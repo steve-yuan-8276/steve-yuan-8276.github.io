@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[Linux折腾笔记：在Cent OS7上配置SSH]]></title>
+    <url>%2F2017%2F12%2F13%2FHowToInstallCentOS%2F</url>
+    <content type="text"><![CDATA[准备工作： 安装VMmare fusion 下载 cent OS tips： 安装都是傻瓜式的，不过记得设置root 密码（不要轻易告诉别人） 设置静态IPstep 1: 查看当前网络状况，使用命令123#ip add#ifconfig 如何不存在ip信息，可通过以下命令自动获取ip： 1dhchlient 需要注意的是，这里需要记下来ip address、gateway、netmask、ensXX（网卡信息），后面设置静态ip会用到。 step 2 ：编辑网卡配置1# vi /etc/sysconfig/network-scripts/ifcfg-ensXX 注：此处的XX，就是前面查到的网卡信息。 12345678需要更改的信息如下：ONBOOT=yes（原来是no）；BOOTPROTO=static（原来是dhclient）下面是需要增加的信息：IPADDR=xxx.xxx.xxx.xxx(dhclient获取的网址)NETMASK=255.255.255.0（子网掩码）GATEWAEY=xxx.xxx.xxx.xxx(网关地址)DNS1=119.29.29.29（DNS服务器） 最后，先按“esc”退出编辑模式，之后再输入“:wq”进行保存。 step 3: 重启ip设置1systemctl restart network.service 正常情况下，静态ip就设置好。检查是否成功，可以ping一下外网，如： 1ping www.baidu.com 远程连接此虚拟机前提条件： mac自带终端或者item 输入如下命令进行连接：1ssh username@xxx.xxx.xxx.xxx -p 22 注意： 此处的username是cent os 中的账户名 xxx.xxx.xxx.xxx 是刚刚设置的静态ip 22 表示连接的默认端口号，后期也可以进行编辑更改。 配置远程ssh 登陆step 1: 生成密钥对 (本机操作)1. 进入当前用户目录，一般root用户只需要这样即可1cd ~ 2. 创建.ssh目录并设置权限12mkdir -p .sshchmod 700 .ssh 3. 进入 .ssh 目录和生成密钥对12cd .sshssh-keygen 然后，一路回车即可 这里要注意的是： 一是 ssh-keygen 的详细用法，参见ssh-keygen 中文手册 二是前面生成密钥的会显示地址，记住这个地址，需要把id_rsa.pub 的内容复制出来，后面会用到。 step 2: 生成密钥认证文件 （在服务器端或者通过ssh root操作）123456789101. 创建认证文件touch authorized_keys2. 编辑认证文件vi /root/.ssh/authorized_keys进入编辑界面后按i 开始编辑；把刚才复制的id_rsa.pub 内容复制到里面，稳妥起见，前面可以加一行注释，注释已#开头；最后按esc退出编辑状态，再按：wq 保存退出3. 授权认证文件chmod 600 authorized_keys 做完这三步，授权文件就搞定了。 step 3: 修改SSH配置（在服务器端或者 ssh root操作）1. 使用root登录修改配置文件：/etc/ssh/sshd_config1vi /etc/ssh/sshd_config 2. 将下面的内容的前面的 # 去掉123456#PubkeyAuthentication yes#AuthorizedKeysFile .ssh/authorized_keys然后，修改下面的内容的 yes 为 noPasswordAuthentication yes 修改后效果为 1234RSAAuthentication yesPubkeyAuthentication yesAuthorizedKeysFile .ssh/authorized_keysPasswordAuthentication no 3. 最后重启SSH服务CentOS 6.x： 1service sshd restart CentOS 7.x： 1systemctl restart sshd step 4: 检验是否成功 重启虚拟机，然后使用如下命令登陆 ssh root@xxx.xxx.xxx.xxx]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>ssh</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Github折腾笔记：hexo+github 实现域名绑定]]></title>
+    <url>%2F2017%2F12%2F13%2FhowToSetDomain%2F</url>
+    <content type="text"><![CDATA[前提条件： 拥有github.io 了解bash基本操作 花一点点小钱 step 1 ：购买域名在万网注册账户，实名认证，购买域名，一路按照流程走就OK了。 step 2: 域名设置解析1.登陆万网，点击控制台 =&gt; 产品与服务 =&gt; 域名 =&gt; 解析 2. 继续点击 添加解析 如图所示，这里只需要改动两处：一是主机记录，写 “www”二是记录值，就是github.io的ip地址。获取这个ip值，可以直接打开终端通过ping命令获取。 添加之后选择保存即可。 step3. 配置hexo在本地hexo文件根目录下找到source，进入这个目录后创建文件名为 CNAME 的文件，打开之后编辑文件写入刚买来的域名。 12345678终端输入：cd /Users/steveyuan/documents/github-file/steveBlog/source #这里是文件路径，需要根据实际情况进行调整touch CNAME #该文件不写后缀之后双击打开文档进行编辑，输入域名，保存www.steve-yuan.com #这里是自己的域名 step 4: 修复Bug如果正确进行了以上几步，将会看到以下画面： google了一下，原来已经有人踩过这个坑了。虽然解析到了github服务器，但是并没有指向正确的页面。 解决方法： 1.进入自己的github.io 的Repository，点击 Create new file，创建一个文件，名字还是叫 CNAME 。2. 编辑CHAME 文件，内容还是域名，不过不包括“ http：// www ”，点击保存。3. 进入本地hexo文件夹，重新生成、部署网站。123hexo cleanhexo generate hexo deploy 然后，喝杯茶休息一下，重新在浏览器输入域名，齐活。]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[前端学习笔记：如何使用Google官方推荐的webp进行图片压缩]]></title>
+    <url>%2F2017%2F12%2F12%2Fweb-howToUseWebp%2F</url>
+    <content type="text"><![CDATA[第一步：安装1. 安装Xcode，App Store直接下载安装2. 安装macport下载地址在这里 WARNING:) 注意选择支持本机的安装包，因为我的系统是machighSierra，所以选择MacPorts-2.4.2-10.13-HighSierra.pkg 打开终端，输入 port，正确显示版本号说明安装成功。 Update MacPorts： 用以下命令行sudo port selfupdate 3. Install libwebp:1sudo port install webp 第二步：使用Images to the WebP Format1cwebp -q 80 image.png -o image.webp More instruction, check ducumentation WebP Format to Images1dwebp image.webp -o image.png More instruction, check ducumentation]]></content>
+      <categories>
+        <category>front-end</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>front-end</tag>
+        <tag>google</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[前端学习笔记： 所有 HTTP 状态代码及其定义]]></title>
+    <url>%2F2017%2F12%2F12%2Fweb-webStatusCode%2F</url>
+    <content type="text"><![CDATA[2xx 成功 序号 代码 含义 1 200 正常：请求已完成。 2 201 正常：紧接 POST 命令。 3 202 正常：已接受用于处理，但处理尚未完成。 4 203 正常：部分信息 — 返回的信息只是一部分。 5 204 正常：无响应 — 已接收请求，但不存在要回送的信息。 3xx 重定向 序号 代码 含义 1 301 已移动：请求的数据具有新的位置且更改是永久的。 2 302 已找到 ：请求的数据临时具有不同 URI。 3 303 请参阅其它 ：可在另一 URI 下找到对请求的响应，且应使用 GET 方法检索此响应。 4 304 未修改： 未按预期修改文档。 5 305 使用代理：必须通过位置字段中提供的代理来访问请求的资源。 6 306 未使用：不再使用；保留此代码以便将来使用。 4xx 客户端出现的错误 序号 代码 含义 1 400 错误请求：请求中有语法问题，或不能满足请求。 2 401 未授权：未授权客户机访问数据。 3 402 需要付款： 表示计费系统已有效。 4 403 禁止 ： 即使有授权也不需要访问。 5 404 找不到 — 服务器找不到给定的资源；文档不存在。 6 407 代理认证请求 — 客户机首先必须使用代理认证自身。 7 415 介质类型不受支持 — 服务器拒绝服务请求，因为不支持请求实体的格式。 5xx 服务器中出现的错误 序号 代码 含义 1 500 内部错误：因为意外情况，服务器不能完成请求。 2 501 未执行 ：服务器不支持请求的工具。 3 502 错误网关 ： 服务器接收到来自上游服务器的无效响应。 4 503 无法获得服务 ：由于临时过载或维护，服务器无法处理请求。]]></content>
+      <categories>
+        <category>front-end</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>front-end</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Github折腾笔记：step by step 利用github.io建立个人博客]]></title>
+    <url>%2F2017%2F12%2F12%2Fgithub-HowToBuildBlogWithGithub-md%2F</url>
+    <content type="text"><![CDATA[折腾前提： 了解git基础知识，最好有github账户（没有的话，需要新建一个）。 了解并掌握MarkDown基本语法 已安装node.js 第一步：本地安装HEXO1.命令行输入：1npm install -g hexo 2.新建一个blog文件夹，然后通过终端进入该文件夹123cd documentstouch blog cd blog 3.执行以下命令：1hexo init 4.安装依赖包1npm install 到这里，hexo安装完毕。 第二步：新建github.ioWARNING: 对于已经配置好github账户的你，请跳过本章节，直接进入下一步。 1.新建github账户2.生成SSH密钥1ssh-keygen -t rsa -C XXX@gmail.com //此邮箱为github注册邮箱 一路下一步，会得到两个id_rsa和id_rsa.pub两个文件，其中id_rsa是私钥，自己偷偷看管好就行；id_rsa.pub是公钥，使用cat命令查看一下内容，复制出来，下面会用到。 3.打开github设置页面，点击New SSH key,然后粘贴id_rsa.pub内容，然后点击Add SSH key。4. 新建github.io，方法参见官方文档第三部：设置HEXO1.在hexo文件夹内找到_config.yml配置文件，sublime打开编辑：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475# Hexo Configuration ## Docs: https://hexo.io/docs/configuration.html## Source: https://github.com/hexojs/hexo/# Site 站点信息设置title: #站名subtitle: #副标题description: #站描述author: #作者language: zh-CN #语言timezone:# URL 链接设置## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;url: http://blog.prozin.xyzroot: /permalink: :year/:month/:day/:title/permalink_defaults:# Directory 文件目录source_dir: sourcepublic_dir: publictag_dir: tagsarchive_dir: archivescategory_dir: categoriescode_dir: downloads/codei18n_dir: :langskip_render:# Writing 文章new_post_name: :title.md # File name of new postsdefault_layout: posttitlecase: false # Transform title into titlecaseexternal_link: true # Open external links in new tabfilename_case: 0render_drafts: falsepost_asset_folder: falserelative_link: falsefuture: truehighlight: enable: true line_number: true auto_detect: true tab_replace:# Category &amp; Tagdefault_category: uncategorizedcategory_map:tag_map:# Date / Time format 日期## Hexo uses Moment.js to parse and display date## You can customize the date format as defined in## http://momentjs.com/docs/#/displaying/format/date_format: YYYY-MM-DDtime_format: HH:mm:ss# Pagination 分页## Set per_page to 0 to disable paginationper_page: 20pagination_dir: page# Extensions 扩展## Plugins: https://hexo.io/plugins/## Themes: https://hexo.io/themes/theme: landscape #默认主题# Deployment 这里设置了Git获#这里一定要注意不要写错了，否则部署到Github上会出问题## Docs: https://hexo.io/docs/deployment.htmldeploy: type: git repo: 仓库地址.git branch: master message: &apos;站点更新:&#123;&#123;now(&quot;YYYY-MM-DD HH/mm/ss&quot;)&#125;&#125;&apos; 划重点： 配置文件的冒号“:”后面有一个空格 repo: 就是github地址.git ，这里的“.git”一定不能忘。 2.生成网页1hexo generate 3. 部署.deploy目录1hexo deploy WARNING：这里有个坑 我进行到这一步的时候遇到了错误提示：ERROR Deployer not found: github, google了一下，找到了这个文档, 给出的填坑方法如下： 1npm install hexo-deployer-git --save 安装完成后，再运行deploy命令，顺利通过，进入下一关。 hexo 常用命令行 序号 命令 含义 1 hexo help #查看帮助 2 hexo init #初始化一个目录 3 hexo new “postName” #新建文章 4 hexo new page “pageName” #新建页面 5 hexo generate #生成网页，可以在 public 目录查看整个网站的文件 6 hexo server #本地预览，’Ctrl+C’关闭 7 hexo deploy #部署.deploy目录 8 hexo clean #清除缓存，强烈建议每次执行命令前先清理缓存，每次部署前先删除 .deploy 文件夹 第四步：更改主题为NEXT具体参见说明文档 内容详细到令人发指，step by step就好了。 第五步：修建并发布文章1.新建文档 1hexo new &quot;标题&quot; 2.编辑文章刚刚生成的文档在在sourse/ _posts文件夹下生，默认是 .md文件，推荐使用Mweb进行编辑。 3.发布文章 123hexo cleanhexo generatehexo deploy 以下提示说明部署成功 1[info] Deploy done: git 然后就齐活了，访问你自己的github.io 地址，就可以看到博客了。 参考文档： 手把手教你建github技术博客 Mac OS使用github+hexo搭建自己的博客 CentOS下搭建Hexo + github 博客 5分钟 搭建免费个人博客 手把手教你使用Hexo + Github Pages搭建个人独立博客 Github Pages说明文档]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>github</tag>
+      </tags>
+  </entry>
+</search>

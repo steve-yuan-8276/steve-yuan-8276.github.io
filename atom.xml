@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2017-12-14T02:25:08.978Z</updated>
+  <updated>2017-12-14T15:08:56.114Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>前端学习笔记：ES6 中的Array.prototype.map() 和Array.prototype.filter()</title>
+    <link href="https://steve-yuan-8276.github.io/2017/12/14/mapAndFilter/"/>
+    <id>https://steve-yuan-8276.github.io/2017/12/14/mapAndFilter/</id>
+    <published>2017-12-14T14:42:23.000Z</published>
+    <updated>2017-12-14T15:08:56.114Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="map"><a href="#map" class="headerlink" title="map()"></a>map()</h3><p>map() 方法创建一个新数组，其结果是该数组中的每个元素都调用一个提供的函数后返回的结果。</p><p>示例如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const names = [&apos;Michael&apos;, &apos;Ryan&apos;, &apos;Tyler&apos;];</span><br><span class="line"></span><br><span class="line">const nameLengths = names.map( name =&gt; name.length );</span><br></pre></td></tr></table></figure><h3 id="filter"><a href="#filter" class="headerlink" title="filter()"></a>filter()</h3><p>filter() 方法创建一个新数组, 其包含通过所提供函数实现的测试的所有元素。</p><p>示例如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const names = [&apos;Michael&apos;, &apos;Ryan&apos;, &apos;Tyler&apos;];</span><br><span class="line"></span><br><span class="line">const shortNames = names.filter( name =&gt; name.length &lt; 5 );</span><br></pre></td></tr></table></figure><h3 id="map-和-filter-连用，一个方法返回的数据可以是另一个方法的新数组。"><a href="#map-和-filter-连用，一个方法返回的数据可以是另一个方法的新数组。" class="headerlink" title="map() 和 filter() 连用，一个方法返回的数据可以是另一个方法的新数组。"></a>map() 和 filter() 连用，一个方法返回的数据可以是另一个方法的新数组。</h3><p>示例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">const names = [&apos;Michael&apos;, &apos;Ryan&apos;, &apos;Tyler&apos;];</span><br><span class="line"></span><br><span class="line">const shortNamesLengths = names.filter( name =&gt; name.length &lt; 5 ).map( name =&gt; name.length );</span><br></pre></td></tr></table></figure><h3 id="练习题："><a href="#练习题：" class="headerlink" title="练习题："></a>练习题：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const musicData = [</span><br><span class="line">    &#123; artist: &apos;Adele&apos;, name: &apos;25&apos;, sales: 1731000 &#125;,</span><br><span class="line">    &#123; artist: &apos;Drake&apos;, name: &apos;Views&apos;, sales: 1608000 &#125;,</span><br><span class="line">    &#123; artist: &apos;Beyonce&apos;, name: &apos;Lemonade&apos;, sales: 1554000 &#125;,</span><br><span class="line">    &#123; artist: &apos;Chris Stapleton&apos;, name: &apos;Traveller&apos;, sales: 1085000 &#125;,</span><br><span class="line">    &#123; artist: &apos;Pentatonix&apos;, name: &apos;A Pentatonix Christmas&apos;, sales: 904000 &#125;,</span><br><span class="line">    &#123; artist: &apos;Original Broadway Cast Recording&apos;, </span><br><span class="line">      name: &apos;Hamilton: An American Musical&apos;, sales: 820000 &#125;,</span><br><span class="line">    &#123; artist: &apos;Twenty One Pilots&apos;, name: &apos;Blurryface&apos;, sales: 738000 &#125;,</span><br><span class="line">    &#123; artist: &apos;Prince&apos;, name: &apos;The Very Best of Prince&apos;, sales: 668000 &#125;,</span><br><span class="line">    &#123; artist: &apos;Rihanna&apos;, name: &apos;Anti&apos;, sales: 603000 &#125;,</span><br><span class="line">    &#123; artist: &apos;Justin Bieber&apos;, name: &apos;Purpose&apos;, sales: 554000 &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure><p>//map() 方法创建一个新的数组，并包含以下格式的项目：<album> by <name> sold <sales> copies<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const albumSalesStrings = musicData.map(album =&gt; `$&#123;album.name&#125; by $&#123;album.artist&#125; sold $&#123;album.sales&#125; copies`);</span><br><span class="line">console.log(albumSalesStrings);</span><br></pre></td></tr></table></figure></sales></name></album></p><p>//filter() 方法创建一个新的数组，其中仅包含名称在 10 和 25 个字符之间的专辑。将新数组存储在变量 results 中。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const results = musicData.filter(album =&gt; album.name.length &lt;= 25 &amp;&amp; album.name.length &gt;= 10);</span><br><span class="line">console.log(results);</span><br></pre></td></tr></table></figure><p>//.map() 和 .filter() 组合到一起<br>//使用 .filter() 从列表中过滤出销量超过 1,000,000 张的专辑。然后对返回的数组调用 .map()，并创建一个项目格式如下的新数组：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;artist&gt; is a great performer</span><br><span class="line">const popular = musicData</span><br><span class="line">  .filter(album =&gt; album.sales &gt; 1000000)</span><br><span class="line">  .map(album =&gt; `$&#123;album.artist&#125; is a great performer`);</span><br><span class="line">  console.log(popular);</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;map&quot;&gt;&lt;a href=&quot;#map&quot; class=&quot;headerlink&quot; title=&quot;map()&quot;&gt;&lt;/a&gt;map()&lt;/h3&gt;&lt;p&gt;map() 方法创建一个新数组，其结果是该数组中的每个元素都调用一个提供的函数后返回的结果。&lt;/p&gt;
+&lt;p&gt;示例如下：&lt;/p
+      
+    
+    </summary>
+    
+      <category term="front-end" scheme="https://steve-yuan-8276.github.io/categories/front-end/"/>
+    
+    
+      <category term="front-end" scheme="https://steve-yuan-8276.github.io/tags/front-end/"/>
+    
+      <category term="JavaScript" scheme="https://steve-yuan-8276.github.io/tags/JavaScript/"/>
+    
+      <category term="ES6" scheme="https://steve-yuan-8276.github.io/tags/ES6/"/>
+    
+  </entry>
   
   <entry>
     <title>前端学习笔记：如何使用Jasmine</title>
@@ -128,9 +158,9 @@
       <category term="front-end" scheme="https://steve-yuan-8276.github.io/categories/front-end/"/>
     
     
-      <category term="web" scheme="https://steve-yuan-8276.github.io/tags/web/"/>
-    
       <category term="front-end" scheme="https://steve-yuan-8276.github.io/tags/front-end/"/>
+    
+      <category term="web" scheme="https://steve-yuan-8276.github.io/tags/web/"/>
     
       <category term="google" scheme="https://steve-yuan-8276.github.io/tags/google/"/>
     
@@ -162,9 +192,9 @@
       <category term="front-end" scheme="https://steve-yuan-8276.github.io/categories/front-end/"/>
     
     
-      <category term="web" scheme="https://steve-yuan-8276.github.io/tags/web/"/>
-    
       <category term="front-end" scheme="https://steve-yuan-8276.github.io/tags/front-end/"/>
+    
+      <category term="web" scheme="https://steve-yuan-8276.github.io/tags/web/"/>
     
   </entry>
   

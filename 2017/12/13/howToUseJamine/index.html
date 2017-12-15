@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Steve的折腾学习日志">
 <meta property="og:description" content="基本思路： Write your tests Watch them fail Make them pass Refactor Repeat  使用 jasmine-html12345678910111213141516171819&amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;&amp;lt;head&amp;gt;    &amp;lt;meta charset">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-14T02:25:08.978Z">
+<meta property="og:updated_time" content="2017-12-15T13:06:07.983Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前端学习笔记：如何使用Jasmine">
 <meta name="twitter:description" content="基本思路： Write your tests Watch them fail Make them pass Refactor Repeat  使用 jasmine-html12345678910111213141516171819&amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;&amp;lt;head&amp;gt;    &amp;lt;meta charset">
@@ -405,6 +405,7 @@
 <li>Repeat</li>
 </ol>
 <h3 id="使用-jasmine-html"><a href="#使用-jasmine-html" class="headerlink" title="使用 jasmine-html"></a>使用 jasmine-html</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Jasmine Spec Runner v2.4.1&lt;/title&gt;</span><br><span class="line">    &lt;link rel=&quot;shortcut icon&quot; type=&quot;image/png&quot; href=&quot;../jasmine-2.4.1/images/jasmine_favicon.png&quot;&gt;</span><br><span class="line">    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;../jasmine-2.4.1/lib/jasmine-core/jasmine.css&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;script type=&quot;text/javascript&quot; src=&quot;../jasmine-2.4.1/lib/jasmine-core/jasmine.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script type=&quot;text/javascript&quot; src=&quot;../jasmine-2.4.1/lib/jasmine-core/jasmine-html.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script type=&quot;text/javascript&quot; src=&quot;../jasmine-2.4.1/lib/jasmine-core/boot.js&quot;&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 需要测试的js文件及jasmine测试脚本 --&gt;</span><br><span class="line">    &lt;script type=&quot;text/javascript&quot; src=&quot;myFirstJasmineTest.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <h3 id="jasmine基本语法"><a href="#jasmine基本语法" class="headerlink" title="jasmine基本语法"></a>jasmine基本语法</h3><h4 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">describe(&apos;JavaScript addition operator&apos;, function () &#123;</span><br><span class="line">    it(&apos;adds two numbers together&apos;, function () &#123;</span><br><span class="line">        expect(1 + 2).toEqual(3);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <h4 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h4><h5 id="1-describe-string-function-："><a href="#1-describe-string-function-：" class="headerlink" title="1. describe(string, function)："></a>1. describe(string, function)：</h5><ul>
 <li>可以理解为是一个测试集或者测试包（官方称之为suite），主要功能是用来划分单元测试的，describe是可以嵌套使用的</li>
@@ -685,7 +686,7 @@ afterEach：每个spec（即it）运行之后运行
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -707,7 +708,7 @@ afterEach：每个spec（即it）运行之后运行
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

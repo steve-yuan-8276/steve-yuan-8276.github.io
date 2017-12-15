@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[HEXO NEXT设置社交图标social icon遇到的坑]]></title>
+    <url>%2F2017%2F12%2F15%2FhowToSetIcon%2F</url>
+    <content type="text"><![CDATA[写在前面一定要学会阅读说明文档！一定要学会阅读说明文档！一定要学会阅读说明文档！重要的事情说三遍！ 这是一个神马坑呢？作为一个有志于从事前端/全栈开发的青年，怎么可以没有blog呢？于是，果断按照网上教程照猫画虎做了一个，却在icon设置上栽了跟头。 具体是这样的： 按照说明文档和isuues提示的操作方法，在fontawesome找到相应的图片名称，但是显示结果很预期的不一样。 实际显示效果是这样的（如图），只有facebook正常，其他三个图标都不对，不知道为什么。 问题分析解决你说怪不怪，为啥只有FB的icon正确显示，其他的不见踪迹呢？难道我只有在Facebook比较受欢迎，其他的都不受待见？试着更换了别的图标，还是不对！ 神马情况？直到我看到了这句话： 示例代码： 看到这里，突然有一种想抽自己的冲动。原来答案一直就杵在眼前，而我却一直视而不见，还花了三天的时间各种查资料！ 当然，这个social_icons: 也很有迷惑性，之前总在这里改来改去，其实该修改的在前面social目录下就已经修改完了，这里只要保持光溜溜就好。 好吧！此处省略一万字感慨，今天的埋坑记录就到这里。]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>front-end</tag>
+        <tag>icon</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[前端学习笔记：ES6 中的Array.prototype.map() 和Array.prototype.filter()]]></title>
     <url>%2F2017%2F12%2F14%2FmapAndFilter%2F</url>
     <content type="text"><![CDATA[map()map() 方法创建一个新数组，其结果是该数组中的每个元素都调用一个提供的函数后返回的结果。 示例如下： 123const names = [&apos;Michael&apos;, &apos;Ryan&apos;, &apos;Tyler&apos;];const nameLengths = names.map( name =&gt; name.length ); filter()filter() 方法创建一个新数组, 其包含通过所提供函数实现的测试的所有元素。 示例如下： 123const names = [&apos;Michael&apos;, &apos;Ryan&apos;, &apos;Tyler&apos;];const shortNames = names.filter( name =&gt; name.length &lt; 5 ); map() 和 filter() 连用，一个方法返回的数据可以是另一个方法的新数组。示例： 123const names = [&apos;Michael&apos;, &apos;Ryan&apos;, &apos;Tyler&apos;];const shortNamesLengths = names.filter( name =&gt; name.length &lt; 5 ).map( name =&gt; name.length ); 练习题：12345678910111213const musicData = [ &#123; artist: &apos;Adele&apos;, name: &apos;25&apos;, sales: 1731000 &#125;, &#123; artist: &apos;Drake&apos;, name: &apos;Views&apos;, sales: 1608000 &#125;, &#123; artist: &apos;Beyonce&apos;, name: &apos;Lemonade&apos;, sales: 1554000 &#125;, &#123; artist: &apos;Chris Stapleton&apos;, name: &apos;Traveller&apos;, sales: 1085000 &#125;, &#123; artist: &apos;Pentatonix&apos;, name: &apos;A Pentatonix Christmas&apos;, sales: 904000 &#125;, &#123; artist: &apos;Original Broadway Cast Recording&apos;, name: &apos;Hamilton: An American Musical&apos;, sales: 820000 &#125;, &#123; artist: &apos;Twenty One Pilots&apos;, name: &apos;Blurryface&apos;, sales: 738000 &#125;, &#123; artist: &apos;Prince&apos;, name: &apos;The Very Best of Prince&apos;, sales: 668000 &#125;, &#123; artist: &apos;Rihanna&apos;, name: &apos;Anti&apos;, sales: 603000 &#125;, &#123; artist: &apos;Justin Bieber&apos;, name: &apos;Purpose&apos;, sales: 554000 &#125;]; //map() 方法创建一个新的数组，并包含以下格式的项目： by sold copies12const albumSalesStrings = musicData.map(album =&gt; `$&#123;album.name&#125; by $&#123;album.artist&#125; sold $&#123;album.sales&#125; copies`);console.log(albumSalesStrings); //filter() 方法创建一个新的数组，其中仅包含名称在 10 和 25 个字符之间的专辑。将新数组存储在变量 results 中。 12const results = musicData.filter(album =&gt; album.name.length &lt;= 25 &amp;&amp; album.name.length &gt;= 10);console.log(results); //.map() 和 .filter() 组合到一起//使用 .filter() 从列表中过滤出销量超过 1,000,000 张的专辑。然后对返回的数组调用 .map()，并创建一个项目格式如下的新数组： 12345&lt;artist&gt; is a great performerconst popular = musicData .filter(album =&gt; album.sales &gt; 1000000) .map(album =&gt; `$&#123;album.artist&#125; is a great performer`); console.log(popular);]]></content>

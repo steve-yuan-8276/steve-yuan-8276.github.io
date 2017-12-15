@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2017-12-14T15:08:56.114Z</updated>
+  <updated>2017-12-15T02:17:46.385Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>HEXO NEXT设置社交图标social icon遇到的坑</title>
+    <link href="https://steve-yuan-8276.github.io/2017/12/15/howToSetIcon/"/>
+    <id>https://steve-yuan-8276.github.io/2017/12/15/howToSetIcon/</id>
+    <published>2017-12-15T01:41:14.000Z</published>
+    <updated>2017-12-15T02:17:46.385Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>一定要学会阅读说明文档！<br>一定要学会阅读说明文档！<br>一定要学会阅读说明文档！<br>重要的事情说三遍！</p><h3 id="这是一个神马坑呢？"><a href="#这是一个神马坑呢？" class="headerlink" title="这是一个神马坑呢？"></a>这是一个神马坑呢？</h3><p>作为一个有志于从事前端/全栈开发的青年，怎么可以没有blog呢？于是，果断按照网上教程照猫画虎做了一个，却在icon设置上栽了跟头。</p><p>具体是这样的：</p><p>按照<a href="http://theme-next.iissnan.com/theme-settings.html" target="_blank" rel="noopener">说明文档</a>和<a href="https://github.com/iissnan/hexo-theme-next/wiki/%E8%AE%BE%E7%BD%AE%E4%BE%A7%E8%BE%B9%E6%A0%8F%E7%A4%BE%E4%BA%A4%E9%93%BE%E6%8E%A5" target="_blank" rel="noopener">isuues</a>提示的操作方法，在<a href="http://fontawesome.io/icons/" target="_blank" rel="noopener">fontawesome</a>找到相应的图片名称，但是显示结果很预期的不一样。</p><p>实际显示效果是这样的（如图），只有facebook正常，其他三个图标都不对，不知道为什么。<br><img src="http://oslz30y7b.bkt.clouddn.com/17-12-14/74306491.jpg" alt=""></p><h3 id="问题分析解决"><a href="#问题分析解决" class="headerlink" title="问题分析解决"></a>问题分析解决</h3><p>你说怪不怪，为啥只有FB的icon正确显示，其他的不见踪迹呢？难道我只有在Facebook比较受欢迎，其他的都不受待见？<br><img src="http://oslz30y7b.bkt.clouddn.com/17-12-15/91006122.jpg" alt=""><br>试着更换了别的图标，还是不对！</p><p>神马情况？直到我看到了这句话：<br><img src="http://oslz30y7b.bkt.clouddn.com/17-12-15/45771296.jpg" alt=""></p><p>示例代码：<br><img src="http://oslz30y7b.bkt.clouddn.com/17-12-15/78119604.jpg" alt=""></p><p>看到这里，突然有一种想抽自己的冲动。原来答案一直就杵在眼前，而我却一直视而不见，还花了三天的时间各种查资料！</p><p>当然，这个social_icons: 也很有迷惑性，之前总在这里改来改去，其实该修改的在前面social目录下就已经修改完了，这里只要保持光溜溜就好。</p><p>好吧！此处省略一万字感慨，今天的埋坑记录就到这里。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;一定要学会阅读说明文档！&lt;br&gt;一定要学会阅读说明文档！&lt;br&gt;一定要学会阅读说明文档！&lt;br&gt;重要的事情说三遍！&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+      <category term="hexo" scheme="https://steve-yuan-8276.github.io/categories/hexo/"/>
+    
+    
+      <category term="hexo" scheme="https://steve-yuan-8276.github.io/tags/hexo/"/>
+    
+      <category term="front-end" scheme="https://steve-yuan-8276.github.io/tags/front-end/"/>
+    
+      <category term="icon" scheme="https://steve-yuan-8276.github.io/tags/icon/"/>
+    
+  </entry>
   
   <entry>
     <title>前端学习笔记：ES6 中的Array.prototype.map() 和Array.prototype.filter()</title>

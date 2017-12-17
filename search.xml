@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Python笔记： python 爬虫基础]]></title>
+    <url>%2F2017%2F12%2F17%2FbasisOfPthonScrapy%2F</url>
+    <content type="text"><![CDATA[环境搭建 python3 google chrome 编辑器（sublime、pyCharm、atom） 爬虫三步走第一步：使用requests获得数据： 导入requests 使用requests.get获取网页源码 12import requests r = requests.get(&apos;https://book.douban.com/subject/1084336/comments/&apos;).text 第二步：使用BeautifulSoup4解析数据： 导入bs4 解析网页数据 寻找数据 for循环打印 12345from bs4 import BeautifulSoupsoup = BeautifulSoup(r,&apos;lxml&apos;)pattern = soup.find_all(&apos;p&apos;,&apos;comment-content&apos;)for item in pattern: print(item.string) 第三步：使用pandas保存数据： 导入pandas 新建list对象 使用to_csv写入 1234567891011import pandascomments = []for item in pattern: comments.append(item.string) df = pandas.DataFrame(comments)df.to_csv(&apos;comments.csv&apos;)``` ### 爬虫示例#### 使用urllib包获取百度首页信息： import urllib.request #导入urllib.request f = urllib.request.urlopen(‘http://www.baidu.com/‘) #打开网址，返回一个类文件对象 f.read(500) #打印前500字符 f.read(500).decode(‘utf-8’) #打印前500字符并修改编码为utf-8123456Requests包：由于requests是python的第三方库，阅读[快速上手requests](http://docs.python-requests.org/zh_CN/latest/user/quickstart.html)#### 使用Requests库获取百度首页信息： import requests #导入requests库 r = requests.get(‘https://www.baidu.com/‘) #使用requests.get方法获取网页信息 rr.text #打印结果 r.encoding=’utf-8’ #修改编码 r.text #打印结果```]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>scrapy</tag>
+        <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[git折腾笔记：GitHub 使用简易指南]]></title>
     <url>%2F2017%2F12%2F16%2FhowToUseGithub%2F</url>
     <content type="text"><![CDATA[创建新仓库创建新文件夹，打开，然后执行以下创建新的 git 仓库。 1git init 克隆仓库执行如下命令以创建一个本地仓库的克隆版本： 1git clone /path/to/repository 如果是远端服务器上的仓库，你的命令会是这个样子： 1git clone username@host:/path/to/repository 工作流你的本地仓库由 git 维护的三棵“树”组成： 第一个是你的工作目录，它持有实际文件； 第二个是 缓存区（Index），它像个缓存区域，临时保存你的改动； 第三个是 HEAD，指向你最近一次提交后的结果。 添加与提交第一步：12git add &lt;filename&gt;git add * 第二步：1git commit -m &quot;代码提交信息&quot; 现在，你的改动已经提交到了 HEAD，但是还没到你的远端仓库。 第三步：1git push origin master 可以把 master 换成你想要推送的任何分支。 分支创建仓库的时候，默认分支是master；可以手动创建其他分支： 1. 创建一个叫做“feature_x”的分支，并切换过去：1git checkout -b feature_x 2. 切换回主分支：1git checkout master 3. 再把新建的分支删掉：1git branch -d feature_x 将分支推送到远端仓库（只有当分支被push到仓库，别人才能看到）1git push origin &lt;branch&gt; 合并分支要合并其他分支到你的当前分支（例如 master），执行： 1git merge &lt;branch&gt; 自动合并并非次次都能成功，并可能导致冲突（conflicts）。 这时候就需要你修改这些文件来手动合并冲突。 在合并改动之前，也可以使用如下命令查看： 1git diff &lt;source_branch&gt; &lt;target_branch&gt; 标签执行如下命令以创建一个叫做 1.0.0 的标签： 1git tag 1.0.0 1b2e1d63ff 1b2e1d63ff 是你想要标记的提交 ID 的前 10 位字符。使用如下命令获取提交 ID： 1git log 你也可以用该提交 ID 的少一些的前6位。 替换本地改动1git checkout -- &lt;filename&gt; 此命令会使用 HEAD 中的最新内容替换掉你的工作目录中的文件。已添加到缓存区的改动，以及新文件，都不受影响。 假如你想要丢弃你所有的本地改动与提交，可以到服务器上获取最新的版本并将你本地主分支指向到它： 12git fetch origingit reset --hard origin/master 有用的贴士 内建的图形化 git：gitk 彩色的 git 输出：git config color.ui true 显示历史记录时，只显示一行注释信息：git config format.pretty oneline 交互地添加文件至缓存区：git add -i]]></content>
@@ -122,8 +135,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
         <tag>google</tag>
       </tags>
   </entry>
@@ -135,8 +148,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
       </tags>
   </entry>
   <entry>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2017-12-17T10:00:09.275Z</updated>
+  <updated>2017-12-17T10:01:37.274Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -21,17 +21,25 @@
     <link href="https://steve-yuan-8276.github.io/2017/12/17/basisOfPthonScrapy/"/>
     <id>https://steve-yuan-8276.github.io/2017/12/17/basisOfPthonScrapy/</id>
     <published>2017-12-17T09:54:52.000Z</published>
-    <updated>2017-12-17T10:00:09.275Z</updated>
+    <updated>2017-12-17T10:01:37.274Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><ul><li><p><a href="https://www.python.org/" target="_blank" rel="noopener">python3</a></p></li><li><p>google chrome</p></li><li><p>编辑器（sublime、pyCharm、atom）</p></li></ul><h3 id="爬虫三步走"><a href="#爬虫三步走" class="headerlink" title="爬虫三步走"></a>爬虫三步走</h3><h4 id="第一步：使用requests获得数据："><a href="#第一步：使用requests获得数据：" class="headerlink" title="第一步：使用requests获得数据："></a>第一步：使用requests获得数据：</h4><ol><li>导入requests </li><li>使用requests.get获取网页源码</li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import requests      </span><br><span class="line">r = requests.get(&apos;https://book.douban.com/subject/1084336/comments/&apos;).text</span><br></pre></td></tr></table></figure><h4 id="第二步：使用BeautifulSoup4解析数据："><a href="#第二步：使用BeautifulSoup4解析数据：" class="headerlink" title="第二步：使用BeautifulSoup4解析数据："></a>第二步：使用BeautifulSoup4解析数据：</h4><ol><li>导入bs4 </li><li>解析网页数据 </li><li>寻找数据 </li><li>for循环打印</li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup = BeautifulSoup(r,&apos;lxml&apos;)</span><br><span class="line">pattern = soup.find_all(&apos;p&apos;,&apos;comment-content&apos;)</span><br><span class="line">for item in pattern:</span><br><span class="line">    print(item.string)</span><br></pre></td></tr></table></figure><h4 id="第三步：使用pandas保存数据："><a href="#第三步：使用pandas保存数据：" class="headerlink" title="第三步：使用pandas保存数据："></a>第三步：使用pandas保存数据：</h4><ol><li>导入pandas </li><li>新建list对象 </li><li>使用to_csv写入</li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import pandas</span><br><span class="line">comments = []</span><br><span class="line">for item in pattern:</span><br><span class="line">    comments.append(item.string)    </span><br><span class="line">df = pandas.DataFrame(comments)</span><br><span class="line">df.to_csv(&apos;comments.csv&apos;)</span><br><span class="line"></span><br><span class="line">``` </span><br><span class="line">### 爬虫示例</span><br><span class="line"></span><br><span class="line">#### 使用urllib包获取百度首页信息：</span><br></pre></td></tr></table></figure><p>import urllib.request</p><p>#导入urllib.request</p><p>f = urllib.request.urlopen(‘<a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a>‘)</p><p>#打开网址，返回一个类文件对象</p><p>f.read(500)</p><p>#打印前500字符</p><p>f.read(500).decode(‘utf-8’)</p><p>#打印前500字符并修改编码为utf-8<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Requests包：由于requests是python的第三方库，阅读[快速上手requests](http://docs.python-requests.org/zh_CN/latest/user/quickstart.html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### 使用Requests库获取百度首页信息：</span><br></pre></td></tr></table></figure></p><p>import requests      #导入requests库</p><p>r = requests.get(‘<a href="https://www.baidu.com/" target="_blank" rel="noopener">https://www.baidu.com/</a>‘)</p><p>#使用requests.get方法获取网页信息</p><p>r<br>r.text      #打印结果</p><p>r.encoding=’utf-8’       #修改编码</p><p>r.text        #打印结果<br>```</p>]]></content>
+    <content type="html"><![CDATA[<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><ul><li><p><a href="https://www.python.org/" target="_blank" rel="noopener">python3</a></p></li><li><p>google chrome</p></li><li><p>编辑器（sublime、pyCharm、atom）</p></li></ul><h3 id="爬虫三步走"><a href="#爬虫三步走" class="headerlink" title="爬虫三步走"></a>爬虫三步走</h3><h4 id="第一步：使用requests获得数据："><a href="#第一步：使用requests获得数据：" class="headerlink" title="第一步：使用requests获得数据："></a>第一步：使用requests获得数据：</h4><ol><li>导入requests </li><li>使用requests.get获取网页源码</li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import requests      </span><br><span class="line">r = requests.get(&apos;https://book.douban.com/subject/1084336/comments/&apos;).text</span><br></pre></td></tr></table></figure><a id="more"></a><h4 id="第二步：使用BeautifulSoup4解析数据："><a href="#第二步：使用BeautifulSoup4解析数据：" class="headerlink" title="第二步：使用BeautifulSoup4解析数据："></a>第二步：使用BeautifulSoup4解析数据：</h4><ol><li>导入bs4 </li><li>解析网页数据 </li><li>寻找数据 </li><li>for循环打印</li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">soup = BeautifulSoup(r,&apos;lxml&apos;)</span><br><span class="line">pattern = soup.find_all(&apos;p&apos;,&apos;comment-content&apos;)</span><br><span class="line">for item in pattern:</span><br><span class="line">    print(item.string)</span><br></pre></td></tr></table></figure><h4 id="第三步：使用pandas保存数据："><a href="#第三步：使用pandas保存数据：" class="headerlink" title="第三步：使用pandas保存数据："></a>第三步：使用pandas保存数据：</h4><ol><li>导入pandas </li><li>新建list对象 </li><li>使用to_csv写入</li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import pandas</span><br><span class="line">comments = []</span><br><span class="line">for item in pattern:</span><br><span class="line">    comments.append(item.string)    </span><br><span class="line">df = pandas.DataFrame(comments)</span><br><span class="line">df.to_csv(&apos;comments.csv&apos;)</span><br><span class="line"></span><br><span class="line">``` </span><br><span class="line">### 爬虫示例</span><br><span class="line"></span><br><span class="line">#### 使用urllib包获取百度首页信息：</span><br></pre></td></tr></table></figure><p>import urllib.request</p><p>#导入urllib.request</p><p>f = urllib.request.urlopen(‘<a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a>‘)</p><p>#打开网址，返回一个类文件对象</p><p>f.read(500)</p><p>#打印前500字符</p><p>f.read(500).decode(‘utf-8’)</p><p>#打印前500字符并修改编码为utf-8<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Requests包：由于requests是python的第三方库，阅读[快速上手requests](http://docs.python-requests.org/zh_CN/latest/user/quickstart.html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### 使用Requests库获取百度首页信息：</span><br></pre></td></tr></table></figure></p><p>import requests      #导入requests库</p><p>r = requests.get(‘<a href="https://www.baidu.com/" target="_blank" rel="noopener">https://www.baidu.com/</a>‘)</p><p>#使用requests.get方法获取网页信息</p><p>r<br>r.text      #打印结果</p><p>r.encoding=’utf-8’       #修改编码</p><p>r.text        #打印结果<br>```</p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;h3 id=&quot;环境搭建&quot;&gt;&lt;a href=&quot;#环境搭建&quot; class=&quot;headerlink&quot; title=&quot;环境搭建&quot;&gt;&lt;/a&gt;环境搭建&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.python.org/&quot; target=&quot;_blank&quot; rel
-      
+      &lt;h3 id=&quot;环境搭建&quot;&gt;&lt;a href=&quot;#环境搭建&quot; class=&quot;headerlink&quot; title=&quot;环境搭建&quot;&gt;&lt;/a&gt;环境搭建&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&quot;https://www.python.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;python3&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;google chrome&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;编辑器（sublime、pyCharm、atom）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;爬虫三步走&quot;&gt;&lt;a href=&quot;#爬虫三步走&quot; class=&quot;headerlink&quot; title=&quot;爬虫三步走&quot;&gt;&lt;/a&gt;爬虫三步走&lt;/h3&gt;&lt;h4 id=&quot;第一步：使用requests获得数据：&quot;&gt;&lt;a href=&quot;#第一步：使用requests获得数据：&quot; class=&quot;headerlink&quot; title=&quot;第一步：使用requests获得数据：&quot;&gt;&lt;/a&gt;第一步：使用requests获得数据：&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;导入requests &lt;/li&gt;
+&lt;li&gt;使用requests.get获取网页源码&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;import requests      &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;r = requests.get(&amp;apos;https://book.douban.com/subject/1084336/comments/&amp;apos;).text&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     
@@ -375,9 +383,9 @@
       <category term="front-end" scheme="https://steve-yuan-8276.github.io/categories/front-end/"/>
     
     
-      <category term="web" scheme="https://steve-yuan-8276.github.io/tags/web/"/>
-    
       <category term="front-end" scheme="https://steve-yuan-8276.github.io/tags/front-end/"/>
+    
+      <category term="web" scheme="https://steve-yuan-8276.github.io/tags/web/"/>
     
       <category term="google" scheme="https://steve-yuan-8276.github.io/tags/google/"/>
     
@@ -436,9 +444,9 @@
       <category term="front-end" scheme="https://steve-yuan-8276.github.io/categories/front-end/"/>
     
     
-      <category term="web" scheme="https://steve-yuan-8276.github.io/tags/web/"/>
-    
       <category term="front-end" scheme="https://steve-yuan-8276.github.io/tags/front-end/"/>
+    
+      <category term="web" scheme="https://steve-yuan-8276.github.io/tags/web/"/>
     
   </entry>
   

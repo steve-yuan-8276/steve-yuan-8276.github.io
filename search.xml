@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[python爬虫学习笔记：Requests 的基本用法]]></title>
+    <url>%2F2017%2F12%2F18%2FbasisOfRequests%2F</url>
+    <content type="text"><![CDATA[安装1pip3 install requests Requests的简单用法Requests库的七个主要方法 序号 方法 说明 1 requests.request() 构造一个请求，支撑以下各方法的基础方法 2 requests.get() 获取HTML网页的主要方法，对应于HTTP的GET 3 requests.head() 获取HTML网页头信息的方法，对应于HTTP的HEAD 4 requests.post() 向HTML网页提交POST请求的方法，对应于HTTP的POST 5 requests.put() 向HTML网页提交PUT请求的方法，对应于HTTP的PUT 6 requests.patch() 向HTML网页提交局部修改请求，对应于HTTP的PATCH 7 requests.delete() 向HTML网页提交删除请求，对应于HTTP的DELETE Requests.get的用法：12import requests #导入Requests库r = requests.get(url) #使用get方法发送请求，返回包含网页数据的Response并存储到Response对象r中 Response对象的属性： r.status_code：http请求的返回状态，200表示连接成功(阅读HTTP状态码，了解各状态码含义) r.text：返回对象的文本内容 r.content：猜测返回对象的二进制形式 r.encoding：分析返回对象的编码方式 r.apparent_encoding：响应内容编码方式（备选编码方式） 爬取网页通用框架12345678910111213#定义函数def getHTMLText(url): try: r = requests.get(url,timeout=20) #设置超时 r.raise_for_status() r.encoding = r.apparent_encoding return r.text except: #异常处理 return &quot;产生异常&quot;if __name__ == &apos;__main__&apos;: url = &quot; &quot; print(getHTMLText(url)) #调用函数 爬虫协议爬虫协议，也被叫做robots协议，是为了告诉网络蜘蛛哪些页面可以抓取，哪些页面不能抓取 如何查看爬虫协议：在访问网站域名后加上robots.txt即可，例如查看百度网站的爬虫协议：https://www.baidu.com/robots.txt 爬虫协议属性：拦截所有的机器人：12User-agent: * Disallow: / 允许所有的机器人：12User-agent: * Disallow:]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>scrapy</tag>
+        <tag>requests</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Python笔记： python 爬虫基础]]></title>
     <url>%2F2017%2F12%2F17%2FbasisOfPthonScrapy%2F</url>
     <content type="text"><![CDATA[环境搭建 python3 google chrome 编辑器（sublime、pyCharm、atom） 爬虫三步走第一步：使用requests获得数据： 导入requests 使用requests.get获取网页源码 12import requests r = requests.get(&apos;https://book.douban.com/subject/1084336/comments/&apos;).text 第二步：使用BeautifulSoup4解析数据： 导入bs4 解析网页数据 寻找数据 for循环打印 12345from bs4 import BeautifulSoupsoup = BeautifulSoup(r,&apos;lxml&apos;)pattern = soup.find_all(&apos;p&apos;,&apos;comment-content&apos;)for item in pattern: print(item.string) 第三步：使用pandas保存数据： 导入pandas 新建list对象 使用to_csv写入 1234567891011import pandascomments = []for item in pattern: comments.append(item.string) df = pandas.DataFrame(comments)df.to_csv(&apos;comments.csv&apos;)``` ### 爬虫示例#### 使用urllib包获取百度首页信息： import urllib.request #导入urllib.request f = urllib.request.urlopen(‘http://www.baidu.com/‘) #打开网址，返回一个类文件对象 f.read(500) #打印前500字符 f.read(500).decode(‘utf-8’) #打印前500字符并修改编码为utf-8123456Requests包：由于requests是python的第三方库，阅读[快速上手requests](http://docs.python-requests.org/zh_CN/latest/user/quickstart.html)#### 使用Requests库获取百度首页信息： import requests #导入requests库 r = requests.get(‘https://www.baidu.com/‘) #使用requests.get方法获取网页信息 rr.text #打印结果 r.encoding=’utf-8’ #修改编码 r.text #打印结果```]]></content>
@@ -55,7 +68,7 @@
   <entry>
     <title><![CDATA[为GitHub Pages自定义域名配置HTTPS]]></title>
     <url>%2F2017%2F12%2F15%2FsetHttps%2F</url>
-    <content type="text"><![CDATA[原帖地址在这里，以下是笔记整理： 前提准备搭建完成github.io购买域名注册Cloudflare账号 基本思路 在 Cloudflare中添加你的域名，设置2个A记录； 去你的域名注册商更改 DNS Server 成 Cloudflare 所提供的； 在 Cloudflare 中配置 Crypto ，选择 Full （这一步要一段时间才能起效） 在 Cloudflare 配置 Page Rules ，一个是 always use https ，一个是 redirect http 到 https，保持等待生效。 具体操作：step 1 ：添加域名，设置解析记录登录Cloudflare后，在这里 添加 你的域名，如下图，输入你的域名，例如 thinktxt.com 并点击Begin Scan开始扫描； 完成域名解析扫描后，点击 Continue Setup 继续； 看到DNS记录（包括子域）列表之后，按照下图提示设置后，点击 Continue，进入下一步注：此处设置cname是为了重定向www 选择免费服务计划，然后点击下一步 step 2 ：更改DNS Server以万网为例，在域名管理中选择DNS修改/创建，如下图： 在万网修改好DNS之后，在Cloudflare点击继续，如下图： 注：官方说域名服务器修改最长需要72小时生效，显示 Status: Active 即可。 重定向：点击 Page Rules =&gt; Create Page Rule 添加顶级域名重定向到https 强制使用SSL，可以使用通配符* 完成，剩下的就是等待了，正常情况下过个把小时就能以https访问了。]]></content>
+    <content type="text"><![CDATA[原帖地址在这里，以下是笔记整理： WARNING: 亲测，使用此方法大概过了整整一天（24小时）才给网站加上那把绿色小锁。所以，每一步做对了也不见得就能看到立竿见影的效果，还需要耐心等待。 前提准备搭建完成github.io购买域名注册Cloudflare账号 基本思路 在 Cloudflare中添加你的域名，设置2个A记录； 去你的域名注册商更改 DNS Server 成 Cloudflare 所提供的； 在 Cloudflare 中配置 Crypto ，选择 Full （这一步要一段时间才能起效） 在 Cloudflare 配置 Page Rules ，一个是 always use https ，一个是 redirect http 到 https，保持等待生效。 具体操作：step 1 ：添加域名，设置解析记录登录Cloudflare后，在这里 添加 你的域名，如下图，输入你的域名，例如 thinktxt.com 并点击Begin Scan开始扫描； 完成域名解析扫描后，点击 Continue Setup 继续； 看到DNS记录（包括子域）列表之后，按照下图提示设置后，点击 Continue，进入下一步注：此处设置cname是为了重定向www 选择免费服务计划，然后点击下一步 step 2 ：更改DNS Server以万网为例，在域名管理中选择DNS修改/创建，如下图： 在万网修改好DNS之后，在Cloudflare点击继续，如下图： 注：官方说域名服务器修改最长需要72小时生效，显示 Status: Active 即可。 重定向：点击 Page Rules =&gt; Create Page Rule 添加顶级域名重定向到https 强制使用SSL，可以使用通配符* 完成，剩下的就是等待了，正常情况下过个把小时就能以https访问了。]]></content>
       <categories>
         <category>hexo</category>
       </categories>

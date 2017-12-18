@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="centos,ssh," />
+  <meta name="keywords" content="python,scrapy,requests," />
 
 
 
@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="准备工作： 安装VMmare fusion 下载 cent OS  tips： 安装都是傻瓜式的，不过记得设置root 密码（不要轻易告诉别人） 设置静态IPstep 1: 查看当前网络状况，使用命令123#ip add#ifconfig 如何不存在ip信息，可通过以下命令自动获取ip： 1dhchlient 需要注意的是，这里需要记下来ip address、gateway、netmask、ens">
-<meta name="keywords" content="centos,ssh">
+<meta name="description" content="安装1pip3 install requests Requests的简单用法Requests库的七个主要方法   序号 方法 说明     1 requests.request() 构造一个请求，支撑以下各方法的基础方法   2 requests.get() 获取HTML网页的主要方法，对应于HTTP的GET   3 requests.head() 获取HTML网页头信息的方法，对应于HTTP的H">
+<meta name="keywords" content="python,scrapy,requests">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux折腾笔记：在Cent OS7上配置SSH">
-<meta property="og:url" content="https://steve-yuan-8276.github.io/2017/12/13/HowToInstallCentOS/index.html">
+<meta property="og:title" content="python爬虫学习笔记：Requests 的基本用法">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/index.html">
 <meta property="og:site_name" content="Steve的折腾学习日志">
-<meta property="og:description" content="准备工作： 安装VMmare fusion 下载 cent OS  tips： 安装都是傻瓜式的，不过记得设置root 密码（不要轻易告诉别人） 设置静态IPstep 1: 查看当前网络状况，使用命令123#ip add#ifconfig 如何不存在ip信息，可通过以下命令自动获取ip： 1dhchlient 需要注意的是，这里需要记下来ip address、gateway、netmask、ens">
+<meta property="og:description" content="安装1pip3 install requests Requests的简单用法Requests库的七个主要方法   序号 方法 说明     1 requests.request() 构造一个请求，支撑以下各方法的基础方法   2 requests.get() 获取HTML网页的主要方法，对应于HTTP的GET   3 requests.head() 获取HTML网页头信息的方法，对应于HTTP的H">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-15T13:05:32.427Z">
+<meta property="og:updated_time" content="2017-12-18T05:20:59.572Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux折腾笔记：在Cent OS7上配置SSH">
-<meta name="twitter:description" content="准备工作： 安装VMmare fusion 下载 cent OS  tips： 安装都是傻瓜式的，不过记得设置root 密码（不要轻易告诉别人） 设置静态IPstep 1: 查看当前网络状况，使用命令123#ip add#ifconfig 如何不存在ip信息，可通过以下命令自动获取ip： 1dhchlient 需要注意的是，这里需要记下来ip address、gateway、netmask、ens">
+<meta name="twitter:title" content="python爬虫学习笔记：Requests 的基本用法">
+<meta name="twitter:description" content="安装1pip3 install requests Requests的简单用法Requests库的七个主要方法   序号 方法 说明     1 requests.request() 构造一个请求，支撑以下各方法的基础方法   2 requests.get() 获取HTML网页的主要方法，对应于HTTP的GET   3 requests.head() 获取HTML网页头信息的方法，对应于HTTP的H">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2017/12/13/HowToInstallCentOS/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/"/>
 
 
 
 
 
-  <title>Linux折腾笔记：在Cent OS7上配置SSH | Steve的折腾学习日志</title>
+  <title>python爬虫学习笔记：Requests 的基本用法 | Steve的折腾学习日志</title>
   
 
 
@@ -308,7 +308,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2017/12/13/HowToInstallCentOS/">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
@@ -325,7 +325,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linux折腾笔记：在Cent OS7上配置SSH</h1>
+          <h1 class="post-title" itemprop="name headline">python爬虫学习笔记：Requests 的基本用法</h1>
         
 
         <div class="post-meta">
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-13T17:52:55+08:00">
-                2017-12-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-18T13:17:47+08:00">
+                2017-12-18
               </time>
             
 
@@ -360,8 +360,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
                   </a>
                 </span>
 
@@ -378,9 +378,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/12/13/HowToInstallCentOS/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/18/basisOfRequests/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/12/13/HowToInstallCentOS/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/12/18/basisOfRequests/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -408,57 +408,68 @@
       
 
       
-        <h3 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h3><ul>
-<li>安装VMmare fusion</li>
-<li>下载 cent OS</li>
-</ul>
-<p>tips： 安装都是傻瓜式的，不过记得设置root 密码（不要轻易告诉别人）</p>
-<h3 id="设置静态IP"><a href="#设置静态IP" class="headerlink" title="设置静态IP"></a>设置静态IP</h3><h4 id="step-1-查看当前网络状况，使用命令"><a href="#step-1-查看当前网络状况，使用命令" class="headerlink" title="step 1: 查看当前网络状况，使用命令"></a>step 1: 查看当前网络状况，使用命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#ip add</span><br><span class="line"></span><br><span class="line">#ifconfig</span><br></pre></td></tr></table></figure>
-<p>如何不存在ip信息，可通过以下命令自动获取ip：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dhchlient</span><br></pre></td></tr></table></figure>
-<p>需要注意的是，这里需要记下来ip address、gateway、netmask、ensXX（网卡信息），后面设置静态ip会用到。</p>
+        <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install requests</span><br></pre></td></tr></table></figure>
+<h3 id="Requests的简单用法"><a href="#Requests的简单用法" class="headerlink" title="Requests的简单用法"></a>Requests的简单用法</h3><h4 id="Requests库的七个主要方法"><a href="#Requests库的七个主要方法" class="headerlink" title="Requests库的七个主要方法"></a>Requests库的七个主要方法</h4><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>requests.request()</td>
+<td>构造一个请求，支撑以下各方法的基础方法</td>
+</tr>
+<tr>
+<td>2</td>
+<td>requests.get()</td>
+<td>获取HTML网页的主要方法，对应于HTTP的GET</td>
+</tr>
+<tr>
+<td>3</td>
+<td>requests.head()</td>
+<td>获取HTML网页头信息的方法，对应于HTTP的HEAD</td>
+</tr>
+<tr>
+<td>4</td>
+<td>requests.post()</td>
+<td>向HTML网页提交POST请求的方法，对应于HTTP的POST</td>
+</tr>
+<tr>
+<td>5</td>
+<td>requests.put()</td>
+<td>向HTML网页提交PUT请求的方法，对应于HTTP的PUT</td>
+</tr>
+<tr>
+<td>6</td>
+<td>requests.patch()</td>
+<td>向HTML网页提交局部修改请求，对应于HTTP的PATCH</td>
+</tr>
+<tr>
+<td>7</td>
+<td>requests.delete()</td>
+<td>向HTML网页提交删除请求，对应于HTTP的DELETE</td>
+</tr>
+</tbody>
+</table>
 <a id="more"></a>
-<h4 id="step-2-：编辑网卡配置"><a href="#step-2-：编辑网卡配置" class="headerlink" title="step 2 ：编辑网卡配置"></a>step 2 ：编辑网卡配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># vi /etc/sysconfig/network-scripts/ifcfg-ensXX</span><br></pre></td></tr></table></figure>
-<p>注：此处的XX，就是前面查到的网卡信息。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">需要更改的信息如下：</span><br><span class="line">ONBOOT=yes（原来是no）；</span><br><span class="line">BOOTPROTO=static（原来是dhclient）</span><br><span class="line">下面是需要增加的信息：</span><br><span class="line">IPADDR=xxx.xxx.xxx.xxx(dhclient获取的网址)</span><br><span class="line">NETMASK=255.255.255.0（子网掩码）</span><br><span class="line">GATEWAEY=xxx.xxx.xxx.xxx(网关地址)</span><br><span class="line">DNS1=119.29.29.29（DNS服务器）</span><br></pre></td></tr></table></figure>
-<p>最后，先按“esc”退出编辑模式，之后再输入“:wq”进行保存。</p>
-<h4 id="step-3-重启ip设置"><a href="#step-3-重启ip设置" class="headerlink" title="step 3: 重启ip设置"></a>step 3: 重启ip设置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart network.service</span><br></pre></td></tr></table></figure>
-<p>正常情况下，静态ip就设置好。检查是否成功，可以ping一下外网，如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping www.baidu.com</span><br></pre></td></tr></table></figure>
-<h3 id="远程连接此虚拟机"><a href="#远程连接此虚拟机" class="headerlink" title="远程连接此虚拟机"></a>远程连接此虚拟机</h3><h4 id="前提条件："><a href="#前提条件：" class="headerlink" title="前提条件："></a>前提条件：</h4><ul>
-<li>mac自带终端或者item</li>
+<h5 id="Requests-get的用法："><a href="#Requests-get的用法：" class="headerlink" title="Requests.get的用法："></a>Requests.get的用法：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import requests       #导入Requests库</span><br><span class="line">r = requests.get(url)       #使用get方法发送请求，返回包含网页数据的Response并存储到Response对象r中</span><br></pre></td></tr></table></figure>
+<h5 id="Response对象的属性："><a href="#Response对象的属性：" class="headerlink" title="Response对象的属性："></a>Response对象的属性：</h5><ul>
+<li>r.status_code：http请求的返回状态，200表示连接成功(阅读HTTP状态码，了解各状态码含义)</li>
+<li>r.text：返回对象的文本内容</li>
+<li>r.content：猜测返回对象的二进制形式</li>
+<li>r.encoding：分析返回对象的编码方式</li>
+<li>r.apparent_encoding：响应内容编码方式（备选编码方式）</li>
 </ul>
-<h4 id="输入如下命令进行连接："><a href="#输入如下命令进行连接：" class="headerlink" title="输入如下命令进行连接："></a>输入如下命令进行连接：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh username@xxx.xxx.xxx.xxx -p 22</span><br></pre></td></tr></table></figure>
-<p>注意：</p>
-<ol>
-<li>此处的username是cent os 中的账户名</li>
-<li>xxx.xxx.xxx.xxx 是刚刚设置的静态ip</li>
-<li>22 表示连接的默认端口号，后期也可以进行编辑更改。</li>
-</ol>
-<h3 id="配置远程ssh-登陆"><a href="#配置远程ssh-登陆" class="headerlink" title="配置远程ssh 登陆"></a>配置远程ssh 登陆</h3><h4 id="step-1-生成密钥对-本机操作"><a href="#step-1-生成密钥对-本机操作" class="headerlink" title="step 1:  生成密钥对 (本机操作)"></a>step 1:  生成密钥对 (本机操作)</h4><h5 id="1-进入当前用户目录，一般root用户只需要这样即可"><a href="#1-进入当前用户目录，一般root用户只需要这样即可" class="headerlink" title="1. 进入当前用户目录，一般root用户只需要这样即可"></a>1. 进入当前用户目录，一般root用户只需要这样即可</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br></pre></td></tr></table></figure>
-<h5 id="2-创建-ssh目录并设置权限"><a href="#2-创建-ssh目录并设置权限" class="headerlink" title="2. 创建.ssh目录并设置权限"></a>2. 创建.ssh目录并设置权限</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p .ssh</span><br><span class="line">chmod 700 .ssh</span><br></pre></td></tr></table></figure>
-<h5 id="3-进入-ssh-目录和生成密钥对"><a href="#3-进入-ssh-目录和生成密钥对" class="headerlink" title="3. 进入 .ssh 目录和生成密钥对"></a>3. 进入 .ssh 目录和生成密钥对</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd .ssh</span><br><span class="line">ssh-keygen</span><br></pre></td></tr></table></figure>
-<p>然后，一路回车即可</p>
-<p>这里要注意的是：</p>
-<ul>
-<li><p>一是 ssh-keygen 的详细用法，参见<a href="http://www.jinbuguo.com/openssh/ssh-keygen.html" target="_blank" rel="noopener">ssh-keygen 中文手册</a></p>
-</li>
-<li><p>二是前面生成密钥的会显示地址，记住这个地址，需要把id_rsa.pub 的内容复制出来，后面会用到。</p>
-</li>
-</ul>
-<h4 id="step-2-生成密钥认证文件-（在服务器端或者通过ssh-root操作）"><a href="#step-2-生成密钥认证文件-（在服务器端或者通过ssh-root操作）" class="headerlink" title="step 2: 生成密钥认证文件 （在服务器端或者通过ssh root操作）"></a>step 2: 生成密钥认证文件 （在服务器端或者通过ssh root操作）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1. 创建认证文件</span><br><span class="line">touch authorized_keys</span><br><span class="line"></span><br><span class="line">2. 编辑认证文件</span><br><span class="line">vi /root/.ssh/authorized_keys</span><br><span class="line">进入编辑界面后按i 开始编辑；</span><br><span class="line">把刚才复制的id_rsa.pub  内容复制到里面，稳妥起见，前面可以加一行注释，注释已#开头；</span><br><span class="line">最后按esc退出编辑状态，再按：wq 保存退出</span><br><span class="line">3. 授权认证文件</span><br><span class="line">chmod 600 authorized_keys</span><br></pre></td></tr></table></figure>
-<p>做完这三步，授权文件就搞定了。</p>
-<h4 id="step-3-修改SSH配置（在服务器端或者-ssh-root操作）"><a href="#step-3-修改SSH配置（在服务器端或者-ssh-root操作）" class="headerlink" title="step 3: 修改SSH配置（在服务器端或者 ssh root操作）"></a>step 3: 修改SSH配置（在服务器端或者 ssh root操作）</h4><h5 id="1-使用root登录修改配置文件：-etc-ssh-sshd-config"><a href="#1-使用root登录修改配置文件：-etc-ssh-sshd-config" class="headerlink" title="1. 使用root登录修改配置文件：/etc/ssh/sshd_config"></a>1. 使用root登录修改配置文件：/etc/ssh/sshd_config</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
-<h5 id="2-将下面的内容的前面的-去掉"><a href="#2-将下面的内容的前面的-去掉" class="headerlink" title="2. 将下面的内容的前面的 # 去掉"></a>2. 将下面的内容的前面的 # 去掉</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#PubkeyAuthentication yes</span><br><span class="line">#AuthorizedKeysFile .ssh/authorized_keys</span><br><span class="line"></span><br><span class="line">然后，修改下面的内容的 yes 为 no</span><br><span class="line"></span><br><span class="line">PasswordAuthentication yes</span><br></pre></td></tr></table></figure>
-<p>修改后效果为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RSAAuthentication yes</span><br><span class="line">PubkeyAuthentication yes</span><br><span class="line">AuthorizedKeysFile .ssh/authorized_keys</span><br><span class="line">PasswordAuthentication no</span><br></pre></td></tr></table></figure>
-<h5 id="3-最后重启SSH服务"><a href="#3-最后重启SSH服务" class="headerlink" title="3. 最后重启SSH服务"></a>3. 最后重启SSH服务</h5><p>CentOS 6.x：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service sshd restart</span><br></pre></td></tr></table></figure>
-<p>CentOS 7.x：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart sshd</span><br></pre></td></tr></table></figure>
-<p>step 4: 检验是否成功<br> 重启虚拟机，然后使用如下命令登陆</p>
-<pre><code>ssh root@xxx.xxx.xxx.xxx
-</code></pre>
+<h3 id="爬取网页通用框架"><a href="#爬取网页通用框架" class="headerlink" title="爬取网页通用框架"></a>爬取网页通用框架</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#定义函数</span><br><span class="line">def getHTMLText(url):</span><br><span class="line">    try:</span><br><span class="line">        r = requests.get(url,timeout=20) #设置超时</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = r.apparent_encoding</span><br><span class="line">        return r.text</span><br><span class="line">    except: #异常处理</span><br><span class="line">        return &quot;产生异常&quot;</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    url = &quot; &quot;</span><br><span class="line">    print(getHTMLText(url)) #调用函数</span><br></pre></td></tr></table></figure>
+<h3 id="爬虫协议"><a href="#爬虫协议" class="headerlink" title="爬虫协议"></a>爬虫协议</h3><p>爬虫协议，也被叫做robots协议，是为了告诉网络蜘蛛哪些页面可以抓取，哪些页面不能抓取</p>
+<h4 id="如何查看爬虫协议："><a href="#如何查看爬虫协议：" class="headerlink" title="如何查看爬虫协议："></a>如何查看爬虫协议：</h4><p>在访问网站域名后加上robots.txt即可，例如查看百度网站的爬虫协议：<a href="https://www.baidu.com/robots.txt" target="_blank" rel="noopener">https://www.baidu.com/robots.txt</a></p>
+<h4 id="爬虫协议属性："><a href="#爬虫协议属性：" class="headerlink" title="爬虫协议属性："></a>爬虫协议属性：</h4><h5 id="拦截所有的机器人："><a href="#拦截所有的机器人：" class="headerlink" title="拦截所有的机器人："></a>拦截所有的机器人：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User-agent: * </span><br><span class="line">Disallow: /</span><br></pre></td></tr></table></figure>
+<h5 id="允许所有的机器人："><a href="#允许所有的机器人：" class="headerlink" title="允许所有的机器人："></a>允许所有的机器人：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User-agent: * </span><br><span class="line">Disallow:</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -475,9 +486,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/centos/" rel="tag"># centos</a>
+            <a href="/tags/python/" rel="tag"># python</a>
           
-            <a href="/tags/ssh/" rel="tag"># ssh</a>
+            <a href="/tags/scrapy/" rel="tag"># scrapy</a>
+          
+            <a href="/tags/requests/" rel="tag"># requests</a>
           
         </div>
       
@@ -490,8 +503,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/13/howToSetDomain/" rel="next" title="Github折腾笔记：hexo+github  实现域名绑定">
-                <i class="fa fa-chevron-left"></i> Github折腾笔记：hexo+github  实现域名绑定
+              <a href="/2017/12/17/basisOfPthonScrapy/" rel="next" title="Python笔记： python 爬虫基础">
+                <i class="fa fa-chevron-left"></i> Python笔记： python 爬虫基础
               </a>
             
           </div>
@@ -499,10 +512,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/12/13/howToUseJamine/" rel="prev" title="前端学习笔记：如何使用Jasmine">
-                前端学习笔记：如何使用Jasmine <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -683,7 +692,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备工作："><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x51C6;&#x5907;&#x5DE5;&#x4F5C;&#xFF1A;" class="headerlink" title="&#x51C6;&#x5907;&#x5DE5;&#x4F5C;&#xFF1A;"></a>&#x51C6;&#x5907;&#x5DE5;&#x4F5C;&#xFF1A;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置静态IP"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x8BBE;&#x7F6E;&#x9759;&#x6001;IP" class="headerlink" title="&#x8BBE;&#x7F6E;&#x9759;&#x6001;IP"></a>&#x8BBE;&#x7F6E;&#x9759;&#x6001;IP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#step-1-查看当前网络状况，使用命令"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#step-1-&#x67E5;&#x770B;&#x5F53;&#x524D;&#x7F51;&#x7EDC;&#x72B6;&#x51B5;&#xFF0C;&#x4F7F;&#x7528;&#x547D;&#x4EE4;" class="headerlink" title="step 1: &#x67E5;&#x770B;&#x5F53;&#x524D;&#x7F51;&#x7EDC;&#x72B6;&#x51B5;&#xFF0C;&#x4F7F;&#x7528;&#x547D;&#x4EE4;"></a>step 1: &#x67E5;&#x770B;&#x5F53;&#x524D;&#x7F51;&#x7EDC;&#x72B6;&#x51B5;&#xFF0C;&#x4F7F;&#x7528;&#x547D;&#x4EE4;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#step-2-：编辑网卡配置"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#step-2-&#xFF1A;&#x7F16;&#x8F91;&#x7F51;&#x5361;&#x914D;&#x7F6E;" class="headerlink" title="step 2 &#xFF1A;&#x7F16;&#x8F91;&#x7F51;&#x5361;&#x914D;&#x7F6E;"></a>step 2 &#xFF1A;&#x7F16;&#x8F91;&#x7F51;&#x5361;&#x914D;&#x7F6E;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#step-3-重启ip设置"><span class="nav-number">2.3.</span> <span class="nav-text"><a href="#step-3-&#x91CD;&#x542F;ip&#x8BBE;&#x7F6E;" class="headerlink" title="step 3: &#x91CD;&#x542F;ip&#x8BBE;&#x7F6E;"></a>step 3: &#x91CD;&#x542F;ip&#x8BBE;&#x7F6E;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#远程连接此虚拟机"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x8FDC;&#x7A0B;&#x8FDE;&#x63A5;&#x6B64;&#x865A;&#x62DF;&#x673A;" class="headerlink" title="&#x8FDC;&#x7A0B;&#x8FDE;&#x63A5;&#x6B64;&#x865A;&#x62DF;&#x673A;"></a>&#x8FDC;&#x7A0B;&#x8FDE;&#x63A5;&#x6B64;&#x865A;&#x62DF;&#x673A;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#前提条件："><span class="nav-number">3.1.</span> <span class="nav-text"><a href="#&#x524D;&#x63D0;&#x6761;&#x4EF6;&#xFF1A;" class="headerlink" title="&#x524D;&#x63D0;&#x6761;&#x4EF6;&#xFF1A;"></a>&#x524D;&#x63D0;&#x6761;&#x4EF6;&#xFF1A;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输入如下命令进行连接："><span class="nav-number">3.2.</span> <span class="nav-text"><a href="#&#x8F93;&#x5165;&#x5982;&#x4E0B;&#x547D;&#x4EE4;&#x8FDB;&#x884C;&#x8FDE;&#x63A5;&#xFF1A;" class="headerlink" title="&#x8F93;&#x5165;&#x5982;&#x4E0B;&#x547D;&#x4EE4;&#x8FDB;&#x884C;&#x8FDE;&#x63A5;&#xFF1A;"></a>&#x8F93;&#x5165;&#x5982;&#x4E0B;&#x547D;&#x4EE4;&#x8FDB;&#x884C;&#x8FDE;&#x63A5;&#xFF1A;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置远程ssh-登陆"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x914D;&#x7F6E;&#x8FDC;&#x7A0B;ssh-&#x767B;&#x9646;" class="headerlink" title="&#x914D;&#x7F6E;&#x8FDC;&#x7A0B;ssh &#x767B;&#x9646;"></a>&#x914D;&#x7F6E;&#x8FDC;&#x7A0B;ssh &#x767B;&#x9646;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#step-1-生成密钥对-本机操作"><span class="nav-number">4.1.</span> <span class="nav-text"><a href="#step-1-&#x751F;&#x6210;&#x5BC6;&#x94A5;&#x5BF9;-&#x672C;&#x673A;&#x64CD;&#x4F5C;" class="headerlink" title="step 1:  &#x751F;&#x6210;&#x5BC6;&#x94A5;&#x5BF9; (&#x672C;&#x673A;&#x64CD;&#x4F5C;)"></a>step 1:  &#x751F;&#x6210;&#x5BC6;&#x94A5;&#x5BF9; (&#x672C;&#x673A;&#x64CD;&#x4F5C;)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-进入当前用户目录，一般root用户只需要这样即可"><span class="nav-number">4.1.1.</span> <span class="nav-text"><a href="#1-&#x8FDB;&#x5165;&#x5F53;&#x524D;&#x7528;&#x6237;&#x76EE;&#x5F55;&#xFF0C;&#x4E00;&#x822C;root&#x7528;&#x6237;&#x53EA;&#x9700;&#x8981;&#x8FD9;&#x6837;&#x5373;&#x53EF;" class="headerlink" title="1. &#x8FDB;&#x5165;&#x5F53;&#x524D;&#x7528;&#x6237;&#x76EE;&#x5F55;&#xFF0C;&#x4E00;&#x822C;root&#x7528;&#x6237;&#x53EA;&#x9700;&#x8981;&#x8FD9;&#x6837;&#x5373;&#x53EF;"></a>1. &#x8FDB;&#x5165;&#x5F53;&#x524D;&#x7528;&#x6237;&#x76EE;&#x5F55;&#xFF0C;&#x4E00;&#x822C;root&#x7528;&#x6237;&#x53EA;&#x9700;&#x8981;&#x8FD9;&#x6837;&#x5373;&#x53EF;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-创建-ssh目录并设置权限"><span class="nav-number">4.1.2.</span> <span class="nav-text"><a href="#2-&#x521B;&#x5EFA;-ssh&#x76EE;&#x5F55;&#x5E76;&#x8BBE;&#x7F6E;&#x6743;&#x9650;" class="headerlink" title="2. &#x521B;&#x5EFA;.ssh&#x76EE;&#x5F55;&#x5E76;&#x8BBE;&#x7F6E;&#x6743;&#x9650;"></a>2. &#x521B;&#x5EFA;.ssh&#x76EE;&#x5F55;&#x5E76;&#x8BBE;&#x7F6E;&#x6743;&#x9650;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-进入-ssh-目录和生成密钥对"><span class="nav-number">4.1.3.</span> <span class="nav-text"><a href="#3-&#x8FDB;&#x5165;-ssh-&#x76EE;&#x5F55;&#x548C;&#x751F;&#x6210;&#x5BC6;&#x94A5;&#x5BF9;" class="headerlink" title="3. &#x8FDB;&#x5165; .ssh &#x76EE;&#x5F55;&#x548C;&#x751F;&#x6210;&#x5BC6;&#x94A5;&#x5BF9;"></a>3. &#x8FDB;&#x5165; .ssh &#x76EE;&#x5F55;&#x548C;&#x751F;&#x6210;&#x5BC6;&#x94A5;&#x5BF9;</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#step-2-生成密钥认证文件-（在服务器端或者通过ssh-root操作）"><span class="nav-number">4.2.</span> <span class="nav-text"><a href="#step-2-&#x751F;&#x6210;&#x5BC6;&#x94A5;&#x8BA4;&#x8BC1;&#x6587;&#x4EF6;-&#xFF08;&#x5728;&#x670D;&#x52A1;&#x5668;&#x7AEF;&#x6216;&#x8005;&#x901A;&#x8FC7;ssh-root&#x64CD;&#x4F5C;&#xFF09;" class="headerlink" title="step 2: &#x751F;&#x6210;&#x5BC6;&#x94A5;&#x8BA4;&#x8BC1;&#x6587;&#x4EF6; &#xFF08;&#x5728;&#x670D;&#x52A1;&#x5668;&#x7AEF;&#x6216;&#x8005;&#x901A;&#x8FC7;ssh root&#x64CD;&#x4F5C;&#xFF09;"></a>step 2: &#x751F;&#x6210;&#x5BC6;&#x94A5;&#x8BA4;&#x8BC1;&#x6587;&#x4EF6; &#xFF08;&#x5728;&#x670D;&#x52A1;&#x5668;&#x7AEF;&#x6216;&#x8005;&#x901A;&#x8FC7;ssh root&#x64CD;&#x4F5C;&#xFF09;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#step-3-修改SSH配置（在服务器端或者-ssh-root操作）"><span class="nav-number">4.3.</span> <span class="nav-text"><a href="#step-3-&#x4FEE;&#x6539;SSH&#x914D;&#x7F6E;&#xFF08;&#x5728;&#x670D;&#x52A1;&#x5668;&#x7AEF;&#x6216;&#x8005;-ssh-root&#x64CD;&#x4F5C;&#xFF09;" class="headerlink" title="step 3: &#x4FEE;&#x6539;SSH&#x914D;&#x7F6E;&#xFF08;&#x5728;&#x670D;&#x52A1;&#x5668;&#x7AEF;&#x6216;&#x8005; ssh root&#x64CD;&#x4F5C;&#xFF09;"></a>step 3: &#x4FEE;&#x6539;SSH&#x914D;&#x7F6E;&#xFF08;&#x5728;&#x670D;&#x52A1;&#x5668;&#x7AEF;&#x6216;&#x8005; ssh root&#x64CD;&#x4F5C;&#xFF09;</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-使用root登录修改配置文件：-etc-ssh-sshd-config"><span class="nav-number">4.3.1.</span> <span class="nav-text"><a href="#1-&#x4F7F;&#x7528;root&#x767B;&#x5F55;&#x4FEE;&#x6539;&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#xFF1A;-etc-ssh-sshd-config" class="headerlink" title="1. &#x4F7F;&#x7528;root&#x767B;&#x5F55;&#x4FEE;&#x6539;&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#xFF1A;/etc/ssh/sshd_config"></a>1. &#x4F7F;&#x7528;root&#x767B;&#x5F55;&#x4FEE;&#x6539;&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#xFF1A;/etc/ssh/sshd_config</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-将下面的内容的前面的-去掉"><span class="nav-number">4.3.2.</span> <span class="nav-text"><a href="#2-&#x5C06;&#x4E0B;&#x9762;&#x7684;&#x5185;&#x5BB9;&#x7684;&#x524D;&#x9762;&#x7684;-&#x53BB;&#x6389;" class="headerlink" title="2. &#x5C06;&#x4E0B;&#x9762;&#x7684;&#x5185;&#x5BB9;&#x7684;&#x524D;&#x9762;&#x7684; # &#x53BB;&#x6389;"></a>2. &#x5C06;&#x4E0B;&#x9762;&#x7684;&#x5185;&#x5BB9;&#x7684;&#x524D;&#x9762;&#x7684; # &#x53BB;&#x6389;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-最后重启SSH服务"><span class="nav-number">4.3.3.</span> <span class="nav-text"><a href="#3-&#x6700;&#x540E;&#x91CD;&#x542F;SSH&#x670D;&#x52A1;" class="headerlink" title="3. &#x6700;&#x540E;&#x91CD;&#x542F;SSH&#x670D;&#x52A1;"></a>3. &#x6700;&#x540E;&#x91CD;&#x542F;SSH&#x670D;&#x52A1;</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x5B89;&#x88C5;" class="headerlink" title="&#x5B89;&#x88C5;"></a>&#x5B89;&#x88C5;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Requests的简单用法"><span class="nav-number">2.</span> <span class="nav-text"><a href="#Requests&#x7684;&#x7B80;&#x5355;&#x7528;&#x6CD5;" class="headerlink" title="Requests&#x7684;&#x7B80;&#x5355;&#x7528;&#x6CD5;"></a>Requests&#x7684;&#x7B80;&#x5355;&#x7528;&#x6CD5;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Requests库的七个主要方法"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#Requests&#x5E93;&#x7684;&#x4E03;&#x4E2A;&#x4E3B;&#x8981;&#x65B9;&#x6CD5;" class="headerlink" title="Requests&#x5E93;&#x7684;&#x4E03;&#x4E2A;&#x4E3B;&#x8981;&#x65B9;&#x6CD5;"></a>Requests&#x5E93;&#x7684;&#x4E03;&#x4E2A;&#x4E3B;&#x8981;&#x65B9;&#x6CD5;</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Requests-get的用法："><span class="nav-number">2.1.1.</span> <span class="nav-text"><a href="#Requests-get&#x7684;&#x7528;&#x6CD5;&#xFF1A;" class="headerlink" title="Requests.get&#x7684;&#x7528;&#x6CD5;&#xFF1A;"></a>Requests.get&#x7684;&#x7528;&#x6CD5;&#xFF1A;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Response对象的属性："><span class="nav-number">2.1.2.</span> <span class="nav-text"><a href="#Response&#x5BF9;&#x8C61;&#x7684;&#x5C5E;&#x6027;&#xFF1A;" class="headerlink" title="Response&#x5BF9;&#x8C61;&#x7684;&#x5C5E;&#x6027;&#xFF1A;"></a>Response&#x5BF9;&#x8C61;&#x7684;&#x5C5E;&#x6027;&#xFF1A;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#爬取网页通用框架"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x722C;&#x53D6;&#x7F51;&#x9875;&#x901A;&#x7528;&#x6846;&#x67B6;" class="headerlink" title="&#x722C;&#x53D6;&#x7F51;&#x9875;&#x901A;&#x7528;&#x6846;&#x67B6;"></a>&#x722C;&#x53D6;&#x7F51;&#x9875;&#x901A;&#x7528;&#x6846;&#x67B6;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#爬虫协议"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x722C;&#x866B;&#x534F;&#x8BAE;" class="headerlink" title="&#x722C;&#x866B;&#x534F;&#x8BAE;"></a>&#x722C;&#x866B;&#x534F;&#x8BAE;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何查看爬虫协议："><span class="nav-number">4.1.</span> <span class="nav-text"><a href="#&#x5982;&#x4F55;&#x67E5;&#x770B;&#x722C;&#x866B;&#x534F;&#x8BAE;&#xFF1A;" class="headerlink" title="&#x5982;&#x4F55;&#x67E5;&#x770B;&#x722C;&#x866B;&#x534F;&#x8BAE;&#xFF1A;"></a>&#x5982;&#x4F55;&#x67E5;&#x770B;&#x722C;&#x866B;&#x534F;&#x8BAE;&#xFF1A;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#爬虫协议属性："><span class="nav-number">4.2.</span> <span class="nav-text"><a href="#&#x722C;&#x866B;&#x534F;&#x8BAE;&#x5C5E;&#x6027;&#xFF1A;" class="headerlink" title="&#x722C;&#x866B;&#x534F;&#x8BAE;&#x5C5E;&#x6027;&#xFF1A;"></a>&#x722C;&#x866B;&#x534F;&#x8BAE;&#x5C5E;&#x6027;&#xFF1A;</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#拦截所有的机器人："><span class="nav-number">4.2.1.</span> <span class="nav-text"><a href="#&#x62E6;&#x622A;&#x6240;&#x6709;&#x7684;&#x673A;&#x5668;&#x4EBA;&#xFF1A;" class="headerlink" title="&#x62E6;&#x622A;&#x6240;&#x6709;&#x7684;&#x673A;&#x5668;&#x4EBA;&#xFF1A;"></a>&#x62E6;&#x622A;&#x6240;&#x6709;&#x7684;&#x673A;&#x5668;&#x4EBA;&#xFF1A;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#允许所有的机器人："><span class="nav-number">4.2.2.</span> <span class="nav-text"><a href="#&#x5141;&#x8BB8;&#x6240;&#x6709;&#x7684;&#x673A;&#x5668;&#x4EBA;&#xFF1A;" class="headerlink" title="&#x5141;&#x8BB8;&#x6240;&#x6709;&#x7684;&#x673A;&#x5668;&#x4EBA;&#xFF1A;"></a>&#x5141;&#x8BB8;&#x6240;&#x6709;&#x7684;&#x673A;&#x5668;&#x4EBA;&#xFF1A;</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -853,9 +862,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://steve-yuan-8276.github.io/2017/12/13/HowToInstallCentOS/';
-          this.page.identifier = '2017/12/13/HowToInstallCentOS/';
-          this.page.title = 'Linux折腾笔记：在Cent OS7上配置SSH';
+          this.page.url = 'https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/';
+          this.page.identifier = '2017/12/18/basisOfRequests/';
+          this.page.title = 'python爬虫学习笔记：Requests 的基本用法';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://steve-yuan.disqus.com/embed.js';

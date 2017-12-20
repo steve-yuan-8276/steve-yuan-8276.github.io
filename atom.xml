@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2017-12-18T05:20:59.572Z</updated>
+  <updated>2017-12-20T13:59:01.360Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>python爬虫学习笔记：Xpath的基本用法</title>
+    <link href="https://steve-yuan-8276.github.io/2017/12/20/basisOfXpath/"/>
+    <id>https://steve-yuan-8276.github.io/2017/12/20/basisOfXpath/</id>
+    <published>2017-12-20T13:56:58.000Z</published>
+    <updated>2017-12-20T13:59:01.360Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="installation"><a href="#installation" class="headerlink" title="installation"></a>installation</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install lxml</span><br></pre></td></tr></table></figure><h3 id="Xpath的使用："><a href="#Xpath的使用：" class="headerlink" title="Xpath的使用："></a>Xpath的使用：</h3><h4 id="1-使用Xpath解析网页数据的步骤"><a href="#1-使用Xpath解析网页数据的步骤" class="headerlink" title="1. 使用Xpath解析网页数据的步骤"></a>1. 使用Xpath解析网页数据的步骤</h4><ul><li>从lxml导入etree</li><li>解析数据，返回xml结构</li><li>使用.xpath()寻找和定位数据</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">html =&apos;&apos;&apos;#省略&apos;&apos;&apos;#html数据，使用requests获取</span><br><span class="line"></span><br><span class="line">s = etree.HTML(html)#解析html数据</span><br><span class="line"></span><br><span class="line">print(s.xpath())#使用.xpath()</span><br></pre></td></tr></table></figure><a id="more"></a><h4 id="2-获取Xpath的方法"><a href="#2-获取Xpath的方法" class="headerlink" title="2. 获取Xpath的方法"></a>2. 获取Xpath的方法</h4><h5 id="第一种方法：从浏览器直接复制"><a href="#第一种方法：从浏览器直接复制" class="headerlink" title="第一种方法：从浏览器直接复制"></a>第一种方法：从浏览器直接复制</h5><ul><li>首先在浏览器上定位到需要爬取的数据</li><li>右键，点击“检查”，在“Elements”下找到定位到所需数据</li><li>右键——Copy——Copy Xpath，即可完成Xpath的复制</li></ul><p>示例：<br><img src="http://oslz30y7b.bkt.clouddn.com/17-12-1/27475888.jpg" alt=""></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#从浏览器直接复制Xpath</span><br><span class="line">import requests</span><br><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">url = &apos;https://book.douban.com/subject/1084336/comments/&apos;</span><br><span class="line">r = requests.get(url).text</span><br><span class="line"></span><br><span class="line">s = etree.HTML(r)</span><br><span class="line">print(s.xpath(&apos;//*[@id=“comments”]/ul/li[1]/div[2]/p/text()&apos;))</span><br></pre></td></tr></table></figure><h5 id="第二种方法：手写Xpath"><a href="#第二种方法：手写Xpath" class="headerlink" title="第二种方法：手写Xpath"></a>第二种方法：手写Xpath</h5><ul><li>获取文本内容用 text()</li><li>获取注释用 comment()</li><li>获取其它任何属性用@xx，如： href, src, value</li><li>想要获取某个标签下所有的文本（包括子标签下的文本），使用string: 如”&lt; p&gt;123&lt; a&gt;来获取我啊&lt; /a&gt;&lt; /p&gt;”，这边如果想要得到的文本为”123来获取我啊”，则需要使用string</li><li>starts-with 匹配字符串前面相等</li><li>contains 匹配任何位置相等<br>示例：<br><img src="http://oslz30y7b.bkt.clouddn.com/17-12-1/66263706.jpg" alt=""></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#手写Xpath</span><br><span class="line">import requests</span><br><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">url = &apos;https://book.douban.com/subject/1084336/comments/&apos;</span><br><span class="line">r = requests.get(url).text</span><br><span class="line"></span><br><span class="line">s = etree.HTML(r)</span><br><span class="line">print(s.xpath(&apos;//div[@class=&quot;comment&quot;]/p/text()&apos;)[0])</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;installation&quot;&gt;&lt;a href=&quot;#installation&quot; class=&quot;headerlink&quot; title=&quot;installation&quot;&gt;&lt;/a&gt;installation&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pip install lxml&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;Xpath的使用：&quot;&gt;&lt;a href=&quot;#Xpath的使用：&quot; class=&quot;headerlink&quot; title=&quot;Xpath的使用：&quot;&gt;&lt;/a&gt;Xpath的使用：&lt;/h3&gt;&lt;h4 id=&quot;1-使用Xpath解析网页数据的步骤&quot;&gt;&lt;a href=&quot;#1-使用Xpath解析网页数据的步骤&quot; class=&quot;headerlink&quot; title=&quot;1. 使用Xpath解析网页数据的步骤&quot;&gt;&lt;/a&gt;1. 使用Xpath解析网页数据的步骤&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;从lxml导入etree&lt;/li&gt;
+&lt;li&gt;解析数据，返回xml结构&lt;/li&gt;
+&lt;li&gt;使用.xpath()寻找和定位数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;from lxml import etree&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;html =&amp;apos;&amp;apos;&amp;apos;#省略&amp;apos;&amp;apos;&amp;apos;#html数据，使用requests获取&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;s = etree.HTML(html)#解析html数据&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;print(s.xpath())#使用.xpath()&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="python" scheme="https://steve-yuan-8276.github.io/categories/python/"/>
+    
+    
+      <category term="python" scheme="https://steve-yuan-8276.github.io/tags/python/"/>
+    
+      <category term="scrapy" scheme="https://steve-yuan-8276.github.io/tags/scrapy/"/>
+    
+      <category term="Xpath" scheme="https://steve-yuan-8276.github.io/tags/Xpath/"/>
+    
+  </entry>
   
   <entry>
     <title>python爬虫学习笔记：Requests 的基本用法</title>

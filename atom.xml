@@ -421,11 +421,11 @@
       <category term="github" scheme="https://steve-yuan-8276.github.io/categories/github/"/>
     
     
+      <category term="ssh" scheme="https://steve-yuan-8276.github.io/tags/ssh/"/>
+    
       <category term="github" scheme="https://steve-yuan-8276.github.io/tags/github/"/>
     
       <category term="bash" scheme="https://steve-yuan-8276.github.io/tags/bash/"/>
-    
-      <category term="ssh" scheme="https://steve-yuan-8276.github.io/tags/ssh/"/>
     
   </entry>
   
@@ -601,9 +601,9 @@
       <category term="front-end" scheme="https://steve-yuan-8276.github.io/categories/front-end/"/>
     
     
-      <category term="front-end" scheme="https://steve-yuan-8276.github.io/tags/front-end/"/>
-    
       <category term="JavaScript" scheme="https://steve-yuan-8276.github.io/tags/JavaScript/"/>
+    
+      <category term="front-end" scheme="https://steve-yuan-8276.github.io/tags/front-end/"/>
     
       <category term="ES6" scheme="https://steve-yuan-8276.github.io/tags/ES6/"/>
     
@@ -666,9 +666,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="ssh" scheme="https://steve-yuan-8276.github.io/tags/ssh/"/>
-    
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
+    
+      <category term="ssh" scheme="https://steve-yuan-8276.github.io/tags/ssh/"/>
     
   </entry>
   

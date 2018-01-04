@@ -133,9 +133,9 @@
         <category>github</category>
       </categories>
       <tags>
+        <tag>ssh</tag>
         <tag>github</tag>
         <tag>bash</tag>
-        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -198,8 +198,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>JavaScript</tag>
+        <tag>front-end</tag>
         <tag>ES6</tag>
       </tags>
   </entry>
@@ -223,8 +223,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>centos</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>

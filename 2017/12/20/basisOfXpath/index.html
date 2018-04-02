@@ -89,13 +89,13 @@
 <meta property="og:site_name" content="Steve的折腾学习日志">
 <meta property="og:description" content="installation1pip install lxml Xpath的使用：1. 使用Xpath解析网页数据的步骤 从lxml导入etree 解析数据，返回xml结构 使用.xpath()寻找和定位数据  1234567from lxml import etreehtml =&amp;apos;&amp;apos;&amp;apos;#省略&amp;apos;&amp;apos;&amp;apos;#html数据，使用requests获取s">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://oslz30y7b.bkt.clouddn.com/17-12-1/27475888.jpg">
-<meta property="og:image" content="http://oslz30y7b.bkt.clouddn.com/17-12-1/66263706.jpg">
-<meta property="og:updated_time" content="2017-12-20T13:59:01.360Z">
+<meta property="og:image" content="https://farm5.staticflickr.com/4619/40100626262_150daf64f4_o.jpg">
+<meta property="og:image" content="https://farm5.staticflickr.com/4719/39234434515_428623e27d_o.jpg">
+<meta property="og:updated_time" content="2018-04-02T02:49:59.619Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python爬虫学习笔记：Xpath的基本用法">
 <meta name="twitter:description" content="installation1pip install lxml Xpath的使用：1. 使用Xpath解析网页数据的步骤 从lxml导入etree 解析数据，返回xml结构 使用.xpath()寻找和定位数据  1234567from lxml import etreehtml =&amp;apos;&amp;apos;&amp;apos;#省略&amp;apos;&amp;apos;&amp;apos;#html数据，使用requests获取s">
-<meta name="twitter:image" content="http://oslz30y7b.bkt.clouddn.com/17-12-1/27475888.jpg">
+<meta name="twitter:image" content="https://farm5.staticflickr.com/4619/40100626262_150daf64f4_o.jpg">
 
 
 
@@ -424,7 +424,7 @@
 <li>右键，点击“检查”，在“Elements”下找到定位到所需数据</li>
 <li>右键——Copy——Copy Xpath，即可完成Xpath的复制</li>
 </ul>
-<p>示例：<br><img src="http://oslz30y7b.bkt.clouddn.com/17-12-1/27475888.jpg" alt=""></p>
+<p>示例：<br><img src="https://farm5.staticflickr.com/4619/40100626262_150daf64f4_o.jpg" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#从浏览器直接复制Xpath</span><br><span class="line">import requests</span><br><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">url = &apos;https://book.douban.com/subject/1084336/comments/&apos;</span><br><span class="line">r = requests.get(url).text</span><br><span class="line"></span><br><span class="line">s = etree.HTML(r)</span><br><span class="line">print(s.xpath(&apos;//*[@id=“comments”]/ul/li[1]/div[2]/p/text()&apos;))</span><br></pre></td></tr></table></figure>
 <h5 id="第二种方法：手写Xpath"><a href="#第二种方法：手写Xpath" class="headerlink" title="第二种方法：手写Xpath"></a>第二种方法：手写Xpath</h5><ul>
 <li>获取文本内容用 text()</li>
@@ -432,7 +432,7 @@
 <li>获取其它任何属性用@xx，如： href, src, value</li>
 <li>想要获取某个标签下所有的文本（包括子标签下的文本），使用string: 如”&lt; p&gt;123&lt; a&gt;来获取我啊&lt; /a&gt;&lt; /p&gt;”，这边如果想要得到的文本为”123来获取我啊”，则需要使用string</li>
 <li>starts-with 匹配字符串前面相等</li>
-<li>contains 匹配任何位置相等<br>示例：<br><img src="http://oslz30y7b.bkt.clouddn.com/17-12-1/66263706.jpg" alt=""></li>
+<li>contains 匹配任何位置相等<br>示例：<br><img src="https://farm5.staticflickr.com/4719/39234434515_428623e27d_o.jpg" alt=""></li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#手写Xpath</span><br><span class="line">import requests</span><br><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">url = &apos;https://book.douban.com/subject/1084336/comments/&apos;</span><br><span class="line">r = requests.get(url).text</span><br><span class="line"></span><br><span class="line">s = etree.HTML(r)</span><br><span class="line">print(s.xpath(&apos;//div[@class=&quot;comment&quot;]/p/text()&apos;)[0])</span><br></pre></td></tr></table></figure>
 
@@ -469,8 +469,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/18/basisOfRequests/" rel="next" title="python爬虫学习笔记：Requests 的基本用法">
-                <i class="fa fa-chevron-left"></i> python爬虫学习笔记：Requests 的基本用法
+              <a href="/2017/12/15/setHttps/" rel="next" title="为GitHub Pages自定义域名配置HTTPS">
+                <i class="fa fa-chevron-left"></i> 为GitHub Pages自定义域名配置HTTPS
               </a>
             
           </div>
@@ -479,8 +479,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/20/howToUseGoogle/" rel="prev" title="HowTo系列| Google搜索常用技巧">
-                HowTo系列| Google搜索常用技巧 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/12/22/freeCodeCampNotes-1/" rel="prev" title="freeCodeCamp笔记：关于CSS优先级的一点常识">
+                freeCodeCamp笔记：关于CSS优先级的一点常识 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -572,7 +572,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -583,7 +583,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -594,7 +594,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

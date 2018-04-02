@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2018-04-02T14:26:02.763Z</updated>
+  <updated>2018-04-02T09:42:45.000Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -15,70 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title></title>
-    <link href="https://steve-yuan-8276.github.io/2018/04/02/httpAndHttps/"/>
-    <id>https://steve-yuan-8276.github.io/2018/04/02/httpAndHttps/</id>
-    <published>2018-04-02T14:26:02.763Z</published>
-    <updated>2018-04-02T14:26:02.763Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="网络基础：从HTTP-到-HTTPS"><a href="#网络基础：从HTTP-到-HTTPS" class="headerlink" title="网络基础：从HTTP 到 HTTPS"></a>网络基础：从HTTP 到 HTTPS</h1><h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>最近一个月都在忙着投简历换工作，要说其中最大的意外，就是在全然不抱希望的前提下给阿里巴巴投递前端工程师的简历，竟然还接到了面试电话。<br>惊不惊喜？意不意外？<br>反正我第一时间以为是淘宝客服来搞推销的，问清楚是面试电话后完全懵逼。从第一个问题开始就不知道自己再说什么……毫无例外滴挂掉了。<br>好吧，这也是真实实力的体现，革命尚未成功，同志仍需努力，加油吧！</p><p>哦，对了，这里说的第一个问题，就是http和https的问题。</p><h3 id="切入正题"><a href="#切入正题" class="headerlink" title="切入正题"></a>切入正题</h3><h4 id="HTTP-超文本传输协议（HyperText-Transfer-Protocol，缩写：HTTP）"><a href="#HTTP-超文本传输协议（HyperText-Transfer-Protocol，缩写：HTTP）" class="headerlink" title="HTTP:超文本传输协议（HyperText Transfer Protocol，缩写：HTTP）"></a>HTTP:超文本传输协议（HyperText Transfer Protocol，缩写：HTTP）</h4><p>HTTP协议，是互联网上应用最广泛的一种网络传输协议，默认使用80端口，主要用来在计算机网络之间进行通信。</p><h5 id="HTTP工作原理："><a href="#HTTP工作原理：" class="headerlink" title="HTTP工作原理："></a>HTTP工作原理：</h5><p><img src="https://lh3.googleusercontent.com/-cD5sV2BnGmc/WmB4UqzGHMI/AAAAAAABgEs/inzQcwbiwtwGV48xCmtfWGDYK0Kbg-pOQCHMYCw/I/15162716952948.jpg" alt=""></p><h5 id="HTTP请求-响应的步骤："><a href="#HTTP请求-响应的步骤：" class="headerlink" title="HTTP请求/响应的步骤："></a>HTTP请求/响应的步骤：</h5><ol><li>客户端连接到Web服务器，默认端口为80，建立一个TCP套接字连接。</li><li>通过TCP套接字，发送HTTP请求。</li><li>服务器接受请求并返回HTTP响应。</li><li>Web服务器主动关闭TCP套接字，释放TCP连接；客户端被动关闭TCP套接字，释放TCP连接。</li><li>客户端浏览器解析HTML内容。</li></ol><h5 id="HTTP协议的缺点："><a href="#HTTP协议的缺点：" class="headerlink" title="HTTP协议的缺点："></a>HTTP协议的缺点：</h5><p>由于HTTP协议采用明文传输，所以天生有两大弊端：</p><ol><li>隐私泄露：不解释</li><li>安全隐患：页面劫持、中间人攻击</li></ol><p>为了克服上述弊端，HTTPS应运而生。</p><h4 id="HTTPS：HTTPS：超文本传输安全协议（Hypertext-Transfer-Protocol-Secure，缩写：HTTPS）"><a href="#HTTPS：HTTPS：超文本传输安全协议（Hypertext-Transfer-Protocol-Secure，缩写：HTTPS）" class="headerlink" title="HTTPS：HTTPS：超文本传输安全协议（Hypertext Transfer Protocol Secure，缩写：HTTPS）"></a>HTTPS：HTTPS：超文本传输安全协议（Hypertext Transfer Protocol Secure，缩写：HTTPS）</h4><p>跟HTTP相比，最大的特点就写在脸上，secure，安全。那么，他是如何做到的呢？</p><h5 id="HTTPS工作原理："><a href="#HTTPS工作原理：" class="headerlink" title="HTTPS工作原理："></a>HTTPS工作原理：</h5><p><img src="https://lh3.googleusercontent.com/-lH6C_xUN3To/WmB6ZyZeMfI/AAAAAAABgE4/R7AdtYXSCIUY_Sks_XiXicvv8fh585fBwCHMYCw/I/15162722299193.jpg" alt=""></p><ol><li>客户使用HTTPS的URL访问Web服务器，要求与Web服务器建立SSL连接。　　</li><li>Web服务器收到客户端请求后，会将网站的证书信息（证书中包含公钥）传送一份给客户端。　　</li><li>客户端的浏览器与Web服务器开始协商SSL/TLS连接的安全等级，也就是信息加密的等级。　　</li><li>客户端的浏览器根据双方同意的安全等级，建立会话密钥，然后利用网站的公钥将会话密钥加密，并传送给网站。　　</li><li>Web服务器利用自己的私钥解密出会话密钥。　</li><li>Web服务器利用会话密钥加密与客户端之间的通信。</li></ol><p>整个这个过程，主要涉及CA证书和公钥方面的知识。<br>这样做的优点在于：</p><ul><li>数据安全</li><li>保护隐私</li><li>基于上述原因，在搜索收录的时候，SEO的排名也会更高一丢丢。</li></ul><p>当然，缺点也是有的，主要是：</p><ul><li>网址域名绑定配置比较麻烦；</li><li>加载时间延长，消耗系统资源；</li><li>SSL证书信用链体系并不安全，特别是在某些国家可以控制CA根证书的情况下，中间人攻击一样可行；</li></ul><h5 id="HTTPS证书的配置："><a href="#HTTPS证书的配置：" class="headerlink" title="HTTPS证书的配置："></a>HTTPS证书的配置：</h5><p> 此处省略五百字，回头补上。我的blog使用的是CloudFlare提供的UniversalSSL，重点是大写的免费！<br> 具体的备注过程之前整理过，地址在<a href="https://www.steve-yuan.com/2017/12/15/setHttps/" target="_blank" rel="noopener">这里</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;网络基础：从HTTP-到-HTTPS&quot;&gt;&lt;a href=&quot;#网络基础：从HTTP-到-HTTPS&quot; class=&quot;headerlink&quot; title=&quot;网络基础：从HTTP 到 HTTPS&quot;&gt;&lt;/a&gt;网络基础：从HTTP 到 HTTPS&lt;/h1&gt;&lt;h3 id=&quot;写
-      
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title></title>
-    <link href="https://steve-yuan-8276.github.io/2018/04/02/basisOfJs/"/>
-    <id>https://steve-yuan-8276.github.io/2018/04/02/basisOfJs/</id>
-    <published>2018-04-02T14:26:02.758Z</published>
-    <updated>2018-04-02T14:26:02.759Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="JS学习笔记：JavaScript常用基础知识整理"><a href="#JS学习笔记：JavaScript常用基础知识整理" class="headerlink" title="JS学习笔记：JavaScript常用基础知识整理"></a>JS学习笔记：JavaScript常用基础知识整理</h1><h3 id="类型和类型转换"><a href="#类型和类型转换" class="headerlink" title="类型和类型转换"></a>类型和类型转换</h3><p>JavaScript中有7个内置类型：null，undefined，boolean，number，string，object，和symbol(ES6)；除了object以外，其它都叫做基本类型。</p><h4 id="Null-vs-Undefined"><a href="#Null-vs-Undefined" class="headerlink" title="Null vs. Undefined"></a>Null vs. Undefined</h4><ul><li><p><strong>Undefined</strong>表示未定义。对于没有初始化的变量、函数调用时候未提供的函数参数、缺失的对象属性，它们的默认值就是undefined。如果一个函数没有返回语句，那么默认的返回值也是undefined。</p></li><li><p><strong>NUll</strong>表示值为空。一个变量我们可以将其赋值为null，表示当前的没有值。</p></li></ul><h4 id="隐式转换"><a href="#隐式转换" class="headerlink" title="隐式转换"></a>隐式转换</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var name = &apos;Joey&apos;;</span><br><span class="line">if (name) &#123;</span><br><span class="line">  console.log(name + &quot; doesn&apos;t share food!&quot;)  // Joey doesn’t share food!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>这里采用了隐式转化，就是当name == true ，则执行下面的语句；反之，当name == false，则不执行。</p><p>“”，0， null，undefined, NaN, false 会自动转换为false。其它的都会转换为真。</p><h4 id="vs"><a href="#vs" class="headerlink" title="== vs. ==="></a>== vs. ===</h4><ul><li>==在验证相等性的时候，会对类型不同的值做一个类型转换。</li><li>===对要判断的值不做类型转换。</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2 == &apos;2&apos;            // True</span><br><span class="line">2 === &apos;2&apos;           // False</span><br><span class="line">undefined == null   // True</span><br><span class="line">undefined === null  // False</span><br></pre></td></tr></table></figure><p>一些比较容易出错的例子：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">false == &quot;&quot;  // true</span><br><span class="line">false == []  // true</span><br><span class="line">false == &#123;&#125;  // false</span><br><span class="line">&quot;&quot; == 0      // true</span><br><span class="line">&quot;&quot; == []     // true</span><br><span class="line">&quot;&quot; == &#123;&#125;     // false</span><br><span class="line">0 == []      // true</span><br><span class="line">0 == &#123;&#125;      // false</span><br><span class="line">0 == null    // false</span><br></pre></td></tr></table></figure><h3 id="作用域-Scope"><a href="#作用域-Scope" class="headerlink" title="作用域(Scope)"></a>作用域(Scope)</h3><ul><li><p><strong>全局作用域</strong>是最外层的作用域，在函数外面定义的变量属于全局作用域，可以被任何其他子作用域访问。在浏览器中，window对象就是全局作用域。</p></li><li><p><strong>局部作用域</strong>是在函数内部的作用域。在局部作用域定义的变量只能在该作用域以及其子作用域被访问。</p></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function outer() &#123;</span><br><span class="line">  let a = 1;</span><br><span class="line">  function inner() &#123;</span><br><span class="line">    let b = 2;</span><br><span class="line">    function innermost() &#123;</span><br><span class="line">      let c = 3;</span><br><span class="line">      console.log(a, b, c);   // 1 2 3</span><br><span class="line">    &#125;</span><br><span class="line">    innermost();</span><br><span class="line">    console.log(a, b);        // 1 2 — &apos;c&apos; is not defined</span><br><span class="line">  &#125;</span><br><span class="line">  inner();</span><br><span class="line">  console.log(a);             // 1 — &apos;b&apos; and &apos;c&apos; are not defined</span><br><span class="line">&#125;</span><br><span class="line">outer();</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;JS学习笔记：JavaScript常用基础知识整理&quot;&gt;&lt;a href=&quot;#JS学习笔记：JavaScript常用基础知识整理&quot; class=&quot;headerlink&quot; title=&quot;JS学习笔记：JavaScript常用基础知识整理&quot;&gt;&lt;/a&gt;JS学习笔记：Java
-      
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title></title>
-    <link href="https://steve-yuan-8276.github.io/2018/04/02/README/"/>
-    <id>https://steve-yuan-8276.github.io/2018/04/02/README/</id>
-    <published>2018-04-02T14:26:02.757Z</published>
-    <updated>2018-04-02T14:26:02.757Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="blog-source"><a href="#blog-source" class="headerlink" title="blog-source"></a>blog-source</h1><p>blog更新文档暂存地址</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;blog-source&quot;&gt;&lt;a href=&quot;#blog-source&quot; class=&quot;headerlink&quot; title=&quot;blog-source&quot;&gt;&lt;/a&gt;blog-source&lt;/h1&gt;&lt;p&gt;blog更新文档暂存地址&lt;/p&gt;
-
-      
-    
-    </summary>
-    
-    
-  </entry>
   
   <entry>
     <title>Linux运维学习笔记3-1：用户配置文件和密码配置文件</title>
@@ -807,6 +743,139 @@
       <category term="bash" scheme="https://steve-yuan-8276.github.io/tags/bash/"/>
     
       <category term="commandLine" scheme="https://steve-yuan-8276.github.io/tags/commandLine/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Mac学习笔记：终端命令行都能做哪些有趣的事情</title>
+    <link href="https://steve-yuan-8276.github.io/2018/01/30/commandLineTrickConllection/"/>
+    <id>https://steve-yuan-8276.github.io/2018/01/30/commandLineTrickConllection/</id>
+    <published>2018-01-30T13:42:39.000Z</published>
+    <updated>2018-04-02T14:26:02.761Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>最近在学习的过程中，发现一些蛮有趣的shell trick，干脆整理一下，免得忘记了。</p><h4 id="tree"><a href="#tree" class="headerlink" title="tree"></a>tree</h4><p>list  contents  of directories in a tree-like format.顾名思义，就是可以像树状结构一样查看文件的目录。如下图所示：</p><a id="more"></a><p><img src="https://farm5.staticflickr.com/4604/39234422945_1ce3d988ce_o.jpg" alt=""></p><h5 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install tree //需要先安装brew</span><br></pre></td></tr></table></figure><h5 id="Verify-if-the-installation-was-successful"><a href="#Verify-if-the-installation-was-successful" class="headerlink" title="Verify if the installation was successful:"></a>Verify if the installation was successful:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tree --version</span><br></pre></td></tr></table></figure><h5 id="How-to-Use"><a href="#How-to-Use" class="headerlink" title="How to Use:"></a>How to Use:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tree -L 2 //L 表示level，后面的2表示两级目录</span><br></pre></td></tr></table></figure><p>最有用的就是这个，更多内容可以输入 <code>man tree</code> 或者 <code>tree -help</code> 进行查询。</p><h4 id="命令行查询天气"><a href="#命令行查询天气" class="headerlink" title="命令行查询天气"></a>命令行查询天气</h4><p><a href="http://wttr.in" target="_blank" rel="noopener">http://wttr.in</a> 是一个允许你搜索世界各地天气预报的网站，而且它的是以 ASCII 字符的形式来显示结果的。通过使用 cURL 访问 <a href="http://wttr.in，就能直接在终端显示查询结果了。" target="_blank" rel="noopener">http://wttr.in，就能直接在终端显示查询结果了。</a></p><p>查询效果是这样的，还是挺骚包的<br><img src="https://farm5.staticflickr.com/4711/39421680974_105b070e0e_o.jpg" alt=""></p><h5 id="获取指定地点的天气"><a href="#获取指定地点的天气" class="headerlink" title="获取指定地点的天气"></a>获取指定地点的天气</h5><h6 id="方式1-直接输入地点"><a href="#方式1-直接输入地点" class="headerlink" title="方式1:直接输入地点"></a>方式1:直接输入地点</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ curl wttr.in/New+York</span><br><span class="line"></span><br><span class="line">$ curl wttr.in/New_York</span><br><span class="line"></span><br><span class="line">$ curl wttr.in/newyork</span><br></pre></td></tr></table></figure><p><strong>warning： 教程上说单词之间要用+或者下划线连接，实测直接连在一起也可以，但是不能有空格，会报错。</strong></p><h6 id="方式2-获取地标性建筑天气"><a href="#方式2-获取地标性建筑天气" class="headerlink" title="方式2:获取地标性建筑天气"></a>方式2:获取地标性建筑天气</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl wttr.in/~tiananmen-square</span><br></pre></td></tr></table></figure><p><img src="https://farm5.staticflickr.com/4714/39234428045_bb0d6db5e7_o.jpg" alt=""></p><h6 id="方式3-获取ip所在地天气"><a href="#方式3-获取ip所在地天气" class="headerlink" title="方式3: 获取ip所在地天气"></a>方式3: 获取ip所在地天气</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl wttr.in/@linuxconfig.org</span><br></pre></td></tr></table></figure><h5 id="TIPS"><a href="#TIPS" class="headerlink" title="TIPS"></a>TIPS</h5><p>默认情况下，wttr.in 会根据你的实际地址来决定显示哪种温度单位（C 还是 F）。基本上，在美国，使用的是华氏度，而其他地方显示的是摄氏度。</p><p>当然，也可以指定显示的温度单位，在 URL 后添加 ?u 会显示华氏度，而添加 ?m 会显示摄氏度。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ curl wttr.in/New_York?m    //强制显示摄氏度</span><br><span class="line"></span><br><span class="line">$ curl wttr.in/Toronto?u     //强制显示华氏度</span><br></pre></td></tr></table></figure><h3 id="查询日历时间"><a href="#查询日历时间" class="headerlink" title="查询日历时间"></a>查询日历时间</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cal     //查看当月</span><br><span class="line">$ cal 2017      //查看当年的日历</span><br><span class="line">$ date     查询具体日期时间</span><br></pre></td></tr></table></figure><h3 id="查询比特币价格"><a href="#查询比特币价格" class="headerlink" title="查询比特币价格"></a>查询比特币价格</h3><p><img src="https://farm5.staticflickr.com/4628/28352847519_4669b0281e_o.png" alt=""></p><p>Installation：<br>前提是已经安装了node.js 和 npm，之后运行以下命令行：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g coinmon</span><br></pre></td></tr></table></figure><p>How to use：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">coinmon     //不带任何参数运行 Coinmon，显示前 10 位加密货币</span><br><span class="line"></span><br><span class="line">coinmon -t 20     //使用 -t 标志查看最高的 n 位加密货币</span><br><span class="line"></span><br><span class="line">coinmon -c cny    //价格默认以美元显示。你还可以使用 -c 标志将价格从美元转换为另一种货币；cny表示人民币</span><br><span class="line"></span><br><span class="line">coinmon -f btc     //使用-f 加货币简称查询制定货币价格</span><br><span class="line"></span><br><span class="line">coinmon -h     //查询说明文档</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;最近在学习的过程中，发现一些蛮有趣的shell trick，干脆整理一下，免得忘记了。&lt;/p&gt;
+&lt;h4 id=&quot;tree&quot;&gt;&lt;a href=&quot;#tree&quot; class=&quot;headerlink&quot; title=&quot;tree&quot;&gt;&lt;/a&gt;tree&lt;/h4&gt;&lt;p&gt;list  contents  of directories in a tree-like format.顾名思义，就是可以像树状结构一样查看文件的目录。如下图所示：&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="shell" scheme="https://steve-yuan-8276.github.io/categories/shell/"/>
+    
+    
+      <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
+    
+      <category term="bash" scheme="https://steve-yuan-8276.github.io/tags/bash/"/>
+    
+      <category term="commandLine" scheme="https://steve-yuan-8276.github.io/tags/commandLine/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>REACT学习笔记（一）：编程环境配置</title>
+    <link href="https://steve-yuan-8276.github.io/2018/01/30/reactNotes-environmentSetup/"/>
+    <id>https://steve-yuan-8276.github.io/2018/01/30/reactNotes-environmentSetup/</id>
+    <published>2018-01-30T13:28:27.000Z</published>
+    <updated>2018-04-02T14:26:02.765Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="编程环境搭建"><a href="#编程环境搭建" class="headerlink" title="编程环境搭建"></a>编程环境搭建</h3><ul><li>Homebrew</li><li>Git</li><li>Sublime as Editor</li><li>iTerm2 (Optional)</li><li>GitHub</li></ul><h4 id="Homebrew-包管理"><a href="#Homebrew-包管理" class="headerlink" title="Homebrew 包管理"></a>Homebrew 包管理</h4><h5 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</span><br></pre></td></tr></table></figure><h5 id="homebrew常用命令："><a href="#homebrew常用命令：" class="headerlink" title="homebrew常用命令："></a>homebrew常用命令：</h5><table><thead><tr><th>命令</th><th>作用</th></tr></thead><tbody><tr><td>brew install &lt;软件名&gt;</td><td>安装软件 </td></tr><tr><td>brew uninstall &lt;软件名&gt;</td><td>卸载软件</td></tr><tr><td>brew search &lt;软件名&gt;</td><td>查询软件</td></tr><tr><td>brew list</td><td>列出已安装的软件</td></tr><tr><td>brew update</td><td>更新brew</td></tr><tr><td>brew home</td><td>用浏览器打开brew的官方网站</td></tr><tr><td>brew info &lt;软件名&gt;</td><td>显示软件信息</td></tr><tr><td>brew deps</td><td>显示包依赖</td></tr></tbody></table><a id="more"></a><h4 id="Git-版本管理"><a href="#Git-版本管理" class="headerlink" title="Git  版本管理"></a>Git  版本管理</h4><h5 id="Installation："><a href="#Installation：" class="headerlink" title="Installation："></a>Installation：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install git</span><br></pre></td></tr></table></figure><h5 id="Verify-if-the-installation-was-successful"><a href="#Verify-if-the-installation-was-successful" class="headerlink" title="Verify if the installation was successful:"></a>Verify if the installation was successful:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git --version</span><br></pre></td></tr></table></figure><h4 id="Sublime-编辑器"><a href="#Sublime-编辑器" class="headerlink" title="Sublime 编辑器"></a>Sublime 编辑器</h4><h5 id="Installation-："><a href="#Installation-：" class="headerlink" title="Installation ："></a>Installation ：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">brew install caskroom/cask/brew-cask</span><br><span class="line">brew tap caskroom/versions</span><br><span class="line">brew cask install sublime-text</span><br></pre></td></tr></table></figure><h5 id="Verify-if-the-installation-was-successful-1"><a href="#Verify-if-the-installation-was-successful-1" class="headerlink" title="Verify if the installation was successful:"></a>Verify if the installation was successful:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sublime --version</span><br></pre></td></tr></table></figure><h5 id="open-any-directory-from-the-command-line-with-sublime-lt-fileName-gt"><a href="#open-any-directory-from-the-command-line-with-sublime-lt-fileName-gt" class="headerlink" title="open any directory from the command line with sublime + &lt;fileName&gt;"></a>open any directory from the command line with <code>sublime + &lt;fileName&gt;</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">link: ln -s &quot;/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl&quot; /usr/local/bin/sublime</span><br></pre></td></tr></table></figure><h4 id="iTerm2-终端替代品"><a href="#iTerm2-终端替代品" class="headerlink" title="iTerm2 终端替代品"></a>iTerm2 终端替代品</h4><h5 id="Installation：-1"><a href="#Installation：-1" class="headerlink" title="Installation："></a>Installation：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew cask install iterm2</span><br></pre></td></tr></table></figure><h4 id="Node-和-Npm"><a href="#Node-和-Npm" class="headerlink" title="Node 和 Npm"></a>Node 和 Npm</h4><p>DownLoad：<a href="https://nodejs.org/en/" target="_blank" rel="noopener">https://nodejs.org</a></p><p>Documentation 在<a href="https://nodejs.org/en/docs/" target="_blank" rel="noopener">这里</a></p><h5 id="Verify-if-the-installation-was-successful-2"><a href="#Verify-if-the-installation-was-successful-2" class="headerlink" title="Verify if the installation was successful:"></a>Verify if the installation was successful:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node --version</span><br><span class="line">npm --version</span><br></pre></td></tr></table></figure><h5 id="howToUse"><a href="#howToUse" class="headerlink" title="howToUse:"></a>howToUse:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g &lt;package&gt;    //全局安装，可以在任意文件夹使用</span><br><span class="line">npm install &lt;package&gt;     //本地安装，只能在安装文件夹里使用</span><br></pre></td></tr></table></figure><h5 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init -y</span><br></pre></td></tr></table></figure><p>-y 标记将把你的 package.json 内容初始化成默认值。如果你不加这个标记，就需要特别设 置该文件的内容。完成 npm 项目初始化之后，你就可以通过 npm install &lt; 包名 &gt; 来安装 新的 node 包了。</p><h4 id="安装-React"><a href="#安装-React" class="headerlink" title="安装 React"></a>安装 React</h4><h5 id="方法一：通过-CDN-content-delivery-network"><a href="#方法一：通过-CDN-content-delivery-network" class="headerlink" title="方法一：通过 CDN (content delivery network)"></a>方法一：通过 CDN (content delivery network)</h5><p>在HTML文件head部分插入：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script crossorigin src=&quot;https://unpkg.com/react@16/umd/react.development.js&quot;&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script crossorigin src=&quot;https://unpkg.com/react-dom@16/umd/react-dom.development.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure><p>WARNING：官方DOCS有一句警告：<code>only meant for development, and are not suitable for production.</code> 很机智的赶脚！</p><h5 id="方法二：npm安装"><a href="#方法二：npm安装" class="headerlink" title="方法二：npm安装"></a>方法二：npm安装</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm init -y    //前提：初始化npm 项目和 package.json 文件</span><br><span class="line">npm install react react-dom</span><br></pre></td></tr></table></figure><h3 id="零基础创建react应用-create-react-app"><a href="#零基础创建react应用-create-react-app" class="headerlink" title="零基础创建react应用 create-react-app"></a>零基础创建react应用 create-react-app</h3><h4 id="Instalation："><a href="#Instalation：" class="headerlink" title="Instalation："></a>Instalation：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g create-react-app</span><br></pre></td></tr></table></figure><h4 id="Verify-if-the-installation-was-successful-3"><a href="#Verify-if-the-installation-was-successful-3" class="headerlink" title="Verify if the installation was successful:"></a>Verify if the installation was successful:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create-react-app --version</span><br></pre></td></tr></table></figure><h4 id="创建react应用"><a href="#创建react应用" class="headerlink" title="创建react应用"></a>创建react应用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">create-react-app hackernews</span><br><span class="line">cd hackernews</span><br></pre></td></tr></table></figure><p>安装完之后的文件目录结构如下：<br><img src="https://farm5.staticflickr.com/4748/39234421475_2528656f83_o.jpg" alt=""></p><p>其中需要关注的文件夹有：</p><ul><li><p>README.md 说明文档</p></li><li><p>src/ ：重点关注，所有需要的文件都可以在这里找到。</p></li><li><p>public/: 包含了所有你的项目构建出的产品文件。最终所有你写在 src/ 文 件夹里面的代码都会在项目构建的时候被打包放在 public 文件夹下。</p></li></ul><p>其他有用的npm命令</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm start   // 在 http://localhost:3000 启动应用 </span><br><span class="line"></span><br><span class="line">npm test     // 运行所有测试 </span><br><span class="line"></span><br><span class="line">npm run build     // 构建项目的产品文件</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;编程环境搭建&quot;&gt;&lt;a href=&quot;#编程环境搭建&quot; class=&quot;headerlink&quot; title=&quot;编程环境搭建&quot;&gt;&lt;/a&gt;编程环境搭建&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Homebrew&lt;/li&gt;
+&lt;li&gt;Git&lt;/li&gt;
+&lt;li&gt;Sublime as Editor&lt;/li&gt;
+&lt;li&gt;iTerm2 (Optional)&lt;/li&gt;
+&lt;li&gt;GitHub&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;Homebrew-包管理&quot;&gt;&lt;a href=&quot;#Homebrew-包管理&quot; class=&quot;headerlink&quot; title=&quot;Homebrew 包管理&quot;&gt;&lt;/a&gt;Homebrew 包管理&lt;/h4&gt;&lt;h5 id=&quot;Installation&quot;&gt;&lt;a href=&quot;#Installation&quot; class=&quot;headerlink&quot; title=&quot;Installation&quot;&gt;&lt;/a&gt;Installation&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;/usr/bin/ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h5 id=&quot;homebrew常用命令：&quot;&gt;&lt;a href=&quot;#homebrew常用命令：&quot; class=&quot;headerlink&quot; title=&quot;homebrew常用命令：&quot;&gt;&lt;/a&gt;homebrew常用命令：&lt;/h5&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;命令&lt;/th&gt;
+&lt;th&gt;作用&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;brew install &amp;lt;软件名&amp;gt;&lt;/td&gt;
+&lt;td&gt;安装软件 &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;brew uninstall &amp;lt;软件名&amp;gt;&lt;/td&gt;
+&lt;td&gt;卸载软件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;brew search &amp;lt;软件名&amp;gt;&lt;/td&gt;
+&lt;td&gt;查询软件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;brew list&lt;/td&gt;
+&lt;td&gt;列出已安装的软件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;brew update&lt;/td&gt;
+&lt;td&gt;更新brew&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;brew home&lt;/td&gt;
+&lt;td&gt;用浏览器打开brew的官方网站&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;brew info &amp;lt;软件名&amp;gt;&lt;/td&gt;
+&lt;td&gt;显示软件信息&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;brew deps&lt;/td&gt;
+&lt;td&gt;显示包依赖&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+    
+    </summary>
+    
+      <category term="react" scheme="https://steve-yuan-8276.github.io/categories/react/"/>
+    
+    
+      <category term="github" scheme="https://steve-yuan-8276.github.io/tags/github/"/>
+    
+      <category term="react" scheme="https://steve-yuan-8276.github.io/tags/react/"/>
+    
+      <category term="node" scheme="https://steve-yuan-8276.github.io/tags/node/"/>
+    
+      <category term="npm" scheme="https://steve-yuan-8276.github.io/tags/npm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HEXO折腾笔记：给自己的博客做个美容</title>
+    <link href="https://steve-yuan-8276.github.io/2018/01/23/blogOptimazation/"/>
+    <id>https://steve-yuan-8276.github.io/2018/01/23/blogOptimazation/</id>
+    <published>2018-01-23T14:44:27.000Z</published>
+    <updated>2018-04-02T14:26:02.760Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>其实早就想折腾，一来忙着换工作，没心情；二来水平很菜，怕一不小心搞坏了。不过就想很多事情一样，心急吃不热豆腐。有些事情还是急不来的，所以……让我coding一下，冷静冷静。</p><p>是的，学习，让我们感觉到很踏实。</p><h3 id="fork-me-on-github"><a href="#fork-me-on-github" class="headerlink" title="fork me on github"></a>fork me on github</h3><h4 id="1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来；"><a href="#1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来；" class="headerlink" title="1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来；"></a>1）通过<a href="https://github.com/blog/273-github-ribbons" target="_blank" rel="noopener">github-ribbons</a>或<a href="http://tholman.com/github-corners/" target="_blank" rel="noopener">github-corners</a>，寻找合适的图标，把代码复制下来；</h4><p><img src="https://farm5.staticflickr.com/4622/28352861209_34a124ced4_o.jpg" alt=""></p><h4 id="2）打开themes-next-layout-layout-swig文件，把代码复制到-lt-div-class-quot-headband-quot-gt-lt-div-gt-下面。"><a href="#2）打开themes-next-layout-layout-swig文件，把代码复制到-lt-div-class-quot-headband-quot-gt-lt-div-gt-下面。" class="headerlink" title="2）打开themes/next/layout/_layout.swig文件，把代码复制到&lt;div class=&quot;headband&quot;&gt;&lt;/div&gt;下面。"></a>2）打开<code>themes/next/layout/_layout.swig</code>文件，把代码复制到<code>&lt;div class=&quot;headband&quot;&gt;&lt;/div&gt;</code>下面。</h4><a id="more"></a><h3 id="静态网页压缩"><a href="#静态网页压缩" class="headerlink" title="静态网页压缩"></a>静态网页压缩</h3><h4 id="1）在站点的根目录下执行以下命令："><a href="#1）在站点的根目录下执行以下命令：" class="headerlink" title="1）在站点的根目录下执行以下命令："></a>1）在站点的根目录下执行以下命令：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ npm install gulp -g</span><br><span class="line">$ npm install gulp-minify-css gulp-uglify gulp-htmlmin gulp-htmlclean gulp --save</span><br><span class="line">$ touch gulpfile.js  //新建 gulpfile.js</span><br></pre></td></tr></table></figure><h4 id="2）采用atom-打开gulpfile-js，复制粘贴以下代码："><a href="#2）采用atom-打开gulpfile-js，复制粘贴以下代码：" class="headerlink" title="2）采用atom 打开gulpfile.js，复制粘贴以下代码："></a>2）采用atom 打开gulpfile.js，复制粘贴以下代码：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">var gulp = require(&apos;gulp&apos;);</span><br><span class="line">var minifycss = require(&apos;gulp-minify-css&apos;);</span><br><span class="line">var uglify = require(&apos;gulp-uglify&apos;);</span><br><span class="line">var htmlmin = require(&apos;gulp-htmlmin&apos;);</span><br><span class="line">var htmlclean = require(&apos;gulp-htmlclean&apos;);</span><br><span class="line">// 压缩 public 目录 css</span><br><span class="line">gulp.task(&apos;minify-css&apos;, function() &#123;</span><br><span class="line">    return gulp.src(&apos;./public/**/*.css&apos;)</span><br><span class="line">        .pipe(minifycss())</span><br><span class="line">        .pipe(gulp.dest(&apos;./public&apos;));</span><br><span class="line">&#125;);</span><br><span class="line">// 压缩 public 目录 html</span><br><span class="line">gulp.task(&apos;minify-html&apos;, function() &#123;</span><br><span class="line">  return gulp.src(&apos;./public/**/*.html&apos;)</span><br><span class="line">    .pipe(htmlclean())</span><br><span class="line">    .pipe(htmlmin(&#123;</span><br><span class="line">         removeComments: true,</span><br><span class="line">         minifyJS: true,</span><br><span class="line">         minifyCSS: true,</span><br><span class="line">         minifyURLs: true,</span><br><span class="line">    &#125;))</span><br><span class="line">    .pipe(gulp.dest(&apos;./public&apos;))</span><br><span class="line">&#125;);</span><br><span class="line">// 压缩 public/js 目录 js</span><br><span class="line">gulp.task(&apos;minify-js&apos;, function() &#123;</span><br><span class="line">    return gulp.src(&apos;./public/**/*.js&apos;)</span><br><span class="line">        .pipe(uglify())</span><br><span class="line">        .pipe(gulp.dest(&apos;./public&apos;));</span><br><span class="line">&#125;);</span><br><span class="line">// 执行 gulp 命令时执行的任务</span><br><span class="line">gulp.task(&apos;default&apos;, [</span><br><span class="line">    &apos;minify-html&apos;,&apos;minify-css&apos;,&apos;minify-js&apos;</span><br><span class="line">]);</span><br></pre></td></tr></table></figure><p>3）更新推送</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">gulp</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure><h3 id="增加字数统计"><a href="#增加字数统计" class="headerlink" title="增加字数统计"></a>增加字数统计</h3><p>利用统计功能，显示文章字数统计,阅读时长,总字数</p><p>1）在站点的根目录下，输入命令：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm i --save hexo-wordcount</span><br></pre></td></tr></table></figure><p>2）打开 <code>themes/next/_config.yml</code>，搜索关键字 <code>post_wordcount</code>：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># Post wordcount display settings</span><br><span class="line"># Dependencies: https://github.com/willin/hexo-wordcount</span><br><span class="line">post_wordcount:</span><br><span class="line">  item_text: true</span><br><span class="line">  #字数统计</span><br><span class="line">  wordcount: true</span><br><span class="line">  #预览时间</span><br><span class="line">  min2read: true</span><br><span class="line">  #总字数,显示在页面底部</span><br><span class="line">  totalcount: true</span><br><span class="line">  separated_meta: true</span><br></pre></td></tr></table></figure><h3 id="实现动态背景"><a href="#实现动态背景" class="headerlink" title="实现动态背景"></a>实现动态背景</h3><p>这个比较酷炫，但是实现方法是最简单的，因为next V5.1.1主题自带，大牛已经写好了只要在设置文件中开启即可。</p><p>在站点目录，找到next主题文件夹，路径是<code>themes/next/_config.yml</code>，搜索找到<code>canvas_nest: false</code>，把它改为<code>canvas_nest: true</code> ，齐活。</p><h3 id="预览效果"><a href="#预览效果" class="headerlink" title="预览效果"></a>预览效果</h3><p>最后的最后，所有的这些改动，会让blog看起来挺像那么回事。虽然也还是菜鸟，不过，怎么说呢……呵呵</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;其实早就想折腾，一来忙着换工作，没心情；二来水平很菜，怕一不小心搞坏了。不过就想很多事情一样，心急吃不热豆腐。有些事情还是急不来的，所以……让我coding一下，冷静冷静。&lt;/p&gt;
+&lt;p&gt;是的，学习，让我们感觉到很踏实。&lt;/p&gt;
+&lt;h3 id=&quot;fork-me-on-github&quot;&gt;&lt;a href=&quot;#fork-me-on-github&quot; class=&quot;headerlink&quot; title=&quot;fork me on github&quot;&gt;&lt;/a&gt;fork me on github&lt;/h3&gt;&lt;h4 id=&quot;1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来；&quot;&gt;&lt;a href=&quot;#1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来；&quot; class=&quot;headerlink&quot; title=&quot;1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来；&quot;&gt;&lt;/a&gt;1）通过&lt;a href=&quot;https://github.com/blog/273-github-ribbons&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;github-ribbons&lt;/a&gt;或&lt;a href=&quot;http://tholman.com/github-corners/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;github-corners&lt;/a&gt;，寻找合适的图标，把代码复制下来；&lt;/h4&gt;&lt;p&gt;&lt;img src=&quot;https://farm5.staticflickr.com/4622/28352861209_34a124ced4_o.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;h4 id=&quot;2）打开themes-next-layout-layout-swig文件，把代码复制到-lt-div-class-quot-headband-quot-gt-lt-div-gt-下面。&quot;&gt;&lt;a href=&quot;#2）打开themes-next-layout-layout-swig文件，把代码复制到-lt-div-class-quot-headband-quot-gt-lt-div-gt-下面。&quot; class=&quot;headerlink&quot; title=&quot;2）打开themes/next/layout/_layout.swig文件，把代码复制到&amp;lt;div class=&amp;quot;headband&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;下面。&quot;&gt;&lt;/a&gt;2）打开&lt;code&gt;themes/next/layout/_layout.swig&lt;/code&gt;文件，把代码复制到&lt;code&gt;&amp;lt;div class=&amp;quot;headband&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&lt;/code&gt;下面。&lt;/h4&gt;
+    
+    </summary>
+    
+      <category term="hexo" scheme="https://steve-yuan-8276.github.io/categories/hexo/"/>
+    
+    
+      <category term="github" scheme="https://steve-yuan-8276.github.io/tags/github/"/>
+    
+      <category term="hexo" scheme="https://steve-yuan-8276.github.io/tags/hexo/"/>
+    
+      <category term="next" scheme="https://steve-yuan-8276.github.io/tags/next/"/>
     
   </entry>
   

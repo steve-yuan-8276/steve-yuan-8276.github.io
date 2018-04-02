@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title></title>
-    <url>%2F2018%2F04%2F02%2FhttpAndHttps%2F</url>
-    <content type="text"><![CDATA[网络基础：从HTTP 到 HTTPS写在前面最近一个月都在忙着投简历换工作，要说其中最大的意外，就是在全然不抱希望的前提下给阿里巴巴投递前端工程师的简历，竟然还接到了面试电话。惊不惊喜？意不意外？反正我第一时间以为是淘宝客服来搞推销的，问清楚是面试电话后完全懵逼。从第一个问题开始就不知道自己再说什么……毫无例外滴挂掉了。好吧，这也是真实实力的体现，革命尚未成功，同志仍需努力，加油吧！ 哦，对了，这里说的第一个问题，就是http和https的问题。 切入正题HTTP:超文本传输协议（HyperText Transfer Protocol，缩写：HTTP）HTTP协议，是互联网上应用最广泛的一种网络传输协议，默认使用80端口，主要用来在计算机网络之间进行通信。 HTTP工作原理： HTTP请求/响应的步骤： 客户端连接到Web服务器，默认端口为80，建立一个TCP套接字连接。 通过TCP套接字，发送HTTP请求。 服务器接受请求并返回HTTP响应。 Web服务器主动关闭TCP套接字，释放TCP连接；客户端被动关闭TCP套接字，释放TCP连接。 客户端浏览器解析HTML内容。 HTTP协议的缺点：由于HTTP协议采用明文传输，所以天生有两大弊端： 隐私泄露：不解释 安全隐患：页面劫持、中间人攻击 为了克服上述弊端，HTTPS应运而生。 HTTPS：HTTPS：超文本传输安全协议（Hypertext Transfer Protocol Secure，缩写：HTTPS）跟HTTP相比，最大的特点就写在脸上，secure，安全。那么，他是如何做到的呢？ HTTPS工作原理： 客户使用HTTPS的URL访问Web服务器，要求与Web服务器建立SSL连接。 Web服务器收到客户端请求后，会将网站的证书信息（证书中包含公钥）传送一份给客户端。 客户端的浏览器与Web服务器开始协商SSL/TLS连接的安全等级，也就是信息加密的等级。 客户端的浏览器根据双方同意的安全等级，建立会话密钥，然后利用网站的公钥将会话密钥加密，并传送给网站。 Web服务器利用自己的私钥解密出会话密钥。 Web服务器利用会话密钥加密与客户端之间的通信。 整个这个过程，主要涉及CA证书和公钥方面的知识。这样做的优点在于： 数据安全 保护隐私 基于上述原因，在搜索收录的时候，SEO的排名也会更高一丢丢。 当然，缺点也是有的，主要是： 网址域名绑定配置比较麻烦； 加载时间延长，消耗系统资源； SSL证书信用链体系并不安全，特别是在某些国家可以控制CA根证书的情况下，中间人攻击一样可行； HTTPS证书的配置： 此处省略五百字，回头补上。我的blog使用的是CloudFlare提供的UniversalSSL，重点是大写的免费！ 具体的备注过程之前整理过，地址在这里]]></content>
-  </entry>
-  <entry>
-    <title></title>
-    <url>%2F2018%2F04%2F02%2FbasisOfJs%2F</url>
-    <content type="text"><![CDATA[JS学习笔记：JavaScript常用基础知识整理类型和类型转换JavaScript中有7个内置类型：null，undefined，boolean，number，string，object，和symbol(ES6)；除了object以外，其它都叫做基本类型。 Null vs. Undefined Undefined表示未定义。对于没有初始化的变量、函数调用时候未提供的函数参数、缺失的对象属性，它们的默认值就是undefined。如果一个函数没有返回语句，那么默认的返回值也是undefined。 NUll表示值为空。一个变量我们可以将其赋值为null，表示当前的没有值。 隐式转换1234var name = &apos;Joey&apos;;if (name) &#123; console.log(name + &quot; doesn&apos;t share food!&quot;) // Joey doesn’t share food!&#125; 这里采用了隐式转化，就是当name == true ，则执行下面的语句；反之，当name == false，则不执行。 “”，0， null，undefined, NaN, false 会自动转换为false。其它的都会转换为真。 == vs. === ==在验证相等性的时候，会对类型不同的值做一个类型转换。 ===对要判断的值不做类型转换。 12342 == &apos;2&apos; // True2 === &apos;2&apos; // Falseundefined == null // Trueundefined === null // False 一些比较容易出错的例子： 123456789false == &quot;&quot; // truefalse == [] // truefalse == &#123;&#125; // false&quot;&quot; == 0 // true&quot;&quot; == [] // true&quot;&quot; == &#123;&#125; // false0 == [] // true0 == &#123;&#125; // false0 == null // false 作用域(Scope) 全局作用域是最外层的作用域，在函数外面定义的变量属于全局作用域，可以被任何其他子作用域访问。在浏览器中，window对象就是全局作用域。 局部作用域是在函数内部的作用域。在局部作用域定义的变量只能在该作用域以及其子作用域被访问。 123456789101112131415function outer() &#123; let a = 1; function inner() &#123; let b = 2; function innermost() &#123; let c = 3; console.log(a, b, c); // 1 2 3 &#125; innermost(); console.log(a, b); // 1 2 — &apos;c&apos; is not defined &#125; inner(); console.log(a); // 1 — &apos;b&apos; and &apos;c&apos; are not defined&#125;outer();]]></content>
-  </entry>
-  <entry>
-    <title></title>
-    <url>%2F2018%2F04%2F02%2FREADME%2F</url>
-    <content type="text"><![CDATA[blog-sourceblog更新文档暂存地址]]></content>
-  </entry>
-  <entry>
     <title><![CDATA[Linux运维学习笔记3-1：用户配置文件和密码配置文件]]></title>
     <url>%2F2018%2F04%2F02%2Fweek-3-1-passwd-shadow%2F</url>
     <content type="text"><![CDATA[写在前面上周五晚上手贱把mac系统升级到最新的10.13.4，升级过程还算顺利，哪知道周日晚上再打开电脑系统就崩溃了——所有的文件、系统设置统统都没有了……重装系统后，发现有6个系统按键又失灵了！ 这件事的直接后果是： 所有的系统文件丢失，虚拟机神马的全都没有了； 已预约mac直营店修 当然，这件事同时也说明了，系统备份还是很有必要的！！！ linux 和 windows 文件互传注：此方法适用于win 和 linux 之间，并且win上需要安装xshell 安装插件 lrzsz 用法： linux to win： sz [filename] 弹出对话框选择文件 win to linux：rz [filename] 弹出对话框选择文件 用户配置文件和密码配置文件/etc/passwd 用户配置文件使用命令： cat /etc/passwd | head 如上图所示，共有7个字段，具体含义如下： 字段 含义 备注 1 user name，用户名 用户名可以由大小写字母、数字、减号、点或者下划线构成 2 password 由于安全因素，这里的password 被放在/etc/shadow 当中，这里用x代替。 3 uid 用户标示号，root用户的uid是0；uid1000以内的系统预留，普通标示号从1000开始 4 gid 组标示号 5 注释说明 如姓名、电话、地址等，可以用 chfn 命令进行更改 6 用户家目录 root 的家目录为 /root；普通用户的家目录为 /home/username 7 用户的shell 常见的shell包括：bash、zsh、ksh 等。另外，该字段还有/sbin/nologin，表示不允许该账号登陆 /etc/shadow 密码配置文件查看命令： cat /etc/shadow | head -n 3 通过上述命令查询到了shadow 文件的前三行内容，每行共分9段，含义如下： 字段 含义 1 用户名，username 2 password，此处显示的是加密之后的密文 3 上次更改密码的时间，此处的时间是以1970年1月1日为起点算传来的 4 经过多少天密码才可以修改，默认是0 ，表示不受限制 5 多少天后密码到期，默认设为99999（大概是273年？） 6 密码到期前的警告期限，默认是7 7 密码到期后的失效期限 8 密码的生命周期，计算方法跟3一样 9 保留字段 用户和用户组管理增加用户 useradd [参数] [username] 常用参数 含义 -u 自定义uid -g 添加到已存在的某个组，后面可以是gid，也可以是组名 -d 自定义家目录 -M 不建立家目录 -s 自定义shell 示例 ： 不带参数，创建与当前用户同组的用户 g 添加到已经存在的某个组；如果gid不存在，则会报错 M 不创建家目录 删除用户 userdel [参数] [username] -r 参数的作用是，同时删除用户及用户家目录；如果省略，则只删除用户，保留 用户家目录。 使用 -r 参数 针对组的操作 groupadd 和 groupdel添加组 groupadd [-g gid] [groupname]-g 为可选参数，用来定义gid，可以不添加。 删除组 groupdel [groupname] 注，如果改组中包含用户，就不可以直接删除，原理类似于 rmdir不能删除非空目录。]]></content>
@@ -263,10 +248,10 @@
         <category>react</category>
       </categories>
       <tags>
+        <tag>github</tag>
         <tag>react</tag>
         <tag>node</tag>
         <tag>npm</tag>
-        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -277,8 +262,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -313,8 +298,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -325,8 +310,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -462,8 +447,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -501,8 +486,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
         <tag>https</tag>
       </tags>
   </entry>
@@ -540,8 +525,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -564,8 +549,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -601,8 +586,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
 </search>

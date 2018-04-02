@@ -92,7 +92,7 @@
 <meta property="og:image" content="https://farm1.staticflickr.com/805/39264033010_f44a3df2ca_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/799/41046981492_381002a7b0_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/877/40380947864_168e70a3a8_o.png">
-<meta property="og:updated_time" content="2018-04-02T02:53:34.000Z">
+<meta property="og:updated_time" content="2018-04-02T14:26:02.769Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux运维学习笔记2-5：如何在linux下进行文件搜素">
 <meta name="twitter:description" content="写在前面这则笔记简要总结文件类型，以及如何在linux系统进行文件搜索。 linux系统文件类型与后缀名linux文件类型在Linux当中，一切设备均为文件。使用ll  [filename] 或者 ls -l [filename/dirname]  查看文件类型。在这则笔记 中已经进行总结。这里再整理一下常用类型用法： 普通文件：一般类型的文件，主要包括：  纯文本档ASCII：文件内容可以直接读">
@@ -455,9 +455,9 @@
 <p>命令行格式： <code>find [路径] [参数] -print</code></p>
 <p>上述命令可以简单地理解为<code>find + 限定条件</code> 通过限定条件来查找所需的文件。<code>-print</code>将匹配的文件输出到标准输出，可省略。</p>
 <h5 id="结合路径进行搜索"><a href="#结合路径进行搜索" class="headerlink" title="结合路径进行搜索"></a>结合路径进行搜索</h5><p>路径，此选项可省略，指的是查找的目录路径，比如要在<code>home</code>目录下找某个文件，就是<code>/home</code> ；需要在<code>etc</code> 目录下找某个配置文件，就是 <code>/etc</code>。</p>
-<h6 id="查找-HOME目录中的文件"><a href="#查找-HOME目录中的文件" class="headerlink" title="查找$HOME目录中的文件"></a>查找$HOME目录中的文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">find ~ -name &quot;*&quot;   //这两者写法都可以</span><br><span class="line">find . -print</span><br></pre></td></tr></table></figure>
-<h6 id="在当前目录及子目录中查找所有的‘-log‘文件"><a href="#在当前目录及子目录中查找所有的‘-log‘文件" class="headerlink" title="在当前目录及子目录中查找所有的‘ *.log‘文件"></a>在当前目录及子目录中查找所有的‘ *.log‘文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name &quot;*.log&quot;</span><br></pre></td></tr></table></figure>
-<h6 id="在当前目录及子目录中查找文件名以一个大写字母开头的文件"><a href="#在当前目录及子目录中查找文件名以一个大写字母开头的文件" class="headerlink" title="在当前目录及子目录中查找文件名以一个大写字母开头的文件"></a>在当前目录及子目录中查找文件名以一个大写字母开头的文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name &quot;[A-Z]*&quot;</span><br></pre></td></tr></table></figure>
+<h6 id="查找-HOME目录中的文件"><a href="#查找-HOME目录中的文件" class="headerlink" title="查找$HOME目录中的文件"></a>查找$HOME目录中的文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">find ~ -name &quot;*&quot; -print   //这两者写法都可以</span><br><span class="line">find . -print</span><br></pre></td></tr></table></figure>
+<h6 id="在当前目录及子目录中查找所有的‘-log‘文件"><a href="#在当前目录及子目录中查找所有的‘-log‘文件" class="headerlink" title="在当前目录及子目录中查找所有的‘ *.log‘文件"></a>在当前目录及子目录中查找所有的‘ *.log‘文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name &quot;*.log&quot; -print</span><br></pre></td></tr></table></figure>
+<h6 id="在当前目录及子目录中查找文件名以一个大写字母开头的文件"><a href="#在当前目录及子目录中查找文件名以一个大写字母开头的文件" class="headerlink" title="在当前目录及子目录中查找文件名以一个大写字母开头的文件"></a>在当前目录及子目录中查找文件名以一个大写字母开头的文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name &quot;[A-Z]*&quot; -print</span><br></pre></td></tr></table></figure>
 <h5 id="结合参数进行搜索"><a href="#结合参数进行搜索" class="headerlink" title="结合参数进行搜索"></a>结合参数进行搜索</h5><h6 id="name-按照文件名查找文件"><a href="#name-按照文件名查找文件" class="headerlink" title="-name  按照文件名查找文件"></a><code>-name</code>  按照文件名查找文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name [filename]</span><br></pre></td></tr></table></figure>
 <h6 id="type按照文件类型查找文件"><a href="#type按照文件类型查找文件" class="headerlink" title="-type按照文件类型查找文件"></a><code>-type</code>按照文件类型查找文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -type [filename]</span><br></pre></td></tr></table></figure>
 <ul>
@@ -478,8 +478,8 @@
 </li>
 </ul>
 <p>后面的 n 表示天数，比如 -atime +n/-n 表示访问或者执行时间大于或小于n天的条件。</p>
-<h6 id="perm-按照文件权限来查找文件"><a href="#perm-按照文件权限来查找文件" class="headerlink" title="-perm 按照文件权限来查找文件"></a><code>-perm</code> 按照文件权限来查找文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -perm 755      //在当前目录下查找文件权限位为755的文件</span><br></pre></td></tr></table></figure>
-<h6 id="user-按照文件属主来查找文件"><a href="#user-按照文件属主来查找文件" class="headerlink" title="-user 按照文件属主来查找文件"></a><code>-user</code> 按照文件属主来查找文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~ -user sam      //在$HOME目录中查找文件属主为sam的文件</span><br></pre></td></tr></table></figure>
+<h6 id="perm-按照文件权限来查找文件"><a href="#perm-按照文件权限来查找文件" class="headerlink" title="-perm 按照文件权限来查找文件"></a><code>-perm</code> 按照文件权限来查找文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -perm 755 –print    //在当前目录下查找文件权限位为755的文件</span><br></pre></td></tr></table></figure>
+<h6 id="user-按照文件属主来查找文件"><a href="#user-按照文件属主来查找文件" class="headerlink" title="-user 按照文件属主来查找文件"></a><code>-user</code> 按照文件属主来查找文件</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~ -user sam –print     //在$HOME目录中查找文件属主为sam的文件</span><br></pre></td></tr></table></figure>
 <p>模糊搜索</p>
 <p>更多find 参数，可以在这两个文章查询：</p>
 <ul>
@@ -675,7 +675,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -686,7 +686,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -697,7 +697,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

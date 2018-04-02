@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="ssh,github," />
+  <meta name="keywords" content="github,ssh," />
 
 
 
@@ -82,7 +82,7 @@
 
 
 <meta name="description" content="准备工作 安装Apple公司的Xcode，最新版的Xcode已经默认安装好了git。完成安装之后，就可以使用 git 的命令行工具。 登陆github网站申请一个免费账号。">
-<meta name="keywords" content="ssh,github">
+<meta name="keywords" content="github,ssh">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Github折腾笔记：mac电脑如何配置ssh连接github">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/01/04/shh-github/index.html">
@@ -90,7 +90,7 @@
 <meta property="og:description" content="准备工作 安装Apple公司的Xcode，最新版的Xcode已经默认安装好了git。完成安装之后，就可以使用 git 的命令行工具。 登陆github网站申请一个免费账号。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm5.staticflickr.com/4659/26259661148_836f20c8cb_o.jpg">
-<meta property="og:updated_time" content="2018-04-02T02:49:59.626Z">
+<meta property="og:updated_time" content="2018-04-02T02:49:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Github折腾笔记：mac电脑如何配置ssh连接github">
 <meta name="twitter:description" content="准备工作 安装Apple公司的Xcode，最新版的Xcode已经默认安装好了git。完成安装之后，就可以使用 git 的命令行工具。 登陆github网站申请一个免费账号。">
@@ -446,9 +446,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/ssh/" rel="tag"># ssh</a>
-          
             <a href="/tags/github/" rel="tag"># github</a>
+          
+            <a href="/tags/ssh/" rel="tag"># ssh</a>
           
         </div>
       
@@ -654,7 +654,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备工作"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x51C6;&#x5907;&#x5DE5;&#x4F5C;" class="headerlink" title="&#x51C6;&#x5907;&#x5DE5;&#x4F5C;"></a>&#x51C6;&#x5907;&#x5DE5;&#x4F5C;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置账号信息"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x914D;&#x7F6E;&#x8D26;&#x53F7;&#x4FE1;&#x606F;" class="headerlink" title="&#x914D;&#x7F6E;&#x8D26;&#x53F7;&#x4FE1;&#x606F;"></a>&#x914D;&#x7F6E;&#x8D26;&#x53F7;&#x4FE1;&#x606F;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建本地ssh"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x521B;&#x5EFA;&#x672C;&#x5730;ssh" class="headerlink" title="&#x521B;&#x5EFA;&#x672C;&#x5730;ssh"></a>&#x521B;&#x5EFA;&#x672C;&#x5730;ssh</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#在终端输入以下命令行："><span class="nav-number">3.1.</span> <span class="nav-text"><a href="#&#x5728;&#x7EC8;&#x7AEF;&#x8F93;&#x5165;&#x4EE5;&#x4E0B;&#x547D;&#x4EE4;&#x884C;&#xFF1A;" class="headerlink" title="&#x5728;&#x7EC8;&#x7AEF;&#x8F93;&#x5165;&#x4EE5;&#x4E0B;&#x547D;&#x4EE4;&#x884C;&#xFF1A;"></a>&#x5728;&#x7EC8;&#x7AEF;&#x8F93;&#x5165;&#x4EE5;&#x4E0B;&#x547D;&#x4EE4;&#x884C;&#xFF1A;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在终端输入："><span class="nav-number">3.2.</span> <span class="nav-text"><a href="#&#x5728;&#x7EC8;&#x7AEF;&#x8F93;&#x5165;&#xFF1A;" class="headerlink" title="&#x5728;&#x7EC8;&#x7AEF;&#x8F93;&#x5165;&#xFF1A;"></a>&#x5728;&#x7EC8;&#x7AEF;&#x8F93;&#x5165;&#xFF1A;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#登陆github输入key"><span class="nav-number">3.3.</span> <span class="nav-text"><a href="#&#x767B;&#x9646;github&#x8F93;&#x5165;key" class="headerlink" title="&#x767B;&#x9646;github&#x8F93;&#x5165;key"></a>&#x767B;&#x9646;github&#x8F93;&#x5165;key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证是否配置成功"><span class="nav-number">3.4.</span> <span class="nav-text"><a href="#&#x9A8C;&#x8BC1;&#x662F;&#x5426;&#x914D;&#x7F6E;&#x6210;&#x529F;" class="headerlink" title="&#x9A8C;&#x8BC1;&#x662F;&#x5426;&#x914D;&#x7F6E;&#x6210;&#x529F; :"></a>&#x9A8C;&#x8BC1;&#x662F;&#x5426;&#x914D;&#x7F6E;&#x6210;&#x529F; :</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备工作"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置账号信息"><span class="nav-number">2.</span> <span class="nav-text">配置账号信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建本地ssh"><span class="nav-number">3.</span> <span class="nav-text">创建本地ssh</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#在终端输入以下命令行："><span class="nav-number">3.1.</span> <span class="nav-text">在终端输入以下命令行：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在终端输入："><span class="nav-number">3.2.</span> <span class="nav-text">在终端输入：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#登陆github输入key"><span class="nav-number">3.3.</span> <span class="nav-text">登陆github输入key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证是否配置成功"><span class="nav-number">3.4.</span> <span class="nav-text">验证是否配置成功 :</span></a></li></ol></li></ol></div>
             
 
           </div>

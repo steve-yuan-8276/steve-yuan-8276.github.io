@@ -286,8 +286,8 @@
         <category>web</category>
       </categories>
       <tags>
-        <tag>https</tag>
         <tag>http</tag>
+        <tag>https</tag>
       </tags>
   </entry>
   <entry>
@@ -310,8 +310,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>

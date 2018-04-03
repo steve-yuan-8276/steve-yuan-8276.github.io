@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2018-04-02T09:42:45.000Z</updated>
+  <updated>2018-04-03T08:22:32.930Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -17,11 +17,92 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Linux运维学习笔记3-2：用户密码管理</title>
+    <link href="https://steve-yuan-8276.github.io/2018/04/03/week3-2-usermod-mkpasswd/"/>
+    <id>https://steve-yuan-8276.github.io/2018/04/03/week3-2-usermod-mkpasswd/</id>
+    <published>2018-04-03T06:42:36.000Z</published>
+    <updated>2018-04-03T08:22:32.930Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记主要记得是用户密码管理相关的知识。</p><h3 id="usermod-更改用户属性"><a href="#usermod-更改用户属性" class="headerlink" title="usermod 更改用户属性"></a>usermod 更改用户属性</h3><p>语法：usermod [参数] [filename]</p><table><thead><tr><th>常用参数</th><th>解释</th></tr></thead><tbody><tr><td>-c</td><td>&lt;备注&gt;：修改用户帐号的备注文字；</td></tr><tr><td>-d</td><td>&lt;登入目录&gt;：修改用户登入时的目录；</td></tr><tr><td>-e</td><td>&lt;有效期限&gt;：修改帐号的有效期限；</td></tr><tr><td>-f</td><td>&lt;缓冲天数&gt;：修改在密码过期后多少天即关闭该帐号；</td></tr><tr><td>-l</td><td>修改用户帐号名称；</td></tr><tr><td>-s</td><td>修改用户登入后所使用的shell；</td></tr><tr><td>-u</td><td>uid，修改用户ID；</td></tr><tr><td>-g</td><td>&lt;群组&gt;：修改用户所属的群组；</td></tr><tr><td>-G</td><td>&lt;群组&gt;；修改用户所属的附加群组；</td></tr><tr><td>-L</td><td>锁定用户密码，使密码无效；</td></tr><tr><td>-U</td><td>解除密码锁定。</td></tr></tbody></table><a id="more"></a><p>举例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">usermod -u 1008 user1     //更改uid</span><br><span class="line"></span><br><span class="line">usermod -g 10098 grp2     //更改gid</span><br><span class="line"></span><br><span class="line">usermod -d /home/user123 user4  //更改user4的家目录</span><br><span class="line"></span><br><span class="line">usermod -G grp1 grp2  //修改附加组</span><br></pre></td></tr></table></figure><p>注：使用<code>-g</code> 只能修改用户所属的一个组；使用<code>-G</code>能够添加到若干个附加组。</p><h3 id="用户密码管理"><a href="#用户密码管理" class="headerlink" title="用户密码管理"></a>用户密码管理</h3><h4 id="passwd-设置用户密码"><a href="#passwd-设置用户密码" class="headerlink" title="passwd 设置用户密码"></a><code>passwd</code> 设置用户密码</h4><p>语法： <code>passwd [username]</code></p><h5 id="密码设置的基本原则："><a href="#密码设置的基本原则：" class="headerlink" title="密码设置的基本原则："></a>密码设置的基本原则：</h5><ul><li>长度不小于10个字符；</li><li>密码包括大小写字母、数字、特殊字符（如*、&amp;、%）等；</li><li>不规则（不要用常用单词或者数字）；</li><li>不使用带有自己的名字、电话、生日及公司名称等。</li></ul><p>注：</p><ol><li>root 用户使用此命令，不加 username 表示更改root 密码；加上username 表示修改该指定用户的密码。</li><li>普通用户只能修改自己的密码。</li></ol><h5 id="passwd的特殊用法"><a href="#passwd的特殊用法" class="headerlink" title="passwd的特殊用法"></a><code>passwd</code>的特殊用法</h5><ul><li><code>/etc/shadow</code> 中第二列表示密码，此处为<code>!!</code> 表示密码为空；此处为<code>*</code> 表示密码锁定。这两种情况下，账户都是不允许登陆。</li></ul><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fpzihczqqpj30iy0aa123.jpg" alt=""></p><ul><li>锁定和解锁账户</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">passwd -l username //锁定用户</span><br><span class="line">passwd -u username  //解锁用户</span><br></pre></td></tr></table></figure><ul><li>使用<code>usermode</code>命令也可以实现同样的效果</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">usermod -L username  //锁定用户</span><br><span class="line">passwd -U username   //解锁用户</span><br></pre></td></tr></table></figure><ul><li>设定密码 <code>passwd --stdin username</code></li></ul><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fpzitd923aj30sk07q48u.jpg" alt=""></p><p>注：此处密码只需要输入一次，而且是明文显示的。</p><ul><li>使用管道符，通过一行命令更改用户密码</li></ul><p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fpzixbygvaj30qy0580z7.jpg" alt=""></p><ul><li>使用参数<code>-e</code> ，通过一行命令更改密码,  例如<code>echo -e &#39;abc123456\nabc123456&#39; | passwd user1</code></li></ul><p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fpzjfp4o9gj30s8088dj8.jpg" alt=""></p><h4 id="mkpasswd-命令"><a href="#mkpasswd-命令" class="headerlink" title="mkpasswd 命令"></a>mkpasswd 命令</h4><p>linux系统默认没有此命令，需要单独安装 <code>yum -y install expect</code></p><p>基本用法：<code>mkpasswd</code></p><p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fpzhv614h1j30jk044n0t.jpg" alt=""></p><p>生成指定长度的密码 <code>passwd -l n</code> n代表数，即长度为多少位</p><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fpzhxu56s8j30im03w0w9.jpg" alt=""></p><p>指定特殊字符和数字 <code>passwd -l n -s n -d n</code> </p><ul><li><code>l</code>表示密码长度</li><li><code>s</code>表示特殊字符</li><li><code>d</code>表示数字</li></ul><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fpzi3qvycnj30o6044q7p.jpg" alt=""></p><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul><li><p><a href="http://man.linuxde.net/usermod" target="_blank" rel="noopener">usermod命令</a></p></li><li><p><a href="http://man.linuxde.net/passwd" target="_blank" rel="noopener">passwd命令</a></p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;这则笔记主要记得是用户密码管理相关的知识。&lt;/p&gt;
+&lt;h3 id=&quot;usermod-更改用户属性&quot;&gt;&lt;a href=&quot;#usermod-更改用户属性&quot; class=&quot;headerlink&quot; title=&quot;usermod 更改用户属性&quot;&gt;&lt;/a&gt;usermod 更改用户属性&lt;/h3&gt;&lt;p&gt;语法：usermod [参数] [filename]&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;常用参数&lt;/th&gt;
+&lt;th&gt;解释&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;-c&lt;/td&gt;
+&lt;td&gt;&amp;lt;备注&amp;gt;：修改用户帐号的备注文字；&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-d&lt;/td&gt;
+&lt;td&gt;&amp;lt;登入目录&amp;gt;：修改用户登入时的目录；&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-e&lt;/td&gt;
+&lt;td&gt;&amp;lt;有效期限&amp;gt;：修改帐号的有效期限；&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-f&lt;/td&gt;
+&lt;td&gt;&amp;lt;缓冲天数&amp;gt;：修改在密码过期后多少天即关闭该帐号；&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-l&lt;/td&gt;
+&lt;td&gt;修改用户帐号名称；&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-s&lt;/td&gt;
+&lt;td&gt;修改用户登入后所使用的shell；&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-u&lt;/td&gt;
+&lt;td&gt;uid，修改用户ID；&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-g&lt;/td&gt;
+&lt;td&gt;&amp;lt;群组&amp;gt;：修改用户所属的群组；&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-G&lt;/td&gt;
+&lt;td&gt;&amp;lt;群组&amp;gt;；修改用户所属的附加群组；&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-L&lt;/td&gt;
+&lt;td&gt;锁定用户密码，使密码无效；&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-U&lt;/td&gt;
+&lt;td&gt;解除密码锁定。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+    
+    </summary>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
+    
+    
+      <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Linux运维学习笔记3-1：用户配置文件和密码配置文件</title>
     <link href="https://steve-yuan-8276.github.io/2018/04/02/week-3-1-passwd-shadow/"/>
     <id>https://steve-yuan-8276.github.io/2018/04/02/week-3-1-passwd-shadow/</id>
     <published>2018-04-02T06:11:37.000Z</published>
-    <updated>2018-04-02T09:42:45.000Z</updated>
+    <updated>2018-04-03T07:42:46.197Z</updated>
     
     <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>上周五晚上手贱把mac系统升级到最新的10.13.4，升级过程还算顺利，哪知道周日晚上再打开电脑系统就崩溃了——所有的文件、系统设置统统都没有了……重装系统后，发现有6个系统按键又失灵了！</p><p>这件事的直接后果是：</p><ol><li>所有的系统文件丢失，虚拟机神马的全都没有了；</li><li>已预约mac直营店修</li></ol><p>当然，这件事同时也说明了，<strong>系统备份还是很有必要的！！！</strong></p><h3 id="linux-和-windows-文件互传"><a href="#linux-和-windows-文件互传" class="headerlink" title="linux 和 windows 文件互传"></a>linux 和 windows 文件互传</h3><p><strong>注：</strong>此方法适用于win 和 linux 之间，并且win上需要安装xshell</p><p>安装插件 <code>lrzsz</code></p><p><img src="https://farm1.staticflickr.com/804/27304023598_990a31814e_o.png" alt=""></p><a id="more"></a><p>用法：</p><ul><li><p>linux to win： <code>sz [filename]</code>   弹出对话框选择文件</p></li><li><p>win to linux：<code>rz [filename]</code>    弹出对话框选择文件</p></li></ul><p><img src="https://farm1.staticflickr.com/899/27304203068_b10fa7b9ca_o.png" alt=""></p><h3 id="用户配置文件和密码配置文件"><a href="#用户配置文件和密码配置文件" class="headerlink" title="用户配置文件和密码配置文件"></a>用户配置文件和密码配置文件</h3><h4 id="etc-passwd-用户配置文件"><a href="#etc-passwd-用户配置文件" class="headerlink" title="/etc/passwd 用户配置文件"></a><code>/etc/passwd</code> 用户配置文件</h4><p>使用命令： <code>cat /etc/passwd |  head</code></p><p><img src="https://farm1.staticflickr.com/898/39367736930_eefeb54ab9_o.png" alt=""></p><p> 如上图所示，共有7个字段，具体含义如下：</p><table><thead><tr><th>字段</th><th>含义</th><th>备注</th></tr></thead><tbody><tr><td> 1</td><td>user name，用户名</td><td>用户名可以由大小写字母、数字、减号、点或者下划线构成</td></tr><tr><td> 2</td><td>password</td><td>由于安全因素，这里的password 被放在<code>/etc/shadow</code> 当中，这里用<code>x</code>代替。</td></tr><tr><td>3</td><td>uid</td><td>用户标示号，root用户的uid是0；uid1000以内的系统预留，普通标示号从1000开始</td></tr><tr><td>4</td><td>gid</td><td>组标示号</td></tr><tr><td>5</td><td>注释说明</td><td>如姓名、电话、地址等，可以用 <code>chfn</code> 命令进行更改</td></tr><tr><td>6</td><td>用户家目录</td><td>root 的家目录为 <code>/root</code>；普通用户的家目录为 <code>/home/username</code></td></tr><tr><td>7</td><td>用户的shell</td><td>常见的shell包括：<code>bash</code>、<code>zsh</code>、<code>ksh</code> 等。另外，该字段还有/sbin/nologin，表示不允许该账号登陆</td></tr></tbody></table><h4 id="etc-shadow-密码配置文件"><a href="#etc-shadow-密码配置文件" class="headerlink" title="/etc/shadow 密码配置文件"></a><code>/etc/shadow</code> 密码配置文件</h4><p>查看命令： <code>cat /etc/shadow | head -n 3</code></p><p><img src="https://farm1.staticflickr.com/798/41134248042_16c2ae1e96_o.png" alt=""></p><p>通过上述命令查询到了shadow 文件的前三行内容，每行共分9段，含义如下：</p><table><thead><tr><th>字段</th><th>含义</th></tr></thead><tbody><tr><td>1</td><td>用户名，username</td></tr><tr><td>2</td><td>password，此处显示的是加密之后的密文</td></tr><tr><td>3</td><td>上次更改密码的时间，此处的时间是以1970年1月1日为起点算传来的</td></tr><tr><td>4</td><td>经过多少天密码才可以修改，默认是0 ，表示不受限制</td></tr><tr><td>5</td><td>多少天后密码到期，默认设为99999（大概是273年？）</td></tr><tr><td>6</td><td>密码到期前的警告期限，默认是7</td></tr><tr><td>7</td><td>密码到期后的失效期限</td></tr><tr><td>8</td><td>密码的生命周期，计算方法跟3一样</td></tr><tr><td>9</td><td>保留字段</td></tr></tbody></table><h3 id="用户和用户组管理"><a href="#用户和用户组管理" class="headerlink" title="用户和用户组管理"></a>用户和用户组管理</h3><h4 id="增加用户-useradd-参数-username"><a href="#增加用户-useradd-参数-username" class="headerlink" title="增加用户 useradd [参数] [username]"></a>增加用户 <code>useradd [参数] [username]</code></h4><table><thead><tr><th>常用参数</th><th>含义</th></tr></thead><tbody><tr><td>-u</td><td>自定义uid</td></tr><tr><td>-g</td><td>添加到已存在的某个组，后面可以是gid，也可以是组名</td></tr><tr><td>-d</td><td>自定义家目录</td></tr><tr><td>-M</td><td>不建立家目录</td></tr><tr><td>-s</td><td>自定义shell</td></tr></tbody></table><h5 id="示例-："><a href="#示例-：" class="headerlink" title="示例 ："></a>示例 ：</h5><ul><li>不带参数，创建与当前用户同组的用户</li></ul><p><img src="https://farm1.staticflickr.com/788/40466234314_84b3e50b7f_o.png" alt=""></p><ul><li><code>g</code> 添加到已经存在的某个组；如果gid不存在，则会报错</li></ul><p><img src="https://farm1.staticflickr.com/788/40283156665_c83e45c4dd_o.png" alt=""></p><ul><li><code>M</code>  不创建家目录</li></ul><p><img src="https://lh3.googleusercontent.com/-SFXBZgAVk2A/WsH2kSNfwXI/AAAAAAABiCg/hehyQO4Jx1w6jzdGXPL0JouASEmfeazGQCHMYCw/I/15226610064487.jpg" alt=""></p><h4 id="删除用户-userdel-参数-username"><a href="#删除用户-userdel-参数-username" class="headerlink" title="删除用户 userdel [参数] [username]"></a>删除用户 <code>userdel [参数] [username]</code></h4><p> -r 参数的作用是，同时删除用户及用户家目录；如果省略，则只删除用户，保留 用户家目录。</p><p> <img src="https://farm1.staticflickr.com/818/41135050292_91ff9b3381_o.png" alt=""></p><p> 使用 <code>-r</code> 参数 </p><p> <img src="https://farm1.staticflickr.com/891/41179445931_07d6d91f51_o.png" alt=""></p><h4 id="针对组的操作-groupadd-和-groupdel"><a href="#针对组的操作-groupadd-和-groupdel" class="headerlink" title="针对组的操作 groupadd 和 groupdel"></a>针对组的操作 groupadd 和 groupdel</h4><h5 id="添加组-groupadd-g-gid-groupname"><a href="#添加组-groupadd-g-gid-groupname" class="headerlink" title="添加组 groupadd [-g gid] [groupname]"></a>添加组 <code>groupadd [-g gid] [groupname]</code></h5><p><code>-g</code>  为可选参数，用来定义gid，可以不添加。</p><p><img src="https://farm1.staticflickr.com/902/40282856345_f2cbf1d4ae_o.png" alt=""></p><h5 id="删除组-groupdel-groupname"><a href="#删除组-groupdel-groupname" class="headerlink" title="删除组 groupdel [groupname]"></a>删除组 <code>groupdel [groupname]</code></h5><p><img src="https://farm1.staticflickr.com/867/41134554112_d741a6044a_o.png" alt=""></p><p>注，如果改组中包含用户，就不可以直接删除，原理类似于 <code>rmdir</code>不能删除非空目录。</p>]]></content>
     
@@ -492,9 +573,9 @@
     
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="ip" scheme="https://steve-yuan-8276.github.io/tags/ip/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -847,35 +928,6 @@
       <category term="node" scheme="https://steve-yuan-8276.github.io/tags/node/"/>
     
       <category term="npm" scheme="https://steve-yuan-8276.github.io/tags/npm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HEXO折腾笔记：给自己的博客做个美容</title>
-    <link href="https://steve-yuan-8276.github.io/2018/01/23/blogOptimazation/"/>
-    <id>https://steve-yuan-8276.github.io/2018/01/23/blogOptimazation/</id>
-    <published>2018-01-23T14:44:27.000Z</published>
-    <updated>2018-04-02T14:26:02.760Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>其实早就想折腾，一来忙着换工作，没心情；二来水平很菜，怕一不小心搞坏了。不过就想很多事情一样，心急吃不热豆腐。有些事情还是急不来的，所以……让我coding一下，冷静冷静。</p><p>是的，学习，让我们感觉到很踏实。</p><h3 id="fork-me-on-github"><a href="#fork-me-on-github" class="headerlink" title="fork me on github"></a>fork me on github</h3><h4 id="1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来；"><a href="#1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来；" class="headerlink" title="1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来；"></a>1）通过<a href="https://github.com/blog/273-github-ribbons" target="_blank" rel="noopener">github-ribbons</a>或<a href="http://tholman.com/github-corners/" target="_blank" rel="noopener">github-corners</a>，寻找合适的图标，把代码复制下来；</h4><p><img src="https://farm5.staticflickr.com/4622/28352861209_34a124ced4_o.jpg" alt=""></p><h4 id="2）打开themes-next-layout-layout-swig文件，把代码复制到-lt-div-class-quot-headband-quot-gt-lt-div-gt-下面。"><a href="#2）打开themes-next-layout-layout-swig文件，把代码复制到-lt-div-class-quot-headband-quot-gt-lt-div-gt-下面。" class="headerlink" title="2）打开themes/next/layout/_layout.swig文件，把代码复制到&lt;div class=&quot;headband&quot;&gt;&lt;/div&gt;下面。"></a>2）打开<code>themes/next/layout/_layout.swig</code>文件，把代码复制到<code>&lt;div class=&quot;headband&quot;&gt;&lt;/div&gt;</code>下面。</h4><a id="more"></a><h3 id="静态网页压缩"><a href="#静态网页压缩" class="headerlink" title="静态网页压缩"></a>静态网页压缩</h3><h4 id="1）在站点的根目录下执行以下命令："><a href="#1）在站点的根目录下执行以下命令：" class="headerlink" title="1）在站点的根目录下执行以下命令："></a>1）在站点的根目录下执行以下命令：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ npm install gulp -g</span><br><span class="line">$ npm install gulp-minify-css gulp-uglify gulp-htmlmin gulp-htmlclean gulp --save</span><br><span class="line">$ touch gulpfile.js  //新建 gulpfile.js</span><br></pre></td></tr></table></figure><h4 id="2）采用atom-打开gulpfile-js，复制粘贴以下代码："><a href="#2）采用atom-打开gulpfile-js，复制粘贴以下代码：" class="headerlink" title="2）采用atom 打开gulpfile.js，复制粘贴以下代码："></a>2）采用atom 打开gulpfile.js，复制粘贴以下代码：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">var gulp = require(&apos;gulp&apos;);</span><br><span class="line">var minifycss = require(&apos;gulp-minify-css&apos;);</span><br><span class="line">var uglify = require(&apos;gulp-uglify&apos;);</span><br><span class="line">var htmlmin = require(&apos;gulp-htmlmin&apos;);</span><br><span class="line">var htmlclean = require(&apos;gulp-htmlclean&apos;);</span><br><span class="line">// 压缩 public 目录 css</span><br><span class="line">gulp.task(&apos;minify-css&apos;, function() &#123;</span><br><span class="line">    return gulp.src(&apos;./public/**/*.css&apos;)</span><br><span class="line">        .pipe(minifycss())</span><br><span class="line">        .pipe(gulp.dest(&apos;./public&apos;));</span><br><span class="line">&#125;);</span><br><span class="line">// 压缩 public 目录 html</span><br><span class="line">gulp.task(&apos;minify-html&apos;, function() &#123;</span><br><span class="line">  return gulp.src(&apos;./public/**/*.html&apos;)</span><br><span class="line">    .pipe(htmlclean())</span><br><span class="line">    .pipe(htmlmin(&#123;</span><br><span class="line">         removeComments: true,</span><br><span class="line">         minifyJS: true,</span><br><span class="line">         minifyCSS: true,</span><br><span class="line">         minifyURLs: true,</span><br><span class="line">    &#125;))</span><br><span class="line">    .pipe(gulp.dest(&apos;./public&apos;))</span><br><span class="line">&#125;);</span><br><span class="line">// 压缩 public/js 目录 js</span><br><span class="line">gulp.task(&apos;minify-js&apos;, function() &#123;</span><br><span class="line">    return gulp.src(&apos;./public/**/*.js&apos;)</span><br><span class="line">        .pipe(uglify())</span><br><span class="line">        .pipe(gulp.dest(&apos;./public&apos;));</span><br><span class="line">&#125;);</span><br><span class="line">// 执行 gulp 命令时执行的任务</span><br><span class="line">gulp.task(&apos;default&apos;, [</span><br><span class="line">    &apos;minify-html&apos;,&apos;minify-css&apos;,&apos;minify-js&apos;</span><br><span class="line">]);</span><br></pre></td></tr></table></figure><p>3）更新推送</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">gulp</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure><h3 id="增加字数统计"><a href="#增加字数统计" class="headerlink" title="增加字数统计"></a>增加字数统计</h3><p>利用统计功能，显示文章字数统计,阅读时长,总字数</p><p>1）在站点的根目录下，输入命令：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm i --save hexo-wordcount</span><br></pre></td></tr></table></figure><p>2）打开 <code>themes/next/_config.yml</code>，搜索关键字 <code>post_wordcount</code>：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># Post wordcount display settings</span><br><span class="line"># Dependencies: https://github.com/willin/hexo-wordcount</span><br><span class="line">post_wordcount:</span><br><span class="line">  item_text: true</span><br><span class="line">  #字数统计</span><br><span class="line">  wordcount: true</span><br><span class="line">  #预览时间</span><br><span class="line">  min2read: true</span><br><span class="line">  #总字数,显示在页面底部</span><br><span class="line">  totalcount: true</span><br><span class="line">  separated_meta: true</span><br></pre></td></tr></table></figure><h3 id="实现动态背景"><a href="#实现动态背景" class="headerlink" title="实现动态背景"></a>实现动态背景</h3><p>这个比较酷炫，但是实现方法是最简单的，因为next V5.1.1主题自带，大牛已经写好了只要在设置文件中开启即可。</p><p>在站点目录，找到next主题文件夹，路径是<code>themes/next/_config.yml</code>，搜索找到<code>canvas_nest: false</code>，把它改为<code>canvas_nest: true</code> ，齐活。</p><h3 id="预览效果"><a href="#预览效果" class="headerlink" title="预览效果"></a>预览效果</h3><p>最后的最后，所有的这些改动，会让blog看起来挺像那么回事。虽然也还是菜鸟，不过，怎么说呢……呵呵</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;其实早就想折腾，一来忙着换工作，没心情；二来水平很菜，怕一不小心搞坏了。不过就想很多事情一样，心急吃不热豆腐。有些事情还是急不来的，所以……让我coding一下，冷静冷静。&lt;/p&gt;
-&lt;p&gt;是的，学习，让我们感觉到很踏实。&lt;/p&gt;
-&lt;h3 id=&quot;fork-me-on-github&quot;&gt;&lt;a href=&quot;#fork-me-on-github&quot; class=&quot;headerlink&quot; title=&quot;fork me on github&quot;&gt;&lt;/a&gt;fork me on github&lt;/h3&gt;&lt;h4 id=&quot;1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来；&quot;&gt;&lt;a href=&quot;#1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来；&quot; class=&quot;headerlink&quot; title=&quot;1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来；&quot;&gt;&lt;/a&gt;1）通过&lt;a href=&quot;https://github.com/blog/273-github-ribbons&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;github-ribbons&lt;/a&gt;或&lt;a href=&quot;http://tholman.com/github-corners/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;github-corners&lt;/a&gt;，寻找合适的图标，把代码复制下来；&lt;/h4&gt;&lt;p&gt;&lt;img src=&quot;https://farm5.staticflickr.com/4622/28352861209_34a124ced4_o.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;h4 id=&quot;2）打开themes-next-layout-layout-swig文件，把代码复制到-lt-div-class-quot-headband-quot-gt-lt-div-gt-下面。&quot;&gt;&lt;a href=&quot;#2）打开themes-next-layout-layout-swig文件，把代码复制到-lt-div-class-quot-headband-quot-gt-lt-div-gt-下面。&quot; class=&quot;headerlink&quot; title=&quot;2）打开themes/next/layout/_layout.swig文件，把代码复制到&amp;lt;div class=&amp;quot;headband&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;下面。&quot;&gt;&lt;/a&gt;2）打开&lt;code&gt;themes/next/layout/_layout.swig&lt;/code&gt;文件，把代码复制到&lt;code&gt;&amp;lt;div class=&amp;quot;headband&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&lt;/code&gt;下面。&lt;/h4&gt;
-    
-    </summary>
-    
-      <category term="hexo" scheme="https://steve-yuan-8276.github.io/categories/hexo/"/>
-    
-    
-      <category term="github" scheme="https://steve-yuan-8276.github.io/tags/github/"/>
-    
-      <category term="hexo" scheme="https://steve-yuan-8276.github.io/tags/hexo/"/>
-    
-      <category term="next" scheme="https://steve-yuan-8276.github.io/tags/next/"/>
     
   </entry>
   

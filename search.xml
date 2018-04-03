@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Linux运维学习笔记3-2：用户密码管理]]></title>
+    <url>%2F2018%2F04%2F03%2Fweek3-2-usermod-mkpasswd%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记主要记得是用户密码管理相关的知识。 usermod 更改用户属性语法：usermod [参数] [filename] 常用参数 解释 -c &lt;备注&gt;：修改用户帐号的备注文字； -d &lt;登入目录&gt;：修改用户登入时的目录； -e &lt;有效期限&gt;：修改帐号的有效期限； -f &lt;缓冲天数&gt;：修改在密码过期后多少天即关闭该帐号； -l 修改用户帐号名称； -s 修改用户登入后所使用的shell； -u uid，修改用户ID； -g &lt;群组&gt;：修改用户所属的群组； -G &lt;群组&gt;；修改用户所属的附加群组； -L 锁定用户密码，使密码无效； -U 解除密码锁定。 举例： 1234567usermod -u 1008 user1 //更改uidusermod -g 10098 grp2 //更改gidusermod -d /home/user123 user4 //更改user4的家目录usermod -G grp1 grp2 //修改附加组 注：使用-g 只能修改用户所属的一个组；使用-G能够添加到若干个附加组。 用户密码管理passwd 设置用户密码语法： passwd [username] 密码设置的基本原则： 长度不小于10个字符； 密码包括大小写字母、数字、特殊字符（如*、&amp;、%）等； 不规则（不要用常用单词或者数字）； 不使用带有自己的名字、电话、生日及公司名称等。 注： root 用户使用此命令，不加 username 表示更改root 密码；加上username 表示修改该指定用户的密码。 普通用户只能修改自己的密码。 passwd的特殊用法 /etc/shadow 中第二列表示密码，此处为!! 表示密码为空；此处为* 表示密码锁定。这两种情况下，账户都是不允许登陆。 锁定和解锁账户 12passwd -l username //锁定用户passwd -u username //解锁用户 使用usermode命令也可以实现同样的效果 12usermod -L username //锁定用户passwd -U username //解锁用户 设定密码 passwd --stdin username 注：此处密码只需要输入一次，而且是明文显示的。 使用管道符，通过一行命令更改用户密码 使用参数-e ，通过一行命令更改密码, 例如echo -e &#39;abc123456\nabc123456&#39; | passwd user1 mkpasswd 命令linux系统默认没有此命令，需要单独安装 yum -y install expect 基本用法：mkpasswd 生成指定长度的密码 passwd -l n n代表数，即长度为多少位 指定特殊字符和数字 passwd -l n -s n -d n l表示密码长度 s表示特殊字符 d表示数字 参考资料 usermod命令 passwd命令]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>linux</tag>
+        <tag>notes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Linux运维学习笔记3-1：用户配置文件和密码配置文件]]></title>
     <url>%2F2018%2F04%2F02%2Fweek-3-1-passwd-shadow%2F</url>
     <content type="text"><![CDATA[写在前面上周五晚上手贱把mac系统升级到最新的10.13.4，升级过程还算顺利，哪知道周日晚上再打开电脑系统就崩溃了——所有的文件、系统设置统统都没有了……重装系统后，发现有6个系统按键又失灵了！ 这件事的直接后果是： 所有的系统文件丢失，虚拟机神马的全都没有了； 已预约mac直营店修 当然，这件事同时也说明了，系统备份还是很有必要的！！！ linux 和 windows 文件互传注：此方法适用于win 和 linux 之间，并且win上需要安装xshell 安装插件 lrzsz 用法： linux to win： sz [filename] 弹出对话框选择文件 win to linux：rz [filename] 弹出对话框选择文件 用户配置文件和密码配置文件/etc/passwd 用户配置文件使用命令： cat /etc/passwd | head 如上图所示，共有7个字段，具体含义如下： 字段 含义 备注 1 user name，用户名 用户名可以由大小写字母、数字、减号、点或者下划线构成 2 password 由于安全因素，这里的password 被放在/etc/shadow 当中，这里用x代替。 3 uid 用户标示号，root用户的uid是0；uid1000以内的系统预留，普通标示号从1000开始 4 gid 组标示号 5 注释说明 如姓名、电话、地址等，可以用 chfn 命令进行更改 6 用户家目录 root 的家目录为 /root；普通用户的家目录为 /home/username 7 用户的shell 常见的shell包括：bash、zsh、ksh 等。另外，该字段还有/sbin/nologin，表示不允许该账号登陆 /etc/shadow 密码配置文件查看命令： cat /etc/shadow | head -n 3 通过上述命令查询到了shadow 文件的前三行内容，每行共分9段，含义如下： 字段 含义 1 用户名，username 2 password，此处显示的是加密之后的密文 3 上次更改密码的时间，此处的时间是以1970年1月1日为起点算传来的 4 经过多少天密码才可以修改，默认是0 ，表示不受限制 5 多少天后密码到期，默认设为99999（大概是273年？） 6 密码到期前的警告期限，默认是7 7 密码到期后的失效期限 8 密码的生命周期，计算方法跟3一样 9 保留字段 用户和用户组管理增加用户 useradd [参数] [username] 常用参数 含义 -u 自定义uid -g 添加到已存在的某个组，后面可以是gid，也可以是组名 -d 自定义家目录 -M 不建立家目录 -s 自定义shell 示例 ： 不带参数，创建与当前用户同组的用户 g 添加到已经存在的某个组；如果gid不存在，则会报错 M 不创建家目录 删除用户 userdel [参数] [username] -r 参数的作用是，同时删除用户及用户家目录；如果省略，则只删除用户，保留 用户家目录。 使用 -r 参数 针对组的操作 groupadd 和 groupdel添加组 groupadd [-g gid] [groupname]-g 为可选参数，用来定义gid，可以不添加。 删除组 groupdel [groupname] 注，如果改组中包含用户，就不可以直接删除，原理类似于 rmdir不能删除非空目录。]]></content>
@@ -143,8 +156,8 @@
       <tags>
         <tag>centos</tag>
         <tag>linux</tag>
-        <tag>notes</tag>
         <tag>ip</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>

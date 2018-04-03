@@ -16,13 +16,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/27/week2-4-centosSpecialPermision/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.768Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2018/03/22/week2-3-AccessToFileAndFolders/</loc>
     
     <lastmod>2018-04-02T14:26:02.768Z</lastmod>
@@ -30,14 +23,21 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/20/week2-2-path-CopyPaste-FileReview/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/19/week2-1-centos-fileFolderPathAndBisicOpration/</loc>
     
     <lastmod>2018-04-02T14:26:02.768Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/19/week2-1-centos-fileFolderPathAndBisicOpration/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/27/week2-4-centosSpecialPermision/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.768Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/03/20/week2-2-path-CopyPaste-FileReview/</loc>
     
     <lastmod>2018-04-02T14:26:02.768Z</lastmod>
     
@@ -135,13 +135,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/20/howToUseGoogle/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.763Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/13/howToUseJamine/</loc>
     
     <lastmod>2018-04-02T14:26:02.763Z</lastmod>
@@ -149,9 +142,9 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/16/howToUseGithub/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/20/howToUseGoogle/</loc>
     
-    <lastmod>2018-04-02T14:26:02.762Z</lastmod>
+    <lastmod>2018-04-02T14:26:02.763Z</lastmod>
     
   </url>
   
@@ -171,6 +164,13 @@
   
   <url>
     <loc>https://steve-yuan-8276.github.io/2018/01/04/howToMoveHexoBlog/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.762Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/16/howToUseGithub/</loc>
     
     <lastmod>2018-04-02T14:26:02.762Z</lastmod>
     
@@ -247,6 +247,13 @@
   </url>
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/27/basisOfRegularExpressions/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2018/02/27/basisOfReact-1-CommonErr/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
@@ -257,20 +264,6 @@
     <loc>https://steve-yuan-8276.github.io/2017/12/17/basisOfPthonScrapy/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/27/basisOfRegularExpressions/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/22/basisOfBootstrap/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.758Z</lastmod>
     
   </url>
   
@@ -289,16 +282,16 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/06/basisOfAutomator/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/22/basisOfBootstrap/</loc>
     
     <lastmod>2018-04-02T14:26:02.758Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/27/arrayMethod/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/06/basisOfAutomator/</loc>
     
-    <lastmod>2018-04-02T14:26:02.757Z</lastmod>
+    <lastmod>2018-04-02T14:26:02.758Z</lastmod>
     
   </url>
   
@@ -311,6 +304,13 @@
   
   <url>
     <loc>https://steve-yuan-8276.github.io/2018/01/22/advancedAit/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.757Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/27/arrayMethod/</loc>
     
     <lastmod>2018-04-02T14:26:02.757Z</lastmod>
     

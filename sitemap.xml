@@ -2,13 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/28/week2-5-howToSearchOnLinux/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.769Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/16/whatIsBEM/</loc>
     
     <lastmod>2018-04-02T14:26:02.769Z</lastmod>
@@ -16,7 +9,21 @@
   </url>
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2018/03/28/week2-5-howToSearchOnLinux/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.769Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2018/03/27/week2-4-centosSpecialPermision/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.768Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/03/20/week2-2-path-CopyPaste-FileReview/</loc>
     
     <lastmod>2018-04-02T14:26:02.768Z</lastmod>
     
@@ -37,21 +44,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/20/week2-2-path-CopyPaste-FileReview/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.768Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/14/week1-3-howToUsePutty-Xshell/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/14/week1-4-centos-rescueMode-emergencyMode/</loc>
     
     <lastmod>2018-04-02T14:26:02.767Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/14/week1-4-centos-rescueMode-emergencyMode/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/14/week1-3-howToUsePutty-Xshell/</loc>
     
     <lastmod>2018-04-02T14:26:02.767Z</lastmod>
     
@@ -79,6 +79,13 @@
   </url>
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/12/web-webStatusCode/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.766Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/12/web-howToUseWebp/</loc>
     
     <lastmod>2018-04-02T14:26:02.766Z</lastmod>
@@ -86,9 +93,9 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/12/web-webStatusCode/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/01/30/reactNotes-environmentSetup/</loc>
     
-    <lastmod>2018-04-02T14:26:02.766Z</lastmod>
+    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
     
   </url>
   
@@ -101,13 +108,6 @@
   
   <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/15/setHttps/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/30/reactNotes-environmentSetup/</loc>
     
     <lastmod>2018-04-02T14:26:02.765Z</lastmod>
     
@@ -135,13 +135,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/20/howToUseGoogle/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.763Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/13/howToUseJamine/</loc>
     
     <lastmod>2018-04-02T14:26:02.763Z</lastmod>
@@ -149,21 +142,21 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/13/howToSetDomain/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/20/howToUseGoogle/</loc>
     
-    <lastmod>2018-04-02T14:26:02.762Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/15/howToSetIcon/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.762Z</lastmod>
+    <lastmod>2018-04-02T14:26:02.763Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/16/howToUseGithub/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.762Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/13/howToSetDomain/</loc>
     
     <lastmod>2018-04-02T14:26:02.762Z</lastmod>
     
@@ -177,14 +170,21 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/27/freeCodeCampPractice-JS/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/15/howToSetIcon/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.762Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/12/github-HowToBuildBlogWithGithub-md/</loc>
     
     <lastmod>2018-04-02T14:26:02.761Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/30/commandLineTrickConllection/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/27/freeCodeCampPractice-JS/</loc>
     
     <lastmod>2018-04-02T14:26:02.761Z</lastmod>
     
@@ -198,14 +198,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/12/github-HowToBuildBlogWithGithub-md/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/26/freeCodeErr-1/</loc>
     
     <lastmod>2018-04-02T14:26:02.761Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/26/freeCodeErr-1/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/01/30/commandLineTrickConllection/</loc>
     
     <lastmod>2018-04-02T14:26:02.761Z</lastmod>
     
@@ -240,14 +240,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/27/basisOfRegularExpressions/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/27/basisOfRegularExpressions/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
     

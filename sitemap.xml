@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2018/04/03/week3-3-su-sudo/</loc>
+    
+    <lastmod>2018-04-04T06:26:42.642Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2018/04/03/week3-2-usermod-mkpasswd/</loc>
     
     <lastmod>2018-04-03T08:22:32.930Z</lastmod>
@@ -16,13 +23,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/16/whatIsBEM/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.769Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2018/03/28/week2-5-howToSearchOnLinux/</loc>
     
     <lastmod>2018-04-02T14:26:02.769Z</lastmod>
@@ -30,9 +30,9 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/27/week2-4-centosSpecialPermision/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/16/whatIsBEM/</loc>
     
-    <lastmod>2018-04-02T14:26:02.768Z</lastmod>
+    <lastmod>2018-04-02T14:26:02.769Z</lastmod>
     
   </url>
   
@@ -58,6 +58,20 @@
   </url>
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2018/03/27/week2-4-centosSpecialPermision/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.768Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/03/14/week1-2-howToSetStaticIp/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.767Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2018/03/14/week1-4-centos-rescueMode-emergencyMode/</loc>
     
     <lastmod>2018-04-02T14:26:02.767Z</lastmod>
@@ -73,13 +87,6 @@
   
   <url>
     <loc>https://steve-yuan-8276.github.io/2018/03/15/week1-5-centOS-filesystem-ls-aliasCommand/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.767Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/14/week1-2-howToSetStaticIp/</loc>
     
     <lastmod>2018-04-02T14:26:02.767Z</lastmod>
     
@@ -114,13 +121,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/15/setHttps/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2018/01/30/reactNotes-environmentSetup/</loc>
     
     <lastmod>2018-04-02T14:26:02.765Z</lastmod>
@@ -136,6 +136,13 @@
   
   <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/14/mapAndFilter/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/15/setHttps/</loc>
     
     <lastmod>2018-04-02T14:26:02.765Z</lastmod>
     
@@ -191,14 +198,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/12/github-HowToBuildBlogWithGithub-md/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/01/30/commandLineTrickConllection/</loc>
     
     <lastmod>2018-04-02T14:26:02.761Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/27/freeCodeCampPractice-JS/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/12/github-HowToBuildBlogWithGithub-md/</loc>
     
     <lastmod>2018-04-02T14:26:02.761Z</lastmod>
     
@@ -212,7 +219,7 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/30/commandLineTrickConllection/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/27/freeCodeCampPractice-JS/</loc>
     
     <lastmod>2018-04-02T14:26:02.761Z</lastmod>
     
@@ -226,7 +233,7 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/09/centOS-fileSystem/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/01/23/blogOptimazation/</loc>
     
     <lastmod>2018-04-02T14:26:02.760Z</lastmod>
     
@@ -240,7 +247,7 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/23/blogOptimazation/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/09/centOS-fileSystem/</loc>
     
     <lastmod>2018-04-02T14:26:02.760Z</lastmod>
     
@@ -261,6 +268,13 @@
   </url>
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2018/02/27/basisOfReact-1-CommonErr/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
@@ -271,27 +285,6 @@
     <loc>https://steve-yuan-8276.github.io/2017/12/17/basisOfPthonScrapy/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/06/basisOfAutomator/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.758Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/16/basisOfGoogleDevTools/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.758Z</lastmod>
     
   </url>
   
@@ -310,7 +303,21 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/13/HowToInstallCentOS/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/06/basisOfAutomator/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.758Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/16/basisOfGoogleDevTools/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.758Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/01/22/advancedAit/</loc>
     
     <lastmod>2018-04-02T14:26:02.757Z</lastmod>
     
@@ -324,7 +331,7 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/22/advancedAit/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/13/HowToInstallCentOS/</loc>
     
     <lastmod>2018-04-02T14:26:02.757Z</lastmod>
     

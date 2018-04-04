@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2018-04-03T08:22:32.930Z</updated>
+  <updated>2018-04-04T06:26:42.642Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux运维学习笔记3-2：用户身份切换</title>
+    <link href="https://steve-yuan-8276.github.io/2018/04/03/week3-3-su-sudo/"/>
+    <id>https://steve-yuan-8276.github.io/2018/04/03/week3-3-su-sudo/</id>
+    <published>2018-04-03T08:39:26.000Z</published>
+    <updated>2018-04-04T06:26:42.642Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记主要整理用户身份切换方面的知识，涉及su 和 sudo 两条命令。</p><h4 id="查询当前用户-whoami"><a href="#查询当前用户-whoami" class="headerlink" title="查询当前用户 whoami"></a>查询当前用户 <code>whoami</code></h4><p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fpzkhqafpgj30h806wafi.jpg" alt=""></p><p><strong>注：</strong>root 用户前面是 <code>#</code> ；切换到普通用户后，前面是 <code>$</code>.</p><p>处于安全考虑，建议使用普通用户，而不是<code>root</code>用户进行日常管理，需要的时候再使用<code>su</code> 或者 <code>sudo</code> 临时使用管理员权限。</p><a id="more"></a><h3 id="su命令：切换用户"><a href="#su命令：切换用户" class="headerlink" title="su命令：切换用户"></a>su命令：切换用户</h3><p>语法： <code>su [-] username</code></p><ul><li>不使用<code>-</code>，切换root，仍然在当前家目录</li></ul><p><img src="https://farm1.staticflickr.com/877/41204926171_0c46590788_o.png" alt=""></p><ul><li>使用 <code>-</code>切换 root，家目录同时切换</li></ul><p><img src="https://farm1.staticflickr.com/874/40308901895_68ba7fbcbb_o.png" alt=""></p><p>注：从root用户切换到普通用户，不需要输入密码；反之，普通用户切换到root用户则需要输入密码。</p><ul><li>临时切换用户运行一条命令 <code>su - -c [command] [username]</code></li></ul><p><img src="https://farm1.staticflickr.com/889/27350659908_9100edecf5_o.png" alt=""></p><h3 id="sudo-命令"><a href="#sudo-命令" class="headerlink" title="sudo 命令"></a>sudo 命令</h3><p>使用<code>su</code>命令仍然有密码泄露的风险，因此<code>sudo</code> 的用武之地。使用 <code>sudo</code> ，可以让普通用户执行只有 <code>root</code> 用户有权执行的命令。</p><p>使用<code>sudo</code> 命令需输入当前用户的密码，而不是系统管理员<code>root</code>的密码，这样就降低root密码扩散是风险，有助于提升系统用户的安全性。 </p><p>sudo权限是在<code>/etc/sudoers</code> 进行配置的，需要使用<code>visudo</code> 进行编辑。<code>visudo</code> 使用 <code>yum install -y sudo</code> 进行安装。</p><p>配置文件在下图标红这一行，所有需要<code>sudo</code> 的用户加入<code>wheel</code> 这个组即可。<br><img src="https://farm1.staticflickr.com/886/40490826284_636d0866b5_o.png" alt=""></p><p><code>sudo -i</code>  为了频繁使用root用户权限使用的命令，该命令的特性包括：</p><ul><li>提示输入密码时该密码为当前账户的密码；</li><li>密码只用输入一次；</li><li>没有时间限制。</li><li>执行该命令后提示符变为<code>#</code>而不是<code>$</code>；</li><li>退回普通账户时可以执行<code>exit</code>或<code>logout</code> ；</li></ul><h4 id="配置-etc-sudoers"><a href="#配置-etc-sudoers" class="headerlink" title="配置/etc/sudoers"></a>配置<code>/etc/sudoers</code></h4><h5 id="用户权限的说明"><a href="#用户权限的说明" class="headerlink" title="用户权限的说明"></a>用户权限的说明</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">## allow root to run any commands anywhere</span><br><span class="line">root  ALL=(ALL:ALL)  ALL</span><br></pre></td></tr></table></figure><p>root 表示这是roo用户，下面的4个all的意思是：</p><ul><li><p>第一个ALL，表示”From ALL hosts”（所有主机）, 意思是 <code>root</code> 从任何机器登录，都可以应用接下来的规则。</p></li><li><p>第二个ALL，表示“run as All user”，意思是<code>root</code>可以以任何用户的身份运行一些命令。</p></li><li><p>第三个ALL，表示“run as All groups”，意思是<code>root</code>可以以任何用户组的身份运行一些命令。</p></li><li><p>第四个ALL，意思是前面的规定适用于任何命令。</p></li></ul><p>上面4个这行合起来的意思是，<code>root</code>这个用户可以从任何机器登录，以任何用户和用户组的身份运行任何命令。</p><h5 id="visudo配置"><a href="#visudo配置" class="headerlink" title="visudo配置"></a>visudo配置</h5><p>配置/etc/sudoers ，使得普通用户不用户输入密码就可以使用<code>sudo</code></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">USER_Alias_USER_SU = user1,user2</span><br><span class="line">Cmnd_Alias_SU = /usr/bin/su</span><br><span class="line">USERS_SU ALL = (ALL) NOPASSWD: SU</span><br></pre></td></tr></table></figure><p><strong>注意：</strong> </p><ol><li>输入 <code>:set nu</code>,可显示行数；</li><li>保存退出，按<code>esc</code>，之后输入<code>:wq</code>；</li></ol><h3 id="限制root远程登录"><a href="#限制root远程登录" class="headerlink" title="限制root远程登录"></a>限制root远程登录</h3><p>编辑/etc/ssh/sshd_config,将 <code>PermitRootLogin yes</code> 中的<code>yes</code>改为<code>no</code>，保存退出后，重启<code>sshd</code>服务，<code>systemctl restart sshd.service</code>。</p><h3 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h3><p><a href="http://www.apelearn.com/bbs/thread-7467-1-1.html" target="_blank" rel="noopener">sudo与su比较</a> </p><p><a href="www.opensource.apple.com/source/sudo/sudo-16/sudo/sample.sudoers">sudo配置文件样例</a></p><p><a href="http://www.apelearn.com/bbs/thread-6899-1-1.html" target="_blank" rel="noopener">sudo -i 也可以登录到root吗？</a></p><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://www.jianshu.com/p/009e748db9e8" target="_blank" rel="noopener">Sudo的用法和Visudo设置</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;这则笔记主要整理用户身份切换方面的知识，涉及su 和 sudo 两条命令。&lt;/p&gt;
+&lt;h4 id=&quot;查询当前用户-whoami&quot;&gt;&lt;a href=&quot;#查询当前用户-whoami&quot; class=&quot;headerlink&quot; title=&quot;查询当前用户 whoami&quot;&gt;&lt;/a&gt;查询当前用户 &lt;code&gt;whoami&lt;/code&gt;&lt;/h4&gt;&lt;p&gt;&lt;img src=&quot;https://ws3.sinaimg.cn/large/006tKfTcly1fpzkhqafpgj30h806wafi.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注：&lt;/strong&gt;root 用户前面是 &lt;code&gt;#&lt;/code&gt; ；切换到普通用户后，前面是 &lt;code&gt;$&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;处于安全考虑，建议使用普通用户，而不是&lt;code&gt;root&lt;/code&gt;用户进行日常管理，需要的时候再使用&lt;code&gt;su&lt;/code&gt; 或者 &lt;code&gt;sudo&lt;/code&gt; 临时使用管理员权限。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
+    
+    
+      <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux运维学习笔记3-2：用户密码管理</title>
@@ -851,83 +880,6 @@
       <category term="bash" scheme="https://steve-yuan-8276.github.io/tags/bash/"/>
     
       <category term="commandLine" scheme="https://steve-yuan-8276.github.io/tags/commandLine/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>REACT学习笔记（一）：编程环境配置</title>
-    <link href="https://steve-yuan-8276.github.io/2018/01/30/reactNotes-environmentSetup/"/>
-    <id>https://steve-yuan-8276.github.io/2018/01/30/reactNotes-environmentSetup/</id>
-    <published>2018-01-30T13:28:27.000Z</published>
-    <updated>2018-04-02T14:26:02.765Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="编程环境搭建"><a href="#编程环境搭建" class="headerlink" title="编程环境搭建"></a>编程环境搭建</h3><ul><li>Homebrew</li><li>Git</li><li>Sublime as Editor</li><li>iTerm2 (Optional)</li><li>GitHub</li></ul><h4 id="Homebrew-包管理"><a href="#Homebrew-包管理" class="headerlink" title="Homebrew 包管理"></a>Homebrew 包管理</h4><h5 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</span><br></pre></td></tr></table></figure><h5 id="homebrew常用命令："><a href="#homebrew常用命令：" class="headerlink" title="homebrew常用命令："></a>homebrew常用命令：</h5><table><thead><tr><th>命令</th><th>作用</th></tr></thead><tbody><tr><td>brew install &lt;软件名&gt;</td><td>安装软件 </td></tr><tr><td>brew uninstall &lt;软件名&gt;</td><td>卸载软件</td></tr><tr><td>brew search &lt;软件名&gt;</td><td>查询软件</td></tr><tr><td>brew list</td><td>列出已安装的软件</td></tr><tr><td>brew update</td><td>更新brew</td></tr><tr><td>brew home</td><td>用浏览器打开brew的官方网站</td></tr><tr><td>brew info &lt;软件名&gt;</td><td>显示软件信息</td></tr><tr><td>brew deps</td><td>显示包依赖</td></tr></tbody></table><a id="more"></a><h4 id="Git-版本管理"><a href="#Git-版本管理" class="headerlink" title="Git  版本管理"></a>Git  版本管理</h4><h5 id="Installation："><a href="#Installation：" class="headerlink" title="Installation："></a>Installation：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install git</span><br></pre></td></tr></table></figure><h5 id="Verify-if-the-installation-was-successful"><a href="#Verify-if-the-installation-was-successful" class="headerlink" title="Verify if the installation was successful:"></a>Verify if the installation was successful:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git --version</span><br></pre></td></tr></table></figure><h4 id="Sublime-编辑器"><a href="#Sublime-编辑器" class="headerlink" title="Sublime 编辑器"></a>Sublime 编辑器</h4><h5 id="Installation-："><a href="#Installation-：" class="headerlink" title="Installation ："></a>Installation ：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">brew install caskroom/cask/brew-cask</span><br><span class="line">brew tap caskroom/versions</span><br><span class="line">brew cask install sublime-text</span><br></pre></td></tr></table></figure><h5 id="Verify-if-the-installation-was-successful-1"><a href="#Verify-if-the-installation-was-successful-1" class="headerlink" title="Verify if the installation was successful:"></a>Verify if the installation was successful:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sublime --version</span><br></pre></td></tr></table></figure><h5 id="open-any-directory-from-the-command-line-with-sublime-lt-fileName-gt"><a href="#open-any-directory-from-the-command-line-with-sublime-lt-fileName-gt" class="headerlink" title="open any directory from the command line with sublime + &lt;fileName&gt;"></a>open any directory from the command line with <code>sublime + &lt;fileName&gt;</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">link: ln -s &quot;/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl&quot; /usr/local/bin/sublime</span><br></pre></td></tr></table></figure><h4 id="iTerm2-终端替代品"><a href="#iTerm2-终端替代品" class="headerlink" title="iTerm2 终端替代品"></a>iTerm2 终端替代品</h4><h5 id="Installation：-1"><a href="#Installation：-1" class="headerlink" title="Installation："></a>Installation：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew cask install iterm2</span><br></pre></td></tr></table></figure><h4 id="Node-和-Npm"><a href="#Node-和-Npm" class="headerlink" title="Node 和 Npm"></a>Node 和 Npm</h4><p>DownLoad：<a href="https://nodejs.org/en/" target="_blank" rel="noopener">https://nodejs.org</a></p><p>Documentation 在<a href="https://nodejs.org/en/docs/" target="_blank" rel="noopener">这里</a></p><h5 id="Verify-if-the-installation-was-successful-2"><a href="#Verify-if-the-installation-was-successful-2" class="headerlink" title="Verify if the installation was successful:"></a>Verify if the installation was successful:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node --version</span><br><span class="line">npm --version</span><br></pre></td></tr></table></figure><h5 id="howToUse"><a href="#howToUse" class="headerlink" title="howToUse:"></a>howToUse:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g &lt;package&gt;    //全局安装，可以在任意文件夹使用</span><br><span class="line">npm install &lt;package&gt;     //本地安装，只能在安装文件夹里使用</span><br></pre></td></tr></table></figure><h5 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init -y</span><br></pre></td></tr></table></figure><p>-y 标记将把你的 package.json 内容初始化成默认值。如果你不加这个标记，就需要特别设 置该文件的内容。完成 npm 项目初始化之后，你就可以通过 npm install &lt; 包名 &gt; 来安装 新的 node 包了。</p><h4 id="安装-React"><a href="#安装-React" class="headerlink" title="安装 React"></a>安装 React</h4><h5 id="方法一：通过-CDN-content-delivery-network"><a href="#方法一：通过-CDN-content-delivery-network" class="headerlink" title="方法一：通过 CDN (content delivery network)"></a>方法一：通过 CDN (content delivery network)</h5><p>在HTML文件head部分插入：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script crossorigin src=&quot;https://unpkg.com/react@16/umd/react.development.js&quot;&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script crossorigin src=&quot;https://unpkg.com/react-dom@16/umd/react-dom.development.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure><p>WARNING：官方DOCS有一句警告：<code>only meant for development, and are not suitable for production.</code> 很机智的赶脚！</p><h5 id="方法二：npm安装"><a href="#方法二：npm安装" class="headerlink" title="方法二：npm安装"></a>方法二：npm安装</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm init -y    //前提：初始化npm 项目和 package.json 文件</span><br><span class="line">npm install react react-dom</span><br></pre></td></tr></table></figure><h3 id="零基础创建react应用-create-react-app"><a href="#零基础创建react应用-create-react-app" class="headerlink" title="零基础创建react应用 create-react-app"></a>零基础创建react应用 create-react-app</h3><h4 id="Instalation："><a href="#Instalation：" class="headerlink" title="Instalation："></a>Instalation：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g create-react-app</span><br></pre></td></tr></table></figure><h4 id="Verify-if-the-installation-was-successful-3"><a href="#Verify-if-the-installation-was-successful-3" class="headerlink" title="Verify if the installation was successful:"></a>Verify if the installation was successful:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create-react-app --version</span><br></pre></td></tr></table></figure><h4 id="创建react应用"><a href="#创建react应用" class="headerlink" title="创建react应用"></a>创建react应用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">create-react-app hackernews</span><br><span class="line">cd hackernews</span><br></pre></td></tr></table></figure><p>安装完之后的文件目录结构如下：<br><img src="https://farm5.staticflickr.com/4748/39234421475_2528656f83_o.jpg" alt=""></p><p>其中需要关注的文件夹有：</p><ul><li><p>README.md 说明文档</p></li><li><p>src/ ：重点关注，所有需要的文件都可以在这里找到。</p></li><li><p>public/: 包含了所有你的项目构建出的产品文件。最终所有你写在 src/ 文 件夹里面的代码都会在项目构建的时候被打包放在 public 文件夹下。</p></li></ul><p>其他有用的npm命令</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm start   // 在 http://localhost:3000 启动应用 </span><br><span class="line"></span><br><span class="line">npm test     // 运行所有测试 </span><br><span class="line"></span><br><span class="line">npm run build     // 构建项目的产品文件</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;编程环境搭建&quot;&gt;&lt;a href=&quot;#编程环境搭建&quot; class=&quot;headerlink&quot; title=&quot;编程环境搭建&quot;&gt;&lt;/a&gt;编程环境搭建&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;Homebrew&lt;/li&gt;
-&lt;li&gt;Git&lt;/li&gt;
-&lt;li&gt;Sublime as Editor&lt;/li&gt;
-&lt;li&gt;iTerm2 (Optional)&lt;/li&gt;
-&lt;li&gt;GitHub&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&quot;Homebrew-包管理&quot;&gt;&lt;a href=&quot;#Homebrew-包管理&quot; class=&quot;headerlink&quot; title=&quot;Homebrew 包管理&quot;&gt;&lt;/a&gt;Homebrew 包管理&lt;/h4&gt;&lt;h5 id=&quot;Installation&quot;&gt;&lt;a href=&quot;#Installation&quot; class=&quot;headerlink&quot; title=&quot;Installation&quot;&gt;&lt;/a&gt;Installation&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;/usr/bin/ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h5 id=&quot;homebrew常用命令：&quot;&gt;&lt;a href=&quot;#homebrew常用命令：&quot; class=&quot;headerlink&quot; title=&quot;homebrew常用命令：&quot;&gt;&lt;/a&gt;homebrew常用命令：&lt;/h5&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;命令&lt;/th&gt;
-&lt;th&gt;作用&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;brew install &amp;lt;软件名&amp;gt;&lt;/td&gt;
-&lt;td&gt;安装软件 &lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;brew uninstall &amp;lt;软件名&amp;gt;&lt;/td&gt;
-&lt;td&gt;卸载软件&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;brew search &amp;lt;软件名&amp;gt;&lt;/td&gt;
-&lt;td&gt;查询软件&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;brew list&lt;/td&gt;
-&lt;td&gt;列出已安装的软件&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;brew update&lt;/td&gt;
-&lt;td&gt;更新brew&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;brew home&lt;/td&gt;
-&lt;td&gt;用浏览器打开brew的官方网站&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;brew info &amp;lt;软件名&amp;gt;&lt;/td&gt;
-&lt;td&gt;显示软件信息&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;brew deps&lt;/td&gt;
-&lt;td&gt;显示包依赖&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-    
-    </summary>
-    
-      <category term="react" scheme="https://steve-yuan-8276.github.io/categories/react/"/>
-    
-    
-      <category term="github" scheme="https://steve-yuan-8276.github.io/tags/github/"/>
-    
-      <category term="react" scheme="https://steve-yuan-8276.github.io/tags/react/"/>
-    
-      <category term="node" scheme="https://steve-yuan-8276.github.io/tags/node/"/>
-    
-      <category term="npm" scheme="https://steve-yuan-8276.github.io/tags/npm/"/>
     
   </entry>
   

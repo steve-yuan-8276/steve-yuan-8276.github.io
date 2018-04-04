@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Linux运维学习笔记3-2：用户身份切换]]></title>
+    <url>%2F2018%2F04%2F03%2Fweek3-3-su-sudo%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记主要整理用户身份切换方面的知识，涉及su 和 sudo 两条命令。 查询当前用户 whoami 注：root 用户前面是 # ；切换到普通用户后，前面是 $. 处于安全考虑，建议使用普通用户，而不是root用户进行日常管理，需要的时候再使用su 或者 sudo 临时使用管理员权限。 su命令：切换用户语法： su [-] username 不使用-，切换root，仍然在当前家目录 使用 -切换 root，家目录同时切换 注：从root用户切换到普通用户，不需要输入密码；反之，普通用户切换到root用户则需要输入密码。 临时切换用户运行一条命令 su - -c [command] [username] sudo 命令使用su命令仍然有密码泄露的风险，因此sudo 的用武之地。使用 sudo ，可以让普通用户执行只有 root 用户有权执行的命令。 使用sudo 命令需输入当前用户的密码，而不是系统管理员root的密码，这样就降低root密码扩散是风险，有助于提升系统用户的安全性。 sudo权限是在/etc/sudoers 进行配置的，需要使用visudo 进行编辑。visudo 使用 yum install -y sudo 进行安装。 配置文件在下图标红这一行，所有需要sudo 的用户加入wheel 这个组即可。 sudo -i 为了频繁使用root用户权限使用的命令，该命令的特性包括： 提示输入密码时该密码为当前账户的密码； 密码只用输入一次； 没有时间限制。 执行该命令后提示符变为#而不是$； 退回普通账户时可以执行exit或logout ； 配置/etc/sudoers用户权限的说明12## allow root to run any commands anywhereroot ALL=(ALL:ALL) ALL root 表示这是roo用户，下面的4个all的意思是： 第一个ALL，表示”From ALL hosts”（所有主机）, 意思是 root 从任何机器登录，都可以应用接下来的规则。 第二个ALL，表示“run as All user”，意思是root可以以任何用户的身份运行一些命令。 第三个ALL，表示“run as All groups”，意思是root可以以任何用户组的身份运行一些命令。 第四个ALL，意思是前面的规定适用于任何命令。 上面4个这行合起来的意思是，root这个用户可以从任何机器登录，以任何用户和用户组的身份运行任何命令。 visudo配置配置/etc/sudoers ，使得普通用户不用户输入密码就可以使用sudo 123USER_Alias_USER_SU = user1,user2Cmnd_Alias_SU = /usr/bin/suUSERS_SU ALL = (ALL) NOPASSWD: SU 注意： 输入 :set nu,可显示行数； 保存退出，按esc，之后输入:wq； 限制root远程登录编辑/etc/ssh/sshd_config,将 PermitRootLogin yes 中的yes改为no，保存退出后，重启sshd服务，systemctl restart sshd.service。 扩展阅读sudo与su比较 sudo配置文件样例 sudo -i 也可以登录到root吗？ 参考资料Sudo的用法和Visudo设置]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>linux</tag>
+        <tag>notes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Linux运维学习笔记3-2：用户密码管理]]></title>
     <url>%2F2018%2F04%2F03%2Fweek3-2-usermod-mkpasswd%2F</url>
     <content type="text"><![CDATA[写在前面这则笔记主要记得是用户密码管理相关的知识。 usermod 更改用户属性语法：usermod [参数] [filename] 常用参数 解释 -c &lt;备注&gt;：修改用户帐号的备注文字； -d &lt;登入目录&gt;：修改用户登入时的目录； -e &lt;有效期限&gt;：修改帐号的有效期限； -f &lt;缓冲天数&gt;：修改在密码过期后多少天即关闭该帐号； -l 修改用户帐号名称； -s 修改用户登入后所使用的shell； -u uid，修改用户ID； -g &lt;群组&gt;：修改用户所属的群组； -G &lt;群组&gt;；修改用户所属的附加群组； -L 锁定用户密码，使密码无效； -U 解除密码锁定。 举例： 1234567usermod -u 1008 user1 //更改uidusermod -g 10098 grp2 //更改gidusermod -d /home/user123 user4 //更改user4的家目录usermod -G grp1 grp2 //修改附加组 注：使用-g 只能修改用户所属的一个组；使用-G能够添加到若干个附加组。 用户密码管理passwd 设置用户密码语法： passwd [username] 密码设置的基本原则： 长度不小于10个字符； 密码包括大小写字母、数字、特殊字符（如*、&amp;、%）等； 不规则（不要用常用单词或者数字）； 不使用带有自己的名字、电话、生日及公司名称等。 注： root 用户使用此命令，不加 username 表示更改root 密码；加上username 表示修改该指定用户的密码。 普通用户只能修改自己的密码。 passwd的特殊用法 /etc/shadow 中第二列表示密码，此处为!! 表示密码为空；此处为* 表示密码锁定。这两种情况下，账户都是不允许登陆。 锁定和解锁账户 12passwd -l username //锁定用户passwd -u username //解锁用户 使用usermode命令也可以实现同样的效果 12usermod -L username //锁定用户passwd -U username //解锁用户 设定密码 passwd --stdin username 注：此处密码只需要输入一次，而且是明文显示的。 使用管道符，通过一行命令更改用户密码 使用参数-e ，通过一行命令更改密码, 例如echo -e &#39;abc123456\nabc123456&#39; | passwd user1 mkpasswd 命令linux系统默认没有此命令，需要单独安装 yum -y install expect 基本用法：mkpasswd 生成指定长度的密码 passwd -l n n代表数，即长度为多少位 指定特殊字符和数字 passwd -l n -s n -d n l表示密码长度 s表示特殊字符 d表示数字 参考资料 usermod命令 passwd命令]]></content>
@@ -323,8 +336,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -460,8 +473,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -574,8 +587,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
         <tag>google</tag>
       </tags>
   </entry>
@@ -587,8 +600,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
       </tags>
   </entry>
   <entry>

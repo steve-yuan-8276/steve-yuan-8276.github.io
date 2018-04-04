@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Linux运维学习笔记3-4：磁盘管理基础知识（一）]]></title>
+    <url>%2F2018%2F04%2F04%2Fweek3-4-basisOfDisksetting%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记主要整理linux磁盘管理的基础知识，包括df、du 两条命令。 查看磁盘或者目录容量df命令 disk filesystem 查看已挂载磁盘的容量命令行格式： df [参数] 如上图所示，一共有6列： 列数 含义 1 分区名字 2 分区总容量 3 使用容量 4 剩余容量 5 已使用容量所占百分比 6 分区挂载点 df 常见参数用法常用的参数有i、 h、 k、 m，参数可省略。具体如下： -i 查看inodes 使用情况，如果inodes已使用100%，即使磁盘空间仍有空余，也会提示磁盘空间已满。 关于inodes的更多信息，可以查看： 阮一峰的笔记：理解inodes linux inode 占用100%的解决办法 -h 使用合适的存储单位显示。 -k、-m 指定存储单位显示，k 表示KB；m表示MB。 du 命令 disk usage 查看某个目录或者文件的大小命令行格式 du [参数] [dirname/filename] 不加任何参数，只会目录（包括子目录）的大小： 常用参数用法如下：-a 列出全部文件及目录的大小 -b、 -k、 -m 指定不同的存储单位，b 表示bytes 字节；k代表KB ；m代表 MB。 注：使用 -k 时，如果文件小于4KB，会显示4KB（inodes记录文件存储的最小的单位是块，通常是4KB大小。） -h 自适应恰当的输出单位 注：这个示例是在mac上的输出结果，centos上找不到合适的目录。 -c 表示最后加总和 -s 表示只列出总和 参数可以连用，例如 du -sh [dirname/filename] 磁盘分区磁盘分区的合理原则 主分区（包括拓展分区）控制在4个以内，不得超过4个； 主分区在前，拓展分区在后； 拓展分区中划分逻辑分区（如果拓展分区被删除，其中的逻辑分区也会被删除）； 添加虚拟分区点击虚拟机设置，选择磁盘，调整大小。 fdisk 磁盘分区工具使用fdisk是linux 下的磁盘分区工具，只能用来划分2TB以下的分区。 使用方法：一、在 console 上输入 fdisk -l /dev/sda ，观察硬盘之实体使用情形。二、在 console 上输入 fdisk /dev/sda，可进入分割硬盘模式。 序号 命令 含义 1 m 显示所有命令列示 2 p 显示硬盘分割情形 3 a 设定硬盘启动区 4 n 设定新的硬盘分割区 5 e 硬盘为[延伸]分割区(extend) 6 p 硬盘为[主要]分割区(primary) 7 t 改变硬盘分割区属性 8 d 删除硬盘分割区属性 9 q 结束不保存硬盘分割区属性 10 w 结束并写入硬盘分割区属性 示例：暂缺，待补充 扩展学习parted分区gpt格式 参考资料 理解inode linux inode 占用100%的解决办法 Linux系统合理规划您的硬盘分区 实例解说Linux中Fdisk分区使用方法]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>linux</tag>
+        <tag>notes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Linux运维学习笔记3-3：用户身份切换]]></title>
     <url>%2F2018%2F04%2F03%2Fweek3-3-su-sudo%2F</url>
     <content type="text"><![CDATA[写在前面这则笔记主要整理用户身份切换方面的知识，涉及su 和 sudo 两条命令。 查询当前用户 whoami 注：root 用户前面是 # ；切换到普通用户后，前面是 $. 处于安全考虑，建议使用普通用户，而不是root用户进行日常管理，需要的时候再使用su 或者 sudo 临时使用管理员权限。 su命令：切换用户语法： su [-] username 不使用-，切换root，仍然在当前家目录 使用 -切换 root，家目录同时切换 注：从root用户切换到普通用户，不需要输入密码；反之，普通用户切换到root用户则需要输入密码。 临时切换用户运行一条命令 su - -c [command] [username] sudo 命令使用su命令仍然有密码泄露的风险，因此sudo 的用武之地。使用 sudo ，可以让普通用户执行只有 root 用户有权执行的命令。 使用sudo 命令需输入当前用户的密码，而不是系统管理员root的密码，这样就降低root密码扩散是风险，有助于提升系统用户的安全性。 sudo权限是在/etc/sudoers 进行配置的，需要使用visudo 进行编辑。visudo 使用 yum install -y sudo 进行安装。 配置文件在下图标红这一行，所有需要sudo 的用户加入wheel 这个组即可。 sudo -i 为了频繁使用root用户权限使用的命令，该命令的特性包括： 提示输入密码时该密码为当前账户的密码； 密码只用输入一次； 没有时间限制。 执行该命令后提示符变为#而不是$； 退回普通账户时可以执行exit或logout ； 配置/etc/sudoers用户权限的说明12## allow root to run any commands anywhereroot ALL=(ALL:ALL) ALL root 表示这是roo用户，下面的4个all的意思是： 第一个ALL，表示”From ALL hosts”（所有主机）, 意思是 root 从任何机器登录，都可以应用接下来的规则。 第二个ALL，表示“run as All user”，意思是root可以以任何用户的身份运行一些命令。 第三个ALL，表示“run as All groups”，意思是root可以以任何用户组的身份运行一些命令。 第四个ALL，意思是前面的规定适用于任何命令。 上面4个这行合起来的意思是，root这个用户可以从任何机器登录，以任何用户和用户组的身份运行任何命令。 visudo配置配置/etc/sudoers ，使得普通用户不用户输入密码就可以使用sudo 123USER_Alias_USER_SU = user1,user2Cmnd_Alias_SU = /usr/bin/suUSERS_SU ALL = (ALL) NOPASSWD: SU 注意： 输入 :set nu,可显示行数； 保存退出，按esc，之后输入:wq； 限制root远程登录编辑/etc/ssh/sshd_config,将 PermitRootLogin yes 中的yes改为no，保存退出后，重启sshd服务，systemctl restart sshd.service。 扩展阅读sudo与su比较 sudo配置文件样例 sudo -i 也可以登录到root吗？ 参考资料Sudo的用法和Visudo设置]]></content>
@@ -336,8 +349,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -473,8 +486,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
         <tag>bash</tag>
       </tags>
   </entry>

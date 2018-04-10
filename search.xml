@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[Linux运维学习笔记4-2：vim基础知识（一）]]></title>
+    <title><![CDATA[Linux运维学习笔记4-2：vim基础知识（二）]]></title>
     <url>%2F2018%2F04%2F09%2Fweek4-3-basisOfVIM-Part2%2F</url>
     <content type="text"><![CDATA[写在前面这则笔记继续整理学习VIM用法，主要包括编辑模式、命令模式相关内容。 进入VIM编辑模式 快捷键 解释 i 在当前字符插入 I 在光标所在行的行首插入 a 在光标后插入 A 在光标所在行的末尾插入 o 在当前行后插入新的一行 O 在当前行前插入新的一行 vim命令模式 快捷键 解释 /word 在光标之后查找关键词，如果存在多个匹配项，按n向后搜索 ?word 在光标之前查找关键词，如果存在多个匹配项，按n向前搜索 :1,$s/word1/word2/g 将文档中的word1替换为word2，不加g则只替换每行的第一个word1 :m,ns/word1/word2/g 将第m行和第n行之间的word1替换为word2，不加g则只替换每行的第一个word1 打开/保存/退出/改变文件 快捷键 解释 :e [path to file] 打开一个文件 :w 存盘 :saveas [path to file] 另存为 &lt;path/to/file&gt; :x、 ZZ 、:wq 保存并退出 (:x表示仅在需要时保存；ZZ不需要输入冒号并回车) :X 设置密码保存并退出，使用此命令后cat 该文件会显示乱码，再次打开需输入密码 :q! 退出不保存 :qa! 强行退出所有的正在编辑的文件，就算别的文件有更改。 :bn、 :bp 你可以同时打开很多文件，使用这两个命令来切换下一个或上一个文件。 vim使用常见问题如何解决代码自动缩进造成乱码解决思路： 方法一：命令模式，输入 :set noai nosi 方法二：paste模式 12:set paste :set nopaste putty, xshell连接linux，小键盘不能输入数字解决思路： 在putty上，选项Terminal-&gt;Features里，找到Disable application keypad mode，选中即可， 在xshell上，修改session 属性 -&gt; 终端-&gt;VT模式-&gt;初始数字键盘模式。 延伸阅读 vim的特殊用法 vim常用快捷键总结 vim快速删除一段字符]]></content>
       <categories>
@@ -83,7 +83,7 @@
   <entry>
     <title><![CDATA[Linux运维学习笔记3-3：用户身份切换]]></title>
     <url>%2F2018%2F04%2F03%2Fweek3-3-su-sudo%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记主要整理用户身份切换方面的知识，涉及su 和 sudo 两条命令。 查询当前用户 whoami 注：root 用户前面是 # ；切换到普通用户后，前面是 $. 处于安全考虑，建议使用普通用户，而不是root用户进行日常管理，需要的时候再使用su 或者 sudo 临时使用管理员权限。 su命令：切换用户语法： su [-] username 不使用-，切换root，仍然在当前家目录 使用 -切换 root，家目录同时切换 注：从root用户切换到普通用户，不需要输入密码；反之，普通用户切换到root用户则需要输入密码。 临时切换用户运行一条命令 su - -c [command] [username] sudo 命令使用su命令仍然有密码泄露的风险，因此sudo 的用武之地。使用 sudo ，可以让普通用户执行只有 root 用户有权执行的命令。 使用sudo 命令需输入当前用户的密码，而不是系统管理员root的密码，这样就降低root密码扩散是风险，有助于提升系统用户的安全性。 sudo权限是在/etc/sudoers 进行配置的，需要使用visudo 进行编辑。visudo 使用 yum install -y sudo 进行安装。 配置文件在下图标红这一行，所有需要sudo 的用户加入wheel 这个组即可。 sudo -i 为了频繁使用root用户权限使用的命令，该命令的特性包括： 提示输入密码时该密码为当前账户的密码； 密码只用输入一次； 没有时间限制。 执行该命令后提示符变为#而不是$； 退回普通账户时可以执行exit或logout ； 配置/etc/sudoers用户权限的说明12## allow root to run any commands anywhereroot ALL=(ALL:ALL) ALL root 表示这是roo用户，下面的4个all的意思是： 第一个ALL，表示”From ALL hosts”（所有主机）, 意思是 root 从任何机器登录，都可以应用接下来的规则。 第二个ALL，表示“run as All user”，意思是root可以以任何用户的身份运行一些命令。 第三个ALL，表示“run as All groups”，意思是root可以以任何用户组的身份运行一些命令。 第四个ALL，意思是前面的规定适用于任何命令。 上面4个这行合起来的意思是，root这个用户可以从任何机器登录，以任何用户和用户组的身份运行任何命令。 visudo配置配置/etc/sudoers ，使得普通用户不用户输入密码就可以使用sudo 123USER_Alias_USER_SU = user1,user2Cmnd_Alias_SU = /usr/bin/suUSERS_SU ALL = (ALL) NOPASSWD: SU 注意： 输入 :set nu,可显示行数； 保存退出，按esc，之后输入:wq； 限制root远程登录编辑/etc/ssh/sshd_config,将 PermitRootLogin yes 中的yes改为no，保存退出后，重启sshd服务，systemctl restart sshd.service。 扩展阅读sudo与su比较 sudo配置文件样例 sudo -i 也可以登录到root吗？ 参考资料Sudo的用法和Visudo设置]]></content>
+    <content type="text"><![CDATA[写在前面这则笔记主要整理用户身份切换方面的知识，涉及su 和 sudo 两条命令。 查询当前用户 whoami 注：root 用户前面是 # ；切换到普通用户后，前面是 $. 处于安全考虑，建议使用普通用户，而不是root用户进行日常管理，需要的时候再使用su 或者 sudo 临时使用管理员权限。 su命令：切换用户语法： su [-] username 不使用-，切换root，仍然在当前家目录，环境变量并不改变 使用 -切换 root，同时切换环境变量 注：从root用户切换到普通用户，不需要输入密码；反之，普通用户切换到root用户则需要输入密码。 临时切换用户运行一条命令 su - -c [command] [username] sudo 命令使用su命令仍然有密码泄露的风险，因此sudo 的用武之地。使用 sudo [command] ，可以让普通用户执行只有 root 用户有权执行的命令。 使用sudo 命令需输入当前用户的密码，而不是系统管理员root的密码，这样就降低root密码扩散是风险，有助于提升系统用户的安全性。 sudo -i 为了频繁使用root用户权限使用的命令，该命令的特性包括： 提示输入密码时该密码为当前账户的密码； 密码只用输入一次； 没有时间限制。 执行该命令后提示符变为#而不是$； 退回普通账户时可以执行exit或logout ； su 和 sudo的进阶玩法简单认识/etc/sudoers输入 visudo 对/etc/sudoers进行编辑，关键是下面这一行： root 表示这是root用户，下面的几个all的意思是： 第一个ALL，表示”From ALL hosts”（所有主机）, 意思是 root 从任何机器登录，都可以应用接下来的规则。 第二个ALL，表示“run as All user”，意思是root可以以任何用户的身份运行一些命令。 第三个ALL，表示“run as All groups”，意思是root可以以任何用户组的身份运行任何命令。 上面几个ALL合起来的意思是，root这个用户可以从任何机器登录，以任何用户和用户组的身份运行任何命令。 如何编辑/etc/sudoers配置/etc/sudoers 需要使用visudo 进行编辑，好处是会自动校验配置文件，会自动检验配置文件改动语法是否有错误，使用起来也就更安全。 visudo安装1yum install -y sudo visudo基本使用1visudo //打开编辑`/etc/sudoers` 基本使用根vi/vim差不多，h、l、k、j进行方向选择；x删除单个字符，dd删除整行； 保存退出：按esc ，输入 :wq ; 如果出现错误，在保存退出的时候会有提示 e返回进行修改，确认没有问题后再正常保存退出； w! 强制保存（不推荐）； visudo配置的两个案例案例一：配置/etc/sudoers，让普通用户能够拥有root 权限,同时可以执行ls、mv、cat命令。方法一：修改用户权限配置 注： /usr/bin/ls, /usr/bin/mv, /usr/bin/cat 需要修改成绝对路径才能够正常使用。 保存退出，提示93行有错误，原来是刚才的路径写错了，应该从 / 根目录写起，修改后重新保存。 检验一下工作成果，初次使用会有风险提示，看起来很拽有没有。输入密码后可以拥有super power 了。如下图： 方法二：设置命令别名 再修改账户权限 保存退出，结果也是一样的。 案例二： 配置/etc/sudoers ，使得普通用户不用户输入密码就可以使用sudo为了满足在防止root密码泄漏的同时，最大限度满足系统用户需要以root身份运行的需求，可以采取以下策略，使得用户可以以普通身份登陆，之后再免密切换到root用户。 基本思路，就是要在配置文件中加入以下几行内容： 123USER_Alias_USER_SU = yuanfeng, user1 //设置用户aliasCmnd_Alias_SU = /usr/bin/su //设置权限aliasUSERS_SU ALL = (ALL) NOPASSWD: SU //设置免密su 创建一个user alias 设置一个规则免密执行su命令登录root 检验一下学习成果，普通用户输入 sudo su -，免密切换到root用户。 最后，还可以禁止root用户远程登录，实现步骤：编辑/etc/ssh/sshd_config,将 PermitRootLogin yes 中的yes改为no，保存退出后，重启sshd服务。 1systemctl restart sshd.service 通过上述步骤，就可以实现了我们的目的，齐活。 扩展阅读sudo与su比较 sudo配置文件样例 sudo -i 也可以登录到root吗？ 参考资料Sudo的用法和Visudo设置]]></content>
       <categories>
         <category>linux</category>
       </categories>
@@ -416,8 +416,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -553,8 +553,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
         <tag>bash</tag>
       </tags>
   </entry>

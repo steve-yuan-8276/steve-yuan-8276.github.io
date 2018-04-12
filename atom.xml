@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2018-04-10T05:31:32.549Z</updated>
+  <updated>2018-04-12T05:53:30.624Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -17,17 +17,171 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Linux运维学习笔记4-4：文件打包压缩工具（一）</title>
+    <link href="https://steve-yuan-8276.github.io/2018/04/11/week4-5-basisOfZipToolPart2/"/>
+    <id>https://steve-yuan-8276.github.io/2018/04/11/week4-5-basisOfZipToolPart2/</id>
+    <published>2018-04-11T09:01:54.000Z</published>
+    <updated>2018-04-12T05:53:30.624Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记书接上回，继续整理打包压缩软件的知识，主要涉及<code>zip</code>和 <code>tar</code> 两个工具。</p><h3 id="tar-工具"><a href="#tar-工具" class="headerlink" title="tar 工具"></a>tar 工具</h3><p>由于<code>gzip、bzip2、xz</code>三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是<code>tar</code>。</p><p>不仅如此，<code>tar</code> 强大之处在于，配合参数，可以打包压缩一起来。</p><p>命令行格式：<code>tar [参数] [目标文件] [源文件或目录]</code></p><p><strong>注：</strong></p><ul><li><p><code>目标文件</code> 指的是打包后的文件名</p></li><li><p><code>源文件或目录</code> 指的是需要打包的文件或目录</p></li></ul><h4 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h4><table><thead><tr><th>参数</th><th>解释</th></tr></thead><tbody><tr><td>-c</td><td>建立一个tar包或压缩包</td></tr><tr><td>-v</td><td>表示可视化</td></tr><tr><td>-f</td><td>指定压缩文件包名称 （多个参数组合的情况下，把f放在最后，紧跟压缩文件包名）</td></tr><tr><td>-t</td><td>查看tar包里的内容</td></tr><tr><td>-z</td><td>指定gzip压缩</td></tr><tr><td>-j（小写）</td><td>指定bzip2压缩</td></tr><tr><td>-J（大写）</td><td>指定xz压缩</td></tr><tr><td>-x</td><td>解包或解压缩</td></tr><tr><td>–exclude filename</td><td>特殊用法，表示在打包或者压缩是，将该filename排除在外</td></tr></tbody></table><a id="more"></a><h4 id="常见用法："><a href="#常见用法：" class="headerlink" title="常见用法："></a>常见用法：</h4><p><code>tar</code>命令的参数经常连用，示例如下：</p><h5 id="文件目录打包"><a href="#文件目录打包" class="headerlink" title="文件目录打包"></a>文件目录打包</h5><ul><li><code>-cvf</code> 可视化打包目录<code>test</code>，指定文件名为<code>test.tar</code></li></ul><p><img src="https://farm1.staticflickr.com/883/39591298120_b18c7565a1_o.png" alt=""></p><ul><li><code>-xvf</code> 解包<code>test.tar</code></li></ul><p><img src="https://farm1.staticflickr.com/898/41400341911_a94cdf644b_o.png" alt=""></p><ul><li><code>--exclude filename</code> 特殊用法，将指定文建排除在外</li></ul><p>当前目录的情况</p><p><img src="https://farm1.staticflickr.com/817/41400575281_35e0e1c1a9_o.png" alt=""></p><p>打包压缩的情况</p><p><img src="https://farm1.staticflickr.com/877/41357789462_856b0f6d51_o.png" alt=""></p><p><code>-tf</code> 查看一下打包后的目录文件情况<br><img src="https://farm1.staticflickr.com/874/39591660990_3ab0620310_o.png" alt=""></p><h5 id="文件打包并用gzip处理"><a href="#文件打包并用gzip处理" class="headerlink" title="文件打包并用gzip处理"></a>文件打包并用gzip处理</h5><ul><li><code>-czvf</code> 打包文件并使用gzip压缩</li></ul><p><img src="https://farm1.staticflickr.com/811/26529628317_4e19a320e1_o.png" alt=""></p><ul><li><code>-zxvf</code> 解压缩 <code>.tar.gz</code> 格式的文件</li></ul><p><img src="https://farm1.staticflickr.com/865/27530040088_2c5b940f29_o.png" alt=""></p><ul><li><code>zcat</code> 查看压缩包文件内容</li></ul><p><strong>注：</strong> <code>zcat</code> 用于不真正解压缩文件，就能显示压缩包中文件的内容的场合。</p><p><img src="https://farm1.staticflickr.com/880/41400794141_9261292ff8_o.png" alt=""></p><h5 id="文件打包并用bzip2处理"><a href="#文件打包并用bzip2处理" class="headerlink" title="文件打包并用bzip2处理"></a>文件打包并用bzip2处理</h5><p><code>-cjvf</code> 打包文件并使用bzip2压缩</p><p><img src="https://farm1.staticflickr.com/896/27530217828_92ae2d4679_o.png" alt=""></p><p><code>-xjvf</code> 解压缩 <code>.tar.bz2</code> 格式的文件</p><p><img src="https://farm1.staticflickr.com/897/39591752720_776c467ac6_o.png" alt=""></p><ul><li><code>bzcat</code> 不解压包查看内容</li></ul><p><img src="https://farm1.staticflickr.com/815/40505243565_4c549ea55a_o.png" alt=""></p><h3 id="zip-压缩工具"><a href="#zip-压缩工具" class="headerlink" title="zip 压缩工具"></a><code>zip</code> 压缩工具</h3><p>除了上述这些打包压缩工具，还需要考虑到在windows、linux、 mac下通用的打包压缩格式 <code>.zip</code></p><p>zip 工具centos默认没有，需要单独安装 <code>yum install -y zip</code></p><h4 id="zip-工具的使用"><a href="#zip-工具的使用" class="headerlink" title="zip 工具的使用"></a>zip 工具的使用</h4><h5 id="zip压缩"><a href="#zip压缩" class="headerlink" title="zip压缩"></a><code>zip</code>压缩</h5><p>命令行格式：<code>zip [参数] [压缩包名称] [源文件或目录]</code></p><p><img src="https://farm1.staticflickr.com/872/40505381985_0e6aaa078a_o.png" alt=""></p><p>如果目录下有还有二级甚至多级目录，zip命令 不加参数时，仅仅会讲二级目录压缩；</p><p>如果想一并压缩二级目录及多级目录，有两种方法：</p><ul><li>第一种方法：使用通配符</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip test.zip test/*</span><br></pre></td></tr></table></figure><ul><li>第二种方法：使用 -r 参数</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip -r test.zip test/</span><br></pre></td></tr></table></figure><h5 id="unzip-解压缩"><a href="#unzip-解压缩" class="headerlink" title="unzip 解压缩"></a><code>unzip</code> 解压缩</h5><p><code>zip</code>文件需要单独安装<code>unzip</code> 工具来解压，安装命令为 <code>yum install -y unzip</code></p><p>命令行格式: <code>unzip [filename]</code></p><p><img src="https://farm1.staticflickr.com/886/40687288864_77f7950b69_o.png" alt=""></p><p>看下这个帖子： <a href="http://ask.apelearn.com/question/5435" target="_blank" rel="noopener">http://ask.apelearn.com/question/5435</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;这则笔记书接上回，继续整理打包压缩软件的知识，主要涉及&lt;code&gt;zip&lt;/code&gt;和 &lt;code&gt;tar&lt;/code&gt; 两个工具。&lt;/p&gt;
+&lt;h3 id=&quot;tar-工具&quot;&gt;&lt;a href=&quot;#tar-工具&quot; class=&quot;headerlink&quot; title=&quot;tar 工具&quot;&gt;&lt;/a&gt;tar 工具&lt;/h3&gt;&lt;p&gt;由于&lt;code&gt;gzip、bzip2、xz&lt;/code&gt;三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是&lt;code&gt;tar&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;不仅如此，&lt;code&gt;tar&lt;/code&gt; 强大之处在于，配合参数，可以打包压缩一起来。&lt;/p&gt;
+&lt;p&gt;命令行格式：&lt;code&gt;tar [参数] [目标文件] [源文件或目录]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;目标文件&lt;/code&gt; 指的是打包后的文件名&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;源文件或目录&lt;/code&gt; 指的是需要打包的文件或目录&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;常用参数&quot;&gt;&lt;a href=&quot;#常用参数&quot; class=&quot;headerlink&quot; title=&quot;常用参数&quot;&gt;&lt;/a&gt;常用参数&lt;/h4&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;解释&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;-c&lt;/td&gt;
+&lt;td&gt;建立一个tar包或压缩包&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-v&lt;/td&gt;
+&lt;td&gt;表示可视化&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-f&lt;/td&gt;
+&lt;td&gt;指定压缩文件包名称 （多个参数组合的情况下，把f放在最后，紧跟压缩文件包名）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-t&lt;/td&gt;
+&lt;td&gt;查看tar包里的内容&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-z&lt;/td&gt;
+&lt;td&gt;指定gzip压缩&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-j（小写）&lt;/td&gt;
+&lt;td&gt;指定bzip2压缩&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-J（大写）&lt;/td&gt;
+&lt;td&gt;指定xz压缩&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-x&lt;/td&gt;
+&lt;td&gt;解包或解压缩&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;–exclude filename&lt;/td&gt;
+&lt;td&gt;特殊用法，表示在打包或者压缩是，将该filename排除在外&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+    
+    </summary>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
+    
+    
+      <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="zip" scheme="https://steve-yuan-8276.github.io/tags/zip/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux运维学习笔记4-4：文件打包压缩工具（一）</title>
+    <link href="https://steve-yuan-8276.github.io/2018/04/11/week4-4-basisOfZipToolsPart1/"/>
+    <id>https://steve-yuan-8276.github.io/2018/04/11/week4-4-basisOfZipToolsPart1/</id>
+    <published>2018-04-11T09:01:13.000Z</published>
+    <updated>2018-04-12T05:52:28.787Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记主要整理Linux文件压缩与打包方面的知识，主要涉及gzip、bzip、xz。</p><h3 id="常见的Linux压缩打包文件"><a href="#常见的Linux压缩打包文件" class="headerlink" title="常见的Linux压缩打包文件"></a>常见的Linux压缩打包文件</h3><table><thead><tr><th>后缀名</th><th>解释</th></tr></thead><tbody><tr><td>.gz</td><td>gzip压缩工具压缩的文件</td></tr><tr><td>.bz2</td><td>bzip2压缩工具压缩的文件</td></tr><tr><td>.tar</td><td>tar工具打包的文件（tar没有压缩功能，只能合并打包）</td></tr><tr><td>.tar.gz</td><td>先由tar打包，再由zip工具压缩的文件</td></tr><tr><td>.tar.bz2</td><td>先由tar打包，再由bzip2工具压缩的文件</td></tr><tr><td>.tar.xz</td><td>先由tar打包，再由xz工具压缩的文件</td></tr></tbody></table><a id="more"></a><h3 id="gzip压缩工具"><a href="#gzip压缩工具" class="headerlink" title="gzip压缩工具"></a>gzip压缩工具</h3><p>命令行格式： <code>gzip [参数] [filename]</code></p><p><strong>注：</strong>gzip只能压缩文件，不能压缩目录</p><p>常用参数：</p><table><thead><tr><th>参数</th><th>解释</th></tr></thead><tbody><tr><td>-n</td><td>n代表压缩等级，从1到9，默认为6，可不加。</td></tr><tr><td>-d</td><td>表示解压缩</td></tr></tbody></table><p>示例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gzip 1.txt    //在当前目录下压缩1.txt，源文件会消失，只保留压缩文件</span><br><span class="line"></span><br><span class="line">gzip -d 1.txt.gz    //解压1.txt.gz 到当前目录</span><br></pre></td></tr></table></figure><p><img src="https://farm1.staticflickr.com/815/41384147991_ce30416e03_o.png" alt=""></p><h3 id="bzip2压缩工具"><a href="#bzip2压缩工具" class="headerlink" title="bzip2压缩工具"></a>bzip2压缩工具</h3><h4 id="bzip2-安装："><a href="#bzip2-安装：" class="headerlink" title="bzip2 安装："></a>bzip2 安装：</h4><p>centOS 7 默认没有，需要单独安装 <code>yum install -y bzip2</code></p><h4 id="bzip2-使用："><a href="#bzip2-使用：" class="headerlink" title="bzip2 使用："></a>bzip2 使用：</h4><p>命令行格式：<code>bzip2 [参数] [filename]</code></p><p><strong>注：</strong>bzip2 工具也是支持文件压缩，不支持目录压缩。</p><p>常用参数</p><table><thead><tr><th>参数</th><th>解释</th></tr></thead><tbody><tr><td>-z</td><td>表示压缩，可省略</td></tr><tr><td>-d</td><td>表示解压缩</td></tr></tbody></table><p>示例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bzip2 1.txt   //压缩1.txt</span><br><span class="line">bzip2 -d 1.txt   //解压缩 1.txt.bz2</span><br></pre></td></tr></table></figure><p><img src="https://farm1.staticflickr.com/813/26513702367_0a19c8db86_o.png" alt=""></p><h3 id="xz压缩工具"><a href="#xz压缩工具" class="headerlink" title="xz压缩工具"></a>xz压缩工具</h3><p>命令行格式： <code>xz [参数] [filename]</code></p><p><strong>注：</strong>bzip2 工具也是支持文件压缩，不支持目录压缩。</p><p>常见参数：</p><table><thead><tr><th>参数</th><th>解释</th></tr></thead><tbody><tr><td>-z</td><td>表示压缩，可省略</td></tr><tr><td>-d</td><td>表示解压缩</td></tr></tbody></table><p>示例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xz 1.txt   //压缩1.txt</span><br><span class="line">xz -d 1.txt   //解压缩 1.txt.xz</span><br></pre></td></tr></table></figure><p><img src="https://farm1.staticflickr.com/897/41384356831_60612e52d6_o.png" alt=""></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;这则笔记主要整理Linux文件压缩与打包方面的知识，主要涉及gzip、bzip、xz。&lt;/p&gt;
+&lt;h3 id=&quot;常见的Linux压缩打包文件&quot;&gt;&lt;a href=&quot;#常见的Linux压缩打包文件&quot; class=&quot;headerlink&quot; title=&quot;常见的Linux压缩打包文件&quot;&gt;&lt;/a&gt;常见的Linux压缩打包文件&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;后缀名&lt;/th&gt;
+&lt;th&gt;解释&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;.gz&lt;/td&gt;
+&lt;td&gt;gzip压缩工具压缩的文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;.bz2&lt;/td&gt;
+&lt;td&gt;bzip2压缩工具压缩的文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;.tar&lt;/td&gt;
+&lt;td&gt;tar工具打包的文件（tar没有压缩功能，只能合并打包）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;.tar.gz&lt;/td&gt;
+&lt;td&gt;先由tar打包，再由zip工具压缩的文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;.tar.bz2&lt;/td&gt;
+&lt;td&gt;先由tar打包，再由bzip2工具压缩的文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;.tar.xz&lt;/td&gt;
+&lt;td&gt;先由tar打包，再由xz工具压缩的文件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+    
+    </summary>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
+    
+    
+      <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="zip" scheme="https://steve-yuan-8276.github.io/tags/zip/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Linux运维学习笔记4-3：vim基础知识（二）</title>
     <link href="https://steve-yuan-8276.github.io/2018/04/09/week4-3-basisOfVIM-Part2/"/>
     <id>https://steve-yuan-8276.github.io/2018/04/09/week4-3-basisOfVIM-Part2/</id>
     <published>2018-04-09T08:24:47.000Z</published>
-    <updated>2018-04-10T05:31:32.549Z</updated>
+    <updated>2018-04-12T05:50:46.158Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记继续整理学习VIM用法，主要包括编辑模式、命令模式相关内容。</p><h3 id="进入VIM编辑模式"><a href="#进入VIM编辑模式" class="headerlink" title="进入VIM编辑模式"></a>进入VIM编辑模式</h3><table><thead><tr><th>快捷键</th><th>解释</th></tr></thead><tbody><tr><td>i</td><td>在当前字符插入</td></tr><tr><td>I</td><td>在光标所在行的行首插入</td></tr><tr><td>a</td><td>在光标后插入</td></tr><tr><td>A</td><td>在光标所在行的末尾插入</td></tr><tr><td>o</td><td>在当前行后插入新的一行</td></tr><tr><td>O</td><td>在当前行前插入新的一行</td></tr></tbody></table><a id="more"></a><h3 id="vim命令模式"><a href="#vim命令模式" class="headerlink" title="vim命令模式"></a>vim命令模式</h3><table><thead><tr><th>快捷键</th><th>解释</th></tr></thead><tbody><tr><td><code>/word</code></td><td>在光标之后查找关键词，如果存在多个匹配项，按n向后搜索</td></tr><tr><td><code>?word</code></td><td>在光标之前查找关键词，如果存在多个匹配项，按n向前搜索</td></tr><tr><td><code>:1,$s/word1/word2/g</code></td><td>将文档中的word1替换为word2，不加g则只替换每行的第一个word1</td></tr><tr><td><code>:m,ns/word1/word2/g</code></td><td>将第m行和第n行之间的word1替换为word2，不加g则只替换每行的第一个word1</td></tr></tbody></table><h4 id="打开-保存-退出-改变文件"><a href="#打开-保存-退出-改变文件" class="headerlink" title="打开/保存/退出/改变文件"></a>打开/保存/退出/改变文件</h4><table><thead><tr><th>快捷键</th><th>解释</th></tr></thead><tbody><tr><td><code>:e [path to file]</code></td><td>打开一个文件</td></tr><tr><td><code>:w</code></td><td>存盘</td></tr><tr><td><code>:saveas [path to file]</code></td><td>另存为 &lt;path/to/file&gt;</td></tr><tr><td><code>:x</code>、 <code>ZZ</code> 、<code>:wq</code></td><td>保存并退出 (<code>:x</code>表示仅在需要时保存；<code>ZZ</code>不需要输入冒号并回车)</td></tr><tr><td><code>:X</code></td><td>设置密码保存并退出，使用此命令后cat 该文件会显示乱码，再次打开需输入密码</td></tr><tr><td><code>:q!</code></td><td>退出不保存 </td></tr><tr><td><code>:qa!</code></td><td>强行退出所有的正在编辑的文件，就算别的文件有更改。</td></tr><tr><td><code>:bn</code>、 <code>:bp</code></td><td>你可以同时打开很多文件，使用这两个命令来切换下一个或上一个文件。</td></tr></tbody></table><h3 id="vim使用常见问题"><a href="#vim使用常见问题" class="headerlink" title="vim使用常见问题"></a>vim使用常见问题</h3><h4 id="如何解决代码自动缩进造成乱码"><a href="#如何解决代码自动缩进造成乱码" class="headerlink" title="如何解决代码自动缩进造成乱码"></a>如何解决代码自动缩进造成乱码</h4><h5 id="解决思路："><a href="#解决思路：" class="headerlink" title="解决思路："></a>解决思路：</h5><ul><li>方法一：命令模式，输入 <code>:set noai nosi</code></li><li></li><li>方法二：paste模式</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">:set paste </span><br><span class="line">:set nopaste</span><br></pre></td></tr></table></figure><h4 id="putty-xshell连接linux，小键盘不能输入数字"><a href="#putty-xshell连接linux，小键盘不能输入数字" class="headerlink" title="putty, xshell连接linux，小键盘不能输入数字"></a>putty, xshell连接linux，小键盘不能输入数字</h4><h5 id="解决思路：-1"><a href="#解决思路：-1" class="headerlink" title="解决思路："></a>解决思路：</h5><ul><li><p>在<code>putty</code>上，选项<code>Terminal</code>-&gt;<code>Features</code>里，找到<code>Disable application keypad mode</code>，选中即可，</p></li><li><p>在xshell上，修改<code>session 属性</code> -&gt; <code>终端</code>-&gt;<code>VT模式</code>-&gt;<code>初始数字键盘模式</code>。</p></li></ul><h3 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h3><ul><li><p><a href="http://www.apelearn.com/bbs/thread-9334-1-1.html" target="_blank" rel="noopener">vim的特殊用法</a> </p></li><li><p><a href="http://www.apelearn.com/bbs/thread-407-1-1.html" target="_blank" rel="noopener">vim常用快捷键总结</a> </p></li><li><p><a href="http://www.apelearn.com/bbs/thread-842-1-1.html" target="_blank" rel="noopener">vim快速删除一段字符</a> </p></li></ul>]]></content>
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记继续整理学习VIM用法，主要包括编辑模式、命令模式相关内容。</p><ul><li>先把vim命令贴出来：</li></ul><p><img src="https://farm5.staticflickr.com/4783/39120869320_db56e0d91c_o.jpg" alt=""></p><ul><li>再把vim键位图贴出来：</li></ul><p><img src="https://farm1.staticflickr.com/798/27532370398_e3dac173f7_o.jpg" alt=""></p><h3 id="进入VIM编辑模式"><a href="#进入VIM编辑模式" class="headerlink" title="进入VIM编辑模式"></a>进入VIM编辑模式</h3><table><thead><tr><th>快捷键</th><th>解释</th></tr></thead><tbody><tr><td>i</td><td>在当前字符插入</td></tr><tr><td>I</td><td>在光标所在行的行首插入</td></tr><tr><td>a</td><td>在光标后插入</td></tr><tr><td>A</td><td>在光标所在行的末尾插入</td></tr><tr><td>o</td><td>在当前行后插入新的一行</td></tr><tr><td>O</td><td>在当前行前插入新的一行</td></tr></tbody></table><a id="more"></a><h3 id="vim命令模式"><a href="#vim命令模式" class="headerlink" title="vim命令模式"></a>vim命令模式</h3><table><thead><tr><th>快捷键</th><th>解释</th></tr></thead><tbody><tr><td><code>/word</code></td><td>在光标之后查找关键词，如果存在多个匹配项，按n向后搜索</td></tr><tr><td><code>?word</code></td><td>在光标之前查找关键词，如果存在多个匹配项，按n向前搜索</td></tr><tr><td><code>:1,$s/word1/word2/g</code></td><td>将文档中的word1替换为word2，不加g则只替换每行的第一个word1</td></tr><tr><td><code>:m,ns/word1/word2/g</code></td><td>将第m行和第n行之间的word1替换为word2，不加g则只替换每行的第一个word1</td></tr></tbody></table><h4 id="打开-保存-退出-改变文件"><a href="#打开-保存-退出-改变文件" class="headerlink" title="打开/保存/退出/改变文件"></a>打开/保存/退出/改变文件</h4><table><thead><tr><th>快捷键</th><th>解释</th></tr></thead><tbody><tr><td><code>:e [path to file]</code></td><td>打开一个文件</td></tr><tr><td><code>:w</code></td><td>存盘</td></tr><tr><td><code>:saveas [path to file]</code></td><td>另存为 &lt;path/to/file&gt;</td></tr><tr><td><code>:x</code>、 <code>ZZ</code> 、<code>:wq</code></td><td>保存并退出 (<code>:x</code>表示仅在需要时保存；<code>ZZ</code>不需要输入冒号并回车)</td></tr><tr><td><code>:X</code></td><td>设置密码保存并退出，使用此命令后cat 该文件会显示乱码，再次打开需输入密码</td></tr><tr><td><code>:q!</code></td><td>退出不保存 </td></tr><tr><td><code>:qa!</code></td><td>强行退出所有的正在编辑的文件，就算别的文件有更改。</td></tr><tr><td><code>:bn</code>、 <code>:bp</code></td><td>你可以同时打开很多文件，使用这两个命令来切换下一个或上一个文件。</td></tr></tbody></table><h3 id="vim使用常见问题"><a href="#vim使用常见问题" class="headerlink" title="vim使用常见问题"></a>vim使用常见问题</h3><h4 id="如何解决代码自动缩进造成乱码"><a href="#如何解决代码自动缩进造成乱码" class="headerlink" title="如何解决代码自动缩进造成乱码"></a>如何解决代码自动缩进造成乱码</h4><h5 id="解决思路："><a href="#解决思路：" class="headerlink" title="解决思路："></a>解决思路：</h5><ul><li>方法一：命令模式，输入 <code>:set noai nosi</code></li><li></li><li>方法二：paste模式</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">:set paste </span><br><span class="line">:set nopaste</span><br></pre></td></tr></table></figure><h4 id="putty-xshell连接linux，小键盘不能输入数字"><a href="#putty-xshell连接linux，小键盘不能输入数字" class="headerlink" title="putty, xshell连接linux，小键盘不能输入数字"></a>putty, xshell连接linux，小键盘不能输入数字</h4><h5 id="解决思路：-1"><a href="#解决思路：-1" class="headerlink" title="解决思路："></a>解决思路：</h5><ul><li><p>在<code>putty</code>上，选项<code>Terminal</code>-&gt;<code>Features</code>里，找到<code>Disable application keypad mode</code>，选中即可，</p></li><li><p>在xshell上，修改<code>session 属性</code> -&gt; <code>终端</code>-&gt;<code>VT模式</code>-&gt;<code>初始数字键盘模式</code>。</p></li></ul><h3 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h3><ul><li><p><a href="http://www.apelearn.com/bbs/thread-9334-1-1.html" target="_blank" rel="noopener">vim的特殊用法</a> </p></li><li><p><a href="http://www.apelearn.com/bbs/thread-407-1-1.html" target="_blank" rel="noopener">vim常用快捷键总结</a> </p></li><li><p><a href="http://www.apelearn.com/bbs/thread-842-1-1.html" target="_blank" rel="noopener">vim快速删除一段字符</a> </p></li></ul>]]></content>
     
     <summary type="html">
     
       &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;这则笔记继续整理学习VIM用法，主要包括编辑模式、命令模式相关内容。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;先把vim命令贴出来：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;https://farm5.staticflickr.com/4783/39120869320_db56e0d91c_o.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;再把vim键位图贴出来：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;https://farm1.staticflickr.com/798/27532370398_e3dac173f7_o.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;h3 id=&quot;进入VIM编辑模式&quot;&gt;&lt;a href=&quot;#进入VIM编辑模式&quot; class=&quot;headerlink&quot; title=&quot;进入VIM编辑模式&quot;&gt;&lt;/a&gt;进入VIM编辑模式&lt;/h3&gt;&lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -70,9 +224,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="vim" scheme="https://steve-yuan-8276.github.io/tags/vim/"/>
     
@@ -117,9 +271,9 @@
     <link href="https://steve-yuan-8276.github.io/2018/04/09/week4-2-basisOfVIM-Part1/"/>
     <id>https://steve-yuan-8276.github.io/2018/04/09/week4-2-basisOfVIM-Part1/</id>
     <published>2018-04-09T04:12:11.000Z</published>
-    <updated>2018-04-09T09:14:13.551Z</updated>
+    <updated>2018-04-12T05:47:47.318Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记开始学习VIM用法。</p><p>vim 是比系统自带的vi更强大的文本编辑器，支持语法高亮，有大量的快捷键需要记忆，学习难度也很大。</p><h3 id="vim-安装"><a href="#vim-安装" class="headerlink" title="vim 安装"></a>vim 安装</h3><p>centOS 7安装：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y vim-enhanced</span><br></pre></td></tr></table></figure><p>macOS 安装：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install vim</span><br></pre></td></tr></table></figure><a id="more"></a><h4 id="vim简单配置"><a href="#vim简单配置" class="headerlink" title="vim简单配置"></a>vim简单配置</h4><p>Vim编辑环境配置，涉及<code>/etc/vimrc</code> 和 <code>~/.vimrc</code>。前者是全局配置，而后置只针对当前用户，所以就新建一个进行修改即可。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">touch ～/.vimrc //新建当前用户目录下的配置文件</span><br><span class="line"></span><br><span class="line">vim ~/.vimrc     //编辑` .vimrc`文件</span><br></pre></td></tr></table></figure><p>新增以下内容：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">set nu         // 这是设置显示行号</span><br><span class="line">set  showmode   //设置在命令行界面最下面显示当前模式等。</span><br><span class="line">set   ruler     // 在右下角显示光标所在的行数等信息</span><br><span class="line">set autoindent   // 设置每次单击Enter键后，光标移动到下一行时与上一行的起始字符对齐</span><br><span class="line">syntax on    // 即设置语法检测，当编辑C或者Shell脚本时，关键字会用特殊颜色显示</span><br></pre></td></tr></table></figure><p>之后，按 <code>esc</code> 键，输入<code>:wq</code>进行保存。</p><h3 id="vim普通模式下的基本操作"><a href="#vim普通模式下的基本操作" class="headerlink" title="vim普通模式下的基本操作"></a>vim普通模式下的基本操作</h3><p>命令行格式: <code>vim [filename]</code></p><p>vim 有三种模式，包括普通模式、编辑模式和命令模式。首先是普通模式：</p><p>在普通模式下，可以进行的操作包括：</p><h4 id="移动光标"><a href="#移动光标" class="headerlink" title="移动光标"></a>移动光标</h4><ul><li>使用h、l、k、j 代表左、右、上、下，如下图所示：</li></ul><p><img src="https://farm1.staticflickr.com/901/26464130577_36444dcabe_o.png" alt=""></p><ul><li><code>Ctrl+B</code>、<code>ctrl+F</code> 代表向前/向后翻页。</li></ul><ul><li><code>0</code>、<code>shift+6</code>移动到本行行首；<code>shift+4</code> 移动到本行末尾。</li></ul><ul><li><code>gg</code> 移动到第一行；<code>G</code> 移动到最后一行；<code>nG</code>移动到第n行（n代表数字）</li></ul><h4 id="删除字符或行"><a href="#删除字符或行" class="headerlink" title="删除字符或行"></a>删除字符或行</h4><ul><li><p><code>x</code>表示向后删除一个字符；<code>X</code>表示向前删除一个字符；<code>nx</code>表示向后删除n的字符（n代表数字）</p></li><li><p><code>dd</code> 删除光标所在行；<code>ndd</code> 删除光标所在行之后的n行（n代表数字）</p></li></ul><h4 id="复制粘贴字符或者行"><a href="#复制粘贴字符或者行" class="headerlink" title="复制粘贴字符或者行"></a>复制粘贴字符或者行</h4><ul><li><p><code>yy</code>复制光标所在行；<code>nyy</code> 从光标所载行开始，向下复制n行。</p></li><li><p>小写 <code>p</code> 表示从光标所在行开始<strong>向后</strong>粘贴；大写 <code>P</code> 表示<strong>向前</strong>粘贴</p></li><li><p>按 <code>v</code> 移动光标会选中指定文字</p></li><li><p>按 <code>u</code> 还原上一步操作</p></li></ul><h4 id="查看帮助文档"><a href="#查看帮助文档" class="headerlink" title="查看帮助文档"></a>查看帮助文档</h4><p>输入 <code>:help</code> 查看帮助文档</p><p>输入 <code>/</code> 或者 <code>?</code> 查找关键字</p>]]></content>
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记开始学习VIM用法。</p><p>vim 是比系统自带的vi更强大的文本编辑器，支持语法高亮，有大量的快捷键需要记忆，学习难度也很大。</p><h3 id="vim-安装"><a href="#vim-安装" class="headerlink" title="vim 安装"></a>vim 安装</h3><p>centOS 7安装：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y vim-enhanced</span><br></pre></td></tr></table></figure><p>macOS 安装：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install vim</span><br></pre></td></tr></table></figure><a id="more"></a><h4 id="vim简单配置"><a href="#vim简单配置" class="headerlink" title="vim简单配置"></a>vim简单配置</h4><p>Vim编辑环境配置，涉及<code>/etc/vimrc</code> 和 <code>~/.vimrc</code>。前者是全局配置，而后置只针对当前用户，所以就新建一个进行修改即可。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">touch ～/.vimrc //新建当前用户目录下的配置文件</span><br><span class="line"></span><br><span class="line">vim ~/.vimrc     //编辑` .vimrc`文件</span><br></pre></td></tr></table></figure><p>新增以下内容：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">set nu         // 这是设置显示行号</span><br><span class="line">set  showmode   //设置在命令行界面最下面显示当前模式等。</span><br><span class="line">set   ruler     // 在右下角显示光标所在的行数等信息</span><br><span class="line">set autoindent   // 设置每次单击Enter键后，光标移动到下一行时与上一行的起始字符对齐</span><br><span class="line">syntax on    // 即设置语法检测，当编辑C或者Shell脚本时，关键字会用特殊颜色显示</span><br></pre></td></tr></table></figure><p>之后，按 <code>esc</code> 键，输入<code>:wq</code>进行保存。</p><h3 id="vim普通模式下的基本操作"><a href="#vim普通模式下的基本操作" class="headerlink" title="vim普通模式下的基本操作"></a>vim普通模式下的基本操作</h3><p>命令行格式: <code>vim [filename]</code></p><p>vim 有三种模式，包括普通模式、编辑模式和命令模式。首先是普通模式：</p><p>在普通模式下，可以进行的操作包括：</p><h4 id="移动光标"><a href="#移动光标" class="headerlink" title="移动光标"></a>移动光标</h4><ul><li>使用h、l、k、j 代表左、右、上、下，如下图所示：</li></ul><p><img src="https://farm1.staticflickr.com/901/26464130577_36444dcabe_o.png" alt=""></p><ul><li><code>Ctrl+B</code>、<code>ctrl+F</code> 代表向前/向后翻页。</li></ul><ul><li><code>0</code>、<code>shift+6</code>移动到本行行首；<code>shift+4</code> 移动到本行末尾。</li></ul><ul><li><code>gg</code> 移动到第一行；<code>G</code> 移动到最后一行；<code>nG</code>移动到第n行（n代表数字）</li></ul><h4 id="删除字符或行"><a href="#删除字符或行" class="headerlink" title="删除字符或行"></a>删除字符或行</h4><ul><li><p><code>x</code>表示向后删除一个字符；<code>X</code>表示向前删除一个字符；<code>nx</code>表示向后删除n的字符（n代表数字）</p></li><li><p><code>dd</code> 删除光标所在行；<code>ndd</code> 删除光标所在行之后的n行（n代表数字）</p></li></ul><h4 id="复制粘贴字符或者行"><a href="#复制粘贴字符或者行" class="headerlink" title="复制粘贴字符或者行"></a>复制粘贴字符或者行</h4><ul><li><p><code>yy</code>复制光标所在行；<code>nyy</code> 从光标所载行开始，向下复制n行。</p></li><li><p>小写 <code>p</code> 表示从光标所在行开始<strong>向后</strong>粘贴；大写 <code>P</code> 表示<strong>向前</strong>粘贴</p></li><li><p>按 <code>v</code> 移动光标会选中指定文字</p></li><li><p>按 <code>u</code> 还原上一步操作</p></li></ul><h4 id="查看帮助文档"><a href="#查看帮助文档" class="headerlink" title="查看帮助文档"></a>查看帮助文档</h4><p>vim 快捷键示意图</p><p><img src="https://farm5.staticflickr.com/4783/39120869320_db56e0d91c_o.jpg" alt=""></p><p>输入 <code>:help</code> 查看帮助文档</p><p>输入 <code>/</code> 或者 <code>?</code> 查找关键字</p>]]></content>
     
     <summary type="html">
     
@@ -137,9 +291,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="vim" scheme="https://steve-yuan-8276.github.io/tags/vim/"/>
     
@@ -167,9 +321,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="lvm" scheme="https://steve-yuan-8276.github.io/tags/lvm/"/>
     
@@ -180,9 +334,9 @@
     <link href="https://steve-yuan-8276.github.io/2018/04/08/week3-5-diskformatting/"/>
     <id>https://steve-yuan-8276.github.io/2018/04/08/week3-5-diskformatting/</id>
     <published>2018-04-08T02:17:56.000Z</published>
-    <updated>2018-04-10T11:55:08.296Z</updated>
+    <updated>2018-04-12T01:20:49.808Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记承接<a href="https://www.steve-yuan.com/2018/04/04/week3-4-basisOfDisksetting/" target="_blank" rel="noopener">磁盘管理基础知识（一）</a>，主要包括磁盘格式化、磁盘挂载及手动增加swap分区。</p><h4 id="添加一个块新硬盘的工作流："><a href="#添加一个块新硬盘的工作流：" class="headerlink" title="添加一个块新硬盘的工作流："></a>添加一个块新硬盘的工作流：</h4><ol><li><p>磁盘分区 （fdisk、parted）</p></li><li><p>磁盘格式化  （mkfs.ext2、mkfs.ext3、mkfs.ext4和mkfs.xfs ）</p></li><li><p>挂载分区  （mount）</p></li><li><p>修改 <code>/etc/fstab</code></p></li></ol><h3 id="linux常见文件系统及磁盘格式化"><a href="#linux常见文件系统及磁盘格式化" class="headerlink" title="linux常见文件系统及磁盘格式化"></a>linux常见文件系统及磁盘格式化</h3><h4 id="linux常见文件系统"><a href="#linux常见文件系统" class="headerlink" title="linux常见文件系统"></a>linux常见文件系统</h4><p>文件系统（File System）是文件管理系统的简称，是用来组织数据在存储介质上的存储方式以及检索方式的。</p><p>磁盘分区完成后，还需要“格式化”，其实就是安装文件系统。目前，主流操作系统的文件系统如下：</p><table><thead><tr><th>操作系统</th><th>文件系统</th><th>备注</th></tr></thead><tbody><tr><td>windows</td><td>FAT、NTFS、ReFS</td><td>win10最新的文件系统是ReFS，相比已经被广泛应用的NTFS，弹性文件系统的优势在于能够提供更高的稳定性，可以自动验证数据是否损坏，并尽力恢复数据</td></tr><tr><td>linux</td><td>ext2、2xt3、ext4、xfs等</td><td>摸钱在学习的centos7的默认文件系统是xfs</td></tr><tr><td>MacOS</td><td>HFS、HFS+、APFS</td><td>macOS最新的文件系统是APFS，这是一种专门针对SSD优化的文件系统，最大的特性是原生支持加密。</td></tr></tbody></table><a id="more"></a><p>重点看看Linux常用的文件系统：</p><table><thead><tr><th>文件系统</th><th>最大文件名长度</th><th>最大文件大小</th><th>最大分区大小</th><th>适用场景</th><th>原因</th></tr></thead><tbody><tr><td>ext2</td><td>255 bytes</td><td>2 TB</td><td>16 TB</td><td>U盘</td><td>U盘一般不会存很多文件，且U盘的文件在电脑上有备份，安全性要求没那么高，由于ext2不写日志（journal），所以写U盘性能比较好。当然由于ext2的兼容性没有fat好，目前大多数U盘格式还是用fat</td></tr><tr><td>ext3</td><td>255 bytes</td><td>2 TB</td><td>16 TB</td><td>对稳定性要求高的地方</td><td>与ext2相比，ext3实现了日志功能，但是ext2的缺点ext3也有</td></tr><tr><td>ext4</td><td>255 bytes</td><td>16 TB</td><td>1 EB</td><td>小文件较少</td><td>ext系列的文件系统都不支持inode动态分配，所以如果有大量小文件需要存储的话，不建议用ext4</td></tr><tr><td>xfs</td><td>255 bytes</td><td>8 EB</td><td>8 EB</td><td>小文件多或者需要大的xttr空间，如openstack swift将数据文件的元数据放在了xttr里面</td><td>xfs支持inode动态分配，所以不存在inode不够的情况，并且xttr的最大长度可以达到64K</td></tr><tr><td>Btrfs</td><td>255 bytes</td><td>16 EB</td><td>16 EB</td><td>没有频繁的写操作，且需要btrfs的一些特性</td><td>btrfs虽然还不稳定，但支持众多的功能，如果你需要这些功能，且不会频繁的写文件，那么选择btrfs</td></tr></tbody></table><h4 id="磁盘格式化"><a href="#磁盘格式化" class="headerlink" title="磁盘格式化"></a>磁盘格式化</h4><h5 id="mke2fs、mkfs-ext2、mkfs-ext3和mkfs-ext4"><a href="#mke2fs、mkfs-ext2、mkfs-ext3和mkfs-ext4" class="headerlink" title="mke2fs、mkfs.ext2、mkfs.ext3和mkfs.ext4"></a>mke2fs、mkfs.ext2、mkfs.ext3和mkfs.ext4</h5><p><strong>注：</strong>默认linux这个4个命令是一样的。</p><p>命令行格式：<code>mke2fs [参数] [设备名称]</code></p><table><thead><tr><th>常用参数</th><th>用法</th></tr></thead><tbody><tr><td>-b</td><td>指定数据块块大小，必须是1024的整数倍；centOS7默认是4KB</td></tr><tr><td>-i</td><td>设定inode 的大小</td></tr><tr><td>-N</td><td>设定inode的数量</td></tr><tr><td>-c</td><td>格式化前先检测磁盘是否有问题；加上这个选项后，格式化速度会非常慢</td></tr><tr><td>-L</td><td>预设该分区的标签（label）</td></tr><tr><td>-j</td><td>建立ext3格式的分区</td></tr><tr><td>-t</td><td>制定文件系统类型，如ext2、ext3、ext4等等</td></tr></tbody></table><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mke2fs -t ext4 /dev/sdb1</span><br><span class="line">[root@localhost ~]# mke2fs -t ext4 /dev/sdb2</span><br></pre></td></tr></table></figure><h5 id="mkfs-xfs"><a href="#mkfs-xfs" class="headerlink" title="mkfs.xfs"></a>mkfs.xfs</h5><p><strong>注：</strong><code>mke2fs</code> 并不支持分区格式化为xfs类型，只能使用<code>mkfs.xfs</code></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mkfs.xfs /dev/sdb1</span><br></pre></td></tr></table></figure><h5 id="e2label-查看或修改分区标签"><a href="#e2label-查看或修改分区标签" class="headerlink" title="e2label 查看或修改分区标签"></a>e2label 查看或修改分区标签</h5><p><strong>注：</strong>该命令只支持<code>ext</code>格式的文件系统，不支持<code>xfs</code>文件系统</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e2label /dev/sdb5    //查看分区label</span><br><span class="line">e2label /dev/sdb5  TEST123   //修改分区label</span><br></pre></td></tr></table></figure><h3 id="挂载-卸载磁盘"><a href="#挂载-卸载磁盘" class="headerlink" title="挂载/卸载磁盘"></a>挂载/卸载磁盘</h3><p>磁盘格式化后，需要挂载分区才能使用。在挂载分区前，需要先建立一个挂载点，该挂载点是以目录的形式存在的，<strong>这个挂载点必须是空目录</strong>。一旦把某个分区挂在到该挂载点（目录）下，再往该目录写数据时，就会写到相应的分区当中。</p><h4 id="查看系统分区信息"><a href="#查看系统分区信息" class="headerlink" title="查看系统分区信息"></a>查看系统分区信息</h4><h5 id="mount-查看已挂载的分区"><a href="#mount-查看已挂载的分区" class="headerlink" title="mount 查看已挂载的分区"></a><code>mount</code> 查看已挂载的分区</h5><p><img src="https://farm1.staticflickr.com/876/39508454940_ba483bdca2_o.png" alt=""></p><h5 id="blkid-查看未挂载的分区"><a href="#blkid-查看未挂载的分区" class="headerlink" title="blkid 查看未挂载的分区"></a><code>blkid</code> 查看未挂载的分区</h5><p><img src="https://farm1.staticflickr.com/785/40604614524_759d353bbf_o.png" alt=""></p><h5 id="etc-fstab文件"><a href="#etc-fstab文件" class="headerlink" title="/etc/fstab文件"></a><code>/etc/fstab</code>文件</h5><p>输入命令行 <code>cat /etc/fstab</code> ,可以查看启动时需要挂载的分区信息</p><p><img src="https://farm1.staticflickr.com/889/40417612895_e0886fbcb1_o.png" alt=""></p><table><thead><tr><th>显示列</th><th>含义</th></tr></thead><tbody><tr><td>1</td><td>分区标示，label、UUID等</td></tr><tr><td>2</td><td>挂载点，比如第1行等挂载点是<code>/</code> 根目录</td></tr><tr><td>3</td><td>分区格式，如图，这里是xfs</td></tr><tr><td>4</td><td>mount等挂载参数（后面单列表格）</td></tr><tr><td>5</td><td>是否被dump备份，1表示备份，0表示不备份</td></tr><tr><td>6</td><td>开机是否自检磁盘，1和2表示检测，1的优先级高于2，即根分区设置为1，其他的分区设置为2；0表示不检测</td></tr></tbody></table><table><thead><tr><th>常用参数</th><th>含义</th></tr></thead><tbody><tr><td>sync/async</td><td>sync表示时时同步内存和磁盘数据；async 表示异步处理，每隔一段时间再把数据从内存写入磁盘</td></tr><tr><td>auto/noauto</td><td>auto开机自动挂载；noauto不自动挂载</td></tr><tr><td>ro/rw</td><td>ro表示以只读权限挂载；rw表示以读写权限挂载</td></tr><tr><td>exec/noexec</td><td>exec表示允许挂载可执行文件；noexec不允许挂载可执行文件，<strong><code>/</code>根目录不要设置为<code>noexec</code>，否则无法使用系统</strong></td></tr><tr><td>user/nouser</td><td>表示是否允许root用户之外的其他用户挂载分区。<strong>安全起见，使用<code>nouser</code>，只允许root用户挂载分区</strong></td></tr><tr><td>suid/nosuid</td><td>是否允许分区有suid属性</td></tr><tr><td>usrquota</td><td>启动磁盘配额模式，会针对用户限定其使用磁盘额度</td></tr><tr><td>default</td><td>按照默认值设置挂载定义，包括 rw、suid、 dev、exec、 auto、nouser和async</td></tr></tbody></table><h4 id="添加挂载点的方法："><a href="#添加挂载点的方法：" class="headerlink" title="添加挂载点的方法："></a>添加挂载点的方法：</h4><h5 id="方法一：vi-etc-fstab"><a href="#方法一：vi-etc-fstab" class="headerlink" title="方法一：vi /etc/fstab"></a>方法一：vi /etc/fstab</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/dev/sdb1       /bk          ext4            defaults,noatime       1 2</span><br></pre></td></tr></table></figure><h5 id="方法二：mount-参数-分区"><a href="#方法二：mount-参数-分区" class="headerlink" title="方法二：mount [参数] [分区]"></a>方法二：mount [参数] [分区]</h5><p>mount -a 将磁盘分区中所有的分区自动挂载上</p><p>mount -t 指定挂载分区的类型，默认不指定，会自动识别</p><p>mount -o 指定挂载分区的参数特性，即 <code>/etc/fstab</code> 第四列的内容。常见的参数比如 rw（可读写）、suid（允许设置uid）、exec（允许挂载可执行文件）等等。</p><h5 id="设置某个分区自动挂载的方法"><a href="#设置某个分区自动挂载的方法" class="headerlink" title="设置某个分区自动挂载的方法"></a>设置某个分区自动挂载的方法</h5><p>方法一：编辑 <code>/etc/fstab</code> 中添加一行</p><p>方法二：将挂载命令写入 <code>/etc/rc.d/rc.local</code></p><p>写入后执行如下命令：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod a+x /etc/rc.d/rc.local</span><br></pre></td></tr></table></figure><h4 id="删除挂载点"><a href="#删除挂载点" class="headerlink" title="删除挂载点"></a>删除挂载点</h4><p>命令行格式： <code>unmount [参数] [挂载点]</code></p><p>有时挂载点无法删除，是因为当前目录在需要删除的挂载点上，解决的思路：</p><ol><li><p>进入其他目录执行删除操作</p></li><li><p>使用-l 参数</p></li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unmout -l /etc/fstab</span><br></pre></td></tr></table></figure><h3 id="手动增加swap空间"><a href="#手动增加swap空间" class="headerlink" title="手动增加swap空间"></a>手动增加swap空间</h3><p>swap分区就是虚拟内存，当虚拟内存不够的时候，就需要手动添加。基本思路是：建立swapfile -&gt; 格式化为swap格式 -&gt; 启动虚拟磁盘</p><h4 id="建立swapfile"><a href="#建立swapfile" class="headerlink" title="建立swapfile"></a>建立swapfile</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dd if= /dev/zero of=/tmp/newdisk bs=1M count=1024</span><br></pre></td></tr></table></figure><p><code>if</code>指定源，一般写/dev/zero<br><code>of</code> 指定目标文件<br><code>bs</code> 指定块大小<br><code>count</code> 指定块的数量</p><p>根据上述内容，<code>目标文件大小 =  bs * count</code></p><h4 id="格式化为swap格式"><a href="#格式化为swap格式" class="headerlink" title="格式化为swap格式"></a>格式化为swap格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkswap -f /tmp/newdisk</span><br></pre></td></tr></table></figure><h4 id="启动虚拟磁盘"><a href="#启动虚拟磁盘" class="headerlink" title="启动虚拟磁盘"></a>启动虚拟磁盘</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swapon /tmp/newdisk</span><br></pre></td></tr></table></figure><p>此时，系统提示有安全风险，对该分区修改权限，使用如下命令：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 0600 /tmp/newdisk</span><br></pre></td></tr></table></figure><h4 id="卸载虚拟磁盘"><a href="#卸载虚拟磁盘" class="headerlink" title="卸载虚拟磁盘"></a>卸载虚拟磁盘</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swapoff /tmp/newdisk</span><br></pre></td></tr></table></figure><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://blog.csdn.net/u013301192/article/details/47859899" target="_blank" rel="noopener">常见文件系统的格式</a></p><p><a href="https://segmentfault.com/a/1190000008481493" target="_blank" rel="noopener">Linux下常见文件系统对比</a></p><p><a href="http://wuchong.me/blog/2014/07/19/linux-file-system/" target="_blank" rel="noopener">Linux基础：文件系统</a></p><p><a href="https://legacy.gitbook.com/book/wizardforcel/vbird-linux-basic-4e/details" target="_blank" rel="noopener">鸟哥的Linux私房菜：基础学习篇 第四版</a></p><p><a href="http://blog.51cto.com/3037673/1727744" target="_blank" rel="noopener">Linux文件系统及磁盘分区与格式化</a></p>]]></content>
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记承接<a href="https://www.steve-yuan.com/2018/04/04/week3-4-basisOfDisksetting/" target="_blank" rel="noopener">磁盘管理基础知识（一）</a>，主要包括磁盘格式化、磁盘挂载及手动增加swap分区。</p><h4 id="添加一个块新硬盘的工作流："><a href="#添加一个块新硬盘的工作流：" class="headerlink" title="添加一个块新硬盘的工作流："></a>添加一个块新硬盘的工作流：</h4><ol><li><p>磁盘分区 （fdisk、parted）</p></li><li><p>磁盘格式化  （mkfs.ext2、mkfs.ext3、mkfs.ext4和mkfs.xfs ）</p></li><li><p>挂载分区  （mount）</p></li><li><p>修改 <code>/etc/fstab</code></p></li></ol><h3 id="linux常见文件系统及磁盘格式化"><a href="#linux常见文件系统及磁盘格式化" class="headerlink" title="linux常见文件系统及磁盘格式化"></a>linux常见文件系统及磁盘格式化</h3><h4 id="linux常见文件系统"><a href="#linux常见文件系统" class="headerlink" title="linux常见文件系统"></a>linux常见文件系统</h4><p>文件系统（File System）是文件管理系统的简称，是用来组织数据在存储介质上的存储方式以及检索方式的。</p><p>磁盘分区完成后，还需要“格式化”，其实就是安装文件系统。目前，主流操作系统的文件系统如下：</p><table><thead><tr><th>操作系统</th><th>文件系统</th><th>备注</th></tr></thead><tbody><tr><td>windows</td><td>FAT、NTFS、ReFS</td><td>win10最新的文件系统是ReFS，相比已经被广泛应用的NTFS，弹性文件系统的优势在于能够提供更高的稳定性，可以自动验证数据是否损坏，并尽力恢复数据</td></tr><tr><td>linux</td><td>ext2、2xt3、ext4、xfs等</td><td>摸钱在学习的centos7的默认文件系统是xfs</td></tr><tr><td>MacOS</td><td>HFS、HFS+、APFS</td><td>macOS最新的文件系统是APFS，这是一种专门针对SSD优化的文件系统，最大的特性是原生支持加密。</td></tr></tbody></table><a id="more"></a><p>重点看看Linux常用的文件系统：</p><table><thead><tr><th>文件系统</th><th>最大文件名长度</th><th>最大文件大小</th><th>最大分区大小</th><th>适用场景</th><th>原因</th></tr></thead><tbody><tr><td>ext2</td><td>255 bytes</td><td>2 TB</td><td>16 TB</td><td>U盘</td><td>U盘一般不会存很多文件，且U盘的文件在电脑上有备份，安全性要求没那么高，由于ext2不写日志（journal），所以写U盘性能比较好。当然由于ext2的兼容性没有fat好，目前大多数U盘格式还是用fat</td></tr><tr><td>ext3</td><td>255 bytes</td><td>2 TB</td><td>16 TB</td><td>对稳定性要求高的地方</td><td>与ext2相比，ext3实现了日志功能，但是ext2的缺点ext3也有</td></tr><tr><td>ext4</td><td>255 bytes</td><td>16 TB</td><td>1 EB</td><td>小文件较少</td><td>ext系列的文件系统都不支持inode动态分配，所以如果有大量小文件需要存储的话，不建议用ext4</td></tr><tr><td>xfs</td><td>255 bytes</td><td>8 EB</td><td>8 EB</td><td>小文件多或者需要大的xttr空间，如openstack swift将数据文件的元数据放在了xttr里面</td><td>xfs支持inode动态分配，所以不存在inode不够的情况，并且xttr的最大长度可以达到64K</td></tr><tr><td>Btrfs</td><td>255 bytes</td><td>16 EB</td><td>16 EB</td><td>没有频繁的写操作，且需要btrfs的一些特性</td><td>btrfs虽然还不稳定，但支持众多的功能，如果你需要这些功能，且不会频繁的写文件，那么选择btrfs</td></tr></tbody></table><h4 id="磁盘格式化"><a href="#磁盘格式化" class="headerlink" title="磁盘格式化"></a>磁盘格式化</h4><h5 id="mke2fs、mkfs-ext2、mkfs-ext3和mkfs-ext4"><a href="#mke2fs、mkfs-ext2、mkfs-ext3和mkfs-ext4" class="headerlink" title="mke2fs、mkfs.ext2、mkfs.ext3和mkfs.ext4"></a>mke2fs、mkfs.ext2、mkfs.ext3和mkfs.ext4</h5><p><strong>注：</strong>默认linux这个4个命令是一样的。</p><p>命令行格式：<code>mke2fs [参数] [设备名称]</code></p><table><thead><tr><th>常用参数</th><th>用法</th></tr></thead><tbody><tr><td>-b</td><td>指定数据块块大小，必须是1024的整数倍；centOS7默认是4KB</td></tr><tr><td>-i [字节]</td><td>i（小写）指定每个inode 的字节数</td></tr><tr><td>-I [文件]</td><td>I（大写）从指定的文件中读取坏的块大小</td></tr><tr><td>-N</td><td>设定inode的数量</td></tr><tr><td>-c</td><td>格式化前先检测磁盘是否有问题；加上这个选项后，格式化速度会非常慢</td></tr><tr><td>-L</td><td>预设该分区的标签（label）</td></tr><tr><td>-j</td><td>建立ext3格式的分区</td></tr><tr><td>-t</td><td>制定文件系统类型，如ext2、ext3、ext4等（常用）</td></tr></tbody></table><p>最常用参数： <code>-t</code> 指定分区类型</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mke2fs -t ext4 /dev/sdb1</span><br></pre></td></tr></table></figure><h5 id="mkfs-xfs"><a href="#mkfs-xfs" class="headerlink" title="mkfs.xfs"></a>mkfs.xfs</h5><p><strong>注：</strong><code>mke2fs</code> 并不支持分区格式化为xfs类型，只能使用<code>mkfs.xfs</code></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mkfs.xfs /dev/sdb1</span><br></pre></td></tr></table></figure><h5 id="e2label-查看或修改分区标签"><a href="#e2label-查看或修改分区标签" class="headerlink" title="e2label 查看或修改分区标签"></a>e2label 查看或修改分区标签</h5><p><strong>注：</strong>该命令只支持<code>ext</code>格式的文件系统，不支持<code>xfs</code>文件系统</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e2label /dev/sdb5    //查看分区label</span><br><span class="line">e2label /dev/sdb5  TEST123   //修改分区label</span><br></pre></td></tr></table></figure><h3 id="挂载-卸载磁盘"><a href="#挂载-卸载磁盘" class="headerlink" title="挂载/卸载磁盘"></a>挂载/卸载磁盘</h3><p>磁盘格式化后，需要挂载分区才能使用。在挂载分区前，需要先建立一个挂载点，该挂载点是以目录的形式存在的，<strong>这个挂载点必须是空目录</strong>。一旦把某个分区挂在到该挂载点（目录）下，再往该目录写数据时，就会写到相应的分区当中。</p><h4 id="查看系统分区信息"><a href="#查看系统分区信息" class="headerlink" title="查看系统分区信息"></a>查看系统分区信息</h4><h5 id="mount-查看已挂载的分区"><a href="#mount-查看已挂载的分区" class="headerlink" title="mount 查看已挂载的分区"></a><code>mount</code> 查看已挂载的分区</h5><p><img src="https://farm1.staticflickr.com/876/39508454940_ba483bdca2_o.png" alt=""></p><h5 id="blkid-查看未挂载的分区"><a href="#blkid-查看未挂载的分区" class="headerlink" title="blkid 查看未挂载的分区"></a><code>blkid</code> 查看未挂载的分区</h5><p><img src="https://farm1.staticflickr.com/785/40604614524_759d353bbf_o.png" alt=""></p><h5 id="etc-fstab文件"><a href="#etc-fstab文件" class="headerlink" title="/etc/fstab文件"></a><code>/etc/fstab</code>文件</h5><p>输入命令行 <code>cat /etc/fstab</code> ,可以查看启动时需要挂载的分区信息</p><p><img src="https://farm1.staticflickr.com/889/40417612895_e0886fbcb1_o.png" alt=""></p><table><thead><tr><th>显示列</th><th>含义</th></tr></thead><tbody><tr><td>1</td><td>分区标示，label、UUID等</td></tr><tr><td>2</td><td>挂载点，比如第1行等挂载点是<code>/</code> 根目录</td></tr><tr><td>3</td><td>分区格式，如图，这里是xfs</td></tr><tr><td>4</td><td>mount等挂载参数（后面单列表格）</td></tr><tr><td>5</td><td>是否被dump备份，1表示备份，0表示不备份</td></tr><tr><td>6</td><td>开机是否自检磁盘，1和2表示检测，1的优先级高于2，即根分区设置为1，其他的分区设置为2；0表示不检测</td></tr></tbody></table><table><thead><tr><th>常用参数</th><th>含义</th></tr></thead><tbody><tr><td>sync/async</td><td>sync表示时时同步内存和磁盘数据；async 表示异步处理，每隔一段时间再把数据从内存写入磁盘</td></tr><tr><td>auto/noauto</td><td>auto开机自动挂载；noauto不自动挂载</td></tr><tr><td>ro/rw</td><td>ro表示以只读权限挂载；rw表示以读写权限挂载</td></tr><tr><td>exec/noexec</td><td>exec表示允许挂载可执行文件；noexec不允许挂载可执行文件，<strong><code>/</code>根目录不要设置为<code>noexec</code>，否则无法使用系统</strong></td></tr><tr><td>user/nouser</td><td>表示是否允许root用户之外的其他用户挂载分区。<strong>安全起见，使用<code>nouser</code>，只允许root用户挂载分区</strong></td></tr><tr><td>suid/nosuid</td><td>是否允许分区有suid属性</td></tr><tr><td>usrquota</td><td>启动磁盘配额模式，会针对用户限定其使用磁盘额度</td></tr><tr><td>default</td><td>按照默认值设置挂载定义，包括 rw、suid、 dev、exec、 auto、nouser和async</td></tr></tbody></table><h4 id="添加挂载点的方法："><a href="#添加挂载点的方法：" class="headerlink" title="添加挂载点的方法："></a>添加挂载点的方法：</h4><h5 id="方法一：vi-etc-fstab"><a href="#方法一：vi-etc-fstab" class="headerlink" title="方法一：vi /etc/fstab"></a>方法一：vi /etc/fstab</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/dev/sdb1       /bk          ext4            defaults,noatime       1 2</span><br></pre></td></tr></table></figure><h5 id="方法二：mount-参数-分区"><a href="#方法二：mount-参数-分区" class="headerlink" title="方法二：mount [参数] [分区]"></a>方法二：mount [参数] [分区]</h5><p>mount -a 将磁盘分区中所有的分区自动挂载上</p><p>mount -t 指定挂载分区的类型，默认不指定，会自动识别</p><p>mount -o 指定挂载分区的参数特性，即 <code>/etc/fstab</code> 第四列的内容。常见的参数比如 rw（可读写）、suid（允许设置uid）、exec（允许挂载可执行文件）等等。</p><h5 id="设置某个分区自动挂载的方法"><a href="#设置某个分区自动挂载的方法" class="headerlink" title="设置某个分区自动挂载的方法"></a>设置某个分区自动挂载的方法</h5><p>方法一：编辑 <code>/etc/fstab</code> 中添加一行</p><p>方法二：将挂载命令写入 <code>/etc/rc.d/rc.local</code></p><p>写入后执行如下命令：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod a+x /etc/rc.d/rc.local</span><br></pre></td></tr></table></figure><h4 id="删除挂载点"><a href="#删除挂载点" class="headerlink" title="删除挂载点"></a>删除挂载点</h4><p>命令行格式： <code>unmount [参数] [挂载点]</code></p><p>有时挂载点无法删除，是因为当前目录在需要删除的挂载点上，解决的思路：</p><ol><li><p>进入其他目录执行删除操作</p></li><li><p>使用-l 参数</p></li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unmout -l /etc/fstab</span><br></pre></td></tr></table></figure><h3 id="手动增加swap空间"><a href="#手动增加swap空间" class="headerlink" title="手动增加swap空间"></a>手动增加swap空间</h3><p>swap分区就是虚拟内存，当虚拟内存不够的时候，就需要手动添加。基本思路是：建立swapfile -&gt; 格式化为swap格式 -&gt; 启动虚拟磁盘</p><h4 id="建立swapfile"><a href="#建立swapfile" class="headerlink" title="建立swapfile"></a>建立swapfile</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dd if= /dev/zero of=/tmp/newdisk bs=1M count=1024</span><br></pre></td></tr></table></figure><p><code>if</code>指定源，一般写/dev/zero<br><code>of</code> 指定目标文件<br><code>bs</code> 指定块大小<br><code>count</code> 指定块的数量</p><p>根据上述内容，<code>目标文件大小 =  bs * count</code></p><h4 id="格式化为swap格式"><a href="#格式化为swap格式" class="headerlink" title="格式化为swap格式"></a>格式化为swap格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkswap -f /tmp/newdisk</span><br></pre></td></tr></table></figure><h4 id="启动虚拟磁盘"><a href="#启动虚拟磁盘" class="headerlink" title="启动虚拟磁盘"></a>启动虚拟磁盘</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swapon /tmp/newdisk</span><br></pre></td></tr></table></figure><p>此时，系统提示有安全风险，对该分区修改权限，使用如下命令：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 0600 /tmp/newdisk</span><br></pre></td></tr></table></figure><h4 id="卸载虚拟磁盘"><a href="#卸载虚拟磁盘" class="headerlink" title="卸载虚拟磁盘"></a>卸载虚拟磁盘</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swapoff /tmp/newdisk</span><br></pre></td></tr></table></figure><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://blog.csdn.net/u013301192/article/details/47859899" target="_blank" rel="noopener">常见文件系统的格式</a></p><p><a href="https://segmentfault.com/a/1190000008481493" target="_blank" rel="noopener">Linux下常见文件系统对比</a></p><p><a href="http://wuchong.me/blog/2014/07/19/linux-file-system/" target="_blank" rel="noopener">Linux基础：文件系统</a></p><p><a href="https://legacy.gitbook.com/book/wizardforcel/vbird-linux-basic-4e/details" target="_blank" rel="noopener">鸟哥的Linux私房菜：基础学习篇 第四版</a></p><p><a href="http://blog.51cto.com/3037673/1727744" target="_blank" rel="noopener">Linux文件系统及磁盘分区与格式化</a></p>]]></content>
     
     <summary type="html">
     
@@ -233,9 +387,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -260,9 +414,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -289,9 +443,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -300,9 +454,9 @@
     <link href="https://steve-yuan-8276.github.io/2018/04/03/week3-2-usermod-mkpasswd/"/>
     <id>https://steve-yuan-8276.github.io/2018/04/03/week3-2-usermod-mkpasswd/</id>
     <published>2018-04-03T06:42:36.000Z</published>
-    <updated>2018-04-11T08:54:24.404Z</updated>
+    <updated>2018-04-11T08:57:59.601Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记主要记得是用户密码管理相关的知识。</p><h3 id="usermod-更改用户属性"><a href="#usermod-更改用户属性" class="headerlink" title="usermod 更改用户属性"></a>usermod 更改用户属性</h3><p>语法：<code>usermod [参数] [filename]</code></p><table><thead><tr><th>常用参数</th><th>解释</th></tr></thead><tbody><tr><td>-c</td><td>&lt;备注&gt;：修改用户帐号的备注文字；</td></tr><tr><td>-d</td><td>&lt;登入目录&gt;：修改用户登入时的目录；</td></tr><tr><td>-e</td><td>&lt;有效期限&gt;：修改帐号的有效期限；</td></tr><tr><td>-f</td><td>&lt;缓冲天数&gt;：修改在密码过期后多少天即关闭该帐号；</td></tr><tr><td>-l</td><td>修改用户帐号名称；</td></tr><tr><td>-s</td><td>修改用户登入后所使用的shell；</td></tr><tr><td>-u</td><td>uid，修改用户ID；</td></tr><tr><td>-g</td><td>&lt;群组&gt;：修改用户所属的群组；</td></tr><tr><td>-G</td><td>&lt;群组&gt;；修改用户所属的附加群组；</td></tr><tr><td>-L</td><td>锁定用户密码，使密码无效；</td></tr><tr><td>-U</td><td>解除密码锁定。</td></tr></tbody></table><a id="more"></a><p>举例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">usermod -u 1008 user1     //更改uid</span><br><span class="line"></span><br><span class="line">usermod -g 10098 grp2     //更改gid</span><br><span class="line"></span><br><span class="line">usermod -d /home/user123 user4  //更改user4的家目录</span><br><span class="line"></span><br><span class="line">usermod -G grp1 grp2  //修改附加组</span><br><span class="line"></span><br><span class="line">usermod -g  groupname  username    //更改用户组</span><br></pre></td></tr></table></figure><p>注：使用<code>-g</code> 只能修改用户所属的一个组；使用<code>-G</code>能够添加到若干个附加组。</p><h4 id="usermod-特殊用法：通过-s-禁止用户登陆"><a href="#usermod-特殊用法：通过-s-禁止用户登陆" class="headerlink" title="usermod 特殊用法：通过 -s 禁止用户登陆"></a>usermod 特殊用法：通过 -s 禁止用户登陆</h4><p>命令行 <code>useermod -s [pathToShell] [UserName]</code> 可以修改用户登入后使用的shell，也就是<code>/etc/passwd</code>第7列第内容，因此也可以利用 <code>/sbin/nologin</code>和<code>/bin/false</code>的特性，实现禁止用户登陆的目的。</p><p><code>/sbin/nologin</code> ：不允许系统login，可以使用ftp等其他服务；</p><p><code>/bin/false</code> ：最严格的禁止login选项，一切服务都不能用，</p><p>示例</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">usermod -s /sbin/nologin user1 //不允许user1用户登陆，但可以使用ftp；</span><br><span class="line"></span><br><span class="line">usermod -s /bin/false user1 //禁止user1 用户登陆，神马都不能作。</span><br></pre></td></tr></table></figure><h3 id="用户密码管理"><a href="#用户密码管理" class="headerlink" title="用户密码管理"></a>用户密码管理</h3><h4 id="passwd-设置用户密码"><a href="#passwd-设置用户密码" class="headerlink" title="passwd 设置用户密码"></a><code>passwd</code> 设置用户密码</h4><p>语法： <code>passwd [username]</code></p><h5 id="密码设置的基本原则："><a href="#密码设置的基本原则：" class="headerlink" title="密码设置的基本原则："></a>密码设置的基本原则：</h5><ul><li>长度不小于10个字符；</li><li>密码包括大小写字母、数字、特殊字符（如*、&amp;、%）等；</li><li>不规则（不要用常用单词或者数字）；</li><li>不使用带有自己的名字、电话、生日及公司名称等。</li></ul><p>注：</p><ol><li>root 用户使用此命令，不加 username 表示更改root 密码；加上username 表示修改该指定用户的密码。</li><li>普通用户只能修改自己的密码。</li></ol><h5 id="passwd的特殊用法"><a href="#passwd的特殊用法" class="headerlink" title="passwd的特殊用法"></a><code>passwd</code>的特殊用法</h5><ul><li><code>/etc/shadow</code> 中第二列表示密码，此处为<code>!!</code> 表示密码为空；此处为<code>*</code> 表示密码锁定。这两种情况下，账户都是不允许登陆。</li></ul><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fpzihczqqpj30iy0aa123.jpg" alt=""></p><ul><li>锁定和解锁账户</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">passwd -l username //锁定用户</span><br><span class="line">passwd -u username  //解锁用户</span><br></pre></td></tr></table></figure><ul><li>使用<code>usermode</code>命令也可以实现同样的效果</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">usermod -L username  //锁定用户</span><br><span class="line">passwd -U username   //解锁用户</span><br></pre></td></tr></table></figure><ul><li>设定密码 <code>passwd --stdin username</code></li></ul><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fpzitd923aj30sk07q48u.jpg" alt=""></p><p>注：此处密码只需要输入一次，而且是明文显示的。</p><ul><li>使用管道符，通过一行命令更改用户密码</li></ul><p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fpzixbygvaj30qy0580z7.jpg" alt=""></p><ul><li>使用参数<code>-e</code> ，通过一行命令更改密码,  例如<code>echo -e &#39;abc123456\nabc123456&#39; | passwd user1</code></li></ul><p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fpzjfp4o9gj30s8088dj8.jpg" alt=""></p><h4 id="mkpasswd-命令"><a href="#mkpasswd-命令" class="headerlink" title="mkpasswd 命令"></a>mkpasswd 命令</h4><p>linux系统默认没有此命令，需要单独安装 <code>yum -y install expect</code></p><p>基本用法：<code>mkpasswd</code></p><p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fpzhv614h1j30jk044n0t.jpg" alt=""></p><p>生成指定长度的密码 <code>passwd -l n</code> n代表数，即长度为多少位</p><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fpzhxu56s8j30im03w0w9.jpg" alt=""></p><p>指定特殊字符和数字 <code>passwd -l n -s n -d n</code> </p><ul><li><code>l</code>表示密码长度</li><li><code>s</code>表示特殊字符</li><li><code>d</code>表示数字</li></ul><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fpzi3qvycnj30o6044q7p.jpg" alt=""></p><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul><li><p><a href="http://man.linuxde.net/usermod" target="_blank" rel="noopener">usermod命令</a></p></li><li><p><a href="http://man.linuxde.net/passwd" target="_blank" rel="noopener">passwd命令</a></p></li></ul>]]></content>
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记主要记得是用户密码管理相关的知识。</p><h3 id="usermod-更改用户属性"><a href="#usermod-更改用户属性" class="headerlink" title="usermod 更改用户属性"></a>usermod 更改用户属性</h3><p>语法：<code>usermod [参数] [filename]</code></p><table><thead><tr><th>常用参数</th><th>解释</th></tr></thead><tbody><tr><td>-c</td><td>&lt;备注&gt;：修改用户帐号的备注文字；</td></tr><tr><td>-d</td><td>&lt;登入目录&gt;：修改用户登入时的目录；</td></tr><tr><td>-e</td><td>&lt;有效期限&gt;：修改帐号的有效期限；</td></tr><tr><td>-f</td><td>&lt;缓冲天数&gt;：修改在密码过期后多少天即关闭该帐号；</td></tr><tr><td>-l</td><td>修改用户帐号名称；</td></tr><tr><td>-s</td><td>修改用户登入后所使用的shell；</td></tr><tr><td>-u</td><td>uid，修改用户ID；</td></tr><tr><td>-g</td><td>&lt;群组&gt;：修改用户所属的群组；</td></tr><tr><td>-G</td><td>&lt;群组&gt;；修改用户所属的附加群组；</td></tr><tr><td>-L</td><td>锁定用户密码，使密码无效；</td></tr><tr><td>-U</td><td>解除密码锁定。</td></tr></tbody></table><a id="more"></a><p>举例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">usermod -u 1008 user1     //更改uid</span><br><span class="line"></span><br><span class="line">usermod -g 10098 grp2     //更改gid</span><br><span class="line"></span><br><span class="line">usermod -d /home/user123 user4  //更改user4的家目录</span><br><span class="line"></span><br><span class="line">usermod -G grp1 grp2  //修改附加组</span><br><span class="line"></span><br><span class="line">usermod -g  groupname  username    //更改用户组</span><br></pre></td></tr></table></figure><p>注：使用<code>-g</code> 只能修改用户所属的一个组；使用<code>-G</code>能够添加到若干个附加组。</p><h4 id="usermod-特殊用法：通过-s-禁止用户登陆"><a href="#usermod-特殊用法：通过-s-禁止用户登陆" class="headerlink" title="usermod 特殊用法：通过 -s 禁止用户登陆"></a>usermod 特殊用法：通过 <code>-s</code> 禁止用户登陆</h4><p>命令行 <code>useermod -s [pathToShell] [UserName]</code> 可以修改用户登入后使用的shell，也就是<code>/etc/passwd</code>第7列第内容，因此也可以利用 <code>/sbin/nologin</code>和<code>/bin/false</code>的特性，实现禁止用户登陆的目的。</p><p><code>/sbin/nologin</code> ：不允许系统login，可以使用ftp等其他服务；</p><p><code>/bin/false</code> ：最严格的禁止login选项，一切服务都不能用，</p><p>示例</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">usermod -s /sbin/nologin user1 //不允许user1用户登陆，但可以使用ftp；</span><br><span class="line"></span><br><span class="line">usermod -s /bin/false user1 //禁止user1 用户登陆，神马都不能作。</span><br></pre></td></tr></table></figure><h3 id="用户密码管理"><a href="#用户密码管理" class="headerlink" title="用户密码管理"></a>用户密码管理</h3><h4 id="passwd-设置用户密码"><a href="#passwd-设置用户密码" class="headerlink" title="passwd 设置用户密码"></a><code>passwd</code> 设置用户密码</h4><p>语法： <code>passwd [username]</code></p><h5 id="密码设置的基本原则："><a href="#密码设置的基本原则：" class="headerlink" title="密码设置的基本原则："></a>密码设置的基本原则：</h5><ul><li>长度不小于10个字符；</li><li>密码包括大小写字母、数字、特殊字符（如*、&amp;、%）等；</li><li>不规则（不要用常用单词或者数字）；</li><li>不使用带有自己的名字、电话、生日及公司名称等。</li></ul><p>注：</p><ol><li>root 用户使用此命令，不加 username 表示更改root 密码；加上username 表示修改该指定用户的密码。</li><li>普通用户只能修改自己的密码。</li></ol><h5 id="passwd的特殊用法"><a href="#passwd的特殊用法" class="headerlink" title="passwd的特殊用法"></a><code>passwd</code>的特殊用法</h5><ul><li><code>/etc/shadow</code> 中第二列表示密码，此处为<code>!!</code> 表示密码为空；此处为<code>*</code> 表示密码锁定。这两种情况下，账户都是不允许登陆。</li></ul><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fpzihczqqpj30iy0aa123.jpg" alt=""></p><ul><li>锁定和解锁账户</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">passwd -l username //锁定用户</span><br><span class="line">passwd -u username  //解锁用户</span><br></pre></td></tr></table></figure><ul><li>使用<code>usermode</code>命令也可以实现同样的效果</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">usermod -L username  //锁定用户</span><br><span class="line">passwd -U username   //解锁用户</span><br></pre></td></tr></table></figure><ul><li>设定密码 <code>passwd --stdin username</code></li></ul><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fpzitd923aj30sk07q48u.jpg" alt=""></p><p>注：此处密码只需要输入一次，而且是明文显示的。</p><ul><li>使用管道符，通过一行命令更改用户密码</li></ul><p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fpzixbygvaj30qy0580z7.jpg" alt=""></p><ul><li>使用参数<code>-e</code> ，通过一行命令更改密码,  例如<code>echo -e &#39;abc123456\nabc123456&#39; | passwd user1</code></li></ul><p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fpzjfp4o9gj30s8088dj8.jpg" alt=""></p><h4 id="mkpasswd-命令"><a href="#mkpasswd-命令" class="headerlink" title="mkpasswd 命令"></a>mkpasswd 命令</h4><p>linux系统默认没有此命令，需要单独安装 <code>yum -y install expect</code></p><p>基本用法：<code>mkpasswd</code></p><p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fpzhv614h1j30jk044n0t.jpg" alt=""></p><p>生成指定长度的密码 <code>passwd -l n</code> n代表数，即长度为多少位</p><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fpzhxu56s8j30im03w0w9.jpg" alt=""></p><p>指定特殊字符和数字 <code>passwd -l n -s n -d n</code> </p><ul><li><code>l</code>表示密码长度</li><li><code>s</code>表示特殊字符</li><li><code>d</code>表示数字</li></ul><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fpzi3qvycnj30o6044q7p.jpg" alt=""></p><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul><li><p><a href="http://man.linuxde.net/usermod" target="_blank" rel="noopener">usermod命令</a></p></li><li><p><a href="http://man.linuxde.net/passwd" target="_blank" rel="noopener">passwd命令</a></p></li></ul>]]></content>
     
     <summary type="html">
     
@@ -370,9 +524,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -405,9 +559,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -441,9 +595,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -478,9 +632,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -568,9 +722,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -600,9 +754,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -611,9 +765,9 @@
     <link href="https://steve-yuan-8276.github.io/2018/03/19/week2-1-centos-fileFolderPathAndBisicOpration/"/>
     <id>https://steve-yuan-8276.github.io/2018/03/19/week2-1-centos-fileFolderPathAndBisicOpration/</id>
     <published>2018-03-19T08:00:22.000Z</published>
-    <updated>2018-04-02T14:26:02.768Z</updated>
+    <updated>2018-04-12T01:57:06.947Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="相对路径和绝对路径"><a href="#相对路径和绝对路径" class="headerlink" title="相对路径和绝对路径"></a>相对路径和绝对路径</h3><p>顾名思义，文件路径就是用来描述存放文件的地方。这里有两种描述的方法：</p><ul><li>绝对路径：从根目录写起的，叫做绝对路径。</li><li>相对路径：与当前目录相对的写法，叫做相对路径。</li></ul><p>举例来说：</p><p>pwd        //查询当前所在的绝对路径</p><p><img src="https://farm1.staticflickr.com/808/27024710608_759c7aebd7_o.png" alt=""></p><p>上图中，红框标示出来的部分，就是当前所在的绝对路径，即 <code>/Users/stevey/documents/github-file</code> ，通过 ls 命令可以看到，下面有一个 steveBlog 的文件夹。</p><a id="more"></a><p>要进入这个文件夹可以采用两种方法：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd steveBlog        //相对路径</span><br><span class="line"></span><br><span class="line">cd /Users/stevey/documents/github-file/steveBlog        //绝对路径</span><br></pre></td></tr></table></figure><h3 id="常见的文档操作命令"><a href="#常见的文档操作命令" class="headerlink" title="常见的文档操作命令"></a>常见的文档操作命令</h3><h4 id="pwd-命令"><a href="#pwd-命令" class="headerlink" title="pwd 命令"></a>pwd 命令</h4><p>用于显示当前所在目录。在linux系统中， <code>.</code>表示当前目录，  <code>..</code>表示上一级目录。</p><h4 id="cd-命令"><a href="#cd-命令" class="headerlink" title="cd 命令"></a>cd 命令</h4><table><thead><tr><th>名称</th><th>作用</th></tr></thead><tbody><tr><td>cd</td><td>返回用户主目录</td></tr><tr><td>cd /etc</td><td>改变到其它路径</td></tr><tr><td>cd ..</td><td>返回到上一级目录</td></tr><tr><td>cd / 或 cd ～</td><td>返回到根目录</td></tr><tr><td>cd -</td><td>返回之前的目录</td></tr></tbody></table><h4 id="mkdir-命令"><a href="#mkdir-命令" class="headerlink" title="mkdir 命令"></a>mkdir 命令</h4><p>命令格式：<code>mkdir  [参数] [文件目录]</code></p><p>-m 设置文件权限</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -m 777 test3     //输入</span><br><span class="line">drwxrwxrwx 2 root root 4096 10-25 17:46 test3    //实现效果</span><br></pre></td></tr></table></figure><p> -p 新建一个目录串</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /test1/test2</span><br></pre></td></tr></table></figure><p> <img src="https://farm5.staticflickr.com/4776/27024999888_3e624dcbcd_o.png" alt=""></p><p>-v 创建新目录都显示信息</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -v /test3</span><br></pre></td></tr></table></figure><p><img src="https://farm1.staticflickr.com/806/40895559391_9279c2cc95_o.png" alt=""></p><h4 id="rmdir-命令"><a href="#rmdir-命令" class="headerlink" title="rmdir 命令"></a>rmdir 命令</h4><p>跟mkdir 相反，rmdir表示删除目录。命令格式为：<code>mkdir  [参数] [文件目录]</code> 。这个命令的特点在于，只能删除空目录；即使加了 -p 参数，也只能删除一串空目录。如果目录当中有文件，这个命令就没有用了。</p><h4 id="rm命令"><a href="#rm命令" class="headerlink" title="rm命令"></a>rm命令</h4><p>用来删除文件或文件目录。命令格式为：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm  [参数] [文件]</span><br></pre></td></tr></table></figure><table><thead><tr><th>常用参数</th><th>含义</th></tr></thead><tbody><tr><td>-f</td><td>–force    忽略不存在的文件，从不给出提示。</td></tr><tr><td>-i</td><td>–interactive 进行交互式删除</td></tr><tr><td>-r</td><td>–recursive，将参数中列出的全部目录和子目录均递归地删除。</td></tr></tbody></table><p><strong>注意：</strong></p><ul><li>如果要删除非空目录，需要使用<code>rm -rf [文件目录]</code></li><li>千万不要<code>rm -rf /</code> ，一旦输入这个命令，然后就没有然后了。</li></ul>]]></content>
+    <content type="html"><![CDATA[<h3 id="相对路径和绝对路径"><a href="#相对路径和绝对路径" class="headerlink" title="相对路径和绝对路径"></a>相对路径和绝对路径</h3><p>顾名思义，文件路径就是用来描述存放文件的地方。这里有两种描述的方法：</p><ul><li>绝对路径：从根目录写起的，叫做绝对路径。</li><li>相对路径：与当前目录相对的写法，叫做相对路径。</li></ul><p>举例来说：</p><p>pwd        //查询当前所在的绝对路径</p><p><img src="https://farm1.staticflickr.com/808/27024710608_759c7aebd7_o.png" alt=""></p><p>上图中，红框标示出来的部分，就是当前所在的绝对路径，即 <code>/Users/stevey/documents/github-file</code> ，通过 ls 命令可以看到，下面有一个 steveBlog 的文件夹。</p><a id="more"></a><p>要进入这个文件夹可以采用两种方法：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd steveBlog        //相对路径</span><br><span class="line"></span><br><span class="line">cd /Users/stevey/documents/github-file/steveBlog        //绝对路径</span><br></pre></td></tr></table></figure><h3 id="常见的文档操作命令"><a href="#常见的文档操作命令" class="headerlink" title="常见的文档操作命令"></a>常见的文档操作命令</h3><h4 id="pwd-命令"><a href="#pwd-命令" class="headerlink" title="pwd 命令"></a>pwd 命令</h4><p>用于显示当前所在目录。在linux系统中， <code>.</code>表示当前目录，  <code>..</code>表示上一级目录。</p><h4 id="cd-命令：切换目录"><a href="#cd-命令：切换目录" class="headerlink" title="cd 命令：切换目录"></a>cd 命令：切换目录</h4><table><thead><tr><th>名称</th><th>作用</th></tr></thead><tbody><tr><td>cd</td><td>返回用户主目录</td></tr><tr><td>cd /etc</td><td>改变到其它路径</td></tr><tr><td>cd ..</td><td>返回到上一级目录</td></tr><tr><td>cd / 或 cd ～</td><td>返回到根目录</td></tr><tr><td>cd -</td><td>返回之前的目录</td></tr></tbody></table><h4 id="mkdir-命令：创建文件夹"><a href="#mkdir-命令：创建文件夹" class="headerlink" title="mkdir 命令：创建文件夹"></a>mkdir 命令：创建文件夹</h4><p>命令格式：<code>mkdir  [参数] [文件目录]</code></p><p>-m 设置文件权限</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -m 777 test3     //输入</span><br><span class="line">drwxrwxrwx 2 root root 4096 10-25 17:46 test3    //实现效果</span><br></pre></td></tr></table></figure><p> -p 新建一个目录串</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /test1/test2</span><br></pre></td></tr></table></figure><p> <img src="https://farm5.staticflickr.com/4776/27024999888_3e624dcbcd_o.png" alt=""></p><p>-v 创建新目录都显示信息</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -v /test3</span><br></pre></td></tr></table></figure><p><img src="https://farm1.staticflickr.com/806/40895559391_9279c2cc95_o.png" alt=""></p><p>在指定目录下创建多个目录<strong>（使用绝对路径）</strong></p><p><img src="https://farm1.staticflickr.com/878/39590698680_863c8252b1_o.png" alt=""></p><h4 id="rmdir-命令：删除目录"><a href="#rmdir-命令：删除目录" class="headerlink" title="rmdir 命令：删除目录"></a>rmdir 命令：删除目录</h4><p>跟mkdir 相反，rmdir表示删除目录。命令格式为：<code>mkdir  [参数] [文件目录]</code> 。这个命令的特点在于，只能删除空目录；即使加了 -p 参数，也只能删除一串空目录。如果目录当中有文件，这个命令就没有用了。</p><h4 id="touch-命令：创建文件"><a href="#touch-命令：创建文件" class="headerlink" title="touch 命令：创建文件"></a>touch 命令：创建文件</h4><p>命令行格式： <code>touch [参数] [filename]</code></p><table><thead><tr><th>选项</th><th>命令行格式</th><th>作用</th></tr></thead><tbody><tr><td>-a</td><td><code>touch -a file</code></td><td>改变档案的访问时间记录。</td></tr><tr><td>-d    `</td><td>touch -d time file`</td><td>设定时间与日期，可以使用各种不同的格式。</td></tr><tr><td>-m</td><td><code>touch -m file</code></td><td>改变档案的修改时间记录。</td></tr><tr><td>-r</td><td><code>touch -r file1 file2</code></td><td>使用参考文档的时间记录。</td></tr><tr><td>-t</td><td><code>touch -t time file</code></td><td>设定档案的时间记录，格式与 date 指令相同。</td></tr></tbody></table><p>示例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 在当前目录创建 test.txt 文件</span><br><span class="line">touch test.txt</span><br><span class="line"></span><br><span class="line">// 创建多个文件</span><br><span class="line">touch test1.txt test2.txt</span><br><span class="line"></span><br><span class="line">//修改访问时间</span><br><span class="line">touch -a test.txt</span><br><span class="line"></span><br><span class="line">//查看访问修改文件的时间</span><br><span class="line">stat test.txt</span><br><span class="line"></span><br><span class="line">// 更改为自定义格式、自定义时间戳（更改访问时间、修改时间）</span><br><span class="line">touch -d &apos;18-May-2017&apos; test.txt</span><br><span class="line"></span><br><span class="line">// 更改修改时间</span><br><span class="line">touch -m test.txt</span><br><span class="line"></span><br><span class="line">//修改 test1.txt 为 test2.txt 文件的时间戳。</span><br><span class="line">touch -r test1.txt test2.txt</span><br><span class="line"></span><br><span class="line">// 更改为自定义时间戳</span><br><span class="line">touch -t 201703031558.28 test.txt</span><br></pre></td></tr></table></figure><h4 id="rm命令：删除文件或目录"><a href="#rm命令：删除文件或目录" class="headerlink" title="rm命令：删除文件或目录"></a>rm命令：删除文件或目录</h4><p>用来删除文件或文件目录。命令格式为：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm  [参数] [文件]</span><br></pre></td></tr></table></figure><table><thead><tr><th>常用参数</th><th>含义</th></tr></thead><tbody><tr><td>-f</td><td>–force    忽略不存在的文件，从不给出提示。</td></tr><tr><td>-i</td><td>–interactive 进行交互式删除</td></tr><tr><td>-r</td><td>–recursive，将参数中列出的全部目录和子目录均递归地删除。</td></tr></tbody></table><p><strong>注意：</strong></p><ul><li>如果要删除非空目录，需要使用<code>rm -rf [文件目录]</code></li><li>千万不要<code>rm -rf /</code> ，一旦输入这个命令，然后就没有然后了。</li></ul>]]></content>
     
     <summary type="html">
     
@@ -634,9 +788,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -753,9 +907,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -780,9 +934,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="rescueMode" scheme="https://steve-yuan-8276.github.io/tags/rescueMode/"/>
     
@@ -811,83 +965,15 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="putty" scheme="https://steve-yuan-8276.github.io/tags/putty/"/>
     
       <category term="xshell" scheme="https://steve-yuan-8276.github.io/tags/xshell/"/>
     
       <category term="iterm2" scheme="https://steve-yuan-8276.github.io/tags/iterm2/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux运维学习笔记1-2：如何配置静态IP</title>
-    <link href="https://steve-yuan-8276.github.io/2018/03/14/week1-2-howToSetStaticIp/"/>
-    <id>https://steve-yuan-8276.github.io/2018/03/14/week1-2-howToSetStaticIp/</id>
-    <published>2018-03-14T03:57:08.000Z</published>
-    <updated>2018-04-02T14:26:02.767Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h3><p>这节课主要是如何设置静态ip及过程中的网络问题排查。</p><h3 id="设置网络静态IP"><a href="#设置网络静态IP" class="headerlink" title="设置网络静态IP"></a>设置网络静态IP</h3><h4 id="获取IP地址信息"><a href="#获取IP地址信息" class="headerlink" title="获取IP地址信息"></a>获取IP地址信息</h4><p>在登录框中输入以下命令，获取ip地址</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dhchlient    // 自动获取ip地址</span><br></pre></td></tr></table></figure><p>可以通过ping命令来验证网络是否联通</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping -c 4 www.163.com</span><br></pre></td></tr></table></figure><p>查看当前网络状况，使用命令</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip addr    // 查看ip地址信息</span><br></pre></td></tr></table></figure><p>`需要注意的是，这里需要记下来ip address、gateway、netmask、ensXX（网卡信息），后面设置静态ip会用到。</p><a id="more"></a><h4 id="编辑网卡配置"><a href="#编辑网卡配置" class="headerlink" title="编辑网卡配置"></a>编辑网卡配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># vi /etc/sysconfig/network-scripts/ifcfg-ens33</span><br></pre></td></tr></table></figure><p>注：此处的XX，就是前面查到的网卡信息。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ONBOOT=yes；//表示网卡随系统一起启动</span><br><span class="line">BOOTPROTO=static // 用来设置网卡启动类型，dhcp表示自动获取ip地址，static表示手动设置ip地址</span><br><span class="line">IPADDR=xxx.xxx.xxx.xxx  //dhclient获取的网址</span><br><span class="line">NETMASK=255.255.255.0    //子网掩码</span><br><span class="line">GATEWAEY=xxx.xxx.xxx.xxx     //网关地址</span><br><span class="line">DNS1=119.29.29.29    //DNS服务器地址，这里提供的一个公共DNS</span><br></pre></td></tr></table></figure><p>最后，先按“esc”退出编辑模式，之后再输入“:wq”进行保存。</p><h4 id="重启ip设置"><a href="#重启ip设置" class="headerlink" title="重启ip设置"></a>重启ip设置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart network.service</span><br></pre></td></tr></table></figure><p>正常情况下，静态ip就设置好。检查是否成功，可以ping一下外网，如：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping -c 4 www.163.com</span><br></pre></td></tr></table></figure><h3 id="Troubleshooting"><a href="#Troubleshooting" class="headerlink" title="Troubleshooting"></a>Troubleshooting</h3><h4 id="网关及DNS配置错误"><a href="#网关及DNS配置错误" class="headerlink" title="网关及DNS配置错误"></a>网关及DNS配置错误</h4><p>实际遇到的问题，按照教程进行到这一部后发现网络不通，提示错误 <code>name or service not know</code> ，解决起来又是一番折腾。归纳起来有两点：</p><ul><li><p>之前把网关写错了，后来经网友提示，<strong>ip和网关必须是在同一个网段；</strong></p></li><li><p>教程中给出的DNS地址 <code>119.29.29.29</code>是DNSpod公司提供的公共DNS，如果这个DNS地址不行，就试试<code>8.8.8.8</code>，或者<code>114.114.114.114</code></p></li></ul><h4 id="网络连接方式问题"><a href="#网络连接方式问题" class="headerlink" title="网络连接方式问题"></a>网络连接方式问题</h4><p>课程中提到了不同网络连接方式也可能造成不能上网的问题，虽然没有遇到，还是上网查了一下相关的基本资料。</p><h5 id="NAT模式："><a href="#NAT模式：" class="headerlink" title="NAT模式："></a>NAT模式：</h5><p>就是让虚拟机借助NAT(网络地址转换)功能，通过宿主机器所在的网络来访问公网。</p><p>NAT模式中，虚拟机的网卡，是在vmware提供的一个虚拟网络，跟物理网卡的网络不在同一个网络。换句话说，宿主机可以虚拟机，虚拟机也可以访问局域网内的其他主机，但是局域网内的其他电脑不能访问虚拟机。</p><h5 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h5><p>桥接网络是指本地物理网卡和虚拟网卡通过VMnet0虚拟交换机进行桥接，物理网卡和虚拟网卡在拓扑图上处于同等地位，物理网卡和虚拟网卡处于同一个网段，虚拟交换机相当于一台现实网络中的交换机，所以两个网卡的IP地址也要设置为同一网段。</p><p>在这种模式下，虚拟机可以访问外网，局域网内的其他电脑也可以访问虚拟机。</p><h5 id="Host-only-模式"><a href="#Host-only-模式" class="headerlink" title="Host-only 模式"></a>Host-only 模式</h5><p>与NAT模式类似，不同之处在于，在Host-Only模式下，虚拟网络是一个全封闭的网络，虚拟机只能与虚拟机、主机互访，但虚拟机和外部的网络是被隔离开的，不能上Internet。局域网内的计算机也不能访问虚拟机。</p><h5 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h5><ul><li><p><a href="https://blog.ttionya.com/article-1159.html" target="_blank" rel="noopener">在VMware中使CentOS利用桥接上网</a></p></li><li><p><a href="https://www.cnblogs.com/rainman/archive/2013/05/06/3063925.html" target="_blank" rel="noopener">VMware中三种网络连接的区别</a></p></li><li><p><a href="https://www.cnblogs.com/ggjucheng/archive/2012/08/19/2646007.html" target="_blank" rel="noopener">实例讲解虚拟机3种网络模式(桥接、nat、Host-only)</a></p></li><li><p><a href="https://www.jianshu.com/p/ed73dd4bde19" target="_blank" rel="noopener">VMWare（NAT、桥接 ）模式</a></p></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;主要内容&quot;&gt;&lt;a href=&quot;#主要内容&quot; class=&quot;headerlink&quot; title=&quot;主要内容&quot;&gt;&lt;/a&gt;主要内容&lt;/h3&gt;&lt;p&gt;这节课主要是如何设置静态ip及过程中的网络问题排查。&lt;/p&gt;
-&lt;h3 id=&quot;设置网络静态IP&quot;&gt;&lt;a href=&quot;#设置网络静态IP&quot; class=&quot;headerlink&quot; title=&quot;设置网络静态IP&quot;&gt;&lt;/a&gt;设置网络静态IP&lt;/h3&gt;&lt;h4 id=&quot;获取IP地址信息&quot;&gt;&lt;a href=&quot;#获取IP地址信息&quot; class=&quot;headerlink&quot; title=&quot;获取IP地址信息&quot;&gt;&lt;/a&gt;获取IP地址信息&lt;/h4&gt;&lt;p&gt;在登录框中输入以下命令，获取ip地址&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;dhchlient    // 自动获取ip地址&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;可以通过ping命令来验证网络是否联通&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ping -c 4 www.163.com&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;查看当前网络状况，使用命令&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ip addr    // 查看ip地址信息&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;`需要注意的是，这里需要记下来ip address、gateway、netmask、ensXX（网卡信息），后面设置静态ip会用到。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
-    
-    
-      <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
-    
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
-      <category term="ip" scheme="https://steve-yuan-8276.github.io/tags/ip/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux运维学习笔记1-1：初识centOS7</title>
-    <link href="https://steve-yuan-8276.github.io/2018/03/14/week1-1-basisOfCentOS/"/>
-    <id>https://steve-yuan-8276.github.io/2018/03/14/week1-1-basisOfCentOS/</id>
-    <published>2018-03-14T02:22:02.000Z</published>
-    <updated>2018-04-02T14:26:02.766Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这是猿课linux运维的第一篇，先给自己加加油，争取四个月之内顺利毕业。</p><h3 id="Linux基础知识"><a href="#Linux基础知识" class="headerlink" title="Linux基础知识"></a>Linux基础知识</h3><p>Linux跟MacOS、Windows一样，都是计算机操作系统，不同之处在有两点：</p><ul><li><p>一是开源（大部分是免费的）；</p></li><li><p>二是多用在服务器领域（学习这个就是为了转行找工作，不是嘛）</p></li></ul><a id="more"></a><h3 id="常见的Linux发行版"><a href="#常见的Linux发行版" class="headerlink" title="常见的Linux发行版"></a>常见的Linux发行版</h3><table><thead><tr><th>系统名称</th><th>官网</th><th>特点</th><th>备注</th></tr></thead><tbody><tr><td>Ubuntu</td><td><a href="https://www.ubuntu.com/" target="_blank" rel="noopener">https://www.ubuntu.com/</a></td><td>目前最流行的个人版Linux系统，界面做得比较美观。</td><td>使用apt安装和更新软件</td></tr><tr><td>Red Hat Enterprise（RHEL）</td><td><a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux" target="_blank" rel="noopener">https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux</a></td><td>面向企业的server版本，也是应用最广泛的server版本。</td><td>需要授权付费才能使用yum工具</td></tr><tr><td>centOS</td><td><a href="https://www.centos.org/" target="_blank" rel="noopener">https://www.centos.org/</a></td><td>CentOS与RHEL 100%兼容，更重要的是完全免费。</td><td>使用yum工具安装和更新软件</td></tr><tr><td>Debian</td><td><a href="https://www.debian.org/" target="_blank" rel="noopener">https://www.debian.org/</a></td><td>元老级的linux版本，也非常适合英语server</td><td>使用apt安装和更新软件</td></tr></tbody></table><h3 id="安装虚拟机"><a href="#安装虚拟机" class="headerlink" title="安装虚拟机"></a>安装虚拟机</h3><h4 id="虚拟机选择："><a href="#虚拟机选择：" class="headerlink" title="虚拟机选择："></a>虚拟机选择：</h4><table><thead><tr><th>虚拟机</th><th>官网</th><th>特点</th><th>备注</th></tr></thead><tbody><tr><td> VirtualBox</td><td><a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" rel="noopener">https://www.virtualbox.org/wiki/Downloads</a></td><td>免费，适用于mac、Windows </td></tr><tr><td>VMware fusion</td><td><a href="https://store.vmware.com/store?Action=home&amp;Locale=en_US&amp;SiteID=vmware" target="_blank" rel="noopener">https://store.vmware.com/store?Action=home&amp;Locale=en_US&amp;SiteID=vmware</a></td><td>付费，使用与mac和wondows</td><td>价格居中，尤其是在某宝上</td></tr><tr><td>parallel desktop</td><td><a href="https://www.parallels.com/cn/products/desktop/" target="_blank" rel="noopener">https://www.parallels.com/cn/products/desktop/</a></td><td>付费，适用于mac和windows</td><td>价格最贵，不过近两年都有bundle。</td></tr></tbody></table><h3 id="安装centOS7"><a href="#安装centOS7" class="headerlink" title="安装centOS7"></a>安装centOS7</h3><h4 id="下载地址："><a href="#下载地址：" class="headerlink" title="下载地址："></a>下载地址：</h4><ul><li><p>官方镜像：<a href="https://www.centos.org/download/" target="_blank" rel="noopener">CentOS官网</a> </p></li><li><p>国内镜像：<a href="http://mirrors.sohu.com/centos/" target="_blank" rel="noopener">搜狐</a>、<a href="http://mirrors.163.com/centos/" target="_blank" rel="noopener">163</a>、<a href="https://mirrors.aliyun.com/centos/" target="_blank" rel="noopener">阿里巴巴</a></p></li></ul><h4 id="新建虚拟机："><a href="#新建虚拟机：" class="headerlink" title="新建虚拟机："></a>新建虚拟机：</h4><h5 id="安装要点："><a href="#安装要点：" class="headerlink" title="安装要点："></a>安装要点：</h5><h6 id="1-系统语言：有中文设置，不过我选择了默认英文"><a href="#1-系统语言：有中文设置，不过我选择了默认英文" class="headerlink" title="1. 系统语言：有中文设置，不过我选择了默认英文"></a>1. 系统语言：有中文设置，不过我选择了默认英文</h6><p><img src="https://farm5.staticflickr.com/4795/40096188544_64caf2d034_o.png" alt=""></p><h6 id="2-时区设置：选择asia，shanghai或者hongkong都OK，反正都是东八区"><a href="#2-时区设置：选择asia，shanghai或者hongkong都OK，反正都是东八区" class="headerlink" title="2. 时区设置：选择asia，shanghai或者hongkong都OK，反正都是东八区"></a>2. 时区设置：选择asia，shanghai或者hongkong都OK，反正都是东八区</h6><p><img src="https://farm5.staticflickr.com/4794/40763821762_1b5ab843b3_o.png" alt=""></p><p><img src="https://farm5.staticflickr.com/4786/40096214624_9fa2d544cc_o.png" alt=""></p><h6 id="3-系统分区："><a href="#3-系统分区：" class="headerlink" title="3. 系统分区："></a>3. 系统分区：</h6><p><img src="https://farm5.staticflickr.com/4786/39910598915_54f93524b4_o.png" alt=""></p><ul><li><p>在系统“安装位置”中，选择“我要配置分区”，自定义系统分区；<br><img src="https://farm5.staticflickr.com/4774/25934222407_5c921ba09b_o.png" alt=""></p></li><li><p>在 LVM下拉菜单，选择 “标准分区”，之后点击加号手动进行修改<br><img src="https://farm5.staticflickr.com/4772/26935868658_9946af8702_o.png" alt=""></p></li><li><p>这里分了三个区： <code>/boot</code> 、<code>/swap</code> 、<code>/</code>。除<code>/boot</code> 、<code>/swap</code>之外的空间都可以分给<code>/</code>根目录。</p></li></ul><p><img src="https://farm5.staticflickr.com/4788/40805785351_2fccdcbc05_o.png" alt=""></p><h6 id="4-设置一下root用户密码，稍微复杂一点。"><a href="#4-设置一下root用户密码，稍微复杂一点。" class="headerlink" title="4. 设置一下root用户密码，稍微复杂一点。"></a>4. 设置一下root用户密码，稍微复杂一点。</h6><p><img src="https://farm5.staticflickr.com/4794/40805799851_bc419713ca_o.png" alt=""></p><h6 id="5-接受分区，更改，继续安装就好了。"><a href="#5-接受分区，更改，继续安装就好了。" class="headerlink" title="5. 接受分区，更改，继续安装就好了。"></a>5. 接受分区，更改，继续安装就好了。</h6><h5 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h5><h6 id="1-系统分区一般按照如下原则进行划分，但考虑到虚拟机主要是为了学习目的，总共只有20G硬盘空间，所以没有设置-data-分区。"><a href="#1-系统分区一般按照如下原则进行划分，但考虑到虚拟机主要是为了学习目的，总共只有20G硬盘空间，所以没有设置-data-分区。" class="headerlink" title="1. 系统分区一般按照如下原则进行划分，但考虑到虚拟机主要是为了学习目的，总共只有20G硬盘空间，所以没有设置/data  分区。"></a>1. 系统分区一般按照如下原则进行划分，但考虑到虚拟机主要是为了学习目的，总共只有20G硬盘空间，所以没有设置<code>/data</code>  分区。</h6><table><thead><tr><th>分区名称</th><th>空间大小</th></tr></thead><tbody><tr><td>/boot</td><td>200M</td></tr><tr><td>/swap</td><td>4G</td></tr><tr><td>/</td><td>20G</td></tr><tr><td>/data</td><td>剩余磁盘空间</td></tr></tbody></table><h6 id="2-swap分区大小跟物理内存大小有关，通常建议如下："><a href="#2-swap分区大小跟物理内存大小有关，通常建议如下：" class="headerlink" title="2. swap分区大小跟物理内存大小有关，通常建议如下："></a>2. swap分区大小跟物理内存大小有关，通常建议如下：</h6><table><thead><tr><th>物理内存</th><th>SWAP分区</th></tr></thead><tbody><tr><td>4G以内</td><td>内存的2倍</td></tr><tr><td>4-8G</td><td>等于内存大小</td></tr><tr><td>8-64G</td><td>8G</td></tr><tr><td>64-256G</td><td>16G</td></tr></tbody></table>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;这是猿课linux运维的第一篇，先给自己加加油，争取四个月之内顺利毕业。&lt;/p&gt;
-&lt;h3 id=&quot;Linux基础知识&quot;&gt;&lt;a href=&quot;#Linux基础知识&quot; class=&quot;headerlink&quot; title=&quot;Linux基础知识&quot;&gt;&lt;/a&gt;Linux基础知识&lt;/h3&gt;&lt;p&gt;Linux跟MacOS、Windows一样，都是计算机操作系统，不同之处在有两点：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;一是开源（大部分是免费的）；&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;二是多用在服务器领域（学习这个就是为了转行找工作，不是嘛）&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
-    
-    
-      <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
-    
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   

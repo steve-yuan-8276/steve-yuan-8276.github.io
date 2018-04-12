@@ -1,16 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[Linux运维学习笔记4-3：vim基础知识（二）]]></title>
-    <url>%2F2018%2F04%2F09%2Fweek4-3-basisOfVIM-Part2%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记继续整理学习VIM用法，主要包括编辑模式、命令模式相关内容。 进入VIM编辑模式 快捷键 解释 i 在当前字符插入 I 在光标所在行的行首插入 a 在光标后插入 A 在光标所在行的末尾插入 o 在当前行后插入新的一行 O 在当前行前插入新的一行 vim命令模式 快捷键 解释 /word 在光标之后查找关键词，如果存在多个匹配项，按n向后搜索 ?word 在光标之前查找关键词，如果存在多个匹配项，按n向前搜索 :1,$s/word1/word2/g 将文档中的word1替换为word2，不加g则只替换每行的第一个word1 :m,ns/word1/word2/g 将第m行和第n行之间的word1替换为word2，不加g则只替换每行的第一个word1 打开/保存/退出/改变文件 快捷键 解释 :e [path to file] 打开一个文件 :w 存盘 :saveas [path to file] 另存为 &lt;path/to/file&gt; :x、 ZZ 、:wq 保存并退出 (:x表示仅在需要时保存；ZZ不需要输入冒号并回车) :X 设置密码保存并退出，使用此命令后cat 该文件会显示乱码，再次打开需输入密码 :q! 退出不保存 :qa! 强行退出所有的正在编辑的文件，就算别的文件有更改。 :bn、 :bp 你可以同时打开很多文件，使用这两个命令来切换下一个或上一个文件。 vim使用常见问题如何解决代码自动缩进造成乱码解决思路： 方法一：命令模式，输入 :set noai nosi 方法二：paste模式 12:set paste :set nopaste putty, xshell连接linux，小键盘不能输入数字解决思路： 在putty上，选项Terminal-&gt;Features里，找到Disable application keypad mode，选中即可， 在xshell上，修改session 属性 -&gt; 终端-&gt;VT模式-&gt;初始数字键盘模式。 延伸阅读 vim的特殊用法 vim常用快捷键总结 vim快速删除一段字符]]></content>
+    <title><![CDATA[Linux运维学习笔记4-4：文件打包压缩工具（一）]]></title>
+    <url>%2F2018%2F04%2F11%2Fweek4-5-basisOfZipToolPart2%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记书接上回，继续整理打包压缩软件的知识，主要涉及zip和 tar 两个工具。 tar 工具由于gzip、bzip2、xz三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是tar。 不仅如此，tar 强大之处在于，配合参数，可以打包压缩一起来。 命令行格式：tar [参数] [目标文件] [源文件或目录] 注： 目标文件 指的是打包后的文件名 源文件或目录 指的是需要打包的文件或目录 常用参数 参数 解释 -c 建立一个tar包或压缩包 -v 表示可视化 -f 指定压缩文件包名称 （多个参数组合的情况下，把f放在最后，紧跟压缩文件包名） -t 查看tar包里的内容 -z 指定gzip压缩 -j（小写） 指定bzip2压缩 -J（大写） 指定xz压缩 -x 解包或解压缩 –exclude filename 特殊用法，表示在打包或者压缩是，将该filename排除在外 常见用法：tar命令的参数经常连用，示例如下： 文件目录打包 -cvf 可视化打包目录test，指定文件名为test.tar -xvf 解包test.tar --exclude filename 特殊用法，将指定文建排除在外 当前目录的情况 打包压缩的情况 -tf 查看一下打包后的目录文件情况 文件打包并用gzip处理 -czvf 打包文件并使用gzip压缩 -zxvf 解压缩 .tar.gz 格式的文件 zcat 查看压缩包文件内容 注： zcat 用于不真正解压缩文件，就能显示压缩包中文件的内容的场合。 文件打包并用bzip2处理-cjvf 打包文件并使用bzip2压缩 -xjvf 解压缩 .tar.bz2 格式的文件 bzcat 不解压包查看内容 zip 压缩工具除了上述这些打包压缩工具，还需要考虑到在windows、linux、 mac下通用的打包压缩格式 .zip zip 工具centos默认没有，需要单独安装 yum install -y zip zip 工具的使用zip压缩命令行格式：zip [参数] [压缩包名称] [源文件或目录] 如果目录下有还有二级甚至多级目录，zip命令 不加参数时，仅仅会讲二级目录压缩； 如果想一并压缩二级目录及多级目录，有两种方法： 第一种方法：使用通配符 1zip test.zip test/* 第二种方法：使用 -r 参数 1zip -r test.zip test/ unzip 解压缩zip文件需要单独安装unzip 工具来解压，安装命令为 yum install -y unzip 命令行格式: unzip [filename] 看下这个帖子： http://ask.apelearn.com/question/5435]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>zip</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Linux运维学习笔记4-4：文件打包压缩工具（一）]]></title>
+    <url>%2F2018%2F04%2F11%2Fweek4-4-basisOfZipToolsPart1%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记主要整理Linux文件压缩与打包方面的知识，主要涉及gzip、bzip、xz。 常见的Linux压缩打包文件 后缀名 解释 .gz gzip压缩工具压缩的文件 .bz2 bzip2压缩工具压缩的文件 .tar tar工具打包的文件（tar没有压缩功能，只能合并打包） .tar.gz 先由tar打包，再由zip工具压缩的文件 .tar.bz2 先由tar打包，再由bzip2工具压缩的文件 .tar.xz 先由tar打包，再由xz工具压缩的文件 gzip压缩工具命令行格式： gzip [参数] [filename] 注：gzip只能压缩文件，不能压缩目录 常用参数： 参数 解释 -n n代表压缩等级，从1到9，默认为6，可不加。 -d 表示解压缩 示例： 123gzip 1.txt //在当前目录下压缩1.txt，源文件会消失，只保留压缩文件gzip -d 1.txt.gz //解压1.txt.gz 到当前目录 bzip2压缩工具bzip2 安装：centOS 7 默认没有，需要单独安装 yum install -y bzip2 bzip2 使用：命令行格式：bzip2 [参数] [filename] 注：bzip2 工具也是支持文件压缩，不支持目录压缩。 常用参数 参数 解释 -z 表示压缩，可省略 -d 表示解压缩 示例： 12bzip2 1.txt //压缩1.txtbzip2 -d 1.txt //解压缩 1.txt.bz2 xz压缩工具命令行格式： xz [参数] [filename] 注：bzip2 工具也是支持文件压缩，不支持目录压缩。 常见参数： 参数 解释 -z 表示压缩，可省略 -d 表示解压缩 示例： 12xz 1.txt //压缩1.txtxz -d 1.txt //解压缩 1.txt.xz]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>zip</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Linux运维学习笔记4-3：vim基础知识（二）]]></title>
+    <url>%2F2018%2F04%2F09%2Fweek4-3-basisOfVIM-Part2%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记继续整理学习VIM用法，主要包括编辑模式、命令模式相关内容。 先把vim命令贴出来： 再把vim键位图贴出来： 进入VIM编辑模式 快捷键 解释 i 在当前字符插入 I 在光标所在行的行首插入 a 在光标后插入 A 在光标所在行的末尾插入 o 在当前行后插入新的一行 O 在当前行前插入新的一行 vim命令模式 快捷键 解释 /word 在光标之后查找关键词，如果存在多个匹配项，按n向后搜索 ?word 在光标之前查找关键词，如果存在多个匹配项，按n向前搜索 :1,$s/word1/word2/g 将文档中的word1替换为word2，不加g则只替换每行的第一个word1 :m,ns/word1/word2/g 将第m行和第n行之间的word1替换为word2，不加g则只替换每行的第一个word1 打开/保存/退出/改变文件 快捷键 解释 :e [path to file] 打开一个文件 :w 存盘 :saveas [path to file] 另存为 &lt;path/to/file&gt; :x、 ZZ 、:wq 保存并退出 (:x表示仅在需要时保存；ZZ不需要输入冒号并回车) :X 设置密码保存并退出，使用此命令后cat 该文件会显示乱码，再次打开需输入密码 :q! 退出不保存 :qa! 强行退出所有的正在编辑的文件，就算别的文件有更改。 :bn、 :bp 你可以同时打开很多文件，使用这两个命令来切换下一个或上一个文件。 vim使用常见问题如何解决代码自动缩进造成乱码解决思路： 方法一：命令模式，输入 :set noai nosi 方法二：paste模式 12:set paste :set nopaste putty, xshell连接linux，小键盘不能输入数字解决思路： 在putty上，选项Terminal-&gt;Features里，找到Disable application keypad mode，选中即可， 在xshell上，修改session 属性 -&gt; 终端-&gt;VT模式-&gt;初始数字键盘模式。 延伸阅读 vim的特殊用法 vim常用快捷键总结 vim快速删除一段字符]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>linux</tag>
+        <tag>notes</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -30,14 +58,14 @@
   <entry>
     <title><![CDATA[Linux运维学习笔记4-2：vim基础知识（一）]]></title>
     <url>%2F2018%2F04%2F09%2Fweek4-2-basisOfVIM-Part1%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记开始学习VIM用法。 vim 是比系统自带的vi更强大的文本编辑器，支持语法高亮，有大量的快捷键需要记忆，学习难度也很大。 vim 安装centOS 7安装： 1yum install -y vim-enhanced macOS 安装： 1brew install vim vim简单配置Vim编辑环境配置，涉及/etc/vimrc 和 ~/.vimrc。前者是全局配置，而后置只针对当前用户，所以就新建一个进行修改即可。 123touch ～/.vimrc //新建当前用户目录下的配置文件vim ~/.vimrc //编辑` .vimrc`文件 新增以下内容： 12345set nu // 这是设置显示行号set showmode //设置在命令行界面最下面显示当前模式等。set ruler // 在右下角显示光标所在的行数等信息set autoindent // 设置每次单击Enter键后，光标移动到下一行时与上一行的起始字符对齐syntax on // 即设置语法检测，当编辑C或者Shell脚本时，关键字会用特殊颜色显示 之后，按 esc 键，输入:wq进行保存。 vim普通模式下的基本操作命令行格式: vim [filename] vim 有三种模式，包括普通模式、编辑模式和命令模式。首先是普通模式： 在普通模式下，可以进行的操作包括： 移动光标 使用h、l、k、j 代表左、右、上、下，如下图所示： Ctrl+B、ctrl+F 代表向前/向后翻页。 0、shift+6移动到本行行首；shift+4 移动到本行末尾。 gg 移动到第一行；G 移动到最后一行；nG移动到第n行（n代表数字） 删除字符或行 x表示向后删除一个字符；X表示向前删除一个字符；nx表示向后删除n的字符（n代表数字） dd 删除光标所在行；ndd 删除光标所在行之后的n行（n代表数字） 复制粘贴字符或者行 yy复制光标所在行；nyy 从光标所载行开始，向下复制n行。 小写 p 表示从光标所在行开始向后粘贴；大写 P 表示向前粘贴 按 v 移动光标会选中指定文字 按 u 还原上一步操作 查看帮助文档输入 :help 查看帮助文档 输入 / 或者 ? 查找关键字]]></content>
+    <content type="text"><![CDATA[写在前面这则笔记开始学习VIM用法。 vim 是比系统自带的vi更强大的文本编辑器，支持语法高亮，有大量的快捷键需要记忆，学习难度也很大。 vim 安装centOS 7安装： 1yum install -y vim-enhanced macOS 安装： 1brew install vim vim简单配置Vim编辑环境配置，涉及/etc/vimrc 和 ~/.vimrc。前者是全局配置，而后置只针对当前用户，所以就新建一个进行修改即可。 123touch ～/.vimrc //新建当前用户目录下的配置文件vim ~/.vimrc //编辑` .vimrc`文件 新增以下内容： 12345set nu // 这是设置显示行号set showmode //设置在命令行界面最下面显示当前模式等。set ruler // 在右下角显示光标所在的行数等信息set autoindent // 设置每次单击Enter键后，光标移动到下一行时与上一行的起始字符对齐syntax on // 即设置语法检测，当编辑C或者Shell脚本时，关键字会用特殊颜色显示 之后，按 esc 键，输入:wq进行保存。 vim普通模式下的基本操作命令行格式: vim [filename] vim 有三种模式，包括普通模式、编辑模式和命令模式。首先是普通模式： 在普通模式下，可以进行的操作包括： 移动光标 使用h、l、k、j 代表左、右、上、下，如下图所示： Ctrl+B、ctrl+F 代表向前/向后翻页。 0、shift+6移动到本行行首；shift+4 移动到本行末尾。 gg 移动到第一行；G 移动到最后一行；nG移动到第n行（n代表数字） 删除字符或行 x表示向后删除一个字符；X表示向前删除一个字符；nx表示向后删除n的字符（n代表数字） dd 删除光标所在行；ndd 删除光标所在行之后的n行（n代表数字） 复制粘贴字符或者行 yy复制光标所在行；nyy 从光标所载行开始，向下复制n行。 小写 p 表示从光标所在行开始向后粘贴；大写 P 表示向前粘贴 按 v 移动光标会选中指定文字 按 u 还原上一步操作 查看帮助文档vim 快捷键示意图 输入 :help 查看帮助文档 输入 / 或者 ? 查找关键字]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -50,22 +78,22 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>lvm</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[Linux运维学习笔记3-5：磁盘管理基础知识（二）]]></title>
     <url>%2F2018%2F04%2F08%2Fweek3-5-diskformatting%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记承接磁盘管理基础知识（一），主要包括磁盘格式化、磁盘挂载及手动增加swap分区。 添加一个块新硬盘的工作流： 磁盘分区 （fdisk、parted） 磁盘格式化 （mkfs.ext2、mkfs.ext3、mkfs.ext4和mkfs.xfs ） 挂载分区 （mount） 修改 /etc/fstab linux常见文件系统及磁盘格式化linux常见文件系统文件系统（File System）是文件管理系统的简称，是用来组织数据在存储介质上的存储方式以及检索方式的。 磁盘分区完成后，还需要“格式化”，其实就是安装文件系统。目前，主流操作系统的文件系统如下： 操作系统 文件系统 备注 windows FAT、NTFS、ReFS win10最新的文件系统是ReFS，相比已经被广泛应用的NTFS，弹性文件系统的优势在于能够提供更高的稳定性，可以自动验证数据是否损坏，并尽力恢复数据 linux ext2、2xt3、ext4、xfs等 摸钱在学习的centos7的默认文件系统是xfs MacOS HFS、HFS+、APFS macOS最新的文件系统是APFS，这是一种专门针对SSD优化的文件系统，最大的特性是原生支持加密。 重点看看Linux常用的文件系统： 文件系统 最大文件名长度 最大文件大小 最大分区大小 适用场景 原因 ext2 255 bytes 2 TB 16 TB U盘 U盘一般不会存很多文件，且U盘的文件在电脑上有备份，安全性要求没那么高，由于ext2不写日志（journal），所以写U盘性能比较好。当然由于ext2的兼容性没有fat好，目前大多数U盘格式还是用fat ext3 255 bytes 2 TB 16 TB 对稳定性要求高的地方 与ext2相比，ext3实现了日志功能，但是ext2的缺点ext3也有 ext4 255 bytes 16 TB 1 EB 小文件较少 ext系列的文件系统都不支持inode动态分配，所以如果有大量小文件需要存储的话，不建议用ext4 xfs 255 bytes 8 EB 8 EB 小文件多或者需要大的xttr空间，如openstack swift将数据文件的元数据放在了xttr里面 xfs支持inode动态分配，所以不存在inode不够的情况，并且xttr的最大长度可以达到64K Btrfs 255 bytes 16 EB 16 EB 没有频繁的写操作，且需要btrfs的一些特性 btrfs虽然还不稳定，但支持众多的功能，如果你需要这些功能，且不会频繁的写文件，那么选择btrfs 磁盘格式化mke2fs、mkfs.ext2、mkfs.ext3和mkfs.ext4注：默认linux这个4个命令是一样的。 命令行格式：mke2fs [参数] [设备名称] 常用参数 用法 -b 指定数据块块大小，必须是1024的整数倍；centOS7默认是4KB -i 设定inode 的大小 -N 设定inode的数量 -c 格式化前先检测磁盘是否有问题；加上这个选项后，格式化速度会非常慢 -L 预设该分区的标签（label） -j 建立ext3格式的分区 -t 制定文件系统类型，如ext2、ext3、ext4等等 12[root@localhost ~]# mke2fs -t ext4 /dev/sdb1[root@localhost ~]# mke2fs -t ext4 /dev/sdb2 mkfs.xfs注：mke2fs 并不支持分区格式化为xfs类型，只能使用mkfs.xfs 1[root@localhost ~]# mkfs.xfs /dev/sdb1 e2label 查看或修改分区标签注：该命令只支持ext格式的文件系统，不支持xfs文件系统 12e2label /dev/sdb5 //查看分区labele2label /dev/sdb5 TEST123 //修改分区label 挂载/卸载磁盘磁盘格式化后，需要挂载分区才能使用。在挂载分区前，需要先建立一个挂载点，该挂载点是以目录的形式存在的，这个挂载点必须是空目录。一旦把某个分区挂在到该挂载点（目录）下，再往该目录写数据时，就会写到相应的分区当中。 查看系统分区信息mount 查看已挂载的分区 blkid 查看未挂载的分区 /etc/fstab文件输入命令行 cat /etc/fstab ,可以查看启动时需要挂载的分区信息 显示列 含义 1 分区标示，label、UUID等 2 挂载点，比如第1行等挂载点是/ 根目录 3 分区格式，如图，这里是xfs 4 mount等挂载参数（后面单列表格） 5 是否被dump备份，1表示备份，0表示不备份 6 开机是否自检磁盘，1和2表示检测，1的优先级高于2，即根分区设置为1，其他的分区设置为2；0表示不检测 常用参数 含义 sync/async sync表示时时同步内存和磁盘数据；async 表示异步处理，每隔一段时间再把数据从内存写入磁盘 auto/noauto auto开机自动挂载；noauto不自动挂载 ro/rw ro表示以只读权限挂载；rw表示以读写权限挂载 exec/noexec exec表示允许挂载可执行文件；noexec不允许挂载可执行文件，/根目录不要设置为noexec，否则无法使用系统 user/nouser 表示是否允许root用户之外的其他用户挂载分区。安全起见，使用nouser，只允许root用户挂载分区 suid/nosuid 是否允许分区有suid属性 usrquota 启动磁盘配额模式，会针对用户限定其使用磁盘额度 default 按照默认值设置挂载定义，包括 rw、suid、 dev、exec、 auto、nouser和async 添加挂载点的方法：方法一：vi /etc/fstab1/dev/sdb1 /bk ext4 defaults,noatime 1 2 方法二：mount [参数] [分区]mount -a 将磁盘分区中所有的分区自动挂载上 mount -t 指定挂载分区的类型，默认不指定，会自动识别 mount -o 指定挂载分区的参数特性，即 /etc/fstab 第四列的内容。常见的参数比如 rw（可读写）、suid（允许设置uid）、exec（允许挂载可执行文件）等等。 设置某个分区自动挂载的方法方法一：编辑 /etc/fstab 中添加一行 方法二：将挂载命令写入 /etc/rc.d/rc.local 写入后执行如下命令： 1chmod a+x /etc/rc.d/rc.local 删除挂载点命令行格式： unmount [参数] [挂载点] 有时挂载点无法删除，是因为当前目录在需要删除的挂载点上，解决的思路： 进入其他目录执行删除操作 使用-l 参数 1unmout -l /etc/fstab 手动增加swap空间swap分区就是虚拟内存，当虚拟内存不够的时候，就需要手动添加。基本思路是：建立swapfile -&gt; 格式化为swap格式 -&gt; 启动虚拟磁盘 建立swapfile1dd if= /dev/zero of=/tmp/newdisk bs=1M count=1024 if指定源，一般写/dev/zeroof 指定目标文件bs 指定块大小count 指定块的数量 根据上述内容，目标文件大小 = bs * count 格式化为swap格式1mkswap -f /tmp/newdisk 启动虚拟磁盘1swapon /tmp/newdisk 此时，系统提示有安全风险，对该分区修改权限，使用如下命令： 1chmod 0600 /tmp/newdisk 卸载虚拟磁盘1swapoff /tmp/newdisk 参考资料常见文件系统的格式 Linux下常见文件系统对比 Linux基础：文件系统 鸟哥的Linux私房菜：基础学习篇 第四版 Linux文件系统及磁盘分区与格式化]]></content>
+    <content type="text"><![CDATA[写在前面这则笔记承接磁盘管理基础知识（一），主要包括磁盘格式化、磁盘挂载及手动增加swap分区。 添加一个块新硬盘的工作流： 磁盘分区 （fdisk、parted） 磁盘格式化 （mkfs.ext2、mkfs.ext3、mkfs.ext4和mkfs.xfs ） 挂载分区 （mount） 修改 /etc/fstab linux常见文件系统及磁盘格式化linux常见文件系统文件系统（File System）是文件管理系统的简称，是用来组织数据在存储介质上的存储方式以及检索方式的。 磁盘分区完成后，还需要“格式化”，其实就是安装文件系统。目前，主流操作系统的文件系统如下： 操作系统 文件系统 备注 windows FAT、NTFS、ReFS win10最新的文件系统是ReFS，相比已经被广泛应用的NTFS，弹性文件系统的优势在于能够提供更高的稳定性，可以自动验证数据是否损坏，并尽力恢复数据 linux ext2、2xt3、ext4、xfs等 摸钱在学习的centos7的默认文件系统是xfs MacOS HFS、HFS+、APFS macOS最新的文件系统是APFS，这是一种专门针对SSD优化的文件系统，最大的特性是原生支持加密。 重点看看Linux常用的文件系统： 文件系统 最大文件名长度 最大文件大小 最大分区大小 适用场景 原因 ext2 255 bytes 2 TB 16 TB U盘 U盘一般不会存很多文件，且U盘的文件在电脑上有备份，安全性要求没那么高，由于ext2不写日志（journal），所以写U盘性能比较好。当然由于ext2的兼容性没有fat好，目前大多数U盘格式还是用fat ext3 255 bytes 2 TB 16 TB 对稳定性要求高的地方 与ext2相比，ext3实现了日志功能，但是ext2的缺点ext3也有 ext4 255 bytes 16 TB 1 EB 小文件较少 ext系列的文件系统都不支持inode动态分配，所以如果有大量小文件需要存储的话，不建议用ext4 xfs 255 bytes 8 EB 8 EB 小文件多或者需要大的xttr空间，如openstack swift将数据文件的元数据放在了xttr里面 xfs支持inode动态分配，所以不存在inode不够的情况，并且xttr的最大长度可以达到64K Btrfs 255 bytes 16 EB 16 EB 没有频繁的写操作，且需要btrfs的一些特性 btrfs虽然还不稳定，但支持众多的功能，如果你需要这些功能，且不会频繁的写文件，那么选择btrfs 磁盘格式化mke2fs、mkfs.ext2、mkfs.ext3和mkfs.ext4注：默认linux这个4个命令是一样的。 命令行格式：mke2fs [参数] [设备名称] 常用参数 用法 -b 指定数据块块大小，必须是1024的整数倍；centOS7默认是4KB -i [字节] i（小写）指定每个inode 的字节数 -I [文件] I（大写）从指定的文件中读取坏的块大小 -N 设定inode的数量 -c 格式化前先检测磁盘是否有问题；加上这个选项后，格式化速度会非常慢 -L 预设该分区的标签（label） -j 建立ext3格式的分区 -t 制定文件系统类型，如ext2、ext3、ext4等（常用） 最常用参数： -t 指定分区类型 1[root@localhost ~]# mke2fs -t ext4 /dev/sdb1 mkfs.xfs注：mke2fs 并不支持分区格式化为xfs类型，只能使用mkfs.xfs 1[root@localhost ~]# mkfs.xfs /dev/sdb1 e2label 查看或修改分区标签注：该命令只支持ext格式的文件系统，不支持xfs文件系统 12e2label /dev/sdb5 //查看分区labele2label /dev/sdb5 TEST123 //修改分区label 挂载/卸载磁盘磁盘格式化后，需要挂载分区才能使用。在挂载分区前，需要先建立一个挂载点，该挂载点是以目录的形式存在的，这个挂载点必须是空目录。一旦把某个分区挂在到该挂载点（目录）下，再往该目录写数据时，就会写到相应的分区当中。 查看系统分区信息mount 查看已挂载的分区 blkid 查看未挂载的分区 /etc/fstab文件输入命令行 cat /etc/fstab ,可以查看启动时需要挂载的分区信息 显示列 含义 1 分区标示，label、UUID等 2 挂载点，比如第1行等挂载点是/ 根目录 3 分区格式，如图，这里是xfs 4 mount等挂载参数（后面单列表格） 5 是否被dump备份，1表示备份，0表示不备份 6 开机是否自检磁盘，1和2表示检测，1的优先级高于2，即根分区设置为1，其他的分区设置为2；0表示不检测 常用参数 含义 sync/async sync表示时时同步内存和磁盘数据；async 表示异步处理，每隔一段时间再把数据从内存写入磁盘 auto/noauto auto开机自动挂载；noauto不自动挂载 ro/rw ro表示以只读权限挂载；rw表示以读写权限挂载 exec/noexec exec表示允许挂载可执行文件；noexec不允许挂载可执行文件，/根目录不要设置为noexec，否则无法使用系统 user/nouser 表示是否允许root用户之外的其他用户挂载分区。安全起见，使用nouser，只允许root用户挂载分区 suid/nosuid 是否允许分区有suid属性 usrquota 启动磁盘配额模式，会针对用户限定其使用磁盘额度 default 按照默认值设置挂载定义，包括 rw、suid、 dev、exec、 auto、nouser和async 添加挂载点的方法：方法一：vi /etc/fstab1/dev/sdb1 /bk ext4 defaults,noatime 1 2 方法二：mount [参数] [分区]mount -a 将磁盘分区中所有的分区自动挂载上 mount -t 指定挂载分区的类型，默认不指定，会自动识别 mount -o 指定挂载分区的参数特性，即 /etc/fstab 第四列的内容。常见的参数比如 rw（可读写）、suid（允许设置uid）、exec（允许挂载可执行文件）等等。 设置某个分区自动挂载的方法方法一：编辑 /etc/fstab 中添加一行 方法二：将挂载命令写入 /etc/rc.d/rc.local 写入后执行如下命令： 1chmod a+x /etc/rc.d/rc.local 删除挂载点命令行格式： unmount [参数] [挂载点] 有时挂载点无法删除，是因为当前目录在需要删除的挂载点上，解决的思路： 进入其他目录执行删除操作 使用-l 参数 1unmout -l /etc/fstab 手动增加swap空间swap分区就是虚拟内存，当虚拟内存不够的时候，就需要手动添加。基本思路是：建立swapfile -&gt; 格式化为swap格式 -&gt; 启动虚拟磁盘 建立swapfile1dd if= /dev/zero of=/tmp/newdisk bs=1M count=1024 if指定源，一般写/dev/zeroof 指定目标文件bs 指定块大小count 指定块的数量 根据上述内容，目标文件大小 = bs * count 格式化为swap格式1mkswap -f /tmp/newdisk 启动虚拟磁盘1swapon /tmp/newdisk 此时，系统提示有安全风险，对该分区修改权限，使用如下命令： 1chmod 0600 /tmp/newdisk 卸载虚拟磁盘1swapoff /tmp/newdisk 参考资料常见文件系统的格式 Linux下常见文件系统对比 Linux基础：文件系统 鸟哥的Linux私房菜：基础学习篇 第四版 Linux文件系统及磁盘分区与格式化]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -77,8 +105,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -90,8 +118,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -103,8 +131,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -116,8 +144,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -129,8 +157,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -142,8 +170,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -155,8 +183,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -168,21 +196,21 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[Linux运维学习笔记2-1：文档路径及基本操作]]></title>
     <url>%2F2018%2F03%2F19%2Fweek2-1-centos-fileFolderPathAndBisicOpration%2F</url>
-    <content type="text"><![CDATA[相对路径和绝对路径顾名思义，文件路径就是用来描述存放文件的地方。这里有两种描述的方法： 绝对路径：从根目录写起的，叫做绝对路径。 相对路径：与当前目录相对的写法，叫做相对路径。 举例来说： pwd //查询当前所在的绝对路径 上图中，红框标示出来的部分，就是当前所在的绝对路径，即 /Users/stevey/documents/github-file ，通过 ls 命令可以看到，下面有一个 steveBlog 的文件夹。 要进入这个文件夹可以采用两种方法： 123cd steveBlog //相对路径cd /Users/stevey/documents/github-file/steveBlog //绝对路径 常见的文档操作命令pwd 命令用于显示当前所在目录。在linux系统中， .表示当前目录， ..表示上一级目录。 cd 命令 名称 作用 cd 返回用户主目录 cd /etc 改变到其它路径 cd .. 返回到上一级目录 cd / 或 cd ～ 返回到根目录 cd - 返回之前的目录 mkdir 命令命令格式：mkdir [参数] [文件目录] -m 设置文件权限 12mkdir -m 777 test3 //输入drwxrwxrwx 2 root root 4096 10-25 17:46 test3 //实现效果 -p 新建一个目录串 1mkdir -p /test1/test2 -v 创建新目录都显示信息 1mkdir -v /test3 rmdir 命令跟mkdir 相反，rmdir表示删除目录。命令格式为：mkdir [参数] [文件目录] 。这个命令的特点在于，只能删除空目录；即使加了 -p 参数，也只能删除一串空目录。如果目录当中有文件，这个命令就没有用了。 rm命令用来删除文件或文件目录。命令格式为： 1rm [参数] [文件] 常用参数 含义 -f –force 忽略不存在的文件，从不给出提示。 -i –interactive 进行交互式删除 -r –recursive，将参数中列出的全部目录和子目录均递归地删除。 注意： 如果要删除非空目录，需要使用rm -rf [文件目录] 千万不要rm -rf / ，一旦输入这个命令，然后就没有然后了。]]></content>
+    <content type="text"><![CDATA[相对路径和绝对路径顾名思义，文件路径就是用来描述存放文件的地方。这里有两种描述的方法： 绝对路径：从根目录写起的，叫做绝对路径。 相对路径：与当前目录相对的写法，叫做相对路径。 举例来说： pwd //查询当前所在的绝对路径 上图中，红框标示出来的部分，就是当前所在的绝对路径，即 /Users/stevey/documents/github-file ，通过 ls 命令可以看到，下面有一个 steveBlog 的文件夹。 要进入这个文件夹可以采用两种方法： 123cd steveBlog //相对路径cd /Users/stevey/documents/github-file/steveBlog //绝对路径 常见的文档操作命令pwd 命令用于显示当前所在目录。在linux系统中， .表示当前目录， ..表示上一级目录。 cd 命令：切换目录 名称 作用 cd 返回用户主目录 cd /etc 改变到其它路径 cd .. 返回到上一级目录 cd / 或 cd ～ 返回到根目录 cd - 返回之前的目录 mkdir 命令：创建文件夹命令格式：mkdir [参数] [文件目录] -m 设置文件权限 12mkdir -m 777 test3 //输入drwxrwxrwx 2 root root 4096 10-25 17:46 test3 //实现效果 -p 新建一个目录串 1mkdir -p /test1/test2 -v 创建新目录都显示信息 1mkdir -v /test3 在指定目录下创建多个目录（使用绝对路径） rmdir 命令：删除目录跟mkdir 相反，rmdir表示删除目录。命令格式为：mkdir [参数] [文件目录] 。这个命令的特点在于，只能删除空目录；即使加了 -p 参数，也只能删除一串空目录。如果目录当中有文件，这个命令就没有用了。 touch 命令：创建文件命令行格式： touch [参数] [filename] 选项 命令行格式 作用 -a touch -a file 改变档案的访问时间记录。 -d ` touch -d time file` 设定时间与日期，可以使用各种不同的格式。 -m touch -m file 改变档案的修改时间记录。 -r touch -r file1 file2 使用参考文档的时间记录。 -t touch -t time file 设定档案的时间记录，格式与 date 指令相同。 示例： 1234567891011121314151617181920212223// 在当前目录创建 test.txt 文件touch test.txt// 创建多个文件touch test1.txt test2.txt//修改访问时间touch -a test.txt//查看访问修改文件的时间stat test.txt// 更改为自定义格式、自定义时间戳（更改访问时间、修改时间）touch -d &apos;18-May-2017&apos; test.txt// 更改修改时间touch -m test.txt//修改 test1.txt 为 test2.txt 文件的时间戳。touch -r test1.txt test2.txt// 更改为自定义时间戳touch -t 201703031558.28 test.txt rm命令：删除文件或目录用来删除文件或文件目录。命令格式为： 1rm [参数] [文件] 常用参数 含义 -f –force 忽略不存在的文件，从不给出提示。 -i –interactive 进行交互式删除 -r –recursive，将参数中列出的全部目录和子目录均递归地删除。 注意： 如果要删除非空目录，需要使用rm -rf [文件目录] 千万不要rm -rf / ，一旦输入这个命令，然后就没有然后了。]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -206,8 +234,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -219,8 +247,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rescueMode</tag>
       </tags>
   </entry>
@@ -233,8 +261,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>putty</tag>
         <tag>xshell</tag>
         <tag>iterm2</tag>
@@ -249,8 +277,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>ip</tag>
       </tags>
   </entry>
@@ -263,8 +291,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -393,8 +421,8 @@
         <category>web</category>
       </categories>
       <tags>
-        <tag>https</tag>
         <tag>http</tag>
+        <tag>https</tag>
       </tags>
   </entry>
   <entry>

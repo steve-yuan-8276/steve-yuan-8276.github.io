@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[Linux运维学习笔记4-4：文件打包压缩工具（一）]]></title>
+    <title><![CDATA[Linux运维学习笔记4-5：文件打包压缩工具（二）]]></title>
     <url>%2F2018%2F04%2F11%2Fweek4-5-basisOfZipToolPart2%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记书接上回，继续整理打包压缩软件的知识，主要涉及zip和 tar 两个工具。 tar 工具由于gzip、bzip2、xz三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是tar。 不仅如此，tar 强大之处在于，配合参数，可以打包压缩一起来。 命令行格式：tar [参数] [目标文件] [源文件或目录] 注： 目标文件 指的是打包后的文件名 源文件或目录 指的是需要打包的文件或目录 常用参数 参数 解释 -c 建立一个tar包或压缩包 -v 表示可视化 -f 指定压缩文件包名称 （多个参数组合的情况下，把f放在最后，紧跟压缩文件包名） -t 查看tar包里的内容 -z 指定gzip压缩 -j（小写） 指定bzip2压缩 -J（大写） 指定xz压缩 -x 解包或解压缩 –exclude filename 特殊用法，表示在打包或者压缩是，将该filename排除在外 常见用法：tar命令的参数经常连用，示例如下： 文件目录打包 -cvf 可视化打包目录test，指定文件名为test.tar -xvf 解包test.tar --exclude filename 特殊用法，将指定文建排除在外 当前目录的情况 打包压缩的情况 -tf 查看一下打包后的目录文件情况 文件打包并用gzip处理 -czvf 打包文件并使用gzip压缩 -zxvf 解压缩 .tar.gz 格式的文件 zcat 查看压缩包文件内容 注： zcat 用于不真正解压缩文件，就能显示压缩包中文件的内容的场合。 文件打包并用bzip2处理-cjvf 打包文件并使用bzip2压缩 -xjvf 解压缩 .tar.bz2 格式的文件 bzcat 不解压包查看内容 zip 压缩工具除了上述这些打包压缩工具，还需要考虑到在windows、linux、 mac下通用的打包压缩格式 .zip zip 工具centos默认没有，需要单独安装 yum install -y zip zip 工具的使用zip压缩命令行格式：zip [参数] [压缩包名称] [源文件或目录] 如果目录下有还有二级甚至多级目录，zip命令 不加参数时，仅仅会讲二级目录压缩； 如果想一并压缩二级目录及多级目录，有两种方法： 第一种方法：使用通配符 1zip test.zip test/* 第二种方法：使用 -r 参数 1zip -r test.zip test/ unzip 解压缩zip文件需要单独安装unzip 工具来解压，安装命令为 yum install -y unzip 命令行格式: unzip [filename] 看下这个帖子： http://ask.apelearn.com/question/5435]]></content>
+    <content type="text"><![CDATA[写在前面这则笔记书接上回，继续整理打包压缩软件的知识，主要涉及zip和 tar 两个工具。 tar 工具由于gzip、bzip2、xz三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是tar。 不仅如此，tar 强大之处在于，配合参数，可以打包压缩一起来。 命令行格式：tar [参数] [目标文件] [源文件或目录] 注： 目标文件 指的是打包后的文件名 源文件或目录 指的是需要打包的文件或目录 常用参数 参数 解释 -c 建立一个tar包或压缩包 -v 表示可视化 -f 指定压缩文件包名称 （多个参数组合的情况下，把f放在最后，紧跟压缩文件包名） -t 查看tar包里的内容 -z 指定gzip压缩 -j（小写） 指定bzip2压缩 -J（大写） 指定xz压缩 -x 解包或解压缩 –exclude filename 特殊用法，表示在打包或者压缩是，将该filename排除在外 常见用法：tar命令的参数经常连用，示例如下： 文件目录打包 -cvf 可视化打包目录test，指定文件名为test.tar -xvf 解包test.tar --exclude filename 特殊用法，将指定文建排除在外 当前目录的情况 打包压缩的情况 -tf 查看一下打包后的目录文件情况 文件打包并用gzip处理 -czvf 打包文件并使用gzip压缩 -zxvf 解压缩 .tar.gz 格式的文件 zcat 查看压缩包文件内容 注： zcat 用于不真正解压缩文件，就能显示压缩包中文件的内容的场合。 文件打包并用bzip2处理-cjvf 打包文件并使用bzip2压缩 -xjvf 解压缩 .tar.bz2 格式的文件 bzcat 不解压包查看内容 zip 压缩工具除了上述这些打包压缩工具，还需要考虑到在windows、linux、 mac下通用的打包压缩格式 .zip zip 工具centos默认没有，需要单独安装 yum install -y zip zip 工具的使用zip压缩命令行格式：zip [参数] [压缩包名称] [源文件或目录] 如果目录下有还有二级甚至多级目录，zip命令 不加参数时，仅仅会讲二级目录压缩； 如果想一并压缩二级目录及多级目录，有两种方法： 第一种方法：使用通配符 1zip test.zip test/* 第二种方法：使用 -r 参数 1zip -r test.zip test/ unzip 解压缩zip文件需要单独安装unzip 工具来解压，安装命令为 yum install -y unzip 命令行格式: unzip [filename] 补充知识点：超过4G的压缩包如何处理linux 的unzip命令处理4G以上的压缩包会报错，解决办法是换个压缩工具，使用7zip工具。 7zip 安装： 通过yum 直接安装： 12345yum install -y wget //先安装wget ，已经安装过的可以跳过这一步wget https://www.mirrorservice.org/sites/dl.fedoraproject.org/pub/epel/7/x86_64/Packages/p/p7zip-16.02-2.el7.x86_64.rpmsudo rpm -U --quiet p7zip-16.02-2.el7.x86_64.rpm 注：这个软件yum 木有，不信 yum list p7zip看下。 脚本安装： 下载 7zip 的安装包 执行以下命令安装： 123tar xjvf p7zip_xxx.tar.bz2cd p7zip_xxxsh install.sh 7zip使用：17za x [filename.zip] //解压文件]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -23,22 +23,22 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>zip</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[Linux运维学习笔记4-3：vim基础知识（二）]]></title>
     <url>%2F2018%2F04%2F09%2Fweek4-3-basisOfVIM-Part2%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记继续整理学习VIM用法，主要包括编辑模式、命令模式相关内容。 先把vim命令贴出来： 再把vim键位图贴出来： 进入VIM编辑模式 快捷键 解释 i 在当前字符插入 I 在光标所在行的行首插入 a 在光标后插入 A 在光标所在行的末尾插入 o 在当前行后插入新的一行 O 在当前行前插入新的一行 vim命令模式 快捷键 解释 /word 在光标之后查找关键词，如果存在多个匹配项，按n向后搜索 ?word 在光标之前查找关键词，如果存在多个匹配项，按n向前搜索 :1,$s/word1/word2/g 将文档中的word1替换为word2，不加g则只替换每行的第一个word1 :m,ns/word1/word2/g 将第m行和第n行之间的word1替换为word2，不加g则只替换每行的第一个word1 打开/保存/退出/改变文件 快捷键 解释 :e [path to file] 打开一个文件 :w 存盘 :saveas [path to file] 另存为 &lt;path/to/file&gt; :x、 ZZ 、:wq 保存并退出 (:x表示仅在需要时保存；ZZ不需要输入冒号并回车) :X 设置密码保存并退出，使用此命令后cat 该文件会显示乱码，再次打开需输入密码 :q! 退出不保存 :qa! 强行退出所有的正在编辑的文件，就算别的文件有更改。 :bn、 :bp 你可以同时打开很多文件，使用这两个命令来切换下一个或上一个文件。 vim使用常见问题如何解决代码自动缩进造成乱码解决思路： 方法一：命令模式，输入 :set noai nosi 方法二：paste模式 12:set paste :set nopaste putty, xshell连接linux，小键盘不能输入数字解决思路： 在putty上，选项Terminal-&gt;Features里，找到Disable application keypad mode，选中即可， 在xshell上，修改session 属性 -&gt; 终端-&gt;VT模式-&gt;初始数字键盘模式。 延伸阅读 vim的特殊用法 vim常用快捷键总结 vim快速删除一段字符]]></content>
+    <content type="text"><![CDATA[写在前面这则笔记继续整理学习VIM用法，主要包括编辑模式、命令模式相关内容。 先把vim命令贴出来： 再把vim键位图贴出来： 进入VIM编辑模式 快捷键 解释 i 在当前字符插入 I 在光标所在行的行首插入 a 在光标后插入 A 在光标所在行的末尾插入 o 在当前行后插入新的一行 O 在当前行前插入新的一行 vim命令模式 快捷键 解释 /word 在光标之后查找关键词，如果存在多个匹配项，按n向后搜索 ?word 在光标之前查找关键词，如果存在多个匹配项，按n向前搜索 :1,$s/word1/word2/g （难点）将文档中的word1替换为word2，不加g则只替换每行的第一个word1 :m,ns/word1/word2/g （难点）将第m行和第n行之间的word1替换为word2，不加g则只替换每行的第一个word1 打开/保存/退出/改变文件 快捷键 解释 :e [path to file] 打开一个文件 :w 存盘 :saveas [path to file] 另存为 &lt;path/to/file&gt; :x、 ZZ 、:wq 保存并退出 (:x表示仅在需要时保存；ZZ不需要输入冒号并回车) :X 设置密码保存并退出，使用此命令后cat 该文件会显示乱码，再次打开需输入密码 :q! 退出不保存 wq! 强制保存退出 :qa! 强行退出所有的正在编辑的文件，就算别的文件有更改。 :bn、 :bp 你可以同时打开很多文件，使用这两个命令来切换下一个或上一个文件。 vim使用常见问题如何解决代码自动缩进造成乱码解决思路： 方法一：命令模式，输入 :set noai nosi 方法二：paste模式 12:set paste :set nopaste putty, xshell连接linux，小键盘不能输入数字解决思路： 在putty上，选项Terminal-&gt;Features里，找到Disable application keypad mode，选中即可， 在xshell上，修改session 属性 -&gt; 终端-&gt;VT模式-&gt;初始数字键盘模式。 延伸阅读 vim的特殊用法 vim常用快捷键总结 vim快速删除一段字符]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -64,8 +64,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -78,8 +78,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>lvm</tag>
       </tags>
   </entry>
@@ -92,8 +92,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -105,8 +105,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -118,8 +118,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -131,8 +131,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -144,8 +144,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -157,8 +157,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -170,8 +170,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -183,8 +183,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -196,8 +196,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -209,8 +209,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -234,8 +234,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -247,8 +247,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>rescueMode</tag>
       </tags>
   </entry>
@@ -261,8 +261,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>putty</tag>
         <tag>xshell</tag>
         <tag>iterm2</tag>
@@ -277,8 +277,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>ip</tag>
       </tags>
   </entry>
@@ -291,8 +291,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -421,8 +421,8 @@
         <category>web</category>
       </categories>
       <tags>
-        <tag>http</tag>
         <tag>https</tag>
+        <tag>http</tag>
       </tags>
   </entry>
   <entry>
@@ -445,8 +445,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -582,8 +582,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
         <tag>bash</tag>
       </tags>
   </entry>

@@ -167,9 +167,9 @@
     <link href="https://steve-yuan-8276.github.io/2018/04/09/week4-3-basisOfVIM-Part2/"/>
     <id>https://steve-yuan-8276.github.io/2018/04/09/week4-3-basisOfVIM-Part2/</id>
     <published>2018-04-09T08:24:47.000Z</published>
-    <updated>2018-04-13T03:39:08.918Z</updated>
+    <updated>2018-04-13T08:10:04.801Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记继续整理学习VIM用法，主要包括编辑模式、命令模式相关内容。</p><ul><li>先把vim命令贴出来：</li></ul><p><img src="https://farm5.staticflickr.com/4783/39120869320_db56e0d91c_o.jpg" alt=""></p><ul><li>再把vim键位图贴出来：</li></ul><p><img src="https://farm1.staticflickr.com/798/27532370398_e3dac173f7_o.jpg" alt=""></p><h3 id="进入VIM编辑模式"><a href="#进入VIM编辑模式" class="headerlink" title="进入VIM编辑模式"></a>进入VIM编辑模式</h3><table><thead><tr><th>快捷键</th><th>解释</th></tr></thead><tbody><tr><td>i</td><td>在当前字符插入</td></tr><tr><td>I</td><td>在光标所在行的行首插入</td></tr><tr><td>a</td><td>在光标后插入</td></tr><tr><td>A</td><td>在光标所在行的末尾插入</td></tr><tr><td>o</td><td>在当前行后插入新的一行</td></tr><tr><td>O</td><td>在当前行前插入新的一行</td></tr></tbody></table><a id="more"></a><h3 id="vim命令模式"><a href="#vim命令模式" class="headerlink" title="vim命令模式"></a>vim命令模式</h3><table><thead><tr><th>快捷键</th><th>解释</th></tr></thead><tbody><tr><td><code>/word</code></td><td>在光标之后查找关键词，如果存在多个匹配项，按n向后搜索</td></tr><tr><td><code>?word</code></td><td>在光标之前查找关键词，如果存在多个匹配项，按n向前搜索</td></tr><tr><td><code>:1,$s/word1/word2/g</code></td><td>（难点）将文档中的word1替换为word2，不加g则只替换每行的第一个word1</td></tr><tr><td><code>:m,ns/word1/word2/g</code></td><td>（难点）将第m行和第n行之间的word1替换为word2，不加g则只替换每行的第一个word1</td></tr></tbody></table><h4 id="打开-保存-退出-改变文件"><a href="#打开-保存-退出-改变文件" class="headerlink" title="打开/保存/退出/改变文件"></a>打开/保存/退出/改变文件</h4><table><thead><tr><th>快捷键</th><th>解释</th></tr></thead><tbody><tr><td><code>:e [path to file]</code></td><td>打开一个文件</td></tr><tr><td><code>:w</code></td><td>存盘</td></tr><tr><td><code>:saveas [path to file]</code></td><td>另存为 &lt;path/to/file&gt;</td></tr><tr><td><code>:x</code>、 <code>ZZ</code> 、<code>:wq</code></td><td>保存并退出 (<code>:x</code>表示仅在需要时保存；<code>ZZ</code>不需要输入冒号并回车)</td></tr><tr><td><code>:X</code></td><td>设置密码保存并退出，使用此命令后cat 该文件会显示乱码，再次打开需输入密码</td></tr><tr><td><code>:q!</code></td><td>退出不保存 </td></tr><tr><td><code>wq!</code></td><td>强制保存退出</td></tr><tr><td><code>:qa!</code></td><td>强行退出所有的正在编辑的文件，就算别的文件有更改。</td></tr><tr><td><code>:bn</code>、 <code>:bp</code></td><td>你可以同时打开很多文件，使用这两个命令来切换下一个或上一个文件。</td></tr></tbody></table><h3 id="vim使用常见问题"><a href="#vim使用常见问题" class="headerlink" title="vim使用常见问题"></a>vim使用常见问题</h3><h4 id="如何解决代码自动缩进造成乱码"><a href="#如何解决代码自动缩进造成乱码" class="headerlink" title="如何解决代码自动缩进造成乱码"></a>如何解决代码自动缩进造成乱码</h4><h5 id="解决思路："><a href="#解决思路：" class="headerlink" title="解决思路："></a>解决思路：</h5><ul><li>方法一：命令模式，输入 <code>:set noai nosi</code></li><li></li><li>方法二：paste模式</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">:set paste </span><br><span class="line">:set nopaste</span><br></pre></td></tr></table></figure><h4 id="putty-xshell连接linux，小键盘不能输入数字"><a href="#putty-xshell连接linux，小键盘不能输入数字" class="headerlink" title="putty, xshell连接linux，小键盘不能输入数字"></a>putty, xshell连接linux，小键盘不能输入数字</h4><h5 id="解决思路：-1"><a href="#解决思路：-1" class="headerlink" title="解决思路："></a>解决思路：</h5><ul><li><p>在<code>putty</code>上，选项<code>Terminal</code>-&gt;<code>Features</code>里，找到<code>Disable application keypad mode</code>，选中即可，</p></li><li><p>在xshell上，修改<code>session 属性</code> -&gt; <code>终端</code>-&gt;<code>VT模式</code>-&gt;<code>初始数字键盘模式</code>。</p></li></ul><h3 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h3><ul><li><p><a href="http://www.apelearn.com/bbs/thread-9334-1-1.html" target="_blank" rel="noopener">vim的特殊用法</a> </p></li><li><p><a href="http://www.apelearn.com/bbs/thread-407-1-1.html" target="_blank" rel="noopener">vim常用快捷键总结</a> </p></li><li><p><a href="http://www.apelearn.com/bbs/thread-842-1-1.html" target="_blank" rel="noopener">vim快速删除一段字符</a> </p></li></ul>]]></content>
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记继续整理学习VIM用法，主要包括编辑模式、命令模式相关内容。</p><ul><li>先把vim命令贴出来：</li></ul><p><img src="https://farm5.staticflickr.com/4783/39120869320_db56e0d91c_o.jpg" alt=""></p><a id="more"></a><ul><li>再把vim键位图贴出来：</li></ul><p><img src="https://farm1.staticflickr.com/798/27532370398_e3dac173f7_o.jpg" alt=""></p><h3 id="进入VIM编辑模式"><a href="#进入VIM编辑模式" class="headerlink" title="进入VIM编辑模式"></a>进入VIM编辑模式</h3><table><thead><tr><th>快捷键</th><th>解释</th></tr></thead><tbody><tr><td>i</td><td>在当前字符插入</td></tr><tr><td>I</td><td>在光标所在行的行首插入</td></tr><tr><td>a</td><td>在光标后插入</td></tr><tr><td>A</td><td>在光标所在行的末尾插入</td></tr><tr><td>o</td><td>在当前行后插入新的一行</td></tr><tr><td>O</td><td>在当前行前插入新的一行</td></tr></tbody></table><h3 id="vim命令模式"><a href="#vim命令模式" class="headerlink" title="vim命令模式"></a>vim命令模式</h3><table><thead><tr><th>快捷键</th><th>解释</th></tr></thead><tbody><tr><td><code>/word</code></td><td>在光标之后查找关键词，如果存在多个匹配项，按n向后搜索</td></tr><tr><td><code>?word</code></td><td>在光标之前查找关键词，如果存在多个匹配项，按n向前搜索</td></tr><tr><td><code>:1,$s/word1/word2/g</code></td><td>（难点）将文档中的word1替换为word2，不加g则只替换每行的第一个word1</td></tr><tr><td><code>:m,ns/word1/word2/g</code></td><td>（难点）将第m行和第n行之间的word1替换为word2，不加g则只替换每行的第一个word1</td></tr></tbody></table><h4 id="打开-保存-退出-改变文件"><a href="#打开-保存-退出-改变文件" class="headerlink" title="打开/保存/退出/改变文件"></a>打开/保存/退出/改变文件</h4><table><thead><tr><th>快捷键</th><th>解释</th></tr></thead><tbody><tr><td><code>:e [path to file]</code></td><td>打开一个文件</td></tr><tr><td><code>:w</code></td><td>存盘</td></tr><tr><td><code>:saveas [path to file]</code></td><td>另存为 &lt;path/to/file&gt;</td></tr><tr><td><code>:x</code>、 <code>ZZ</code> 、<code>:wq</code></td><td>保存并退出 (<code>:x</code>表示仅在需要时保存；<code>ZZ</code>不需要输入冒号并回车)</td></tr><tr><td><code>:X</code></td><td>设置密码保存并退出，使用此命令后cat 该文件会显示乱码，再次打开需输入密码</td></tr><tr><td><code>:q!</code></td><td>退出不保存 </td></tr><tr><td><code>wq!</code></td><td>强制保存退出</td></tr><tr><td><code>:qa!</code></td><td>强行退出所有的正在编辑的文件，就算别的文件有更改。</td></tr><tr><td><code>:bn</code>、 <code>:bp</code></td><td>你可以同时打开很多文件，使用这两个命令来切换下一个或上一个文件。</td></tr></tbody></table><h3 id="vim使用常见问题"><a href="#vim使用常见问题" class="headerlink" title="vim使用常见问题"></a>vim使用常见问题</h3><h4 id="两个小窍门"><a href="#两个小窍门" class="headerlink" title="两个小窍门"></a>两个小窍门</h4><ul><li><p><code>vim +10 [filename]</code> ，即进入会光标自动跳转到第10行</p></li><li><p><code>bash</code> 命令 <code>!$</code> 自动重复上一条命令。</p></li></ul><h4 id="如何解决代码自动缩进造成乱码"><a href="#如何解决代码自动缩进造成乱码" class="headerlink" title="如何解决代码自动缩进造成乱码"></a>如何解决代码自动缩进造成乱码</h4><h5 id="解决思路："><a href="#解决思路：" class="headerlink" title="解决思路："></a>解决思路：</h5><ul><li><p>方法一：命令模式，输入 <code>:set noai nosi</code></p></li><li><p>方法二：paste模式</p></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">:set paste </span><br><span class="line">:set nopaste</span><br></pre></td></tr></table></figure><h4 id="putty-xshell连接linux，小键盘不能输入数字"><a href="#putty-xshell连接linux，小键盘不能输入数字" class="headerlink" title="putty, xshell连接linux，小键盘不能输入数字"></a>putty, xshell连接linux，小键盘不能输入数字</h4><h5 id="解决思路：-1"><a href="#解决思路：-1" class="headerlink" title="解决思路："></a>解决思路：</h5><ul><li><p>在<code>putty</code>上，选项<code>Terminal</code>-&gt;<code>Features</code>里，找到<code>Disable application keypad mode</code>，选中即可，</p></li><li><p>在xshell上，修改<code>session 属性</code> -&gt; <code>终端</code>-&gt;<code>VT模式</code>-&gt;<code>初始数字键盘模式</code>。</p></li></ul><h3 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h3><ul><li><p><a href="http://www.apelearn.com/bbs/thread-9334-1-1.html" target="_blank" rel="noopener">vim的特殊用法</a> </p></li><li><p><a href="http://www.apelearn.com/bbs/thread-407-1-1.html" target="_blank" rel="noopener">vim常用快捷键总结</a> </p></li><li><p><a href="http://www.apelearn.com/bbs/thread-842-1-1.html" target="_blank" rel="noopener">vim快速删除一段字符</a> </p></li></ul>]]></content>
     
     <summary type="html">
     
@@ -178,44 +178,6 @@
 &lt;li&gt;先把vim命令贴出来：&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&quot;https://farm5.staticflickr.com/4783/39120869320_db56e0d91c_o.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;再把vim键位图贴出来：&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;https://farm1.staticflickr.com/798/27532370398_e3dac173f7_o.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;h3 id=&quot;进入VIM编辑模式&quot;&gt;&lt;a href=&quot;#进入VIM编辑模式&quot; class=&quot;headerlink&quot; title=&quot;进入VIM编辑模式&quot;&gt;&lt;/a&gt;进入VIM编辑模式&lt;/h3&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;快捷键&lt;/th&gt;
-&lt;th&gt;解释&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;i&lt;/td&gt;
-&lt;td&gt;在当前字符插入&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;I&lt;/td&gt;
-&lt;td&gt;在光标所在行的行首插入&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;a&lt;/td&gt;
-&lt;td&gt;在光标后插入&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;A&lt;/td&gt;
-&lt;td&gt;在光标所在行的末尾插入&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;o&lt;/td&gt;
-&lt;td&gt;在当前行后插入新的一行&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;O&lt;/td&gt;
-&lt;td&gt;在当前行前插入新的一行&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
     
     </summary>
     

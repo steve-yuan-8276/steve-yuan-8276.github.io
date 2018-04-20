@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2018-04-18T10:18:31.233Z</updated>
+  <updated>2018-04-20T07:38:26.091Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux运维学习笔记：正则表达式基础</title>
+    <link href="https://steve-yuan-8276.github.io/2018/04/19/linuxNotes-BasisOfRegularExpression/"/>
+    <id>https://steve-yuan-8276.github.io/2018/04/19/linuxNotes-BasisOfRegularExpression/</id>
+    <published>2018-04-19T06:20:07.000Z</published>
+    <updated>2018-04-20T07:38:26.091Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>果然，不管是前端、后端，还是python，统统绕不开正则。这则笔记整理正则表达式的基础知识。</p><p>这则笔记是这本书的读书笔记，另有部分内容来自网络。</p><h3 id="什么是正则表达式-RegularExpression？"><a href="#什么是正则表达式-RegularExpression？" class="headerlink" title="什么是正则表达式 RegularExpression？"></a>什么是正则表达式 <code>RegularExpression</code>？</h3><p>正则表达式，以下简称‘正则’，英文名<code>RegularExpression</code>，是经过专门编写的文本字符串，用来匹配字符串（尤其是文件内字符串）。</p><p>正则的历史跟计算机的历史一样古老，不但在vi（vim）、grep及sed等Unix命令行工具中广泛应用，主流的编程语言，比如Python、Perl、Java、JavaScript、C#、Ruby等，都支持正则。</p><h3 id="正则基础"><a href="#正则基础" class="headerlink" title="正则基础"></a>正则基础</h3><h4 id="常用的正则基本语法"><a href="#常用的正则基本语法" class="headerlink" title="常用的正则基本语法"></a>常用的正则基本语法</h4><ul><li><code>[0-9]</code> <code>\d</code>  匹配0-9的任意数字；</li></ul><p><img src="https://farm1.staticflickr.com/881/27685927128_2429a3c7e7_o.png" alt=""></p><ul><li><code>\D</code> 匹配非数字字符，包括一些字符 <code>-</code>、 <code>%</code>；</li></ul><p><img src="https://farm1.staticflickr.com/868/41514813902_7a6b3a4d77_o.png" alt=""></p><ul><li><code>\w</code> <code>[a-z]</code> w小写，匹配任意单词字符</li></ul><p><img src="https://farm1.staticflickr.com/788/26687219147_d3d84c2ff8_o.png" alt=""></p><ul><li>‘\W’ W大写，匹配所有非单词字符；</li></ul><p><img src="https://farm1.staticflickr.com/852/27685918678_390f5965fb_o.png" alt=""></p><ul><li><code>\s</code> 匹配空白符，包括空格、制表符<code>\t</code>、换行符<code>\n</code>、回车符<code>\r</code></li></ul><p><img src="https://farm1.staticflickr.com/859/40844514604_6ac87a7805_o.png" alt=""></p><ul><li><code>\S</code> 匹配所有非空白符；</li></ul><p><img src="https://farm1.staticflickr.com/931/40844524634_b721e5ce69_o.png" alt=""></p><ul><li><code>.</code>通配符，可以匹配任意字符；</li></ul><p><img src="https://farm1.staticflickr.com/857/41555995511_8accbdb282_o.png" alt=""></p><ul><li><code>{n}</code> n为数字，表示匹配的对象出现的次数，跟其他的符号配合起来使用</li></ul><p><code>\w{4}</code>匹配任意4个连续的字符<br><img src="https://farm1.staticflickr.com/821/39747380600_c029715871_o.png" alt=""></p><ul><li><code>?</code> 表示连接词是可选的，比如 -? 表示连接符-可以有，也可以没有；</li></ul><p><img src="https://farm1.staticflickr.com/907/39747729640_06166784a2_o.png" alt=""></p><ul><li><code>+</code> 表示一个或多个；</li></ul><p>比如，<code>.+</code> 匹配一个或多个任意字符，通常匹配一行内容，不匹配换行符、回车符。</p><p><img src="https://farm1.staticflickr.com/905/40844727734_95321c2d4f_o.png" alt=""></p><ul><li><code>*</code> 表示0个或者多个；</li></ul><p>匹配0个或任意多个任意字符</p><p><img src="https://farm1.staticflickr.com/870/40663069785_25eddd8efd_o.png" alt=""></p><ul><li><code>\</code> 脱义符；</li></ul><p>比如，<code>\d</code> 匹配任意数字；  <code>\\d</code> 脱义后，特指<code>\d</code>这两个字符</p><p><img src="https://farm1.staticflickr.com/785/40845041734_0246842479_o.png" alt=""></p><ul><li><code>|</code> 选择符，表示从多个可选项中选择一个；</li></ul><p><img src="https://farm1.staticflickr.com/853/26706808937_5672796ceb_o.png" alt=""></p><ul><li><code>\b</code> 匹配单词的边界；</li></ul><p><code>\b</code> 自定边界，但它本身并不匹配任何字符，比如，匹配一个100以内的偶数</p><p><img src="https://farm1.staticflickr.com/859/41574954341_028686e95d_o.png" alt=""></p><p>匹配以A开头，后面跟5个字符，以T结尾的单词</p><p><img src="https://farm1.staticflickr.com/880/40844489374_da0872def2_o.png" alt=""></p><h4 id="字符组"><a href="#字符组" class="headerlink" title="字符组"></a>字符组</h4><p><code>[^ ]</code>字符组取反</p><ul><li><code>[\n]</code>表示匹配换行符； <code>[\n^]</code>取反，表示匹配除换行符以外的所有字符，跟 .* 结果一样。</li></ul><p><img src="https://farm1.staticflickr.com/870/40844705504_dfe7b9a2bb_o.png" alt=""></p><p>-<code>[^0-9]</code> 取反，非数字；</p><p><img src="https://farm1.staticflickr.com/809/40663391845_3703c0a122_o.png" alt=""></p><ul><li><code>[^a-z]</code> 取反，非字母；</li></ul><p><img src="https://farm1.staticflickr.com/882/41556356501_a151315bfc_o.png" alt=""></p><ul><li><code>[a-z&amp;&amp;[^e-n]]</code> 取a-z中间的字母，并将e-n排除</li></ul><p><img src="https://farm1.staticflickr.com/845/41575070431_1a17448dd7_o.png" alt=""></p><h3 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h3><ul><li><p>《学习正则表达式 》</p></li><li><p>《精通正则表达式（第3版）》</p></li><li><p>《正则表达式经典实例》</p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;果然，不管是前端、后端，还是python，统统绕不开正则。这则笔记整理正则表达式的基础知识。&lt;/p&gt;
+&lt;p&gt;这则笔记是这本书
+      
+    
+    </summary>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
+    
+    
+      <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux运维学习笔记5-5：shell基础知识（三）</title>
@@ -838,96 +868,6 @@
 &lt;p&gt;比如，在Linux系统中，用户密码保存在 &lt;code&gt;/etc/shadow&lt;/code&gt;  ，设置密码使用的命令是 &lt;code&gt;passwd&lt;/code&gt;，分别看一下这两者的权限&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://farm1.staticflickr.com/886/40358699654_292fe93e3c_o.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;由上图可知，&lt;code&gt;/etc/shadow&lt;/code&gt; 默认的权限为&lt;code&gt;000&lt;/code&gt;，&lt;code&gt;rwx&lt;/code&gt;权限都没有的，也不能执行相应的操作。但 &lt;code&gt;passwd&lt;/code&gt;赋予一个特殊权限，让我们在执行&lt;code&gt;passwd&lt;/code&gt;命令时，临时拥有 root 权限，从而可以修改密码。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
-    
-    
-      <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
-    
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux运维学习笔记2-3：文件及目录权限基础命令操作</title>
-    <link href="https://steve-yuan-8276.github.io/2018/03/22/week2-3-AccessToFileAndFolders/"/>
-    <id>https://steve-yuan-8276.github.io/2018/03/22/week2-3-AccessToFileAndFolders/</id>
-    <published>2018-03-22T09:42:06.000Z</published>
-    <updated>2018-04-02T14:26:02.768Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>今天主要总结的centos 系统文件、目录权限及其权限操作的相关命令。</p><h3 id="文件和目录权限"><a href="#文件和目录权限" class="headerlink" title="文件和目录权限"></a>文件和目录权限</h3><h4 id="文件主要类型"><a href="#文件主要类型" class="headerlink" title="文件主要类型"></a>文件主要类型</h4><table><thead><tr><th>名称</th><th>释义</th></tr></thead><tbody><tr><td>d</td><td>目录</td></tr><tr><td>-</td><td>普通文件</td></tr><tr><td>l</td><td>链接文件</td></tr><tr><td>b</td><td>块设备，例如存盘分区文件 <code>/dev/sda</code></td></tr><tr><td>c</td><td>串行端口设备文件，例如鼠标、键盘、打印机、tty终端</td></tr><tr><td>s</td><td>嵌套字文件，用于进程通讯</td></tr></tbody></table><h4 id="3种权限"><a href="#3种权限" class="headerlink" title="3种权限"></a>3种权限</h4><table><thead><tr><th>名称</th><th>权限名称</th><th>数字描述</th><th>解释</th></tr></thead><tbody><tr><td>r</td><td>读权限（read）</td><td>4</td><td>可以打开文件、目录读取查看；</td></tr><tr><td>w</td><td>写权限（write）</td><td>2</td><td>对文件、目录可以编写更改</td></tr><tr><td>x</td><td>执行权限（execute）</td><td>1</td><td>对文件可执行(可执行文件)、对目录可查找该目录下的内容</td></tr></tbody></table><a id="more"></a><h4 id="权限所属对象"><a href="#权限所属对象" class="headerlink" title="权限所属对象"></a>权限所属对象</h4><table><thead><tr><th>名称</th><th>权限名称</th><th>解释</th></tr></thead><tbody><tr><td> u</td><td>用户（user）</td><td>生成文件或目录时登录的当前用户</td></tr><tr><td> g</td><td>组（group）</td><td>所属群组</td></tr><tr><td> 0</td><td>其他人（others）</td><td>除拥有者，同组人以外的人</td></tr><tr><td> a</td><td>所有人（all）</td><td>包括拥有者、同组人及其他人</td></tr></tbody></table><h4 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h4><p><img src="https://farm1.staticflickr.com/786/40923428912_a61aa9c98b_o.jpg" alt=""></p><p>如图所示，可分为7个部分：</p><h5 id="1-代表这个文件的类型与权限-permission-，例如第一行-rw-r-r-，包含的信息包括："><a href="#1-代表这个文件的类型与权限-permission-，例如第一行-rw-r-r-，包含的信息包括：" class="headerlink" title="1. 代表这个文件的类型与权限(permission)，例如第一行-rw-r--r--.，包含的信息包括："></a>1. 代表这个文件的类型与权限(permission)，例如第一行<code>-rw-r--r--.</code>，包含的信息包括：</h5><ul><li><p>第1位 <code>-</code> 表示这是一个普通文档；</p></li><li><p>第2位至第10位<code>rw-r--r--</code>，按照数字表示，也可以写为644。</p></li><li><p>第11位<code>.</code> ，在centos5之前是没有这一位的；之后的版本（centos6、centos7）如果使用了SElinux content属性，这里是 <code>.</code>；如果使用了acl属性，这里是<code>+</code></p></li></ul><h5 id="2-表示有多少档名连结到此节点-i-node-；"><a href="#2-表示有多少档名连结到此节点-i-node-；" class="headerlink" title="2. 表示有多少档名连结到此节点(i-node)；"></a>2. 表示有多少档名连结到此节点(i-node)；</h5><h5 id="3-表示这个文件-或目录-的拥有者账号；"><a href="#3-表示这个文件-或目录-的拥有者账号；" class="headerlink" title="3. 表示这个文件(或目录)的拥有者账号；"></a>3. 表示这个文件(或目录)的拥有者账号；</h5><h5 id="4-表示这个文件的所属群组；"><a href="#4-表示这个文件的所属群组；" class="headerlink" title="4. 表示这个文件的所属群组；"></a>4. 表示这个文件的所属群组；</h5><h5 id="5-表示这个文件的容量大小，默认单位为bytes；"><a href="#5-表示这个文件的容量大小，默认单位为bytes；" class="headerlink" title="5. 表示这个文件的容量大小，默认单位为bytes；"></a>5. 表示这个文件的容量大小，默认单位为bytes；</h5><h5 id="6-表示这个文件的创建日期或最近修改日期；"><a href="#6-表示这个文件的创建日期或最近修改日期；" class="headerlink" title="6. 表示这个文件的创建日期或最近修改日期；"></a>6. 表示这个文件的创建日期或最近修改日期；</h5><h5 id="7-表示这个文件的名字；"><a href="#7-表示这个文件的名字；" class="headerlink" title="7. 表示这个文件的名字；"></a>7. 表示这个文件的名字；</h5><h3 id="更改文件所属组及用户名"><a href="#更改文件所属组及用户名" class="headerlink" title="更改文件所属组及用户名"></a>更改文件所属组及用户名</h3><h4 id="chgrp-更改所属组（change-group）"><a href="#chgrp-更改所属组（change-group）" class="headerlink" title="chgrp  更改所属组（change group）"></a>chgrp  更改所属组（change group）</h4><p>命令行格式： <code>chgrp [组名] [文件名/目录名]</code></p><h5 id="更改文件所属组"><a href="#更改文件所属组" class="headerlink" title="更改文件所属组"></a>更改文件所属组</h5><p>命令行格式： <code>chgrp [组名] [文件名]</code></p><p>如下图所示，所属组由 <code>root</code>改为<code>test-1-group</code></p><p><img src="https://farm1.staticflickr.com/788/40072167445_23485bbd1e_o.png" alt=""></p><h5 id="更改目录所属组"><a href="#更改目录所属组" class="headerlink" title="更改目录所属组"></a>更改目录所属组</h5><p>命令行格式： <code>chgrp [组名] [目录名]</code></p><p>默认只更改目录所属组，如下图所示，文件夹a1所属组已经由<code>root</code> 改为 <code>test-1-group</code>；而文件夹 <code>a1</code>中的<code>b2</code> 所属组仍为 <code>root</code>，并未改变。</p><p><img src="https://farm5.staticflickr.com/4786/26094089267_bce206c3e3_o.png" alt=""></p><p>如果希望一次性都改掉，则需要使用参数 <code>-R</code>  ，格式为 <code>chgrp -R [所属组] [目录名]</code></p><p><img src="https://farm1.staticflickr.com/817/40966123091_20599b2c30_o.png" alt=""></p><p><strong>注：</strong>配图命令有点问题，应该是 <code>chgrp - R test-1-group a1</code></p><h4 id="chown-更改所有者和所属组"><a href="#chown-更改所有者和所属组" class="headerlink" title="chown 更改所有者和所属组"></a>chown 更改所有者和所属组</h4><p>chown (change owner) 既可以更改文件所有者，也可以连同所属组一起更改。具体用法：</p><h5 id="更改所有者：chown-用户名-文件名"><a href="#更改所有者：chown-用户名-文件名" class="headerlink" title="更改所有者：chown [用户名] [文件名]"></a>更改所有者：<code>chown [用户名] [文件名]</code></h5><p><img src="https://farm1.staticflickr.com/787/27153315418_ce768e280c_o.png" alt=""></p><h5 id="同时更改所有者和所属组：-chown-R-用户名：组名-文件名或目录名"><a href="#同时更改所有者和所属组：-chown-R-用户名：组名-文件名或目录名" class="headerlink" title="同时更改所有者和所属组： chown [ -R ] [用户名：组名] [文件名或目录名]"></a>同时更改所有者和所属组： <code>chown [ -R ] [用户名：组名] [文件名或目录名]</code></h5><p><img src="https://farm1.staticflickr.com/800/40131059235_46bca59141_o.png" alt=""></p><h3 id="更改文件权限"><a href="#更改文件权限" class="headerlink" title="更改文件权限"></a>更改文件权限</h3><h4 id="chmod-更改文件权限"><a href="#chmod-更改文件权限" class="headerlink" title="chmod 更改文件权限"></a>chmod 更改文件权限</h4><h5 id="第一种方式：命令格式：chmod-R-number-文件名或目录"><a href="#第一种方式：命令格式：chmod-R-number-文件名或目录" class="headerlink" title="第一种方式：命令格式：chmod [ -R ] [number ] [文件名或目录]"></a>第一种方式：命令格式：<code>chmod [ -R ] [number ] [文件名或目录]</code></h5><p>如前文所述，在描述文件权限的时候，可以用4代表r（read）、2代表w（write）、x代表 execute（执行）；</p><p>在linux中，目录的默认权限为755，即（<code>user:rwx</code>；<code>group:rx</code>；<code>others:rx</code>）；文件的默认权限为644 ，即（<code>user:rw</code>；<code>group:r</code>；<code>others:r</code>）</p><p>这里的<code>-R</code> 是可选项，表示级联修改，<code>chmod [ -R ] [number ] [目录]</code> ， 不但会更改目录权限，连同目录下的文件权限也一并更改。</p><h5 id="第二种方式：针对某个分组设置权限"><a href="#第二种方式：针对某个分组设置权限" class="headerlink" title="第二种方式：针对某个分组设置权限"></a>第二种方式：针对某个分组设置权限</h5><p>文件所有者：<code>chmod u+x a1/1.txt</code></p><p><img src="https://farm1.staticflickr.com/784/40131521215_0f53f2e6cd_o.png" alt=""></p><p>文件所属组：<code>chmod o=rwx a1/1.txt</code></p><p><img src="https://farm1.staticflickr.com/819/27153741948_d45a591c08_o.png" alt=""></p><p>其他用户：<code>chmod o-x a1/1.txt</code></p><p><img src="https://farm1.staticflickr.com/791/27153813428_7a76d17e4e_o.png" alt=""></p><p>所有用户：<code>chmod a+x a1/1.txt</code></p><p><img src="https://farm1.staticflickr.com/807/40316354744_02eb9dd508_o.png" alt=""></p><p>注意：a代表all（所有组别用户）</p><h4 id="umask-文件默认权限"><a href="#umask-文件默认权限" class="headerlink" title="umask 文件默认权限"></a>umask 文件默认权限</h4><p><strong>WARNING： 一般不用修改文件默认权限，因此这一小节仅作为了解内容。</strong></p><p>默认情况下，目录的权限为755，即 <code>rwxr-xr-x</code> ;默认普通文件的权限为644，即 <code>rw-r--r--</code> ；</p><p>输入 <code>umask</code> ，可以查询默认权限；root账户的默认值为root账户为<code>0022</code>，一般用户为<code>0002</code>。以root用户为例，是将数字转为rwx，之后再“减去”相应的全选。具体而言，</p><ul><li><p>第一位表示这是一个八进位制数字，没有特别含义，不用管它；</p></li><li><p>此时文件夹权限为777 - 022 = 755，即<code>rwxrwxrwx</code> - <code>----w--w-</code> = <code>rwxr-xr-x</code> </p></li><li><p>此时文件权限为666 - 022 = 644 ，即<code>rw-rw-rw-</code> - <code>----w--w-</code> = <code>rw- r--r--</code></p></li></ul><p>文件默认权限，可以通过 <code>umask [number]</code>来更改,方法参照前面的例子即可。</p><h3 id="修改文件的特殊权限"><a href="#修改文件的特殊权限" class="headerlink" title="修改文件的特殊权限"></a>修改文件的特殊权限</h3><h4 id="chatrr-命令"><a href="#chatrr-命令" class="headerlink" title="chatrr 命令"></a>chatrr 命令</h4><p>命令格式 <code>chatrr [ +-= ] [ 参数 ] [文件或目录名]</code></p><h5 id="常见参数用法"><a href="#常见参数用法" class="headerlink" title="常见参数用法"></a>常见参数用法</h5><table><thead><tr><th>命令</th><th>含义</th></tr></thead><tbody><tr><td>A</td><td>文件或目录的atime不可修改</td></tr><tr><td>a</td><td>只能追加不能删除，非root用户不能设定该属性</td></tr><tr><td>s</td><td>会将数据同步写入磁盘</td></tr><tr><td>c</td><td>自动压缩文件，读取时自动解压</td></tr><tr><td>i</td><td>不能删除、重命名、设定链接、编辑写入及新增数据</td></tr></tbody></table><h5 id="常用用法示例"><a href="#常用用法示例" class="headerlink" title="常用用法示例"></a>常用用法示例</h5><h6 id="a-用法"><a href="#a-用法" class="headerlink" title="a 用法"></a><code>a</code> 用法</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># touch a.txt</span><br><span class="line"># ls</span><br><span class="line">anaconda-ks.cfg  a.txt</span><br><span class="line"># chattr +a a.txt</span><br><span class="line"># rm -rf a.txt</span><br><span class="line">rm: cannot remove ‘a.txt’: Operation not permitted //不可删除</span><br><span class="line"># echo &apos;this is a test&apos; &gt;&gt; a.txt  //只能追加内容</span><br><span class="line"># cat a.txt</span><br><span class="line">this is a test</span><br></pre></td></tr></table></figure><p><strong>注：</strong>删除<code>a</code>权限用 <code>chattr -a a.txt</code></p><h6 id="i-用法"><a href="#i-用法" class="headerlink" title="i 用法"></a><code>i</code> 用法</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> # touch b.txt</span><br><span class="line"> # ls</span><br><span class="line">anaconda-ks.cfg  b.txt</span><br><span class="line"> # chattr +i b.txt</span><br><span class="line"> # rm -rf b.txt     //不可删除</span><br><span class="line">rm: cannot remove ‘b.txt’: Operation not permitted</span><br><span class="line"> # echo &apos;this is a test&apos; &gt; b.txt    //不可编辑写入</span><br><span class="line">-bash: b.txt: Permission denied</span><br><span class="line"> # echo &apos;this is a test&apos; &gt;&gt; b.txt     //不可追加内容</span><br><span class="line">-bash: b.txt: Permission denied</span><br></pre></td></tr></table></figure><p><strong>注：</strong>删除<code>i</code>权限 用<code>chattr -i b.txt</code></p><h4 id="lsattr-命令"><a href="#lsattr-命令" class="headerlink" title="lsattr 命令"></a>lsattr 命令</h4><p><code>lsattr</code> 用来读取文件或目录的特殊权限，命令格式为 <code>lsattr [ 参数 ] [文件或目录名]</code></p><table><thead><tr><th>参数</th><th>含义</th></tr></thead><tbody><tr><td>a</td><td>类似于<code>ls -a</code>  ，表示连同隐藏文件一起列出</td></tr><tr><td>R</td><td>连同子目录的信息一起列出</td></tr></tbody></table><p>举个栗子</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> # mkdir c1 </span><br><span class="line"> # lsattr c1    // c1是刚刚创建的一个空文件夹，因此里面没有文件，不会又显示</span><br><span class="line"> # lsattr -aR c1  //连同隐藏文件一起显示</span><br><span class="line">---------------- c1/.</span><br><span class="line">---------------- c1/..</span><br></pre></td></tr></table></figure><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul><li><p><a href="https://www.iwwenbo.com/linux-file-dir-chmod-chown/" target="_blank" rel="noopener">Linux更改文件及目录权限</a></p></li><li><p><a href="https://www.jianshu.com/p/37248be468f1" target="_blank" rel="noopener">linux文件目录权限</a></p></li><li><p><a href="http://blog.51cto.com/yuan2/93318" target="_blank" rel="noopener">Linux下文件及目录普通权限</a></p></li><li><p><a href="http://www.178linux.com/83210" target="_blank" rel="noopener">linux用户组和权限管理</a></p></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;今天主要总结的centos 系统文件、目录权限及其权限操作的相关命令。&lt;/p&gt;
-&lt;h3 id=&quot;文件和目录权限&quot;&gt;&lt;a href=&quot;#文件和目录权限&quot; class=&quot;headerlink&quot; title=&quot;文件和目录权限&quot;&gt;&lt;/a&gt;文件和目录权限&lt;/h3&gt;&lt;h4 id=&quot;文件主要类型&quot;&gt;&lt;a href=&quot;#文件主要类型&quot; class=&quot;headerlink&quot; title=&quot;文件主要类型&quot;&gt;&lt;/a&gt;文件主要类型&lt;/h4&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;名称&lt;/th&gt;
-&lt;th&gt;释义&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;d&lt;/td&gt;
-&lt;td&gt;目录&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;-&lt;/td&gt;
-&lt;td&gt;普通文件&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;l&lt;/td&gt;
-&lt;td&gt;链接文件&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;b&lt;/td&gt;
-&lt;td&gt;块设备，例如存盘分区文件 &lt;code&gt;/dev/sda&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;c&lt;/td&gt;
-&lt;td&gt;串行端口设备文件，例如鼠标、键盘、打印机、tty终端&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;s&lt;/td&gt;
-&lt;td&gt;嵌套字文件，用于进程通讯&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h4 id=&quot;3种权限&quot;&gt;&lt;a href=&quot;#3种权限&quot; class=&quot;headerlink&quot; title=&quot;3种权限&quot;&gt;&lt;/a&gt;3种权限&lt;/h4&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;名称&lt;/th&gt;
-&lt;th&gt;权限名称&lt;/th&gt;
-&lt;th&gt;数字描述&lt;/th&gt;
-&lt;th&gt;解释&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;r&lt;/td&gt;
-&lt;td&gt;读权限（read）&lt;/td&gt;
-&lt;td&gt;4&lt;/td&gt;
-&lt;td&gt;可以打开文件、目录读取查看；&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;w&lt;/td&gt;
-&lt;td&gt;写权限（write）&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;对文件、目录可以编写更改&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;x&lt;/td&gt;
-&lt;td&gt;执行权限（execute）&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;对文件可执行(可执行文件)、对目录可查找该目录下的内容&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
     
     </summary>
     

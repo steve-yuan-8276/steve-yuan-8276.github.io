@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Linux运维学习笔记：正则之grep]]></title>
+    <url>%2F2018%2F04%2F20%2Fweek6-1-basisOfRegEx-part1%2F</url>
+    <content type="text"><![CDATA[写在前面从这则笔记开始，分3节课整理linux下正则表达式的用法，主要涉及grep、sed、awk三个命令。 正则，就是一种文本处理的方法，这里有一些正则的基础知识。 正则表达式基础正则表达式元字符 表达式 描述 . 匹配单个任意字符 [] 匹配指定范围内的任意单个字符,比如[abc],[a-z],[0-9],[a-zA-Z] [^] 匹配指定范围外的任意单个字符 [:space:] 匹配空白字符 [:punct:] 匹配所有标点符号的集合 [a-z]或 [:lower:] 匹配所有的小写字母 [A-Z]或 [:upper:] 匹配所有的大写字母 [a-zA-Z]或 [:alpha:] 匹配大小写字母 [0-9]或 [:digit:] 匹配数字 [0-9a-zA-Z]或 [:alnum:] 匹配数字和大小写字母 匹配次数 表达式 描述 * 匹配其前面的字符任意次，比如.*匹配任意字符任意次数 \? 匹配其前面的字符1次或0次 \{m,n\} 匹配其前字符最少m，最多n次） 字符锚定 表达式 描述 ^ 锚定行首，此字符后面的任意内容必须出现在行首 $ 锚定行尾，此字符前面的任意内容必须出现在行尾 ^$ 锚定空白行，可以统计空白行 \&lt;或\b 锚定词首，其后面的任意字符必须做为单词首部出现 \&gt;或\b 锚定词尾，其前面的任意字符必须做为单词尾部出现 拓展正则表达式相比于基础正则表达式，拓展正则表达式的不同之处主要在于以下几点： 在匹配次数方面，加入了 + ，表示匹配字符出现一次或多次； 基本正则表达式，使用( ) { } . ? |都需要转义,在扩展正则表达中不需要加转义符 \ |表示或者的意思。 grep和egrep 命令grep用法grep是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。 命令行格式：grep [参数] [关键词] [filename] 常用参数 用法 -c 打印符合要求的行数 -i 忽略大小写 -n 输出符合要求的行及行号 -v 打印不符合要求的行 -A n n 为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 常见用法 匹配带有关键词的行，并输出行号 grep -n &#39;keyword&#39; 匹配不带有关键词的行，并输出行号 grep -v &#39;keyword&#39; 匹配包括数字的行 grep &#39;[0-9]&#39; 匹配不包括数字的行 grep -v &#39;[0-9]&#39; 匹配大写字母 grep [A-Z] 或 grep [[:upper:]] 匹配单行包含空格的内容 grep [[:space:]] 匹配单行包含标点符号的内容 grep [[:punct:]] 匹配单行包含数字和大小写字母的内容 grep [0-9a-z-A-Z]或grep [[:alnum:]] 匹配所有以#开头的行，并显示行号 grep -n &#39;^#&#39; 注：包括空行。 匹配所有的非空行和不以#开头的行 grep -vn &#39;^#&#39; 匹配任意一个字符 grep -n &#39;ro.t&#39; .表示任意字符 12[root@stevey ~]# cat a.txt | grep -n &apos;ro.t&apos;3:root:x:0:0:root:/root:/bin/bash 匹配任意多个字符 .* 表示0个或多个任意字符； 匹配特定重复次数的字符 此处需要用{}，其中为数字，表示为{n} 或{m, n}。其中 {n}表示特定次数；{m, n} 表示范围，m &lt; n 注：{}前后都要使用转义符号\ {n}表示特定次数 {m,n} 表示范围，m &lt; n n可以省略，表示m以上 m也可以省略，表示n次及以下 ABC特殊参数用法 -A n n为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 egrep 命令： grep 命令的升级版egrep 是 grep 的升级版，使用拓展式的正则表达式，与grep -E的效果相同。 + 匹配一个或多个字符 ? 匹配0个或1个字符 | 表示或者，表示二选一或者多选一，满足其中一个就可以 （）表示一个整体， 比如(oo)+ 匹配oo 出现一次或一次以上]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>regularExpression</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Linux运维学习笔记：正则表达式基础]]></title>
     <url>%2F2018%2F04%2F19%2FlinuxNotes-BasisOfRegularExpression%2F</url>
     <content type="text"><![CDATA[写在前面果然，不管是前端、后端，还是python，统统绕不开正则。这则笔记整理正则表达式的基础知识。 这则笔记是这本书的读书笔记，另有部分内容来自网络。 什么是正则表达式 RegularExpression？正则表达式，以下简称‘正则’，英文名RegularExpression，是经过专门编写的文本字符串，用来匹配字符串（尤其是文件内字符串）。 正则的历史跟计算机的历史一样古老，不但在vi（vim）、grep及sed等Unix命令行工具中广泛应用，主流的编程语言，比如Python、Perl、Java、JavaScript、C#、Ruby等，都支持正则。 正则基础常用的正则基本语法 [0-9] \d 匹配0-9的任意数字； \D 匹配非数字字符，包括一些字符 -、 %； \w [a-z] w小写，匹配任意单词字符 ‘\W’ W大写，匹配所有非单词字符； \s 匹配空白符，包括空格、制表符\t、换行符\n、回车符\r \S 匹配所有非空白符； .通配符，可以匹配任意字符； {n} n为数字，表示匹配的对象出现的次数，跟其他的符号配合起来使用 \w{4}匹配任意4个连续的字符 ? 表示连接词是可选的，比如 -? 表示连接符-可以有，也可以没有； + 表示一个或多个； 比如，.+ 匹配一个或多个任意字符，通常匹配一行内容，不匹配换行符、回车符。 * 表示0个或者多个； 匹配0个或任意多个任意字符 \ 脱义符； 比如，\d 匹配任意数字； \\d 脱义后，特指\d这两个字符 | 选择符，表示从多个可选项中选择一个； \b 匹配单词的边界； \b 自定边界，但它本身并不匹配任何字符，比如，匹配一个100以内的偶数 匹配以A开头，后面跟5个字符，以T结尾的单词 字符组[^ ]字符组取反 [\n]表示匹配换行符； [\n^]取反，表示匹配除换行符以外的所有字符，跟 .* 结果一样。 -[^0-9] 取反，非数字； [^a-z] 取反，非字母； [a-z&amp;&amp;[^e-n]] 取a-z中间的字母，并将e-n排除 延伸阅读 《学习正则表达式 》 《精通正则表达式（第3版）》 《正则表达式经典实例》]]></content>
@@ -30,7 +43,7 @@
   <entry>
     <title><![CDATA[Linux运维学习笔记5-4：shell基础知识（二）]]></title>
     <url>%2F2018%2F04%2F17%2Fweek5-4-basisOfShellPart2%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记接着整理shell基础知识，主要涉及管道符、作业控制，以及环境变量方面的知识。 管道符和作业控制| 管道符用于将前一条指令的输出作为后一条指令的输入示例： wc命令用来统计指定文件中的字节数、字数、行数，并将统计结果显示输出。常见参数-c表示字节数；-l表示行数。与wc连用，可以实现统计的效果。 12345[root@stevey ~]# cat /etc/passwd | wc -l //统计passwd一共有多少行21[root@stevey ~]# ll | wc -l //统计当前目录下一共有多少文件12 grep命令是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。 作业控制指的是在shell运行当中的过程控制，主要包括： 暂停：ctrl + Z 前台恢复：fg （指的是foreground） 后台运行：bg （指的是background） 撤销：ctrl + c （这个最常用，尤其是输错命令的时候） 练习环节： 实验了一下教材练习，有几个需要注意的点： 当有两个以上的任务都被暂停的时候，bash 会给暂停的任务编号。此时，输入 jobs 可查看；切换任务使用 fg n，其中 n 为任务编号。 把&amp;放在命令后面就会显示该任务的pid，如果要结束任务，使用kill + pid 12345678910[root@stevey ~]# vmstat 1 &gt; a.txt &amp;[3] 76388[root@stevey ~]# kill 76388 //结束该任务[root@stevey ~]# ps //ps命令查询当前进程 PID TTY TIME CMD 993 pts/0 00:00:00 bash 76367 pts/0 00:00:00 vi 76368 pts/0 00:00:00 vmstat 76389 pts/0 00:00:00 ps[3] Terminated vmstat 1 &gt; a.txt //这就是刚才被结束的进程 shell变量变量，可以理解为通过一些比较简单的字符来替代某些具有特殊意义的设定或者数据。比如，因为有了PATH变量，查看目录的时候，只需要ls即可。 系统环境变量都存在哪里？系统级配置文件：注：对系统级配置的更改会影响到所有用户； 文件名 特性 包含内容 /etc/profile login shell 该文件预置了PATH、USER、LOGNAME、MAIL、INPUTRC、HOSTNAME、HISTSIZE、umask /etc/bashrc no-login shell 该文件预设umask，以及PS1；PS1的格式为[user@hostname dir]# user是用户名；hostname是主机名；dir是当前目录；$是一个特殊字符，root用户此处是# /etc/profile 与 /etc/bashrc的区别 /etc/profile 是login shell，通过终端输入用户名和密码进入到terminal，此时进入的shell环境就是login shell，例如，通过ssh远程进入到主机。因此，通过login shell运行的shell命令放入到.bash_profile中。 /etc/bashrc是no-login shell，不需要输入用户名密码而进入的shell环境，通过gnome,KDE等桌面环境进入终端，此时进入的shell环境就是no-login shell。因此，通过no-login shell运行的shell命令放入到.bashrc文件中。 Mac OS系统中，每次运行terminal，系统会默认运行一个login shell环境，因此mac系统配置都在/etc/profile和.bash_profile这两个文件中，一般安全起见，修改当前目录下的.bash_profile就可以了。 延伸阅读： .bashrc和.bash_profile之间的不同 关于“.bash_profile”和“.bashrc”区别的总结 用户级别配置文件：注： 用户级别的配置文件都是隐藏文件，以 . 开头，如果没有，可以新建； 对这里的配置文件进行修改，只会影响当前用户。 文件名 包含内容 .bash_profile 定义当前用户个人华路径及环境变量的文件名称，当用户登陆时，该文件仅执行一次 .bashrc 专属用户的shell的bash信息，可将别名、自定义变量写在这里，当登陆或每次打开新的shell，该文件都会被读取 .bash_history 记录命令历史 .bash_logout 当退出shell时，该文件会被执行 如何查看变量？ env 显示及设置用户变量变量 变量名 含义 HOSTNAME 主机名称 SHELL 当前的shell HISTSIZE 执行命令的历史记录数量，默认是1000条 PATH 表示shell将到那些目录查找命令或程序 PWD 当前目录 LANG 与语言相关的环境变量 HOME 当前用户家目录 LOGNAME 当前用户登录名 set :显示及设置shell变量 包括的私有变量以及用户变量，不同类的shell有不同的私有变量 bash,ksh,csh每中shell私有变量都不一样。 echo $[变量名] 查看某个变量的值 1234[root@stevey ~]# echo $PATH/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin[root@stevey ~]# echo $HOSTNAMEstevey 关于变量的规定 变量格式 a=b , 其中a为变量名，b为变量内容，等号两边不允许有空格； 变量名只能由字母、数字及下划线组成，且不能以数字开头； 当变量内容含有特殊字符，需要做特殊处理，具体见下表： 变量内容 符号 示例 特殊字符（以空格） 使用单引号 myname=’steve yuan’ 变量内容本身有单引号 使用双引号 mac=”steve’mac” 变量内容需要用到其他命令 使用反引号（tab键上面的那个键） hotkey=’pwd’ 变量累加其他变量的内容 使用双引号 myname=”$LOGNAME”Steve]]></content>
+    <content type="text"><![CDATA[写在前面这则笔记接着整理shell基础知识，主要涉及管道符、作业控制，以及环境变量方面的知识。 管道符和作业控制| 管道符用于将前一条指令的输出作为后一条指令的输入示例： wc命令用来统计指定文件中的字节数、字数、行数，并将统计结果显示输出。常见参数-c表示字节数；-l表示行数。与wc连用，可以实现统计的效果。 12345[root@stevey ~]# cat /etc/passwd | wc -l //统计passwd一共有多少行21[root@stevey ~]# ll | wc -l //统计当前目录下一共有多少文件12 grep命令是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。 作业控制指的是在shell运行当中的过程控制，主要包括： 暂停：ctrl + Z 前台恢复：fg （指的是foreground） 后台运行：bg （指的是background） 撤销：ctrl + c （这个最常用，尤其是输错命令的时候） 练习环节： 实验了一下教材练习，有几个需要注意的点： 当有两个以上的任务都被暂停的时候，bash 会给暂停的任务编号。此时，输入 jobs 可查看；切换任务使用 fg n，其中 n 为任务编号。 使用&amp;，命令在后台运行，就会显示该任务的pid，如果要结束任务，使用kill + pid 12345678910[root@stevey ~]# vmstat 1 &gt; a.txt &amp;[3] 76388[root@stevey ~]# kill 76388 //结束该任务[root@stevey ~]# ps //ps命令查询当前进程 PID TTY TIME CMD 993 pts/0 00:00:00 bash 76367 pts/0 00:00:00 vi 76368 pts/0 00:00:00 vmstat 76389 pts/0 00:00:00 ps[3] Terminated vmstat 1 &gt; a.txt //这就是刚才被结束的进程 shell变量变量，可以理解为通过一些比较简单的字符来替代某些具有特殊意义的设定或者数据。比如，因为有了PATH变量，查看目录的时候，只需要ls即可。 系统环境变量都存在哪里？系统级配置文件：注：对系统级配置的更改会影响到所有用户； 文件名 特性 包含内容 /etc/profile login shell 该文件预置了PATH、USER、LOGNAME、MAIL、INPUTRC、HOSTNAME、HISTSIZE、umask /etc/bashrc no-login shell 该文件预设umask，以及PS1；PS1的格式为[user@hostname dir]# user是用户名；hostname是主机名；dir是当前目录；$是一个特殊字符，root用户此处是# /etc/profile 与 /etc/bashrc的区别 /etc/profile 是login shell，通过终端输入用户名和密码进入到terminal，此时进入的shell环境就是login shell，例如，通过ssh远程进入到主机。因此，通过login shell运行的shell命令放入到.bash_profile中。 /etc/bashrc是no-login shell，不需要输入用户名密码而进入的shell环境，通过gnome,KDE等桌面环境进入终端，此时进入的shell环境就是no-login shell。因此，通过no-login shell运行的shell命令放入到.bashrc文件中。 Mac OS系统中，每次运行terminal，系统会默认运行一个login shell环境，因此mac系统配置都在/etc/profile和.bash_profile这两个文件中，一般安全起见，修改当前目录下的.bash_profile就可以了。 延伸阅读： .bashrc和.bash_profile之间的不同 关于“.bash_profile”和“.bashrc”区别的总结 用户级别配置文件：注： 用户级别的配置文件都是隐藏文件，以 . 开头，如果没有，可以新建； 对这里的配置文件进行修改，只会影响当前用户。 文件名 包含内容 .bash_profile 定义当前用户个人华路径及环境变量的文件名称，当用户登陆时，该文件仅执行一次 .bashrc 专属用户的shell的bash信息，可将别名、自定义变量写在这里，当登陆或每次打开新的shell，该文件都会被读取 .bash_history 记录命令历史 .bash_logout 当退出shell时，该文件会被执行 如何查看变量？ env 显示及设置用户变量变量 变量名 含义 HOSTNAME 主机名称 SHELL 当前的shell HISTSIZE 执行命令的历史记录数量，默认是1000条 PATH 表示shell将到那些目录查找命令或程序 PWD 当前目录 LANG 与语言相关的环境变量，中文为zh_CN.UTF-8 ;english为 en_US.UTF-8 HOME 当前用户家目录 LOGNAME 当前用户登录名 set :显示及设置shell变量 包括的私有变量以及用户变量，不同类的shell有不同的私有变量 bash,ksh,csh每中shell私有变量都不一样。 echo $[变量名] 查看某个变量的值 1234[root@stevey ~]# echo $PATH/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin[root@stevey ~]# echo $HOSTNAMEstevey 关于变量的规定 变量格式 a=b , 其中a为变量名，b为变量内容，等号两边不允许有空格； 变量名只能由字母、数字及下划线组成，且不能以数字开头； 当变量内容含有特殊字符，需要做特殊处理，具体见下表： 变量内容 符号 示例 特殊字符（以空格） 使用单引号 myname=’steve yuan’ 变量内容本身有单引号 使用双引号 mac=”steve’mac” 变量内容需要用到其他命令 使用反引号（tab键上面的那个键） hotkey=’pwd’ 变量累加其他变量的内容 使用双引号 myname=”$LOGNAME”Steve 如何自定义变量方法一：修改全局变量 /etc/profile123vim /etc/profile //编辑此配置文件，添加变量，修改完成后按`esc` 键，输入 `:wq` 保存退出。source /etc/profile //此方法会影响全局所有用户 方法二：修改当前用户变量 ～/.bashrc123vim ～/.bashrc //编辑此配置文件，添加变量，修改完成后按`esc` 键，输入 `:wq` 保存退出。source ～/.bashrc //此方法子对当前用户有效 方法三：export [变量] 更改全局变量命令行格式： export [参数][变量名称]=[变量设置值] 参数 描述 -f 代表[变量名称]中为函数名称。 -n 删除指定的变量。变量实际上并未删除，只是不会输出到后续指令的执行环境中。 -p 列出所有的shell赋予程序的环境变量。 列出当前所有的环境变量 export -p 定义环境变量赋值 export [变量名称]=[变量设置值] 取消变量 unset [变量名]]]></content>
       <categories>
         <category>linux</category>
       </categories>
@@ -542,8 +555,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -679,8 +692,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -744,8 +757,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>front-end</tag>
+        <tag>JavaScript</tag>
         <tag>ES6</tag>
       </tags>
   </entry>

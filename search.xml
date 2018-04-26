@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[Linux运维学习笔记：练习题目整理]]></title>
     <url>%2F2018%2F04%2F24%2FlinuxNotes-ShellPractices1%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记整理了一下shell基础知识的课后练习题及其解答。 作业题：1. 设置环境变量 HISTSIZE , 使其能够保存10000条命令历史。解答 方法一：export命令 1export HISTSIZE=10000 方法二：vim编辑/etc/profile,将HISTSIZE的值改为10000，之后保存退出，source /etc/profile 2. 为什么如果这样设置PS1 PS1=&quot;[\u@\h \W]\$ &quot; 显示的结果和我们预想的不一样，那要如何设置才能恢复原来默认的？解答： 如图所示，设置变量应该使用单引号；如果使用双引号，要再加上脱义符\ 具体的设置方法参见第一题的解答。 3. 想办法把当前目录下的文件的文件名中的小写字母全部替换为大写字母。解答： 使用tr命令替换字符，ls | tr ‘[a-z]’ ‘[A-Z]’ ，如下图所示： 4. 使用sort以”:”为分隔符，对/etc/passwd文件的第5段排序。解答： 主要考察sort用法，-t选项指定分割符，-k选项指定域； 1cat /etc/passwd | sort -t &apos;:&apos; -k 5 如下图所示： 5. 使用cut以”:”为分隔符，截出/etc/passwd的第三段字符。解答： 主要考察cut用法，-d 选项指定分割符；-f选项指定域。 1cat /etc/passwd | cut -d &apos;:&apos; -f 3 如下图所示： 6. 简述这几个文件的作用： /etc/profile, /etc/bashrc, .bashrc, .bash_profile.解答： 配置文件 作用 /etc/profile 配置所有用户共同的环境变量，当用户登录时总是会首先读取这个文件 /etc/bashrc 每一个运行bash shell的用户都执行此文件，此外还有PS1,umask的设置 .bashrc 每个用户的bash设置，用户登录shell或者新打开shell时都会读取此文件，以no-login的方式交互 .bash_profile 用户自己的环境变量，可以在其中设置一些自己使用shell信息，是以login的交互方式进行的 7. export 的作用是什么？解答： export命令用于显示和设置环境变量，命令行格式：export A=&#39;Alibaba&#39; 其中，A代表变量名，&#39;Alibaba&#39;代表变量内容。 8. linux下自定义变量要符合什么样的规则呢？解答： 命令行格式：export A=&#39;Alibaba&#39; 其中，A代表变量名，&#39;Alibaba&#39;代表变量内容。设置变量要符合以下规则： =等号两边不能有空格； 变量名只能由英、数字以及下划线组成，而且不能以数字开头； 当变量内容带有特殊字符（如空格）时，需要加上单引号； 如果变量内容中需要用到其他命令运行结果则可以使用反引号； 变量内容可以累加其他变量的内容，需要加双引号； 9. 如何把要运行的命令丢到后台跑？又如何把后台跑的进程给调到前台？解答： 在命令行后面加&amp;，表示background的意思；查看后台运行程序可以使用jobs命令；如果要调回前台，使用fg。 10. 列出当前目录下以”test”开头的文件和目录。解答： 主要考察grep的用法，^表示起始位置；$表示结束位置; ls | grep &#39;^test&#39; 查找当前目录下文件名以test打头的文件 更简单的解决办法，*可以表示任意字符 ls test* 联同子目录的都一起匹配出来了。 11. 如何把一个命令的输出内容不仅打印到屏幕上而且还可以重定向到一个文件内？解答： 该题目主要涉及管道符和tee命令知识，cat /etc/passwd | tee b.txt 如下图所示: 12. 假如有个命令很长，我们如何使用一个简单的字符串代替这个复杂的命令呢？请举例说明。解答： 这道题是在考查设置alias的知识。 第一种方法：alias 命令 1alias short=long 第二种方法：使用vim 更改配置文件，只想更改当前用户的话就在 ~/.bashrc 设置；更改全局配置的话，就在 /etc/bashrc ，设置完成保存退出，执行 如下命令生效： 1source ~/.bashrc 13. 我如何实现这样的功能，把一条命令丢到后台运行，而且把其正确输出和错误输出同时重定向到一个文件内？解答： 这道题考查输出重定向，以及后台运行的命令&amp; 最方便的用法 &amp;&gt; 14. 如何按照大小（假如按照10M)分隔一个大文件，又如何按照行数(假如10000行)分隔？解答： 此题考查split 命令,命令行格式：split [参数] [file] ，其中-b 表示按字节数切割；-l表示按行数切割； 不过这里需要做一个算数：1M = 1024KB= 1024 * 1024 bytes，看起来有点繁琐。 15. 做实验，搞明白 ; &amp;&amp; || 这三个符号的含义。解答： ;多条命令在一条命令中是执行，各条命令间并无关联； &amp;&amp;相当于是”且”的关系,只有前一条命令执行成功后一条命令才执行； || 相当于“或”，前一条命令执行成功，后一条命令不执行；前一条命令不执行，后一条命令才执行；两条命令，总有一条执行。 16. 如果只想让某个用户使用某个变量如何做？解答： 这道题目的意思应该是，如何设置当前用户的变量，而不是全局变量，实质是在问/etc/profile 和 ～/.bash_profile 的区别： /etc 是存储存储系统变量的文件目录，自然/etc/profile定义的就是全局变量，会影响到所有用户； ～ 是当前用户的家目录，在这里的配置文件只会影响当前用户； 综上所述，如果只想定义当前用户的变量环境，在～/.bash_profile配置即可。 17. 使用哪个命令会把系统当中所有的变量以及当前用户定义的自定义变量列出来？解答： set 命令：显示系统所有的变量和当前用户自定义的变量 类似的命令还有env ：显示用户变量。 更多的笔记，在Linux运维学习笔记5-4：shell基础知识（二） 扩展阅读： Linux环境变量之“PS1” Linux支持中文 让命令历史永久保存并加时间戳 linux 下/etc/profile、/etc/bashrc、~/.bash_profile、~/.bashrc 是干啥的]]></content>
+    <content type="text"><![CDATA[写在前面这则笔记整理了一下shell基础知识的课后练习题及其解答。 作业题：1. 设置环境变量 HISTSIZE , 使其能够保存10000条命令历史。解答 方法一：export命令 1export HISTSIZE=10000 方法二：vim编辑/etc/profile,将HISTSIZE的值改为10000，之后保存退出，source /etc/profile 2. 为什么如果这样设置PS1 PS1=&quot;[\u@\h \W]\$ &quot; 显示的结果和我们预想的不一样，那要如何设置才能恢复原来默认的？解答： 如图所示，设置变量应该使用单引号；如果使用双引号，要再加上脱义符\ 具体的设置方法参见第一题的解答。 3. 想办法把当前目录下的文件的文件名中的小写字母全部替换为大写字母。解答： 使用tr命令替换字符，ls | tr ‘[a-z]’ ‘[A-Z]’ ，如下图所示： 4. 使用sort以”:”为分隔符，对/etc/passwd文件的第5段排序。解答： 主要考察sort用法，-t选项指定分割符，-k选项指定域； 1cat /etc/passwd | sort -t &apos;:&apos; -k 5 如下图所示： 5. 使用cut以”:”为分隔符，截出/etc/passwd的第三段字符。解答： 主要考察cut用法，-d 选项指定分割符；-f选项指定域。 1cat /etc/passwd | cut -d &apos;:&apos; -f 3 如下图所示： 6. 简述这几个文件的作用： /etc/profile, /etc/bashrc, .bashrc, .bash_profile.解答： 配置文件 作用 /etc/profile 配置所有用户共同的环境变量，当用户登录时总是会首先读取这个文件 /etc/bashrc 每一个运行bash shell的用户都执行此文件，此外还有PS1,umask的设置 .bashrc 每个用户的bash设置，用户登录shell或者新打开shell时都会读取此文件，以no-login的方式交互 .bash_profile 用户自己的环境变量，可以在其中设置一些自己使用shell信息，是以login的交互方式进行的 7. export 的作用是什么？解答： export命令用于显示和设置环境变量，命令行格式：export A=&#39;Alibaba&#39; 其中，A代表变量名，&#39;Alibaba&#39;代表变量内容。 8. linux下自定义变量要符合什么样的规则呢？解答： 命令行格式：export A=&#39;Alibaba&#39; 其中，A代表变量名，&#39;Alibaba&#39;代表变量内容。设置变量要符合以下规则： =等号两边不能有空格； 变量名只能由英、数字以及下划线组成，而且不能以数字开头； 当变量内容带有特殊字符（如空格）时，需要加上单引号； 如果变量内容中需要用到其他命令运行结果则可以使用反引号； 变量内容可以累加其他变量的内容，需要加双引号； 9. 如何把要运行的命令丢到后台跑？又如何把后台跑的进程给调到前台？解答： 在命令行后面加&amp;，表示background的意思；查看后台运行程序可以使用jobs命令；如果要调回前台，使用fg。 10. 列出当前目录下以”test”开头的文件和目录。解答： 主要考察grep的用法，^表示起始位置；$表示结束位置; ls | grep &#39;^test&#39; 查找当前目录下文件名以test打头的文件 更简单的解决办法，*可以表示任意字符 ls test* 联同子目录的都一起匹配出来了。 11. 如何把一个命令的输出内容不仅打印到屏幕上而且还可以重定向到一个文件内？解答： 该题目主要涉及管道符和tee命令知识，cat /etc/passwd | tee b.txt 如下图所示: 12. 假如有个命令很长，我们如何使用一个简单的字符串代替这个复杂的命令呢？请举例说明。解答： 这道题是在考查设置alias的知识。 第一种方法：alias 命令 1alias short=long 第二种方法：使用vim 更改配置文件，只想更改当前用户的话就在 ~/.bashrc 设置；更改全局配置的话，就在 /etc/bashrc ，设置完成保存退出，执行 如下命令生效： 1source ~/.bashrc 13. 我如何实现这样的功能，把一条命令丢到后台运行，而且把其正确输出和错误输出同时重定向到一个文件内？解答： 这道题考查输出重定向，以及后台运行的命令&amp; 最方便的用法 &amp;&gt; 14. 如何按照大小（假如按照10M)分隔一个大文件，又如何按照行数(假如10000行)分隔？解答： 此题考查split 命令,命令行格式：split [参数] [需要切割的文件] [指定切割文件名的前缀] ，其中-b 表示按大小切割；-l表示按行数切割； 假定需要切割的文件名为a.txt，指定切割为前缀为yf- 1split -b 10M a.txt yf- 假定按照10000行一组进行切割 1split -l 10000 a.txt yf- 15. 做实验，搞明白 ; &amp;&amp; || 这三个符号的含义。解答： ;多条命令在一条命令中是执行，各条命令间并无关联； &amp;&amp;相当于是”且”的关系,只有前一条命令执行成功后一条命令才执行； || 相当于“或”，前一条命令执行成功，后一条命令不执行；前一条命令不执行，后一条命令才执行；两条命令，总有一条执行。 16. 如果只想让某个用户使用某个变量如何做？解答： 这道题目的意思应该是，如何设置当前用户的变量，而不是全局变量，实质是在问/etc/profile 和 ～/.bash_profile 的区别： /etc 是存储存储系统变量的文件目录，自然/etc/profile定义的就是全局变量，会影响到所有用户； ～ 是当前用户的家目录，在这里的配置文件只会影响当前用户； 综上所述，如果只想定义当前用户的变量环境，在～/.bash_profile配置即可。 17. 使用哪个命令会把系统当中所有的变量以及当前用户定义的自定义变量列出来？解答： set 命令：显示系统所有的变量和当前用户自定义的变量 类似的命令还有env ：显示用户变量。 更多的笔记，在Linux运维学习笔记5-4：shell基础知识（二） 扩展阅读： Linux环境变量之“PS1” Linux支持中文 让命令历史永久保存并加时间戳 linux 下/etc/profile、/etc/bashrc、~/.bash_profile、~/.bashrc 是干啥的]]></content>
       <categories>
         <category>linux</category>
       </categories>
@@ -17,7 +17,7 @@
   <entry>
     <title><![CDATA[Linux运维学习笔记6-3：正则之awk]]></title>
     <url>%2F2018%2F04%2F20%2Fweek6-3-basisOfRegEx-part3%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记接着上一期：Linux运维学习笔记：正则之sed，继续整理正则基础知识，主要是awk 工具基础知识。 awk 命令awk 也是流式编辑器，将文档内容一行一行地进行处理，支持自定义函数及正则表达式。 匹配字符串匹配字符123[root@stevey ~]# awk &apos;/root/&apos; a.txt //与sed用法相似，不过没有颜色显示root:x:0:0:root:/root:/bin/bashoperator:x:11:0:operator:/root:/sbin/nologin ~代表匹配的意思 1234[root@stevey ~]# awk -F &apos;:&apos; &apos;$1 ~/ro/&apos; a.txtroot:x:0:0:root:/root:/bin/bash[root@stevey ~]# awk -F &apos;:&apos; &apos;$1 ~/oo/&apos; a.txtroot:x:0:0:root:/root:/bin/bash 多次匹配 12345678910[root@stevey ~]# awk -F &apos;:&apos; &apos;root &#123;print $1,$3&#125; /bin/ &#123;print $1,$3&#125;&apos; a.txt //先匹配root，再匹配binroot 0bin 1daemon 2adm 3lp 4sync 5shutdown 6halt 7mail 8 截取文档字段-F 选项，后面跟指定分割符；如不加 -F选项，默认以空格或tab为分隔符；print表示打印，要用{} 括起来，$1表示第一列，$2表示第二列，以此类推； 注：$0 表示整行 条件操作符awk命令支持用逻辑符号进行匹配， 符号 含义 == 等于 != 不等于 &gt; 大于 &lt; 小于 &gt;= 大于等于 &lt;= 小于等于 注：在于数字做比较时，加引号，则视为字符串；不加引号，则视为数字。 示例一： 12345[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &gt;= 500&apos; a.txt //匹配uid大于500的内容polkitd:x:999:997:User for polkitd:/:/sbin/nologinuser1:x:1000:1000::/home/user1:/bin/bashuser2:x:1001:1001::/home/user2:/bin/bashyuanfeng:x:1002:1002::/home/yuanfeng:/bin/bash 示例二： 12[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 == 1000&apos; a.txt //== 表示等于，相当于精确匹配user1:x:1000:1000::/home/user1:/bin/bash 示例三： 1234567[root@stevey ~]# awk -F &apos;:&apos; &apos;$7 !=/bin/bash&apos; a.txtroot:x:0:0:root:/root:/bin/bashbin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinadm:x:3:4:adm:/var/adm:/sbin/nologinlp:x:4:7:lp:/var/spool/lpd:/sbin/nologinsync:x:5:0:sync:/sbin:/bin/sync 还可以对两个字段进行逻辑比较 123456[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 == $4 &apos; a.txtroot:x:0:0:root:/root:/bin/bashbin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinnobody:x:99:99:Nobody:/:/sbin/nologinsystemd-network:x:192:192:systemd Network 支持&amp;&amp;，表示且的意思，两个条件都满足。 1234[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &gt; 5 &amp;&amp; $4 &lt; 7&apos; a.txtshutdown:x:6:0:shutdown:/sbin:/sbin/shutdownhalt:x:7:0:halt:/sbin:/sbin/haltoperator:x:11:0:operator:/root:/sbin/nologin 支持 ||，表示或的意思，两个条件满足其一。 123[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &gt; 1000 || $4 == &quot;/bin/bash&quot;&apos; a.txtuser2:x:1001:1001::/home/user2:/bin/bashyuanfeng:x:1002:1002::/home/yuanfeng:/bin/bash\ awk 内置变量 OFS 用法 12345678910[root@stevey ~]# awk -F &apos;:&apos; &apos;&#123;OFS=&quot;#&quot;&#125; &#123;print $1, $3, $4&#125;&apos; a.txtroot#0#0bin#1#1daemon#2#2adm#3#4lp#4#7sync#5#0shutdown#6#0halt#7#0mail#8#12 NR表示分割符后一共有多少个字段; $NF 表示最后一个字段的值 12345678[root@stevey ~]# head -n 3 a.txt | awk -F &apos;:&apos; &apos;&#123;print NF&#125;&apos;777[root@stevey ~]# head -n 3 a.txt | awk -F &apos;:&apos; &apos;&#123;print $NF&#125;&apos; /bin/bash/sbin/nologin/sbin/nologin awk中的数学计算对指定字段赋值 12345678[root@stevey ~]# awk -F &apos;:&apos; &apos;&#123;$1=&quot;root&quot;;print $0&#125;&apos; a.txtroot x 0 0 root /root /bin/bashroot x 1 1 bin /bin /sbin/nologinroot x 2 2 daemon /sbin /sbin/nologinroot x 3 4 adm /var/adm /sbin/nologinroot x 4 7 lp /var/spool/lpd /sbin/nologinroot x 5 0 sync /sbin /bin/syncroot x 6 0 shutdown /sbin /sbin/shutdown 将指定字段的值进行数学运算后，赋给另一个字段 123[root@stevey ~]# head -n 2 a.txt | awk -F &apos;:&apos; &apos;&#123;$7=$3+$4; print $0&#125;&apos; //$7被重新赋值，等于$3、$4相加之和。root x 0 0 root /root 0bin x 1 1 bin /bin 2]]></content>
+    <content type="text"><![CDATA[写在前面这则笔记接着上一期：Linux运维学习笔记：正则之sed，继续整理正则基础知识，主要是awk 工具基础知识。 awk 命令awk 也是流式编辑器，用来进行高级文本处理，支持关联数组、归递函数、条件语句等。 语法结构第一种：awk [选项参数] &#39;script&#39; file(s)在这种格式中，awk从一个或多个文件中读取内容，之后再用引号里的script进行处理。 [选项参数] 这里一般是-F 后面跟分割符，比如/etc/passwd，字段与字段之间使用：分割，处理时就要写成 -F &#39;:&#39;；如果不加 -F 默认使用空格分割。 再来说后面script的部分，awk 之所以能够进行高级文本处理，是因为这里的script可以很复杂，通常可分为三个可选的部分：BEGIN、BODY和END。 awk的工作方式： 执行BEGIN 语句块；这是一个可选语句块，例如变量初始化、打印输出表格的表头等通常都放在这里面。 BODY通常包含两个部分：pattern和action；awk在执行完BEGIN语句之后，会逐行读取file内容，就像一个for循环，每读一行先按照前面的pattern进行匹配，如果匹配则执行后面的action；重复这个过程，一直到文件内容全部读完。 执行END语句块；跟BEGIN类似，也是可选的。 注：在第二步中的的action 是可以省略的；如果省略action，则默认执行{ print }，也就是把所有符合pattern的内容都打印在屏幕上。 第二种：awk [选项参数] -f script-file file(s)在这种格式种，script被写进脚本文件里，在执行的时候，awk 命令会从脚本文件中读取script，在按照方式一中的步骤进行操作。这则笔记暂不涉及这种用法。 awk 基本操作匹配字符串 先来看最基本的用法：从/etc/passwd 中匹配出含有root 的行；前文说到，script的部分中，BEGIN、END都是可选的，这里都省略了，中间包括了-F指定分割符，以及BODY中的pattern，省略了action，默认执行{print}，打印出了匹配pattern的行。 123[root@stevey ~]# cat /etc/passwd | awk -F &apos;:&apos; &apos;/root/&apos;root:x:0:0:root:/root:/bin/bashoperator:x:11:0:operator:/root:/sbin/nologin 再复杂一点，可以切割之后匹配关键词；例如，在在第一段中匹配包含keyword的行，$1 表示第一个字段，~代表匹配的意思 1234[root@stevey ~]# awk -F &apos;:&apos; &apos;$1 ~/ro/&apos; a.txt root:x:0:0:root:/root:/bin/bash[root@stevey ~]# awk -F &apos;:&apos; &apos;$1 ~/oo/&apos; a.txtroot:x:0:0:root:/root:/bin/bash 关于-F选项，后面跟指定的分割符；如不加 -F选项，默认以空格或tab为分隔符；print表示打印，要用{} 括起来，$1表示第一列，$2表示第二列，以此类推； {print $n}用来指定打印区域；$n n表示数字，用来制定域；$0 很特殊，表示所有的段； 12345[root@stevey ~]# cat /etc/passwd |awk -F &apos;:&apos; &apos;$1 ~/root/ &#123;print $1&#125;&apos; //这里只将第一字段显示出来root[root@stevey ~]# cat /etc/passwd |awk -F &apos;:&apos; &apos;$1 ~/root/ &#123;print $0&#125;&apos; //$0表示显示整行root:x:0:0:root:/root:/bin/bash 多次匹配 123456[root@stevey ~]# head -n 5 a.txt | awk -F &apos;:&apos; &apos;/root/ &#123;print $1,$3&#125; /sbin/ &#123;print $0&#125;&apos;root 0bin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinadm:x:3:4:adm:/var/adm:/sbin/nologinlp:x:4:7:lp:/var/spool/lpd:/sbin/nologin 条件操作符awk命令支持用逻辑符号进行匹配， 符号 含义 == 等于 != 不等于 &gt; 大于 &lt; 小于 &gt;= 大于等于 &lt;= 小于等于 注：在于数字做比较时，加引号，则视为字符串；不加引号，则视为数字。 匹配uid大于500的行 12345[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &gt; 500&apos; a.txt //匹配uid大于500的内容polkitd:x:999:997:User for polkitd:/:/sbin/nologinuser1:x:1000:1000::/home/user1:/bin/bashuser2:x:1001:1001::/home/user2:/bin/bashyuanfeng:x:1002:1002::/home/yuanfeng:/bin/bash 匹配uid等于1000的行，这里相当于精确匹配 12[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 == 1000&apos; a.txt //== 表示等于，相当于精确匹配user1:x:1000:1000::/home/user1:/bin/bash 匹配第七列不是’/bin/bash’ 的行，!=表示取非的意思。 1234567[root@stevey ~]# awk -F &apos;:&apos; &apos;$7 !=/bin/bash&apos; a.txtroot:x:0:0:root:/root:/bin/bashbin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinadm:x:3:4:adm:/var/adm:/sbin/nologinlp:x:4:7:lp:/var/spool/lpd:/sbin/nologinsync:x:5:0:sync:/sbin:/bin/sync awk 还可以对两列内容比较逻辑关系 123456[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &lt; $4&apos; a.txtadm:x:3:4:adm:/var/adm:/sbin/nologinlp:x:4:7:lp:/var/spool/lpd:/sbin/nologinmail:x:8:12:mail:/var/spool/mail:/sbin/nologingames:x:12:100:games:/usr/games:/sbin/nologinftp:x:14:50:FTP User:/var/ftp:/sbin/nologin 比较两个字段是否精确比较 123456[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 == $4 &apos; a.txtroot:x:0:0:root:/root:/bin/bashbin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinnobody:x:99:99:Nobody:/:/sbin/nologinsystemd-network:x:192:192:systemd Network 支持&amp;&amp;，表示且的意思，两个条件都满足。 12[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &gt; 5 &amp;&amp; $3 &lt; 7&apos; a.txtshutdown:x:6:0:shutdown:/sbin:/sbin/shutdown 支持 ||，表示或的意思，两个条件满足其一。 123[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &gt; 1000 || $4 == &quot;/bin/bash&quot;&apos; a.txtuser2:x:1001:1001::/home/user2:/bin/bashyuanfeng:x:1002:1002::/home/yuanfeng:/bin/bash\ awk 内置变量 内置变量 含义 $0 当前记录（这个变量中存放着整个行的内容） $1~$n 当前记录的第n个字段，字段间由FS分隔 FS 输入字段分隔符 默认是空格或Tab NF 当前记录中的字段个数，就是有多少列 NR 已经读出的记录数，就是行号，从1开始，如果有多个文件话，这个值也是不断累加中。 FNR 当前记录数，与NR不同的是，这个值会是各个文件自己的行号 RS 输入的记录分隔符， 默认为换行符 OFS 输出字段分隔符， 默认也是空格 ORS 输出的记录分隔符，默认为换行符 FILENAME 当前输入文件的名字 内置变量的用法示例 OFS 用法 12345678910[root@stevey ~]# awk -F &apos;:&apos; &apos;&#123;OFS=&quot;#&quot;&#125; &#123;print $1, $3, $4&#125;&apos; a.txtroot#0#0bin#1#1daemon#2#2adm#3#4lp#4#7sync#5#0shutdown#6#0halt#7#0mail#8#12 NR表示分割符后一共有多少个字段; $NF 表示最后一个字段的值 12345678[root@stevey ~]# head -n 3 a.txt | awk -F &apos;:&apos; &apos;&#123;print NF&#125;&apos;777[root@stevey ~]# head -n 3 a.txt | awk -F &apos;:&apos; &apos;&#123;print $NF&#125;&apos; /bin/bash/sbin/nologin/sbin/nologin awk中的数学计算 对指定字段赋值 12345678[root@stevey ~]# awk -F &apos;:&apos; &apos;&#123;$1=&quot;root&quot;;print $0&#125;&apos; a.txtroot x 0 0 root /root /bin/bashroot x 1 1 bin /bin /sbin/nologinroot x 2 2 daemon /sbin /sbin/nologinroot x 3 4 adm /var/adm /sbin/nologinroot x 4 7 lp /var/spool/lpd /sbin/nologinroot x 5 0 sync /sbin /bin/syncroot x 6 0 shutdown /sbin /sbin/shutdown 将指定字段的值进行数学运算后，赋给另一个字段 123[root@stevey ~]# head -n 2 a.txt | awk -F &apos;:&apos; &apos;&#123;$7=$3+$4; print $0&#125;&apos; //$7被重新赋值，等于$3、$4相加之和。root x 0 0 root /root 0bin x 1 1 bin /bin 2 参考资料 AWK 简明教程 GNU/Linux awk命令用法详解 linux awk命令详解]]></content>
       <categories>
         <category>linux</category>
       </categories>
@@ -43,7 +43,7 @@
   <entry>
     <title><![CDATA[Linux运维学习笔记6-1：正则之grep]]></title>
     <url>%2F2018%2F04%2F20%2Fweek6-1-basisOfRegEx-part1%2F</url>
-    <content type="text"><![CDATA[写在前面从这则笔记开始，分3节课整理linux下正则表达式的用法，主要涉及grep、sed、awk三个命令。 正则，就是一种文本处理的方法，这里有一些正则的基础知识。 正则表达式基础正则表达式正则表达式，是经过专门编写的文本字符串，用来匹配字符串，这里还整理了一篇正则基础。 元字符 表达式 描述 . 匹配单个任意字符 [] 匹配指定范围内的任意单个字符,比如[abc],[a-z],[0-9],[a-zA-Z] [^] 匹配指定范围外的任意单个字符 [:space:] 匹配空白字符 [:punct:] 匹配所有标点符号的集合 [a-z]或 [:lower:] 匹配所有的小写字母 [A-Z]或 [:upper:] 匹配所有的大写字母 [a-zA-Z]或 [:alpha:] 匹配大小写字母 [0-9]或 [:digit:] 匹配数字 [0-9a-zA-Z]或 [:alnum:] 匹配数字和大小写字母 匹配次数 表达式 描述 * 匹配其前面的字符任意次，比如.*匹配任意字符任意次数 \? 匹配其前面的字符1次或0次 \{m,n\} 匹配其前字符最少m，最多n次） 字符锚定 表达式 描述 ^ 锚定行首，此字符后面的任意内容必须出现在行首 $ 锚定行尾，此字符前面的任意内容必须出现在行尾 ^$ 锚定空白行，可以统计空白行 \&lt;或\b 锚定词首，其后面的任意字符必须做为单词首部出现 \&gt;或\b 锚定词尾，其前面的任意字符必须做为单词尾部出现 拓展正则表达式相比于基础正则表达式，拓展正则表达式的不同之处主要在于以下几点： 在匹配次数方面，加入了 + ，表示匹配字符出现一次或多次； 基本正则表达式，使用( ) { } . ? |都需要转义,在扩展正则表达中不需要加转义符 \ |表示或者的意思。 grep和egrep 命令grep用法grep是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。 命令行格式：grep [参数] [关键词] [filename] 常用参数 用法 -c 打印符合要求的行数 -i 忽略大小写 -n 输出符合要求的行及行号 -v 取反 -r 归递处理，包含多级子目录 -A n n 为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 常见用法 匹配符合要求的行数grep -c &#39;keyword&#39; 搜索/etc目录及其多级子目录 grep -r /etc 匹配带有关键词的行，并输出行号 grep -n &#39;keyword&#39; 匹配不带有关键词的行，并输出行号 grep -v &#39;keyword&#39; 匹配包括数字的行 grep &#39;[0-9]&#39; 匹配不包括数字的行 grep -v &#39;[0-9]&#39; 匹配大写字母 grep [A-Z] 或 grep [[:upper:]] 匹配单行包含空格的内容 grep [[:space:]] 匹配单行包含标点符号的内容 grep [[:punct:]] 匹配单行包含数字和大小写字母的内容 grep [0-9a-z-A-Z]或grep [[:alnum:]] 匹配所有以#开头的行，并显示行号 grep -n &#39;^#&#39; 注：包括空行。 匹配所有的非空行和不以#开头的行 grep -vn &#39;^#&#39; 匹配任意一个字符 grep -n &#39;ro.t&#39; .表示任意字符 12[root@stevey ~]# cat a.txt | grep -n &apos;ro.t&apos;3:root:x:0:0:root:/root:/bin/bash 匹配任意多个字符 .* 表示0个或多个任意字符； 匹配特定重复次数的字符 此处需要用{}，其中为数字，表示为{n} 或{m, n}。其中 {n}表示特定次数；{m, n} 表示范围，m &lt; n 注： {}前后都要使用转义符号\；如果不想使用脱义符号，使用grep -E 或者egrep {n}表示特定次数； {m,n} 表示范围，m &lt; n n可以省略，表示m以上 m也可以省略，表示n次及以下 ABC特殊参数用法 -A n n为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 egrep 命令： grep 命令的升级版egrep 是 grep 的升级版，使用拓展式的正则表达式，与grep -E的效果相同。 + 匹配一个或多个字符 ? 匹配0个或1个字符 | 表示或者，表示二选一或者多选一，满足其中一个就可以 ()表示一个整体， 比如(oo)+， 匹配oo 出现一次或一次以上]]></content>
+    <content type="text"><![CDATA[写在前面从这则笔记开始，分3节课整理linux下正则表达式的用法，主要涉及grep、sed、awk三个命令。 正则，就是一种文本处理的方法，这里有一些正则的基础知识。 正则表达式基础正则表达式正则表达式，是经过专门编写的文本字符串，用来匹配字符串，这里还整理了一篇正则基础。 元字符 表达式 描述 . 匹配单个任意字符 [] 匹配指定范围内的任意单个字符,比如[abc],[a-z],[0-9],[a-zA-Z] [^] 取非，匹配指定范围外的任意单个字符 [:space:] 匹配空白字符 [:punct:] 匹配所有标点符号的集合 [a-z]或 [:lower:] 匹配所有的小写字母 [A-Z]或 [:upper:] 匹配所有的大写字母 [a-zA-Z]或 [:alpha:] 匹配大小写字母 [0-9]或 [:digit:] 匹配数字 [0-9a-zA-Z]或 [:alnum:] 匹配数字和大小写字母 匹配次数 表达式 描述 * 匹配其前面的字符任意次，比如.*匹配任意字符任意次数 \? 匹配其前面的字符1次或0次 \{m,n\} 匹配其前字符最少m，最多n次） 字符锚定 表达式 描述 ^ 锚定行首，此字符后面的任意内容必须出现在行首 $ 锚定行尾，此字符前面的任意内容必须出现在行尾 ^$ 锚定空白行，可以统计空白行 \&lt;或\b 锚定词首，其后面的任意字符必须做为单词首部出现 \&gt;或\b 锚定词尾，其前面的任意字符必须做为单词尾部出现 拓展正则表达式相比于基础正则表达式，拓展正则表达式的不同之处主要在于以下几点： 在匹配次数方面，加入了 + ，表示匹配字符出现一次或多次； 基本正则表达式，使用( ) { } . ? |都需要转义,在扩展正则表达中不需要加转义符 \ |表示或者的意思。 grep和egrep 命令grep用法grep是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。 命令行格式：grep [参数] [关键词] [filename] 常用参数 用法 -c 打印符合要求的行数 -i 忽略大小写 -n 输出符合要求的行及行号 -v 取反 -r 归递处理，包含多级子目录 -A n n 为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 常见用法 匹配符合要求的行数grep -c &#39;keyword&#39; 搜索/etc目录及其多级子目录 grep -r /etc 匹配带有关键词的行，并输出行号 grep -n &#39;keyword&#39; 匹配不带有关键词的行，并输出行号 grep -v &#39;keyword&#39; 匹配包括数字的行 grep &#39;[0-9]&#39; 匹配不包括数字的行 grep -v &#39;[0-9]&#39; 匹配大写字母 grep [A-Z] 或 grep [[:upper:]] 匹配单行包含空格的内容 grep [[:space:]] 匹配单行包含标点符号的内容 grep [[:punct:]] 匹配单行包含数字和大小写字母的内容 grep [0-9a-z-A-Z]或grep [[:alnum:]] 匹配所有以#开头的行，并显示行号 grep -n &#39;^#&#39; 注：包括空行。 匹配所有的非空行和不以#开头的行 grep -vn &#39;^#&#39; 匹配任意一个字符 grep -n &#39;ro.t&#39; .表示任意字符 12[root@stevey ~]# cat a.txt | grep -n &apos;ro.t&apos;3:root:x:0:0:root:/root:/bin/bash 匹配任意多个字符 .* 表示0个或多个任意字符； 匹配特定重复次数的字符 此处需要用{}，其中为数字，表示为{n} 或{m, n}。其中 {n}表示特定次数；{m, n} 表示范围，m &lt; n 注： {}前后都要使用转义符号\；如果不想使用脱义符号，使用grep -E 或者egrep {n}表示特定次数； {m,n} 表示范围，m &lt; n n可以省略，表示m以上 m也可以省略，表示n次及以下 ABC特殊参数用法 -A n n为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 egrep 命令： grep 命令的升级版egrep 是 grep 的升级版，使用拓展式的正则表达式，与grep -E的效果相同。 + 匹配一个或多个字符 ? 匹配0个或1个字符 | 表示或者，表示二选一或者多选一，满足其中一个就可以 ()表示一个整体， 比如(oo)+， 匹配oo 出现一次或一次以上]]></content>
       <categories>
         <category>linux</category>
       </categories>
@@ -200,9 +200,9 @@
         <category>mac</category>
       </categories>
       <tags>
+        <tag>mac</tag>
         <tag>bash</tag>
         <tag>notes</tag>
-        <tag>mac</tag>
       </tags>
   </entry>
   <entry>
@@ -533,10 +533,10 @@
         <category>react</category>
       </categories>
       <tags>
+        <tag>github</tag>
         <tag>react</tag>
         <tag>node</tag>
         <tag>npm</tag>
-        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -547,8 +547,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -583,8 +583,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -771,8 +771,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
         <tag>https</tag>
       </tags>
   </entry>
@@ -810,8 +810,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -834,8 +834,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -871,8 +871,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
 </search>

@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Linux运维学习笔记7-1：监控系统状态命令（一）]]></title>
+    <url>%2F2018%2F04%2F28%2Fweek701-howToManageLinux%2F</url>
+    <content type="text"><![CDATA[写在前面前一阶段linux基础知识暂告一段落，下面开始介绍linux系统管理的基本知识。本节主要涉及w、 vmstat、 top、 sar 、nload 五个命令。 w 命令w命令用于显示目前登入系统的用户信息，可得知目前登入系统的用户有哪些人，以及他们正在执行的程序。 命令行格式： 1w [选项] [参数] 常用选项 含义 -f 开启或关闭显示用户从何处登入系统 -h 不显示各栏位的标题信息列 -l 使用详细格式列表，此为预设值 -s 使用简洁格式列表，不显示用户登入时间，终端机阶段作业和程序所耗费的CPU时间 -u 忽略执行程序的名称，以及该程序耗费CPU时间的信息 -V 显示版本信息 w 命令能查到哪些信息示例： 上图中， 第一行从左到右依次为：时间、系统运行时间、登陆用户数、平均负载。最值得关注的是平均负载，由三个数字组成，分别代表1分钟、5分钟、15分钟的系统负载；数字越大，说明服务器的压力越大。 第二行显示的是登陆名、登陆地址等信息。 判断服务器压力的方法：将均衡负载数与cpu数做比较，如果长时间大于cpu个数，就说明系统压力大；反之，说明系统运行正常。 这里需要补充了解一下系统cpu的查询方法： 系统cpu信息保存在 /proc/cpuinfo,系统内核从0开始，逐一列出。 查询系统有几个cpu，可以使用 cat /proc/cpuinfo | grep -c &#39;processor&#39; 注：grep -c 表示打印符合条件的行数。 对比一下红框内的数字，说明系统负载不高。 vmstat 命令vmstat是Virtual Meomory Statistics（虚拟内存统计）的缩写，可对操作系统的虚拟内存、进程、CPU活动进行监控。可以对系统的整体情况进行统计，但不足之处是无法对某个进程进行深入分析。 物理内存和虚拟内存：学习vmstat 命令，首先需要了解物理内存和虚拟内存的区别。 物理内存：系统硬件提供的内存大小，是真正的内存； 虚拟内存：利用磁盘空间虚拟出的一块逻辑内存，用作虚拟内存的磁盘空间被称为交换空间（Swap Space）。linux下设置虚拟内存的方法见这里 物理内存的速度快，但是空间有限。为了最大化利用物理内存，系统会不时的进行页面交换操作，以保持尽可能多的空闲物理内存，即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面，从而避免等待交换所需的时间。 vmstat 命令行格式：1vmstat[选项] [参数] 常用选项 含义 -a 显示活动内页； -f 显示启动后创建的进程总数； -m 显示slab信息； -n 头信息仅显示一次； -s 以表格方式显示事件计数器和内存状态； -d 报告磁盘状态； -p 显示指定的硬盘分区状态； -S 输出信息的单位。 参数： 事件间隔：状态信息刷新的时间间隔； 次数：显示报告的次数； vmstat 能查到哪些信息 procs进程相关信息 r ：run，表示运行队列，某一时刻CPU只能处理一个任务，其他的任务只能排队，这个状态就是r记录的状态；如果这个数值长时间大于服务器CPU，就说明cpu资源不够用了。 b： block，表示等待资源的进程数,资源指的是I/O 、内存等。b状态反应的是进程任务将结果写入磁盘的过程，如果这个数字长期大于1，说明磁盘写入频繁，需要关注。 memory 内存相关信息 swpd： 虚拟内存已使用的大小，单位为KB，如果大于0，表示机器物理内存不足； free： 空闲的物理内存的大小； buff： 用作缓冲的内存大小； cache ：表示从磁盘中读取的缓存大小； swap内存交换情况 si ：每秒从虚拟内存写入内存的数据量； so ：每秒虚拟内存写入磁盘的大小； io 磁盘使用情况 bi ：读磁盘的数据量； bo ：写磁盘的数据量； system系统采集间隔内的中断数 in ：每秒CPU的中断次数，包括时间中断 cs ：每秒上下文切换次数，例如我们调用系统函数、线程切换，都要进程上下文切换。这个值要越小越好，数值偏大表示你的CPU大部分浪费在上下文切换，导致CPU干正经事的时间少了，没有得到充分利用。 CPU使用状态 us：用户CPU时间百分比； sy ：系统CPU时间百分比，如果太高，表示系统调用时间长，例如是IO操作频繁。 id ：空闲 CPU时间百分比；一般来说，id + us + sy = 100,一般我认为id是空闲CPU使用率，us是用户CPU使用率，sy是系统CPU使用率。 wa ：等待IO CPU时间； st ：表示被偷走的CPU所占百分比，一般为0. top 命令top命令用于动态监控进程所占用的系统资源，每隔3秒钟更新一次，特点是会将占用CPU、内存磁盘I/O 最高的进程放在最前面。 命令行格式： 1top [选项] 常用选项 含义 -b 以批处理模式操作； -c 显示完整的治命令； -d 屏幕刷新间隔时间； -I 忽略失效过程； -s 保密模式； -S 累积模式； -i&lt;时间&gt; 设置间隔时间； -u&lt;用户名&gt; 指定用户名； -p&lt;进程号&gt; 指定进程； -n&lt;次数&gt; 循环显示的次数 top 能查看哪些信息 上图中， RES 表示占用内存的大小； %MEM 表示占用内存的百分比； top 基本操作： shift + m 按照内容使用情况排序； 数字 1 列出所有CPU使用状态； q退出top； top 常见用法：非动态打印系统资源使用情况命令行格式： top -bn1 sar命令sar（System Activity Reporter系统活动情况报告）是目前 Linux 上最为全面的系统性能分析工具之一，可以从多方面对系统的活动进行报告，包括：文件的读写情况、系统调用的使用情况、磁盘I/O、CPU效率、内存使用状况、进程活动及IPC有关的活动等。 Sar是后台进程sadc的前端显示工具，与其他系统监控工具相比，它可以打印从当天零点开始到当前时刻到系统状态信息。 命令行格式： 1sar [options] [-o file] t [n] t为采样间隔，n为采样次数，默认值是1； -o file表示将命令结果以二进制格式存放在文件中，file 是文件名。 options 为命令行选项，sar命令常用选项如下： 常用选项 含义 -A 所有报告的总和 -u 输出CPU使用情况的统计信息 -v 输出inode、文件和其他内核表的统计信息 -d 输出每一个块设备的活动信息 -r 输出内存和交换空间的统计信息 -b 显示I/O和传送速率的统计信息 -a 文件读写情况 -c 输出进程统计信息，每秒创建的进程数 -R 输出内存页面的统计信息 -y 终端设备活动情况 -w 输出系统交换活动信息 sar 安装centos 7 默认没有sar，需要单独安装；安装名为“sysstat”的包后，sadc就会自动从内核收集报告并保存到/var/log/sa/ 目录下。 1yum install -y sysstat 启动sadc(system activity data collector)服务(sysstat)，这样报告就会被写入到日志文件“/var/log/sa/saDD”中并且已经存在的文档将会被归档,DD表示日期。 12systemctl start sysstatsystemctl enable sysstat sar 使用实例查看网络流量 ：sar -n {keyword} or {ALL} 使用-f选项可以查看某一天的网络流量历史 1sar -n DEV -f /var/log/sa/sa28 那么，从这张表能看出哪些有用的信息呢？ 列名称 含义 IFACE 设备名称 rxpck/s 每秒进入收取的包的数量，数值大于4000，说明网络异常； txpck/s 每秒发送出去的包的数量 rxkB/s 每秒收取的数据量，数值大于5000000，说明网络异常； txkB/s 每秒发送的数据量 查看历史负载 sar -q CPU资源监控sar -u -o test 10 3 // 每10秒采样一次，连续采样3次，观察CPU 的使用情况，并将采样结果以二进制形式存入当前目录下的文件test中 需要重点关注的指标： %iowait：显示用于等待I/O操作占用 CPU 总时间的百分比；若 %iowait 的值过高，表示硬盘存在I/O瓶颈； %idle：显示 CPU 空闲时间占用 CPU 总时间的百分比；若 %idle 的值高但系统响应慢时，有可能是 CPU 等待分配内存，此时应加大内存容量；若 %idle 的值持续低于1，则系统的 CPU 处理能力相对较低，表明系统中最需要解决的资源是 CPU 。 inode、文件和其他内核表监控1sar -v 10 3 //每10秒采样一次，连续采样3次，观察核心表的状态 输出项 含义 dentunusd 目录高速缓存中未被使用的条目数量 file-nr 文件句柄（file handle）的使用数量 inode-nr 索引节点句柄（inode handle）的使用数量 pty-nr 使用的pty数量 nload 命令nload 安装1yum install -y epel-release; yum install -y nload // 先安装 epel-release 包，再安装nload；nload包在epel拓展源里的； nload 使用输入nload进行查看，按q退出； 参考资料每天一个linux命令（46）：vmstat命令 linux sar 命令详解 7 个实例教你使用 sar 命令 sar 找出系统瓶颈的利器]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>regularExpression</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Linux运维学习笔记6-4：怎么写shell脚本？]]></title>
     <url>%2F2018%2F04%2F27%2FlinuxNotes-howToWriteShellScript%2F</url>
     <content type="text"><![CDATA[写在前面终于学到shell脚本了，但是视频课程竟然没有专门讲……好吧，既然你不讲，我就自己整理吧。 什么是shell脚本？提到shell脚本，先要说到shell：shell是一种应用程序，一个操作界面，用户能够通过shell访问操作系统服务。linux中最常见的shell是bash。bash是交互式的，输入一条命令就能看到执行结果。 shell脚本（shell script），是一种为shell编写的脚本程序。我们可以把需要执行的命令写在脚本当中，系统通过读取脚本执行命令。 示例： 1234567891011#!/bin/sh## Auto create filescd ~mkdir shell_tutcd shell_tutfor ((i=0; i&lt;10; i++)); do touch test_$i.txtdone 如上所示，一个标准内容大概分成三个部分: 第一部分：#!/bin/sh，指定脚本解释器，这里是用/bin/sh做解释器的；专业术语叫shebang，是# （sharp） 和！（bang）两个字符的合起来的简写。 第二部分：## Auto create files ，注释，主要是用来解释这个脚本是干嘛的。 第三部分：脚本本身，就是一行行的脚本代码。 关于脚本一些约定俗成的规则： 脚本通常都以 .sh 作为后缀名； 注释虽然不是必须的，但为了便于后期维护和管理，强烈建议每个脚本都要写注释； 脚本建议统一放在/usr/local/sbin/ ，便于维护和管理 脚本的执行方式第一种：脚本作为命令行参数调用1sh a.sh // 执行a.sh；这里的a.sh 是命令行的参数 前面写成bash也可以， 1bash a.sh 第二种：赋予脚本执行权限 X ，将其变为可执行文件12chmod 755 a.sh //此处也可以写成 chmod +x a.sh 注意+x中间没有空格a.sh //这里也可以使用文件的绝对路径 shell脚本的预备知识：date 命令date命令 是在shell脚本当中最常用的命令，用来显示或者设置系统的日期和时间。 命令行格式： date [参数] [+格式] 参数 含义 -d –date=字符串：显示指定字符串所描述的时间，而非当前时间 -f –file=日期文件：类似–date，从日期文件中按行读入时间描述 -r –reference=文件：显示文件指定文件的最后修改时间 -R –rfc-2822：以RFC 2822格式输出日期和时间 格式 含义 %y 以两位数字表示年份(00-99) %Y 以四位数字表示年份 %m 月份(01-12) %d 按月计的日期(例如：01) %j 按年计的日期（0-366） %c 当前locale 的日期和时间 (如：2005年3月3日 星期四 23:05:25) %b 当前locale 的月名缩写 (如：一，代表一月) %a 当前locale 的星期名缩写(例如： 日，代表星期日) %A 当前locale 的星期名全称 (如：星期日) %H 小时(00-23) %M 分(00-59) %S 大写S，表示秒(00-60) %s 小写s，自UTC 时间 1970-01-01 00:00:00 以来所经过的秒数 %w 小写w，一星期中的第几日(0-6)，0 代表周一 %W 大写W，一年中的第几周，以周一为每星期第一天(00-53) date 示例显示时间，可以设定显示格式 date + [格式] 显示时间 12[root@stevey ~]# dateFri Apr 27 14:09:18 HKT 2018 %A : 星期几 (Sunday..Saturday) 12[root@stevey ~]# date &apos;+%A&apos;Friday %j ：一年中的第几天 12[root@stevey ~]# date &apos;+%j&apos;117 %W ：一年中的第几周 12[root@stevey ~]# date &apos;+%W&apos;17 %s : 从 1970 年 1 月 1 日 00:00:00 UTC 到目前为止的秒数 12[root@stevey ~]# date &apos;+%s&apos;1524809758 加减操作 -d 参数1234567date +%Y%m%d //显示前天年月日date -d &quot;+1 day&quot; +%Y%m%d //显示前一天的日期date -d &quot;-1 day&quot; +%Y%m%d //显示后一天的日期date -d &quot;-1 month&quot; +%Y%m%d //显示上一月的日期date -d &quot;+1 month&quot; +%Y%m%d //显示下一月的日期date -d &quot;-1 year&quot; +%Y%m%d //显示前一年的日期date -d &quot;+1 year&quot; +%Y%m%d //显示下一年的日期 一天前的日期： 1date date -d &quot;-1 day&quot; +%d 一小时前： 1date date -d &quot;-1 hour&quot; +%H 一分钟前； 1date date -d &quot;-1 min&quot; +%M 设定时间：-s 选项，注：设置当前时间，只有root权限才能设置，其他只能查看 123456date -s 20120523 //设置成20120523，这样会把具体时间设置成空00:00:00date -s 01:01:01 //设置具体时间，不会对日期做更改date -s &quot;01:01:01 2012-05-23&quot; //这样可以设置全部时间date -s &quot;01:01:01 20120523&quot; //这样可以设置全部时间date -s &quot;2012-05-23 01:01:01&quot; //这样可以设置全部时间date -s &quot;20120523 01:01:01&quot; //这样可以设置全部时间 shell脚本变量变量格式： var=value var是变量名，value是变量内容； 注： 引用变量，需要加上$,即 $var ； 变量名var 如果是环境变量，约定俗成都用大写字母；如果是其他的变量，建议使用驼峰命名法，第一个单词用小写，从第二个单词开始，每个单词的首字母使用大写，例如 myName； 变量值可以是数字、字符串或者shell命令；如果是shell命令需要使用反引号（tab 上面那个键）； 示例: 注：引用变量时，要用双引号 “” ，否则 $var 会被当作字面量输出； 数字运算注：数学计算要用方括号 [] 括起来；同时，引用变量需要加 $ 示例： 123456789cat sum1.sh#! /bin/bash //shebang## get sum of two numbers //注释：求和m=3n=5sum=$[$m+$n] 获取用户输入注：相当于只定义变量，不赋值；value以参数的形式传入。 示例： 这里用到了rea命令，read 命令从键盘读取变量的值，通常用在shell脚本中与用户进行交互的场合。 命令行格式：read [选项] [参数] 参数指的就是变量名，可以跟多个变量名； 常用选项 含义 -p “提示信息” ：在等待键盘输入时，输出提示信息，方便用户输入 -t 秒数：指定等待时间，防止read命令一直等待用户输入 -s 输入的数据不显示在监视器上（实际上，数据是显示的，只是read命令将文本颜色设置成与背景相同的颜色） -n 字符数：指定输入的字符数，只要用户输入指定的字符数，该read命令立即执行完毕 12345678910#! /bin/bash## Using &apos;read&apos; in shell scriptsread -p &quot;please input a number: &quot; xread -p &quot;Input another number: &quot; ysum=$[$x+$y]echo &quot;$x + $y = $sum&quot; 预设变量shell变量没有数据类型的区别，变量中的值都是以字符串的形式保存的，按照使用环境大概有以下几种： 环境变量：用于保存操作系统运行时使用的环境参数 位置变量：Bash将传递给脚本的参数保存在位置变量中，以便于在脚本中引用这些参数 预定义变量：由系统保留和维护的一组特殊的变量，这些变量通常用于保存程序运行状态等 自定义变量：由用户自行定义的变量，可用于用户编写的脚本，多个命令间的值传递等 预设变量 含义 $0 保存当前程序或脚本的名称 $* 保存传递给脚本或进程的所有参数 $$ 当前进程给脚本的PID号 $! 后台运行的最后一个进程的PID号 $? 用于返回上一条命令是否成功执行。如果这个变量的值为0，说明上一个命令正确执行；如果这个变量的值为非0，则说明上一个命令执行有错误 $# 用于保存脚本的参数个数 示例： 123456789#! /bin/bash## This script contains $0echo &quot;$1 $2 $0&quot; $0指的是脚本的名字sum=$[$1+$2]echo &quot;$1 + $2 = $sum&quot; shell脚本中的逻辑判断 if 和 caseif判断命令行格式 1234567if 判断语句1；then //逻辑判断是否符合条件1 command A //满足条件则执行command Aalif 判断语句2；then //逻辑判断是否符合条件B command B //满足条件则执行command Belse command B //否则执行command Cfi 注: 跟JS 中的if判断如出一辙，同样也有 else、 elif；根据实际需要使用判断；else、 elif 可以省略。 数字判断数字判断语句有两种写法： 第一种写法：类似((var&lt;n)) ，其中a为变量名，n为数字；比如((a&lt;16)) 逻辑判断中也支持 &amp;&amp; 且； || 或 示例： 12345678910111213#! /bin/bash## Using ifread -p &quot;please input your age: &quot; nif((n&lt;16));then echo &quot;hello,kid&quot;elif ((n&gt;=16)) &amp;&amp; ((n&lt;=60));then echo &quot;Time to play!&quot;else echo &quot;OK, You need rest.&quot;fi 第二种写法：使用 [] 使用这种写法，逻辑关系需要改变一下写法 逻辑关系 (()) 写法 [] 写法 大于 ((m&gt;n)) [m -gt n] 小于 ((m&lt;n)) [m -lt n] 小于等于 ((m&lt;=n)) [m -le n] 大于等于 ((m&gt;=n)) [m -ge n] 等于 ((m=n)) [m -eq n] 不等于 ((m!=n)) [m -ne n] 字符判断if 判断也支持判断文档的类型 命令行格式： 123if [ 参数 filename ];then commandfi 也可以写成一行 1if [ 参数 filename ];then command;fi 注：[] 里面要有空格。 这里的参数常见的有： 选项 含义 -e exist ，判断文档或目录是否存在； -d directory，判断是否是目录； -f file，判断是否是文件； -r read，判断是否有read权限； -w write，判断是否有write权限； -x execute，判断是否有execute权限； 示例 1if [ -e a.txt ];then echo &quot;This is a file&quot;;fi case 判断case 判断可以理解成if 判断的一种高级形式，跟JS当中的switch语句很像。 命令行格式： 1234567891011121314151617case var invalue1） command A ;;value2） command B ;;value3） command C ;;value4） command D ;;*) command F ;;esac 示例： 123456789101112131415161718#! /bin/bash## measure input number is even or notread -p &quot;please in number: &quot; na=$[$n%2] // $n%2 表示取余数case $a in1) echo &quot;This is odd number.&quot; ;;0) echo &quot;This is a even number.&quot; ;;*) echo &quot;Ops, Something wrong.&quot;esac shell 脚本中的函数格式： 12345function 函数名（）&#123; command1 command2&#125; 注：shell函数要写在最前面，不能写在中间或后面。就是说，函数需要先定义，再调用，否则就会出错。 示例： 12345678910111213#! /bin/bash## In this script, we&apos;ll use functionread -p &quot;input a number: &quot; mread -p &quot;inout another number: &quot; nfunction sum()&#123; sum=$(($m+$n)) echo &quot;sum = $sum&quot;&#125;sum shell 脚本中的循环跟python其他的高级语言类似，shell脚本也有for循环、while循环，以及break、continue。 for 循环格式： 123for 变量名 in 循环条件；do commanddone 先来看一个最简单的for循环，列出1-5数字： 1234567#! /bin/bash## for loop practicefor i in `seq 1 5`; do echo $idone 再增加一点难度，循环条件也可以是一个命令的执行结果 1234567#! /bin/bash## for loop practicefor file in `ls /root/`; do echo $filedone while 循环while 循环实质上就是for的一种变体，只要满足某个条件，循环就会一直执行。 格式： 123while 循环条件；do commanddone 先看一个例子： 12345678910#! /bin/bash## while loop practicea=10while [ $a -ge 1 ]; do echo &quot;$a&quot; a=$[$a-1]done 注：如果我们想让这个循环一直执行下去，可以用冒号代替循环条件。 break语句：中断本次循环适用场景：将判断和循环结合起来，符合某些条件时break中断循环。注：break只会影响本次循环，在有多重循环嵌套的情况，break只会影响本层级的循环，它的上层循环不受影响。 示例： 123456789101112#! /bin/bash## for loop with break practicefor a in `seq 1 10`do echo &quot;$a&quot; if [ $a == 5 ]; then break fidoneecho &quot;It is over.&quot; continue 语句：跳出本次循环继续执行示例： 12345678910111213#! /bin/bash## for loop with continue practicefor a in `seq 1 10`do if [ $a == 5 ]; then continue else echo &quot;$a&quot; fidoneecho &quot;It is over.&quot; 在这个循环中，因为加入了continue语句，会直接跳过5，输出结果如下 exit语句：终止循环跟break不同之处，在于使用exit语句，会直接退出整个shell脚本。 比如，我们把刚才脚本中continue改为 exit，如下所示 12345678910111213#! /bin/bash## for loop with exit practicefor a in `seq 1 10`do if [ $a == 5 ]; then continue else echo &quot;$a&quot; fidoneecho &quot;It is over.&quot; 执行脚本，结果如下： 12345[root@stevey sbin]# bash while1.sh1234 //执行到5，运行exit语句，直接退出shell脚本，后面的语句都不执行]]></content>
@@ -9,8 +22,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -23,8 +36,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -36,8 +49,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -49,8 +62,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -62,8 +75,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -75,8 +88,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -89,8 +102,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -103,8 +116,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -117,8 +130,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -129,10 +142,10 @@
         <category>kindle</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>dropbox</tag>
         <tag>IFTTT</tag>
         <tag>kinlde</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -144,8 +157,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -158,8 +171,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -172,8 +185,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -186,8 +199,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -200,8 +213,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -227,8 +240,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -241,8 +254,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>lvm</tag>
       </tags>
   </entry>
@@ -255,8 +268,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -268,8 +281,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -281,8 +294,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -294,8 +307,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -307,8 +320,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -320,8 +333,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -333,8 +346,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -346,8 +359,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -359,8 +372,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -372,8 +385,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -397,8 +410,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -410,8 +423,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>rescueMode</tag>
       </tags>
   </entry>
@@ -424,8 +437,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>putty</tag>
         <tag>xshell</tag>
         <tag>iterm2</tag>
@@ -440,8 +453,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>ip</tag>
       </tags>
   </entry>
@@ -454,8 +467,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>

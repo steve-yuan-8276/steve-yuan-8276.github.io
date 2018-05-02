@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Linux运维学习笔记：sed命令练习题目]]></title>
+    <url>%2F2018%2F05%2F02%2FlinuxNotes-sedPractice%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记接着上期 sed 笔记相关知识，主要是一些练习题目。 打印某行到某行之间的内容新建a.txt，内容如下，打印[abcfd]到 [rty] 解题思路： 主要考察sed -n， -n 选项表示打印指定行。 方法一： 1sed -n &apos;4,8p&apos; a.txt 方法二： 1sed -n &apos;/\[abcfd\]/,/\[rty\]/p&apos; a.txt sed转换大小写解题思路： sed中，使用\u表示大写，\l表示小写 12345sed &apos;s/\b[a-z]/\u&amp;/g&apos; filename // 把每个单词的第一个小写字母变大写：sed &apos;s/[a-z]/\u&amp;/g&apos; filename // 所有小写变大写sed &apos;s/[A-Z]/\l&amp;/g&apos; filename //大写变小写 sed在某一行最后添加一个数字替换文档内容： sed &#39;m,ns/keyword/替换文字/g&#39; [filename] 123sed &apos;/root/s/^/abc /&apos; /etc/passwd //在/etc/passwd文件中在含有root的行的前面添加abc字符串，并在后面跟一个空格sed &apos;/^mail\&gt;/,/^ftp\&gt;/s/$/ abc/&apos; /etc/passwd //在以第一个mail开头的行到以一个ftp开头的行的后面添加abc，并在abc前面加一个空格 删除某行到最后一行WARNING：（这个拓展完全没看懂）定义一个标签a，匹配c，然后N把下一行加到模式空间里，匹配最后一行时，才退出标签循环，然后命令d，把这个模式空间里的内容全部清除。 1234567891011[root@test200 ~]# cat testabcdef[root@test200 ~]# sed &apos;/c/&#123;p;:a;N;$!ba;d&#125;&apos; test abc 打印1到100行含某个字符串的行解题思路： 本题还是考察 sed -n 的用法。 1sed -n &apos;1,100&#123;/abc/p&#125;&apos; 1.txt 除了这种方法，借助管道符，还有两种方法也可以实现： 方法一： 1sed -n &apos;1,100p&apos; 1.txt|sed -n &apos;/abc/&apos;p 方法二： 1sed -n &apos;1,100p&apos; /etc/passwd | grep root]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>regularExpression</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Linux运维学习笔记7-1：监控系统状态命令（一）]]></title>
     <url>%2F2018%2F04%2F28%2Fweek701-howToManageLinux%2F</url>
     <content type="text"><![CDATA[写在前面前一阶段linux基础知识暂告一段落，下面开始介绍linux系统管理的基本知识。本节主要涉及w、 vmstat、 top、 sar 、nload 五个命令。 w 命令w命令用于显示目前登入系统的用户信息，可得知目前登入系统的用户有哪些人，以及他们正在执行的程序。 命令行格式： 1w [选项] [参数] 常用选项 含义 -f 开启或关闭显示用户从何处登入系统 -h 不显示各栏位的标题信息列 -l 使用详细格式列表，此为预设值 -s 使用简洁格式列表，不显示用户登入时间，终端机阶段作业和程序所耗费的CPU时间 -u 忽略执行程序的名称，以及该程序耗费CPU时间的信息 -V 显示版本信息 w 命令能查到哪些信息示例： 上图中， 第一行从左到右依次为：时间、系统运行时间、登陆用户数、平均负载。最值得关注的是平均负载，由三个数字组成，分别代表1分钟、5分钟、15分钟的系统负载；数字越大，说明服务器的压力越大。 第二行显示的是登陆名、登陆地址等信息。 判断服务器压力的方法：将均衡负载数与cpu数做比较，如果长时间大于cpu个数，就说明系统压力大；反之，说明系统运行正常。 这里需要补充了解一下系统cpu的查询方法： 系统cpu信息保存在 /proc/cpuinfo,系统内核从0开始，逐一列出。 查询系统有几个cpu，可以使用 cat /proc/cpuinfo | grep -c &#39;processor&#39; 注：grep -c 表示打印符合条件的行数。 对比一下红框内的数字，说明系统负载不高。 vmstat 命令vmstat是Virtual Meomory Statistics（虚拟内存统计）的缩写，可对操作系统的虚拟内存、进程、CPU活动进行监控。可以对系统的整体情况进行统计，但不足之处是无法对某个进程进行深入分析。 物理内存和虚拟内存：学习vmstat 命令，首先需要了解物理内存和虚拟内存的区别。 物理内存：系统硬件提供的内存大小，是真正的内存； 虚拟内存：利用磁盘空间虚拟出的一块逻辑内存，用作虚拟内存的磁盘空间被称为交换空间（Swap Space）。linux下设置虚拟内存的方法见这里 物理内存的速度快，但是空间有限。为了最大化利用物理内存，系统会不时的进行页面交换操作，以保持尽可能多的空闲物理内存，即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面，从而避免等待交换所需的时间。 vmstat 命令行格式：1vmstat[选项] [参数] 常用选项 含义 -a 显示活动内页； -f 显示启动后创建的进程总数； -m 显示slab信息； -n 头信息仅显示一次； -s 以表格方式显示事件计数器和内存状态； -d 报告磁盘状态； -p 显示指定的硬盘分区状态； -S 输出信息的单位。 参数： 事件间隔：状态信息刷新的时间间隔； 次数：显示报告的次数； vmstat 能查到哪些信息 procs进程相关信息 r ：run，表示运行队列，某一时刻CPU只能处理一个任务，其他的任务只能排队，这个状态就是r记录的状态；如果这个数值长时间大于服务器CPU，就说明cpu资源不够用了。 b： block，表示等待资源的进程数,资源指的是I/O 、内存等。b状态反应的是进程任务将结果写入磁盘的过程，如果这个数字长期大于1，说明磁盘写入频繁，需要关注。 memory 内存相关信息 swpd： 虚拟内存已使用的大小，单位为KB，如果大于0，表示机器物理内存不足； free： 空闲的物理内存的大小； buff： 用作缓冲的内存大小； cache ：表示从磁盘中读取的缓存大小； swap内存交换情况 si ：每秒从虚拟内存写入内存的数据量； so ：每秒虚拟内存写入磁盘的大小； io 磁盘使用情况 bi ：读磁盘的数据量； bo ：写磁盘的数据量； system系统采集间隔内的中断数 in ：每秒CPU的中断次数，包括时间中断 cs ：每秒上下文切换次数，例如我们调用系统函数、线程切换，都要进程上下文切换。这个值要越小越好，数值偏大表示你的CPU大部分浪费在上下文切换，导致CPU干正经事的时间少了，没有得到充分利用。 CPU使用状态 us：用户CPU时间百分比； sy ：系统CPU时间百分比，如果太高，表示系统调用时间长，例如是IO操作频繁。 id ：空闲 CPU时间百分比；一般来说，id + us + sy = 100,一般我认为id是空闲CPU使用率，us是用户CPU使用率，sy是系统CPU使用率。 wa ：等待IO CPU时间； st ：表示被偷走的CPU所占百分比，一般为0. top 命令top命令用于动态监控进程所占用的系统资源，每隔3秒钟更新一次，特点是会将占用CPU、内存磁盘I/O 最高的进程放在最前面。 命令行格式： 1top [选项] 常用选项 含义 -b 以批处理模式操作； -c 显示完整的治命令； -d 屏幕刷新间隔时间； -I 忽略失效过程； -s 保密模式； -S 累积模式； -i&lt;时间&gt; 设置间隔时间； -u&lt;用户名&gt; 指定用户名； -p&lt;进程号&gt; 指定进程； -n&lt;次数&gt; 循环显示的次数 top 能查看哪些信息 上图中， RES 表示占用内存的大小； %MEM 表示占用内存的百分比； top 基本操作： shift + m 按照内容使用情况排序； 数字 1 列出所有CPU使用状态； q退出top； top 常见用法：非动态打印系统资源使用情况命令行格式： top -bn1 sar命令sar（System Activity Reporter系统活动情况报告）是目前 Linux 上最为全面的系统性能分析工具之一，可以从多方面对系统的活动进行报告，包括：文件的读写情况、系统调用的使用情况、磁盘I/O、CPU效率、内存使用状况、进程活动及IPC有关的活动等。 Sar是后台进程sadc的前端显示工具，与其他系统监控工具相比，它可以打印从当天零点开始到当前时刻到系统状态信息。 命令行格式： 1sar [options] [-o file] t [n] t为采样间隔，n为采样次数，默认值是1； -o file表示将命令结果以二进制格式存放在文件中，file 是文件名。 options 为命令行选项，sar命令常用选项如下： 常用选项 含义 -A 所有报告的总和 -u 输出CPU使用情况的统计信息 -v 输出inode、文件和其他内核表的统计信息 -d 输出每一个块设备的活动信息 -r 输出内存和交换空间的统计信息 -b 显示I/O和传送速率的统计信息 -a 文件读写情况 -c 输出进程统计信息，每秒创建的进程数 -R 输出内存页面的统计信息 -y 终端设备活动情况 -w 输出系统交换活动信息 sar 安装centos 7 默认没有sar，需要单独安装；安装名为“sysstat”的包后，sadc就会自动从内核收集报告并保存到/var/log/sa/ 目录下。 1yum install -y sysstat 启动sadc(system activity data collector)服务(sysstat)，这样报告就会被写入到日志文件“/var/log/sa/saDD”中并且已经存在的文档将会被归档,DD表示日期。 12systemctl start sysstatsystemctl enable sysstat sar 使用实例查看网络流量 ：sar -n {keyword} or {ALL} 使用-f选项可以查看某一天的网络流量历史 1sar -n DEV -f /var/log/sa/sa28 那么，从这张表能看出哪些有用的信息呢？ 列名称 含义 IFACE 设备名称 rxpck/s 每秒进入收取的包的数量，数值大于4000，说明网络异常； txpck/s 每秒发送出去的包的数量 rxkB/s 每秒收取的数据量，数值大于5000000，说明网络异常； txkB/s 每秒发送的数据量 查看历史负载 sar -q CPU资源监控sar -u -o test 10 3 // 每10秒采样一次，连续采样3次，观察CPU 的使用情况，并将采样结果以二进制形式存入当前目录下的文件test中 需要重点关注的指标： %iowait：显示用于等待I/O操作占用 CPU 总时间的百分比；若 %iowait 的值过高，表示硬盘存在I/O瓶颈； %idle：显示 CPU 空闲时间占用 CPU 总时间的百分比；若 %idle 的值高但系统响应慢时，有可能是 CPU 等待分配内存，此时应加大内存容量；若 %idle 的值持续低于1，则系统的 CPU 处理能力相对较低，表明系统中最需要解决的资源是 CPU 。 inode、文件和其他内核表监控1sar -v 10 3 //每10秒采样一次，连续采样3次，观察核心表的状态 输出项 含义 dentunusd 目录高速缓存中未被使用的条目数量 file-nr 文件句柄（file handle）的使用数量 inode-nr 索引节点句柄（inode handle）的使用数量 pty-nr 使用的pty数量 nload 命令nload 安装1yum install -y epel-release; yum install -y nload // 先安装 epel-release 包，再安装nload；nload包在epel拓展源里的； nload 使用输入nload进行查看，按q退出； 参考资料每天一个linux命令（46）：vmstat命令 linux sar 命令详解 7 个实例教你使用 sar 命令 sar 找出系统瓶颈的利器]]></content>
@@ -559,10 +572,10 @@
         <category>react</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>react</tag>
         <tag>node</tag>
         <tag>npm</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -573,8 +586,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -609,8 +622,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -797,8 +810,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>https</tag>
       </tags>
   </entry>
@@ -823,8 +836,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>front-end</tag>
+        <tag>JavaScript</tag>
         <tag>ES6</tag>
       </tags>
   </entry>
@@ -836,8 +849,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -860,8 +873,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -897,8 +910,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
 </search>

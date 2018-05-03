@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2018-05-03T08:59:23.268Z</updated>
+  <updated>2018-05-03T13:41:27.547Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -15,6 +15,62 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>shell练习题目：第1-5题</title>
+    <link href="https://steve-yuan-8276.github.io/2018/05/03/shell100-practice1/"/>
+    <id>https://steve-yuan-8276.github.io/2018/05/03/shell100-practice1/</id>
+    <published>2018-05-03T09:54:37.000Z</published>
+    <updated>2018-05-03T13:41:27.547Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="第1题"><a href="#第1题" class="headerlink" title="第1题"></a>第1题</h3><p>按照年-月-日 <code>XXXX-XX-XX</code> 格式每天生成一个日志文件，记录每天的磁盘使用情况。</p><h4 id="相关知识点"><a href="#相关知识点" class="headerlink" title="相关知识点"></a>相关知识点</h4><h5 id="date-命令：显示系统时间"><a href="#date-命令：显示系统时间" class="headerlink" title="date 命令：显示系统时间"></a><code>date</code> 命令：显示系统时间</h5><p><code>date</code>命令用来显示或者设置系统的日期和时间，是shell脚本当中最常用的命令，</p><p>命令行格式： </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date [参数] [+格式]</span><br></pre></td></tr></table></figure><p>详细的用法，参见<a href="https://www.steve-yuan.com/2018/04/27/linuxNotes-howToWriteShellScript/" target="_blank" rel="noopener">这里</a>。</p><table><thead><tr><th>常见格式</th><th>含义</th></tr></thead><tbody><tr><td>%y</td><td>以两位数字表示年份(00-99)</td></tr><tr><td>%Y</td><td>以四位数字表示年份</td></tr><tr><td>%m</td><td>月份(01-12)</td></tr><tr><td>%d</td><td>按月计的日期(例如：01)</td></tr></tbody></table><a id="more"></a><h5 id="df-命令：查看磁盘使用情况"><a href="#df-命令：查看磁盘使用情况" class="headerlink" title="df 命令：查看磁盘使用情况"></a><code>df</code> 命令：查看磁盘使用情况</h5><p>命令行格式</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df [参数]</span><br></pre></td></tr></table></figure><p>这个命令比较简单，常见的参数有 -k（KB）、 -m（MB）、 h（自适应选择存储单位），以及i（查看inode使用情况）；</p><p>更多的用法介绍在<a href="https://www.steve-yuan.com/2018/04/04/week3-4-basisOfDisksetting/" target="_blank" rel="noopener">这里</a></p><h4 id="shell脚本"><a href="#shell脚本" class="headerlink" title="shell脚本"></a>shell脚本</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#! /bin/bash   </span><br><span class="line"></span><br><span class="line">## In this script, we&apos;ll create disk-usage log</span><br><span class="line"></span><br><span class="line">date=`date +%Y-%m-%d`     //定义日期格式</span><br><span class="line">logfile=$date.log         </span><br><span class="line">df -h &gt; $logfile</span><br></pre></td></tr></table></figure><p>[To Be Continue]</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;第1题&quot;&gt;&lt;a href=&quot;#第1题&quot; class=&quot;headerlink&quot; title=&quot;第1题&quot;&gt;&lt;/a&gt;第1题&lt;/h3&gt;&lt;p&gt;按照年-月-日 &lt;code&gt;XXXX-XX-XX&lt;/code&gt; 格式每天生成一个日志文件，记录每天的磁盘使用情况。&lt;/p&gt;
+&lt;h4 id=&quot;相关知识点&quot;&gt;&lt;a href=&quot;#相关知识点&quot; class=&quot;headerlink&quot; title=&quot;相关知识点&quot;&gt;&lt;/a&gt;相关知识点&lt;/h4&gt;&lt;h5 id=&quot;date-命令：显示系统时间&quot;&gt;&lt;a href=&quot;#date-命令：显示系统时间&quot; class=&quot;headerlink&quot; title=&quot;date 命令：显示系统时间&quot;&gt;&lt;/a&gt;&lt;code&gt;date&lt;/code&gt; 命令：显示系统时间&lt;/h5&gt;&lt;p&gt;&lt;code&gt;date&lt;/code&gt;命令用来显示或者设置系统的日期和时间，是shell脚本当中最常用的命令，&lt;/p&gt;
+&lt;p&gt;命令行格式： &lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;date [参数] [+格式]&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;详细的用法，参见&lt;a href=&quot;https://www.steve-yuan.com/2018/04/27/linuxNotes-howToWriteShellScript/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;这里&lt;/a&gt;。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;常见格式&lt;/th&gt;
+&lt;th&gt;含义&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;%y&lt;/td&gt;
+&lt;td&gt;以两位数字表示年份(00-99)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;%Y&lt;/td&gt;
+&lt;td&gt;以四位数字表示年份&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;%m&lt;/td&gt;
+&lt;td&gt;月份(01-12)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;%d&lt;/td&gt;
+&lt;td&gt;按月计的日期(例如：01)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+    
+    </summary>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
+    
+    
+      <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux运维学习笔记7-2：监控系统状态命令（二）</title>
@@ -956,39 +1012,6 @@
       <category term="bash" scheme="https://steve-yuan-8276.github.io/tags/bash/"/>
     
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux运维学习笔记4-2：vim基础知识（一）</title>
-    <link href="https://steve-yuan-8276.github.io/2018/04/09/week4-2-basisOfVIM-Part1/"/>
-    <id>https://steve-yuan-8276.github.io/2018/04/09/week4-2-basisOfVIM-Part1/</id>
-    <published>2018-04-09T04:12:11.000Z</published>
-    <updated>2018-04-12T05:47:47.318Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记开始学习VIM用法。</p><p>vim 是比系统自带的vi更强大的文本编辑器，支持语法高亮，有大量的快捷键需要记忆，学习难度也很大。</p><h3 id="vim-安装"><a href="#vim-安装" class="headerlink" title="vim 安装"></a>vim 安装</h3><p>centOS 7安装：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y vim-enhanced</span><br></pre></td></tr></table></figure><p>macOS 安装：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install vim</span><br></pre></td></tr></table></figure><a id="more"></a><h4 id="vim简单配置"><a href="#vim简单配置" class="headerlink" title="vim简单配置"></a>vim简单配置</h4><p>Vim编辑环境配置，涉及<code>/etc/vimrc</code> 和 <code>~/.vimrc</code>。前者是全局配置，而后置只针对当前用户，所以就新建一个进行修改即可。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">touch ～/.vimrc //新建当前用户目录下的配置文件</span><br><span class="line"></span><br><span class="line">vim ~/.vimrc     //编辑` .vimrc`文件</span><br></pre></td></tr></table></figure><p>新增以下内容：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">set nu         // 这是设置显示行号</span><br><span class="line">set  showmode   //设置在命令行界面最下面显示当前模式等。</span><br><span class="line">set   ruler     // 在右下角显示光标所在的行数等信息</span><br><span class="line">set autoindent   // 设置每次单击Enter键后，光标移动到下一行时与上一行的起始字符对齐</span><br><span class="line">syntax on    // 即设置语法检测，当编辑C或者Shell脚本时，关键字会用特殊颜色显示</span><br></pre></td></tr></table></figure><p>之后，按 <code>esc</code> 键，输入<code>:wq</code>进行保存。</p><h3 id="vim普通模式下的基本操作"><a href="#vim普通模式下的基本操作" class="headerlink" title="vim普通模式下的基本操作"></a>vim普通模式下的基本操作</h3><p>命令行格式: <code>vim [filename]</code></p><p>vim 有三种模式，包括普通模式、编辑模式和命令模式。首先是普通模式：</p><p>在普通模式下，可以进行的操作包括：</p><h4 id="移动光标"><a href="#移动光标" class="headerlink" title="移动光标"></a>移动光标</h4><ul><li>使用h、l、k、j 代表左、右、上、下，如下图所示：</li></ul><p><img src="https://farm1.staticflickr.com/901/26464130577_36444dcabe_o.png" alt=""></p><ul><li><code>Ctrl+B</code>、<code>ctrl+F</code> 代表向前/向后翻页。</li></ul><ul><li><code>0</code>、<code>shift+6</code>移动到本行行首；<code>shift+4</code> 移动到本行末尾。</li></ul><ul><li><code>gg</code> 移动到第一行；<code>G</code> 移动到最后一行；<code>nG</code>移动到第n行（n代表数字）</li></ul><h4 id="删除字符或行"><a href="#删除字符或行" class="headerlink" title="删除字符或行"></a>删除字符或行</h4><ul><li><p><code>x</code>表示向后删除一个字符；<code>X</code>表示向前删除一个字符；<code>nx</code>表示向后删除n的字符（n代表数字）</p></li><li><p><code>dd</code> 删除光标所在行；<code>ndd</code> 删除光标所在行之后的n行（n代表数字）</p></li></ul><h4 id="复制粘贴字符或者行"><a href="#复制粘贴字符或者行" class="headerlink" title="复制粘贴字符或者行"></a>复制粘贴字符或者行</h4><ul><li><p><code>yy</code>复制光标所在行；<code>nyy</code> 从光标所载行开始，向下复制n行。</p></li><li><p>小写 <code>p</code> 表示从光标所在行开始<strong>向后</strong>粘贴；大写 <code>P</code> 表示<strong>向前</strong>粘贴</p></li><li><p>按 <code>v</code> 移动光标会选中指定文字</p></li><li><p>按 <code>u</code> 还原上一步操作</p></li></ul><h4 id="查看帮助文档"><a href="#查看帮助文档" class="headerlink" title="查看帮助文档"></a>查看帮助文档</h4><p>vim 快捷键示意图</p><p><img src="https://farm5.staticflickr.com/4783/39120869320_db56e0d91c_o.jpg" alt=""></p><p>输入 <code>:help</code> 查看帮助文档</p><p>输入 <code>/</code> 或者 <code>?</code> 查找关键字</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;这则笔记开始学习VIM用法。&lt;/p&gt;
-&lt;p&gt;vim 是比系统自带的vi更强大的文本编辑器，支持语法高亮，有大量的快捷键需要记忆，学习难度也很大。&lt;/p&gt;
-&lt;h3 id=&quot;vim-安装&quot;&gt;&lt;a href=&quot;#vim-安装&quot; class=&quot;headerlink&quot; title=&quot;vim 安装&quot;&gt;&lt;/a&gt;vim 安装&lt;/h3&gt;&lt;p&gt;centOS 7安装：&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;yum install -y vim-enhanced&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;macOS 安装：&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;brew install vim&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-    
-    </summary>
-    
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
-    
-    
-      <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
-    
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
-      <category term="vim" scheme="https://steve-yuan-8276.github.io/tags/vim/"/>
     
   </entry>
   

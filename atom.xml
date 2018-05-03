@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2018-05-03T13:41:27.547Z</updated>
+  <updated>2018-05-03T13:44:59.123Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>shell练习题目：第1-5题</title>
+    <title>linux学习笔记：shell练习第1-5题</title>
     <link href="https://steve-yuan-8276.github.io/2018/05/03/shell100-practice1/"/>
     <id>https://steve-yuan-8276.github.io/2018/05/03/shell100-practice1/</id>
     <published>2018-05-03T09:54:37.000Z</published>
-    <updated>2018-05-03T13:41:27.547Z</updated>
+    <updated>2018-05-03T13:44:59.123Z</updated>
     
     <content type="html"><![CDATA[<h3 id="第1题"><a href="#第1题" class="headerlink" title="第1题"></a>第1题</h3><p>按照年-月-日 <code>XXXX-XX-XX</code> 格式每天生成一个日志文件，记录每天的磁盘使用情况。</p><h4 id="相关知识点"><a href="#相关知识点" class="headerlink" title="相关知识点"></a>相关知识点</h4><h5 id="date-命令：显示系统时间"><a href="#date-命令：显示系统时间" class="headerlink" title="date 命令：显示系统时间"></a><code>date</code> 命令：显示系统时间</h5><p><code>date</code>命令用来显示或者设置系统的日期和时间，是shell脚本当中最常用的命令，</p><p>命令行格式： </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date [参数] [+格式]</span><br></pre></td></tr></table></figure><p>详细的用法，参见<a href="https://www.steve-yuan.com/2018/04/27/linuxNotes-howToWriteShellScript/" target="_blank" rel="noopener">这里</a>。</p><table><thead><tr><th>常见格式</th><th>含义</th></tr></thead><tbody><tr><td>%y</td><td>以两位数字表示年份(00-99)</td></tr><tr><td>%Y</td><td>以四位数字表示年份</td></tr><tr><td>%m</td><td>月份(01-12)</td></tr><tr><td>%d</td><td>按月计的日期(例如：01)</td></tr></tbody></table><a id="more"></a><h5 id="df-命令：查看磁盘使用情况"><a href="#df-命令：查看磁盘使用情况" class="headerlink" title="df 命令：查看磁盘使用情况"></a><code>df</code> 命令：查看磁盘使用情况</h5><p>命令行格式</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df [参数]</span><br></pre></td></tr></table></figure><p>这个命令比较简单，常见的参数有 -k（KB）、 -m（MB）、 h（自适应选择存储单位），以及i（查看inode使用情况）；</p><p>更多的用法介绍在<a href="https://www.steve-yuan.com/2018/04/04/week3-4-basisOfDisksetting/" target="_blank" rel="noopener">这里</a></p><h4 id="shell脚本"><a href="#shell脚本" class="headerlink" title="shell脚本"></a>shell脚本</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#! /bin/bash   </span><br><span class="line"></span><br><span class="line">## In this script, we&apos;ll create disk-usage log</span><br><span class="line"></span><br><span class="line">date=`date +%Y-%m-%d`     //定义日期格式</span><br><span class="line">logfile=$date.log         </span><br><span class="line">df -h &gt; $logfile</span><br></pre></td></tr></table></figure><p>[To Be Continue]</p>]]></content>
     

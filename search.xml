@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[shell练习题目：第1-5题]]></title>
+    <title><![CDATA[linux学习笔记：shell练习第1-5题]]></title>
     <url>%2F2018%2F05%2F03%2Fshell100-practice1%2F</url>
     <content type="text"><![CDATA[第1题按照年-月-日 XXXX-XX-XX 格式每天生成一个日志文件，记录每天的磁盘使用情况。 相关知识点date 命令：显示系统时间date命令用来显示或者设置系统的日期和时间，是shell脚本当中最常用的命令， 命令行格式： 1date [参数] [+格式] 详细的用法，参见这里。 常见格式 含义 %y 以两位数字表示年份(00-99) %Y 以四位数字表示年份 %m 月份(01-12) %d 按月计的日期(例如：01) df 命令：查看磁盘使用情况命令行格式 1df [参数] 这个命令比较简单，常见的参数有 -k（KB）、 -m（MB）、 h（自适应选择存储单位），以及i（查看inode使用情况）； 更多的用法介绍在这里 shell脚本1234567#! /bin/bash ## In this script, we&apos;ll create disk-usage logdate=`date +%Y-%m-%d` //定义日期格式logfile=$date.log df -h &gt; $logfile [To Be Continue]]]></content>
       <categories>
@@ -661,8 +661,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -798,8 +798,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -912,8 +912,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>web</tag>
         <tag>front-end</tag>
+        <tag>web</tag>
         <tag>google</tag>
       </tags>
   </entry>
@@ -925,8 +925,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>web</tag>
         <tag>front-end</tag>
+        <tag>web</tag>
       </tags>
   </entry>
   <entry>

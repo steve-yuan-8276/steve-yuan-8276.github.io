@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[Linux运维学习笔记7-3：监控系统状态命令（三）]]></title>
-    <url>%2F2018%2F05%2F07%2Fweek7-3-howToMnageLinuxPart3%2F</url>
-    <content type="text"><![CDATA[写在前面 这些笔记接着整理linux网络相关的内容。 10.11 Linux网络相关10.12 firewalld和netfilter10.13 netfilter5表5链介绍10.14 iptables语法 扩展（selinux了解即可） selinux教程 http://os.51cto.com/art/201209/355490.htm2.selinux pdf电子书 http://pan.baidu.com/s/1jGGdExK]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>tcpdump</tag>
-        <tag>wireshark</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[linux学习笔记：shell练习第1题]]></title>
     <url>%2F2018%2F05%2F03%2Fshell100-practice1%2F</url>
     <content type="text"><![CDATA[第1题按照年-月-日 XXXX-XX-XX 格式每天生成一个日志文件，记录每天的磁盘使用情况。 相关知识点date 命令：显示系统时间date命令用来显示或者设置系统的日期和时间，是shell脚本当中最常用的命令， 命令行格式： 1date [参数] [+格式] 详细的用法，参见这里。 常见格式 含义 %y 以两位数字表示年份(00-99) %Y 以四位数字表示年份 %m 月份(01-12) %d 按月计的日期(例如：01) df 命令：查看磁盘使用情况命令行格式 1df [参数] 这个命令比较简单，常见的参数有 -k（KB）、 -m（MB）、 h（自适应选择存储单位），以及i（查看inode使用情况）； 更多的用法介绍在这里 shell脚本1234567#! /bin/bash ## In this script, we&apos;ll create disk-usage logdate=`date +%Y-%m-%d` //定义日期格式logfile=$date.log df -h &gt; $logfile]]></content>
@@ -651,8 +637,8 @@
         <category>web</category>
       </categories>
       <tags>
-        <tag>https</tag>
         <tag>http</tag>
+        <tag>https</tag>
       </tags>
   </entry>
   <entry>
@@ -877,8 +863,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>front-end</tag>
+        <tag>JavaScript</tag>
         <tag>ES6</tag>
       </tags>
   </entry>

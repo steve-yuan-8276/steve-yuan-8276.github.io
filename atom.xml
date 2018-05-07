@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2018-05-07T09:46:00.323Z</updated>
+  <updated>2018-05-07T02:14:35.164Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -15,40 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Linux运维学习笔记7-3：监控系统状态命令（三）</title>
-    <link href="https://steve-yuan-8276.github.io/2018/05/07/week7-3-howToMnageLinuxPart3/"/>
-    <id>https://steve-yuan-8276.github.io/2018/05/07/week7-3-howToMnageLinuxPart3/</id>
-    <published>2018-05-07T09:40:11.000Z</published>
-    <updated>2018-05-07T09:46:00.323Z</updated>
-    
-    <content type="html"><![CDATA[<p>写在前面</p><p>这些笔记接着整理linux网络相关的内容。</p><p>10.11 Linux网络相关<br>10.12 firewalld和netfilter<br>10.13 netfilter5表5链介绍<br>10.14 iptables语法</p><p>扩展（selinux了解即可）</p><ol><li>selinux教程  <a href="http://os.51cto.com/art/201209/355490.htm" target="_blank" rel="noopener">http://os.51cto.com/art/201209/355490.htm</a><br>2.selinux pdf电子书  <a href="http://pan.baidu.com/s/1jGGdExK" target="_blank" rel="noopener">http://pan.baidu.com/s/1jGGdExK</a></li></ol>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;写在前面&lt;/p&gt;
-&lt;p&gt;这些笔记接着整理linux网络相关的内容。&lt;/p&gt;
-&lt;p&gt;10.11 Linux网络相关&lt;br&gt;10.12 firewalld和netfilter&lt;br&gt;10.13 netfilter5表5链介绍&lt;br&gt;10.14 iptables语法&lt;/p&gt;
-&lt;p
-      
-    
-    </summary>
-    
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
-    
-    
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
-      <category term="tcpdump" scheme="https://steve-yuan-8276.github.io/tags/tcpdump/"/>
-    
-      <category term="wireshark" scheme="https://steve-yuan-8276.github.io/tags/wireshark/"/>
-    
-  </entry>
   
   <entry>
     <title>linux学习笔记：shell练习第1题</title>
@@ -1016,6 +982,40 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="vim" scheme="https://steve-yuan-8276.github.io/tags/vim/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mac笔记：关于mac的一些骚操作</title>
+    <link href="https://steve-yuan-8276.github.io/2018/04/09/trickOfMac/"/>
+    <id>https://steve-yuan-8276.github.io/2018/04/09/trickOfMac/</id>
+    <published>2018-04-09T05:19:26.000Z</published>
+    <updated>2018-05-03T08:37:00.668Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记主要整理一些在网上看到的关于mac的使用技巧。</p><h3 id="Mac-OS-添加-alias"><a href="#Mac-OS-添加-alias" class="headerlink" title="Mac OS 添加 alias"></a><code>Mac OS</code> 添加 <code>alias</code></h3><h4 id="解决思路："><a href="#解决思路：" class="headerlink" title="解决思路："></a>解决思路：</h4><p>修改系统配置文件<code>/etc/profile</code> 或者 <code>~/.bash_profile</code>，这两个文件的区别在于：</p><ul><li><p><code>/etc/profile</code> 适用于所有用户的全局配置脚本</p></li><li><p><code>~/.bash_profile</code> 适用于当前用户的启动配置文件</p></li></ul><p>所以，修改<code>~/.bash_profile</code>比较安全点。</p><a id="more"></a><h4 id="实现步骤："><a href="#实现步骤：" class="headerlink" title="实现步骤："></a>实现步骤：</h4><h5 id="修改-bash-profile"><a href="#修改-bash-profile" class="headerlink" title="修改~/.bash_profile"></a>修改<code>~/.bash_profile</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bash_profile   //使用vim编辑</span><br><span class="line"></span><br><span class="line">alias ll=&apos;ls -l --color=auto&apos;    //添加这一行，使得` ll `命令生效</span><br><span class="line"></span><br><span class="line">alias subl=&quot;&apos;/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl&apos;&quot;   // 使用 subl 打开sublime text</span><br><span class="line"></span><br><span class="line">alias ping=&apos;ping -c 4&apos;     //ping 命令默认执行4次</span><br></pre></td></tr></table></figure><p>之后，按esc， 输入 :wq 保存退出；</p><h5 id="执行以下命令，配置文件生效"><a href="#执行以下命令，配置文件生效" class="headerlink" title="执行以下命令，配置文件生效"></a>执行以下命令，配置文件生效</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bath_profile</span><br></pre></td></tr></table></figure><h3 id="终端安装-mac-vim"><a href="#终端安装-mac-vim" class="headerlink" title="终端安装 mac-vim"></a>终端安装 mac-vim</h3><h4 id="安装brew"><a href="#安装brew" class="headerlink" title="安装brew"></a>安装brew</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</span><br></pre></td></tr></table></figure><h4 id="安装VIM"><a href="#安装VIM" class="headerlink" title="安装VIM"></a>安装VIM</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install vim --with-lua --with-override-system-vi</span><br></pre></td></tr></table></figure><h4 id="安装-GUI-版-mac-vim"><a href="#安装-GUI-版-mac-vim" class="headerlink" title="安装 GUI 版 mac vim"></a>安装 GUI 版 mac vim</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install macvim --with-lua --with-override-system-vim</span><br></pre></td></tr></table></figure><p>安装完成后重启终端即可。</p><h4 id="更新mac-vim"><a href="#更新mac-vim" class="headerlink" title="更新mac vim"></a>更新mac vim</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew upgrade macvim</span><br></pre></td></tr></table></figure><p>输入 <code>mvim</code> 可以从终端启动 GUI 版的 Vim。</p><h3 id="终端自动补全"><a href="#终端自动补全" class="headerlink" title="终端自动补全"></a>终端自动补全</h3><h4 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h4><p>修改<code>～/.inputrc</code>配置文件（如果家目录下没有就新建一个）；配置完成后，按tab键，就能够自动补全。</p><h4 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h4><ul><li>第一步：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.inputrc    打开编辑文件，加入一下内容</span><br><span class="line"></span><br><span class="line">set completion-ignore-case on</span><br><span class="line">set show-all-if-ambiguous on</span><br><span class="line">TAB: menu-complete</span><br></pre></td></tr></table></figure><ul><li><p>第二步：完成后，按 <code>esc</code> ，输入 <code>:wq</code> 保存退出。</p></li><li><p>第三步：重启shell</p></li></ul><h3 id="mac自带的sed和linux表现不一致"><a href="#mac自带的sed和linux表现不一致" class="headerlink" title="mac自带的sed和linux表现不一致"></a>mac自带的sed和linux表现不一致</h3><p>mac 和 linux中都有sed命令，但是因为mac系统用的是原生的bsd系列，而一般的linux系统用的是gnu系统，所以两者在某些命令中还是有区别的。</p><p>在linux中，</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed &quot;$line a\\(多一个\，用来防止转义) $value&quot; $filename</span><br></pre></td></tr></table></figure><p>在mac当中，</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sed &quot;$line a\       //在 \ 后要加一个空格</span><br><span class="line"></span><br><span class="line">&gt;$value             //需要添加新一行的内容）</span><br><span class="line"></span><br><span class="line">&gt;&quot; $filename        //文件名</span><br></pre></td></tr></table></figure><p>如果想要像linux那样，在mac中使用sed，就需要安装 <code>gnu-sed</code> ，具体如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">brew install gnu-sed --with-default-names   //安装gnu-sed</span><br><span class="line">vim ~/.zshrc    //编辑环境变量文件，加入下面这一行</span><br><span class="line">export PATH=&quot;/usr/local/opt/gnu-sed/libexec/gnubin:$PATH&quot;</span><br><span class="line">3.source ~/.zshrc   //或者新开窗口，让设置生效</span><br></pre></td></tr></table></figure><p><strong>注：</strong>如果希望直接更改源文件，在使用sed的时候加上 <code>-i</code> 选项。</p><h3 id="mac-录屏生成gif动图"><a href="#mac-录屏生成gif动图" class="headerlink" title="mac 录屏生成gif动图"></a>mac 录屏生成gif动图</h3><h4 id="第一步：录制mov格式视频"><a href="#第一步：录制mov格式视频" class="headerlink" title="第一步：录制mov格式视频"></a>第一步：录制mov格式视频</h4><ul><li>打开mac自带 QuickTime Player</li></ul><p><img src="https://farm1.staticflickr.com/909/41145334074_51240e092f_o.png" alt=""></p><ul><li><p>点击 <code>QuickTime Player -&gt; file -&gt; New Moive Recording</code></p></li><li><p>点击录制按钮 &gt; 选择录制区域 (选择模拟器) &gt; 开始录制</p></li><li><p>录制完成 &gt; 点击mac右上角停止按钮结束录制 &gt; 保存格式为 mov</p></li><li><p>调整视频尺寸，如果是放在公众号里面的话，480P清晰度就足够了；不然尺寸太大，转成gif依然放不到公众号里面。如下图所示：</p></li></ul><p><img src="https://farm1.staticflickr.com/953/40963919175_e6b5e2d735_o.png" alt=""></p><h4 id="第二步：将mov视频转成gif"><a href="#第二步：将mov视频转成gif" class="headerlink" title="第二步：将mov视频转成gif"></a>第二步：将mov视频转成gif</h4><p>在APP Store 就可以下载GIFBrewery，免费的功能就够了。</p><p><img src="https://farm1.staticflickr.com/956/27993879978_90c7258c4e_o.png" alt=""></p><p>安装后运行，GIFBrewery -&gt; File  -&gt; Open 那个mov视频</p><p>点击界面Create GIF -&gt; Save成gif 文件即可。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;这则笔记主要整理一些在网上看到的关于mac的使用技巧。&lt;/p&gt;
+&lt;h3 id=&quot;Mac-OS-添加-alias&quot;&gt;&lt;a href=&quot;#Mac-OS-添加-alias&quot; class=&quot;headerlink&quot; title=&quot;Mac OS 添加 alias&quot;&gt;&lt;/a&gt;&lt;code&gt;Mac OS&lt;/code&gt; 添加 &lt;code&gt;alias&lt;/code&gt;&lt;/h3&gt;&lt;h4 id=&quot;解决思路：&quot;&gt;&lt;a href=&quot;#解决思路：&quot; class=&quot;headerlink&quot; title=&quot;解决思路：&quot;&gt;&lt;/a&gt;解决思路：&lt;/h4&gt;&lt;p&gt;修改系统配置文件&lt;code&gt;/etc/profile&lt;/code&gt; 或者 &lt;code&gt;~/.bash_profile&lt;/code&gt;，这两个文件的区别在于：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;/etc/profile&lt;/code&gt; 适用于所有用户的全局配置脚本&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;~/.bash_profile&lt;/code&gt; 适用于当前用户的启动配置文件&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以，修改&lt;code&gt;~/.bash_profile&lt;/code&gt;比较安全点。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="mac" scheme="https://steve-yuan-8276.github.io/categories/mac/"/>
+    
+    
+      <category term="mac" scheme="https://steve-yuan-8276.github.io/tags/mac/"/>
+    
+      <category term="bash" scheme="https://steve-yuan-8276.github.io/tags/bash/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   

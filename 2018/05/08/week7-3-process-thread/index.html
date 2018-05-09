@@ -1,4 +1,997 @@
-<!DOCTYPE html><html class="theme-next gemini use-motion" lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3"><link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222"><meta name="keywords" content="notes,linux,pid,tid,"><link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml"><meta name="description" content="写在前面这部分笔记是学习ps 命令的拓展知识，ps命令的用法在这里，不再赘述。 进程和线程CPU工作的基本原理要理解进程和线程，先要大概了解一下CPU的工作原理： 电脑的核心是CPU，它承担了计算机所有的计算任务，就像一个永不停歇的工厂。但是，CPU又个特点，就是一个核心同时只能执行一个任务，一心不可二用。 即便是对于多核CPU而言，每个核心在单位时间内也只能执行一个任务：  总线程数 &amp;lt;="><meta name="keywords" content="notes,linux,pid,tid"><meta property="og:type" content="article"><meta property="og:title" content="Linux运维学习笔记：进程和线程"><meta property="og:url" content="https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/index.html"><meta property="og:site_name" content="Steve的折腾学习日志"><meta property="og:description" content="写在前面这部分笔记是学习ps 命令的拓展知识，ps命令的用法在这里，不再赘述。 进程和线程CPU工作的基本原理要理解进程和线程，先要大概了解一下CPU的工作原理： 电脑的核心是CPU，它承担了计算机所有的计算任务，就像一个永不停歇的工厂。但是，CPU又个特点，就是一个核心同时只能执行一个任务，一心不可二用。 即便是对于多核CPU而言，每个核心在单位时间内也只能执行一个任务：  总线程数 &amp;lt;="><meta property="og:locale" content="zh-Hans"><meta property="og:updated_time" content="2018-05-08T14:59:31.760Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Linux运维学习笔记：进程和线程"><meta name="twitter:description" content="写在前面这部分笔记是学习ps 命令的拓展知识，ps命令的用法在这里，不再赘述。 进程和线程CPU工作的基本原理要理解进程和线程，先要大概了解一下CPU的工作原理： 电脑的核心是CPU，它承担了计算机所有的计算任务，就像一个永不停歇的工厂。但是，CPU又个特点，就是一个核心同时只能执行一个任务，一心不可二用。 即便是对于多核CPU而言，每个核心在单位时间内也只能执行一个任务：  总线程数 &amp;lt;="><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.3",sidebar:{position:"right",display:"post",offset:12,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/"><title>Linux运维学习笔记：进程和线程 | Steve的折腾学习日志</title><script>!function(e,a,t,n,g,c,o){e.GoogleAnalyticsObject=g,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),o=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",o.parentNode.insertBefore(c,o)}(window,document,"script",0,"ga"),ga("create","UA-111158073-1","auto"),ga("send","pageview")</script></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-right page-post-detail"><div class="headband"></div> <a href="https://github.com/steve-yuan-8276"><img style="position:absolute;top:0;left:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">Steve的折腾学习日志</span><span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br> 首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br> 标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br> 分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br> 归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i><br> 关于</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br> 搜索</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i></span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"> <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="Steve Yuan"><meta itemprop="description" content=""><meta itemprop="image" content="/uploads/logo.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Steve的折腾学习日志"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Linux运维学习笔记：进程和线程</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-08T22:05:04+08:00">2018-05-08</time></span> <span class="post-category"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span></span> <span class="post-comments-count"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-comment-o"></i></span><a href="/2018/05/08/week7-3-process-thread/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/05/08/week7-3-process-thread/" itemprop="commentCount"></span></a></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i></span> <span class="post-meta-item-text">字数统计&#58;</span> <span title="字数统计">1,396</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-clock-o"></i></span> <span class="post-meta-item-text">阅读时长 &asymp;</span> <span title="阅读时长">5</span></div></div></header><div class="post-body" itemprop="articleBody"><h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这部分笔记是学习<code>ps</code> 命令的拓展知识，<code>ps</code>命令的用法在<a href="https://www.steve-yuan.com/2018/05/03/week7-2-howToManageLinuxPart2/" target="_blank" rel="noopener">这里</a>，不再赘述。</p><h3 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h3><h3 id="CPU工作的基本原理"><a href="#CPU工作的基本原理" class="headerlink" title="CPU工作的基本原理"></a>CPU工作的基本原理</h3><p>要理解进程和线程，先要大概了解一下CPU的工作原理：</p><p>电脑的核心是CPU，它承担了计算机所有的计算任务，就像一个永不停歇的工厂。但是，CPU又个特点，就是一个核心同时只能执行一个任务，一心不可二用。</p><p>即便是对于多核CPU而言，每个核心在单位时间内也只能执行一个任务：</p><ul><li><p>总线程数 &lt;= CPU数量：并行运行</p></li><li><p>总线程数 &gt; CPU数量：并发运行</p></li></ul><p>为了优化CPU运行，就有了必须使用并发技术，其中最容易理解的是<strong>“时间片轮转进程调度算法”</strong>，大致原理如下：在操作系统的管理下，所有正在运行的进程轮流使用CPU，每个进程允许占用CPU的时间非常短(比如10毫秒)，虽然单位时间内每个核心有且只有一个进程，但由于进程快速轮换，用户感觉不出来，就好象所有的进程都在不间断地运行一样。</p><a id="more"></a><h4 id="进程和线程的基本概念"><a href="#进程和线程的基本概念" class="headerlink" title="进程和线程的基本概念"></a>进程和线程的基本概念</h4><p><strong>进程</strong><code>process</code>：是程序在计算机上的一次执行活动，是操作系统分配资源的单位。当你运行一个程序，你就启动了一个进程。</p><p><strong>线程</strong> <code>Thread</code>：是进程的一个实体，是CPU调度和分派的基本单位。</p><h4 id="线程和进程的关系："><a href="#线程和进程的关系：" class="headerlink" title="线程和进程的关系："></a>线程和进程的关系：</h4><ul><li><p>一个线程只能属于一个进程，而一个进程可以有多个线程，但至少有一个线程（通常说的主线程）；</p></li><li><p>资源分配给进程，同一进程的所有线程共享该进程的所有资源；</p></li><li><p>线程在执行过程中，需要协作同步。不同进程的线程间要利用消息通信的办法实现同步；</p></li><li><p>处理机分给线程，即真正在处理机上运行的是线程；</p></li><li><p>线程是指进程内的一个执行单元，也是进程内的可调度实体。</p></li></ul><p>两者的区别在于：</p><ul><li><p>调度：线程作为调度和分配的基本单位，进程作为拥有资源的基本单位；</p></li><li><p>并发性：不仅进程之间可以并发执行，同一个进程的多个线程之间也可以并发执行；</p></li><li><p>拥有资源：进程是拥有资源的一个独立单位，线程不拥有系统资源，但可以访问隶属于进程的资源；</p></li></ul><h4 id="操作系统的分类"><a href="#操作系统的分类" class="headerlink" title="操作系统的分类"></a>操作系统的分类</h4><p>上面了解了cpu工作原理，以及进程和线程的简单知识。需要了解的是，进程和线程如何执行，并不是有它自己决定的，而是由操作系统决定的。</p><p>根据进程和线程的特点，有两种解决方案：</p><ul><li><p>一是启动多个进程，每个进程虽然只有一个线程，但多个进程可以一块执行多个任务；</p></li><li><p>二是启动一个进程，在一个进程内启动多个线程，这样，多个线程也可以一块执行多个任务；</p></li></ul><p>所以，操作系统要想实现多任务处理，无非三种途径：</p><ol><li><p>多进程模式；</p></li><li><p>多线程模式；</p></li><li><p>多进程+多线程模式</p></li></ol><h4 id="pid和tid"><a href="#pid和tid" class="headerlink" title="pid和tid"></a>pid和tid</h4><p>Linux的线程是“轻量级进程”（Light-Weight Process，即LWP）。在Linux系统上运行一个程序时，操作系统会为这个程序创建一个进程，也就是“主线程”，后续则可以产生出更多的线程。每个进程都有一个PID（Process ID），每个线程也会有一个TID（Thread ID），属于同一进程的线程各自有拥有不同的TID，但它们的PID是相同的，都等于“主线程”的TID。</p><p>从本质上来讲，Linux系统下的进程和线程没有区别，只不过同一进程中的线程可以共享某些资源。</p><p>示例一：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey bin]# cd /usr/local/sbin     //进入脚本目录</span><br><span class="line">[root@stevey sbin]# ls</span><br><span class="line">createFile.sh  even.sh  fun1.sh  option1.sh  sum1.sh  while1.sh</span><br><span class="line">df1.sh         for1.sh  if1.sh   read1.sh    var1.sh</span><br><span class="line">[root@stevey sbin]# bash even.sh &amp;       //运行脚本</span><br><span class="line">[1] 16282</span><br><span class="line">[root@stevey sbin]# please in number: bg    //把脚本后台运行</span><br><span class="line">[1]+ bash even.sh &amp;</span><br><span class="line">[root@stevey sbin]# ps -T 16282          //ps查询pid信息</span><br><span class="line">   PID   SPID TTY      STAT   TIME COMMAND</span><br><span class="line"> 16282  16282 pts/1    T      0:00 bash even.sh</span><br></pre></td></tr></table></figure><p>上面的例子实际只运行了一个进程/进程，所以不明显；网上上找了一个示例如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;omp.h&gt;</span><br><span class="line"></span><br><span class="line">int main(void)&#123;</span><br><span class="line"></span><br><span class="line">        #pragma omp parallel num_threads(4)</span><br><span class="line">        for(;;)</span><br><span class="line">        &#123;</span><br><span class="line">            sleep(1);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>编译并在后台运行这个程序：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -fopenmp threads.c</span><br><span class="line">$ ./a.out &amp;</span><br><span class="line">[1] 9802</span><br></pre></td></tr></table></figure><p>进程的PID是9802，用ps -T pid命令查看进程的线程信息：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ ps -T 9802</span><br><span class="line">  PID  SPID TTY      STAT   TIME COMMAND</span><br><span class="line"> 9802  9802 pts/1    Sl     0:00 ./a.out</span><br><span class="line"> 9802  9803 pts/1    Sl     0:00 ./a.out</span><br><span class="line"> 9802  9804 pts/1    Sl     0:00 ./a.out</span><br><span class="line"> 9802  9805 pts/1    Sl     0:00 ./a.out</span><br></pre></td></tr></table></figure><p>其中SPID即为TID。可以看到当前进程的PID是9802，共包含4个线程，其TID依次为：9802，9803，9804和9805，其中PID和SPID相同的线程即为主线程。</p><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul><li><p><a href="https://www.cnblogs.com/lmule/archive/2010/08/18/1802774.html" target="_blank" rel="noopener">进程和线程的区别</a></p></li><li><p><a href="https://blog.csdn.net/mxsgoden/article/details/8821936" target="_blank" rel="noopener">腾讯面试题04.进程和线程的区别？</a></p></li><li><p><a href="http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html" target="_blank" rel="noopener">进程与线程的一个简单解释</a></p></li><li><p><a href="https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/0013868322563729e03f6905ea94f0195528e3647887415000" target="_blank" rel="noopener">进程和线程</a></p></li><li><p><a href="https://www.zhihu.com/question/21535820" target="_blank" rel="noopener">进程和线程有什么区别？</a></p></li><li><p><a href="http://nanxiao.me/linux-thread-model-analysis/" target="_blank" rel="noopener">Linux线程模型浅析</a></p></li></ul></div><div><ul class="post-copyright"><li class="post-copyright-author"> <strong>本文作者：</strong> Steve Yuan</li><li class="post-copyright-link"> <strong>本文链接：</strong> <a href="https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/" title="Linux运维学习笔记：进程和线程">https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/</a></li><li class="post-copyright-license"> <strong>版权声明：</strong> 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li></ul></div><footer class="post-footer"><div class="post-tags"> <a href="/tags/notes/" rel="tag"># notes</a> <a href="/tags/linux/" rel="tag"># linux</a> <a href="/tags/pid/" rel="tag"># pid</a> <a href="/tags/tid/" rel="tag"># tid</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2018/05/08/week7-5-howToMnageLinuxPart5/" rel="next" title="week7-5-howToMnageLinuxPart5"><i class="fa fa-chevron-left"></i> week7-5-howToMnageLinuxPart5</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="disqus_thread"><noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan"><p class="site-author-name" itemprop="name">Steve Yuan</p><p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">77</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/index.html"><span class="site-state-item-count">13</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"> <a href="/tags/index.html"><span class="site-state-item-count">65</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/steve-yuan-8276" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i> GitHub</a></span><span class="links-of-author-item"><a href="https://twitter.com/feng8276" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i> Twitter</a></span><span class="links-of-author-item"><a href="https://www.facebook.com/feng74" target="_blank" title="Facebook"><i class="fa fa-fw fa-facebook"></i> Facebook</a></span><span class="links-of-author-item"><a href="mailto:yuanf02@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i> E-Mail</a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程和线程"><span class="nav-number">2.</span> <span class="nav-text">进程和线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU工作的基本原理"><span class="nav-number">3.</span> <span class="nav-text">CPU工作的基本原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进程和线程的基本概念"><span class="nav-number">3.1.</span> <span class="nav-text">进程和线程的基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程和进程的关系："><span class="nav-number">3.2.</span> <span class="nav-text">线程和进程的关系：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#操作系统的分类"><span class="nav-number">3.3.</span> <span class="nav-text">操作系统的分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pid和tid"><span class="nav-number">3.4.</span> <span class="nav-text">pid和tid</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">Steve Yuan</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-area-chart"></i></span> <span class="post-meta-item-text">Site words total count&#58;</span> <span title="Site words total count">94.6k</span></div><div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div> <span class="post-meta-divider">|</span><div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script type="text/javascript" src="/lib/three/three.min.js"></script><script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script><script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script><script type="text/javascript">var disqus_config=function(){this.page.url="https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/",this.page.identifier="2018/05/08/week7-3-process-thread/",this.page.title="Linux运维学习笔记：进程和线程"},d=document,s=d.createElement("script");s.src="https://steve-yuan.disqus.com/embed.js",s.setAttribute("data-timestamp",""+ +new Date),(d.head||d.body).appendChild(s)</script><script type="text/javascript">
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="notes,linux,pid,tid," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="写在前面这部分笔记是学习ps 命令的拓展知识，ps命令的用法在这里，不再赘述。 进程和线程CPU工作的基本原理要理解进程和线程，先要大概了解一下CPU的工作原理： 电脑的核心是CPU，它承担了计算机所有的计算任务，就像一个永不停歇的工厂。但是，CPU又个特点，就是一个核心同时只能执行一个任务，一心不可二用。 即便是对于多核CPU而言，每个核心在单位时间内也只能执行一个任务：  总线程数 &amp;lt;=">
+<meta name="keywords" content="notes,linux,pid,tid">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux运维学习笔记：进程和线程">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/index.html">
+<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:description" content="写在前面这部分笔记是学习ps 命令的拓展知识，ps命令的用法在这里，不再赘述。 进程和线程CPU工作的基本原理要理解进程和线程，先要大概了解一下CPU的工作原理： 电脑的核心是CPU，它承担了计算机所有的计算任务，就像一个永不停歇的工厂。但是，CPU又个特点，就是一个核心同时只能执行一个任务，一心不可二用。 即便是对于多核CPU而言，每个核心在单位时间内也只能执行一个任务：  总线程数 &amp;lt;=">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-08T14:59:31.760Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux运维学习笔记：进程和线程">
+<meta name="twitter:description" content="写在前面这部分笔记是学习ps 命令的拓展知识，ps命令的用法在这里，不再赘述。 进程和线程CPU工作的基本原理要理解进程和线程，先要大概了解一下CPU的工作原理： 电脑的核心是CPU，它承担了计算机所有的计算任务，就像一个永不停歇的工厂。但是，CPU又个特点，就是一个核心同时只能执行一个任务，一心不可二用。 即便是对于多核CPU而言，每个核心在单位时间内也只能执行一个任务：  总线程数 &amp;lt;=">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/"/>
+
+
+
+
+
+  <title>Linux运维学习笔记：进程和线程 | Steve的折腾学习日志</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111158073-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/steve-yuan-8276"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux运维学习笔记：进程和线程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-08T22:05:04+08:00">
+                2018-05-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/08/week7-3-process-thread/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/08/week7-3-process-thread/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,396
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这部分笔记是学习<code>ps</code> 命令的拓展知识，<code>ps</code>命令的用法在<a href="https://www.steve-yuan.com/2018/05/03/week7-2-howToManageLinuxPart2/" target="_blank" rel="noopener">这里</a>，不再赘述。</p>
+<h3 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h3><h3 id="CPU工作的基本原理"><a href="#CPU工作的基本原理" class="headerlink" title="CPU工作的基本原理"></a>CPU工作的基本原理</h3><p>要理解进程和线程，先要大概了解一下CPU的工作原理：</p>
+<p>电脑的核心是CPU，它承担了计算机所有的计算任务，就像一个永不停歇的工厂。但是，CPU又个特点，就是一个核心同时只能执行一个任务，一心不可二用。</p>
+<p>即便是对于多核CPU而言，每个核心在单位时间内也只能执行一个任务：</p>
+<ul>
+<li><p>总线程数 &lt;= CPU数量：并行运行</p>
+</li>
+<li><p>总线程数 &gt; CPU数量：并发运行</p>
+</li>
+</ul>
+<p>为了优化CPU运行，就有了必须使用并发技术，其中最容易理解的是<strong>“时间片轮转进程调度算法”</strong>，大致原理如下：在操作系统的管理下，所有正在运行的进程轮流使用CPU，每个进程允许占用CPU的时间非常短(比如10毫秒)，虽然单位时间内每个核心有且只有一个进程，但由于进程快速轮换，用户感觉不出来，就好象所有的进程都在不间断地运行一样。</p>
+<a id="more"></a>
+<h4 id="进程和线程的基本概念"><a href="#进程和线程的基本概念" class="headerlink" title="进程和线程的基本概念"></a>进程和线程的基本概念</h4><p><strong>进程</strong><code>process</code>：是程序在计算机上的一次执行活动，是操作系统分配资源的单位。当你运行一个程序，你就启动了一个进程。</p>
+<p><strong>线程</strong> <code>Thread</code>：是进程的一个实体，是CPU调度和分派的基本单位。</p>
+<h4 id="线程和进程的关系："><a href="#线程和进程的关系：" class="headerlink" title="线程和进程的关系："></a>线程和进程的关系：</h4><ul>
+<li><p>一个线程只能属于一个进程，而一个进程可以有多个线程，但至少有一个线程（通常说的主线程）；</p>
+</li>
+<li><p>资源分配给进程，同一进程的所有线程共享该进程的所有资源；</p>
+</li>
+<li><p>线程在执行过程中，需要协作同步。不同进程的线程间要利用消息通信的办法实现同步；</p>
+</li>
+<li><p>处理机分给线程，即真正在处理机上运行的是线程；</p>
+</li>
+<li><p>线程是指进程内的一个执行单元，也是进程内的可调度实体。</p>
+</li>
+</ul>
+<p>两者的区别在于：</p>
+<ul>
+<li><p>调度：线程作为调度和分配的基本单位，进程作为拥有资源的基本单位；</p>
+</li>
+<li><p>并发性：不仅进程之间可以并发执行，同一个进程的多个线程之间也可以并发执行；</p>
+</li>
+<li><p>拥有资源：进程是拥有资源的一个独立单位，线程不拥有系统资源，但可以访问隶属于进程的资源；</p>
+</li>
+</ul>
+<h4 id="操作系统的分类"><a href="#操作系统的分类" class="headerlink" title="操作系统的分类"></a>操作系统的分类</h4><p>上面了解了cpu工作原理，以及进程和线程的简单知识。需要了解的是，进程和线程如何执行，并不是有它自己决定的，而是由操作系统决定的。</p>
+<p>根据进程和线程的特点，有两种解决方案：</p>
+<ul>
+<li><p>一是启动多个进程，每个进程虽然只有一个线程，但多个进程可以一块执行多个任务；</p>
+</li>
+<li><p>二是启动一个进程，在一个进程内启动多个线程，这样，多个线程也可以一块执行多个任务；</p>
+</li>
+</ul>
+<p>所以，操作系统要想实现多任务处理，无非三种途径：</p>
+<ol>
+<li><p>多进程模式；</p>
+</li>
+<li><p>多线程模式；</p>
+</li>
+<li><p>多进程+多线程模式</p>
+</li>
+</ol>
+<h4 id="pid和tid"><a href="#pid和tid" class="headerlink" title="pid和tid"></a>pid和tid</h4><p>Linux的线程是“轻量级进程”（Light-Weight Process，即LWP）。在Linux系统上运行一个程序时，操作系统会为这个程序创建一个进程，也就是“主线程”，后续则可以产生出更多的线程。每个进程都有一个PID（Process ID），每个线程也会有一个TID（Thread ID），属于同一进程的线程各自有拥有不同的TID，但它们的PID是相同的，都等于“主线程”的TID。</p>
+<p>从本质上来讲，Linux系统下的进程和线程没有区别，只不过同一进程中的线程可以共享某些资源。</p>
+<p>示例一：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey bin]# cd /usr/local/sbin     //进入脚本目录</span><br><span class="line">[root@stevey sbin]# ls</span><br><span class="line">createFile.sh  even.sh  fun1.sh  option1.sh  sum1.sh  while1.sh</span><br><span class="line">df1.sh         for1.sh  if1.sh   read1.sh    var1.sh</span><br><span class="line">[root@stevey sbin]# bash even.sh &amp;       //运行脚本</span><br><span class="line">[1] 16282</span><br><span class="line">[root@stevey sbin]# please in number: bg    //把脚本后台运行</span><br><span class="line">[1]+ bash even.sh &amp;</span><br><span class="line">[root@stevey sbin]# ps -T 16282          //ps查询pid信息</span><br><span class="line">   PID   SPID TTY      STAT   TIME COMMAND</span><br><span class="line"> 16282  16282 pts/1    T      0:00 bash even.sh</span><br></pre></td></tr></table></figure>
+<p>上面的例子实际只运行了一个进程/进程，所以不明显；网上上找了一个示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;omp.h&gt;</span><br><span class="line"></span><br><span class="line">int main(void)&#123;</span><br><span class="line"></span><br><span class="line">        #pragma omp parallel num_threads(4)</span><br><span class="line">        for(;;)</span><br><span class="line">        &#123;</span><br><span class="line">            sleep(1);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译并在后台运行这个程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -fopenmp threads.c</span><br><span class="line">$ ./a.out &amp;</span><br><span class="line">[1] 9802</span><br></pre></td></tr></table></figure>
+<p>进程的PID是9802，用ps -T pid命令查看进程的线程信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ ps -T 9802</span><br><span class="line">  PID  SPID TTY      STAT   TIME COMMAND</span><br><span class="line"> 9802  9802 pts/1    Sl     0:00 ./a.out</span><br><span class="line"> 9802  9803 pts/1    Sl     0:00 ./a.out</span><br><span class="line"> 9802  9804 pts/1    Sl     0:00 ./a.out</span><br><span class="line"> 9802  9805 pts/1    Sl     0:00 ./a.out</span><br></pre></td></tr></table></figure>
+<p>其中SPID即为TID。可以看到当前进程的PID是9802，共包含4个线程，其TID依次为：9802，9803，9804和9805，其中PID和SPID相同的线程即为主线程。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><p><a href="https://www.cnblogs.com/lmule/archive/2010/08/18/1802774.html" target="_blank" rel="noopener">进程和线程的区别</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/mxsgoden/article/details/8821936" target="_blank" rel="noopener">腾讯面试题04.进程和线程的区别？</a></p>
+</li>
+<li><p><a href="http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html" target="_blank" rel="noopener">进程与线程的一个简单解释</a></p>
+</li>
+<li><p><a href="https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/0013868322563729e03f6905ea94f0195528e3647887415000" target="_blank" rel="noopener">进程和线程</a></p>
+</li>
+<li><p><a href="https://www.zhihu.com/question/21535820" target="_blank" rel="noopener">进程和线程有什么区别？</a></p>
+</li>
+<li><p><a href="http://nanxiao.me/linux-thread-model-analysis/" target="_blank" rel="noopener">Linux线程模型浅析</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Steve Yuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/" title="Linux运维学习笔记：进程和线程">https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/pid/" rel="tag"># pid</a>
+          
+            <a href="/tags/tid/" rel="tag"># tid</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/08/week7-5-howToMnageLinuxPart5/" rel="next" title="week7-5-howToMnageLinuxPart5">
+                <i class="fa fa-chevron-left"></i> week7-5-howToMnageLinuxPart5
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/logo.png"
+                alt="Steve Yuan" />
+            
+              <p class="site-author-name" itemprop="name">Steve Yuan</p>
+              <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">77</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/steve-yuan-8276" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/feng8276" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.facebook.com/feng74" target="_blank" title="Facebook">
+                    
+                      <i class="fa fa-fw fa-facebook"></i>Facebook</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yuanf02@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程和线程"><span class="nav-number">2.</span> <span class="nav-text">进程和线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU工作的基本原理"><span class="nav-number">3.</span> <span class="nav-text">CPU工作的基本原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进程和线程的基本概念"><span class="nav-number">3.1.</span> <span class="nav-text">进程和线程的基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程和进程的关系："><span class="nav-number">3.2.</span> <span class="nav-text">线程和进程的关系：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#操作系统的分类"><span class="nav-number">3.3.</span> <span class="nav-text">操作系统的分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pid和tid"><span class="nav-number">3.4.</span> <span class="nav-text">pid和tid</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Steve Yuan</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">94.6k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/';
+          this.page.identifier = '2018/05/08/week7-3-process-thread/';
+          this.page.title = 'Linux运维学习笔记：进程和线程';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://steve-yuan.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
     // Popup Window;
     var isfetched = false;
     var isXml = true;
@@ -313,4 +1306,28 @@
         onPopupClose();
       }
     });
-  </script></body></html>
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

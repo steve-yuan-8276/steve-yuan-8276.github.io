@@ -1,4 +1,1408 @@
-<!DOCTYPE html><html class="theme-next gemini use-motion" lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3"><link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222"><meta name="keywords" content="regularExpression,notes,linux,"><link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml"><meta name="description" content="写在前面前一阶段linux基础知识暂告一段落，下面开始介绍linux系统管理的基本知识。本节主要涉及w、 vmstat、 top、 sar 、nload 五个命令。 w 命令w命令用于显示目前登入系统的用户信息，可得知目前登入系统的用户有哪些人，以及他们正在执行的程序。 命令行格式： 1w [选项] [参数]    常用选项 含义     -f 　 开启或关闭显示用户从何处登入系统   -h"><meta name="keywords" content="regularExpression,notes,linux"><meta property="og:type" content="article"><meta property="og:title" content="Linux运维学习笔记7-1：监控系统状态命令（一）"><meta property="og:url" content="https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/index.html"><meta property="og:site_name" content="Steve的折腾学习日志"><meta property="og:description" content="写在前面前一阶段linux基础知识暂告一段落，下面开始介绍linux系统管理的基本知识。本节主要涉及w、 vmstat、 top、 sar 、nload 五个命令。 w 命令w命令用于显示目前登入系统的用户信息，可得知目前登入系统的用户有哪些人，以及他们正在执行的程序。 命令行格式： 1w [选项] [参数]    常用选项 含义     -f 　 开启或关闭显示用户从何处登入系统   -h"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="https://farm1.staticflickr.com/827/26970450367_793b8a1a48_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/825/41796965602_d3fe3b42ae_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/958/27073202477_be4651e520_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/967/41223389244_60ae08f3f9_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/871/40940715765_8f5da8b8b4_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/966/41898892482_09472b5712_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/944/27073312657_f58410269a_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/866/41125178854_6c34a4de13_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/980/41842148301_5675e21a4d_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/869/41226238294_df2a05d1f0_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/960/41127699724_b82a96ae33_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/868/41844637301_c1380285fb_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/982/41802095122_115a922970_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/980/27976621358_2d5b012db6_o.png"><meta property="og:image" content="https://farm1.staticflickr.com/912/40038532240_6271cd8cb2_o.png"><meta property="og:updated_time" content="2018-05-07T06:15:19.896Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Linux运维学习笔记7-1：监控系统状态命令（一）"><meta name="twitter:description" content="写在前面前一阶段linux基础知识暂告一段落，下面开始介绍linux系统管理的基本知识。本节主要涉及w、 vmstat、 top、 sar 、nload 五个命令。 w 命令w命令用于显示目前登入系统的用户信息，可得知目前登入系统的用户有哪些人，以及他们正在执行的程序。 命令行格式： 1w [选项] [参数]    常用选项 含义     -f 　 开启或关闭显示用户从何处登入系统   -h"><meta name="twitter:image" content="https://farm1.staticflickr.com/827/26970450367_793b8a1a48_o.png"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.3",sidebar:{position:"right",display:"post",offset:12,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/"><title>Linux运维学习笔记7-1：监控系统状态命令（一） | Steve的折腾学习日志</title><script>!function(e,a,t,n,g,c,o){e.GoogleAnalyticsObject=g,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),o=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",o.parentNode.insertBefore(c,o)}(window,document,"script",0,"ga"),ga("create","UA-111158073-1","auto"),ga("send","pageview")</script></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-right page-post-detail"><div class="headband"></div> <a href="https://github.com/steve-yuan-8276"><img style="position:absolute;top:0;left:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">Steve的折腾学习日志</span><span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br> 首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br> 标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br> 分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br> 归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i><br> 关于</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br> 搜索</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i></span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"> <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="Steve Yuan"><meta itemprop="description" content=""><meta itemprop="image" content="/uploads/logo.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Steve的折腾学习日志"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Linux运维学习笔记7-1：监控系统状态命令（一）</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-28T15:52:52+08:00">2018-04-28</time></span> <span class="post-category"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span></span> <span class="post-comments-count"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-comment-o"></i></span><a href="/2018/04/28/week701-howToManageLinux/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/04/28/week701-howToManageLinux/" itemprop="commentCount"></span></a></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i></span> <span class="post-meta-item-text">字数统计&#58;</span> <span title="字数统计">3,789</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-clock-o"></i></span> <span class="post-meta-item-text">阅读时长 &asymp;</span> <span title="阅读时长">14</span></div></div></header><div class="post-body" itemprop="articleBody"><h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>前一阶段linux基础知识暂告一段落，下面开始介绍linux系统管理的基本知识。本节主要涉及<code>w</code>、 <code>vmstat</code>、 <code>top</code>、 <code>sar</code> 、<code>nload</code> 五个命令。</p><h3 id="w-命令"><a href="#w-命令" class="headerlink" title="w 命令"></a><code>w</code> 命令</h3><p><code>w</code>命令用于显示目前登入系统的用户信息，可得知目前登入系统的用户有哪些人，以及他们正在执行的程序。</p><p>命令行格式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">w [选项] [参数]</span><br></pre></td></tr></table></figure><table><thead><tr><th>常用选项</th><th>含义</th></tr></thead><tbody><tr><td>-f 　</td><td>开启或关闭显示用户从何处登入系统</td></tr><tr><td>-h 　</td><td>不显示各栏位的标题信息列</td></tr><tr><td>-l 　</td><td>使用详细格式列表，此为预设值</td></tr><tr><td>-s 　</td><td>使用简洁格式列表，不显示用户登入时间，终端机阶段作业和程序所耗费的CPU时间</td></tr><tr><td>-u 　</td><td>忽略执行程序的名称，以及该程序耗费CPU时间的信息</td></tr><tr><td>-V 　</td><td>显示版本信息</td></tr></tbody></table><h4 id="w-命令能查到哪些信息"><a href="#w-命令能查到哪些信息" class="headerlink" title="w 命令能查到哪些信息"></a><code>w</code> 命令能查到哪些信息</h4><p>示例：</p><p><img src="https://farm1.staticflickr.com/827/26970450367_793b8a1a48_o.png" alt=""></p><p>上图中，</p><p>第一行从左到右依次为：时间、系统运行时间、登陆用户数、平均负载。最值得关注的是平均负载，由三个数字组成，分别代表1分钟、5分钟、15分钟的系统负载；数字越大，说明服务器的压力越大。</p><p>第二行显示的是登陆名、登陆地址等信息。</p><a id="more"></a><h5 id="判断服务器压力的方法："><a href="#判断服务器压力的方法：" class="headerlink" title="判断服务器压力的方法："></a>判断服务器压力的方法：</h5><p>将<strong>均衡负载数</strong>与<strong>逻辑cpu</strong>做比较，如果长时间大于cpu个数，就说明系统压力大；反之，说明cpu资源有富余。</p><p>这里需要补充了解一下系统逻辑cpu的查询方法：</p><p><strong>系统cpu信息</strong>保存在 <code>/proc/cpuinfo</code>,系统内核从0开始，逐一列出。</p><p>查询系统有几个cpu，可以使用 <code>cat /proc/cpuinfo | grep -c &#39;processor&#39;</code></p><p><strong>注：</strong><code>grep -c</code> 表示打印符合条件的行数。</p><p><img src="https://farm1.staticflickr.com/825/41796965602_d3fe3b42ae_o.png" alt=""></p><p>通过上图可以看到：</p><ul><li><p>系统逻辑cpu有1个；</p></li><li><p>一分钟平均负载是0.00；</p></li></ul><p>所以，结论就是现在cpu很闲，没事干。</p><p>在实际使用当中，<strong>cpu负载的理想状态：</strong>平均负载接近但不高于逻辑cpu的值；这样cpu既不至于闲置，也至于太多处理不过来。</p><h6 id="uptime-命令："><a href="#uptime-命令：" class="headerlink" title="uptime 命令："></a>uptime 命令：</h6><p>查询系统运行时间和负载情况，还可以使用 uptime 命令，跟w 命令第一行的效果一摸一样，如下：</p><p><img src="https://farm1.staticflickr.com/958/27073202477_be4651e520_o.png" alt=""></p><h5 id="当前用户的登陆信息"><a href="#当前用户的登陆信息" class="headerlink" title="当前用户的登陆信息"></a>当前用户的登陆信息</h5><p><img src="https://farm1.staticflickr.com/967/41223389244_60ae08f3f9_o.png" alt=""></p><p>第二行：系统登陆用户，这里用户名是root，使用的终端是tty1，本地登陆；后面还有登陆时间、cpu使用情况等等。</p><p>第三行：shell远程登陆的用户，这里的用户名是root，使用的终端是pts/0，登陆ip是172.16.155.1；</p><p>这里涉及一个知识点：<code>tty</code> 和<code>pts</code> ：</p><p>在计算机发展早期，为了让尽可能多的用户利用系统资源，使用自己的IO设备连接和操作主机，产生了终端terminal的概念，即计算机设置了很多终端，每个使用者通过自己的终端来连接和使用主机资源。</p><p>进入PC时代后，电脑资源越来越便宜，每个人都可以轻松拥有一台电脑而不用跟别人分享，但是linux系统依然保留了早期的这种设定。只不过，这里的终端是由mingtty软件虚拟出来的。</p><ul><li><p><code>tty</code>：通常，Linux发行版提供7个虚拟屏幕，1~6号是命令行终端，第7个是X- Window，即图形化界面。</p></li><li><p><code>pts</code> ：通过终端，还可以虚拟出无限多个终端，编号从pts/0开始，以此类推；</p></li></ul><p><strong>注：</strong></p><ol><li><p>关于tty 的配置文件,CentOS 6.X 开始 TTY 的配置由 /etc/inittab更改为 /etc/init/start-ttys.conf<strong>(注：此处有误，正确的配置文件查到再补充)</strong>，可以通过编辑这个文件来修改默认的终端数；</p></li><li><p>centos7 下切换命令行模式和图形模式的方法：<strong>必须在root用户下操作</strong></p></li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl set-default multi-user.target  //设置成命令模式</span><br><span class="line"></span><br><span class="line">systemctl set-default graphical.target  //设置成图形模式</span><br></pre></td></tr></table></figure><h3 id="vmstat-命令"><a href="#vmstat-命令" class="headerlink" title="vmstat 命令"></a>vmstat 命令</h3><p><code>vmstat</code>是Virtual Meomory Statistics（虚拟内存统计）的缩写，可对操作系统的虚拟内存、进程、CPU活动进行监控。可以对系统的整体情况进行统计，但不足之处是无法对某个进程进行深入分析。</p><h4 id="物理内存和虚拟内存："><a href="#物理内存和虚拟内存：" class="headerlink" title="物理内存和虚拟内存："></a>物理内存和虚拟内存：</h4><p>学习vmstat 命令，首先需要了解物理内存和虚拟内存的区别。</p><p>物理内存：系统硬件提供的内存大小，是真正的内存；</p><p>虚拟内存：利用磁盘空间虚拟出的一块逻辑内存，用作虚拟内存的磁盘空间被称为交换空间（Swap Space）。linux下设置<a href="https://www.steve-yuan.com/2018/04/08/week3-5-diskformatting/" target="_blank" rel="noopener">虚拟内存的方法见这里</a></p><p>物理内存的速度快，但是空间有限。为了最大化利用物理内存，系统会不时的进行页面交换操作，以保持尽可能多的空闲物理内存，即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面，从而避免等待交换所需的时间。</p><h4 id="vmstat-命令行格式："><a href="#vmstat-命令行格式：" class="headerlink" title="vmstat 命令行格式："></a><code>vmstat</code> 命令行格式：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vmstat[选项] [参数]</span><br></pre></td></tr></table></figure><table><thead><tr><th>常用选项</th><th>含义</th></tr></thead><tbody><tr><td>-a</td><td>显示活动内页；</td></tr><tr><td>-f</td><td>显示启动后创建的进程总数；</td></tr><tr><td>-m</td><td>显示slab信息；</td></tr><tr><td>-n</td><td>头信息仅显示一次；</td></tr><tr><td>-s</td><td>以表格方式显示事件计数器和内存状态；</td></tr><tr><td>-d</td><td>报告磁盘状态；</td></tr><tr><td>-p</td><td>显示指定的硬盘分区状态；</td></tr><tr><td>-S</td><td>输出信息的单位；</td></tr></tbody></table><p>参数：</p><ul><li><p>事件间隔：状态信息刷新的时间间隔；</p></li><li><p>次数：显示报告的次数；</p></li></ul><h4 id="vmstat-能查到哪些信息"><a href="#vmstat-能查到哪些信息" class="headerlink" title="vmstat 能查到哪些信息"></a><code>vmstat</code> 能查到哪些信息</h4><p><code>vmstat</code> 默认输出</p><p><img src="https://farm1.staticflickr.com/871/40940715765_8f5da8b8b4_o.png" alt=""></p><p><code>vmstat [n]</code>：n代表数字，每隔n秒输出一次，手动按<code>ctrl+c</code>结束。</p><p><img src="https://farm1.staticflickr.com/966/41898892482_09472b5712_o.png" alt=""></p><p><code>vmstat [m] [n]</code> : m、 n 代表数字，意思是每个m秒输出一次，一共输出n次；</p><p><img src="https://farm1.staticflickr.com/944/27073312657_f58410269a_o.png" alt=""></p><h5 id="procs进程相关信息"><a href="#procs进程相关信息" class="headerlink" title="procs进程相关信息"></a><code>procs</code>进程相关信息</h5><ul><li><p><code>r</code> ：run，表示运行队列，某一时刻CPU只能处理一个任务，其他的任务只能排队，这个状态就是r记录的状态；如果这个数值长时间大于服务器CPU，就说明cpu资源不够用了。</p></li><li><p><code>b</code>： block，表示等待资源的进程数,资源指的是I/O 、内存等。b状态反应的是进程任务将结果写入磁盘的过程，如果这个数字长期大于1，说明磁盘写入频繁，需要关注。</p></li></ul><h5 id="memory-内存相关信息"><a href="#memory-内存相关信息" class="headerlink" title="memory 内存相关信息"></a><code>memory</code> 内存相关信息</h5><ul><li><p><code>swpd</code>： 虚拟内存已使用的大小，单位为KB，如果大于0，表示机器物理内存不足；</p></li><li><p><code>free</code>： 空闲的物理内存的大小；</p></li><li><p><code>buff</code>： 用作缓冲的内存大小；</p></li><li><p><code>cache</code> ：表示从磁盘中读取的缓存大小；</p></li></ul><h5 id="swap内存交换情况"><a href="#swap内存交换情况" class="headerlink" title="swap内存交换情况"></a><code>swap</code>内存交换情况</h5><ul><li><p><code>si</code> ：每秒从虚拟内存写入内存的数据量；</p></li><li><p><code>so</code> ：每秒虚拟内存写入磁盘的大小；</p></li></ul><p><strong>注：</strong>这两个数据与swap 强有关，如果频繁变化，说明内存不够用。</p><h5 id="io-磁盘使用情况"><a href="#io-磁盘使用情况" class="headerlink" title="io 磁盘使用情况"></a><code>io</code> 磁盘使用情况</h5><ul><li><p><code>bi</code> ：读磁盘的数据量；</p></li><li><p><code>bo</code> ：写磁盘的数据量；</p></li></ul><p><strong>注：</strong>如果这两个数值过大，说明磁盘在频繁读写；由于磁盘读写速度相对于内存、CPU速度很慢，必然影响系统性能，反映在数据上，b也会增大。</p><h5 id="system系统采集间隔内的中断数"><a href="#system系统采集间隔内的中断数" class="headerlink" title="system系统采集间隔内的中断数"></a><code>system</code>系统采集间隔内的中断数</h5><ul><li><p><code>in</code> ：每秒CPU的中断次数，包括时间中断</p></li><li><p><code>cs</code> ：每秒上下文切换次数，例如我们调用系统函数、线程切换，都要进程上下文切换。这个值要越小越好，数值偏大表示你的CPU大部分浪费在上下文切换，导致CPU干正经事的时间少了，没有得到充分利用。</p></li></ul><h5 id="CPU使用状态"><a href="#CPU使用状态" class="headerlink" title="CPU使用状态"></a>CPU使用状态</h5><ul><li><p><code>us</code>：用户CPU时间百分比；如果长时间大于50%，说明系统资源不够。</p></li><li><p><code>sy</code> ：系统CPU时间百分比，如果太高，表示系统调用时间长，例如是IO操作频繁。</p></li><li><p><code>id</code> ：空闲 CPU时间百分比；一般来说，id + us + sy = 100,一般我认为id是空闲CPU使用率，us是用户CPU使用率，sy是系统CPU使用率。</p></li><li><p><code>wa</code> ：等待IO CPU时间；</p></li><li><p><code>st</code> ：表示被偷走的CPU所占百分比，一般为0.</p></li></ul><h3 id="top-命令"><a href="#top-命令" class="headerlink" title="top 命令"></a><code>top</code> 命令</h3><p><code>top</code>命令用于动态监控进程所占用的系统资源，每隔3秒钟更新一次，特点是会将占用CPU、内存磁盘I/O 最高的进程放在最前面。</p><p>命令行格式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top [选项]</span><br></pre></td></tr></table></figure><table><thead><tr><th>常用选项</th><th>含义</th></tr></thead><tbody><tr><td>-b</td><td>以批处理模式操作；</td></tr><tr><td>-c</td><td>显示完整的治命令；</td></tr><tr><td>-d</td><td>屏幕刷新间隔时间；</td></tr><tr><td>-I</td><td>忽略失效过程；</td></tr><tr><td>-s</td><td>保密模式；</td></tr><tr><td>-S</td><td>累积模式；</td></tr><tr><td>-i&lt;时间&gt;</td><td>设置间隔时间；</td></tr><tr><td>-u&lt;用户名&gt;</td><td>指定用户名；</td></tr><tr><td>-p&lt;进程号&gt;</td><td>指定进程；</td></tr><tr><td>-n&lt;次数&gt;</td><td>循环显示的次数</td></tr></tbody></table><h4 id="top-能查看哪些信息"><a href="#top-能查看哪些信息" class="headerlink" title="top 能查看哪些信息"></a>top 能查看哪些信息</h4><p><img src="https://farm1.staticflickr.com/866/41125178854_6c34a4de13_o.png" alt=""></p><h5 id="第一列：跟w-命令第一行、uptime-命令查询结果显示一致；"><a href="#第一列：跟w-命令第一行、uptime-命令查询结果显示一致；" class="headerlink" title="第一列：跟w 命令第一行、uptime 命令查询结果显示一致；"></a>第一列：跟w 命令第一行、uptime 命令查询结果显示一致；</h5><h5 id="第二列：当前的系统任务情况："><a href="#第二列：当前的系统任务情况：" class="headerlink" title="第二列：当前的系统任务情况："></a>第二列：当前的系统任务情况：</h5><p>linux共有5种状态，如下：</p><table><thead><tr><th>状态码</th><th>状态</th><th>具体描述</th></tr></thead><tbody><tr><td>D</td><td>不可中断</td><td>uninterruptible sleep (usually IO) 收到信号不唤醒和不可运行, 进程必须等待直到有中断发生</td></tr><tr><td>R</td><td>运行</td><td>runnable (on run queue) 正在运行或在运行队列中等待</td></tr><tr><td>S</td><td>中断</td><td>sleeping 休眠中, 受阻, 在等待某个条件的形成或接受到信号</td></tr><tr><td>T</td><td>停止</td><td>traced or stopped 进程收到SIGSTOP, SIGSTP, SIGTIN, SIGTOU信号后停止运行运行</td></tr><tr><td>Z</td><td>僵死</td><td>a defunct (“zombie”) process 进程已终止, 但进程描述符存在, 直到父进程调用wait4()系统调用后释放</td></tr></tbody></table><h5 id="第三列：cpu使用情况"><a href="#第三列：cpu使用情况" class="headerlink" title="第三列：cpu使用情况"></a>第三列：cpu使用情况</h5><p>这里重点关注一下us这一项，也就是用户使用cpu的情况；</p><h5 id="第四列：内存使用情况；"><a href="#第四列：内存使用情况；" class="headerlink" title="第四列：内存使用情况；"></a>第四列：内存使用情况；</h5><h5 id="第五列：虚拟内存使用情况；"><a href="#第五列：虚拟内存使用情况；" class="headerlink" title="第五列：虚拟内存使用情况；"></a>第五列：虚拟内存使用情况；</h5><h4 id="top-常见用法："><a href="#top-常见用法：" class="headerlink" title="top 常见用法："></a>top 常见用法：</h4><p> <code>top -bn1</code> 非动态打印系统资源使用情况</p><p><img src="https://farm1.staticflickr.com/980/41842148301_5675e21a4d_o.png" alt=""></p><p>上图中，</p><ul><li><p>RES 表示占用内存的大小；</p></li><li><p>%MEM 表示占用内存的百分比；</p></li></ul><h5 id="top-基本操作："><a href="#top-基本操作：" class="headerlink" title="top 基本操作："></a><code>top</code> 基本操作：</h5><ul><li><p><code>shift + m</code> 按照内容使用情况排序；</p></li><li><p>数字 <code>1</code> 切换显示各个CPU使用状态；</p></li><li><p><code>q</code>退出top；</p></li></ul><h3 id="sar命令"><a href="#sar命令" class="headerlink" title="sar命令"></a>sar命令</h3><p>sar（System Activity Reporter系统活动情况报告）是Linux 上最为全面的系统性能分析工具之一，可以从多方面对系统的活动进行报告，包括：文件的读写情况、系统调用的使用情况、磁盘I/O、CPU效率、内存使用状况、进程活动及IPC有关的活动等。</p><p>Sar是后台进程sadc的前端显示工具，与其他系统监控工具相比，它可以打印从当天零点开始到当前时刻到系统状态信息。</p><h4 id="sar-安装"><a href="#sar-安装" class="headerlink" title="sar 安装"></a><code>sar</code> 安装</h4><p>centos 7 默认没有sar，需要单独安装；安装名为“sysstat”的包后，sadc就会自动从内核收集报告并保存到<code>/var/log/sa/</code> 目录下；</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y sysstat</span><br></pre></td></tr></table></figure><p>启动sadc(system activity data collector)服务(sysstat)，这样报告就会被写入到日志文件“/var/log/sa/saDD”中并且已经存在的文档将会被归档,DD表示日期（该报告默认保存一个月）</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start sysstat</span><br><span class="line">systemctl enable sysstat</span><br></pre></td></tr></table></figure><h4 id="命令行格式"><a href="#命令行格式" class="headerlink" title="命令行格式"></a>命令行格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sar [options] [-o file] t [n]</span><br></pre></td></tr></table></figure><ul><li><p>t为采样间隔，n为采样次数，默认值是1；</p></li><li><p>-o file表示将命令结果以二进制格式存放在文件中，file 是文件名。</p></li><li><p>options 为命令行选项，sar命令常用选项如下：</p></li></ul><table><thead><tr><th>常用选项</th><th>含义</th></tr></thead><tbody><tr><td>-A</td><td>所有报告的总和</td></tr><tr><td>-u</td><td>输出CPU使用情况的统计信息</td></tr><tr><td>-v</td><td>输出inode、文件和其他内核表的统计信息</td></tr><tr><td>-d</td><td>输出每一个块设备的活动信息</td></tr><tr><td>-r</td><td>输出内存和交换空间的统计信息</td></tr><tr><td>-b</td><td>显示I/O和传送速率的统计信息</td></tr><tr><td>-a</td><td>文件读写情况</td></tr><tr><td>-c</td><td>输出进程统计信息，每秒创建的进程数</td></tr><tr><td>-R</td><td>输出内存页面的统计信息</td></tr><tr><td>-y</td><td>终端设备活动情况</td></tr><tr><td>-w</td><td>输出系统交换活动信息</td></tr></tbody></table><h4 id="sar-使用实例"><a href="#sar-使用实例" class="headerlink" title="sar 使用实例"></a><code>sar</code> 使用实例</h4><h5 id="使用-o选项保存sar命令的输出结果"><a href="#使用-o选项保存sar命令的输出结果" class="headerlink" title="使用-o选项保存sar命令的输出结果"></a>使用<code>-o</code>选项保存sar命令的输出结果</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sar 2 5 -o /tmp/data &gt; /dev/null 2&gt;&amp;1</span><br><span class="line"></span><br><span class="line">sar -f /tmp/data    // 使用“sar -f ”输出结果</span><br></pre></td></tr></table></figure><p>追溯指定日期的统计数据</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sar -f /var/log/sysstat/sa28</span><br></pre></td></tr></table></figure><h5 id="查看网络流量-：sar-n-keyword-or-ALL"><a href="#查看网络流量-：sar-n-keyword-or-ALL" class="headerlink" title="查看网络流量 ：sar -n {keyword} or {ALL}"></a>查看网络流量 ：<code>sar -n {keyword} or {ALL}</code></h5><p>sar -n DEV 2 5 //查询网卡流量，每2秒钟输出一次，一共输出5次</p><p><img src="https://farm1.staticflickr.com/869/41226238294_df2a05d1f0_o.png" alt=""></p><p>使用<code>-f</code>选项可以查看某一天的网络流量历史</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sar -n DEV -f /var/log/sa/sa28</span><br></pre></td></tr></table></figure><p><img src="https://farm1.staticflickr.com/960/41127699724_b82a96ae33_o.png" alt=""></p><p>那么，从这张表能看出哪些有用的信息呢？</p><table><thead><tr><th>列名称</th><th>含义</th></tr></thead><tbody><tr><td>IFACE</td><td>设备名称</td></tr><tr><td>rxpck/s</td><td>每秒接收的包的数量，单位是个数，数值上万，说明网络异常；</td></tr><tr><td>rxkB/s</td><td>每秒接收的数据量，单位是KB，数值大于5000000，说明网络异常；</td></tr><tr><td>txpck/s</td><td>每秒发送的包的数量，单位是个数；</td></tr><tr><td>txkB/s</td><td>每秒发送的数据量，单位是KB；</td></tr></tbody></table><h5 id="查看历史负载-sar-q"><a href="#查看历史负载-sar-q" class="headerlink" title="查看历史负载 sar -q"></a>查看历史负载 <code>sar -q</code></h5><p><img src="https://farm1.staticflickr.com/868/41844637301_c1380285fb_o.png" alt=""></p><h5 id="CPU资源监控"><a href="#CPU资源监控" class="headerlink" title="CPU资源监控"></a>CPU资源监控</h5><p>sar -u -o test 10 3 // 每10秒采样一次，连续采样3次，观察CPU 的使用情况，并将采样结果以二进制形式存入当前目录下的文件test中</p><p><img src="https://farm1.staticflickr.com/982/41802095122_115a922970_o.png" alt=""></p><p>需要重点关注的指标：</p><ul><li><p><code>%iowait</code>：显示用于等待I/O操作占用 CPU 总时间的百分比；若 <code>%iowait</code> 的值过高，表示硬盘存在I/O瓶颈；</p></li><li><p><code>%idle</code>：显示 CPU 空闲时间占用 CPU 总时间的百分比；若 <code>%idle</code> 的值高但系统响应慢时，有可能是 CPU 等待分配内存，此时应加大内存容量；若 <code>%idle</code> 的值持续低于1，则系统的 CPU 处理能力相对较低，表明系统中最需要解决的资源是 CPU 。</p></li></ul><h5 id="inode、文件和其他内核表监控"><a href="#inode、文件和其他内核表监控" class="headerlink" title="inode、文件和其他内核表监控"></a>inode、文件和其他内核表监控</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sar -v 10 3     //每10秒采样一次，连续采样3次，观察核心表的状态</span><br></pre></td></tr></table></figure><p><img src="https://farm1.staticflickr.com/980/27976621358_2d5b012db6_o.png" alt=""></p><table><thead><tr><th>输出项</th><th>含义</th></tr></thead><tbody><tr><td>dentunusd</td><td>目录高速缓存中未被使用的条目数量</td></tr><tr><td>file-nr</td><td>文件句柄（file handle）的使用数量</td></tr><tr><td>inode-nr</td><td>索引节点句柄（inode handle）的使用数量</td></tr><tr><td>pty-nr</td><td>使用的pty数量</td></tr></tbody></table><h5 id="要判断系统瓶颈问题，有时需几个-sar-命令选项结合起来"><a href="#要判断系统瓶颈问题，有时需几个-sar-命令选项结合起来" class="headerlink" title="要判断系统瓶颈问题，有时需几个 sar 命令选项结合起来"></a>要判断系统瓶颈问题，有时需几个 sar 命令选项结合起来</h5><ul><li><p>怀疑CPU存在瓶颈，可用 <code>sar -u</code> 和 <code>sar -q</code>等来查看；</p></li><li><p>怀疑内存存在瓶颈，可用<code>sar -B</code>、<code>sar -r</code> 和 <code>sar -W</code> 等来查看；</p></li><li><p>怀疑I/O存在瓶颈，可用 <code>sar -b</code>、<code>sar -u</code> 和 <code>sar -d</code> 等来查看；</p></li></ul><h5 id="查看sar日志"><a href="#查看sar日志" class="headerlink" title="查看sar日志"></a>查看sar日志</h5><p>安装sar之后，在<code>/var/log/sa</code>下还会生成一个sar打头的文件。sa开头的文件是二进位制文件，只能用sar命令行<code>sar -f [filename]</code>查看；而以sar开头的文件是文本文件，可以用cat命令查看。</p><h3 id="nload-命令"><a href="#nload-命令" class="headerlink" title="nload 命令"></a><code>nload</code> 命令</h3><h4 id="nload-安装"><a href="#nload-安装" class="headerlink" title="nload 安装"></a><code>nload</code> 安装</h4><p>nload包在epel拓展源里的；如果没有epel-release 包，需要先安装。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release; yum install -y nload     // 先安装epel-release 包，再安装nload；</span><br></pre></td></tr></table></figure><h4 id="nload-使用"><a href="#nload-使用" class="headerlink" title="nload 使用"></a><code>nload</code> 使用</h4><p>输入<code>nload</code>进行查看；按向右方向键切换网卡；按<code>q</code>退出；</p><p><img src="https://farm1.staticflickr.com/912/40038532240_6271cd8cb2_o.png" alt=""></p><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul><li><p><a href="https://www.cnblogs.com/peida/archive/2012/12/25/2833108.html" target="_blank" rel="noopener">每天一个linux命令（46）：vmstat命令</a></p></li><li><p><a href="http://www.chinaz.com/server/2013/0401/297942.shtml" target="_blank" rel="noopener">linux sar 命令详解</a></p></li><li><p><a href="https://linuxstory.org/generate-cpu-memory-io-report-sar-command/" target="_blank" rel="noopener">7 个实例教你使用 sar 命令</a></p></li><li><p><a href="https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/sar.html" target="_blank" rel="noopener">sar 找出系统瓶颈的利器</a></p></li><li><p><a href="https://teakki.com/p/57dbc1a43362acc508f650bf" target="_blank" rel="noopener">CentOS6.X关闭TTY方法</a></p></li></ul></div><div><ul class="post-copyright"><li class="post-copyright-author"> <strong>本文作者：</strong> Steve Yuan</li><li class="post-copyright-link"> <strong>本文链接：</strong> <a href="https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/" title="Linux运维学习笔记7-1：监控系统状态命令（一）">https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/</a></li><li class="post-copyright-license"> <strong>版权声明：</strong> 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li></ul></div><footer class="post-footer"><div class="post-tags"> <a href="/tags/regularExpression/" rel="tag"># regularExpression</a> <a href="/tags/notes/" rel="tag"># notes</a> <a href="/tags/linux/" rel="tag"># linux</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2018/04/27/linuxNotes-howToWriteShellScript/" rel="next" title="Linux运维学习笔记6-4：怎么写shell脚本？"><i class="fa fa-chevron-left"></i> Linux运维学习笔记6-4：怎么写shell脚本？</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"> <a href="/2018/05/02/linuxNotes-sedPractice/" rel="prev" title="Linux运维学习笔记：sed命令练习题目">Linux运维学习笔记：sed命令练习题目<i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="disqus_thread"><noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan"><p class="site-author-name" itemprop="name">Steve Yuan</p><p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">77</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/index.html"><span class="site-state-item-count">13</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"> <a href="/tags/index.html"><span class="site-state-item-count">65</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/steve-yuan-8276" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i> GitHub</a></span><span class="links-of-author-item"><a href="https://twitter.com/feng8276" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i> Twitter</a></span><span class="links-of-author-item"><a href="https://www.facebook.com/feng74" target="_blank" title="Facebook"><i class="fa fa-fw fa-facebook"></i> Facebook</a></span><span class="links-of-author-item"><a href="mailto:yuanf02@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i> E-Mail</a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#w-命令"><span class="nav-number">2.</span> <span class="nav-text">w 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#w-命令能查到哪些信息"><span class="nav-number">2.1.</span> <span class="nav-text">w 命令能查到哪些信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#判断服务器压力的方法："><span class="nav-number">2.1.1.</span> <span class="nav-text">判断服务器压力的方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#uptime-命令："><span class="nav-number">2.1.1.1.</span> <span class="nav-text">uptime 命令：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#当前用户的登陆信息"><span class="nav-number">2.1.2.</span> <span class="nav-text">当前用户的登陆信息</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vmstat-命令"><span class="nav-number">3.</span> <span class="nav-text">vmstat 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#物理内存和虚拟内存："><span class="nav-number">3.1.</span> <span class="nav-text">物理内存和虚拟内存：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vmstat-命令行格式："><span class="nav-number">3.2.</span> <span class="nav-text">vmstat 命令行格式：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vmstat-能查到哪些信息"><span class="nav-number">3.3.</span> <span class="nav-text">vmstat 能查到哪些信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#procs进程相关信息"><span class="nav-number">3.3.1.</span> <span class="nav-text">procs进程相关信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#memory-内存相关信息"><span class="nav-number">3.3.2.</span> <span class="nav-text">memory 内存相关信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#swap内存交换情况"><span class="nav-number">3.3.3.</span> <span class="nav-text">swap内存交换情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#io-磁盘使用情况"><span class="nav-number">3.3.4.</span> <span class="nav-text">io 磁盘使用情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#system系统采集间隔内的中断数"><span class="nav-number">3.3.5.</span> <span class="nav-text">system系统采集间隔内的中断数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CPU使用状态"><span class="nav-number">3.3.6.</span> <span class="nav-text">CPU使用状态</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#top-命令"><span class="nav-number">4.</span> <span class="nav-text">top 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#top-能查看哪些信息"><span class="nav-number">4.1.</span> <span class="nav-text">top 能查看哪些信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一列：跟w-命令第一行、uptime-命令查询结果显示一致；"><span class="nav-number">4.1.1.</span> <span class="nav-text">第一列：跟w 命令第一行、uptime 命令查询结果显示一致；</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二列：当前的系统任务情况："><span class="nav-number">4.1.2.</span> <span class="nav-text">第二列：当前的系统任务情况：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三列：cpu使用情况"><span class="nav-number">4.1.3.</span> <span class="nav-text">第三列：cpu使用情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第四列：内存使用情况；"><span class="nav-number">4.1.4.</span> <span class="nav-text">第四列：内存使用情况；</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第五列：虚拟内存使用情况；"><span class="nav-number">4.1.5.</span> <span class="nav-text">第五列：虚拟内存使用情况；</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#top-常见用法："><span class="nav-number">4.2.</span> <span class="nav-text">top 常见用法：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#top-基本操作："><span class="nav-number">4.2.1.</span> <span class="nav-text">top 基本操作：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sar命令"><span class="nav-number">5.</span> <span class="nav-text">sar命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sar-安装"><span class="nav-number">5.1.</span> <span class="nav-text">sar 安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令行格式"><span class="nav-number">5.2.</span> <span class="nav-text">命令行格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sar-使用实例"><span class="nav-number">5.3.</span> <span class="nav-text">sar 使用实例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#使用-o选项保存sar命令的输出结果"><span class="nav-number">5.3.1.</span> <span class="nav-text">使用-o选项保存sar命令的输出结果</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看网络流量-：sar-n-keyword-or-ALL"><span class="nav-number">5.3.2.</span> <span class="nav-text">查看网络流量 ：sar -n {keyword} or {ALL}</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看历史负载-sar-q"><span class="nav-number">5.3.3.</span> <span class="nav-text">查看历史负载 sar -q</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CPU资源监控"><span class="nav-number">5.3.4.</span> <span class="nav-text">CPU资源监控</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#inode、文件和其他内核表监控"><span class="nav-number">5.3.5.</span> <span class="nav-text">inode、文件和其他内核表监控</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#要判断系统瓶颈问题，有时需几个-sar-命令选项结合起来"><span class="nav-number">5.3.6.</span> <span class="nav-text">要判断系统瓶颈问题，有时需几个 sar 命令选项结合起来</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看sar日志"><span class="nav-number">5.3.7.</span> <span class="nav-text">查看sar日志</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nload-命令"><span class="nav-number">6.</span> <span class="nav-text">nload 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nload-安装"><span class="nav-number">6.1.</span> <span class="nav-text">nload 安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nload-使用"><span class="nav-number">6.2.</span> <span class="nav-text">nload 使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">Steve Yuan</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-area-chart"></i></span> <span class="post-meta-item-text">Site words total count&#58;</span> <span title="Site words total count">94.6k</span></div><div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div> <span class="post-meta-divider">|</span><div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script type="text/javascript" src="/lib/three/three.min.js"></script><script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script><script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script><script type="text/javascript">var disqus_config=function(){this.page.url="https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/",this.page.identifier="2018/04/28/week701-howToManageLinux/",this.page.title="Linux运维学习笔记7-1：监控系统状态命令（一）"},d=document,s=d.createElement("script");s.src="https://steve-yuan.disqus.com/embed.js",s.setAttribute("data-timestamp",""+ +new Date),(d.head||d.body).appendChild(s)</script><script type="text/javascript">
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="regularExpression,notes,linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="写在前面前一阶段linux基础知识暂告一段落，下面开始介绍linux系统管理的基本知识。本节主要涉及w、 vmstat、 top、 sar 、nload 五个命令。 w 命令w命令用于显示目前登入系统的用户信息，可得知目前登入系统的用户有哪些人，以及他们正在执行的程序。 命令行格式： 1w [选项] [参数]    常用选项 含义     -f 　 开启或关闭显示用户从何处登入系统   -h">
+<meta name="keywords" content="regularExpression,notes,linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux运维学习笔记7-1：监控系统状态命令（一）">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/index.html">
+<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:description" content="写在前面前一阶段linux基础知识暂告一段落，下面开始介绍linux系统管理的基本知识。本节主要涉及w、 vmstat、 top、 sar 、nload 五个命令。 w 命令w命令用于显示目前登入系统的用户信息，可得知目前登入系统的用户有哪些人，以及他们正在执行的程序。 命令行格式： 1w [选项] [参数]    常用选项 含义     -f 　 开启或关闭显示用户从何处登入系统   -h">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://farm1.staticflickr.com/827/26970450367_793b8a1a48_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/825/41796965602_d3fe3b42ae_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/958/27073202477_be4651e520_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/967/41223389244_60ae08f3f9_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/871/40940715765_8f5da8b8b4_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/966/41898892482_09472b5712_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/944/27073312657_f58410269a_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/866/41125178854_6c34a4de13_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/980/41842148301_5675e21a4d_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/869/41226238294_df2a05d1f0_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/960/41127699724_b82a96ae33_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/868/41844637301_c1380285fb_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/982/41802095122_115a922970_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/980/27976621358_2d5b012db6_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/912/40038532240_6271cd8cb2_o.png">
+<meta property="og:updated_time" content="2018-05-07T06:15:19.896Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux运维学习笔记7-1：监控系统状态命令（一）">
+<meta name="twitter:description" content="写在前面前一阶段linux基础知识暂告一段落，下面开始介绍linux系统管理的基本知识。本节主要涉及w、 vmstat、 top、 sar 、nload 五个命令。 w 命令w命令用于显示目前登入系统的用户信息，可得知目前登入系统的用户有哪些人，以及他们正在执行的程序。 命令行格式： 1w [选项] [参数]    常用选项 含义     -f 　 开启或关闭显示用户从何处登入系统   -h">
+<meta name="twitter:image" content="https://farm1.staticflickr.com/827/26970450367_793b8a1a48_o.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/"/>
+
+
+
+
+
+  <title>Linux运维学习笔记7-1：监控系统状态命令（一） | Steve的折腾学习日志</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111158073-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/steve-yuan-8276"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux运维学习笔记7-1：监控系统状态命令（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-28T15:52:52+08:00">
+                2018-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/28/week701-howToManageLinux/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/28/week701-howToManageLinux/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,789
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  14
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>前一阶段linux基础知识暂告一段落，下面开始介绍linux系统管理的基本知识。本节主要涉及<code>w</code>、 <code>vmstat</code>、 <code>top</code>、 <code>sar</code> 、<code>nload</code> 五个命令。</p>
+<h3 id="w-命令"><a href="#w-命令" class="headerlink" title="w 命令"></a><code>w</code> 命令</h3><p><code>w</code>命令用于显示目前登入系统的用户信息，可得知目前登入系统的用户有哪些人，以及他们正在执行的程序。</p>
+<p>命令行格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">w [选项] [参数]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>常用选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-f 　</td>
+<td>开启或关闭显示用户从何处登入系统</td>
+</tr>
+<tr>
+<td>-h 　</td>
+<td>不显示各栏位的标题信息列</td>
+</tr>
+<tr>
+<td>-l 　</td>
+<td>使用详细格式列表，此为预设值</td>
+</tr>
+<tr>
+<td>-s 　</td>
+<td>使用简洁格式列表，不显示用户登入时间，终端机阶段作业和程序所耗费的CPU时间</td>
+</tr>
+<tr>
+<td>-u 　</td>
+<td>忽略执行程序的名称，以及该程序耗费CPU时间的信息</td>
+</tr>
+<tr>
+<td>-V 　</td>
+<td>显示版本信息</td>
+</tr>
+</tbody>
+</table>
+<h4 id="w-命令能查到哪些信息"><a href="#w-命令能查到哪些信息" class="headerlink" title="w 命令能查到哪些信息"></a><code>w</code> 命令能查到哪些信息</h4><p>示例：</p>
+<p><img src="https://farm1.staticflickr.com/827/26970450367_793b8a1a48_o.png" alt=""></p>
+<p>上图中，</p>
+<p>第一行从左到右依次为：时间、系统运行时间、登陆用户数、平均负载。最值得关注的是平均负载，由三个数字组成，分别代表1分钟、5分钟、15分钟的系统负载；数字越大，说明服务器的压力越大。</p>
+<p>第二行显示的是登陆名、登陆地址等信息。</p>
+<a id="more"></a>
+<h5 id="判断服务器压力的方法："><a href="#判断服务器压力的方法：" class="headerlink" title="判断服务器压力的方法："></a>判断服务器压力的方法：</h5><p>将<strong>均衡负载数</strong>与<strong>逻辑cpu</strong>做比较，如果长时间大于cpu个数，就说明系统压力大；反之，说明cpu资源有富余。</p>
+<p>这里需要补充了解一下系统逻辑cpu的查询方法：</p>
+<p><strong>系统cpu信息</strong>保存在 <code>/proc/cpuinfo</code>,系统内核从0开始，逐一列出。</p>
+<p>查询系统有几个cpu，可以使用 <code>cat /proc/cpuinfo | grep -c &#39;processor&#39;</code> </p>
+<p><strong>注：</strong><code>grep -c</code> 表示打印符合条件的行数。</p>
+<p><img src="https://farm1.staticflickr.com/825/41796965602_d3fe3b42ae_o.png" alt=""></p>
+<p>通过上图可以看到：</p>
+<ul>
+<li><p>系统逻辑cpu有1个；</p>
+</li>
+<li><p>一分钟平均负载是0.00；</p>
+</li>
+</ul>
+<p>所以，结论就是现在cpu很闲，没事干。</p>
+<p>在实际使用当中，<strong>cpu负载的理想状态：</strong>平均负载接近但不高于逻辑cpu的值；这样cpu既不至于闲置，也至于太多处理不过来。</p>
+<h6 id="uptime-命令："><a href="#uptime-命令：" class="headerlink" title="uptime 命令："></a>uptime 命令：</h6><p>查询系统运行时间和负载情况，还可以使用 uptime 命令，跟w 命令第一行的效果一摸一样，如下：</p>
+<p><img src="https://farm1.staticflickr.com/958/27073202477_be4651e520_o.png" alt=""></p>
+<h5 id="当前用户的登陆信息"><a href="#当前用户的登陆信息" class="headerlink" title="当前用户的登陆信息"></a>当前用户的登陆信息</h5><p><img src="https://farm1.staticflickr.com/967/41223389244_60ae08f3f9_o.png" alt=""></p>
+<p>第二行：系统登陆用户，这里用户名是root，使用的终端是tty1，本地登陆；后面还有登陆时间、cpu使用情况等等。</p>
+<p>第三行：shell远程登陆的用户，这里的用户名是root，使用的终端是pts/0，登陆ip是172.16.155.1；</p>
+<p>这里涉及一个知识点：<code>tty</code> 和<code>pts</code> ：</p>
+<p>在计算机发展早期，为了让尽可能多的用户利用系统资源，使用自己的IO设备连接和操作主机，产生了终端terminal的概念，即计算机设置了很多终端，每个使用者通过自己的终端来连接和使用主机资源。</p>
+<p>进入PC时代后，电脑资源越来越便宜，每个人都可以轻松拥有一台电脑而不用跟别人分享，但是linux系统依然保留了早期的这种设定。只不过，这里的终端是由mingtty软件虚拟出来的。</p>
+<ul>
+<li><p><code>tty</code>：通常，Linux发行版提供7个虚拟屏幕，1~6号是命令行终端，第7个是X- Window，即图形化界面。</p>
+</li>
+<li><p><code>pts</code> ：通过终端，还可以虚拟出无限多个终端，编号从pts/0开始，以此类推；</p>
+</li>
+</ul>
+<p><strong>注：</strong></p>
+<ol>
+<li><p>关于tty 的配置文件,CentOS 6.X 开始 TTY 的配置由 /etc/inittab更改为 /etc/init/start-ttys.conf<strong>(注：此处有误，正确的配置文件查到再补充)</strong>，可以通过编辑这个文件来修改默认的终端数；</p>
+</li>
+<li><p>centos7 下切换命令行模式和图形模式的方法：<strong>必须在root用户下操作</strong></p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl set-default multi-user.target  //设置成命令模式</span><br><span class="line"></span><br><span class="line">systemctl set-default graphical.target  //设置成图形模式</span><br></pre></td></tr></table></figure>
+<h3 id="vmstat-命令"><a href="#vmstat-命令" class="headerlink" title="vmstat 命令"></a>vmstat 命令</h3><p><code>vmstat</code>是Virtual Meomory Statistics（虚拟内存统计）的缩写，可对操作系统的虚拟内存、进程、CPU活动进行监控。可以对系统的整体情况进行统计，但不足之处是无法对某个进程进行深入分析。</p>
+<h4 id="物理内存和虚拟内存："><a href="#物理内存和虚拟内存：" class="headerlink" title="物理内存和虚拟内存："></a>物理内存和虚拟内存：</h4><p>学习vmstat 命令，首先需要了解物理内存和虚拟内存的区别。</p>
+<p>物理内存：系统硬件提供的内存大小，是真正的内存；</p>
+<p>虚拟内存：利用磁盘空间虚拟出的一块逻辑内存，用作虚拟内存的磁盘空间被称为交换空间（Swap Space）。linux下设置<a href="https://www.steve-yuan.com/2018/04/08/week3-5-diskformatting/" target="_blank" rel="noopener">虚拟内存的方法见这里</a></p>
+<p>物理内存的速度快，但是空间有限。为了最大化利用物理内存，系统会不时的进行页面交换操作，以保持尽可能多的空闲物理内存，即使并没有什么事情需要内存，Linux也会交换出暂时不用的内存页面，从而避免等待交换所需的时间。</p>
+<h4 id="vmstat-命令行格式："><a href="#vmstat-命令行格式：" class="headerlink" title="vmstat 命令行格式："></a><code>vmstat</code> 命令行格式：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vmstat[选项] [参数]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>常用选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>显示活动内页；</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>显示启动后创建的进程总数；</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>显示slab信息；</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>头信息仅显示一次；</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>以表格方式显示事件计数器和内存状态；</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>报告磁盘状态；</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>显示指定的硬盘分区状态；</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>输出信息的单位；</td>
+</tr>
+</tbody>
+</table>
+<p>参数：</p>
+<ul>
+<li><p>事件间隔：状态信息刷新的时间间隔；</p>
+</li>
+<li><p>次数：显示报告的次数；</p>
+</li>
+</ul>
+<h4 id="vmstat-能查到哪些信息"><a href="#vmstat-能查到哪些信息" class="headerlink" title="vmstat 能查到哪些信息"></a><code>vmstat</code> 能查到哪些信息</h4><p><code>vmstat</code> 默认输出</p>
+<p><img src="https://farm1.staticflickr.com/871/40940715765_8f5da8b8b4_o.png" alt=""></p>
+<p><code>vmstat [n]</code>：n代表数字，每隔n秒输出一次，手动按<code>ctrl+c</code>结束。</p>
+<p><img src="https://farm1.staticflickr.com/966/41898892482_09472b5712_o.png" alt=""></p>
+<p><code>vmstat [m] [n]</code> : m、 n 代表数字，意思是每个m秒输出一次，一共输出n次；</p>
+<p><img src="https://farm1.staticflickr.com/944/27073312657_f58410269a_o.png" alt=""></p>
+<h5 id="procs进程相关信息"><a href="#procs进程相关信息" class="headerlink" title="procs进程相关信息"></a><code>procs</code>进程相关信息</h5><ul>
+<li><p><code>r</code> ：run，表示运行队列，某一时刻CPU只能处理一个任务，其他的任务只能排队，这个状态就是r记录的状态；如果这个数值长时间大于服务器CPU，就说明cpu资源不够用了。</p>
+</li>
+<li><p><code>b</code>： block，表示等待资源的进程数,资源指的是I/O 、内存等。b状态反应的是进程任务将结果写入磁盘的过程，如果这个数字长期大于1，说明磁盘写入频繁，需要关注。</p>
+</li>
+</ul>
+<h5 id="memory-内存相关信息"><a href="#memory-内存相关信息" class="headerlink" title="memory 内存相关信息"></a><code>memory</code> 内存相关信息</h5><ul>
+<li><p><code>swpd</code>： 虚拟内存已使用的大小，单位为KB，如果大于0，表示机器物理内存不足；</p>
+</li>
+<li><p><code>free</code>： 空闲的物理内存的大小；</p>
+</li>
+<li><p><code>buff</code>： 用作缓冲的内存大小；</p>
+</li>
+<li><p><code>cache</code> ：表示从磁盘中读取的缓存大小；</p>
+</li>
+</ul>
+<h5 id="swap内存交换情况"><a href="#swap内存交换情况" class="headerlink" title="swap内存交换情况"></a><code>swap</code>内存交换情况</h5><ul>
+<li><p><code>si</code> ：每秒从虚拟内存写入内存的数据量；</p>
+</li>
+<li><p><code>so</code> ：每秒虚拟内存写入磁盘的大小；</p>
+</li>
+</ul>
+<p><strong>注：</strong>这两个数据与swap 强有关，如果频繁变化，说明内存不够用。</p>
+<h5 id="io-磁盘使用情况"><a href="#io-磁盘使用情况" class="headerlink" title="io 磁盘使用情况"></a><code>io</code> 磁盘使用情况</h5><ul>
+<li><p><code>bi</code> ：读磁盘的数据量；</p>
+</li>
+<li><p><code>bo</code> ：写磁盘的数据量；</p>
+</li>
+</ul>
+<p><strong>注：</strong>如果这两个数值过大，说明磁盘在频繁读写；由于磁盘读写速度相对于内存、CPU速度很慢，必然影响系统性能，反映在数据上，b也会增大。</p>
+<h5 id="system系统采集间隔内的中断数"><a href="#system系统采集间隔内的中断数" class="headerlink" title="system系统采集间隔内的中断数"></a><code>system</code>系统采集间隔内的中断数</h5><ul>
+<li><p><code>in</code> ：每秒CPU的中断次数，包括时间中断</p>
+</li>
+<li><p><code>cs</code> ：每秒上下文切换次数，例如我们调用系统函数、线程切换，都要进程上下文切换。这个值要越小越好，数值偏大表示你的CPU大部分浪费在上下文切换，导致CPU干正经事的时间少了，没有得到充分利用。</p>
+</li>
+</ul>
+<h5 id="CPU使用状态"><a href="#CPU使用状态" class="headerlink" title="CPU使用状态"></a>CPU使用状态</h5><ul>
+<li><p><code>us</code>：用户CPU时间百分比；如果长时间大于50%，说明系统资源不够。</p>
+</li>
+<li><p><code>sy</code> ：系统CPU时间百分比，如果太高，表示系统调用时间长，例如是IO操作频繁。</p>
+</li>
+<li><p><code>id</code> ：空闲 CPU时间百分比；一般来说，id + us + sy = 100,一般我认为id是空闲CPU使用率，us是用户CPU使用率，sy是系统CPU使用率。</p>
+</li>
+<li><p><code>wa</code> ：等待IO CPU时间；</p>
+</li>
+<li><p><code>st</code> ：表示被偷走的CPU所占百分比，一般为0.</p>
+</li>
+</ul>
+<h3 id="top-命令"><a href="#top-命令" class="headerlink" title="top 命令"></a><code>top</code> 命令</h3><p><code>top</code>命令用于动态监控进程所占用的系统资源，每隔3秒钟更新一次，特点是会将占用CPU、内存磁盘I/O 最高的进程放在最前面。</p>
+<p>命令行格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top [选项]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>常用选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-b</td>
+<td>以批处理模式操作；</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>显示完整的治命令；</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>屏幕刷新间隔时间；</td>
+</tr>
+<tr>
+<td>-I</td>
+<td>忽略失效过程；</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>保密模式；</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>累积模式；</td>
+</tr>
+<tr>
+<td>-i&lt;时间&gt;</td>
+<td>设置间隔时间；</td>
+</tr>
+<tr>
+<td>-u&lt;用户名&gt;</td>
+<td>指定用户名；</td>
+</tr>
+<tr>
+<td>-p&lt;进程号&gt;</td>
+<td>指定进程；</td>
+</tr>
+<tr>
+<td>-n&lt;次数&gt;</td>
+<td>循环显示的次数</td>
+</tr>
+</tbody>
+</table>
+<h4 id="top-能查看哪些信息"><a href="#top-能查看哪些信息" class="headerlink" title="top 能查看哪些信息"></a>top 能查看哪些信息</h4><p><img src="https://farm1.staticflickr.com/866/41125178854_6c34a4de13_o.png" alt=""></p>
+<h5 id="第一列：跟w-命令第一行、uptime-命令查询结果显示一致；"><a href="#第一列：跟w-命令第一行、uptime-命令查询结果显示一致；" class="headerlink" title="第一列：跟w 命令第一行、uptime 命令查询结果显示一致；"></a>第一列：跟w 命令第一行、uptime 命令查询结果显示一致；</h5><h5 id="第二列：当前的系统任务情况："><a href="#第二列：当前的系统任务情况：" class="headerlink" title="第二列：当前的系统任务情况："></a>第二列：当前的系统任务情况：</h5><p>linux共有5种状态，如下：</p>
+<table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>状态</th>
+<th>具体描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D</td>
+<td>不可中断</td>
+<td>uninterruptible sleep (usually IO) 收到信号不唤醒和不可运行, 进程必须等待直到有中断发生</td>
+</tr>
+<tr>
+<td>R</td>
+<td>运行</td>
+<td>runnable (on run queue) 正在运行或在运行队列中等待</td>
+</tr>
+<tr>
+<td>S</td>
+<td>中断</td>
+<td>sleeping 休眠中, 受阻, 在等待某个条件的形成或接受到信号</td>
+</tr>
+<tr>
+<td>T</td>
+<td>停止</td>
+<td>traced or stopped 进程收到SIGSTOP, SIGSTP, SIGTIN, SIGTOU信号后停止运行运行</td>
+</tr>
+<tr>
+<td>Z</td>
+<td>僵死</td>
+<td>a defunct (“zombie”) process 进程已终止, 但进程描述符存在, 直到父进程调用wait4()系统调用后释放</td>
+</tr>
+</tbody>
+</table>
+<h5 id="第三列：cpu使用情况"><a href="#第三列：cpu使用情况" class="headerlink" title="第三列：cpu使用情况"></a>第三列：cpu使用情况</h5><p>这里重点关注一下us这一项，也就是用户使用cpu的情况；</p>
+<h5 id="第四列：内存使用情况；"><a href="#第四列：内存使用情况；" class="headerlink" title="第四列：内存使用情况；"></a>第四列：内存使用情况；</h5><h5 id="第五列：虚拟内存使用情况；"><a href="#第五列：虚拟内存使用情况；" class="headerlink" title="第五列：虚拟内存使用情况；"></a>第五列：虚拟内存使用情况；</h5><h4 id="top-常见用法："><a href="#top-常见用法：" class="headerlink" title="top 常见用法："></a>top 常见用法：</h4><p> <code>top -bn1</code> 非动态打印系统资源使用情况</p>
+<p><img src="https://farm1.staticflickr.com/980/41842148301_5675e21a4d_o.png" alt=""></p>
+<p>上图中，</p>
+<ul>
+<li><p>RES 表示占用内存的大小；</p>
+</li>
+<li><p>%MEM 表示占用内存的百分比；</p>
+</li>
+</ul>
+<h5 id="top-基本操作："><a href="#top-基本操作：" class="headerlink" title="top 基本操作："></a><code>top</code> 基本操作：</h5><ul>
+<li><p><code>shift + m</code> 按照内容使用情况排序；</p>
+</li>
+<li><p>数字 <code>1</code> 切换显示各个CPU使用状态；</p>
+</li>
+<li><p><code>q</code>退出top；</p>
+</li>
+</ul>
+<h3 id="sar命令"><a href="#sar命令" class="headerlink" title="sar命令"></a>sar命令</h3><p>sar（System Activity Reporter系统活动情况报告）是Linux 上最为全面的系统性能分析工具之一，可以从多方面对系统的活动进行报告，包括：文件的读写情况、系统调用的使用情况、磁盘I/O、CPU效率、内存使用状况、进程活动及IPC有关的活动等。</p>
+<p>Sar是后台进程sadc的前端显示工具，与其他系统监控工具相比，它可以打印从当天零点开始到当前时刻到系统状态信息。</p>
+<h4 id="sar-安装"><a href="#sar-安装" class="headerlink" title="sar 安装"></a><code>sar</code> 安装</h4><p>centos 7 默认没有sar，需要单独安装；安装名为“sysstat”的包后，sadc就会自动从内核收集报告并保存到<code>/var/log/sa/</code> 目录下；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y sysstat</span><br></pre></td></tr></table></figure>
+<p>启动sadc(system activity data collector)服务(sysstat)，这样报告就会被写入到日志文件“/var/log/sa/saDD”中并且已经存在的文档将会被归档,DD表示日期（该报告默认保存一个月）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start sysstat</span><br><span class="line">systemctl enable sysstat</span><br></pre></td></tr></table></figure>
+<h4 id="命令行格式"><a href="#命令行格式" class="headerlink" title="命令行格式"></a>命令行格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sar [options] [-o file] t [n]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>t为采样间隔，n为采样次数，默认值是1；</p>
+</li>
+<li><p>-o file表示将命令结果以二进制格式存放在文件中，file 是文件名。</p>
+</li>
+<li><p>options 为命令行选项，sar命令常用选项如下：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>常用选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-A</td>
+<td>所有报告的总和</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>输出CPU使用情况的统计信息</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>输出inode、文件和其他内核表的统计信息</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>输出每一个块设备的活动信息</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>输出内存和交换空间的统计信息</td>
+</tr>
+<tr>
+<td>-b</td>
+<td>显示I/O和传送速率的统计信息</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>文件读写情况</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>输出进程统计信息，每秒创建的进程数</td>
+</tr>
+<tr>
+<td>-R</td>
+<td>输出内存页面的统计信息</td>
+</tr>
+<tr>
+<td>-y</td>
+<td>终端设备活动情况</td>
+</tr>
+<tr>
+<td>-w</td>
+<td>输出系统交换活动信息</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sar-使用实例"><a href="#sar-使用实例" class="headerlink" title="sar 使用实例"></a><code>sar</code> 使用实例</h4><h5 id="使用-o选项保存sar命令的输出结果"><a href="#使用-o选项保存sar命令的输出结果" class="headerlink" title="使用-o选项保存sar命令的输出结果"></a>使用<code>-o</code>选项保存sar命令的输出结果</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sar 2 5 -o /tmp/data &gt; /dev/null 2&gt;&amp;1</span><br><span class="line"></span><br><span class="line">sar -f /tmp/data    // 使用“sar -f ”输出结果</span><br></pre></td></tr></table></figure>
+<p>追溯指定日期的统计数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sar -f /var/log/sysstat/sa28</span><br></pre></td></tr></table></figure>
+<h5 id="查看网络流量-：sar-n-keyword-or-ALL"><a href="#查看网络流量-：sar-n-keyword-or-ALL" class="headerlink" title="查看网络流量 ：sar -n {keyword} or {ALL}"></a>查看网络流量 ：<code>sar -n {keyword} or {ALL}</code></h5><p>sar -n DEV 2 5   //查询网卡流量，每2秒钟输出一次，一共输出5次</p>
+<p><img src="https://farm1.staticflickr.com/869/41226238294_df2a05d1f0_o.png" alt=""></p>
+<p>使用<code>-f</code>选项可以查看某一天的网络流量历史</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sar -n DEV -f /var/log/sa/sa28</span><br></pre></td></tr></table></figure>
+<p><img src="https://farm1.staticflickr.com/960/41127699724_b82a96ae33_o.png" alt=""></p>
+<p>那么，从这张表能看出哪些有用的信息呢？</p>
+<table>
+<thead>
+<tr>
+<th>列名称</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IFACE</td>
+<td>设备名称</td>
+</tr>
+<tr>
+<td>rxpck/s</td>
+<td>每秒接收的包的数量，单位是个数，数值上万，说明网络异常；</td>
+</tr>
+<tr>
+<td>rxkB/s</td>
+<td>每秒接收的数据量，单位是KB，数值大于5000000，说明网络异常；</td>
+</tr>
+<tr>
+<td>txpck/s</td>
+<td>每秒发送的包的数量，单位是个数；</td>
+</tr>
+<tr>
+<td>txkB/s</td>
+<td>每秒发送的数据量，单位是KB；</td>
+</tr>
+</tbody>
+</table>
+<h5 id="查看历史负载-sar-q"><a href="#查看历史负载-sar-q" class="headerlink" title="查看历史负载 sar -q"></a>查看历史负载 <code>sar -q</code></h5><p><img src="https://farm1.staticflickr.com/868/41844637301_c1380285fb_o.png" alt=""></p>
+<h5 id="CPU资源监控"><a href="#CPU资源监控" class="headerlink" title="CPU资源监控"></a>CPU资源监控</h5><p>sar -u -o test 10 3     // 每10秒采样一次，连续采样3次，观察CPU 的使用情况，并将采样结果以二进制形式存入当前目录下的文件test中</p>
+<p><img src="https://farm1.staticflickr.com/982/41802095122_115a922970_o.png" alt=""></p>
+<p>需要重点关注的指标：</p>
+<ul>
+<li><p><code>%iowait</code>：显示用于等待I/O操作占用 CPU 总时间的百分比；若 <code>%iowait</code> 的值过高，表示硬盘存在I/O瓶颈；</p>
+</li>
+<li><p><code>%idle</code>：显示 CPU 空闲时间占用 CPU 总时间的百分比；若 <code>%idle</code> 的值高但系统响应慢时，有可能是 CPU 等待分配内存，此时应加大内存容量；若 <code>%idle</code> 的值持续低于1，则系统的 CPU 处理能力相对较低，表明系统中最需要解决的资源是 CPU 。</p>
+</li>
+</ul>
+<h5 id="inode、文件和其他内核表监控"><a href="#inode、文件和其他内核表监控" class="headerlink" title="inode、文件和其他内核表监控"></a>inode、文件和其他内核表监控</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sar -v 10 3     //每10秒采样一次，连续采样3次，观察核心表的状态</span><br></pre></td></tr></table></figure>
+<p><img src="https://farm1.staticflickr.com/980/27976621358_2d5b012db6_o.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>输出项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dentunusd</td>
+<td>目录高速缓存中未被使用的条目数量</td>
+</tr>
+<tr>
+<td>file-nr</td>
+<td>文件句柄（file handle）的使用数量</td>
+</tr>
+<tr>
+<td>inode-nr</td>
+<td>索引节点句柄（inode handle）的使用数量</td>
+</tr>
+<tr>
+<td>pty-nr</td>
+<td>使用的pty数量</td>
+</tr>
+</tbody>
+</table>
+<h5 id="要判断系统瓶颈问题，有时需几个-sar-命令选项结合起来"><a href="#要判断系统瓶颈问题，有时需几个-sar-命令选项结合起来" class="headerlink" title="要判断系统瓶颈问题，有时需几个 sar 命令选项结合起来"></a>要判断系统瓶颈问题，有时需几个 sar 命令选项结合起来</h5><ul>
+<li><p>怀疑CPU存在瓶颈，可用 <code>sar -u</code> 和 <code>sar -q</code>等来查看；</p>
+</li>
+<li><p>怀疑内存存在瓶颈，可用<code>sar -B</code>、<code>sar -r</code> 和 <code>sar -W</code> 等来查看；</p>
+</li>
+<li><p>怀疑I/O存在瓶颈，可用 <code>sar -b</code>、<code>sar -u</code> 和 <code>sar -d</code> 等来查看；</p>
+</li>
+</ul>
+<h5 id="查看sar日志"><a href="#查看sar日志" class="headerlink" title="查看sar日志"></a>查看sar日志</h5><p>安装sar之后，在<code>/var/log/sa</code>下还会生成一个sar打头的文件。sa开头的文件是二进位制文件，只能用sar命令行<code>sar -f [filename]</code>查看；而以sar开头的文件是文本文件，可以用cat命令查看。</p>
+<h3 id="nload-命令"><a href="#nload-命令" class="headerlink" title="nload 命令"></a><code>nload</code> 命令</h3><h4 id="nload-安装"><a href="#nload-安装" class="headerlink" title="nload 安装"></a><code>nload</code> 安装</h4><p>nload包在epel拓展源里的；如果没有epel-release 包，需要先安装。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release; yum install -y nload     // 先安装epel-release 包，再安装nload；</span><br></pre></td></tr></table></figure>
+<h4 id="nload-使用"><a href="#nload-使用" class="headerlink" title="nload 使用"></a><code>nload</code> 使用</h4><p>输入<code>nload</code>进行查看；按向右方向键切换网卡；按<code>q</code>退出；</p>
+<p><img src="https://farm1.staticflickr.com/912/40038532240_6271cd8cb2_o.png" alt=""></p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><p><a href="https://www.cnblogs.com/peida/archive/2012/12/25/2833108.html" target="_blank" rel="noopener">每天一个linux命令（46）：vmstat命令</a></p>
+</li>
+<li><p><a href="http://www.chinaz.com/server/2013/0401/297942.shtml" target="_blank" rel="noopener">linux sar 命令详解</a></p>
+</li>
+<li><p><a href="https://linuxstory.org/generate-cpu-memory-io-report-sar-command/" target="_blank" rel="noopener">7 个实例教你使用 sar 命令</a></p>
+</li>
+<li><p><a href="https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/sar.html" target="_blank" rel="noopener">sar 找出系统瓶颈的利器</a></p>
+</li>
+<li><p><a href="https://teakki.com/p/57dbc1a43362acc508f650bf" target="_blank" rel="noopener">CentOS6.X关闭TTY方法</a>  </p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Steve Yuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/" title="Linux运维学习笔记7-1：监控系统状态命令（一）">https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/regularExpression/" rel="tag"># regularExpression</a>
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/27/linuxNotes-howToWriteShellScript/" rel="next" title="Linux运维学习笔记6-4：怎么写shell脚本？">
+                <i class="fa fa-chevron-left"></i> Linux运维学习笔记6-4：怎么写shell脚本？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/02/linuxNotes-sedPractice/" rel="prev" title="Linux运维学习笔记：sed命令练习题目">
+                Linux运维学习笔记：sed命令练习题目 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/logo.png"
+                alt="Steve Yuan" />
+            
+              <p class="site-author-name" itemprop="name">Steve Yuan</p>
+              <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">77</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/steve-yuan-8276" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/feng8276" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.facebook.com/feng74" target="_blank" title="Facebook">
+                    
+                      <i class="fa fa-fw fa-facebook"></i>Facebook</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yuanf02@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#w-命令"><span class="nav-number">2.</span> <span class="nav-text">w 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#w-命令能查到哪些信息"><span class="nav-number">2.1.</span> <span class="nav-text">w 命令能查到哪些信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#判断服务器压力的方法："><span class="nav-number">2.1.1.</span> <span class="nav-text">判断服务器压力的方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#uptime-命令："><span class="nav-number">2.1.1.1.</span> <span class="nav-text">uptime 命令：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#当前用户的登陆信息"><span class="nav-number">2.1.2.</span> <span class="nav-text">当前用户的登陆信息</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vmstat-命令"><span class="nav-number">3.</span> <span class="nav-text">vmstat 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#物理内存和虚拟内存："><span class="nav-number">3.1.</span> <span class="nav-text">物理内存和虚拟内存：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vmstat-命令行格式："><span class="nav-number">3.2.</span> <span class="nav-text">vmstat 命令行格式：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vmstat-能查到哪些信息"><span class="nav-number">3.3.</span> <span class="nav-text">vmstat 能查到哪些信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#procs进程相关信息"><span class="nav-number">3.3.1.</span> <span class="nav-text">procs进程相关信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#memory-内存相关信息"><span class="nav-number">3.3.2.</span> <span class="nav-text">memory 内存相关信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#swap内存交换情况"><span class="nav-number">3.3.3.</span> <span class="nav-text">swap内存交换情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#io-磁盘使用情况"><span class="nav-number">3.3.4.</span> <span class="nav-text">io 磁盘使用情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#system系统采集间隔内的中断数"><span class="nav-number">3.3.5.</span> <span class="nav-text">system系统采集间隔内的中断数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CPU使用状态"><span class="nav-number">3.3.6.</span> <span class="nav-text">CPU使用状态</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#top-命令"><span class="nav-number">4.</span> <span class="nav-text">top 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#top-能查看哪些信息"><span class="nav-number">4.1.</span> <span class="nav-text">top 能查看哪些信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一列：跟w-命令第一行、uptime-命令查询结果显示一致；"><span class="nav-number">4.1.1.</span> <span class="nav-text">第一列：跟w 命令第一行、uptime 命令查询结果显示一致；</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二列：当前的系统任务情况："><span class="nav-number">4.1.2.</span> <span class="nav-text">第二列：当前的系统任务情况：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三列：cpu使用情况"><span class="nav-number">4.1.3.</span> <span class="nav-text">第三列：cpu使用情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第四列：内存使用情况；"><span class="nav-number">4.1.4.</span> <span class="nav-text">第四列：内存使用情况；</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第五列：虚拟内存使用情况；"><span class="nav-number">4.1.5.</span> <span class="nav-text">第五列：虚拟内存使用情况；</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#top-常见用法："><span class="nav-number">4.2.</span> <span class="nav-text">top 常见用法：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#top-基本操作："><span class="nav-number">4.2.1.</span> <span class="nav-text">top 基本操作：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sar命令"><span class="nav-number">5.</span> <span class="nav-text">sar命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sar-安装"><span class="nav-number">5.1.</span> <span class="nav-text">sar 安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令行格式"><span class="nav-number">5.2.</span> <span class="nav-text">命令行格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sar-使用实例"><span class="nav-number">5.3.</span> <span class="nav-text">sar 使用实例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#使用-o选项保存sar命令的输出结果"><span class="nav-number">5.3.1.</span> <span class="nav-text">使用-o选项保存sar命令的输出结果</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看网络流量-：sar-n-keyword-or-ALL"><span class="nav-number">5.3.2.</span> <span class="nav-text">查看网络流量 ：sar -n {keyword} or {ALL}</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看历史负载-sar-q"><span class="nav-number">5.3.3.</span> <span class="nav-text">查看历史负载 sar -q</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CPU资源监控"><span class="nav-number">5.3.4.</span> <span class="nav-text">CPU资源监控</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#inode、文件和其他内核表监控"><span class="nav-number">5.3.5.</span> <span class="nav-text">inode、文件和其他内核表监控</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#要判断系统瓶颈问题，有时需几个-sar-命令选项结合起来"><span class="nav-number">5.3.6.</span> <span class="nav-text">要判断系统瓶颈问题，有时需几个 sar 命令选项结合起来</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看sar日志"><span class="nav-number">5.3.7.</span> <span class="nav-text">查看sar日志</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nload-命令"><span class="nav-number">6.</span> <span class="nav-text">nload 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nload-安装"><span class="nav-number">6.1.</span> <span class="nav-text">nload 安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nload-使用"><span class="nav-number">6.2.</span> <span class="nav-text">nload 使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Steve Yuan</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">94.6k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/';
+          this.page.identifier = '2018/04/28/week701-howToManageLinux/';
+          this.page.title = 'Linux运维学习笔记7-1：监控系统状态命令（一）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://steve-yuan.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
     // Popup Window;
     var isfetched = false;
     var isXml = true;
@@ -313,4 +1717,28 @@
         onPopupClose();
       }
     });
-  </script></body></html>
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

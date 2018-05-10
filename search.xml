@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Linux运维学习笔记7-5：定时任务和服务管理]]></title>
+    <url>%2F2018%2F05%2F10%2Fweek8-1-linuxnotes-cron%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记整理linux定时任务管理和服务管理的内容，涉及的命令主要包括crontab、chkconfig、systemd等。 Linux的定时任务管理 crontabcrontab 是linux系统中内置的一个服务，用来管理定时任务。比如，我们写了一个脚本，需要定时执行，就要用到crontab crontab 服务启用及停止 安装 Crontab 服务 注：centos 7默认已经安装 1yum install -y crontabs 启用服务 注：默认此服务是没有启动的 1systemctl start crond 停止服务 1systemctl stop crond 查看服务状态 1systemctl status crond 加入开机启动 1systemctl enable crond 取消开机启动 1systemctl disable crond 备份 crontab 文件（以root用户为例） 1cp /var/spool/cron/root /var/spool/cron/root.backup crontab 配置文件注；crontab的配置文件在/etc/crontab，既然是定时任务，下面这部分就是演示如何表示时间的，很有用。 123456789101112131415[root@stevey ~]# cat /etc/crontab //查看crontab配置文件SHELL=/bin/bashPATH=/sbin:/bin:/usr/sbin:/usr/binMAILTO=root# For details see man 4 crontabs# Example of job definition:# .---------------- minute (0 - 59) //表示分数（0-59）# | .------------- hour (0 - 23) //表示24小时制（0-24）# | | .---------- day of month (1 - 31) //表示天（1-31）# | | | .------- month (1 - 12) OR jan,feb,mar,apr ... //表示月（1-12），也可以用英文简写也表示# | | | | .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat //表示星期几，1-6分别对应星期一至星期六；星期天可以写为0或者7# | | | | |# * * * * * user-name command to be executed 在表达时间的字段中，还可以使用以下特殊符号： *星号：代表所任意值，如果在month字段使用，就是每个月都执行； ,逗号：用逗号隔开的值，指定一个列表范围，例如，“1,2,5,7,8,9”； -短横线：整数之间的中杠表示一个整数范围，例如“2-6”表示“2,3,4,5,6”； /斜线：指定时间的间隔频率，例如“0-23/2”表示每两小时执行一次，对应的时间就是0、2、4、6、8、10、12、14、16、18、20、22；斜线可以和星号一起使用，如果在表示分钟的字段出现*/10，表示每十分钟执行一次。 跟crontab相关的其他配置文件 /var/spool/cron/ 所有用户 crontab 任务文件存放的目录,文件名即用户名 /etc/cron.deny 该文件中所列的用户不允许使用 crontab 命令 /etc/cron.allow 该文件中所列的用户允许使用 crontab 命令 /etc/cron.d/ 该目录用来存放任何要执行的crontab文件或脚本 crontab使用命令行格式： 123crontab [options] filecrontab [options]crontab -n [hostname] 常用选项 含义 -u define user 设定某个用户的crontab服务；如果不指定用户，则编辑当前用户的crontab文件 -e edit user’s crontab 进入编辑状态； -r delete user’s crontab 删除某个用户的 crontab 文件； -l 列出任务计划 crontab -e 进入编辑状态，实际相当于调用vim对定时任务进行编辑，退出保存后，被保存在/var/spool/cron/[username]。比如，当前笔者是在用root用户操作，默认设置的就被保存在/var/spool/cron/root文件当中。 修改编辑器，可以通过自定义环境变量的方式： 12345vim ~/.bashrc //编辑当前当前用户的配置文件；也可以编辑 /etc/bashrc来更改全局用户变量export EDITOR=vim //添加这一行，意思是指定vim作为默认编辑器；之后保存退出source ~/.bashrc //重新加载配置文件 注： 涉及路径时，需要使用绝对路径。 crontab 任务都是保存了之后立即执行的，但是有的时候却无法执行，将命令单独拿出来却可以使用，这个时候需要检查一下 crontab 文件的环境变量是否正常。 使用实例 每1分钟执行一次Command 1* * * * * Command 每小时的第3和第15分钟执行 13,15 * * * * Command 在上午8点到11点的第3和第15分钟执行 13,15 8-11 * * * Command 每隔两天的上午8点到11点的第3和第15分钟执行 13,15 8-11 */2 * * myCommand 每周一上午8点到11点的第3和第15分钟执行 13,15 8-11 * * 1 myCommand 每晚的21:30重启smb 130 21 * * * /etc/init.d/smb restart 每月1、10、22日的4 : 45重启smb 145 4 1,10,22 * * /etc/init.d/smb restart 每周六、周日的1 : 10重启smb 110 1 * * 6,0 /etc/init.d/smb restart 每天18 : 00至23 : 00之间每隔30分钟重启smb 10,30 18-23 * * * /etc/init.d/smb restart 每星期六的晚上11 : 00 pm重启smb 10 23 * * 6 /etc/init.d/smb restart 每一小时重启smb 1* */1 * * * /etc/init.d/smb restart 晚上11点到早上7点之间，每隔一小时重启smb 10 23-7 * * * /etc/init.d/smb restart chkconfig 服务管理工具centos6.x以及之前的版本，系统预设服务文件存放在/etc/init.d目录下，使用以下命令控制： 12345service [服务名] [参数]或者/etc/init.d/apache2 [参数] 参数包括： start： 启动 stop：终止 restart：重启 chkconfig 是centos6.x之前的服务管理工具。尽管在contos7中，服务管理方案已经发生了改变，但因为centos6.x应用依然比较广泛，所以也需要了解一下。 chkconfig有两种方法：第一种用法：1chkconfig [参数][系统服务] 常见参数 说明 –add 增加所指定的系统服务，让chkconfig指令得以管理它，并同时在系统启动的叙述文件内增加相关数据； –del 删除所指定的系统服务，不再由chkconfig指令管理，并同时在系统启动的叙述文件内删除相关数据； –list 显示所有运行级系统服务的运行状态信息（on或off） 示例： 1234567chkconfig --list //列出所有的系统服务chkconfig --list mysqld //列出mysqld服务设置情况 chkconfig --add httpd //增加httpd服务 chkconfig --del httpd //删除httpd服务 第二种用法：1chkconfig [--level &lt;级别代码&gt;][系统服务][参数] --level&lt;级别代码&gt;，指定读系统服务要在哪一个执行等级中开启或关闭，centos6.x之前的版本中，共有以下7种级别。 级别代码 说明 0 表示关机 1 单用户模式 2 无网络连接的多用户命令行模式 3 有网络连接的多用户命令行模式 4 不可用 5 带图形界面的多用户模式 6 重新启动 常见参数 说明 on 启动 off 关闭 reset 重置服务 注：on和off默认只对运行级3，4，5有效；reset对所有运行级有效。 示例： 12345chkconfig --level httpd 2345 on //设置httpd在运行级别为2、3、4、5的情况下都是on（开启）的状态 chkconfig --level 35 mysqld on //--level 35表示操作只在等级3和5执行，on表示启动，off表示关闭 chkconfig mysqld on //设定mysqld在各等级为on，“各等级”包括2、3、4、5等级 如何启动/删除一个服务启动服务工作流： 编写服务脚本vim [servicename]，保存在/etc/ini.d/目录下； 增加指定的系统服务 chkconfig --add [servicename] 设定服务的默认启动等级 chkconfig --level 35 mysqld on 关闭服务工作流： 查看正在运行的服务 chkconfig --list ； 关闭指定服务 chkconfig [service] off ； 删除一个服务：chkconfig –del servicename systemd管理服务systemd是一种新的linux系统服务管理器，应用在contos7当中，用于取代System V初始进程。它替换了init系统，能够管理系统的启动过程和一些系统服务，一旦启动起来，就将监管整个系统。 Systemd 架构图 Systemd 并不是一个命令，而是一组命令，是系统管理守护进程、工具和库的集合，涉及到系统管理的方方面面，主要包括以下命令： systemctl： Systemd 的主命令，用于管理系统。1234567891011121314151617181920// 重启系统$ sudo systemctl reboot// 关闭系统，切断电源$ sudo systemctl poweroff// CPU停止工作$ sudo systemctl halt// 暂停系统$ sudo systemctl suspend// 让系统进入冬眠状态$ sudo systemctl hibernate// 让系统进入交互式休眠状态$ sudo systemctl hybrid-sleep// 启动进入救援状态（单用户状态）$ sudo systemctl rescue systemd-analyze：查看启动耗时1234567891011// 查看启动耗时$ systemd-analyze // 查看每个服务的启动耗时$ systemd-analyze blame// 显示瀑布状的启动过程流$ systemd-analyze critical-chain// 显示指定服务的启动流$ systemd-analyze critical-chain atd.service hostnamectl ：查看当前主机的信息12345// 显示当前主机的信息$ hostnamectl// 设置主机名。$ sudo hostnamectl set-hostname steve localectl 查看本地化设置123456// 查看本地化设置$ localectl// 设置本地化参数。$ sudo localectl set-locale LANG=en_GB.utf8$ sudo localectl set-keymap en_GB timedatectl 查看当前时区设置12345678910// 查看当前时区设置$ timedatectl// 显示所有可用的时区$ timedatectl list-timezones // 设置当前时区$ sudo timedatectl set-timezone America/New_York$ sudo timedatectl set-time YYYY-MM-DD$ sudo timedatectl set-time HH:MM:SS loginctl 查看当前登录的用户12345678// 列出当前session$ loginctl list-sessions// 列出当前登录用户$ loginctl list-users// 列出显示指定用户的信息$ loginctl show-user steve unit介绍Systemd 可以管理所有系统资源。不同的资源统称为 unit，一共分成12种： unit 说明 Service unit 系统服务 Target unit 多个 Unit 构成的一个组 Device Unit 硬件设备 Mount Unit 文件系统的挂载点 Automount Unit 自动挂载点 Path Unit 文件或路径 Scope Unit 不是由 Systemd 启动的外部进程 Slice Unit 进程组 Snapshot Unit Systemd 快照，可以切回某个快照 Socket Unit 进程间通信的 socket Swap Unit swap 文件 Timer Unit 定时器 unit配置文件每一个 Unit 都有一个配置文件，Systemd 默认目录在 /etc/systemd/system/；但其中有很多配置文件都是软链接，指向 /usr/lib/systemd/system/，也就是说，真正的配置文件保存在 /usr/lib/systemd/system/目录下。 配置文件的格式1234567891011121314[root@stevey system]# cat auditd.service[Unit]Description=Security Auditing ServiceDefaultDependencies=no## If auditd.conf has tcp_listen_port enabled, copy this file to /etc/systemd/system/auditd.service and add network-online.target to the next line so it waits for the network to start before launching.[Service]Type=forkingPIDFile=/var/run/auditd.pidExecStart=/sbin/auditd## To not use augenrules, copy this file to /etc/systemd/system/auditd.service and comment/delete the next line and uncomment the auditctl line.[Install]WantedBy=multi-user.target 如上所示，unit配置文件通常包括几个部分： [Unit] ：区块通常是配置文件的第一个区块，用来定义 Unit 的元数据，以及配置与其他 Unit 的关系。它的主要字段如下。 名称 说明 Description 简短描述 Documentation 文档地址 Requires 当前 Unit 依赖的其他 Unit，如果它们没有运行，当前 Unit 会启动失败 Wants 与当前 Unit 配合的其他 Unit，如果它们没有运行，当前 Unit 不会启动失败 BindsTo 与Requires类似，它指定的 Unit 如果退出，会导致当前 Unit 停止运行 Before 如果该字段指定的 Unit 也要启动，那么必须在当前 Unit 之后启动 After 如果该字段指定的 Unit 也要启动，那么必须在当前 Unit 之前启动 Conflicts 这里指定的 Unit 不能与当前 Unit 同时运行 Condition… 当前 Unit 运行必须满足的条件，否则不会运行 Assert… 当前 Unit 运行必须满足的条件，否则会报启动失败 [Install]|通常是配置文件的最后一个区块，用来定义如何启动，以及是否开机启动，主要字段如下： 名称 说明 WantedBy 它的值是一个或多个 Target，当前 Unit 激活时（enable）符号链接会放入/etc/systemd/system目录下面以 Target 名 + .wants后缀构成的子目录中 RequiredBy 它的值是一个或多个 Target，当前 Unit 激活时，符号链接会放入/etc/systemd/system目录下面以 Target 名 + .required后缀构成的子目录中 Alias 当前 Unit 可用于启动的别名 Also 当前 Unit 激活（enable）时，会被同时激活的其他 Unit [Service]： Service 的配置，只有 Service 类型的 Unit 才有这个区块。它的主要字段如下。 名称 说明 Type 定义启动时的进程行为。它有以下几种值。 Type=simple 默认值，执行ExecStart指定的命令，启动主进程 Type=forking 以 fork 方式从父进程创建子进程，创建后父进程会立即退出 Type=oneshot 一次性进程，Systemd 会等当前服务退出，再继续往下执行 Type=dbus 当前服务通过D-Bus启动 Type=notify 当前服务启动完毕，会通知Systemd，再继续往下执行 Type=idle 若有其他任务执行完毕，当前服务才会运行 ExecStart 启动当前服务的命令 ExecStartPre 启动当前服务之前执行的命令 ExecStartPost 启动当前服务之后执行的命令 ExecReload 重启当前服务时执行的命令 ExecStop 停止当前服务时执行的命令 ExecStopPost 停止当其服务之后执行的命令 RestartSec 自动重启当前服务间隔的秒数 Restart 定义何种情况 Systemd 会自动重启当前服务，可能的值包括always（总是重启）、on-success、on-failure、on-abnormal、on-abort、on-watchdog TimeoutSec 定义 Systemd 停止当前服务之前等待的秒数 Environment 指定环境变量 配置文件一共有四种状态： enabled：已建立启动链接 disabled：没建立启动链接 static：该配置文件没有[Install]部分（无法执行），只能作为其他配置文件的依赖 masked：该配置文件被禁止建立启动链接 unit 依赖关系Unit 之间存在依赖关系，如果unit A 依赖 unit B，在启动unit A的时候，会同时启动unit B。 查看Unit 的依赖 1$ systemctl list-dependencies nginx.service 赖是 Target 类型，默认不会展开；如果需要查询，需要驾驶--all参数 1$ systemctl list-dependencies --all nginx.service 查看Unit systemctl list-units123456789101112131415161718// 列出正在运行的 Unit$ systemctl list-units//列出列出所有配置文件$ systemctl list-unit-files// 列出所有Unit，包括没有找到配置文件的或者启动失败的$ systemctl list-units --all// 列出所有没有运行的 Unit$ systemctl list-units --all --state=inactive// 列出所有加载失败的 Unit$ systemctl list-units --failed// 列出所有正在运行的、类型为 service 的 Unitsystemctl list-units --type=service Unit 管理1234567891011121314151617181920212223242526// 立即启动一个服务$ sudo systemctl start apache.service// 立即停止一个服务$ sudo systemctl stop apache.service// 重启一个服务$ sudo systemctl restart apache.service// 杀死一个服务的所有子进程$ sudo systemctl kill apache.service// 重新加载一个服务的配置文件$ sudo systemctl reload apache.service// 重载所有修改过的配置文件$ sudo systemctl daemon-reload// 显示某个 Unit 的所有底层参数$ systemctl show httpd.service// 显示某个 Unit 的指定属性的值$ systemctl show -p CPUShares httpd.service// 设置某个 Unit 的指定属性$ sudo systemctl set-property httpd.service CPUShares=500 target介绍启动级别（）是一个旧的概念。现在，systemd 引入了一个和启动级别runlevel功能相似又不同的概念——目标target。不像数字表示的启动级别，每个目标都有名字和独特的功能，并且能同时启用多个。一些目标继承其他目标的服务，并启动新服务。 Target 就是一个 Unit组，包含许多相关的 Unit ，类似于”状态点”，启动某个 Target 的时候，会让机器启动到到某种状态。 Target 与 传统 RunLevel 的对应关系 SysV 启动级别 Systemd 目标 注释 0 runlevel0.target, poweroff.target 中断系统（halt） 1, s, single runlevel1.target, rescue.target 单用户模式 2, 4 runlevel2.target, runlevel4.target, multi-user.target 用户自定义启动级别，通常识别为级别3。 3 runlevel3.target, multi-user.target 多用户，无图形界面。用户可以通过终端或网络登录。 5 runlevel5.target, graphical.target 多用户，图形界面。继承级别3的服务，并启动图形界面服务。 6 runlevel6.target, reboot.target 重启 emergency emergency.target 急救模式（Emergency shell） target常用命令1234567891011121314// 查看当前系统的所有 Target$ systemctl list-unit-files --type=target// 查看一个 Target 包含的所有 Unit$ systemctl list-dependencies multi-user.target// 查看启动时的默认 Target$ systemctl get-default// 设置启动时的默认 Target$ sudo systemctl set-default multi-user.target// 切换 Target 时，默认不关闭前一个 Target 启动的进程，而 systemctl isolate 命令，关闭前一个 Target 里面所有不属于后一个 Target 的进程$ sudo systemctl isolate multi-user.target 扩展 anacron http://blog.csdn.net/strikers1982/article/details/4787226 xinetd服(默认机器没有安装这个服务，需要yum install xinetd安装） http://blog.sina.com.cn/s/blog_465bbe6b010000vi.html systemd自定义启动脚本 http://www.jb51.net/article/100457.htm 参考资料 crontab 定时任务 Linux任务管理工具之Crontab linux定时运行命令脚本——crontab Linux下chkconfig命令及守护进程 《chkconfig命令》－linux命令五分钟系列之四 Systemd 入门教程：命令篇 用systemd命令来管理linux系统 systemctl 命令完全指南]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>crontab</tag>
+        <tag>systemd</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Linux运维学习笔记：进程和线程]]></title>
     <url>%2F2018%2F05%2F08%2Fweek7-3-process-thread%2F</url>
     <content type="text"><![CDATA[写在前面这部分笔记是学习ps 命令的拓展知识，ps命令的用法在这里，不再赘述。 进程和线程CPU工作的基本原理要理解进程和线程，先要大概了解一下CPU的工作原理： 电脑的核心是CPU，它承担了计算机所有的计算任务，就像一个永不停歇的工厂。但是，CPU又个特点，就是一个核心同时只能执行一个任务，一心不可二用。 即便是对于多核CPU而言，每个核心在单位时间内也只能执行一个任务： 总线程数 &lt;= CPU数量：并行运行 总线程数 &gt; CPU数量：并发运行 为了优化CPU运行，就有了必须使用并发技术，其中最容易理解的是“时间片轮转进程调度算法”，大致原理如下：在操作系统的管理下，所有正在运行的进程轮流使用CPU，每个进程允许占用CPU的时间非常短(比如10毫秒)，虽然单位时间内每个核心有且只有一个进程，但由于进程快速轮换，用户感觉不出来，就好象所有的进程都在不间断地运行一样。 进程和线程的基本概念进程process：是程序在计算机上的一次执行活动，是操作系统分配资源的单位。当你运行一个程序，你就启动了一个进程。 线程 Thread：是进程的一个实体，是CPU调度和分派的基本单位。 线程和进程的关系： 一个线程只能属于一个进程，而一个进程可以有多个线程，但至少有一个线程（通常说的主线程）； 资源分配给进程，同一进程的所有线程共享该进程的所有资源； 线程在执行过程中，需要协作同步。不同进程的线程间要利用消息通信的办法实现同步； 处理机分给线程，即真正在处理机上运行的是线程； 线程是指进程内的一个执行单元，也是进程内的可调度实体。 两者的区别在于： 调度：线程作为调度和分配的基本单位，进程作为拥有资源的基本单位； 并发性：不仅进程之间可以并发执行，同一个进程的多个线程之间也可以并发执行； 拥有资源：进程是拥有资源的一个独立单位，线程不拥有系统资源，但可以访问隶属于进程的资源； 操作系统的分类上面了解了cpu工作原理，以及进程和线程的简单知识。需要了解的是，进程和线程如何执行，并不是有它自己决定的，而是由操作系统决定的。 根据进程和线程的特点，有两种解决方案： 一是启动多个进程，每个进程虽然只有一个线程，但多个进程可以一块执行多个任务； 二是启动一个进程，在一个进程内启动多个线程，这样，多个线程也可以一块执行多个任务； 所以，操作系统要想实现多任务处理，无非三种途径： 多进程模式； 多线程模式； 多进程+多线程模式 pid和tidLinux的线程是“轻量级进程”（Light-Weight Process，即LWP）。在Linux系统上运行一个程序时，操作系统会为这个程序创建一个进程，也就是“主线程”，后续则可以产生出更多的线程。每个进程都有一个PID（Process ID），每个线程也会有一个TID（Thread ID），属于同一进程的线程各自有拥有不同的TID，但它们的PID是相同的，都等于“主线程”的TID。 从本质上来讲，Linux系统下的进程和线程没有区别，只不过同一进程中的线程可以共享某些资源。 示例一： 1234567891011[root@stevey bin]# cd /usr/local/sbin //进入脚本目录[root@stevey sbin]# lscreateFile.sh even.sh fun1.sh option1.sh sum1.sh while1.shdf1.sh for1.sh if1.sh read1.sh var1.sh[root@stevey sbin]# bash even.sh &amp; //运行脚本[1] 16282[root@stevey sbin]# please in number: bg //把脚本后台运行[1]+ bash even.sh &amp;[root@stevey sbin]# ps -T 16282 //ps查询pid信息 PID SPID TTY STAT TIME COMMAND 16282 16282 pts/1 T 0:00 bash even.sh 上面的例子实际只运行了一个进程/进程，所以不明显；网上上找了一个示例如下： 12345678910111213#include &lt;unistd.h&gt;#include &lt;omp.h&gt;int main(void)&#123; #pragma omp parallel num_threads(4) for(;;) &#123; sleep(1); &#125; return 0;&#125; 编译并在后台运行这个程序： 123$ gcc -fopenmp threads.c$ ./a.out &amp;[1] 9802 进程的PID是9802，用ps -T pid命令查看进程的线程信息： 123456$ ps -T 9802 PID SPID TTY STAT TIME COMMAND 9802 9802 pts/1 Sl 0:00 ./a.out 9802 9803 pts/1 Sl 0:00 ./a.out 9802 9804 pts/1 Sl 0:00 ./a.out 9802 9805 pts/1 Sl 0:00 ./a.out 其中SPID即为TID。可以看到当前进程的PID是9802，共包含4个线程，其TID依次为：9802，9803，9804和9805，其中PID和SPID相同的线程即为主线程。 参考资料 进程和线程的区别 腾讯面试题04.进程和线程的区别？ 进程与线程的一个简单解释 进程和线程 进程和线程有什么区别？ Linux线程模型浅析]]></content>
@@ -8,22 +22,22 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>pid</tag>
         <tag>tid</tag>
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Linux运维学习笔记7-3：网络和防火墙（三）]]></title>
+    <title><![CDATA[Linux运维学习笔记7-5：网络和防火墙（三）]]></title>
     <url>%2F2018%2F05%2F08%2Fweek7-5-howToMnageLinuxPart5%2F</url>
     <content type="text"><![CDATA[写在前面这一则笔记继续整理linux网络防火墙的知识，主要是firewalld的用法。 注：iptables 规则备份和恢复上一则笔记已经整理了，具体参见这里。 firewalld 工具firewalld 是centos 7 下默认的防火墙前端管理工具，跟iptables 相比，它有两个显著区别： firewalld 使用区域和服务而不是链式规则； firewalld 动态管理规则集，允许更新规则而不破坏现有会话和连接； firewall的 安装及基本操作启动服务12sudo systemctl start firewalld //启动firewalld 服务sudo systemctl enable firewalld //设置firewalld 开机启动 禁用服务12sudo systemctl stop firewalld //停止firewalld服务sudo systemctl disable firewalld //禁止firewalld开机启动 检查防火墙状态1sudo firewall-cmd --state //running 表示正在运行；not running 表示没有运行 查看 FirewallD 守护进程的状态1sudo systemctl status firewalld 重新加载 FirewallD 配置1sudo firewall-cmd --reload firewalld的9个zonefirewalld为了简化网络管理的上手难度，让不懂5表、5链的菜鸟也能够简单配置防火墙规则，提出了一个zone和service两个新概念： zone：简单来说，zone 就是firewalld预先准备了几套防火墙策略集合（策略模板），用户可以根据生产场景的不同而选择合适的策略集合，从而实现防火墙策略之间的快速切换； servce：简单来说，就是针对不同端口设置的iptables规则，每个zone都是用了不同的service； firewalld中常用的区域名称及策略规则 区域 默认规则策略 trusted 允许所有的数据包 home 拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh、mdns、ipp-client、amba-client与dhcpv6-client服务相关，则允许流量 internal 等同于home区域 work 拒绝流入的流量，除非与流出的流量数相关；而如果流量与ssh、ipp-client与dhcpv6-client服务相关，则允许流量 public 拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh、dhcpv6-client服务相关，则允许流量 external 拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh服务相关，则允许流量 dmz 拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh服务相关，则允许流量 block 拒绝流入的流量，除非与流出的流量相关 drop 拒绝流入的流量，除非与流出的流量相关 注：firewalld 的缺省区域是 public。 firewalld 命令行格式及常用参数命令行格式： 1firewall-cmd [长参数] 注：用好tab键自动补齐功能。 firewall-cmd命令中使用的参数以及作用 参数 作用 –get-default-zone 查询默认的区域名称 –set-default-zone=&lt;区域名称&gt; 设置默认的区域，使其永久生效 –get-zones 显示可用的区域 –get-services 显示预先定义的服务 –get-active-zones 显示当前正在使用的区域与网卡名称 –add-source= 将源自此IP或子网的流量导向指定的区域 –remove-source= 不再将源自此IP或子网的流量导向某个指定区域 –add-interface=&lt;网卡名称&gt; 将源自该网卡的所有流量都导向某个指定区域 –change-interface=&lt;网卡名称&gt; 将某个网卡与区域进行关联 –list-all 显示当前区域的网卡配置参数、资源、端口以及服务等信息 –list-all-zones 显示所有区域的网卡配置参数、资源、端口以及服务等信息 –add-service=&lt;服务名&gt; 设置默认区域允许该服务的流量 –add-port=&lt;端口号/协议&gt; 设置默认区域允许该端口的流量 –remove-service=&lt;服务名&gt; 设置默认区域不再允许该服务的流量 –remove-port=&lt;端口号/协议&gt; 设置默认区域不再允许该端口的流量 –reload 让“永久生效”的配置规则立即生效，并覆盖当前的配置规则 –panic-on 开启应急状况模式 –panic-off 关闭应急状况模式 关于zone的常用操作 查看指定网卡所在的zone 1firewall-cmd --get-zone-of-interface=ens33 查看所有网卡所在zone 1firewall-cmd --get-active-zones 设定默认的zone 为work 1firewall-cmd --set-default-zone=work 给指定网卡设置zone 1firewall-cmd --zone=public --add-interface=lo 针对指定网卡更改zone 1firewall-cmd --zone=dmz --change-interface=lo 针对网卡删除zone 1firewall-cmd --zone=dmz --remove-interface=lo 关于service的常用操作查看service 列出所有的servie 1firewall-cmd --get-service 查看当前zone有哪些service 1firewll-cmd --list-services 查看指定zone下有哪些service 1firewll-cmd --zone=public --list-services 修改serviceservice的规则都是由配置文件定义的，具体保存在： 配置文件模版在 /usr/lib/firewalld/service/目录下； 真正生效的配置文件在/etc/firewalld/services/目录下（默认为空）； 指定zone添加一个service 123firewall-cmd --zone=public --add-service=http //临时改动，重启后会失效firewall-cmd --zone=public --add-service=http --permanent //--permanent 表示永久改动，会写入对应zone的配置文件 一旦改动了zone的配置文件，会在 /etc/firewalld/zones 目录下生成以.xml为后缀的配置文件。因此，我们也可以通过vim修改这个配置文件来达到修改zone规则的目的。 修改完成后，执行以下命令重新加载生效： 1firewall-cmd --reload //重新加载 更多的示例： 允许 ssh 服务通过 1firewall-cmd --enable service=ssh 禁止 ssh 服务通过 1firewall-cmd --disable service=ssh 临时允许 samba 服务通过 600 秒 1firewall-cmd --enable service=samba --timeout=600 打开 443/tcp 端口在内部区域（internal）: 12firewall-cmd --zone=internal --add-port=443/tcp firewall-cmd – reload 端口转发 12firewall-cmd --zone=external --add-masquerade firewall-cmd --zone=external --add-forward-port=port=22:proto=tcp:toport=3777 参考资料 Iptables与Firewalld防火墙 使用 firewalld 构建 Linux 动态防火墙 CentOS 7下Firewalld防火墙的简明教程 firewalld入门手册]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>firewalld</tag>
       </tags>
   </entry>
@@ -35,8 +49,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -47,8 +61,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tcpdump</tag>
         <tag>wireshark</tag>
       </tags>
@@ -56,13 +70,13 @@
   <entry>
     <title><![CDATA[Linux运维学习笔记7-3：网络和防火墙（一）]]></title>
     <url>%2F2018%2F05%2F07%2Fweek7-3-howToMnageLinuxPart3%2F</url>
-    <content type="text"><![CDATA[写在前面这些笔记接着整理linux网络相关的内容，主要整理网络和防火墙方面的知识。 Linux网络相关Linux上，常用的网络查询工具集有两个，分别是net-tools和iproute。两者在功能能有重叠，后者iproute是前者net-tools的替代方案： 用途 net-tool（替代） iproute2 地址和链路配置 ifconfig ip addr, ip link 路由表 route ip route 邻居 arp ip neigh VLAN vconfig ip link 隧道 iptunnel ip tunnel 组播 ipmaddr ip maddr 统计 netstat ss 查询及设置网卡ip查看网卡ip 方法一：ifconfig 命令 方法二：ip addr 命令 设置网卡IP修改网卡ip第一步：编辑配置文件 网卡ip的配置文件为vim /etc/sysconfig/network-scripts/ifcfg-xxx , 其中xxx是网卡的名称。 1vim /etc/sysconfig/network-scripts/ifcfg-ens33 //编辑网卡配置文件，修改ip地址等信息，并保存退出。 第二步：重启网卡 1234ifdown ens33 &amp;&amp; ifup ens33 //ifdown 关闭网卡；ifup启动网卡。如果是写成ifdown ens33 ；ifup ens33，在shell远程登录时，前一条命令关闭网卡，后面的命令可能因为断网而无法连接。另一种方法：推荐使用systemctl restart network 同一网卡设置多个ip跟正常设置ip相比，最大的不同之处在于拷贝网卡配置文件并重命名。 查看网卡连接状态方法一：mii-tool 命令 mii-tool 命令，用来查看及管理介质的网络接口的状态；常用选项 -v 来查看网络接口的状态 方法二：ethtool 命令 ethtool 命令，显示和更改网卡设置的工具 查询网卡网络端口设置 更改主机名主机名，即下图红红框括起来的部分 显示主机名 123[root@stevey network-scripts]# hostnamestevey[root@ste 更改主机名方法：方法一：临时修改，重启shell会失效 1hostname steveY 方法二：命令行需改，永久生效 1hostnamectl set-hostname steveY 方法二：修改配置文件，永久生效 123vim /etc/hostnamesource /etc/hostname 配置DNS 域名解析神马是DNSDNS，Domain Name System或者Domain Name Service（域名系统或者域名服务）。在计算机网络当中，每个设备都要有自己的ip地址，以便于互相之间识别和联系沟通。但是ip地址不方便记忆，于是就有了域名系统。 DNS的作用就是自动把域名地址翻译为IP地址，帮助你找打访问对象的真实ip地址。 域名设置常见有： A记录 (Address) ：用来指定主机名（或域名）对应的IP地址记录，通俗来说A记录就是服务器的IP； CNAME记录：CNAME (Canonical Name)记录，通常称别名指向。你可以用一个域名指向另一个域名，比如，可以将a.com指向abcd.com ,这样在浏览器输入a.com，就可以跳转到abcd.com； 注：一般来讲，DNS至少要设置两个，一个主力、一个备用；这样只要有一个可用，就不会影响域名的正常使用。 如何配置DNS方法一：修改 /etc/resolv.conf 1234[root@stevey network-scripts]# vim /etc/resolv.conf# Generated by NetworkManagernameserver 129.29.29.29 //注意设置域名的格式，按照这个格式进行修改nameserver 8.8.8.8 注：此方法是临时性的，重启计算机，/etc/resolv.conf 会被网卡配置文件覆盖，前面做得更改会失效。 方法二：修改网卡配置文件，全局修改 1[root@stevey network-scripts]# vim /etc/sysconfig/network-scripts/ifcfg-ens33 修改下图中红框内的部分，按照格式要求进行修改 方法三：修改 /etc/hosts文件 hosts文件是linux系统中负责ip地址与域名快速解析的文件，包含了ip地址和主机名之间的映射。 不同的linux版本，文件也可能不同，比如Debian的对应文件是/etc/hostname；centos的对应文件是 /etc/hosts； 123[root@stevey network-scripts]# cat /etc/hosts127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4::1 localhost localhost.localdomain localhost6 localhost6.localdomain6 如上所示，/etc/hosts包括两个部分，前面是ip地址，后面是域名。其设置规则如下： 一个ip地址可用对应多个域名； 每行只能有一个ip地址，即ip地址是唯一的； 如果出现同一个域名对应不同的IP地址，则以前面出现的为准。 修改host文件 1vim /etc/hosts //编辑hosts文件，逐行增加即可。 linux 防火墙SElinuxSElinux, 全称Security Enhanceed Linux，字面意思是强化安全的Linux系统。它是linux上一个强化安全的子系统， 默认安装在 Fedora 和 Red Hat Enterprise Linux 上，Linux内核2.6版本后集成在内核中。 传统的Linux文件权限与账号的关系是自主访问控制的，即DAC，意思是说根据文件的rwx以及账户权限来管理文件的访问。这样做的风险在于，如果root账户密码泄露，系统安全就无从谈起。 SElinux 是委托访问控制，即MAC。在这种模式下，可以针对特定的进程与特定的文件资源来进行权限的控制，即便是root用户，权限也不一定是777，而是根据当时进程的设置而决定的。 目前SELinux支持三种模式： enforcing 强制模式：代表SELinux正在运行中，并且已经正确开始限制domain/type. permissive:宽容模式，代表SELinux正在运行之中，不过仅会有警告信息，而不会限制domain/type的访问。 disabled：关闭，SELinux没有实际运行。 查看SElinux 相关信息getenforce：当前SELinux的状态12[root@stevey network-scripts]# getenforceEnforcing sestatus：查看SELinux的策略12345678910[root@stevey network-scripts]# sestatusSELinux status: enabled //是否启动 SELinux enabled 表示启动；disabled表示关闭SELinuxfs mount: /sys/fs/selinux //SELinux 相关文件资料挂载点SELinux root directory: /etc/selinux Loaded policy name: targeted //当前策略Current mode: enforcing //目前的模式Mode from config file: enforcingPolicy MLS status: enabledPolicy deny_unknown status: allowedMax kernel policy version: 28 切换SELinux模式 setenforce [参数] 0 ：permissing，宽容模式； 1 ：enforcing，强制模式； 关闭SElinuxselinux 配置文件为 /etc/selinux/config ，编辑该文件并重启即可 123vim /etc/selinux/config将SELINUX=enforcing 改为disabled；保存退出，并重启系统即可。 防火墙管理工具为了保障系统安全，我们需要利用防火墙，通过预先设置的规则来监控进出流量，并执行相应的处理。 在centos6.x之前的系统中，采用的iptables；而centos7开始，使用firewalld。严格说来，iptables与firewalld都不是真正的防火墙，而是用来定义防火墙策略的管理工具。 iptables服务会把配置好的防火墙策略交由内核层面的netfilter网络过滤器来处理； firewalld服务则是把配置好的防火墙策略交由内核层面的nftables包过滤框架来处理。 这两者的区别在于： firewalld可以动态修改单条规则，动态管理规则集，允许更新规则而不破坏现有会话和连接；iptables在修改了规则后必须得全部刷新才可以生效； firewalld使用区域和服务而不是链式规则； firewalld默认是拒绝的，需要设置以后才能放行；iptables默认是允许的，需要拒绝的才去限制； netfilter的 5链、5表前面说过，netfilter是系统真正的安全框架，在系统内核里；而iptables只是一个命令行工具，利用这个工具来操作netfilter netfilter的 5个链防火墙的核心就是设定规则，在不同的节点，对数据匹配规则并执行相应的操作。 链（chains）是数据包传播的路径，每一条链其实就是众多规则中的一个检查清单，每一条链中可以有一条或数条规则。 规则链则依据数据包处理位置的不同，可以分为以下5种： PREROUTING：在进行路由选择前处理数据包（）； INPUT：处理流入的数据包； OUTPUT：处理流出的数据包； FORWARD：处理转发的数据包； POSTROUTING：在进行路由选择后处理数据包； netfilter的 5个表相同规则的集合，叫做“表”，netfilter有也有5个表： 表一：Filter（过滤数据包）主要跟进入Linux本机的数据包有关，是默认的table。 INPUT 链：过滤所有目标地址是本机的数据包（对进入本机数据包的过滤） OUTPUT 链：过滤所有本机产生的数据包（对源地址得数据包的过滤） FORWARD 链：过滤所有路过本机的数据包（源地址和目标地址都不是本机的数据包。 表二：NAT（网络地址转换）如果第一个数据包允许经行NAT或Masquerade,那么其它数据包都会被做相同的动作，也就是其他数据包不会被一个一个地NAT（属于一个流的包只会经过这个表一次）任何时候都不要在这个表任何一条链经行过滤。 包括三个动作： DNAT：改变数据包的目的地址使包能重路由到某台机器，使公网能够访问局域网的服务器 SNAT: 改变数据包的源地址，使局域网能访问公网） MASQUERADE:和SNAT一样使局域网能访问公网，无固定IP使用PPP.PPPoE等拨号上网接入Internet Nat表包含3条链： PREROUTING链 :数据包到达防火墙时改变包的目的地址。 OUTPUT链：改变本地产生数据包的目标地址。 *POSTROUTING链:在数据包离开防火墙时改变数据包的源地址。 表三：Mangle：修改数据包，改变包头中内容(TTL, TOS, MARK )这个 table 主要是与特殊的数据包的路由标志有关，用于给数据包做标记，然后根据标记去操作相应的包。 TOS :设置改变数据包的服务类型，不要使用TOS设置发往Internet的包除非打算依赖TOS来路由，不能在表中配置任何过滤。SNAT、DNAT TTL:改变数据包的生存时间，可以让数据包只有一个特殊的TTL，欺骗ISP,有些ISP并不希望多台计算机共享一个连接访问Internet,ISP通过检查一台计算机所发出的数据包是否含有不同的TTL来判断。 Mask:给数据包设置特殊的标记，通过标记配置带宽限制和基于请求分类。 Mangle表的5条链： PREROUTING链：数据包进入防火墙后，路由判断之前改变数据包。 POSTROUTING链：数据包确定了目标地址后，即路由判断前改变数据包。 OUTPUT链：在数据包被确定目的地址前改变数据包 INPUT链：在数据包进入本机后，应用程序接受之前改变数据包。 FORWARD链：第一次路由判断之后，最后一次路由判断前改变数据包。 表四：RAW关闭nat表上启动的连接追踪机制；默认系统的数据包会被追踪，这样会消耗一定的资源，因此可以通过RAW表来指定某些端口不被追踪。 NEW : 该包想要开始一个连接（重新连接或将连接重定向） RELATED:该包是属于某个已经建立的连接所建立的新连接。例如：FTP的数据传输连接就是控制连接所 RELATED出来的连接。--icmp-type 0 ( ping 应答) 就是--icmp-type 8 (ping 请求)所RELATED出来的 ESTABLISHED :只要发送并接到应答，一个数据连接从NEW变为ESTABLISHED,而且该状态会继续匹配这个连接的后续数据包。 INVALID:数据包不能被识别属于哪个连接或没有任何状态比如内存溢出，收到不知属于哪个连接的ICMP错误信息，一般应该DROP这个状态的任何数据。 表五：security用于强制控制的网络规则，不常用。 iptables的基本语法命令行格式： 1iptables [-t 表] [-命令] [匹配] [操作] -t 表 :用于指定命令应用于哪个iptables内置表。 命令选项: 用于指定iptables的执行方式，包括插入规则，删除规则和添加规则 命令 说明 -P –policy &lt;链名&gt; 定义默认策略 -L –list &lt;链名&gt; 查看iptables规则列表 -A –append &lt;链名&gt; 在规则列表的最后增加1条规则 -I –insert &lt;链名&gt; 在指定的位置插入1条规则 -D –delete &lt;链名&gt; 从规则列表中删除1条规则 -R –replace &lt;链名&gt; 替换规则列表中的某条规则 -F –flush &lt;链名&gt; 删除表中所有规则 -Z –zero &lt;链名&gt; 将表中数据包计数器和流量计数器归零 -X –delete-chain &lt;链名&gt; 删除自定义链 -v –verbose &lt;链名&gt; 与-L他命令一起使用显示更多更详细的信息 匹配规则:指定数据包与规则匹配所具有的特征，包括源地址，目的地址，传输协议和端口号等 匹配规则 说明 -i –in-interface 指定数据包从哪个网络接口进入， -o –out-interface 指定数据包从哪个网络接口输出 -p —proto 指定数据包匹配的协议，如TCP、UDP和ICMP等 -s –source 指定数据包匹配的源地址 –sport 指定数据包匹配的源端口号 –dport 指定数据包匹配的目的端口号 -m –match 指定数据包规则所使用的过滤模块 iptables规则常用动作 动作 说明 REJECT 拦阻该数据包，并返回数据包通知对方 DROP 丢弃数据包不予处理 REDIRECT 将封包重定向到另一个端口（PNAT），之后继续比对其它规则 MASQUERADE 改写封包来源IP为防火墙的IP，可以指定port 对应的范围，进行完此处理动作后，直接跳往下一个规则链（mangle:postrouting） LOG 将数据包相关信息纪录在 /var/log 中，之后继续比对其它规则 SNAT 改写封包来源 IP 为某特定 IP 或 IP 范围，之后直接跳往下一个规则链 DNAT 改写数据包目的地 IP 为某特定 IP 或 IP 范围，之后会直接跳往下一个规则链 MIRROR 镜像数据包，也就是将来源 IP与目的地IP对调后，将数据包返回 QUEUE 中断过滤程序，将封包放入队列，交给其它程序处理 RETURN 结束在目前规则链中的过滤程序，返回主规则链继续过滤 MARK 将封包标上某个代号，以便提供作为后续过滤的条件判断依据，之后继续比对其它规则 iptables常见用法查看及清除规则 查看规则 12345678iptables -t nat -nvl 注： -t 指定表；如果不加-t，默认显示filter表相关信息； -n 表示不针对ip反解析主机名； -L 表示列出； -v 表示列出详细信息； -nvL 表示查看该表格的详细规则； 删除规则 1234iptables -F //删除所有规则iptables -Z //包及流量计数器归零 增加删除指定规则命令行格式： iptables [选项] 常见选项 说明 -A 追加一条规则 -D 删除一条规则 -I 大写I，表示插入一条规则，实际效果跟-A一样 -p 小写p，指定协议，比如tcp、udp、icmp -P 大写P，表示预设策略 –dport 跟-p连用，指定目标端口 –sport 跟-p连用，指定源端口 -d 指定目标ip -s 指定源ip -j 指定动作，如ACCEPT（允许）、DROP（丢弃）、REJECT（拒绝） -i 指定网卡 示例： 1234567iptables -I INPUT -s 8.8.8.8 -j DROP //插入一条规则，将所有来自8.8.8.8的数据包丢弃iptables -D INPUT -s 8.8.8.8 -j DROP //删除上一条规则，注意删除规则时必须和插入规则保持一致iptables -A INPUT -s 1.1.1.1 -p tcp --dport 80 -j DROP //插入一条规则，将来自2.2.2.2的tcp协议，发送到本机80端口的数据包丢弃iptables -A INPUT -s 192.168.1.0/24 -i ens33 //增加一条规则，将来自192.168.1.0/24这个网段，且作用在ens33上的包放行 此外，还有一种删除规则的方法，语法规则如下： 1iptables -D [链名] [规则序号] 查询规则序号 1iptables -nvL --line-numbers 参考资料 SELinux 几种模式之间的转换 SElinux详解 SElinux介绍 CentOS上的安全防护软件Selinux详解 firewalld 与 iptables iptables详解 Iptables详细介绍 iptables的用法 netfilter/iptables详解]]></content>
+    <content type="text"><![CDATA[写在前面这些笔记接着整理linux网络相关的内容，主要整理网络和防火墙方面的知识。 Linux网络相关Linux上，常用的网络查询工具集有两个，分别是net-tools和iproute。两者在功能能有重叠，后者iproute是前者net-tools的替代方案： 用途 net-tool（替代） iproute2 地址和链路配置 ifconfig ip addr, ip link 路由表 route ip route 邻居 arp ip neigh VLAN vconfig ip link 隧道 iptunnel ip tunnel 组播 ipmaddr ip maddr 统计 netstat ss 查询及设置网卡ip查看网卡ip 方法一：ifconfig 命令 方法二：ip addr 命令 设置网卡IP修改网卡ip第一步：编辑配置文件 网卡ip的配置文件为vim /etc/sysconfig/network-scripts/ifcfg-xxx , 其中xxx是网卡的名称。 1vim /etc/sysconfig/network-scripts/ifcfg-ens33 //编辑网卡配置文件，修改ip地址等信息，并保存退出。 第二步：重启网卡 1234ifdown ens33 &amp;&amp; ifup ens33 //ifdown 关闭网卡；ifup启动网卡。如果是写成ifdown ens33 ；ifup ens33，在shell远程登录时，前一条命令关闭网卡，后面的命令可能因为断网而无法连接。另一种方法：推荐使用systemctl restart network 同一网卡设置多个ip跟正常设置ip相比，最大的不同之处在于拷贝网卡配置文件并重命名。 查看网卡连接状态方法一：mii-tool 命令 mii-tool 命令，用来查看及管理介质的网络接口的状态；常用选项 -v 来查看网络接口的状态 方法二：ethtool 命令 ethtool 命令，显示和更改网卡设置的工具 查询网卡网络端口设置 更改主机名主机名，即下图红红框括起来的部分 显示主机名 123[root@stevey network-scripts]# hostnamestevey[root@ste 更改主机名方法：方法一：临时修改，重启shell会失效 1hostname steveY 方法二：命令行需改，永久生效 1hostnamectl set-hostname steveY 方法二：修改配置文件，永久生效 123vim /etc/hostnamesource /etc/hostname 配置DNS 域名解析神马是DNSDNS，Domain Name System或者Domain Name Service（域名系统或者域名服务）。在计算机网络当中，每个设备都要有自己的ip地址，以便于互相之间识别和联系沟通。但是ip地址不方便记忆，于是就有了域名系统。 DNS的作用就是自动把域名地址翻译为IP地址，帮助你找打访问对象的真实ip地址。 域名设置常见有： A记录 (Address) ：用来指定主机名（或域名）对应的IP地址记录，通俗来说A记录就是服务器的IP； CNAME记录：CNAME (Canonical Name)记录，通常称别名指向。你可以用一个域名指向另一个域名，比如，可以将a.com指向abcd.com ,这样在浏览器输入a.com，就可以跳转到abcd.com； 注：一般来讲，DNS至少要设置两个，一个主力、一个备用；这样只要有一个可用，就不会影响域名的正常使用。 如何配置DNS方法一：修改 /etc/resolv.conf 1234[root@stevey network-scripts]# vim /etc/resolv.conf# Generated by NetworkManagernameserver 129.29.29.29 //注意设置域名的格式，按照这个格式进行修改nameserver 8.8.8.8 注：此方法是临时性的，重启计算机，/etc/resolv.conf 会被网卡配置文件覆盖，前面做得更改会失效。 方法二：修改网卡配置文件，全局修改 1[root@stevey network-scripts]# vim /etc/sysconfig/network-scripts/ifcfg-ens33 修改下图中红框内的部分，按照格式要求进行修改 方法三：修改 /etc/hosts文件 hosts文件是linux系统中负责ip地址与域名快速解析的文件，包含了ip地址和主机名之间的映射。 不同的linux版本，文件也可能不同，比如Debian的对应文件是/etc/hostname；centos的对应文件是 /etc/hosts； 123[root@stevey network-scripts]# cat /etc/hosts127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4::1 localhost localhost.localdomain localhost6 localhost6.localdomain6 如上所示，/etc/hosts包括两个部分，前面是ip地址，后面是域名。其设置规则如下： 一个ip地址可用对应多个域名； 每行只能有一个ip地址，即ip地址是唯一的； 如果出现同一个域名对应不同的IP地址，centos6以前面的ip为准；centos7以后面ip的为准。 修改host文件 1vim /etc/hosts //编辑hosts文件，逐行增加即可。 linux 防火墙SElinuxSElinux, 全称Security Enhanceed Linux，字面意思是强化安全的Linux系统。它是linux上一个强化安全的子系统， 默认安装在 Fedora 和 Red Hat Enterprise Linux 上，Linux内核2.6版本后集成在内核中。 传统的Linux文件权限与账号的关系是自主访问控制的，即DAC，意思是说根据文件的rwx以及账户权限来管理文件的访问。这样做的风险在于，如果root账户密码泄露，系统安全就无从谈起。 SElinux 是委托访问控制，即MAC。在这种模式下，可以针对特定的进程与特定的文件资源来进行权限的控制，即便是root用户，权限也不一定是777，而是根据当时进程的设置而决定的。 目前SELinux支持三种模式： enforcing 强制模式：代表SELinux正在运行中，并且已经正确开始限制domain/type. permissive:宽容模式，代表SELinux正在运行之中，不过仅会有警告信息，而不会限制domain/type的访问。 disabled：关闭，SELinux没有实际运行。 查看SElinux 相关信息getenforce：当前SELinux的状态12[root@stevey network-scripts]# getenforceEnforcing sestatus：查看SELinux的策略12345678910[root@stevey network-scripts]# sestatusSELinux status: enabled //是否启动 SELinux enabled 表示启动；disabled表示关闭SELinuxfs mount: /sys/fs/selinux //SELinux 相关文件资料挂载点SELinux root directory: /etc/selinux Loaded policy name: targeted //当前策略Current mode: enforcing //目前的模式Mode from config file: enforcingPolicy MLS status: enabledPolicy deny_unknown status: allowedMax kernel policy version: 28 切换SELinux模式 setenforce [参数] 0 ：permissing，宽容模式； 1 ：enforcing，强制模式； 关闭SElinuxselinux 配置文件为 /etc/selinux/config ，编辑该文件并重启即可 123vim /etc/selinux/config将SELINUX=enforcing 改为disabled；保存退出，并重启系统即可。 防火墙管理工具为了保障系统安全，我们需要利用防火墙，通过预先设置的规则来监控进出流量，并执行相应的处理。 在centos6.x之前的系统中，采用的iptables；而centos7开始，使用firewalld。严格说来，iptables与firewalld都不是真正的防火墙，而是用来定义防火墙策略的管理工具。 iptables服务会把配置好的防火墙策略交由内核层面的netfilter网络过滤器来处理； firewalld服务则是把配置好的防火墙策略交由内核层面的nftables包过滤框架来处理。 这两者的区别在于： firewalld可以动态修改单条规则，动态管理规则集，允许更新规则而不破坏现有会话和连接；iptables在修改了规则后必须得全部刷新才可以生效； firewalld使用区域和服务而不是链式规则； firewalld默认是拒绝的，需要设置以后才能放行；iptables默认是允许的，需要拒绝的才去限制； netfilter的 5链、5表前面说过，netfilter是系统真正的安全框架，在系统内核里；而iptables只是一个命令行工具，利用这个工具来操作netfilter netfilter的 5个链防火墙的核心就是设定规则，在不同的节点，对数据匹配规则并执行相应的操作。 链（chains）是数据包传播的路径，每一条链其实就是众多规则中的一个检查清单，每一条链中可以有一条或数条规则。 规则链则依据数据包处理位置的不同，可以分为以下5种： PREROUTING：在进行路由选择前处理数据包（）； INPUT：处理流入的数据包； OUTPUT：处理流出的数据包； FORWARD：处理转发的数据包； POSTROUTING：在进行路由选择后处理数据包； netfilter的 5个表相同规则的集合，叫做“表”，netfilter有也有5个表： 表一：Filter（过滤数据包）主要跟进入Linux本机的数据包有关，是默认的table。 INPUT 链：过滤所有目标地址是本机的数据包（对进入本机数据包的过滤） OUTPUT 链：过滤所有本机产生的数据包（对源地址得数据包的过滤） FORWARD 链：过滤所有路过本机的数据包（源地址和目标地址都不是本机的数据包。 表二：NAT（网络地址转换）如果第一个数据包允许经行NAT或Masquerade,那么其它数据包都会被做相同的动作，也就是其他数据包不会被一个一个地NAT（属于一个流的包只会经过这个表一次）任何时候都不要在这个表任何一条链经行过滤。 包括三个动作： DNAT：改变数据包的目的地址使包能重路由到某台机器，使公网能够访问局域网的服务器 SNAT: 改变数据包的源地址，使局域网能访问公网） MASQUERADE:和SNAT一样使局域网能访问公网，无固定IP使用PPP.PPPoE等拨号上网接入Internet Nat表包含3条链： PREROUTING链 :数据包到达防火墙时改变包的目的地址。 OUTPUT链：改变本地产生数据包的目标地址。 *POSTROUTING链:在数据包离开防火墙时改变数据包的源地址。 表三：Mangle：修改数据包，改变包头中内容(TTL, TOS, MARK )这个 table 主要是与特殊的数据包的路由标志有关，用于给数据包做标记，然后根据标记去操作相应的包。 TOS :设置改变数据包的服务类型，不要使用TOS设置发往Internet的包除非打算依赖TOS来路由，不能在表中配置任何过滤。SNAT、DNAT TTL:改变数据包的生存时间，可以让数据包只有一个特殊的TTL，欺骗ISP,有些ISP并不希望多台计算机共享一个连接访问Internet,ISP通过检查一台计算机所发出的数据包是否含有不同的TTL来判断。 Mask:给数据包设置特殊的标记，通过标记配置带宽限制和基于请求分类。 Mangle表的5条链： PREROUTING链：数据包进入防火墙后，路由判断之前改变数据包。 POSTROUTING链：数据包确定了目标地址后，即路由判断前改变数据包。 OUTPUT链：在数据包被确定目的地址前改变数据包 INPUT链：在数据包进入本机后，应用程序接受之前改变数据包。 FORWARD链：第一次路由判断之后，最后一次路由判断前改变数据包。 表四：RAW关闭nat表上启动的连接追踪机制；默认系统的数据包会被追踪，这样会消耗一定的资源，因此可以通过RAW表来指定某些端口不被追踪。 NEW : 该包想要开始一个连接（重新连接或将连接重定向） RELATED:该包是属于某个已经建立的连接所建立的新连接。例如：FTP的数据传输连接就是控制连接所 RELATED出来的连接。--icmp-type 0 ( ping 应答) 就是--icmp-type 8 (ping 请求)所RELATED出来的 ESTABLISHED :只要发送并接到应答，一个数据连接从NEW变为ESTABLISHED,而且该状态会继续匹配这个连接的后续数据包。 INVALID:数据包不能被识别属于哪个连接或没有任何状态比如内存溢出，收到不知属于哪个连接的ICMP错误信息，一般应该DROP这个状态的任何数据。 表五：security用于强制控制的网络规则，不常用。 iptables的基本语法命令行格式： 1iptables [-t 表] [-命令] [匹配] [操作] -t 表 :用于指定命令应用于哪个iptables内置表。 命令选项: 用于指定iptables的执行方式，包括插入规则，删除规则和添加规则 命令 说明 -P –policy &lt;链名&gt; 定义默认策略 -L –list &lt;链名&gt; 查看iptables规则列表 -A –append &lt;链名&gt; 在规则列表的最后增加1条规则 -I –insert &lt;链名&gt; 在指定的位置插入1条规则 -D –delete &lt;链名&gt; 从规则列表中删除1条规则 -R –replace &lt;链名&gt; 替换规则列表中的某条规则 -F –flush &lt;链名&gt; 删除表中所有规则 -Z –zero &lt;链名&gt; 将表中数据包计数器和流量计数器归零 -X –delete-chain &lt;链名&gt; 删除自定义链 -v –verbose &lt;链名&gt; 与-L他命令一起使用显示更多更详细的信息 匹配规则:指定数据包与规则匹配所具有的特征，包括源地址，目的地址，传输协议和端口号等 匹配规则 说明 -i –in-interface 指定数据包从哪个网络接口进入， -o –out-interface 指定数据包从哪个网络接口输出 -p —proto 指定数据包匹配的协议，如TCP、UDP和ICMP等 -s –source 指定数据包匹配的源地址 –sport 指定数据包匹配的源端口号 –dport 指定数据包匹配的目的端口号 -m –match 指定数据包规则所使用的过滤模块 iptables规则常用动作 动作 说明 REJECT 拦阻该数据包，并返回数据包通知对方 DROP 丢弃数据包不予处理 REDIRECT 将封包重定向到另一个端口（PNAT），之后继续比对其它规则 MASQUERADE 改写封包来源IP为防火墙的IP，可以指定port 对应的范围，进行完此处理动作后，直接跳往下一个规则链（mangle:postrouting） LOG 将数据包相关信息纪录在 /var/log 中，之后继续比对其它规则 SNAT 改写封包来源 IP 为某特定 IP 或 IP 范围，之后直接跳往下一个规则链 DNAT 改写数据包目的地 IP 为某特定 IP 或 IP 范围，之后会直接跳往下一个规则链 MIRROR 镜像数据包，也就是将来源 IP与目的地IP对调后，将数据包返回 QUEUE 中断过滤程序，将封包放入队列，交给其它程序处理 RETURN 结束在目前规则链中的过滤程序，返回主规则链继续过滤 MARK 将封包标上某个代号，以便提供作为后续过滤的条件判断依据，之后继续比对其它规则 iptables常见用法查看及清除规则 查看规则 12345678iptables -t nat -nvl 注： -t 指定表；如果不加-t，默认显示filter表相关信息； -n 表示不针对ip反解析主机名； -L 表示列出； -v 表示列出详细信息； -nvL 表示查看该表格的详细规则； 删除规则 1234iptables -F //删除所有规则iptables -Z //包及流量计数器归零 增加删除指定规则命令行格式： iptables [选项] 常见选项 说明 -A 追加一条规则 -D 删除一条规则 -I 大写I，表示插入一条规则，实际效果跟-A一样 -p 小写p，指定协议，比如tcp、udp、icmp -P 大写P，表示预设策略 –dport 跟-p连用，指定目标端口 –sport 跟-p连用，指定源端口 -d 指定目标ip -s 指定源ip -j 指定动作，如ACCEPT（允许）、DROP（丢弃）、REJECT（拒绝） -i 指定网卡 示例： 1234567iptables -I INPUT -s 8.8.8.8 -j DROP //插入一条规则，将所有来自8.8.8.8的数据包丢弃iptables -D INPUT -s 8.8.8.8 -j DROP //删除上一条规则，注意删除规则时必须和插入规则保持一致iptables -A INPUT -s 1.1.1.1 -p tcp --dport 80 -j DROP //插入一条规则，将来自2.2.2.2的tcp协议，发送到本机80端口的数据包丢弃iptables -A INPUT -s 192.168.1.0/24 -i ens33 //增加一条规则，将来自192.168.1.0/24这个网段，且作用在ens33上的包放行 此外，还有一种删除规则的方法，语法规则如下： 1iptables -D [链名] [规则序号] 查询规则序号 1iptables -nvL --line-numbers 参考资料 SELinux 几种模式之间的转换 SElinux详解 SElinux介绍 CentOS上的安全防护软件Selinux详解 firewalld 与 iptables iptables详解 Iptables详细介绍 iptables的用法 netfilter/iptables详解]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>iptables</tag>
         <tag>netfilter</tag>
       </tags>
@@ -76,8 +90,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -88,8 +102,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tcpdump</tag>
         <tag>wireshark</tag>
       </tags>
@@ -103,8 +117,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -116,8 +130,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -129,8 +143,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -143,8 +157,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -156,8 +170,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -169,8 +183,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -182,8 +196,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -195,8 +209,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -209,8 +223,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -223,8 +237,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -237,8 +251,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -249,10 +263,10 @@
         <category>kindle</category>
       </categories>
       <tags>
+        <tag>notes</tag>
         <tag>dropbox</tag>
         <tag>IFTTT</tag>
         <tag>kinlde</tag>
-        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -264,8 +278,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -278,8 +292,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -292,8 +306,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -306,8 +320,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -320,8 +334,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -347,8 +361,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -361,8 +375,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>lvm</tag>
       </tags>
   </entry>
@@ -375,8 +389,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -388,8 +402,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -401,8 +415,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -414,8 +428,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -427,8 +441,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -440,8 +454,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -453,8 +467,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -466,8 +480,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -479,8 +493,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -492,8 +506,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -517,8 +531,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -530,8 +544,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rescueMode</tag>
       </tags>
   </entry>
@@ -544,8 +558,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>putty</tag>
         <tag>xshell</tag>
         <tag>iterm2</tag>
@@ -560,8 +574,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>ip</tag>
       </tags>
   </entry>
@@ -574,8 +588,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -728,8 +742,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -865,8 +879,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
         <tag>bash</tag>
       </tags>
   </entry>

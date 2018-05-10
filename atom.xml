@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2018-05-10T12:15:30.944Z</updated>
+  <updated>2018-05-10T14:45:56.198Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -15,6 +15,51 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>mac笔记：关于mac的一些骚操作（二）</title>
+    <link href="https://steve-yuan-8276.github.io/2018/05/10/trick-0f-mac-part2/"/>
+    <id>https://steve-yuan-8276.github.io/2018/05/10/trick-0f-mac-part2/</id>
+    <published>2018-05-10T13:47:33.000Z</published>
+    <updated>2018-05-10T14:45:56.198Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>继续整理有关mac使用的技巧</p><h3 id="下片神器-you-get"><a href="#下片神器-you-get" class="headerlink" title="下片神器 you-get"></a>下片神器 <code>you-get</code></h3><h4 id="安装："><a href="#安装：" class="headerlink" title="安装："></a>安装：</h4><h5 id="安装依赖："><a href="#安装依赖：" class="headerlink" title="安装依赖："></a>安装依赖：</h5><p><a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python 3</a></p><p><a href="https://www.ffmpeg.org/" target="_blank" rel="noopener">FFmpeg</a> </p><p><strong>注：</strong><code>FFmpeg</code>也可以通过brew安装 <code>brew install ffmpeg</code></p><h5 id="安装you-get："><a href="#安装you-get：" class="headerlink" title="安装you-get："></a>安装<code>you-get</code>：</h5><ul><li>通过brew安装</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install you-get</span><br></pre></td></tr></table></figure><ul><li>通过pip3 安装：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install you-get</span><br></pre></td></tr></table></figure><h4 id="升级you-get："><a href="#升级you-get：" class="headerlink" title="升级you-get："></a>升级<code>you-get</code>：</h4><ul><li>如果是通过brew 安装的，则运行：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew upgrade you-get</span><br></pre></td></tr></table></figure><ul><li>如果是通过pip3安装的，则运行：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install --upgrade you-get</span><br></pre></td></tr></table></figure><a id="more"></a><h4 id="使用youget"><a href="#使用youget" class="headerlink" title="使用youget"></a>使用<code>youget</code></h4><h5 id="第一步：找到需要下载的资源，复制网页地址，查看画质和格式信息："><a href="#第一步：找到需要下载的资源，复制网页地址，查看画质和格式信息：" class="headerlink" title="第一步：找到需要下载的资源，复制网页地址，查看画质和格式信息："></a>第一步：找到需要下载的资源，复制网页地址，查看画质和格式信息：</h5><p>命令行格式：<code>you-get -i [url]</code> or <code>you-get --info [url]</code></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">steve:~ steveyuan$ you-get -i https://www.youtube.com/watch?v=iaUze8A0844</span><br><span class="line">site:                YouTube</span><br><span class="line">title:               papi酱 - 如果这些职业和医生混搭…【papi酱突然更新的放送】</span><br><span class="line">streams:             # Available quality and codecs</span><br><span class="line">    [ DASH ] ____________________________________</span><br><span class="line">    - itag:          248</span><br><span class="line">      container:     webm</span><br><span class="line">      quality:       1920x1080</span><br><span class="line">      size:          92.3 MiB (96795814 bytes)</span><br><span class="line">    # download-with: you-get --itag=248 [URL]</span><br><span class="line"></span><br><span class="line">    - itag:          137</span><br><span class="line">      container:     mp4</span><br><span class="line">      quality:       1920x1080</span><br><span class="line">      size:          68.9 MiB (72264226 bytes)</span><br><span class="line">    # download-with: you-get --itag=137 [URL]</span><br><span class="line"></span><br><span class="line">    - itag:          247</span><br><span class="line">      container:     webm</span><br><span class="line">      quality:       1280x720</span><br><span class="line">      size:          50.2 MiB (52596250 bytes)</span><br><span class="line">    # download-with: you-get --itag=247 [URL]</span><br><span class="line">     [ DEFAULT ] _________________________________</span><br><span class="line">    - itag:          22</span><br><span class="line">      container:     mp4</span><br><span class="line">      quality:       hd720</span><br><span class="line">      size:          39.6 MiB (41558299 bytes)</span><br><span class="line">    # download-with: you-get --itag=22 [URL]</span><br></pre></td></tr></table></figure><p>注：带有<code>default</code> 字样的是网页当中默认的格式</p><h5 id="第二步：下载视频"><a href="#第二步：下载视频" class="headerlink" title="第二步：下载视频"></a>第二步：下载视频</h5><p>命令行格式：<code>you-get [参数] [url]</code></p><p>注：这里的参数，对应的就是上面info信息的这个部分，也就是 <code>--itag=22</code>，默认下载到当前目录下。如下图所示：</p><p><img src="https://farm1.staticflickr.com/826/41118014595_7e78e1e4a1_o.png" alt=""></p><p>-o [filePath] 小写-o选项，可以指定下载文件路径(这里要写绝对路径)；<code>-O [fileName]</code>,大写O可以为下载文件重命名；</p><p>you-get –itag=22 -o ~/documents/ -O papi-1.mp4 <a href="https://www.youtube.com/watch?v=iaUze8A0844" target="_blank" rel="noopener">https://www.youtube.com/watch?v=iaUze8A0844</a></p><p><strong>注：</strong></p><ul><li><p>按照官方文档说法，这个参数可以省略，表示下载default的视频链接；</p></li><li><p>如果下载了一半又改主意不想下载了，按 <code>ctrl + c</code> 中止；</p></li></ul><h4 id="分享几个小技巧"><a href="#分享几个小技巧" class="headerlink" title="分享几个小技巧"></a>分享几个小技巧</h4><h5 id="搜索并下载视频"><a href="#搜索并下载视频" class="headerlink" title="搜索并下载视频"></a>搜索并下载视频</h5><p>有时候，我们并不知道下载资源的具体网址，只知道名字而已。这时候输入 <code>you-get [keyword]</code> , 此时you-get 会通过google进行搜索，并下载最相关的视频<code>most relevant video</code>。</p><h5 id="通过代理线路下载"><a href="#通过代理线路下载" class="headerlink" title="通过代理线路下载"></a>通过代理线路下载</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">you-get -x [代理ip：端口号] [url]</span><br><span class="line"></span><br><span class="line">或者，两个效果是一样的</span><br><span class="line"></span><br><span class="line">you-get --http-proxy [代理ip：端口号] [url]</span><br></pre></td></tr></table></figure><h5 id="直接播放视频链接"><a href="#直接播放视频链接" class="headerlink" title="直接播放视频链接"></a>直接播放视频链接</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">you-get -p [播放器名] [url]</span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">you-get --player [播放器名] [url]</span><br></pre></td></tr></table></figure><p>此处也可以指定浏览器打开，免广告</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">you-get -p chromium [url]    //chromium是浏览器名</span><br></pre></td></tr></table></figure><p><strong>注：</strong>更多内容参见<a href="https://github.com/soimort/you-get#supported-sites" target="_blank" rel="noopener">官方说明文档</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;继续整理有关mac使用的技巧&lt;/p&gt;
+&lt;h3 id=&quot;下片神器-you-get&quot;&gt;&lt;a href=&quot;#下片神器-you-get&quot; class=&quot;headerlink&quot; title=&quot;下片神器 you-get&quot;&gt;&lt;/a&gt;下片神器 &lt;code&gt;you-get&lt;/code&gt;&lt;/h3&gt;&lt;h4 id=&quot;安装：&quot;&gt;&lt;a href=&quot;#安装：&quot; class=&quot;headerlink&quot; title=&quot;安装：&quot;&gt;&lt;/a&gt;安装：&lt;/h4&gt;&lt;h5 id=&quot;安装依赖：&quot;&gt;&lt;a href=&quot;#安装依赖：&quot; class=&quot;headerlink&quot; title=&quot;安装依赖：&quot;&gt;&lt;/a&gt;安装依赖：&lt;/h5&gt;&lt;p&gt;&lt;a href=&quot;https://www.python.org/downloads/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;python 3&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.ffmpeg.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;FFmpeg&lt;/a&gt; &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注：&lt;/strong&gt;&lt;code&gt;FFmpeg&lt;/code&gt;也可以通过brew安装 &lt;code&gt;brew install ffmpeg&lt;/code&gt;&lt;/p&gt;
+&lt;h5 id=&quot;安装you-get：&quot;&gt;&lt;a href=&quot;#安装you-get：&quot; class=&quot;headerlink&quot; title=&quot;安装you-get：&quot;&gt;&lt;/a&gt;安装&lt;code&gt;you-get&lt;/code&gt;：&lt;/h5&gt;&lt;ul&gt;
+&lt;li&gt;通过brew安装&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;brew install you-get&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;ul&gt;
+&lt;li&gt;通过pip3 安装：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pip3 install you-get&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h4 id=&quot;升级you-get：&quot;&gt;&lt;a href=&quot;#升级you-get：&quot; class=&quot;headerlink&quot; title=&quot;升级you-get：&quot;&gt;&lt;/a&gt;升级&lt;code&gt;you-get&lt;/code&gt;：&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;如果是通过brew 安装的，则运行：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;brew upgrade you-get&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;ul&gt;
+&lt;li&gt;如果是通过pip3安装的，则运行：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pip3 install --upgrade you-get&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="mac" scheme="https://steve-yuan-8276.github.io/categories/mac/"/>
+    
+    
+      <category term="mac" scheme="https://steve-yuan-8276.github.io/tags/mac/"/>
+    
+      <category term="bash" scheme="https://steve-yuan-8276.github.io/tags/bash/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux运维学习笔记7-5：定时任务和服务管理</title>
@@ -63,9 +108,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="crontab" scheme="https://steve-yuan-8276.github.io/tags/crontab/"/>
     
@@ -101,9 +146,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="pid" scheme="https://steve-yuan-8276.github.io/tags/pid/"/>
     
@@ -138,9 +183,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="firewalld" scheme="https://steve-yuan-8276.github.io/tags/firewalld/"/>
     
@@ -151,25 +196,25 @@
     <link href="https://steve-yuan-8276.github.io/2018/05/08/week7-4-howToMnageLinuxPart4/"/>
     <id>https://steve-yuan-8276.github.io/2018/05/08/week7-4-howToMnageLinuxPart4/</id>
     <published>2018-05-08T02:32:48.000Z</published>
-    <updated>2018-05-09T09:31:41.932Z</updated>
+    <updated>2018-05-10T12:51:23.126Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>接着上一期：Linux运维学习笔记7-3：网络和防火墙（一），继续整理关于<code>iptables</code> 和 <code>netfilter</code>的内容。</p><h3 id="编写脚本定义iptables-规则"><a href="#编写脚本定义iptables-规则" class="headerlink" title="编写脚本定义iptables 规则"></a>编写脚本定义iptables 规则</h3><p><strong>需求：</strong>只针对filter表，预设策略Input链DROP、其他两个链ACCEPT；然后针对192.168.188.0/24网段开通22端口，对所有网段开通80端口和21端口。</p><p><strong>脚本实现：</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># /bin/bash</span><br><span class="line"></span><br><span class="line">ipt=&apos;/etc/sbin/iptables&apos;    //调用iptables，这里要用绝对命令</span><br><span class="line">$ipt -F       //删除所有规则</span><br><span class="line">$ipt -P INPUT DROP    //默认对filter表定义预设策略，所有input流量都丢弃</span><br><span class="line">$ipt -P OUTPUT ACCEPT    //定义预设策略，所有output流量都放行</span><br><span class="line">$ipt -P FORWARD ACCEPT   //表定义预设策略，所有forward流量都放行</span><br><span class="line">$ipt -m state --state RELETED,ETABLISHED -j ACCEPT   //相关数据包放行（这里不太清楚，直播课记得问一下）</span><br><span class="line">$ipt -A INPUT -s 192.168.188.0/24 -p tcp --dport 22 -j ACCEPT</span><br><span class="line">$ipt -A INPUT -p tcp --dport 80 -j ACCEPT</span><br><span class="line">$ipt -A INPUT -p tcp --dport 21 -j ACCEPT</span><br></pre></td></tr></table></figure><a id="more"></a><h3 id="nat表应用"><a href="#nat表应用" class="headerlink" title="nat表应用"></a><code>nat</code>表应用</h3><p>什么nat表？</p><p>nat表是iptables当中的一张表，作用是网络地址转换（Network Address Translation）。</p><p>如果第一个数据包允许经行NAT或Masquerade,那么其它数据包都会被做相同的动作，也就是其他数据包不会被一个一个地NAT（属于一个流的包只会经过这个表一次）任何时候都不要在这个表任何一条链经行过滤。</p><p>包括三个动作：</p><h4 id="SNAT"><a href="#SNAT" class="headerlink" title="SNAT:"></a><code>SNAT</code>:</h4><p>全称Source Network Address Translation，源地址转换，通常被叫做源映谢，指的是改变数据包的源地址，使局域网能访问公网。</p><p><strong>典型应用：</strong>多台电脑公用一个路由器上网，路由器给每个电脑都分配了一个内网ip地址。当电脑访问外部网络的时候，路由器将数据包的报头中的源地址替换成路由器的ip。外网服务记下来的地址，并不是电脑的内网ip地址，而是路由器ip地址。这样就可以实现多台电脑公用一个路由器上网的目的。</p><h4 id="DNAT："><a href="#DNAT：" class="headerlink" title="DNAT："></a><code>DNAT</code>：</h4><p>全称<code>Destination Network Address Translation</code>,目的地址转换，通常被叫做目的映谢，指的是改变数据包的目的地址使包能重路由到某台机器，使公网能够访问局域网的服务器。</p><p>典型应用：比如在内网架设了一个服务器用来建立网站，内网配置内网ip，前段防火墙配置公网ip。当互联网上的用户来访问这个网站的时候，用户客户端发出的数据包包头目的地ip写的是防火墙公网ip，防火墙会将目的地ip改写为内网服务器ip，然后再把这个数据包发给内网服务器。这样以来，就实现了网络访问内网服务器的目的。</p><h4 id="MASQUERADE"><a href="#MASQUERADE" class="headerlink" title="MASQUERADE:"></a><code>MASQUERADE</code>:</h4><p>地址伪装，算是snat中的一种特例，作用是从服务器的网卡上，自动获取当前ip地址来做NAT。</p><p>具体而言，不管现在eth0的出口获得哪个动态ip，MASQUERADE都会自动读取eth0现在的ip地址然后做SNAT出去，这样就实现了很好的动态SNAT地址转换。</p><p>Nat表包含3条链：</p><ul><li><p><code>PREROUTING</code>链 :数据包到达防火墙时改变包的目的地址。</p></li><li><p><code>OUTPUT</code>链：改变本地产生数据包的目标地址。</p></li></ul><p>*<code>POSTROUTING</code>链:在数据包离开防火墙时改变数据包的源地址。</p><p>路由器转发的功能其实是由Linux的iptables实现，而iptables又是通过nat表实现的。</p><p>修改net表开启路由器转发：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;1&apos; &gt; /proc/sys/net/ipv4/ip-forward   //打开路由器转发功能</span><br><span class="line"></span><br><span class="line">iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o eth0 -j MASQUERADE   //设置ip转发操作， -o 后跟设备名，表示出口网卡；MASQUERADE表示伪装。</span><br></pre></td></tr></table></figure><h3 id="iptables的启用、停止及保存备份"><a href="#iptables的启用、停止及保存备份" class="headerlink" title="iptables的启用、停止及保存备份"></a>iptables的启用、停止及保存备份</h3><h4 id="iptables启用"><a href="#iptables启用" class="headerlink" title="iptables启用"></a>iptables启用</h4><p>centos7 默认的防火墙管理软件是<code>firewalld</code>；centos6.x之前的版本用的是<code>iptables</code>。想要在centos7上使用<code>iptables</code>，首先要禁用<code>firewalld</code>。</p><p>实现步骤如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld    //关闭firealld</span><br><span class="line"></span><br><span class="line">systemctl disabled firewalld   //禁止firewalld开机启动</span><br><span class="line"></span><br><span class="line">yum install -y iptables-services   //安装iptables</span><br><span class="line"></span><br><span class="line">systemctl enable iptables   //设置iptables开机启动</span><br><span class="line"></span><br><span class="line">systemctl start iptables    //开启iptables</span><br></pre></td></tr></table></figure><h4 id="iptables关闭"><a href="#iptables关闭" class="headerlink" title="iptables关闭"></a>iptables关闭</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service iptables stop    //停止防火墙，一旦重新设定规则，防火墙还会重新启动</span><br></pre></td></tr></table></figure><h4 id="iptables-保存"><a href="#iptables-保存" class="headerlink" title="iptables 保存"></a>iptables 保存</h4><p>通过命令行设置的规则都保存在内存当中，一旦关机、重启，之前设置的规则就会失效；因此，设定好规则之后需要执行以下操作保存：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service iptables save</span><br></pre></td></tr></table></figure><p>设置好的规则会被保存到<code>/etc/sysconfig/iptables</code> 当中。</p><h4 id="service-备份及恢复"><a href="#service-备份及恢复" class="headerlink" title="service 备份及恢复"></a>service 备份及恢复</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables-save &gt; myipt.rule   //备份， &gt; 表示输出重定向</span><br><span class="line"></span><br><span class="line">iptables-restore &lt; myipt.rule   //恢复，中间的 &lt; 表示输入重定向</span><br></pre></td></tr></table></figure><h3 id="扩展知识"><a href="#扩展知识" class="headerlink" title="扩展知识"></a>扩展知识</h3><h4 id="iptables应用在一个网段"><a href="#iptables应用在一个网段" class="headerlink" title="iptables应用在一个网段"></a>iptables应用在一个网段</h4><p>需求：对于 61.4.176.0-61.4.191.255这个网段的input流量包丢弃</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -I INPUT -m iprange --src-range 61.4.176.0-61.4.191.255 -j DROP   // -m iprange --src-range 这个参数针对一个网段</span><br></pre></td></tr></table></figure><p>另一种实现方式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -I INPUT -s 61.4.176.0/61.4.191.255 -j DROP</span><br></pre></td></tr></table></figure><h4 id="使用-iptables-防止-DDos-攻击"><a href="#使用-iptables-防止-DDos-攻击" class="headerlink" title="使用 iptables 防止 DDos 攻击"></a>使用 iptables 防止 DDos 攻击</h4><p>第一种方法：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">iptables -A FORWARD -p tcp --syn -m limit --limit 1/s --limit-burst 5 -j ACCEPT       //添加规则，每秒中最多允许5个新连接</span><br><span class="line"></span><br><span class="line">iptables -A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j ACCEPT   //添加规则，防止各种端口扫描</span><br><span class="line"></span><br><span class="line">iptables -A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT     //添加规则，防止Ping洪水攻击（Ping of Death）</span><br><span class="line"></span><br><span class="line">service iptables save</span><br></pre></td></tr></table></figure><p>第二种方法：直接编辑iptables配置文件</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysconfig/iptables</span><br><span class="line"></span><br><span class="line">//加入下面几行</span><br><span class="line">#anti syn，ddos</span><br><span class="line">-A FORWARD -p tcp --syn -m limit --limit 1/s --limit-burst 5 -j ACCEPT</span><br><span class="line">-A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j ACCEPT</span><br><span class="line">-A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT</span><br><span class="line"></span><br><span class="line">//保存退出后重启防火墙</span><br><span class="line">service iptables restart</span><br></pre></td></tr></table></figure><h4 id="iptables的常用规则"><a href="#iptables的常用规则" class="headerlink" title="iptables的常用规则"></a><code>iptables</code>的常用规则</h4><ul><li>阻挡自定义的恶意 IP 地址的访问</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -s xxx.xxx.xxx.xxx -j DROP</span><br></pre></td></tr></table></figure><ul><li>防 Ping</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p icmp -j DROP</span><br></pre></td></tr></table></figure><ul><li>禁止 ICMP PING</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p icmp -m icmp --icmp-type echo-request -j DROP</span><br></pre></td></tr></table></figure><ul><li>防止同步包洪水（Sync Flood）</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A FORWARD -p tcp --syn -m limit --limit 1/s -j ACCEPT</span><br></pre></td></tr></table></figure><ul><li>防止端口扫描</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j ACCEPT</span><br></pre></td></tr></table></figure><ul><li>防止 Ping 洪水攻击（Ping of Death）注：限制的速度根据自身情况调整</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p tcp -m state --state NEW -m limit --limit 100/second --limit-burst 300 -j ACCEPT</span><br><span class="line"></span><br><span class="line">iptables -A INPUT -p tcp -m state --state NEW -j DROP</span><br></pre></td></tr></table></figure><ul><li>防止 NMAP FIN/URG/PSH</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -i eth0 -p tcp --tcp-flags ALL FIN,URG,PSH -j DROP</span><br></pre></td></tr></table></figure><ul><li>丢弃异常的 XMAS 数据包 (异常的 XMAS 数据包攻击的后果: 可能导致某些系统崩溃)</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP</span><br><span class="line"></span><br><span class="line">iptables -A INPUT -p tcp --tcp-flags ALL FIN,PSH,URG -j DROP</span><br><span class="line"></span><br><span class="line">iptables -A INPUT -p tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG -j DROP</span><br></pre></td></tr></table></figure><ul><li>丢弃 NULL 空数据包</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -i eth0 -p tcp --tcp-flags ALL NONE -j DROP</span><br></pre></td></tr></table></figure><ul><li>丢弃 Fragments 碎片数据包 (碎片数据包攻击的后果: 可能导致正常数据包丢失)</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -f -j DROP</span><br></pre></td></tr></table></figure><ul><li>SYN/RST</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -i eth0 -p tcp --tcp-flags SYN,RST SYN,RST -j DROP</span><br></pre></td></tr></table></figure><ul><li>SYN/FIN – Scan(possibly)</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -i eth0 -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP</span><br></pre></td></tr></table></figure><ul><li>限制对内部封包的发送速度</li></ul><p><img src="https://farm1.staticflickr.com/967/27123175687_6b5edac5a5_o.png" alt=""></p><ul><li>限制建立联机的转发</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A FORWARD -f -m limit --limit 100/s --limit-burst 100 -j ACCEPT</span><br></pre></td></tr></table></figure><ul><li>丢弃无效数据包</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -m state --state INVALID -j DROP</span><br><span class="line">iptables -A FORWARD -m state --state INVALID -j DROP</span><br><span class="line">iptables -A OUTPUT -m state --state INVALID -j DROP</span><br></pre></td></tr></table></figure><ul><li>阻挡欺诈 IP 地址的访问 (以下为 RFC1918 类型和 IANA 预留地址，多为 LAN 或者多播地址，这些是不可能作为公网地址源的)</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -s 10.0.0.0/8 -j DROP</span><br><span class="line">iptables -A INPUT -s 169.254.0.0/16 -j DROP</span><br><span class="line">iptables -A INPUT -s 172.16.0.0/12 -j DROP</span><br><span class="line">iptables -A INPUT -s 127.0.0.0/8 -j DROP</span><br><span class="line">iptables -A INPUT -s 224.0.0.0/4 -j DROP</span><br><span class="line">iptables -A INPUT -d 224.0.0.0/4 -j DROP</span><br><span class="line">iptables -A INPUT -s 240.0.0.0/5 -j DROP</span><br><span class="line">iptables -A INPUT -d 240.0.0.0/5 -j DROP</span><br><span class="line">iptables -A INPUT -s 0.0.0.0/8 -j DROP</span><br><span class="line">iptables -A INPUT -d 0.0.0.0/8 -j DROP</span><br><span class="line">iptables -A INPUT -d 239.255.255.0/24 -j DROP</span><br><span class="line">iptables -A INPUT -d 255.255.255.255 -j DROP</span><br></pre></td></tr></table></figure><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul><li><p><a href="https://www.yaoblog.info/?p=7656" target="_blank" rel="noopener">使用 IPTABLES 防火墙阻挡常见攻击</a></p></li><li><p><a href="https://www.davex.pw/2017/10/01/how-to-prevent-ddos-by-iptables/" target="_blank" rel="noopener">使用 iptables 防止 DDos 攻击</a></p></li></ul>]]></content>
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>接着上一期：Linux运维学习笔记7-3：网络和防火墙（一），继续整理关于<code>iptables</code> 和 <code>netfilter</code>的内容。</p><h3 id="编写脚本定义iptables-规则"><a href="#编写脚本定义iptables-规则" class="headerlink" title="编写脚本定义iptables 规则"></a>编写脚本定义iptables 规则</h3><p><strong>需求：</strong>只针对filter表，预设策略Input链DROP、其他两个链ACCEPT；然后针对192.168.188.0/24网段开通22端口，对所有网段开通80端口和21端口。</p><p><strong>脚本实现：</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># /bin/bash</span><br><span class="line"></span><br><span class="line">ipt=&apos;/etc/sbin/iptables&apos;    //调用iptables，这里要用绝对命令</span><br><span class="line">$ipt -F       //删除所有规则</span><br><span class="line">$ipt -P INPUT DROP    //默认对filter表定义预设策略，所有input流量都丢弃</span><br><span class="line">$ipt -P OUTPUT ACCEPT    //定义预设策略，所有output流量都放行</span><br><span class="line">$ipt -P FORWARD ACCEPT   //表定义预设策略，所有forward流量都放行</span><br><span class="line">$ipt -m state --state RELATED,ESTABLISHED -j ACCEPT   //相关数据包放行</span><br><span class="line">$ipt -A INPUT -s 192.168.188.0/24 -p tcp --dport 22 -j ACCEPT</span><br><span class="line">$ipt -A INPUT -p tcp --dport 80 -j ACCEPT</span><br><span class="line">$ipt -A INPUT -p tcp --dport 21 -j ACCEPT</span><br></pre></td></tr></table></figure><a id="more"></a><h3 id="nat表应用"><a href="#nat表应用" class="headerlink" title="nat表应用"></a><code>nat</code>表应用</h3><p>什么nat表？</p><p>nat表是iptables当中的一张表，作用是网络地址转换（Network Address Translation）。</p><p>如果第一个数据包允许经行NAT或Masquerade,那么其它数据包都会被做相同的动作，也就是其他数据包不会被一个一个地NAT（属于一个流的包只会经过这个表一次）任何时候都不要在这个表任何一条链经行过滤。</p><p>包括三个动作：</p><h4 id="SNAT"><a href="#SNAT" class="headerlink" title="SNAT:"></a><code>SNAT</code>:</h4><p>全称Source Network Address Translation，源地址转换，通常被叫做源映谢，指的是改变数据包的源地址，使局域网能访问公网。</p><p><strong>典型应用：</strong>多台电脑公用一个路由器上网，路由器给每个电脑都分配了一个内网ip地址。当电脑访问外部网络的时候，路由器将数据包的报头中的源地址替换成路由器的ip。外网服务记下来的地址，并不是电脑的内网ip地址，而是路由器ip地址。这样就可以实现多台电脑公用一个路由器上网的目的。</p><h4 id="DNAT："><a href="#DNAT：" class="headerlink" title="DNAT："></a><code>DNAT</code>：</h4><p>全称<code>Destination Network Address Translation</code>,目的地址转换，通常被叫做目的映谢，指的是改变数据包的目的地址使包能重路由到某台机器，使公网能够访问局域网的服务器。</p><p>典型应用：比如在内网架设了一个服务器用来建立网站，内网配置内网ip，前段防火墙配置公网ip。当互联网上的用户来访问这个网站的时候，用户客户端发出的数据包包头目的地ip写的是防火墙公网ip，防火墙会将目的地ip改写为内网服务器ip，然后再把这个数据包发给内网服务器。这样以来，就实现了网络访问内网服务器的目的。</p><h4 id="MASQUERADE"><a href="#MASQUERADE" class="headerlink" title="MASQUERADE:"></a><code>MASQUERADE</code>:</h4><p>地址伪装，算是snat中的一种特例，作用是从服务器的网卡上，自动获取当前ip地址来做NAT。</p><p>具体而言，不管现在eth0的出口获得哪个动态ip，MASQUERADE都会自动读取eth0现在的ip地址然后做SNAT出去，这样就实现了很好的动态SNAT地址转换。</p><p>Nat表包含3条链：</p><ul><li><p><code>PREROUTING</code>链 :数据包到达防火墙时改变包的目的地址。</p></li><li><p><code>OUTPUT</code>链：改变本地产生数据包的目标地址。</p></li></ul><p>*<code>POSTROUTING</code>链:在数据包离开防火墙时改变数据包的源地址。</p><p>路由器转发的功能其实是由Linux的iptables实现，而iptables又是通过nat表实现的。</p><p>修改net表开启路由器转发：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;1&apos; &gt; /proc/sys/net/ipv4/ip-forward   //打开路由器转发功能</span><br><span class="line"></span><br><span class="line">iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o eth0 -j MASQUERADE   //设置ip转发操作， -o 后跟设备名，表示出口网卡；MASQUERADE表示伪装。</span><br></pre></td></tr></table></figure><h3 id="iptables的启用、停止及保存备份"><a href="#iptables的启用、停止及保存备份" class="headerlink" title="iptables的启用、停止及保存备份"></a>iptables的启用、停止及保存备份</h3><h4 id="iptables启用"><a href="#iptables启用" class="headerlink" title="iptables启用"></a>iptables启用</h4><p>centos7 默认的防火墙管理软件是<code>firewalld</code>；centos6.x之前的版本用的是<code>iptables</code>。想要在centos7上使用<code>iptables</code>，首先要禁用<code>firewalld</code>。</p><p>实现步骤如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld    //关闭firealld</span><br><span class="line"></span><br><span class="line">systemctl disabled firewalld   //禁止firewalld开机启动</span><br><span class="line"></span><br><span class="line">yum install -y iptables-services   //安装iptables</span><br><span class="line"></span><br><span class="line">systemctl enable iptables   //设置iptables开机启动</span><br><span class="line"></span><br><span class="line">systemctl start iptables    //开启iptables</span><br></pre></td></tr></table></figure><h4 id="iptables关闭"><a href="#iptables关闭" class="headerlink" title="iptables关闭"></a>iptables关闭</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service iptables stop    //停止防火墙，一旦重新设定规则，防火墙还会重新启动</span><br></pre></td></tr></table></figure><h4 id="iptables-保存"><a href="#iptables-保存" class="headerlink" title="iptables 保存"></a>iptables 保存</h4><p>通过命令行设置的规则都保存在内存当中，一旦关机、重启，之前设置的规则就会失效；因此，设定好规则之后需要执行以下操作保存：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service iptables save</span><br></pre></td></tr></table></figure><p>设置好的规则会被保存到<code>/etc/sysconfig/iptables</code> 当中。</p><h4 id="service-备份及恢复"><a href="#service-备份及恢复" class="headerlink" title="service 备份及恢复"></a>service 备份及恢复</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables-save &gt; myipt.rule   //备份， &gt; 表示输出重定向</span><br><span class="line"></span><br><span class="line">iptables-restore &lt; myipt.rule   //恢复，中间的 &lt; 表示输入重定向</span><br></pre></td></tr></table></figure><h3 id="扩展知识"><a href="#扩展知识" class="headerlink" title="扩展知识"></a>扩展知识</h3><h4 id="iptables应用在一个网段"><a href="#iptables应用在一个网段" class="headerlink" title="iptables应用在一个网段"></a>iptables应用在一个网段</h4><p>需求：对于 61.4.176.0-61.4.191.255这个网段的input流量包丢弃</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -I INPUT -m iprange --src-range 61.4.176.0-61.4.191.255 -j DROP   // -m iprange --src-range 这个参数针对一个网段</span><br></pre></td></tr></table></figure><p>另一种实现方式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -I INPUT -s 61.4.176.0/61.4.191.255 -j DROP</span><br></pre></td></tr></table></figure><h4 id="使用-iptables-防止-DDos-攻击"><a href="#使用-iptables-防止-DDos-攻击" class="headerlink" title="使用 iptables 防止 DDos 攻击"></a>使用 iptables 防止 DDos 攻击</h4><p>第一种方法：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">iptables -A FORWARD -p tcp --syn -m limit --limit 1/s --limit-burst 5 -j ACCEPT       //添加规则，每秒中最多允许5个新连接</span><br><span class="line"></span><br><span class="line">iptables -A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j ACCEPT   //添加规则，防止各种端口扫描</span><br><span class="line"></span><br><span class="line">iptables -A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT     //添加规则，防止Ping洪水攻击（Ping of Death）</span><br><span class="line"></span><br><span class="line">service iptables save</span><br></pre></td></tr></table></figure><p>第二种方法：直接编辑iptables配置文件</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysconfig/iptables</span><br><span class="line"></span><br><span class="line">//加入下面几行</span><br><span class="line">#anti syn，ddos</span><br><span class="line">-A FORWARD -p tcp --syn -m limit --limit 1/s --limit-burst 5 -j ACCEPT</span><br><span class="line">-A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j ACCEPT</span><br><span class="line">-A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT</span><br><span class="line"></span><br><span class="line">//保存退出后重启防火墙</span><br><span class="line">service iptables restart</span><br></pre></td></tr></table></figure><h4 id="iptables的常用规则"><a href="#iptables的常用规则" class="headerlink" title="iptables的常用规则"></a><code>iptables</code>的常用规则</h4><ul><li>阻挡自定义的恶意 IP 地址的访问</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -s xxx.xxx.xxx.xxx -j DROP</span><br></pre></td></tr></table></figure><ul><li>防 Ping</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p icmp -j DROP</span><br></pre></td></tr></table></figure><ul><li>禁止 ICMP PING</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p icmp -m icmp --icmp-type echo-request -j DROP</span><br></pre></td></tr></table></figure><ul><li>防止同步包洪水（Sync Flood）</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A FORWARD -p tcp --syn -m limit --limit 1/s -j ACCEPT</span><br></pre></td></tr></table></figure><ul><li>防止端口扫描</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j ACCEPT</span><br></pre></td></tr></table></figure><ul><li>防止 Ping 洪水攻击（Ping of Death）注：限制的速度根据自身情况调整</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p tcp -m state --state NEW -m limit --limit 100/second --limit-burst 300 -j ACCEPT</span><br><span class="line"></span><br><span class="line">iptables -A INPUT -p tcp -m state --state NEW -j DROP</span><br></pre></td></tr></table></figure><ul><li>防止 NMAP FIN/URG/PSH</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -i eth0 -p tcp --tcp-flags ALL FIN,URG,PSH -j DROP</span><br></pre></td></tr></table></figure><ul><li>丢弃异常的 XMAS 数据包 (异常的 XMAS 数据包攻击的后果: 可能导致某些系统崩溃)</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP</span><br><span class="line"></span><br><span class="line">iptables -A INPUT -p tcp --tcp-flags ALL FIN,PSH,URG -j DROP</span><br><span class="line"></span><br><span class="line">iptables -A INPUT -p tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG -j DROP</span><br></pre></td></tr></table></figure><ul><li>丢弃 NULL 空数据包</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -i eth0 -p tcp --tcp-flags ALL NONE -j DROP</span><br></pre></td></tr></table></figure><ul><li>丢弃 Fragments 碎片数据包 (碎片数据包攻击的后果: 可能导致正常数据包丢失)</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -f -j DROP</span><br></pre></td></tr></table></figure><ul><li>SYN/RST</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -i eth0 -p tcp --tcp-flags SYN,RST SYN,RST -j DROP</span><br></pre></td></tr></table></figure><ul><li>SYN/FIN – Scan(possibly)</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -i eth0 -p tcp --tcp-flags SYN,FIN SYN,FIN -j DROP</span><br></pre></td></tr></table></figure><ul><li>限制对内部封包的发送速度</li></ul><p><img src="https://farm1.staticflickr.com/967/27123175687_6b5edac5a5_o.png" alt=""></p><ul><li>限制建立联机的转发</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A FORWARD -f -m limit --limit 100/s --limit-burst 100 -j ACCEPT</span><br></pre></td></tr></table></figure><ul><li>丢弃无效数据包</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -m state --state INVALID -j DROP</span><br><span class="line">iptables -A FORWARD -m state --state INVALID -j DROP</span><br><span class="line">iptables -A OUTPUT -m state --state INVALID -j DROP</span><br></pre></td></tr></table></figure><ul><li>阻挡欺诈 IP 地址的访问 (以下为 RFC1918 类型和 IANA 预留地址，多为 LAN 或者多播地址，这些是不可能作为公网地址源的)</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -s 10.0.0.0/8 -j DROP</span><br><span class="line">iptables -A INPUT -s 169.254.0.0/16 -j DROP</span><br><span class="line">iptables -A INPUT -s 172.16.0.0/12 -j DROP</span><br><span class="line">iptables -A INPUT -s 127.0.0.0/8 -j DROP</span><br><span class="line">iptables -A INPUT -s 224.0.0.0/4 -j DROP</span><br><span class="line">iptables -A INPUT -d 224.0.0.0/4 -j DROP</span><br><span class="line">iptables -A INPUT -s 240.0.0.0/5 -j DROP</span><br><span class="line">iptables -A INPUT -d 240.0.0.0/5 -j DROP</span><br><span class="line">iptables -A INPUT -s 0.0.0.0/8 -j DROP</span><br><span class="line">iptables -A INPUT -d 0.0.0.0/8 -j DROP</span><br><span class="line">iptables -A INPUT -d 239.255.255.0/24 -j DROP</span><br><span class="line">iptables -A INPUT -d 255.255.255.255 -j DROP</span><br></pre></td></tr></table></figure><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul><li><p><a href="https://www.yaoblog.info/?p=7656" target="_blank" rel="noopener">使用 IPTABLES 防火墙阻挡常见攻击</a></p></li><li><p><a href="https://www.davex.pw/2017/10/01/how-to-prevent-ddos-by-iptables/" target="_blank" rel="noopener">使用 iptables 防止 DDos 攻击</a></p></li></ul>]]></content>
     
     <summary type="html">
     
       &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;接着上一期：Linux运维学习笔记7-3：网络和防火墙（一），继续整理关于&lt;code&gt;iptables&lt;/code&gt; 和 &lt;code&gt;netfilter&lt;/code&gt;的内容。&lt;/p&gt;
 &lt;h3 id=&quot;编写脚本定义iptables-规则&quot;&gt;&lt;a href=&quot;#编写脚本定义iptables-规则&quot; class=&quot;headerlink&quot; title=&quot;编写脚本定义iptables 规则&quot;&gt;&lt;/a&gt;编写脚本定义iptables 规则&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;需求：&lt;/strong&gt;只针对filter表，预设策略Input链DROP、其他两个链ACCEPT；然后针对192.168.188.0/24网段开通22端口，对所有网段开通80端口和21端口。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;脚本实现：&lt;/strong&gt;&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# /bin/bash&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ipt=&amp;apos;/etc/sbin/iptables&amp;apos;    //调用iptables，这里要用绝对命令&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -F       //删除所有规则&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -P INPUT DROP    //默认对filter表定义预设策略，所有input流量都丢弃&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -P OUTPUT ACCEPT    //定义预设策略，所有output流量都放行&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -P FORWARD ACCEPT   //表定义预设策略，所有forward流量都放行&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -m state --state RELETED,ETABLISHED -j ACCEPT   //相关数据包放行（这里不太清楚，直播课记得问一下）&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -A INPUT -s 192.168.188.0/24 -p tcp --dport 22 -j ACCEPT&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -A INPUT -p tcp --dport 80 -j ACCEPT&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -A INPUT -p tcp --dport 21 -j ACCEPT&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# /bin/bash&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ipt=&amp;apos;/etc/sbin/iptables&amp;apos;    //调用iptables，这里要用绝对命令&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -F       //删除所有规则&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -P INPUT DROP    //默认对filter表定义预设策略，所有input流量都丢弃&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -P OUTPUT ACCEPT    //定义预设策略，所有output流量都放行&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -P FORWARD ACCEPT   //表定义预设策略，所有forward流量都放行&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -m state --state RELATED,ESTABLISHED -j ACCEPT   //相关数据包放行&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -A INPUT -s 192.168.188.0/24 -p tcp --dport 22 -j ACCEPT&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -A INPUT -p tcp --dport 80 -j ACCEPT&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$ipt -A INPUT -p tcp --dport 21 -j ACCEPT&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -243,9 +288,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="tcpdump" scheme="https://steve-yuan-8276.github.io/tags/tcpdump/"/>
     
@@ -322,9 +367,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="iptables" scheme="https://steve-yuan-8276.github.io/tags/iptables/"/>
     
@@ -382,9 +427,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -460,9 +505,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="tcpdump" scheme="https://steve-yuan-8276.github.io/tags/tcpdump/"/>
     
@@ -498,9 +543,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -566,9 +611,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -605,9 +650,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -641,9 +686,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -671,9 +716,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -759,9 +804,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -837,9 +882,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -866,9 +911,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -927,9 +972,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -964,9 +1009,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -1010,39 +1055,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HowTo:如何优雅滴将电子书同步到kindle</title>
-    <link href="https://steve-yuan-8276.github.io/2018/04/16/howToSendBooksToKindle/"/>
-    <id>https://steve-yuan-8276.github.io/2018/04/16/howToSendBooksToKindle/</id>
-    <published>2018-04-16T00:59:02.000Z</published>
-    <updated>2018-04-16T02:55:29.737Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>书籍是人类进步的阶梯！这则笔记主要整理如何把书籍发送到Kindle的三个技巧。</p><h3 id="入门：利用邮箱发送到kindle"><a href="#入门：利用邮箱发送到kindle" class="headerlink" title="入门：利用邮箱发送到kindle"></a>入门：利用邮箱发送到kindle</h3><p>第一步：登陆个人的亚马逊kindle账户（没有的话需要注册一个），点击<code>管理我的内容和设备</code></p><p><img src="https://farm1.staticflickr.com/793/41443427342_a53c279219_o.png" alt=""></p> <a id="more"></a><p>点击‘设置’</p><p><img src="https://farm1.staticflickr.com/797/40592248735_b5d7391c12_o.png" alt=""></p><p>页面往下拉，电子书自动更新这里，选择 <code>已启用</code></p><p><img src="https://farm1.staticflickr.com/793/39677205650_dfec82e017_o.png" alt=""></p><p>在个人文档设置 这里的电子邮箱，指的是kindle设备的专属邮箱，你的每个设备对应一个kindle专属邮箱（Kindle账户登陆了几个设备（电脑客户算、手机客户端、Kindle电子书都算），就有几个专属邮箱；其实个人数据库是一样的，只不过推送到专属邮箱到电子书会在自动下载，而在其他的设备上需要手动点击下载而已）</p><p><img src="https://farm1.staticflickr.com/887/40592335795_7c682c2b1a_o.png" alt=""></p><p>添加个人<code>信任邮箱</code> （注：信任邮箱指的是你打算通过哪个邮箱发到kindle账户），只有添加了信任邮箱，亚马逊才允许通过该邮箱向kindle发送电子书；官方要求不能超过20个信任邮箱，不过一般人应该也没有那么多个人邮箱。</p><p><img src="https://farm1.staticflickr.com/822/27614111148_f949bf3aa0_o.png" alt=""></p><p>添加完成，理论上就可以用邮箱发送电子书了。发送成功之后，亚马逊会自动帮你推送到指定专属设备上。</p><p><strong>注意：</strong></p><ol><li><p>kindle官方支持mobi，你也可以把 <code>.doc</code>、 <code>.txt</code> 发过去，会自动转成mobi格式的文件推送到设备上。不过个人体验最好还是mobi，看起来很舒服。</p></li><li><p>邮箱一次性发送文件的个数<strong>不能超过25个。</strong></p></li><li><p>mobi电子书体积不能超过50兆，否则还是失败。</p></li></ol><h3 id="进阶：利用IFTTT将dropbox存储的电子书发到kindle"><a href="#进阶：利用IFTTT将dropbox存储的电子书发到kindle" class="headerlink" title="进阶：利用IFTTT将dropbox存储的电子书发到kindle"></a>进阶：利用<code>IFTTT</code>将<code>dropbox</code>存储的电子书发到<code>kindle</code></h3><p>这里涉及到了3个服务，特别介绍一下：</p><ul><li><p><a href="https://www.dropbox.com/" target="_blank" rel="noopener">Dropbox：</a>个人存储的神器，墙内不可用，需要科学上网。</p></li><li><p><a href="https://ifttt.com/" target="_blank" rel="noopener">IFTTT：</a>if this then that，顾名思义，就是让不会编程的人也能享受自动化的乐趣。墙内可用，不过支持的服务大多是像<code>google</code>、<code>dropbox</code>、<code>spotify</code>、<code>newyork times</code>等等这种404网站（说到这里脑子里突然涌现出两个成语：井底之蛙、一叶障目）</p></li><li><p>gmail：个人用过最好用的邮箱，天朝同样404……</p></li></ul><p>言归正传，如果你已经按照前面教程进行了邮箱设置，这里就很简单了。IFTTT既可以在电脑上操作，也有手机app，这里以电脑端为例：</p><p>第一步：注册<code>IFTTT</code>账号，假设你有<code>google</code>或者<code>facebook</code>账户，可以直接用这两个账号授权登陆。</p><p>第二步：搜索 kindle，就是红圈标出的这个，然后点击</p><p><img src="https://farm1.staticflickr.com/816/41444062322_a3a2527bc3_o.png" alt=""></p><p>第三步：点击 <code>turn on</code>,会自动在你的<code>dropbox</code>文件夹常见一个叫做<code>SentToKindle</code> 的文件夹（前提是你已经授权ifttt访问dropbox）；下面的邮箱地址填的是kindle设备的专属邮箱（这里也有个隐形前提，就是你已经授权ifttt访问google邮箱）。</p><p><img src="https://farm1.staticflickr.com/900/26614779627_494d3eef4f_o.png" alt=""></p><p>然后就没有什么啦，其余的选择保持默认就好了。设置完成后，随便拖一个mobi文件到<code>SentToKindle</code>，网络没问题的话过几分钟就自动推送到kindle设备了。</p><p><strong>注意：</strong></p><ol><li><p>如果遇到使用不了的情况，很有可能是授权问题，取消gmail邮箱授权，重新操作一次。</p></li><li><p>这个服务涉及到好几个授权，个人也不太确定这样做有没有隐私泄漏风险，酌情考虑使用吧。</p></li></ol><h3 id="再高级一点：使用calibre管理个人电子书"><a href="#再高级一点：使用calibre管理个人电子书" class="headerlink" title="再高级一点：使用calibre管理个人电子书"></a>再高级一点：使用<code>calibre</code>管理个人电子书</h3><p>calibre 是个开源免费软件，重点是真的免费！，而且支持这么多系统：</p><p><img src="https://farm1.staticflickr.com/876/40592933735_8eda24ee67_o.png" alt=""></p><p>进入<a href="https://calibre-ebook.com/download" target="_blank" rel="noopener">calibre官网</a>，选择相应的版本下载安装。在安装时候，会提示你可以提供个人邮箱推送的服务。实验了一下，发现最方便的还是添加google邮箱。</p><p>如果一开始犹豫不决没有添加的话，也可以在这里进行添加。注意确保该邮箱已经添加到亚马逊官网 Kindle 管理后台的 <code>【设置】</code>页面中的“已认可的发件人电子邮箱列表”中。</p><p><img src="https://farm1.staticflickr.com/881/27614880918_0de7c3146a_o.png" alt=""></p><p>这里还是推荐gmail邮箱，如果是其他邮箱的话还要设置服务和端口信息：</p><p>常见邮箱服务器设置：</p><table><thead><tr><th>邮箱服务商</th><th>主机名</th><th>端口</th><th>加密类型</th></tr></thead><tbody><tr><td>163 邮箱</td><td>smtp.163.com</td><td>465 或 587</td><td>SSL</td></tr><tr><td>126 邮箱</td><td>smtp.126.com</td><td>465 或 587</td><td>SSL</td></tr><tr><td>新浪邮箱</td><td>smtp.sina.com</td><td>465</td><td>SSL</td></tr><tr><td>Gmail</td><td>smtp.gmail.com</td><td>587</td><td>TLS</td></tr><tr><td>Hotmail/Live/Outlook邮箱</td><td>smtp-mail.outlook.com</td><td>587</td><td>TLS</td></tr></tbody></table><p>设置完成之后，可以测试一下，没问题就可以正常使用了。打个比方，比如在网上下载了一个epub格式的电子书，导入calibre之后转化为mobi格式，之后右键选择 <code>conect/share</code>选择邮箱发至kindle专属邮箱即可。<strong>注意，此处不要点错了，是<code>conect/share</code>！</strong></p><p>最后，在多说一句，其实calibre 更强大的功能在于书籍管理，有兴趣可以研究一下。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;书籍是人类进步的阶梯！这则笔记主要整理如何把书籍发送到Kindle的三个技巧。&lt;/p&gt;
-&lt;h3 id=&quot;入门：利用邮箱发送到kindle&quot;&gt;&lt;a href=&quot;#入门：利用邮箱发送到kindle&quot; class=&quot;headerlink&quot; title=&quot;入门：利用邮箱发送到kindle&quot;&gt;&lt;/a&gt;入门：利用邮箱发送到kindle&lt;/h3&gt;&lt;p&gt;第一步：登陆个人的亚马逊kindle账户（没有的话需要注册一个），点击&lt;code&gt;管理我的内容和设备&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://farm1.staticflickr.com/793/41443427342_a53c279219_o.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="kindle" scheme="https://steve-yuan-8276.github.io/categories/kindle/"/>
-    
-    
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
-      <category term="dropbox" scheme="https://steve-yuan-8276.github.io/tags/dropbox/"/>
-    
-      <category term="IFTTT" scheme="https://steve-yuan-8276.github.io/tags/IFTTT/"/>
-    
-      <category term="kinlde" scheme="https://steve-yuan-8276.github.io/tags/kinlde/"/>
     
   </entry>
   

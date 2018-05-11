@@ -4,7 +4,21 @@
   <url>
     <loc>https://steve-yuan-8276.github.io/2018/05/10/week8-1-linuxnotes-cron/</loc>
     
-    <lastmod>2018-05-10T14:48:26.587Z</lastmod>
+    <lastmod>2018-05-11T06:08:40.186Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/05/08/week7-4-howToMnageLinuxPart4/</loc>
+    
+    <lastmod>2018-05-11T01:41:39.011Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/05/08/week7-5-howToMnageLinuxPart5/</loc>
+    
+    <lastmod>2018-05-11T01:41:11.326Z</lastmod>
     
   </url>
   
@@ -23,23 +37,9 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/05/08/week7-4-howToMnageLinuxPart4/</loc>
-    
-    <lastmod>2018-05-10T12:51:23.126Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2018/05/07/week7-3-howToMnageLinuxPart3/</loc>
     
     <lastmod>2018-05-10T12:28:32.466Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/05/08/week7-5-howToMnageLinuxPart5/</loc>
-    
-    <lastmod>2018-05-09T09:35:14.534Z</lastmod>
     
   </url>
   
@@ -317,6 +317,13 @@
   </url>
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/12/web-webStatusCode/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.766Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2018/03/14/week1-1-basisOfCentOS/</loc>
     
     <lastmod>2018-04-02T14:26:02.766Z</lastmod>
@@ -331,35 +338,7 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/12/web-webStatusCode/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.766Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/04/shh-github/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/15/setHttps/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/30/reactNotes-environmentSetup/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/14/mapAndFilter/</loc>
     
     <lastmod>2018-04-02T14:26:02.765Z</lastmod>
     
@@ -373,6 +352,27 @@
   </url>
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/14/mapAndFilter/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/01/30/reactNotes-environmentSetup/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/01/04/shh-github/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2018/01/18/httpAndhttps-0/</loc>
     
     <lastmod>2018-04-02T14:26:02.764Z</lastmod>
@@ -380,14 +380,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/20/howToUseGoogle/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/13/howToUseJamine/</loc>
     
     <lastmod>2018-04-02T14:26:02.763Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/13/howToUseJamine/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/20/howToUseGoogle/</loc>
     
     <lastmod>2018-04-02T14:26:02.763Z</lastmod>
     
@@ -422,20 +422,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/26/freeCodeErr-1/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.761Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/22/freeCodeCampNotes-1/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.761Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/12/github-HowToBuildBlogWithGithub-md/</loc>
     
     <lastmod>2018-04-02T14:26:02.761Z</lastmod>
@@ -444,6 +430,20 @@
   
   <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/27/freeCodeCampPractice-JS/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.761Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/26/freeCodeErr-1/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.761Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/22/freeCodeCampNotes-1/</loc>
     
     <lastmod>2018-04-02T14:26:02.761Z</lastmod>
     
@@ -471,13 +471,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/02/27/basisOfReact-1-CommonErr/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/20/basisOfXpath/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
@@ -493,6 +486,13 @@
   
   <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/27/basisOfRegularExpressions/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/02/27/basisOfReact-1-CommonErr/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
     
@@ -520,14 +520,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/12/basisOfCat/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/06/basisOfAutomator/</loc>
     
     <lastmod>2018-04-02T14:26:02.758Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/06/basisOfAutomator/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/12/basisOfCat/</loc>
     
     <lastmod>2018-04-02T14:26:02.758Z</lastmod>
     
@@ -541,14 +541,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/22/advancedAit/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/13/HowToInstallCentOS/</loc>
     
     <lastmod>2018-04-02T14:26:02.757Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/13/HowToInstallCentOS/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/01/22/advancedAit/</loc>
     
     <lastmod>2018-04-02T14:26:02.757Z</lastmod>
     

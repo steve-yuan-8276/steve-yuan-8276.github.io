@@ -8,15 +8,15 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>rsync</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[mac笔记：有趣的命令行工具]]></title>
     <url>%2F2018%2F05%2F11%2FtrickofMac-bashShell%2F</url>
-    <content type="text"><![CDATA[写在前面整理一些有趣的命令行工具，主要来源都是github htop 工具： top 替代git地址：https://github.com/hishamhm/htop 安装：1brew install htop 使用：终端输入 htop： 快捷键操作 说明 h, ? F1 查看htop使用说明 S，F2 htop 设定 /，F3 搜索进程 \，F4 增量进程过滤器 T，F5 显示树形结构 &lt;, &gt;，F6 选择排序方式[ F7 可减少nice值可以提高对应进程的优先级 F8 可增加nice值，降低对应进程的优先级 K，F9 可对进程传递信号 q，F10 结束htop u 只显示一个给定的用户的过程 U 取消标记所有的进程 H 显示或隐藏用户线程 K 显示或隐藏内核线程 F 跟踪进程 P 按CPU 使用排序 M 按内存使用排序 T 按Time+ 使用排序 l 显示进程打开的文件 I 倒转排序顺序 s 选择某进程，按s:用strace追踪进程的系统调用 gifgen ：gif文件生成工具git地址：https://github.com/lukechilds/gifgen 安装：1brew install lukechilds/tap/gifgen 使用：命令行格式： 1gifgen [options] [input] 常用参数 说明 -o Output file [input.gif] -f Frames per second [10] -s Optimize for static background -v Display verbose output from ffmpeg 示例： 12345678//压缩视频文件为gifgifgen video.mp4//-o选项指定输出文件名称gifgen -o demo.gif SCM_1457.mp4//优化北京帧率gifgen -sf 15 screencap.mov]]></content>
+    <content type="text"><![CDATA[写在前面整理一些有趣的命令行工具，主要来源都是github htop 工具： top 替代git地址：https://github.com/hishamhm/htop 安装：1brew install htop 使用：终端输入 htop： 快捷键操作 说明 h, ? F1 查看htop使用说明 S，F2 htop 设定 /，F3 搜索进程 \，F4 增量进程过滤器 T，F5 显示树形结构 &lt;, &gt;，F6 选择排序方式[ F7 可减少nice值可以提高对应进程的优先级 F8 可增加nice值，降低对应进程的优先级 K，F9 可对进程传递信号 q，F10 结束htop u 只显示一个给定的用户的过程 U 取消标记所有的进程 H 显示或隐藏用户线程 K 显示或隐藏内核线程 F 跟踪进程 P 按CPU 使用排序 M 按内存使用排序 T 按Time+ 使用排序 l 显示进程打开的文件 I 倒转排序顺序 s 选择某进程，按s:用strace追踪进程的系统调用 gifgen ：gif文件生成工具git地址：https://github.com/lukechilds/gifgen 安装：1brew install lukechilds/tap/gifgen 使用：命令行格式： 1gifgen [options] [input] 常用参数 说明 -o Output file [input.gif] -f Frames per second [10] -s Optimize for static background -v Display verbose output from ffmpeg 示例： 12345678//压缩视频文件为gifgifgen video.mp4//-o选项指定输出文件名称gifgen -o demo.gif SCM_1457.mp4//优化北京帧率gifgen -sf 15 screencap.mov thefuck 自动更正命令行错误git地址：https://github.com/nvbn/thefuck 安装：1brew install thefuck 修改环境变量 12345vim ~/.bashrc //编辑bash配置文件，加入以下内容：eval $(thefuck --alias) //之后保存退出source ~/.bashrc 重新载入配置文件 使用：直接fuck就OK了，语法简单到令人发指。 示例： 12345678steve:steveBlog steveyuan$ ls als: a: No such file or directorysteve:steveBlog steveyuan$ fuckls [enter/↑/↓/ctrl+c]_config.yml node_modules scaffoldsa.txt package-lock.json sourcedb.json package.json themesgulpfile.js public]]></content>
       <categories>
         <category>mac</category>
       </categories>
@@ -34,8 +34,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>rsync</tag>
       </tags>
   </entry>
@@ -60,8 +60,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>crontab</tag>
         <tag>systemd</tag>
       </tags>
@@ -74,8 +74,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>pid</tag>
         <tag>tid</tag>
       </tags>
@@ -88,8 +88,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>firewalld</tag>
       </tags>
   </entry>
@@ -101,8 +101,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -113,8 +113,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>tcpdump</tag>
         <tag>wireshark</tag>
       </tags>
@@ -127,8 +127,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>iptables</tag>
         <tag>netfilter</tag>
       </tags>
@@ -142,8 +142,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -154,8 +154,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>tcpdump</tag>
         <tag>wireshark</tag>
       </tags>
@@ -169,8 +169,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -182,8 +182,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -195,8 +195,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -209,8 +209,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -222,8 +222,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -235,21 +235,21 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[Linux运维学习笔记6-1：正则之grep]]></title>
     <url>%2F2018%2F04%2F20%2Fweek6-1-basisOfRegEx-part1%2F</url>
-    <content type="text"><![CDATA[写在前面从这则笔记开始，分3节课整理linux下正则表达式的用法，主要涉及grep、sed、awk三个命令。 正则，就是一种文本处理的方法，这里有一些正则的基础知识。 正则表达式基础正则表达式正则表达式，是经过专门编写的文本字符串，用来匹配字符串，这里还整理了一篇正则基础。 元字符 表达式 描述 . 匹配单个任意字符 [] 匹配指定范围内的任意单个字符,比如[abc],[a-z],[0-9],[a-zA-Z] [^] 取非，匹配指定范围外的任意单个字符 [:space:] 匹配空白字符 [:punct:] 匹配所有标点符号的集合 [a-z]或 [:lower:] 匹配所有的小写字母 [A-Z]或 [:upper:] 匹配所有的大写字母 [a-zA-Z]或 [:alpha:] 匹配大小写字母 [0-9]或 [:digit:] 匹配数字 [0-9a-zA-Z]或 [:alnum:] 匹配数字和大小写字母 匹配次数 表达式 描述 * 匹配其前面的字符任意次，比如.*匹配任意字符任意次数 \? 匹配其前面的字符1次或0次 \{m,n\} 匹配其前字符最少m，最多n次） 字符锚定 表达式 描述 ^ 锚定行首，此字符后面的任意内容必须出现在行首 $ 锚定行尾，此字符前面的任意内容必须出现在行尾 ^$ 锚定空白行，可以统计空白行 \&lt;或\b 锚定词首，其后面的任意字符必须做为单词首部出现 \&gt;或\b 锚定词尾，其前面的任意字符必须做为单词尾部出现 拓展正则表达式相比于基础正则表达式，拓展正则表达式的不同之处主要在于以下几点： 在匹配次数方面，加入了 + ，表示匹配字符出现一次或多次； 基本正则表达式，使用( ) { } . ? |都需要转义,在扩展正则表达中不需要加转义符 \ |表示或者的意思。 grep和egrep 命令grep用法grep是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。 命令行格式：grep [参数] [关键词] [filename] 常用参数 用法 -c 打印符合要求的行数 -i 忽略大小写 -n 输出符合要求的行及行号 -v 取反 -r 归递处理，包含多级子目录 -A n n 为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 常见用法 匹配符合要求的行数grep -c &#39;keyword&#39; 搜索/etc目录及其多级子目录 grep -r /etc 匹配带有关键词的行，并输出行号 grep -n &#39;keyword&#39; 匹配不带有关键词的行，并输出行号 grep -v &#39;keyword&#39; 匹配包括数字的行 grep &#39;[0-9]&#39; 匹配不包括数字的行 grep -v &#39;[0-9]&#39; 匹配大写字母 grep [A-Z] 或 grep [[:upper:]] 匹配单行包含空格的内容 grep [[:space:]] 匹配单行包含标点符号的内容 grep [[:punct:]] 匹配单行包含数字和大小写字母的内容 grep [0-9a-z-A-Z]或grep [[:alnum:]] 匹配所有以#开头的行，并显示行号 grep -n &#39;^#&#39; 注：包括空行。 匹配所有的非空行和不以#开头的行 grep -vn &#39;^#&#39; 匹配任意一个字符 grep -n &#39;ro.t&#39; .表示任意字符 12[root@stevey ~]# cat a.txt | grep -n &apos;ro.t&apos;3:root:x:0:0:root:/root:/bin/bash 匹配任意多个字符 .* 表示0个或多个任意字符； 匹配特定重复次数的字符 此处需要用{}，其中为数字，表示为{n} 或{m, n}。其中 {n}表示特定次数；{m, n} 表示范围，m &lt; n 注： {}前后都要使用转义符号\；如果不想使用脱义符号，使用grep -E 或者egrep {n}表示特定次数； {m,n} 表示范围，m &lt; n n可以省略，表示m以上 m也可以省略，表示n次及以下 ABC特殊参数用法 -A n n为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 egrep 命令： grep 命令的升级版egrep 是 grep 的升级版，使用拓展式的正则表达式，与grep -E的效果相同。 + 匹配一个或多个字符 ? 匹配0个或1个字符 | 表示或者，表示二选一或者多选一，满足其中一个就可以 ()表示一个整体， 比如(oo)+， 匹配oo 出现一次或一次以上]]></content>
+    <content type="text"><![CDATA[写在前面从这则笔记开始，分3节课整理linux下正则表达式的用法，主要涉及grep、sed、awk三个命令。 正则，就是一种文本处理的方法，这里有一些正则的基础知识。 正则表达式基础正则表达式正则表达式，是经过专门编写的文本字符串，用来匹配字符串，这里还整理了一篇正则基础。 元字符 表达式 描述 . 匹配单个任意字符 [] 匹配指定范围内的任意单个字符,比如[abc],[a-z],[0-9],[a-zA-Z] [^] 取非，匹配指定范围外的任意单个字符 [:space:] 匹配空白字符 [:punct:] 匹配所有标点符号的集合 [a-z]或 [:lower:] 匹配所有的小写字母 [A-Z]或 [:upper:] 匹配所有的大写字母 [a-zA-Z]或 [:alpha:] 匹配大小写字母 [0-9]或 [:digit:] 匹配数字 [0-9a-zA-Z]或 [:alnum:] 匹配数字和大小写字母 匹配次数 表达式 描述 * 匹配其前面的字符任意次，比如.*匹配任意字符任意次数 \? 匹配其前面的字符1次或0次 \{m,n\} 匹配其前字符最少m，最多n次） 字符锚定 表达式 描述 ^ 锚定行首，此字符后面的任意内容必须出现在行首 $ 锚定行尾，此字符前面的任意内容必须出现在行尾 ^$ 锚定空白行，可以统计空白行 \&lt;或\b 锚定词首，其后面的任意字符必须做为单词首部出现 \&gt;或\b 锚定词尾，其前面的任意字符必须做为单词尾部出现 拓展正则表达式相比于基础正则表达式，拓展正则表达式的不同之处主要在于以下几点： 在匹配次数方面，加入了 + ，表示匹配字符出现一次或多次； 基本正则表达式，使用( ) { } . ? |都需要转义,在扩展正则表达中不需要加转义符 \ |表示或者的意思。 grep和egrep 命令grep用法grep是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。 命令行格式：grep [参数] [关键词] [filename] 常用参数 用法 -c 打印符合要求的行数 -i 忽略大小写 -n 输出符合要求的行及行号 -v 取反 -r 归递处理，包含多级子目录 -l 查询多文件时只输出包含匹配字符的文件名 -A n n 为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 常见用法 匹配符合要求的行数grep -c &#39;keyword&#39; 搜索/etc目录及其多级子目录 grep -r /etc 搜索当前目录下包含‘500’ 的文件名 1ls | grep -rl &apos;500&apos; 匹配带有关键词的行，并输出行号 grep -n &#39;keyword&#39; 匹配不带有关键词的行，并输出行号 grep -v &#39;keyword&#39; 匹配包括数字的行 grep &#39;[0-9]&#39; 匹配不包括数字的行 grep -v &#39;[0-9]&#39; 匹配大写字母 grep [A-Z] 或 grep [[:upper:]] 匹配单行包含空格的内容 grep [[:space:]] 匹配单行包含标点符号的内容 grep [[:punct:]] 匹配单行包含数字和大小写字母的内容 grep [0-9a-z-A-Z]或grep [[:alnum:]] 匹配所有以#开头的行，并显示行号 grep -n &#39;^#&#39; 注：包括空行。 匹配所有的非空行和不以#开头的行 grep -vn &#39;^#&#39; 匹配任意一个字符 grep -n &#39;ro.t&#39; .表示任意字符 12[root@stevey ~]# cat a.txt | grep -n &apos;ro.t&apos;3:root:x:0:0:root:/root:/bin/bash 匹配任意多个字符 .* 表示0个或多个任意字符； 匹配特定重复次数的字符 此处需要用{}，其中为数字，表示为{n} 或{m, n}。其中 {n}表示特定次数；{m, n} 表示范围，m &lt; n 注： {}前后都要使用转义符号\；如果不想使用脱义符号，使用grep -E 或者egrep {n}表示特定次数； {m,n} 表示范围，m &lt; n n可以省略，表示m以上 m也可以省略，表示n次及以下 ABC特殊参数用法 -A n n为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 egrep 命令： grep 命令的升级版egrep 是 grep 的升级版，使用拓展式的正则表达式，与grep -E的效果相同。 + 匹配一个或多个字符 ? 匹配0个或1个字符 | 表示或者，表示二选一或者多选一，满足其中一个就可以 ()表示一个整体， 比如(oo)+， 匹配oo 出现一次或一次以上]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -261,8 +261,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -275,8 +275,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -289,8 +289,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -303,8 +303,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -315,10 +315,10 @@
         <category>kindle</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>dropbox</tag>
         <tag>IFTTT</tag>
         <tag>kinlde</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -330,8 +330,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -344,8 +344,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -358,8 +358,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -372,8 +372,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -386,8 +386,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -413,8 +413,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -427,8 +427,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>lvm</tag>
       </tags>
   </entry>
@@ -441,8 +441,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -454,8 +454,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -467,8 +467,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -480,8 +480,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -493,8 +493,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -506,8 +506,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -519,8 +519,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -532,8 +532,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -545,8 +545,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -558,8 +558,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -583,8 +583,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -596,8 +596,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>rescueMode</tag>
       </tags>
   </entry>
@@ -610,8 +610,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>putty</tag>
         <tag>xshell</tag>
         <tag>iterm2</tag>
@@ -626,8 +626,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>ip</tag>
       </tags>
   </entry>
@@ -640,8 +640,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -794,8 +794,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -931,8 +931,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
         <tag>bash</tag>
       </tags>
   </entry>

@@ -46,9 +46,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="rsync" scheme="https://steve-yuan-8276.github.io/tags/rsync/"/>
     
@@ -59,9 +59,9 @@
     <link href="https://steve-yuan-8276.github.io/2018/05/11/trickofMac-bashShell/"/>
     <id>https://steve-yuan-8276.github.io/2018/05/11/trickofMac-bashShell/</id>
     <published>2018-05-11T09:43:00.000Z</published>
-    <updated>2018-05-14T10:28:20.475Z</updated>
+    <updated>2018-05-14T14:19:46.990Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>整理一些有趣的命令行工具，主要来源都是github</p><h3 id="htop-工具：-top-替代"><a href="#htop-工具：-top-替代" class="headerlink" title="htop 工具： top 替代"></a>htop 工具： top 替代</h3><p>git地址：<a href="https://github.com/hishamhm/htop" target="_blank" rel="noopener">https://github.com/hishamhm/htop</a> </p><h4 id="安装："><a href="#安装：" class="headerlink" title="安装："></a>安装：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install htop</span><br></pre></td></tr></table></figure><h4 id="使用："><a href="#使用：" class="headerlink" title="使用："></a>使用：</h4><p>终端输入 htop：</p><p><img src="https://farm1.staticflickr.com/972/42101390811_af946583a2_o.png" alt=""></p><a id="more"></a><table><thead><tr><th>快捷键操作</th><th>说明</th></tr></thead><tbody><tr><td>h, ? F1</td><td>查看htop使用说明</td></tr><tr><td>S，F2</td><td>htop 设定</td></tr><tr><td>/，F3</td><td>搜索进程</td></tr><tr><td>\，F4</td><td>增量进程过滤器</td></tr><tr><td>T，F5</td><td>显示树形结构</td></tr><tr><td>&lt;, &gt;，F6</td><td>选择排序方式[</td></tr><tr><td>F7</td><td>可减少nice值可以提高对应进程的优先级</td></tr><tr><td>F8</td><td>可增加nice值，降低对应进程的优先级</td></tr><tr><td>K，F9</td><td>可对进程传递信号</td></tr><tr><td>q，F10</td><td>结束htop</td></tr><tr><td>u</td><td>只显示一个给定的用户的过程</td></tr><tr><td>U</td><td>取消标记所有的进程</td></tr><tr><td>H</td><td>显示或隐藏用户线程</td></tr><tr><td>K</td><td>显示或隐藏内核线程</td></tr><tr><td>F</td><td>跟踪进程</td></tr><tr><td>P</td><td>按CPU 使用排序</td></tr><tr><td>M</td><td>按内存使用排序</td></tr><tr><td>T</td><td>按Time+ 使用排序</td></tr><tr><td>l</td><td>显示进程打开的文件</td></tr><tr><td>I</td><td>倒转排序顺序</td></tr><tr><td>s</td><td>选择某进程，按s:用strace追踪进程的系统调用</td></tr></tbody></table><h3 id="gifgen-：gif文件生成工具"><a href="#gifgen-：gif文件生成工具" class="headerlink" title="gifgen ：gif文件生成工具"></a><code>gifgen</code> ：gif文件生成工具</h3><p>git地址：<a href="https://github.com/lukechilds/gifgen" target="_blank" rel="noopener">https://github.com/lukechilds/gifgen</a></p><h4 id="安装：-1"><a href="#安装：-1" class="headerlink" title="安装："></a>安装：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install lukechilds/tap/gifgen</span><br></pre></td></tr></table></figure><h4 id="使用：-1"><a href="#使用：-1" class="headerlink" title="使用："></a>使用：</h4><p>命令行格式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gifgen [options] [input]</span><br></pre></td></tr></table></figure><table><thead><tr><th>常用参数</th><th>说明</th></tr></thead><tbody><tr><td>-o</td><td>Output file [input.gif]</td></tr><tr><td>-f</td><td>Frames per second [10]</td></tr><tr><td>-s</td><td>Optimize for static background</td></tr><tr><td>-v</td><td>Display verbose output from ffmpeg</td></tr></tbody></table><p><strong>示例：</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//压缩视频文件为gif</span><br><span class="line">gifgen video.mp4</span><br><span class="line"></span><br><span class="line">//-o选项指定输出文件名称</span><br><span class="line">gifgen -o demo.gif SCM_1457.mp4</span><br><span class="line"></span><br><span class="line">//优化北京帧率</span><br><span class="line">gifgen -sf 15 screencap.mov</span><br></pre></td></tr></table></figure>]]></content>
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>整理一些有趣的命令行工具，主要来源都是github</p><h3 id="htop-工具：-top-替代"><a href="#htop-工具：-top-替代" class="headerlink" title="htop 工具： top 替代"></a>htop 工具： top 替代</h3><p>git地址：<a href="https://github.com/hishamhm/htop" target="_blank" rel="noopener">https://github.com/hishamhm/htop</a> </p><h4 id="安装："><a href="#安装：" class="headerlink" title="安装："></a>安装：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install htop</span><br></pre></td></tr></table></figure><h4 id="使用："><a href="#使用：" class="headerlink" title="使用："></a>使用：</h4><p>终端输入 htop：</p><p><img src="https://farm1.staticflickr.com/972/42101390811_af946583a2_o.png" alt=""></p><a id="more"></a><table><thead><tr><th>快捷键操作</th><th>说明</th></tr></thead><tbody><tr><td>h, ? F1</td><td>查看htop使用说明</td></tr><tr><td>S，F2</td><td>htop 设定</td></tr><tr><td>/，F3</td><td>搜索进程</td></tr><tr><td>\，F4</td><td>增量进程过滤器</td></tr><tr><td>T，F5</td><td>显示树形结构</td></tr><tr><td>&lt;, &gt;，F6</td><td>选择排序方式[</td></tr><tr><td>F7</td><td>可减少nice值可以提高对应进程的优先级</td></tr><tr><td>F8</td><td>可增加nice值，降低对应进程的优先级</td></tr><tr><td>K，F9</td><td>可对进程传递信号</td></tr><tr><td>q，F10</td><td>结束htop</td></tr><tr><td>u</td><td>只显示一个给定的用户的过程</td></tr><tr><td>U</td><td>取消标记所有的进程</td></tr><tr><td>H</td><td>显示或隐藏用户线程</td></tr><tr><td>K</td><td>显示或隐藏内核线程</td></tr><tr><td>F</td><td>跟踪进程</td></tr><tr><td>P</td><td>按CPU 使用排序</td></tr><tr><td>M</td><td>按内存使用排序</td></tr><tr><td>T</td><td>按Time+ 使用排序</td></tr><tr><td>l</td><td>显示进程打开的文件</td></tr><tr><td>I</td><td>倒转排序顺序</td></tr><tr><td>s</td><td>选择某进程，按s:用strace追踪进程的系统调用</td></tr></tbody></table><h3 id="gifgen-：gif文件生成工具"><a href="#gifgen-：gif文件生成工具" class="headerlink" title="gifgen ：gif文件生成工具"></a><code>gifgen</code> ：gif文件生成工具</h3><p>git地址：<a href="https://github.com/lukechilds/gifgen" target="_blank" rel="noopener">https://github.com/lukechilds/gifgen</a></p><h4 id="安装：-1"><a href="#安装：-1" class="headerlink" title="安装："></a>安装：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install lukechilds/tap/gifgen</span><br></pre></td></tr></table></figure><h4 id="使用：-1"><a href="#使用：-1" class="headerlink" title="使用："></a>使用：</h4><p>命令行格式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gifgen [options] [input]</span><br></pre></td></tr></table></figure><table><thead><tr><th>常用参数</th><th>说明</th></tr></thead><tbody><tr><td>-o</td><td>Output file [input.gif]</td></tr><tr><td>-f</td><td>Frames per second [10]</td></tr><tr><td>-s</td><td>Optimize for static background</td></tr><tr><td>-v</td><td>Display verbose output from ffmpeg</td></tr></tbody></table><p><strong>示例：</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//压缩视频文件为gif</span><br><span class="line">gifgen video.mp4</span><br><span class="line"></span><br><span class="line">//-o选项指定输出文件名称</span><br><span class="line">gifgen -o demo.gif SCM_1457.mp4</span><br><span class="line"></span><br><span class="line">//优化北京帧率</span><br><span class="line">gifgen -sf 15 screencap.mov</span><br></pre></td></tr></table></figure><h3 id="thefuck-自动更正命令行错误"><a href="#thefuck-自动更正命令行错误" class="headerlink" title="thefuck 自动更正命令行错误"></a>thefuck 自动更正命令行错误</h3><p>git地址：<a href="https://github.com/nvbn/thefuck" target="_blank" rel="noopener">https://github.com/nvbn/thefuck</a></p><h4 id="安装：-2"><a href="#安装：-2" class="headerlink" title="安装："></a>安装：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install thefuck</span><br></pre></td></tr></table></figure><p>修改环境变量</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bashrc    //编辑bash配置文件，加入以下内容：</span><br><span class="line"></span><br><span class="line">eval $(thefuck --alias)    //之后保存退出</span><br><span class="line"></span><br><span class="line">source ~/.bashrc    重新载入配置文件</span><br></pre></td></tr></table></figure><h4 id="使用：-2"><a href="#使用：-2" class="headerlink" title="使用："></a>使用：</h4><p>直接<code>fuck</code>就OK了，语法简单到令人发指。</p><p>示例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">steve:steveBlog steveyuan$ ls a</span><br><span class="line">ls: a: No such file or directory</span><br><span class="line">steve:steveBlog steveyuan$ fuck</span><br><span class="line">ls [enter/↑/↓/ctrl+c]</span><br><span class="line">_config.ymlnode_modulesscaffolds</span><br><span class="line">a.txtpackage-lock.jsonsource</span><br><span class="line">db.jsonpackage.jsonthemes</span><br><span class="line">gulpfile.jspublic</span><br></pre></td></tr></table></figure>]]></content>
     
     <summary type="html">
     
@@ -120,9 +120,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="rsync" scheme="https://steve-yuan-8276.github.io/tags/rsync/"/>
     
@@ -220,9 +220,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="crontab" scheme="https://steve-yuan-8276.github.io/tags/crontab/"/>
     
@@ -258,9 +258,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="pid" scheme="https://steve-yuan-8276.github.io/tags/pid/"/>
     
@@ -296,9 +296,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="firewalld" scheme="https://steve-yuan-8276.github.io/tags/firewalld/"/>
     
@@ -325,9 +325,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -401,9 +401,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="tcpdump" scheme="https://steve-yuan-8276.github.io/tags/tcpdump/"/>
     
@@ -480,9 +480,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="iptables" scheme="https://steve-yuan-8276.github.io/tags/iptables/"/>
     
@@ -540,9 +540,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -618,9 +618,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
       <category term="tcpdump" scheme="https://steve-yuan-8276.github.io/tags/tcpdump/"/>
     
@@ -656,9 +656,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -724,9 +724,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -763,9 +763,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -799,9 +799,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -829,9 +829,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -917,9 +917,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -928,9 +928,9 @@
     <link href="https://steve-yuan-8276.github.io/2018/04/20/week6-1-basisOfRegEx-part1/"/>
     <id>https://steve-yuan-8276.github.io/2018/04/20/week6-1-basisOfRegEx-part1/</id>
     <published>2018-04-20T08:02:52.000Z</published>
-    <updated>2018-04-26T12:22:42.256Z</updated>
+    <updated>2018-05-14T13:28:33.659Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>从这则笔记开始，分3节课整理linux下正则表达式的用法，主要涉及grep、sed、awk三个命令。</p><p>正则，就是一种文本处理的方法，这里有一些<a href="https://www.steve-yuan.com/2018/04/19/linuxNotes-BasisOfRegularExpression/#more" target="_blank" rel="noopener">正则的基础知识</a>。</p><h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><h4 id="基础正则表达式"><a href="#基础正则表达式" class="headerlink" title="基础正则表达式"></a>基础正则表达式</h4><p>正则表达式，是经过专门编写的文本字符串，用来匹配字符串，这里还整理了一篇<a href="https://www.steve-yuan.com/2018/04/19/linuxNotes-BasisOfRegularExpression/" target="_blank" rel="noopener">正则基础</a>。</p><h5 id="元字符"><a href="#元字符" class="headerlink" title="元字符"></a>元字符</h5><table><thead><tr><th>表达式</th><th>描述</th></tr></thead><tbody><tr><td><code>.</code></td><td>匹配单个任意字符 </td></tr><tr><td><code>[]</code></td><td>匹配指定范围内的任意单个字符,比如<code>[abc],[a-z],[0-9],[a-zA-Z]</code></td></tr><tr><td><code>[^]</code></td><td>取非，匹配指定范围外的任意单个字符 </td></tr><tr><td><code>[:space:]</code></td><td>匹配空白字符 </td></tr><tr><td><code>[:punct:]</code></td><td>匹配所有标点符号的集合 </td></tr><tr><td><code>[a-z]</code>或 <code>[:lower:]</code></td><td>匹配所有的小写字母 </td></tr><tr><td><code>[A-Z]</code>或 <code>[:upper:]</code></td><td>匹配所有的大写字母 </td></tr><tr><td><code>[a-zA-Z]</code>或 <code>[:alpha:]</code></td><td>匹配大小写字母 </td></tr><tr><td><code>[0-9]</code>或 <code>[:digit:]</code></td><td>匹配数字 </td></tr><tr><td><code>[0-9a-zA-Z]</code>或 <code>[:alnum:]</code></td><td>匹配数字和大小写字母 </td></tr></tbody></table><a id="more"></a><h5 id="匹配次数"><a href="#匹配次数" class="headerlink" title="匹配次数"></a>匹配次数</h5><table><thead><tr><th>表达式</th><th>描述</th></tr></thead><tbody><tr><td><code>*</code></td><td>匹配其前面的字符任意次，比如<code>.*</code>匹配任意字符任意次数  </td></tr><tr><td><code>\?</code></td><td>匹配其前面的字符1次或0次 </td></tr><tr><td><code>\{m,n\}</code></td><td>匹配其前字符最少m，最多n次）  </td></tr></tbody></table><h5 id="字符锚定"><a href="#字符锚定" class="headerlink" title="字符锚定"></a>字符锚定</h5><table><thead><tr><th>表达式</th><th>描述</th></tr></thead><tbody><tr><td><code>^</code></td><td>锚定行首，此字符后面的任意内容必须出现在行首 </td></tr><tr><td><code>$</code></td><td>锚定行尾，此字符前面的任意内容必须出现在行尾   </td></tr><tr><td><code>^$</code></td><td>锚定空白行，可以统计空白行 </td></tr><tr><td><code>\&lt;</code>或<code>\b</code></td><td>锚定词首，其后面的任意字符必须做为单词首部出现 </td></tr><tr><td><code>\&gt;</code>或<code>\b</code></td><td>锚定词尾，其前面的任意字符必须做为单词尾部出现                               </td></tr></tbody></table><h4 id="拓展正则表达式"><a href="#拓展正则表达式" class="headerlink" title="拓展正则表达式"></a>拓展正则表达式</h4><p>相比于基础正则表达式，拓展正则表达式的不同之处主要在于以下几点：</p><ol><li><p>在匹配次数方面，加入了 <code>+</code> ，表示匹配字符出现一次或多次；</p></li><li><p>基本正则表达式，使用<code>( ) { } . ? |</code>都需要转义,在扩展正则表达中不需要加转义符 <code>\</code></p></li><li><p><code>|</code>表示或者的意思。</p></li></ol><h3 id="grep和egrep-命令"><a href="#grep和egrep-命令" class="headerlink" title="grep和egrep 命令"></a><code>grep</code>和<code>egrep</code> 命令</h3><h4 id="grep用法"><a href="#grep用法" class="headerlink" title="grep用法"></a><code>grep</code>用法</h4><p><code>grep</code>是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。</p><p>命令行格式：<code>grep [参数] [关键词] [filename]</code></p><table><thead><tr><th>常用参数</th><th>用法</th></tr></thead><tbody><tr><td>-c</td><td>打印符合要求的行数</td></tr><tr><td>-i</td><td>忽略大小写</td></tr><tr><td>-n</td><td>输出符合要求的行及行号</td></tr><tr><td>-v</td><td>取反</td></tr><tr><td>-r</td><td>归递处理，包含多级子目录</td></tr><tr><td>-A n</td><td>n 为数字，打印符合条件的行及后面n行</td></tr><tr><td>-B n</td><td>n 为数字，打印符合条件的行及前面n行</td></tr><tr><td>-C n</td><td>n 为数字，打印符合条件的行及前、后各n行</td></tr></tbody></table><h5 id="常见用法"><a href="#常见用法" class="headerlink" title="常见用法"></a>常见用法</h5><ul><li>匹配符合要求的行数<code>grep -c &#39;keyword&#39;</code> </li></ul><p><img src="https://farm1.staticflickr.com/823/41663428611_5426e414db_o.png" alt=""></p><ul><li>搜索<code>/etc</code>目录及其多级子目录 <code>grep -r /etc</code></li></ul><p><img src="https://farm1.staticflickr.com/957/26796383137_6ef40a414d_o.png" alt=""></p><ul><li>匹配带有关键词的行，并输出行号  <code>grep -n &#39;keyword&#39;</code>    </li></ul><p><img src="https://farm1.staticflickr.com/926/41535513722_7341af2207_o.png" alt=""></p><ul><li>匹配不带有关键词的行，并输出行号 <code>grep -v &#39;keyword&#39;</code></li></ul><p><img src="https://farm1.staticflickr.com/923/40865213384_8d63bca7f8_o.png" alt=""></p><ul><li>匹配包括数字的行 <code>grep &#39;[0-9]&#39;</code></li></ul><p><img src="https://farm1.staticflickr.com/898/26708034147_9edd8299e8_o.png" alt=""></p><ul><li>匹配不包括数字的行 <code>grep -v &#39;[0-9]&#39;</code></li></ul><p><img src="https://farm1.staticflickr.com/893/40865271714_03a0143a88_o.png" alt=""></p><ul><li>匹配大写字母  <code>grep [A-Z]</code> 或 <code>grep [[:upper:]]</code></li></ul><p><img src="https://farm1.staticflickr.com/826/26771685257_976bdb4c37_o.png" alt=""></p><ul><li>匹配单行包含空格的内容 <code>grep [[:space:]]</code></li></ul><p><img src="https://farm1.staticflickr.com/940/41600180172_0ebe0ceafc_o.png" alt=""></p><ul><li>匹配单行包含标点符号的内容 <code>grep [[:punct:]]</code></li></ul><p><img src="https://farm1.staticflickr.com/834/39832145770_b5bcfa81a4_o.png" alt=""></p><p>匹配单行包含数字和大小写字母的内容 <code>grep [0-9a-z-A-Z]</code>或<code>grep [[:alnum:]]</code></p><p><img src="https://farm1.staticflickr.com/787/40929599884_8b877957c0_o.png" alt=""></p><p><img src="https://farm1.staticflickr.com/809/26771817517_18ea2f9f56_o.png" alt=""></p><ul><li>匹配所有以<code>#</code>开头的行，并显示行号 <code>grep -n &#39;^#&#39;</code> <strong>注：包括空行。</strong></li></ul><p><img src="https://farm1.staticflickr.com/834/27706843708_2a521350d5_o.png" alt=""></p><ul><li>匹配所有的非空行和不以#开头的行 <code>grep -vn &#39;^#&#39;</code></li></ul><p><img src="https://farm1.staticflickr.com/901/26709062077_fae925c39b_o.png" alt=""></p><ul><li>匹配任意一个字符 <code>grep -n &#39;ro.t&#39;</code> <code>.</code>表示任意字符</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# cat a.txt | grep -n &apos;ro.t&apos;</span><br><span class="line">3:root:x:0:0:root:/root:/bin/bash</span><br></pre></td></tr></table></figure><ul><li>匹配任意多个字符 .*  表示0个或多个任意字符；</li></ul><p><img src="https://farm1.staticflickr.com/811/26708998947_6639537642_o.png" alt=""></p><ul><li>匹配特定重复次数的字符</li></ul><p>此处需要用<code>{}</code>，其中为数字，表示为<code>{n}</code> 或<code>{m, n}</code>。其中 <code>{n}</code>表示特定次数；<code>{m, n}</code> 表示范围，<code>m &lt; n</code></p><p><strong>注：</strong> <code>{}</code>前后都要使用转义符号<code>\</code>；如果不想使用脱义符号，使用<code>grep -E</code> 或者<code>egrep</code></p><p><code>{n}</code>表示特定次数；</p><p><img src="https://farm1.staticflickr.com/813/40911570534_cdc0533a11_o.png" alt=""></p><p><code>{m,n}</code> 表示范围，<code>m &lt; n</code></p><p><img src="https://farm1.staticflickr.com/843/26753730477_39a206e94d_o.png" alt=""></p><p><code>n</code>可以省略，表示<code>m</code>以上</p><p><img src="https://farm1.staticflickr.com/788/27753256208_8f90164dcd_o.png" alt=""></p><p><code>m</code>也可以省略，表示<code>n</code>次及以下</p><p><img src="https://farm1.staticflickr.com/828/41582086382_c96f0d1885_o.png" alt=""></p><h5 id="ABC特殊参数用法"><a href="#ABC特殊参数用法" class="headerlink" title="ABC特殊参数用法"></a>ABC特殊参数用法</h5><ul><li><code>-A n</code> <code>n</code>为数字，打印符合条件的行及后面<code>n</code>行</li></ul><p><img src="https://farm1.staticflickr.com/891/39814732550_f5427deaaf_o.png" alt=""></p><ul><li><code>-B n</code> <code>n</code> 为数字，打印符合条件的行及前面<code>n</code>行</li></ul><p><img src="https://farm1.staticflickr.com/841/41622242561_b10c6fc037_o.png" alt=""></p><ul><li><code>-C n</code> <code>n</code> 为数字，打印符合条件的行及前、后各<code>n</code>行</li></ul><p><img src="https://farm1.staticflickr.com/865/39814799080_757fba791c_o.png" alt=""></p><h3 id="egrep-命令：-grep-命令的升级版"><a href="#egrep-命令：-grep-命令的升级版" class="headerlink" title="egrep 命令： grep 命令的升级版"></a><code>egrep</code> 命令： <code>grep</code> 命令的升级版</h3><p><code>egrep</code> 是 <code>grep</code> 的升级版，使用拓展式的正则表达式，与<code>grep -E</code>的效果相同。</p><ul><li><code>+</code> 匹配一个或多个字符</li></ul><p><img src="https://farm1.staticflickr.com/876/41640348821_730ef66c52_o.png" alt=""></p><ul><li><code>?</code> 匹配0个或1个字符</li></ul><p><img src="https://farm1.staticflickr.com/936/41640392701_66516eb7fc_o.png" alt=""></p><ul><li><code>|</code> 表示或者，表示二选一或者多选一，满足其中一个就可以</li></ul><p><img src="https://farm1.staticflickr.com/881/39832853520_fa2cedb4b1_o.png" alt=""></p><ul><li><code>()</code>表示一个整体， 比如<code>(oo)+</code>， 匹配<code>oo</code> 出现一次或一次以上 </li></ul><p><img src="https://farm1.staticflickr.com/834/26772532847_417010a494_o.png" alt=""></p>]]></content>
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>从这则笔记开始，分3节课整理linux下正则表达式的用法，主要涉及grep、sed、awk三个命令。</p><p>正则，就是一种文本处理的方法，这里有一些<a href="https://www.steve-yuan.com/2018/04/19/linuxNotes-BasisOfRegularExpression/#more" target="_blank" rel="noopener">正则的基础知识</a>。</p><h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><h4 id="基础正则表达式"><a href="#基础正则表达式" class="headerlink" title="基础正则表达式"></a>基础正则表达式</h4><p>正则表达式，是经过专门编写的文本字符串，用来匹配字符串，这里还整理了一篇<a href="https://www.steve-yuan.com/2018/04/19/linuxNotes-BasisOfRegularExpression/" target="_blank" rel="noopener">正则基础</a>。</p><h5 id="元字符"><a href="#元字符" class="headerlink" title="元字符"></a>元字符</h5><table><thead><tr><th>表达式</th><th>描述</th></tr></thead><tbody><tr><td><code>.</code></td><td>匹配单个任意字符 </td></tr><tr><td><code>[]</code></td><td>匹配指定范围内的任意单个字符,比如<code>[abc],[a-z],[0-9],[a-zA-Z]</code></td></tr><tr><td><code>[^]</code></td><td>取非，匹配指定范围外的任意单个字符 </td></tr><tr><td><code>[:space:]</code></td><td>匹配空白字符 </td></tr><tr><td><code>[:punct:]</code></td><td>匹配所有标点符号的集合 </td></tr><tr><td><code>[a-z]</code>或 <code>[:lower:]</code></td><td>匹配所有的小写字母 </td></tr><tr><td><code>[A-Z]</code>或 <code>[:upper:]</code></td><td>匹配所有的大写字母 </td></tr><tr><td><code>[a-zA-Z]</code>或 <code>[:alpha:]</code></td><td>匹配大小写字母 </td></tr><tr><td><code>[0-9]</code>或 <code>[:digit:]</code></td><td>匹配数字 </td></tr><tr><td><code>[0-9a-zA-Z]</code>或 <code>[:alnum:]</code></td><td>匹配数字和大小写字母 </td></tr></tbody></table><a id="more"></a><h5 id="匹配次数"><a href="#匹配次数" class="headerlink" title="匹配次数"></a>匹配次数</h5><table><thead><tr><th>表达式</th><th>描述</th></tr></thead><tbody><tr><td><code>*</code></td><td>匹配其前面的字符任意次，比如<code>.*</code>匹配任意字符任意次数  </td></tr><tr><td><code>\?</code></td><td>匹配其前面的字符1次或0次 </td></tr><tr><td><code>\{m,n\}</code></td><td>匹配其前字符最少m，最多n次）  </td></tr></tbody></table><h5 id="字符锚定"><a href="#字符锚定" class="headerlink" title="字符锚定"></a>字符锚定</h5><table><thead><tr><th>表达式</th><th>描述</th></tr></thead><tbody><tr><td><code>^</code></td><td>锚定行首，此字符后面的任意内容必须出现在行首 </td></tr><tr><td><code>$</code></td><td>锚定行尾，此字符前面的任意内容必须出现在行尾   </td></tr><tr><td><code>^$</code></td><td>锚定空白行，可以统计空白行 </td></tr><tr><td><code>\&lt;</code>或<code>\b</code></td><td>锚定词首，其后面的任意字符必须做为单词首部出现 </td></tr><tr><td><code>\&gt;</code>或<code>\b</code></td><td>锚定词尾，其前面的任意字符必须做为单词尾部出现                               </td></tr></tbody></table><h4 id="拓展正则表达式"><a href="#拓展正则表达式" class="headerlink" title="拓展正则表达式"></a>拓展正则表达式</h4><p>相比于基础正则表达式，拓展正则表达式的不同之处主要在于以下几点：</p><ol><li><p>在匹配次数方面，加入了 <code>+</code> ，表示匹配字符出现一次或多次；</p></li><li><p>基本正则表达式，使用<code>( ) { } . ? |</code>都需要转义,在扩展正则表达中不需要加转义符 <code>\</code></p></li><li><p><code>|</code>表示或者的意思。</p></li></ol><h3 id="grep和egrep-命令"><a href="#grep和egrep-命令" class="headerlink" title="grep和egrep 命令"></a><code>grep</code>和<code>egrep</code> 命令</h3><h4 id="grep用法"><a href="#grep用法" class="headerlink" title="grep用法"></a><code>grep</code>用法</h4><p><code>grep</code>是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。</p><p>命令行格式：<code>grep [参数] [关键词] [filename]</code></p><table><thead><tr><th>常用参数</th><th>用法</th></tr></thead><tbody><tr><td>-c</td><td>打印符合要求的行数</td></tr><tr><td>-i</td><td>忽略大小写</td></tr><tr><td>-n</td><td>输出符合要求的行及行号</td></tr><tr><td>-v</td><td>取反</td></tr><tr><td>-r</td><td>归递处理，包含多级子目录</td></tr><tr><td>-l</td><td>查询多文件时只输出包含匹配字符的文件名</td></tr><tr><td>-A n</td><td>n 为数字，打印符合条件的行及后面n行</td></tr><tr><td>-B n</td><td>n 为数字，打印符合条件的行及前面n行</td></tr><tr><td>-C n</td><td>n 为数字，打印符合条件的行及前、后各n行</td></tr></tbody></table><h5 id="常见用法"><a href="#常见用法" class="headerlink" title="常见用法"></a>常见用法</h5><ul><li>匹配符合要求的行数<code>grep -c &#39;keyword&#39;</code> </li></ul><p><img src="https://farm1.staticflickr.com/823/41663428611_5426e414db_o.png" alt=""></p><ul><li>搜索<code>/etc</code>目录及其多级子目录 <code>grep -r /etc</code></li></ul><p><img src="https://farm1.staticflickr.com/957/26796383137_6ef40a414d_o.png" alt=""></p><ul><li>搜索当前目录下包含‘500’ 的文件名</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls | grep -rl &apos;500&apos;</span><br></pre></td></tr></table></figure><ul><li>匹配带有关键词的行，并输出行号  <code>grep -n &#39;keyword&#39;</code>    </li></ul><p><img src="https://farm1.staticflickr.com/926/41535513722_7341af2207_o.png" alt=""></p><ul><li>匹配不带有关键词的行，并输出行号 <code>grep -v &#39;keyword&#39;</code></li></ul><p><img src="https://farm1.staticflickr.com/923/40865213384_8d63bca7f8_o.png" alt=""></p><ul><li>匹配包括数字的行 <code>grep &#39;[0-9]&#39;</code></li></ul><p><img src="https://farm1.staticflickr.com/898/26708034147_9edd8299e8_o.png" alt=""></p><ul><li>匹配不包括数字的行 <code>grep -v &#39;[0-9]&#39;</code></li></ul><p><img src="https://farm1.staticflickr.com/893/40865271714_03a0143a88_o.png" alt=""></p><ul><li>匹配大写字母  <code>grep [A-Z]</code> 或 <code>grep [[:upper:]]</code></li></ul><p><img src="https://farm1.staticflickr.com/826/26771685257_976bdb4c37_o.png" alt=""></p><ul><li>匹配单行包含空格的内容 <code>grep [[:space:]]</code></li></ul><p><img src="https://farm1.staticflickr.com/940/41600180172_0ebe0ceafc_o.png" alt=""></p><ul><li>匹配单行包含标点符号的内容 <code>grep [[:punct:]]</code></li></ul><p><img src="https://farm1.staticflickr.com/834/39832145770_b5bcfa81a4_o.png" alt=""></p><p>匹配单行包含数字和大小写字母的内容 <code>grep [0-9a-z-A-Z]</code>或<code>grep [[:alnum:]]</code></p><p><img src="https://farm1.staticflickr.com/787/40929599884_8b877957c0_o.png" alt=""></p><p><img src="https://farm1.staticflickr.com/809/26771817517_18ea2f9f56_o.png" alt=""></p><ul><li>匹配所有以<code>#</code>开头的行，并显示行号 <code>grep -n &#39;^#&#39;</code> <strong>注：包括空行。</strong></li></ul><p><img src="https://farm1.staticflickr.com/834/27706843708_2a521350d5_o.png" alt=""></p><ul><li>匹配所有的非空行和不以#开头的行 <code>grep -vn &#39;^#&#39;</code></li></ul><p><img src="https://farm1.staticflickr.com/901/26709062077_fae925c39b_o.png" alt=""></p><ul><li>匹配任意一个字符 <code>grep -n &#39;ro.t&#39;</code> <code>.</code>表示任意字符</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# cat a.txt | grep -n &apos;ro.t&apos;</span><br><span class="line">3:root:x:0:0:root:/root:/bin/bash</span><br></pre></td></tr></table></figure><ul><li>匹配任意多个字符 .*  表示0个或多个任意字符；</li></ul><p><img src="https://farm1.staticflickr.com/811/26708998947_6639537642_o.png" alt=""></p><ul><li>匹配特定重复次数的字符</li></ul><p>此处需要用<code>{}</code>，其中为数字，表示为<code>{n}</code> 或<code>{m, n}</code>。其中 <code>{n}</code>表示特定次数；<code>{m, n}</code> 表示范围，<code>m &lt; n</code></p><p><strong>注：</strong> <code>{}</code>前后都要使用转义符号<code>\</code>；如果不想使用脱义符号，使用<code>grep -E</code> 或者<code>egrep</code></p><p><code>{n}</code>表示特定次数；</p><p><img src="https://farm1.staticflickr.com/813/40911570534_cdc0533a11_o.png" alt=""></p><p><code>{m,n}</code> 表示范围，<code>m &lt; n</code></p><p><img src="https://farm1.staticflickr.com/843/26753730477_39a206e94d_o.png" alt=""></p><p><code>n</code>可以省略，表示<code>m</code>以上</p><p><img src="https://farm1.staticflickr.com/788/27753256208_8f90164dcd_o.png" alt=""></p><p><code>m</code>也可以省略，表示<code>n</code>次及以下</p><p><img src="https://farm1.staticflickr.com/828/41582086382_c96f0d1885_o.png" alt=""></p><h5 id="ABC特殊参数用法"><a href="#ABC特殊参数用法" class="headerlink" title="ABC特殊参数用法"></a>ABC特殊参数用法</h5><ul><li><code>-A n</code> <code>n</code>为数字，打印符合条件的行及后面<code>n</code>行</li></ul><p><img src="https://farm1.staticflickr.com/891/39814732550_f5427deaaf_o.png" alt=""></p><ul><li><code>-B n</code> <code>n</code> 为数字，打印符合条件的行及前面<code>n</code>行</li></ul><p><img src="https://farm1.staticflickr.com/841/41622242561_b10c6fc037_o.png" alt=""></p><ul><li><code>-C n</code> <code>n</code> 为数字，打印符合条件的行及前、后各<code>n</code>行</li></ul><p><img src="https://farm1.staticflickr.com/865/39814799080_757fba791c_o.png" alt=""></p><h3 id="egrep-命令：-grep-命令的升级版"><a href="#egrep-命令：-grep-命令的升级版" class="headerlink" title="egrep 命令： grep 命令的升级版"></a><code>egrep</code> 命令： <code>grep</code> 命令的升级版</h3><p><code>egrep</code> 是 <code>grep</code> 的升级版，使用拓展式的正则表达式，与<code>grep -E</code>的效果相同。</p><ul><li><code>+</code> 匹配一个或多个字符</li></ul><p><img src="https://farm1.staticflickr.com/876/41640348821_730ef66c52_o.png" alt=""></p><ul><li><code>?</code> 匹配0个或1个字符</li></ul><p><img src="https://farm1.staticflickr.com/936/41640392701_66516eb7fc_o.png" alt=""></p><ul><li><code>|</code> 表示或者，表示二选一或者多选一，满足其中一个就可以</li></ul><p><img src="https://farm1.staticflickr.com/881/39832853520_fa2cedb4b1_o.png" alt=""></p><ul><li><code>()</code>表示一个整体， 比如<code>(oo)+</code>， 匹配<code>oo</code> 出现一次或一次以上 </li></ul><p><img src="https://farm1.staticflickr.com/834/26772532847_417010a494_o.png" alt=""></p>]]></content>
     
     <summary type="html">
     
@@ -995,9 +995,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   
@@ -1024,9 +1024,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   

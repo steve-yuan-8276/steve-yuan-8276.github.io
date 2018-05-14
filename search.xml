@@ -8,15 +8,15 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rsync</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[mac笔记：有趣的命令行工具]]></title>
     <url>%2F2018%2F05%2F11%2FtrickofMac-bashShell%2F</url>
-    <content type="text"><![CDATA[写在前面整理一些有趣的命令行工具，主要来源都是github moviemongit地址：https://github.com/iCHAIT/moviemon]]></content>
+    <content type="text"><![CDATA[写在前面整理一些有趣的命令行工具，主要来源都是github htop 工具： top 替代git地址：https://github.com/hishamhm/htop 安装：1brew install htop 使用：终端输入 htop： 快捷键操作 说明 h, ? F1 查看htop使用说明 S，F2 htop 设定 /，F3 搜索进程 \，F4 增量进程过滤器 T，F5 显示树形结构 &lt;, &gt;，F6 选择排序方式[ F7 可减少nice值可以提高对应进程的优先级 F8 可增加nice值，降低对应进程的优先级 K，F9 可对进程传递信号 q，F10 结束htop u 只显示一个给定的用户的过程 U 取消标记所有的进程 H 显示或隐藏用户线程 K 显示或隐藏内核线程 F 跟踪进程 P 按CPU 使用排序 M 按内存使用排序 T 按Time+ 使用排序 l 显示进程打开的文件 I 倒转排序顺序 s 选择某进程，按s:用strace追踪进程的系统调用 gifgen ：gif文件生成工具git地址：https://github.com/lukechilds/gifgen 安装：1brew install lukechilds/tap/gifgen 使用：命令行格式： 1gifgen [options] [input] 常用参数 说明 -o Output file [input.gif] -f Frames per second [10] -s Optimize for static background -v Display verbose output from ffmpeg 示例： 12345678//压缩视频文件为gifgifgen video.mp4//-o选项指定输出文件名称gifgen -o demo.gif SCM_1457.mp4//优化北京帧率gifgen -sf 15 screencap.mov]]></content>
       <categories>
         <category>mac</category>
       </categories>
@@ -27,15 +27,15 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Linux运维学习笔记8-2：数据备份工具rsync（一）]]></title>
+    <title><![CDATA[Linux运维学习笔记8-2：数据备份工具rsync]]></title>
     <url>%2F2018%2F05%2F11%2Fweek8-2-linuxNote-rsync%2F</url>
     <content type="text"><![CDATA[写在前面接下来的两节课，整理linux数据备份方面的基础知识。 rsync 工具rsync 命令是一个远程数据同步工具，可以在本地和远程之间通过shell或rsync服务互相拷贝文件。 它的优点在于： 可以镜像保存整个目录树和文件系统； 可以很容易做到保持原来文件的权限、时间、软硬链接等； 无须特殊权限即可安装； 快速：第一次同步时 rsync 会复制全部内容，但在下一次只传输修改过的文件。rsync 在传输数据的过程中可以实行压缩及解压缩操作，因此可以使用更少的带宽； 安全：可以使用 scp、ssh 等方式来传输文件，当然也可以通过直接的 socket 连接； 支持匿名传输，以方便进行网站镜象； 软件安装： 1yum install -y rsync rsync语法：命令行格式（六种）： 1234567891011rsync [OPTION] SRC DEST //拷贝本地文件rsync [OPTION] SRC [USER@]HOST:DEST //通过shell将本地机器内容拷贝到远程机器rsync [OPTION] [USER@]HOST:SRC DEST //通过shell将远程机器内容拷贝到本地rsync [OPTION] [USER@]HOST::SRC DEST //远程rsync服务器中拷贝文件到本地机，[USER@]HOST表示服务器用户名@主机iprsync [OPTION] SRC [USER@]HOST::DEST //本地机器拷贝文件到远程rsync服务器中rsync [OPTION] rsync://[USER@]HOST[:PORT]/SRC [DEST] //显示远程机的文件列表。这类似于rsync传输，不过只要在命令中省略掉本地机信息即可。 常用参数 说明 -v,–verbose 详细模式输出； -a,–archive 归档模式，表示以递归的方式传输文件，并保持所有文件属性不变，相当于使用了组合参数-rlptgoD; 后面跟–no-OPTION，option可以是rlptgoD中的任意一个，表示将这个选项去除。 -r, –recursive 对子目录以递归模式处理; -l, –links 保留软链结; -L 使用该选项后，会将软链接指向的目标文件复制到DST； -p, –perms 保持文件权限; -t, –times 保持文件时间信息; -g, –group 保持文件属组信息; -o, –owner 保持文件属主信息; -D, –devices 保持设备文件信息; -H, –hard-links 保留硬链结; -S, –sparse 对稀疏文件进行特殊处理以节省DST的 空间; –delete 删除那些DST中SRC没有的文件; -z, –compress 对备份的文件在传输时进行压缩处理； –exclude=PATTERN 排除满足特定条件的文件，这里的pattern也是具体的文件名，也可以是带有通配符，比如*.txt –progress 显示同步的过程状态，包括同步文件数量、传输速度等； -u 把目标文件夹DST 中比原文件SRC还新的文件删掉； -P, -partial 传说中的断点续传功能; rsync配置文件说明： 123456789101112131415161718192021222324252627282930# cat/etc/rsyncd.conf //内容如下port = 873 //端口号uid = nobody //指定当模块传输文件的守护进程UIDgid = nobody //指定当模块传输文件的守护进程GIDuse chroot = no //使用chroot到文件系统中的目录中max connections = 10 //最大并发连接数strict modes = yes //指定是否检查口令文件的权限pid file = /usr/local/rsyncd/rsyncd.pid //指定PID文件lock file = /usr/local/rsyncd/rsyncd.lock //指定支持max connection的锁文件，默认为/var/run/rsyncd.lockmotd file = /usr/local/rsyncd/rsyncd.motd //定义服务器信息的，自己写 rsyncd.motd 文件内容log file = /usr/local/rsyncd/rsync.log //rsync 服务器的日志log format = %t %a %m %f %bsyslog facility = local3timeout = 300[conf] //自定义模块path = /usr/local/nginx/conf //用来指定要备份的目录comment = Nginx confignore errors //可以忽略一些IO错误read only = no //设置no，客户端可以上传文件，yes是只读write only = no //no为客户端可以下载，yes 不能下载hosts allow = 192.168.2.0/24 //可以连接的IPhosts deny = * //禁止连接的IPlist = false //客户请求时，使用模块列表uid = rootgid = rootauth users = backup //连接用户名，和linux系统用户名无关系secrets file = /etc/rsyncd.pass //验证密码文件 本地文件同步备份-a 选项：表示以递归的方式传输文件，并保持所有文件属性不变1rsync -a test1/ test2/ 注：如果 test1/ 不加斜杠，会新建一个test2 的目录，将test1放到新建目录下。 -L 选项：使用该选项后，会将软链接指向的目标文件复制到DST1rsync -avL test1/ test2/ -u 选项： 仅仅进行更新，跳过所有已经存在于 DST，如果文件时间晚于要备份的文件，不覆盖更新的文件--delete 选项：假设DST中有一个文件a.txt，而SRC中没有；执行同参数同步后，DST文件夹中的a.txt也会被删除--exclude 选项：显示同步的过程状态，包括同步文件数量、传输速度等rsync通过ssh同步前提：你要确保有远程主机的SSH访问权限 把本地目录同步到远程主机： 123$ rsync -a dir1／ root@blog.topspeedsnail.com:~/dir21$ rsync -a dir1／ root@blog.topspeedsnail.com:~/dir2 把远程主机目录同步到本地： 123$ rsync -a root@blog.topspeedsnail.com:~/dir2/ dir11$ rsync -a root@blog.topspeedsnail.com:~/dir2/ dir1 参考资料 使用rsync命令同步本地目录和远程主机目录 《rsync同步的艺术》–linux命令五分钟系列之四十二 rsync 命令整理 rsync命令 Rsync命令详解]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rsync</tag>
       </tags>
   </entry>
@@ -60,8 +60,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>crontab</tag>
         <tag>systemd</tag>
       </tags>
@@ -74,8 +74,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>pid</tag>
         <tag>tid</tag>
       </tags>
@@ -88,8 +88,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>firewalld</tag>
       </tags>
   </entry>
@@ -101,8 +101,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -113,8 +113,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tcpdump</tag>
         <tag>wireshark</tag>
       </tags>
@@ -127,8 +127,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>iptables</tag>
         <tag>netfilter</tag>
       </tags>
@@ -142,8 +142,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -154,8 +154,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tcpdump</tag>
         <tag>wireshark</tag>
       </tags>
@@ -169,8 +169,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -182,8 +182,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -195,8 +195,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -209,8 +209,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -222,8 +222,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -235,8 +235,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -248,8 +248,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -261,8 +261,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -275,8 +275,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -289,8 +289,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -303,8 +303,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -315,10 +315,10 @@
         <category>kindle</category>
       </categories>
       <tags>
+        <tag>notes</tag>
         <tag>dropbox</tag>
         <tag>IFTTT</tag>
         <tag>kinlde</tag>
-        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -330,8 +330,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -344,8 +344,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -358,8 +358,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -372,8 +372,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -386,8 +386,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -413,8 +413,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -427,8 +427,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>lvm</tag>
       </tags>
   </entry>
@@ -441,8 +441,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -454,8 +454,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -467,8 +467,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -480,8 +480,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -493,8 +493,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -506,8 +506,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -519,8 +519,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -532,8 +532,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -545,8 +545,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -558,8 +558,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -583,8 +583,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -596,8 +596,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rescueMode</tag>
       </tags>
   </entry>
@@ -610,8 +610,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>putty</tag>
         <tag>xshell</tag>
         <tag>iterm2</tag>
@@ -626,8 +626,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>ip</tag>
       </tags>
   </entry>
@@ -640,8 +640,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -996,8 +996,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>JavaScript</tag>
+        <tag>front-end</tag>
         <tag>ES6</tag>
       </tags>
   </entry>
@@ -1045,8 +1045,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>web</tag>
         <tag>front-end</tag>
+        <tag>web</tag>
         <tag>google</tag>
       </tags>
   </entry>
@@ -1058,8 +1058,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>web</tag>
         <tag>front-end</tag>
+        <tag>web</tag>
       </tags>
   </entry>
   <entry>

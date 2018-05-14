@@ -46,9 +46,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="rsync" scheme="https://steve-yuan-8276.github.io/tags/rsync/"/>
     
@@ -59,17 +59,17 @@
     <link href="https://steve-yuan-8276.github.io/2018/05/11/trickofMac-bashShell/"/>
     <id>https://steve-yuan-8276.github.io/2018/05/11/trickofMac-bashShell/</id>
     <published>2018-05-11T09:43:00.000Z</published>
-    <updated>2018-05-11T09:45:58.408Z</updated>
+    <updated>2018-05-14T10:28:20.475Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>整理一些有趣的命令行工具，主要来源都是github</p><h3 id="moviemon"><a href="#moviemon" class="headerlink" title="moviemon"></a>moviemon</h3><p>git地址：<a href="https://github.com/iCHAIT/moviemon" target="_blank" rel="noopener">https://github.com/iCHAIT/moviemon</a></p>]]></content>
+    <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>整理一些有趣的命令行工具，主要来源都是github</p><h3 id="htop-工具：-top-替代"><a href="#htop-工具：-top-替代" class="headerlink" title="htop 工具： top 替代"></a>htop 工具： top 替代</h3><p>git地址：<a href="https://github.com/hishamhm/htop" target="_blank" rel="noopener">https://github.com/hishamhm/htop</a> </p><h4 id="安装："><a href="#安装：" class="headerlink" title="安装："></a>安装：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install htop</span><br></pre></td></tr></table></figure><h4 id="使用："><a href="#使用：" class="headerlink" title="使用："></a>使用：</h4><p>终端输入 htop：</p><p><img src="https://farm1.staticflickr.com/972/42101390811_af946583a2_o.png" alt=""></p><a id="more"></a><table><thead><tr><th>快捷键操作</th><th>说明</th></tr></thead><tbody><tr><td>h, ? F1</td><td>查看htop使用说明</td></tr><tr><td>S，F2</td><td>htop 设定</td></tr><tr><td>/，F3</td><td>搜索进程</td></tr><tr><td>\，F4</td><td>增量进程过滤器</td></tr><tr><td>T，F5</td><td>显示树形结构</td></tr><tr><td>&lt;, &gt;，F6</td><td>选择排序方式[</td></tr><tr><td>F7</td><td>可减少nice值可以提高对应进程的优先级</td></tr><tr><td>F8</td><td>可增加nice值，降低对应进程的优先级</td></tr><tr><td>K，F9</td><td>可对进程传递信号</td></tr><tr><td>q，F10</td><td>结束htop</td></tr><tr><td>u</td><td>只显示一个给定的用户的过程</td></tr><tr><td>U</td><td>取消标记所有的进程</td></tr><tr><td>H</td><td>显示或隐藏用户线程</td></tr><tr><td>K</td><td>显示或隐藏内核线程</td></tr><tr><td>F</td><td>跟踪进程</td></tr><tr><td>P</td><td>按CPU 使用排序</td></tr><tr><td>M</td><td>按内存使用排序</td></tr><tr><td>T</td><td>按Time+ 使用排序</td></tr><tr><td>l</td><td>显示进程打开的文件</td></tr><tr><td>I</td><td>倒转排序顺序</td></tr><tr><td>s</td><td>选择某进程，按s:用strace追踪进程的系统调用</td></tr></tbody></table><h3 id="gifgen-：gif文件生成工具"><a href="#gifgen-：gif文件生成工具" class="headerlink" title="gifgen ：gif文件生成工具"></a><code>gifgen</code> ：gif文件生成工具</h3><p>git地址：<a href="https://github.com/lukechilds/gifgen" target="_blank" rel="noopener">https://github.com/lukechilds/gifgen</a></p><h4 id="安装：-1"><a href="#安装：-1" class="headerlink" title="安装："></a>安装：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install lukechilds/tap/gifgen</span><br></pre></td></tr></table></figure><h4 id="使用：-1"><a href="#使用：-1" class="headerlink" title="使用："></a>使用：</h4><p>命令行格式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gifgen [options] [input]</span><br></pre></td></tr></table></figure><table><thead><tr><th>常用参数</th><th>说明</th></tr></thead><tbody><tr><td>-o</td><td>Output file [input.gif]</td></tr><tr><td>-f</td><td>Frames per second [10]</td></tr><tr><td>-s</td><td>Optimize for static background</td></tr><tr><td>-v</td><td>Display verbose output from ffmpeg</td></tr></tbody></table><p><strong>示例：</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//压缩视频文件为gif</span><br><span class="line">gifgen video.mp4</span><br><span class="line"></span><br><span class="line">//-o选项指定输出文件名称</span><br><span class="line">gifgen -o demo.gif SCM_1457.mp4</span><br><span class="line"></span><br><span class="line">//优化北京帧率</span><br><span class="line">gifgen -sf 15 screencap.mov</span><br></pre></td></tr></table></figure>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;整理一些有趣的命令行工具，主要来源都是github&lt;/p&gt;
-&lt;h3 id=&quot;moviemon&quot;&gt;&lt;a href=&quot;#movi
-      
+      &lt;h3 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h3&gt;&lt;p&gt;整理一些有趣的命令行工具，主要来源都是github&lt;/p&gt;
+&lt;h3 id=&quot;htop-工具：-top-替代&quot;&gt;&lt;a href=&quot;#htop-工具：-top-替代&quot; class=&quot;headerlink&quot; title=&quot;htop 工具： top 替代&quot;&gt;&lt;/a&gt;htop 工具： top 替代&lt;/h3&gt;&lt;p&gt;git地址：&lt;a href=&quot;https://github.com/hishamhm/htop&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/hishamhm/htop&lt;/a&gt; &lt;/p&gt;
+&lt;h4 id=&quot;安装：&quot;&gt;&lt;a href=&quot;#安装：&quot; class=&quot;headerlink&quot; title=&quot;安装：&quot;&gt;&lt;/a&gt;安装：&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;brew install htop&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h4 id=&quot;使用：&quot;&gt;&lt;a href=&quot;#使用：&quot; class=&quot;headerlink&quot; title=&quot;使用：&quot;&gt;&lt;/a&gt;使用：&lt;/h4&gt;&lt;p&gt;终端输入 htop：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://farm1.staticflickr.com/972/42101390811_af946583a2_o.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -85,11 +85,11 @@
   </entry>
   
   <entry>
-    <title>Linux运维学习笔记8-2：数据备份工具rsync（一）</title>
+    <title>Linux运维学习笔记8-2：数据备份工具rsync</title>
     <link href="https://steve-yuan-8276.github.io/2018/05/11/week8-2-linuxNote-rsync/"/>
     <id>https://steve-yuan-8276.github.io/2018/05/11/week8-2-linuxNote-rsync/</id>
     <published>2018-05-11T06:46:22.000Z</published>
-    <updated>2018-05-13T08:17:05.987Z</updated>
+    <updated>2018-05-14T09:50:11.800Z</updated>
     
     <content type="html"><![CDATA[<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>接下来的两节课，整理linux数据备份方面的基础知识。</p><h3 id="rsync-工具"><a href="#rsync-工具" class="headerlink" title="rsync 工具"></a><code>rsync</code> 工具</h3><p>rsync 命令是一个远程数据同步工具，可以在本地和远程之间通过shell或rsync服务互相拷贝文件。</p><p>它的优点在于：</p><ul><li><p>可以镜像保存整个目录树和文件系统；</p></li><li><p>可以很容易做到保持原来文件的权限、时间、软硬链接等；</p></li><li><p>无须特殊权限即可安装；</p></li><li><p>快速：第一次同步时 rsync 会复制全部内容，但在下一次只传输修改过的文件。rsync 在传输数据的过程中可以实行压缩及解压缩操作，因此可以使用更少的带宽；</p></li><li><p>安全：可以使用 scp、ssh 等方式来传输文件，当然也可以通过直接的 socket 连接；</p></li><li><p>支持匿名传输，以方便进行网站镜象；</p></li></ul><p><strong>软件安装：</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y rsync</span><br></pre></td></tr></table></figure><a id="more"></a><h4 id="rsync语法："><a href="#rsync语法：" class="headerlink" title="rsync语法："></a>rsync语法：</h4><p>命令行格式（六种）：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">rsync [OPTION] SRC DEST    //拷贝本地文件</span><br><span class="line"></span><br><span class="line">rsync [OPTION] SRC [USER@]HOST:DEST    //通过shell将本地机器内容拷贝到远程机器</span><br><span class="line"></span><br><span class="line">rsync [OPTION] [USER@]HOST:SRC DEST    //通过shell将远程机器内容拷贝到本地</span><br><span class="line"></span><br><span class="line">rsync [OPTION] [USER@]HOST::SRC DEST   //远程rsync服务器中拷贝文件到本地机，[USER@]HOST表示服务器用户名@主机ip</span><br><span class="line"></span><br><span class="line">rsync [OPTION] SRC [USER@]HOST::DEST   //本地机器拷贝文件到远程rsync服务器中</span><br><span class="line"></span><br><span class="line">rsync [OPTION] rsync://[USER@]HOST[:PORT]/SRC [DEST]   //显示远程机的文件列表。这类似于rsync传输，不过只要在命令中省略掉本地机信息即可。</span><br></pre></td></tr></table></figure><table><thead><tr><th>常用参数</th><th>说明</th></tr></thead><tbody><tr><td>-v,–verbose</td><td>详细模式输出；</td></tr><tr><td>-a,–archive</td><td>归档模式，表示以递归的方式传输文件，并保持所有文件属性不变，相当于使用了组合参数-rlptgoD; 后面跟–no-OPTION，option可以是rlptgoD中的任意一个，表示将这个选项去除。</td></tr><tr><td>-r, –recursive</td><td>对子目录以递归模式处理;</td></tr><tr><td>-l, –links</td><td>保留软链结;</td></tr><tr><td>-L</td><td>使用该选项后，会将软链接指向的目标文件复制到DST；</td></tr><tr><td>-p, –perms</td><td>保持文件权限;</td></tr><tr><td>-t, –times</td><td>保持文件时间信息;</td></tr><tr><td>-g, –group</td><td>保持文件属组信息;</td></tr><tr><td>-o, –owner</td><td>保持文件属主信息;</td></tr><tr><td>-D, –devices</td><td>保持设备文件信息;</td></tr><tr><td>-H, –hard-links</td><td>保留硬链结;</td></tr><tr><td>-S, –sparse</td><td>对稀疏文件进行特殊处理以节省DST的 空间;</td></tr><tr><td>–delete</td><td>删除那些DST中SRC没有的文件;</td></tr><tr><td>-z, –compress</td><td>对备份的文件在传输时进行压缩处理；</td></tr><tr><td>–exclude=PATTERN</td><td>排除满足特定条件的文件，这里的pattern也是具体的文件名，也可以是带有通配符，比如*.txt</td></tr><tr><td>–progress</td><td>显示同步的过程状态，包括同步文件数量、传输速度等；</td></tr><tr><td>-u</td><td>把目标文件夹DST 中比原文件SRC还新的文件删掉；</td></tr><tr><td>-P, -partial</td><td>传说中的断点续传功能;</td></tr></tbody></table><p><strong>rsync配置文件说明：</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># cat/etc/rsyncd.conf  //内容如下</span><br><span class="line">port = 873   //端口号</span><br><span class="line">uid = nobody  //指定当模块传输文件的守护进程UID</span><br><span class="line">gid = nobody  //指定当模块传输文件的守护进程GID</span><br><span class="line">use chroot = no  //使用chroot到文件系统中的目录中</span><br><span class="line">max connections = 10  //最大并发连接数</span><br><span class="line">strict modes = yes  //指定是否检查口令文件的权限</span><br><span class="line"></span><br><span class="line">pid file = /usr/local/rsyncd/rsyncd.pid  //指定PID文件</span><br><span class="line">lock file = /usr/local/rsyncd/rsyncd.lock  //指定支持max connection的锁文件，默认为/var/run/rsyncd.lock</span><br><span class="line">motd file = /usr/local/rsyncd/rsyncd.motd  //定义服务器信息的，自己写 rsyncd.motd 文件内容</span><br><span class="line">log file = /usr/local/rsyncd/rsync.log  //rsync 服务器的日志</span><br><span class="line"></span><br><span class="line">log format = %t %a %m %f %b</span><br><span class="line">syslog facility = local3</span><br><span class="line">timeout = 300</span><br><span class="line"></span><br><span class="line">[conf]  //自定义模块</span><br><span class="line">path = /usr/local/nginx/conf  //用来指定要备份的目录</span><br><span class="line">comment = Nginx conf</span><br><span class="line">ignore errors  //可以忽略一些IO错误</span><br><span class="line">read only = no  //设置no，客户端可以上传文件，yes是只读</span><br><span class="line">write only = no  //no为客户端可以下载，yes 不能下载</span><br><span class="line">hosts allow = 192.168.2.0/24  //可以连接的IP</span><br><span class="line">hosts deny = *  //禁止连接的IP</span><br><span class="line">list = false  //客户请求时，使用模块列表</span><br><span class="line">uid = root</span><br><span class="line">gid = root</span><br><span class="line">auth users = backup  //连接用户名，和linux系统用户名无关系</span><br><span class="line">secrets file = /etc/rsyncd.pass  //验证密码文件</span><br></pre></td></tr></table></figure><h4 id="本地文件同步备份"><a href="#本地文件同步备份" class="headerlink" title="本地文件同步备份"></a>本地文件同步备份</h4><h5 id="a-选项：表示以递归的方式传输文件，并保持所有文件属性不变"><a href="#a-选项：表示以递归的方式传输文件，并保持所有文件属性不变" class="headerlink" title="-a 选项：表示以递归的方式传输文件，并保持所有文件属性不变"></a><code>-a</code> 选项：表示以递归的方式传输文件，并保持所有文件属性不变</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -a test1/ test2/</span><br></pre></td></tr></table></figure><p><strong>注：</strong>如果 test1/ 不加斜杠，会新建一个test2 的目录，将test1放到新建目录下。</p><h5 id="L-选项：使用该选项后，会将软链接指向的目标文件复制到DST"><a href="#L-选项：使用该选项后，会将软链接指向的目标文件复制到DST" class="headerlink" title="-L 选项：使用该选项后，会将软链接指向的目标文件复制到DST"></a><code>-L</code> 选项：使用该选项后，会将软链接指向的目标文件复制到DST</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -avL test1/ test2/</span><br></pre></td></tr></table></figure><h5 id="u-选项：-仅仅进行更新，跳过所有已经存在于-DST，如果文件时间晚于要备份的文件，不覆盖更新的文件"><a href="#u-选项：-仅仅进行更新，跳过所有已经存在于-DST，如果文件时间晚于要备份的文件，不覆盖更新的文件" class="headerlink" title="-u 选项：    仅仅进行更新，跳过所有已经存在于 DST，如果文件时间晚于要备份的文件，不覆盖更新的文件"></a><code>-u</code> 选项：    仅仅进行更新，跳过所有已经存在于 DST，如果文件时间晚于要备份的文件，不覆盖更新的文件</h5><h5 id="delete-选项：假设DST中有一个文件a-txt，而SRC中没有；执行同参数同步后，DST文件夹中的a-txt也会被删除"><a href="#delete-选项：假设DST中有一个文件a-txt，而SRC中没有；执行同参数同步后，DST文件夹中的a-txt也会被删除" class="headerlink" title="--delete 选项：假设DST中有一个文件a.txt，而SRC中没有；执行同参数同步后，DST文件夹中的a.txt也会被删除"></a><code>--delete</code> 选项：假设DST中有一个文件<code>a.txt</code>，而SRC中没有；执行同参数同步后，DST文件夹中的a.txt也会被删除</h5><h5 id="exclude-选项：显示同步的过程状态，包括同步文件数量、传输速度等"><a href="#exclude-选项：显示同步的过程状态，包括同步文件数量、传输速度等" class="headerlink" title="--exclude 选项：显示同步的过程状态，包括同步文件数量、传输速度等"></a><code>--exclude</code> 选项：显示同步的过程状态，包括同步文件数量、传输速度等</h5><h4 id="rsync通过ssh同步"><a href="#rsync通过ssh同步" class="headerlink" title="rsync通过ssh同步"></a>rsync通过ssh同步</h4><p><strong>前提：</strong>你要确保有远程主机的SSH访问权限</p><ul><li>把本地目录同步到远程主机：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -a dir1／ root@blog.topspeedsnail.com:~/dir2</span><br><span class="line">1</span><br><span class="line">$ rsync -a dir1／ root@blog.topspeedsnail.com:~/dir2</span><br></pre></td></tr></table></figure><ul><li>把远程主机目录同步到本地：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ rsync -a root@blog.topspeedsnail.com:~/dir2/ dir1</span><br><span class="line">1</span><br><span class="line">$ rsync -a root@blog.topspeedsnail.com:~/dir2/ dir1</span><br></pre></td></tr></table></figure><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul><li><p><a href="http://blog.topspeedsnail.com/archives/2668" target="_blank" rel="noopener">使用rsync命令同步本地目录和远程主机目录</a></p></li><li><p><a href="http://roclinux.cn/?p=2643" target="_blank" rel="noopener">《rsync同步的艺术》–linux命令五分钟系列之四十二</a></p></li><li><p><a href="https://www.jianshu.com/p/258ceb7b2223" target="_blank" rel="noopener">rsync 命令整理</a></p></li><li><p><a href="http://man.linuxde.net/rsync" target="_blank" rel="noopener">rsync命令</a></p></li><li><p><a href="https://blog.csdn.net/u010391029/article/details/51746641" target="_blank" rel="noopener">Rsync命令详解</a></p></li></ul>]]></content>
     
@@ -120,9 +120,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="rsync" scheme="https://steve-yuan-8276.github.io/tags/rsync/"/>
     
@@ -220,9 +220,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="crontab" scheme="https://steve-yuan-8276.github.io/tags/crontab/"/>
     
@@ -258,9 +258,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="pid" scheme="https://steve-yuan-8276.github.io/tags/pid/"/>
     
@@ -296,9 +296,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="firewalld" scheme="https://steve-yuan-8276.github.io/tags/firewalld/"/>
     
@@ -325,9 +325,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -401,9 +401,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="tcpdump" scheme="https://steve-yuan-8276.github.io/tags/tcpdump/"/>
     
@@ -480,9 +480,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="iptables" scheme="https://steve-yuan-8276.github.io/tags/iptables/"/>
     
@@ -540,9 +540,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -618,9 +618,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="tcpdump" scheme="https://steve-yuan-8276.github.io/tags/tcpdump/"/>
     
@@ -656,9 +656,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -724,9 +724,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -763,9 +763,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -799,9 +799,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -829,9 +829,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -917,9 +917,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -995,9 +995,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -1024,9 +1024,9 @@
     
       <category term="regularExpression" scheme="https://steve-yuan-8276.github.io/tags/regularExpression/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   

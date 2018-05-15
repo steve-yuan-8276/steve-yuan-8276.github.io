@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[Linux运维学习笔记9-1：lamp环境搭建与配置（二）]]></title>
+    <title><![CDATA[Linux运维学习笔记9-2：lamp环境搭建与配置（二）]]></title>
     <url>%2F2018%2F05%2F15%2Fweek-9-2-linuxNotesLampPart-2%2F</url>
     <content type="text"><![CDATA[写在前面这则笔记整理lamp环境安装，主要是apache安装。 apache 安装Apache是世界使用排名第一的Web服务器软件。它可以运行在几乎所有广泛使用的计算机平台上，由于其跨平台和安全性被广泛使用，是最流行的Web服务器端软件之一。 工作流： 下载rpm包 安装依赖包 apr 、apr-util 编译安装httpd 第一步：下载并解压安装包安装包地址： 2.4源码包： apr安装包: apr-util安装包: 第二步：安装依赖包： 安装apr 1234567891011121314//解压apr源码包tar -zvxf apr-1.6.3.tar.gz//进入tar安装包cd apr-1.6.3//配置编辑参数./configure --prefix=/usr/local/apr//编译安装make &amp;&amp; make install//校验是否安装成功echo $? //如果输出0，说明安装成功；否则，执行不成功 安装expat-devel 注：expat-devel是apr-util的依赖包 1yum install -y expat-devel 安装apr-util 1234567891011121314//解压源码包tar -jvxf apr-util-1.6.1.tar.bz2//进入安装包目录cd apr-util-1.6.1//配置编辑参数./configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr//编译安装make &amp;&amp; make install//校验是否安装成功echo $? //如果输出0，说明安装成功；否则，执行不成功 第三步：安装httpd 解压源码包 1tar -zvxf httpd-2.4.33.tar.gz 进入安装文件夹 1cd httpd-2.4.33 配置编译参数 注：\是转义字符，编译参数比较多的时候，可以分行写，用转义符号\分行。 123456[root@stevey httpd-2.4.33]# ./configure \&gt; --prefix=/usr/local/apache2.4 \&gt; --with-apr=/usr/local/apr \&gt; --with-apr-util=/usr/local/apr-util \&gt; --enable-so \&gt; --enable-mods-shared=most 注：trebleShooting 前一步结束之后，遇到错误提示： 安装pcre-devel 1yum install -y pcre-devel 之后在重新配置一下 1./configure --prefix=/usr/local/apache2.4 --with-apr=/usr/local/apr --with-apr-util=/usr/local/apr-util --enable-so --enable-mods-shared=most 编译安装 1make &amp;&amp; make install TroubleShooting 错误提示如下： [未完待续]]]></content>
       <categories>

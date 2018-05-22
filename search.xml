@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[linux学习笔记：从一则招聘启示学base64编码]]></title>
+    <url>%2F2018%2F05%2F22%2FlinuxNotes-base64Practice%2F</url>
+    <content type="text"><![CDATA[写在前面今天，在微信群里看到了一则有趣的招聘启示： 重点是红框括起来的部分，5pyJIHJtIC1yZiAvIOaVsOaNruaBouWkjee7j+mqjA==这是什么鬼呢？当然，很快就有网友认出来这是base64编码，并给出了正确答案。 那么，base64又是什么呢？网上搜了一下，还挺有意思的，于是就整理出了这篇学习笔记。 base64 是神马东东？base64，简单的说，就是使用64个字符来对任意数据进行编码的一种方法，本质上是一种将二进制数据转成文本数据的方案。 二进制文件包含很多无法显示和打印的字符，在进行网络信息传递时，这些二进制资源往往需要转换为Base64编码进行传输，以提高传输效率。 要理解base64编码原理，先看这张表： 先将其转换成二进制形式，然后每连续6比特（2的6次方=64）计算其十进制值，根据该值在上面的索引表中找到对应的字符，最终得到一个文本字符串。 以文本”M”转换为Base64的过程为例，”M”先转化为二进位制形式，转换后的ASCII不足以填充够24位二进制字符串，全部用”0”补充；之后将每3个字节（24位）转换为4个字符，得到的索引值即分别为”T”,”Q”,”=”,”=”,最终的Base64编码结果为”TQ==”。 这里的等号就是为了凑字数，在后面补上“=”字符，使编码后的字符数为4的倍数。这里的等号在传输的可以被省略，解码时如果发现Base64编码字符串长度不能被4整除，则先补充 “=” 字符，再解码即可。 再比如，hello转化为base64 base64解码方法方法一：mac命令行转码mac命令行自带转码工具 base64编码： 12steve:steveBlog steveyuan$ echo &apos;hello&apos; | base64aGVsbG8K base64解码： 12steve:steveBlog steveyuan$ echo &apos;aGVsbG8K&apos; | base64 -Dhello 方法二：利用python 自带的base64转码 base64编码： 12steve:steveBlog steveyuan$ python -m base64 &lt;&lt;&lt; helloaGVsbG8K base64解码： 12steve:steveBlog steveyuan$ python -m base64 -d &lt;&lt;&lt; aGVsbG8Khello 方法三：利用openssl对base64进行编码和解码 base64编码： 12steve:steveBlog steveyuan$ openssl enc -base64 &lt;&lt;&lt; helloaGVsbG8K base64解码： 12steve:steveBlog steveyuan$ openssl enc -base64 -d &lt;&lt;&lt; aGVsbG8Khello 方法四：使用coreutils包装中的base64程序 安装coreutils包(centos7系统下） 1yum install -y coreutils base64编码： 12[root@steve ~]# echo &apos;hello&apos; | base64aGVsbG8K base64解码： 12[root@steve ~]# echo aGVsbG8K | base64 --decodehello 那么，说了这么多，招聘启事当中那句话究竟是什么意思呢？用刚刚学到的方法看下： 12[root@steve ~]# echo 5pyJIHJtIC1yZiAvIOaVsOaNruaBouWkjee7j+mqjA== | base64 --decode有 rm -rf / 数据恢复经验 不过，话说回来rm -rf /之后，真的有办法进行数据恢复嘛？这又是一个新的问题了。 参考资料： Base64编码原理与应用 Base64编码简介 Base64编码规则 为什么要使用base64编码，有哪些情景需求？ 让你完全理解base64是怎么回事 mac下base64命令 我怎样才能从命令行解码base64字符串？]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>notes</tag>
+        <tag>linux</tag>
+        <tag>base64</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[linux学习笔记：阿里云实习笔记]]></title>
     <url>%2F2018%2F05%2F16%2FlinuxNotes-AliEcs%2F</url>
     <content type="text"><![CDATA[写在前面前一阵子，在老师的建议下买的阿里云主机一直闲置，趁着现在复习课程的机会，正好在云主机上实践一下。 云主机远程连接阿里云服务器ECS连接提供了两种方式： 浏览器连接：这种方式下，关键是要记住两个密码，一个是远程连接密码；另一个是云主机密码。这两者在管理台右侧选择更多就可以进行设置，之后重启云主机生效。 其他的就没什么了，需要连接的时候登陆控制台，点击远程连接，按提示操作就可以了，跟操作一个电脑没什么区别。 终端连接：这个才是重点！ 账号密码登陆1ssh root@[ECS公网ip] //ECS公网ip在控制台进行查看 秘钥登陆（推荐，设置好后可以免密登陆）第一步：生成秘钥 在控制台左侧点击 秘钥对 –&gt; 创建SSH秘钥对 按提示输入秘钥对名称，点击自动创建秘钥对，之后会自动下载一个.pem结尾的文件，这个文件非常重要，妥善保管！ 回到之前秘钥对的那个界面，点击 绑定秘钥对，选择需要绑定的ECS云主机。 第二步：采用秘钥登陆1ssh -i [.pem私钥文件] root@[公网IP地址] 注： 这里提到的[.pem私钥文件]，就是之前自动下载的那个文件，这里要写的是文件的绝对路径。那笔者来说，下载后保存在了～/.ssh 目录下，所以这里的路径就是 ~/.ssh/[filename] 在这里还遇到了一个有意思的现象，第一次用秘钥登陆，出现错误提示： 意思是说秘钥权限太open，重新修改为600权限后，顺利登陆。 1chmod 600 ~/.ssh/ali-linux.pem 第三步：设置alias其实第二步结束就已经可以顺利登陆了，但是命令行太长了，还不完美。想到课程中曾经学过alias的用法，所有就有了第三步。 mac环境变量配置文件在～/.bash_profile,编辑这个文件，按照下面的格式设置alias，之后重新加载配置文件。 1alias ali-linux=&apos;ssh -i [.pem私钥文件] root@[公网IP地址]&apos; //等号两边没有空格 之后，只要输入ali-linux，就可以登陆阿里云主机了，完美！]]></content>
@@ -849,8 +862,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -986,8 +999,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1100,8 +1113,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
         <tag>google</tag>
       </tags>
   </entry>
@@ -1113,8 +1126,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
       </tags>
   </entry>
   <entry>

@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[linux运维学习笔记9-5：LAMP环境的基本配置(二)]]></title>
     <url>%2F2018%2F05%2F29%2Fweek9-5-linuxNotes-LampPart2%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记继续整理Lamp相关知识，主要包括apache用户认证、域名跳转、访问日志。 Apache用户认证有时候，我们不希望自己的网站所有人都能看到或者访问，就可以使用密码认证，也就是只有特定的用户才能够访问，apache提供了这样一种用户认证的功能。 具体的设置分三步： 第一步：编辑虚拟主机配置文件 12345678910111213141516171819202122232425262728//配置虚拟主机vim /usr/local/apache2/conf/extra/httpd-vhosts.conf//对备注位置进行修改 &lt;VirtualHost *:&gt; ServerAdmin webmaster@steve.com DocumentRoot &quot;/usr/local/apache2.4/docs/steve.com&quot; ServerName steve.com &lt;Directory /data/wwwroot/steve.com&gt; //指定认证的目录 AllowOverride AuthConfig AuthName &quot;steveY&quot; //认证名字 AuthType Basic //认证类型 AuthUserFile /data/.htpasswd 账号密码文件 require valid-user //所有用户需要认证 ServerAlias www.steve.com ErrorLog &quot;logs/steve.com-error_log&quot; CustomLog &quot;logs/steve.com-access_log&quot; common &lt;/VirtualHost&gt; ``` 修改后，保存退出&lt;!--more--&gt;### 第二步：创建访问用户密码文件 //htppasswd 命令为密码创建工具，-c表示create创建，-m指定加密方式为MD5；/data/.htpasswd 为密码文件，steveY 为用户名/usr/local/apache2.4/bin/htpasswd -cm /data/.htpasswd steveY New password: *Re-type new password: *Adding password for user steveY 123### 第三步：重启Apache //验证格式是否有错误\/usr/local/apache2.4/bin/apachectl -t //重启apache服务/usr/local/apache2.4/bin/apachectl restart //或者重新加载配置文件/usr/local/apache2.4/bin/apachectl graceful 123456789101112## 域名跳转这样做的好处：* 增加SEO权重；* 如果老的域名被放弃了，可以很方便地重定向到新的域名；实现步骤如下：第一步：修改虚拟主机配置 vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf //按照如下修改 DocumentRoot ‘/data/wwwroot/steve.com’ ServerName www.steve.com ServerAlias steve.com //需要mod_rewrite模块支持 RewriteEngine on //打开rewrite功能 RewriteCond %{HTTP_HOST} !^www.steve.com$ //定义rewrite的条件，主机名（域名）不是www.123.com满足条件 RewriteRule ^/(.*)$ http://www.steve.com/$1 [R=301,L] //定义rewrite规则，当满足上面的条件时，这条规则才会执行12修改后，保存退出,并检查是否有语法错误 [root@stevey ~]# /usr/local/apache2.4/bin/apachectl -tSyntax OK12第二步：修改apache主配置文件 //编辑主配置文件vim /usr/local/apache2.4/conf/httpd.conf //找到rewrite，把前面注释#去掉12保存退出后，检查语法错误 [root@stevey ~]# /usr/local/apache2.4/bin/apachectl -tSyntax OK12重新加载模块 [root@stevey ~]# /usr/local/apache2.4/bin/apachectl graceful//查看是否加载模块[root@gary-tao local]# /usr/local/apache2.4/bin/apachectl -M|grep -i rewrite rewrite_module (shared)123456## Apache访问日志网站日志文件保存在`/usr/local/apache2.4/logs/`，通过访问日志，能给了解系统的运行情况。### 查看系统访问日志 cat /usr/local/apache2.4/logs/steve.com-access_log1234### 修改日志配置文件#### 查看配置文件执行以下命令 cat /usr/local/apache2.4/conf/httpd.conf123456789101112131415161718![](https://farm2.staticflickr.com/1736/41709808504_b375256290_o.png)这里要关注的是记录格式说明标示|含义---|---%h|为访问网站的IP;%l|为访问远程登录名,这个字段基本上为&quot;-&quot;;%u|为用户名,当使用用户认证时,这个字段为认证的用户名;%t|为时间;%r|为请求的动作(比如用ctrl-I是就为HEADE);%s|为请求的状态,写成%&gt;s为最后的状态码;%b|为传输数据大小;%&#123;Referer&#125;i|为referer信息(请求本次地址上一次的地址,比如通过百度找到阿铭论坛,那么referer就是baidu);%&#123;User-Agent&#125;i|浏览器标识,比如Firefox或者Chrome浏览器,取决于你用什么浏览器访问;#### 定义虚拟主机配置文本日志格式 vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf //找到custumlog 这一行，将common 改成comdined，之后保存退出 //测试语法错误/usr/local/apache2.4/bin/apachectl -t //重新加载/usr/local/apache2.4/bin/apachectl graceful `]]></content>
+    <content type="text"><![CDATA[写在前面这则笔记继续整理Lamp相关知识，主要包括apache用户认证、域名跳转、访问日志。 Apache用户认证有时候，我们不希望自己的网站所有人都能看到或者访问，就可以使用密码认证，也就是只有特定的用户才能够访问，apache提供了这样一种用户认证的功能。 具体的设置分三步： 第一步：编辑虚拟主机配置文件 12345678910111213141516171819202122232425vim /usr/local/apache2/conf/extra/httpd-vhosts.conf//对备注位置进行修改 &lt;VirtualHost *:&gt; ServerAdmin webmaster@steve.com DocumentRoot &quot;/usr/local/apache2.4/docs/steve.com&quot; ServerName steve.com &lt;Directory /data/wwwroot/steve.com&gt; //指定认证的目录 AllowOverride AuthConfig AuthName &quot;steveY&quot; //认证名字 AuthType Basic //认证类型 AuthUserFile /data/.htpasswd 账号密码文件 require valid-user //所有用户需要认证 ServerAlias www.steve.com ErrorLog &quot;logs/steve.com-error_log&quot; CustomLog &quot;logs/steve.com-access_log&quot; common &lt;/VirtualHost&gt;``` 修改后，保存退出&lt;!--more--&gt;### 第二步：创建访问用户密码文件 //htppasswd 命令为密码创建工具，-c表示create创建，-m指定加密方式为MD5；/data/.htpasswd 为密码文件，steveY 为用户名/usr/local/apache2.4/bin/htpasswd -cm /data/.htpasswd steveY New password: *Re-type new password: *Adding password for user steveY 123### 第三步：重启Apache //验证格式是否有错误\/usr/local/apache2.4/bin/apachectl -t //重启apache服务/usr/local/apache2.4/bin/apachectl restart //或者重新加载配置文件/usr/local/apache2.4/bin/apachectl graceful 123456789101112## 域名跳转这样做的好处：* 增加SEO权重；* 如果老的域名被放弃了，可以很方便地重定向到新的域名；实现步骤如下：第一步：修改虚拟主机配置 vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf //按照如下修改 DocumentRoot ‘/data/wwwroot/steve.com’ ServerName www.steve.com ServerAlias steve.com //需要mod_rewrite模块支持 RewriteEngine on //打开rewrite功能 RewriteCond %{HTTP_HOST} !^www.steve.com$ //定义rewrite的条件，主机名（域名）不是www.123.com满足条件 RewriteRule ^/(.*)$ http://www.steve.com/$1 [R=301,L] //定义rewrite规则，当满足上面的条件时，这条规则才会执行12修改后，保存退出,并检查是否有语法错误 [root@stevey ~]# /usr/local/apache2.4/bin/apachectl -tSyntax OK12第二步：修改apache主配置文件 //编辑主配置文件vim /usr/local/apache2.4/conf/httpd.conf //找到rewrite，把前面注释#去掉12保存退出后，检查语法错误 [root@stevey ~]# /usr/local/apache2.4/bin/apachectl -tSyntax OK12重新加载模块 [root@stevey ~]# /usr/local/apache2.4/bin/apachectl graceful//查看是否加载模块[root@gary-tao local]# /usr/local/apache2.4/bin/apachectl -M|grep -i rewrite rewrite_module (shared)123456## Apache访问日志网站日志文件保存在`/usr/local/apache2.4/logs/`，通过访问日志，能给了解系统的运行情况。### 查看系统访问日志 cat /usr/local/apache2.4/logs/steve.com-access_log1234### 修改日志配置文件#### 查看配置文件执行以下命令 cat /usr/local/apache2.4/conf/httpd.conf123456789101112131415161718![](https://farm2.staticflickr.com/1736/41709808504_b375256290_o.png)这里要关注的是记录格式说明标示|含义---|---%h|为访问网站的IP;%l|为访问远程登录名,这个字段基本上为&quot;-&quot;;%u|为用户名,当使用用户认证时,这个字段为认证的用户名;%t|为时间;%r|为请求的动作(比如用ctrl-I是就为HEADE);%s|为请求的状态,写成%&gt;s为最后的状态码;%b|为传输数据大小;%&#123;Referer&#125;i|为referer信息(请求本次地址上一次的地址,比如通过百度找到阿铭论坛,那么referer就是baidu);%&#123;User-Agent&#125;i|浏览器标识,比如Firefox或者Chrome浏览器,取决于你用什么浏览器访问;#### 定义虚拟主机配置文本日志格式 vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf //找到custumlog 这一行，将common 改成comdined，之后保存退出 //测试语法错误/usr/local/apache2.4/bin/apachectl -t //重新加载/usr/local/apache2.4/bin/apachectl graceful `]]></content>
       <categories>
         <category>linux</category>
       </categories>
@@ -102,9 +102,9 @@
       <tags>
         <tag>notes</tag>
         <tag>linux</tag>
-        <tag>php</tag>
         <tag>apache</tag>
         <tag>mysql</tag>
+        <tag>php</tag>
       </tags>
   </entry>
   <entry>
@@ -117,9 +117,9 @@
       <tags>
         <tag>notes</tag>
         <tag>linux</tag>
-        <tag>php</tag>
         <tag>apache</tag>
         <tag>mysql</tag>
+        <tag>php</tag>
       </tags>
   </entry>
   <entry>
@@ -916,8 +916,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -1053,8 +1053,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
         <tag>bash</tag>
       </tags>
   </entry>

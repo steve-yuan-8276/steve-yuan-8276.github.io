@@ -1,15 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[linux学习笔记13-1：lnmp环境的搭建和配置（六）]]></title>
-    <url>%2F2018%2F06%2F11%2Fweek13-1-linuxNotes-lnmpPart1%2F</url>
-    <content type="text"><![CDATA[写在前面继续整理lnmp环境的配置知识，这则笔记主要是php-fpm相关的内容。 什么是php-fpm？php进程管理的基本概念：先回顾四个概念： CGI：是 Web Server 与 Web Application 之间数据交换的一种协议； FastCGI：同 CGI，是一种通信协议，但比 CGI 在效率上做了一些优化。同样，SCGI 协议与 FastCGI 类似； PHP-CGI：是 PHP （Web Application）对 Web Server 提供的 CGI 协议的接口程序； PHP-FPM：是 PHP（Web Application）对 Web Server 提供的 FastCGI 协议的接口程序，额外还提供了相对智能一些任务管理； php-cgi和php-fpm的关系PHP-CGI就是PHP实现的自带的FastCGI管理器，但是它本身不给力，有明显的不足： 只能解析请求，返回结果，不会进程管理； php-cgi变更php.ini配置后，需重启php-cgi才能让新的php-ini生效，不可以平滑重启； 直接杀死php-cgi进程，php就不能运行了； 基于上述因素，就出现了一些第三方补充解决方案，比如PHP-FPM，它的优点包括： 用于调度管理PHP解析器php-cgi的管理程序； PHP-FPM通过生成新的子进程可以实现php.ini修改后的平滑重启； 如上图所示，当nginx收到 index.php 这个请求后，会启动对应的 CGI 程序，这里就是PHP的解析器。接下来PHP解析器会解析php.ini文件，初始化执行环境，然后处理请求，再以规定CGI规定的格式返回处理后的结果，退出进程，Web server再把结果返回给浏览器。这就是一个完整的动态PHP Web访问流程。 php-fpm进程管理命令行格式： 1nginx -s [signal] 其中,signal常用选项如下： quit - 优雅的关闭，即处理完当前请求再关闭; reload - 重新载入配置文件; reopen - 重新打开日志文件; stop - 立即关闭; php-fpm的pool前面提到过，php-fpm的一个重要功能，就是可以管理进程，这里涉及到一个pool的概念，nginx启动服务后，会产生1个master进程+N个worker进程，共同构成一个进程池（pool），其中 master进程主要负责读取配置文件，并控制管理workder进程； worker进程具体负责处理请求； 先看目前的php-fpm 的pool，执行以下命令： 1ps -aux | grep php-fpm 配置文件解读php-fpm的配置文件在 /usr/local/php-fpm/etc/php-fpm.conf，查看该文件 1cat /usr/local/php-fpm/etc/php-fpm.conf 如上图所示： [global] 全局配置 pid 指定pid路径； error_log 指定php-fpm的错误日志； [www] 当前的pool设定 listen = /tmp/php-fcgi.sock 以sock的方式监听 user = php-fpm 指定运行的用户 group = php-fpm 指定运行的组 pm = dynamic //定义php-fpm的子进程启动模式，dynamic为动态进程管理，一开始只启动少量的子进程，根据实际需求，动态地增加或者减少子进程，最多不会超过pm.max_children定义的数值。另外一种模式是static，这种模式下子进程数量由pm.max_children决定，一次性启动这么多，不会减少也不会增加； pm.max_children = 50 //最大子进程数，ps -aux可以查看； pm.start_servers = 20 //针对dynamic模式，它定义php-fpm服务在启动服务时产生的子进程服务时产生的子进程数量； pm.min_spare_servers = 5 //针对dynamic模式，定义在空闲时段，子进程数的最少数量，如果达到这个数值时，php-fpm服务会自动派生新的子进程； pm.max_spare_servers = 35 //针对dynamic模式，定义在空闲时段，子进程数的最大值，如果高于这个数值就开始清理空闲的子进程； pm.max_requests = 500 //针对dynamic模式，定义一个子进程最多处理的请求数，也就是说在一个php-fpm的子进程最多可以处理这么多请求，当达到这个数值时，它会自动退出； 此外，在配置文件的末尾，还有一行很关键的配置； 与nginx虚拟主机的配置类似，当同一台服务器上多个网站是，我们可以把;include=/usr/local/php-fpm/etc/php-fpm.d/*.conf 注释分号去掉，这样就可以在/usr/local/php-fpm/etc/php-fpm.d 下，为每个虚拟主机配置不同的pool，各个网站之间的pool进程池彼此独立，互不影响。 设置多个pool方法一：在/usr/local/php-fpm/etc/php-fpm里面增加pool第一步：修改配置文件 123456789101112131415161718192021222324252627282930[root@hanfeng etc]# vi /usr/local/php-fpm/etc/php-fpm.conf[global]pid = /usr/local/php-fpm/var/run/php-fpm.piderror_log = /usr/local/php-fpm/var/log/php-fpm.log[www]listen = /tmp/php-fcgi.socklisten.mode = 666user = php-fpmgroup = php-fpmpm = dynamicpm.max_children = 50pm.start_servers = 20pm.min_spare_servers = 5pm.max_spare_servers = 35pm.max_requests = 500rlimit_files = 1024[steve.com]listen = /tmp/steve.socklisten.mode = 666user = php-fpmgroup = php-fpmpm = dynamicpm.max_children = 50pm.start_servers = 20pm.min_spare_servers = 5pm.max_spare_servers = 35pm.max_requests = 500rlimit_files = 1024 第二步：重新加载 nginx 服务 123nginx -tnginx -s reload 第三步：检测效果 1ps -aux | grep php-fpm 第四步：在nginx 中启用pool 默认主机的pool设定 12345678910111213141516//进入nigix虚拟主机配置文件夹[root@stevey etc]# cd /usr/local/nginx/conf/vhost/[root@stevey vhost]# lsdefault.conf test.com.conf//配置test.com.confvi test.com.conf//相关配置 location ~ \.php$ &#123; include fastcgi_params; fastcgi_pass unix:/tmp/php-fcgi.sock; //这个就是www的默认pool fastcgi_index index.php; fastcgi_param SCRIPT_FILENAME /data/nginx/test.com$fastcgi_script_name; &#125; 新建steve.com的pool设定（假设已经有新的steve.com虚拟主机） 12345678910111213141516[root@hanfeng vhost]# vim steve.com.confserver&#123; listen 80 default_server; server_name steve.com; index index.html index.htm index.php; root /data/nginx/steve.com;&#125;location ~ \.php$ &#123; include fastcgi_params; fastcgi_pass unix:/tmp/steve.com.sock; fastcgi_index index.php; fastcgi_param SCRIPT_FILENAME /data/nginx/steve.com$fastcgi_script_name; &#125; 方法二：跟nginx虚拟主机类似，php-fpmye也支持把配置文件拆分出来。第一步：修改php-fpm.conf 1234567vi php-fpm.conf//主文件只保留global设定[global]pid = /usr/local/php-fpm/var/run/php-fpm.piderror_log = /usr/local/php-fpm/var/log/php-fpm.loginclude = etc/php-fpm.d/*.conf //这行很关键，修改后各个虚拟主机的pool设定会保存在 `etc/php-fpm.d/` 目录下。 第二步：创新配置目录 1234567//创建/php-fpm.d/的目录mkdir -p etc/php-fpm.d进入配置目录cd etc/php-fpm.d//新建www.conf,并修改设定vim www.conf 第三步：创建配置文件 12345678910111213141516171819202122232425262728[www]listen = /tmp/php-fcgi.socklisten.mode = 666user = php-fpmgroup = php-fpmpm = dynamicpm.max_children = 50pm.start_servers = 20pm.min_spare_servers = 5pm.max_spare_servers = 35pm.max_requests = 500rlimit_files = 1024//新建steve.com.conf,并修改相关设定vim steve.com.conf[steve.com]listen = /tmp/steve.socklisten.mode = 666user = php-fpmgroup = php-fpmpm = dynamicpm.max_children = 50pm.start_servers = 20pm.min_spare_servers = 5pm.max_spare_servers = 35pm.max_requests = 500rlimit_files = 1024 第四步：重新加载服务 1234//检查语法/usr/local/php-fpm/sbin/php-fpm -t重启服务/etc/init.d/php-fpm restart 第五步：校验结果 1ps -aux | grep php-fpm php-fpm慢执行日志slow log慢执行日志是php-fpm提供的一个很有用的功能，通过查询和分心慢执行日志，方便我们有针对性滴进行优化。 开启slow log第一步：编辑php-fpm配置文件 1234567//PHP 5.3.3 之前设置如下：&lt;value name=&quot;request_slowlog_timeout&quot;&gt;5s&lt;/value&gt;&lt;value name=&quot;slowlog&quot;&gt;logs/php-fpm-slowlog.log&lt;/value&gt;//PHP 5.3.3 之后设置以下如下：request_slowlog_timeout = 5sslowlog = /usr/local/php/log/php-fpm-slowlog.log 注： request_slowlog_timeout 是脚本超过多长时间 就可以记录到日志文件； slowlog 是日志文件的路径； 第二步：重启php-fpm服务 1234//检查语法/usr/local/php-fpm/sbin/php-fpm -t重启服务/etc/init.d/php-fpm restart 第三步：查看slow log 123456cat /usr/local/php/log/php-fpm-slowlog.log[19-Dec-2013 16:54:49] [pool www] pid 18575script_filename = /home/web/htdocs/sandbox_canglong/test/tt.php[0x0000000003a00dc8] curl_exec() /home/web/htdocs/sandbox_canglong/test/tt.php:2[0x0000000003a00cd0] exfilter_curl_get() /home/web/htdocs/sandbox_canglong/test/tt.php:6 说明： script_filename 是入口文件； curl_exec() ： 说明是执行这个方法的时候超过执行时间的； exfilter_curl_get() ：说明调用curl_exec()的方法 ； 每行冒号后面的数字是行号； 注：开启slow log后，在错误日志文件中也有相关记录 open_basediropen_basedir 是php的一个安全设定，就是就访问权限限定在某个文件夹；就算该网站被黑，也只能在特定的文件夹内操作，而不会危及整个服务器的安全。 可以配置open_basedir的地方一共有以下三处，修改方法如下： 方法一：编辑php-fpm.conf1php_admin_value[open_basedir]=/home/wwwroot/:/proc/:/tmp/ 方法二：编辑nginx fastcgi_param12# set php open_basedir fastcgi_param PHP_ADMIN_VALUE &quot;open_basedir=$document_root/:/tmp/:/proc/&quot;; 方法三：编辑php.ini1234[HOST=www.iamle.com]open_basedir=/home/wwwroot/www.iamle.com/:/proc/:/tmp/[PATH=/home/wwwroot/www.iamle.com/]open_basedir=/home/wwwroot/www.iamle.com/:/proc/:/tmp/ open_basedir 安全设置建议三管齐下： 先设置fpm-php中pool池中的总open_basedir； 再对nginx中单个server 通过 fastcgi_param PHP_ADMIN_VALUE 设置； 最后对php.ini设置 [HOST=XXX] [PATH=XXX] 12345678910111213//第一步：在php-fpm.conf对应的pool池中行尾配置php_admin_value[open_basedir]=/home/wwwroot/:/proc/:/tmp///第二步：在nginx fastcgi fastcgi_param配置#这里用$document_root是一种取巧的方法,也可以设置绝对路径# set php open_basedirfastcgi_param PHP_ADMIN_VALUE &quot;open_basedir=$document_root/:/tmp/:/proc/&quot;;//第三步：在php.ini行尾配置[HOST=www.iamle.com]open_basedir=/home/wwwroot/www.iamle.com/:/proc/:/tmp/[PATH=/home/wwwroot/www.iamle.com/]open_basedir=/home/wwwroot/www.iamle.com/:/proc/:/tmp/ 参考资料 浅谈PHP进程管理 CGI、FastCGI和PHP-FPM关系图解 php-fpm的pool 善用php-fpm的慢执行日志slow log，分析php性能问题 php-fpm慢日志查询 PHP-FPM配置文件参数解释 LNMP架构——php-fpm的进程pool设置 nginx+php(fpm-php fastcgi)open_basedir安全设置]]></content>
+    <title><![CDATA[linu笔记：DNS基础及其查询]]></title>
+    <url>%2F2018%2F06%2F14%2FlinuxNotes-MagicOfDig-nslookup%2F</url>
+    <content type="text"><![CDATA[写在前面查漏补缺，补充学习前一阶段课程涉及到的一些有用的DNS基础知识。 什么是DNS我们所熟知的互联网通讯是基于TCP/IP协议的，而TCP/IP是基于ip地址的，也就是说，计算机在网络上通讯依赖的都是ip地址。但是，ip地址本身并不方便记忆，我们通常访问网址也不是通过ip（比如20.181.111.188），而是域名（比如www.baidu.com）。因此，就催生了一套域名转化机制，负责把域名转化成ip地址，这就是DNS。 DNS( Domain Name System)是“域名系统”的英文缩写，具体负责将主机名和域名转换为IP地址。它的工作原理通过归递查询，逐级返回访问对象的真正地址。 域名层级格式如下：1主机名.次级域名.顶级域名.根域名 比如www.baidu.com,真正的域名是www.baidu.com.root，其中， 标识 层级 root 根域名 com 顶级域名 baidu 次级域名 www 主机名 注： 各层级域名之间，用 . 隔开； 因为大家的跟域名都一样，所以在实践中，.root 通常被省略了。 域名查询原理： 从”根域名服务器”查到”顶级域名服务器”的NS记录和A记录（IP地址）； 从”顶级域名服务器”查到”次级域名服务器”的NS记录和A记录（IP地址）； 从”次级域名服务器”查出”主机名”的IP地址； 目前，全世界有13组根域名服务器，具体可以参见wiki介绍。关于域名解析的详细解释，可以查看这个网页：https://www.verisign.com/zh_CN/website-presence/online/how-dns-works/index.xhtml 可以看到，这些服务器都不在国内，如果每一次访问都要这样查询，那速度肯定比蜗牛还慢。所以，实际是运行中是这样的： 浏览器缓存 当用户通过浏览器访问某域名时，浏览器首先会在自己的缓存中查找是否有该域名对应的IP地址（若曾经访问过该域名且没有清空缓存便存在）； 系统缓存 当浏览器缓存中无域名对应IP则会自动检查用户计算机系统Hosts文件DNS缓存是否有该域名对应IP； 路由器缓存 当浏览器及系统缓存中均无域名对应IP则进入路由器缓存中检查，以上三步均为客服端的DNS缓存； ISP（互联网服务提供商）DNS缓存 当在用户客服端查找不到域名对应IP地址，则将进入ISP DNS缓存中进行查询。比如你用的是电信的网络，则会进入电信的DNS缓存服务器中进行查找； 根域名服务器 当以上均未完成，则进入根服务器进行查询。全球仅有13台根域名服务器，1个主根域名服务器，其余12为辅根域名服务器。根域名收到请求后会查看区域文件记录，若无则将其管辖范围内顶级域名（如.com）服务器IP告诉本地DNS服务器； 顶级域名服务器 顶级域名服务器收到请求后查看区域文件记录，若无则将其管辖范围内主域名服务器的IP地址告诉本地DNS服务器； 主域名服务器 主域名服务器接受到请求后查询自己的缓存，如果没有则进入下一级域名服务器进行查找，并重复该步骤直至找到正确纪录； 保存结果至缓存 本地域名服务器把返回的结果保存到缓存，以备下一次使用，同时将该结果反馈给客户端，客户端通过这个IP地址与web服务器建立链接。 DNS的记录类型域名与IP之间的对应关系，称为”记录”record。根据使用场景，”记录”可以分成不同的类型type，常见的DNS记录类型如下： A：地址记录（Address），返回域名指向的IP地址； CNAME：规范名称记录（Canonical Name），返回另一个域名，即当前查询的域名是另一个域名的跳转； NS：域名服务器记录（Name Server），返回保存下一级域名信息的服务器地址。该记录只能设置为域名，不能设置为IP地址； MX：邮件记录（Mail eXchange），返回接收电子邮件的服务器地址； PTR：逆向查询记录（Pointer Record），只用于从IP地址查询域名； DNS查询工具linux下，常用的DNS查询工具有dig 、nslookup，用法如下： dig命令安装 centos安装 1yum install bind-utils 注：mac本身支持dig，不需额外安装。 语法命令行格式： 1dig @[DnsServer] [options] [WebSiteName] [querytype] dnsserver, 指的是dns的地址； 如果指定dnsserver，那么dig会首先通过默认的上连DNS服务器去查询对应的IP地址，然后再以设置的dnsserver为上连DNS服务器； 如果未指定dnsserver，那么dig就会依次使用/etc/resolv.conf里的地址作为上连DNS服务器； WebSiteName，指的是需要查询的域名； querytype,查询的类型，写出 -t [A/AAAA/PTR/MX/ANY]等，默认查询的是A记录，也就是ip地址。 options，指的是各种选项； DNS 命令输出格式 说明： status:NOERROR 表示查询没有什么错误，Query time 表示查询完成时间； SERVER: 10.202.72.116#53(10.202.72.116)，表示本地 DNS 服务器地址和端口号； QUESTION SECTION 表示需要查询的内容，这里需要查询域名的 A 记录； ANSWER SECTION 表示查询结果，返回 A 记录的 IP 地址。600 表示本次查询缓存时间，在 600 秒本地 DNS 服务器可以直接从缓存返回结果； AUTHORITY SECTION 表示从那台 DNS 服务器获取到具体的 A 记录信息，由它来维护查询域名的信息; ADDITIONAL SECTION 表示 NS 服务器对应的 IP 地址，这些 IP 地址对应的服务器安装了 BIND 软件; options 常见用法： 不加任何插件，显示ipv4环境下13个根服务器的信息 1234567891011121314151617181920212223242526272829303132[root@stevey test]# dig; &lt;&lt;&gt;&gt; DiG 9.9.4-RedHat-9.9.4-61.el7 &lt;&lt;&gt;&gt;;; global options: +cmd;; Got answer:;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 23085;; flags: qr rd ra ad; QUERY: 1, ANSWER: 13, AUTHORITY: 0, ADDITIONAL: 1;; OPT PSEUDOSECTION:; EDNS: version: 0, flags:; udp: 512;; QUESTION SECTION:;. IN NS;; ANSWER SECTION:. 112652 IN NS a.root-servers.net.. 112652 IN NS b.root-servers.net.. 112652 IN NS c.root-servers.net.. 112652 IN NS d.root-servers.net.. 112652 IN NS e.root-servers.net.. 112652 IN NS f.root-servers.net.. 112652 IN NS g.root-servers.net.. 112652 IN NS h.root-servers.net.. 112652 IN NS i.root-servers.net.. 112652 IN NS j.root-servers.net.. 112652 IN NS k.root-servers.net.. 112652 IN NS l.root-servers.net.. 112652 IN NS m.root-servers.net.;; Query time: 64 msec;; SERVER: 8.8.8.8#53(8.8.8.8);; WHEN: Thu Jun 14 15:02:20 HKT 2018;; MSG SIZE rcvd: 239 -f选项：从指定文本中逐行读取内容进行查询 12345678910111213141516171819202122232425262728293031323334353637383940414243[root@stevey test]# cat a.txtwww.baidu.comwww.163.com[root@stevey test]# dig -f a.txt @8.8.8.8; &lt;&lt;&gt;&gt; DiG 9.9.4-RedHat-9.9.4-61.el7 &lt;&lt;&gt;&gt; www.baidu.com; (1 server found);; global options: +cmd;; Got answer:;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 5241;; flags: qr rd ra; QUERY: 1, ANSWER: 3, AUTHORITY: 0, ADDITIONAL: 0;; QUESTION SECTION:;www.baidu.com. IN A;; ANSWER SECTION:www.baidu.com. 1176 IN CNAME www.a.shifen.com.www.a.shifen.com. 123 IN A 220.181.111.188www.a.shifen.com. 123 IN A 220.181.112.244;; Query time: 15 msec;; SERVER: 8.8.8.8#53(8.8.8.8);; WHEN: Thu Jun 14 14:36:46 HKT 2018;; MSG SIZE rcvd: 90; &lt;&lt;&gt;&gt; DiG 9.9.4-RedHat-9.9.4-61.el7 &lt;&lt;&gt;&gt; www.163.com;; Got answer:;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 63874;; flags: qr rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 0;; QUESTION SECTION:;www.163.com. IN A;; ANSWER SECTION:www.163.com. 242 IN CNAME www.163.com.lxdns.com.www.163.com.lxdns.com. 439 IN CNAME 163.xdwscache.ourglb0.com.163.xdwscache.ourglb0.com. 22 IN A 103.254.188.230163.xdwscache.ourglb0.com. 22 IN A 106.120.178.41;; Query time: 18 msec;; SERVER: 8.8.8.8#53(8.8.8.8);; WHEN: Thu Jun 14 14:36:46 HKT 2018;; MSG SIZE rcvd: 129 -t选项 指定查询的记录类型 查询A记录 查询CNAME记录 -4/6选项 指定传输协议，-4指的是ipv4；-6指的是ipv6 1234567891011121314[root@stevey test]# dig @8.8.8.8 www.google.com -4; &lt;&lt;&gt;&gt; DiG 9.9.4-RedHat-9.9.4-61.el7 &lt;&lt;&gt;&gt; @8.8.8.8 www.google.com -4; (1 server found);; global options: +cmd;; Got answer:;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 65095;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0;; QUESTION SECTION:;www.google.com. IN A;; ANSWER SECTION:www.google.com. 63 IN A 31.13.66.1 -x选项 逆向查询，意思是查询IP地址对应的域名 123456789101112131415161718192021222324[root@stevey test]# dig -x 193.0.14.129; &lt;&lt;&gt;&gt; DiG 9.9.4-RedHat-9.9.4-61.el7 &lt;&lt;&gt;&gt; -x 193.0.14.129;; global options: +cmd;; Got answer:;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 55475;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0;; QUESTION SECTION:;129.14.0.193.in-addr.arpa. IN PTR;; ANSWER SECTION:129.14.0.193.in-addr.arpa. 1 IN PTR k.root-servers.net.;; Query time: 28 msec;; SERVER: 129.29.29.29#53(129.29.29.29);; WHEN: Thu Jun 14 14:54:29 HKT 2018;; MSG SIZE rcvd: 75;; Query time: 13 msec;; SERVER: 8.8.8.8#53(8.8.8.8);; WHEN: Thu Jun 14 14:51:17 HKT 2018;; MSG SIZE rcvd: 48 +trace 选项 从根域查询一直跟踪直到查询到最终结果，并将整个过程信息输出出来； 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556[root@stevey test]# dig @8.8.8.8 +trace www.baidu.com; &lt;&lt;&gt;&gt; DiG 9.9.4-RedHat-9.9.4-61.el7 &lt;&lt;&gt;&gt; @8.8.8.8 +trace www.baidu.com; (1 server found);; global options: +cmd. 99778 IN NS e.root-servers.net.. 99778 IN NS h.root-servers.net.. 99778 IN NS l.root-servers.net.. 99778 IN NS i.root-servers.net.. 99778 IN NS a.root-servers.net.. 99778 IN NS d.root-servers.net.. 99778 IN NS c.root-servers.net.. 99778 IN NS b.root-servers.net.. 99778 IN NS j.root-servers.net.. 99778 IN NS k.root-servers.net.. 99778 IN NS g.root-servers.net.. 99778 IN NS m.root-servers.net.. 99778 IN NS f.root-servers.net.. 99778 IN RRSIG NS 8 0 518400 20180624050000 20180611040000 39570 . qrPNK9BW+EcNETVHvYGuf3cIP7PmfWb6zfikmgYORzMwsn5urzYu6ZPR x/w5jACtOe9ROfqsj1+rxdHr22nWGMz2ZL1ZzfM+ptu1jOK0cunVPwUR Wd4aFk3Dfe9D5uckdNf8x2NuGfpmDa5CXlMiEGv7OF42MIjR5NRZqarZ B3Gx8cWef+PyouWL7rkpCvBHmywisdOE2QSUK8rkBMNyStI5t6Q5yUTj gHujdswu0iYVZfSrKN6p38taWwoIA2Ljf8N2rXsE5T6e+3lK0tYATL0w 1EOpkSVZ90UsLh7/HPE/l6wO91zA5X1uF33LHseLb5U2M4ScNHOQpx0V /OTqaw==;; Received 525 bytes from 8.8.8.8#53(8.8.8.8) in 263 mscom. 172800 IN NS a.gtld-servers.net.com. 172800 IN NS b.gtld-servers.net.com. 172800 IN NS c.gtld-servers.net.com. 172800 IN NS d.gtld-servers.net.com. 172800 IN NS e.gtld-servers.net.com. 172800 IN NS f.gtld-servers.net.com. 172800 IN NS g.gtld-servers.net.com. 172800 IN NS h.gtld-servers.net.com. 172800 IN NS i.gtld-servers.net.com. 172800 IN NS j.gtld-servers.net.com. 172800 IN NS k.gtld-servers.net.com. 172800 IN NS l.gtld-servers.net.com. 172800 IN NS m.gtld-servers.net.com. 86400 IN DS 30909 8 2 E2D3C916F6DEEAC73294E8268FB5885044A833FC5459588F4A9184CF C41A5766com. 86400 IN RRSIG DS 8 1 86400 20180627050000 20180614040000 39570 . Tg+3ggtwhbBFoGx7mrHTZfHSoxhh6kRbtTX6YXnRZkIV25s15IPLIVLq pUEUVNgmuOmccmuN5vhWqJTgQpHbKA6f4X2ABFSbigBL3zS8MioiVMvv FNlxuATGfqYxqdize3x/fNXiQAy5J+RetXFDoHFATh+6v+Pl/FSyoKs2 pNm3WSU12PD+5wqgmMeoAcbAi1MT7oPcWoGmHS8KEI2WJp+2QjeKwnzl OqVzPdoqvMm/UDRgxcrzww58oO7jPGLRVHwyEgS6oSN8oxTear6AC3Io Oo8/PkQBBStX2fTY1jCKbY7byq/WA5v0QTQuqIWP4mrfSDKAdPGPtVS2 /pF9pg==;; Received 1173 bytes from 192.58.128.30#53(j.root-servers.net) in 386 msbaidu.com. 172800 IN NS dns.baidu.com.baidu.com. 172800 IN NS ns2.baidu.com.baidu.com. 172800 IN NS ns3.baidu.com.baidu.com. 172800 IN NS ns4.baidu.com.baidu.com. 172800 IN NS ns7.baidu.com.CK0POJMG874LJREF7EFN8430QVIT8BSM.com. 86400 IN NSEC3 1 1 0 - CK0Q1GIN43N1ARRC9OSM6QPQR81H5M9A NS SOA RRSIG DNSKEY NSEC3PARAMCK0POJMG874LJREF7EFN8430QVIT8BSM.com. 86400 IN RRSIG NSEC3 8 2 86400 20180621044630 20180614033630 36707 com. VCZSbjvAmAGA/Oa2GZecQbcvXGrO4qRqA3o1vhDfJJtopOSROtQrGnDE RnesT31RcG0FUanP2C632ACP0T2uywP5o7UJE4JNOrw0wZm4TJsfmXHb 1rksLWqZOuNi8SnOLIeEos5vL66xgpNb1OJtdhfEu4TlVEgnzNdu6Rqq IBk=HPVV2B5N85O7HJJRB7690IB5UVF9O9UA.com. 86400 IN NSEC3 1 1 0 - HPVVP23QUO0FP9R0A04URSICJPESKO9J NS DS RRSIGHPVV2B5N85O7HJJRB7690IB5UVF9O9UA.com. 86400 IN RRSIG NSEC3 8 2 86400 20180619043222 20180612032222 36707 com. e7PaDpbSrn/ckI2xSM3CfjUofaBfLGRHb0i9qfiW5JfPEYs04sF2TY27 iILXwNC+galMIJvTZNVh26xEGMWAobA+ehImRXk0f/x5yU1xgQDDN5nY BOa1pKA08/M4hxrosGfiQw4vYJBnWYkpqpgySVHKW63mzomWErEf1SLx dW0=;; Received 697 bytes from 192.35.51.30#53(f.gtld-servers.net) in 324 mswww.baidu.com. 1200 IN CNAME www.a.shifen.com.a.shifen.com. 1200 IN NS ns5.a.shifen.com.a.shifen.com. 1200 IN NS ns4.a.shifen.com.a.shifen.com. 1200 IN NS ns3.a.shifen.com.a.shifen.com. 1200 IN NS ns1.a.shifen.com.a.shifen.com. 1200 IN NS ns2.a.shifen.com.;; Received 239 bytes from 180.76.76.92#53(ns7.baidu.com) in 16 ms +short 选项 仅输出CNAME信息和A记录 1234[root@stevey test]# dig @8.8.8.8 +short www.baidu.comwww.a.shifen.com.220.181.112.244220.181.111.188 nslookup命令跟dig一样，nslookup也是在bind-utils包里的，安装dig的时候，买一送一。 nslookup 有两种工作模式：交互模式、非交互模式交互模式进入方式： 直接输入nslookup命令，不加任何参数，则直接进入交互模式； 输入 nslookup - [域名服务器主机名或ip地址] 退出方式：输入exit 用法： 12345678910111213141516171819202122232425262728293031323334353637383940[root@stevey test]# nslookup//输入查询的域名&gt; baidu.com Server: 129.29.29.29Address: 129.29.29.29#53Non-authoritative answer:Name: baidu.comAddress: 123.125.115.110Name: baidu.comAddress: 220.181.57.216 //指定查询类型&gt; set type=ns&gt; baidu.comServer: 129.29.29.29Address: 129.29.29.29#53Non-authoritative answer:baidu.com nameserver = ns3.baidu.com.baidu.com nameserver = ns4.baidu.com.baidu.com nameserver = dns.baidu.com.baidu.com nameserver = ns7.baidu.com.baidu.com nameserver = ns2.baidu.com.//set all 列出nslookup工具的常用选项的当前设置值&gt; set allDefault server: 129.29.29.29Address: 129.29.29.29#53Default server: 8.8.8.8Address: 8.8.8.8#53Set options: novc nodebug nod2 search recurse timeout = 0 retry = 3 port = 53 querytype = A class = IN srchlist = 非交互模式直接输入 nslookup [查询的IP或主机名] 12345678910[root@stevey test]# nslookup www.baidu.comServer: 129.29.29.29Address: 129.29.29.29#53Non-authoritative answer:www.baidu.com canonical name = www.a.shifen.com.Name: www.a.shifen.comAddress: 220.181.112.244Name: www.a.shifen.comAddress: 220.181.111.188 host 命令 同样查询域名ip信息，默认返回A记录和MX记录。 12345678[root@stevey test]# host baidu.combaidu.com has address 220.181.57.216baidu.com has address 123.125.115.110baidu.com mail is handled by 20 jpmx.baidu.com.baidu.com mail is handled by 15 mx.n.shifen.com.baidu.com mail is handled by 10 mx.maillb.baidu.com.baidu.com mail is handled by 20 mx50.baidu.com.baidu.com mail is handled by 20 mx1.baidu.com. host -a [域名]：返回详细信息，与域名]：返回详`类似 123456789101112[root@stevey test]# host -a www.baidu.comTrying &quot;www.baidu.com&quot;;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 55109;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0;; QUESTION SECTION:;www.baidu.com. IN ANY;; ANSWER SECTION:www.baidu.com. 879 IN CNAME www.a.shifen.com.Received 58 bytes from 129.29.29.29#53 in 13 ms host -c [域名] 查询权威域名服务器信息 12345[root@stevey test]# host -C bjucd.comNameserver 118.145.6.5: bjucd.com has SOA record ns7.dns.net.cn. admin.dns.net.cn. 56 900 600 86400 3600Nameserver 61.135.129.2: bjucd.com has SOA record ns.dns.net.cn. admin.dns.net.cn. 56 900 60 参考资料 DNS根服务器、根服务器、全球13台根域名服务器、详细介绍 wiki：Root name server 《dig挖出DNS的秘密》-linux命令五分钟系列之三十四 Linux命令：使用dig命令解析域名 通过dig命令理解DNS 域名解析之dig,host,nslookup命令 抽象理解DNS]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux学习笔记13-2：mysql的基本使用（一）]]></title>
+    <url>%2F2018%2F06%2F13%2Fweek13-2-linuxNotes-sqlSettingPart1%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记开始整理mysql的基本配置和使用知识。之前测试环境安装的是mariaDB，不过mriaDB跟mysql兼容，下面的例子也用mariaDB来做。 初次登陆及基本设置修改环境变量测试环境使用的是yum安装mariaDB，其安装目录为/usr/bin/mysql。如果不清楚，可以使用find命令查一下： 123456789101112[root@stevey ~]# find / -name &apos;mysql&apos;/etc/logrotate.d/mysql/etc/rc.d/init.d/mysql/etc/selinux/targeted/active/modules/100/mysql/var/lib/mysql/var/lib/mysql/mysql/usr/bin/mysql/usr/lib64/mysql/usr/share/mysql/usr/local/src/php-7.2.6/travis/ext/mysql[root@stevey ~]# which mysql/usr/bin/mysql 如果采用源码包安装的mysql，一般安装目录在/usr/local/mysql/ ，因此在执行命令时需采用绝对路径，非常不方便。解决方法有两种： 修改全局环境变量 1234567vim /etc/profile//增加一行：export PATH=$PATH:/usr/local/mysql/bin///保存退出后，执行以下命令生效source /etc/profile 设置软链接 1ln -s /usr/local/mysql/bin/mysql /usr/bin/ 初次登陆1mysql [-u username] [-h host] [-p password] [database] 其中， -u选项，指定用户名； -h选项，指定主机IP地址或socket -p选项，指定密码；注意p和密码之间没有空格 database，指定登陆哪个数据库（假设有多个数据库的话） 由于是本地虚拟机安装mysql，初次登陆也设置密码，因此只需要输入如下命令即可。 1mysql -u root 设置mysql root 密码(三种方式) 方式一：mysqladmin命令 1mysqladmin –u root password 123456 //密码设定为123456 方法二：set password修改口令： 123[root@stevey test]# mysqlMariaDB [(none)]&gt; set password for root@localhost = password(&apos;PASSWORD&apos;);MariaDB [(none)]&gt; flush privileges; //执行刷新命令后生效 方法三： UPDATE 语句来设置密码： 12MariaDB [(none)]&gt; update mysql.user set password = password(&apos;PASSWORD&apos;) where user=&apos;root&apos;;MariaDB [(none)]&gt; flush privileges; //执行刷新命令后生效 查看当前用户表123456789MariaDB [(none)]&gt; select User,Host,Password from mysql.user;+------+-----------+-------------------------------------------+| User | Host | Password |+------+-----------+-------------------------------------------+| root | localhost | *2E31C5EB30A0D665E861AB5277A2508FB7E7C16A || root | 127.0.0.1 | *2E31C5EB30A0D665E861AB5277A2508FB7E7C16A || root | ::1 | *2E31C5EB30A0D665E861AB5277A2508FB7E7C16A |+------+-----------+-------------------------------------------+3 rows in set (0.13 sec) 重置root密码 修改配置文件 1234vim /etc/my.cnf//在[mysql]下一行增加如下内容：skip-grant 重启mysql 1/etc/init.d/mysqld restart 进入密码表更改密码 12345MariaDB [(none)]&gt; use mysql; //用户名密码存在user表里，而user表存在mysql这个库里，进入mysql，记得加分号MariaDB [(none)]&gt; select * from user; //查看user表MariaDB [(none)]&gt; select password from user where user=&apos;root&apos; ; //查询语句查询密码表。加密的字符串是password这个函数生成 修改配置文件 1234vim /etc/my.cnf//删除如下内容行或skip-grant 重新登陆mysql 1mysql -u root mysql常用命令 查询当前库 123456789MariaDB [(none)]&gt; show databases;+--------------------+| Database |+--------------------+| information_schema || mysql || performance_schema |+--------------------+3 rows in set (0.03 sec) 切换库 1use mysql; 查询库的表 123456789101112131415161718192021222324252627282930313233343536MariaDB [mysql]&gt; show tables;+---------------------------+| Tables_in_mysql |+---------------------------+| column_stats || columns_priv || db || event || func || general_log || gtid_slave_pos || help_category || help_keyword || help_relation || help_topic || host || index_stats || innodb_index_stats || innodb_table_stats || plugin || proc || procs_priv || proxies_priv || roles_mapping || servers || slow_log || table_stats || tables_priv || time_zone || time_zone_leap_second || time_zone_name || time_zone_transition || time_zone_transition_type || user |+---------------------------+30 rows in set (0.00 sec) 查看表里的字段 1desc user; 查看建表语句 1show create table user\G; 查看当前用户 1234567MariaDB [mysql]&gt; select user();+----------------+| user() |+----------------+| root@localhost |+----------------+1 row in set (0.00 sec) 查看当前使用的数据库 1234567MariaDB [mysql]&gt; select database();+------------+| database() |+------------+| mysql |+------------+1 row in set (0.00 sec) 创建库 12MariaDB [mysql]&gt; create database db1; //创建名为db1的库Query OK, 1 row affected (0.00 sec) 创建表 1234567//sql语句以分号结尾，下面实际上是将两个语句放在一行书写//id 和 name 使用的是反引号，tab键上面的//int(4)表示这个表仅包括整数，括号里的4表示最大为4位数//char(40)表示固定长度（40位）的字符数；如果是可变长度的字符数，用varchar（n）表示MariaDB [db1]&gt; use db1; create table t1(`id` int(4), `name` char(40));Database changedQuery OK, 0 rows affected (0.07 sec) 查看当前数据库版本 1234567MariaDB [db1]&gt; select version();+-----------------+| version() |+-----------------+| 10.2.15-MariaDB |+-----------------+1 row in set (0.04 sec) 查看数据库状态 1show status; 查看各参数 123456789101112131415//查看参数show variables; //查看指定的参数show variables like &apos;max_connect%&apos;;//示例MariaDB [db1]&gt; show variables like &apos;max_connect%&apos;;+--------------------+-------+| Variable_name | Value |+--------------------+-------+| max_connect_errors | 100 || max_connections | 151 |+--------------------+-------+2 rows in set (0.00 sec) 修改参数 12345678910111213//设定参数MariaDB [db1]&gt; set global max_connect_errors=1000; Query OK, 0 rows affected (0.05 sec)//查看参数设定的结果MariaDB [db1]&gt; show variables like &apos;max_connect%&apos;;+--------------------+-------+| Variable_name | Value |+--------------------+-------+| max_connect_errors | 1000 || max_connections | 151 |+--------------------+-------+2 rows in set (0.00 sec) 查看数据库队列 show processlist 是显示用户正在运行的线程，需要注意的是，除了 root 用户能看到所有正在运行的线程外，其他用户都只能看到自己正在运行的线程，看不到其它用户正在运行的线程。除非单独个这个用户赋予了PROCESS 权限。 show processlist 默认只显示前100个字符，也就是你看到的语句可能是截断了的，要看全部信息，需要使用 show full processlist。 12345678910111213141516171819202122232425MariaDB [db1]&gt; show processlist;+----+-------------+-----------+------+---------+------+--------------------------+------------------+----------+| Id | User | Host | db | Command | Time | State | Info | Progress |+----+-------------+-----------+------+---------+------+--------------------------+------------------+----------+| 1 | system user | | NULL | Daemon | NULL | InnoDB purge worker | NULL | 0.000 || 2 | system user | | NULL | Daemon | NULL | InnoDB purge worker | NULL | 0.000 || 3 | system user | | NULL | Daemon | NULL | InnoDB purge worker | NULL | 0.000 || 4 | system user | | NULL | Daemon | NULL | InnoDB purge coordinator | NULL | 0.000 || 5 | system user | | NULL | Daemon | NULL | InnoDB shutdown handler | NULL | 0.000 || 15 | root | localhost | db1 | Query | 0 | init | show processlist | 0.000 |+----+-------------+-----------+------+---------+------+--------------------------+------------------+----------+6 rows in set (0.00 sec)MariaDB [db1]&gt; show full processlist;+----+-------------+-----------+------+---------+------+--------------------------+-----------------------+----------+| Id | User | Host | db | Command | Time | State | Info | Progress |+----+-------------+-----------+------+---------+------+--------------------------+-----------------------+----------+| 1 | system user | | NULL | Daemon | NULL | InnoDB purge worker | NULL | 0.000 || 2 | system user | | NULL | Daemon | NULL | InnoDB purge worker | NULL | 0.000 || 3 | system user | | NULL | Daemon | NULL | InnoDB purge worker | NULL | 0.000 || 4 | system user | | NULL | Daemon | NULL | InnoDB purge coordinator | NULL | 0.000 || 5 | system user | | NULL | Daemon | NULL | InnoDB shutdown handler | NULL | 0.000 || 15 | root | localhost | db1 | Query | 0 | init | show full processlist | 0.000 |+----+-------------+-----------+------+---------+------+--------------------------+-----------------------+----------+6 rows in set (0.00 sec) 查询结果的说明： Id: 就是这个线程的唯一标识，show processlist 显示的信息时来自information_schema.processlist 表，所以这个Id就是这个表的主键。当我们发现这个线程有问题的时候，可以通过 kill 命令，加上这个Id值将这个线程杀掉。 User: 就是指启动这个线程的用户。 Host: 记录了发送请求的客户端的 IP 和 端口号。通过这些信息在排查问题的时候，我们可以定位到是哪个客户端的哪个进程发送的请求。 DB: 当前执行的命令是在哪一个数据库上。如果没有指定数据库，则该值为 NULL 。 Command: 是指此刻该线程正在执行的命令，这个选项需要和state结合起来看。 Time: 表示该线程处于当前状态的时间。 State: 线程的状态，和 Command 对应，下面单独解释。 mysql列出的状态State主要有以下几种： Checking table：正在检查数据表； Closing tables：正在将表中修改的数据刷新到磁盘中，同时正在关闭已经用完的表。这是一个很快的操作，如果不是这样的话，就应该确认磁盘空间是否已经满了或者磁盘是否正处于重负中； Connect Out：复制从服务器正在连接主服务器； Copying to tmp table on disk：由于临时结果集大于tmp_table_size，正在将临时表从内存存储转为磁盘存储以此节省内存。 Creating tmp table：正在创建临时表以存放部分查询结果； deleting from main table：服务器正在执行多表删除中的第一部分，刚删除第一个表； deleting from reference tables：服务器正在执行多表删除中的第二部分，正在删除其他表的记录； Flushing tables；正在执行FLUSH TABLES，等待其他线程关闭数据表； Killed；发送了一个kill请求给某线程，那么这个线程将会检查kill标志位，同时会放弃下一个kill请求。MySQL会在每次的主循环中检查kill标志位，不过有些情况下该线程可能会过一小段才能死掉。如果该线程程被其他线程锁住了，那么kill请求会在锁释放时马上生效； Locked；被其他查询锁住了。 Sending data：正在处理SELECT查询的记录，同时正在把结果发送给客户端。 Sorting for group：正在为GROUP BY做排序。 Sorting for order：正在为ORDER BY做排序。 Opening tables：这个过程应该会很快，除非受到其他因素的干扰。例如，在执ALTER TABLE或LOCK TABLE语句行完以前，数据表无法被其他线程打开。正尝试打开一个表。 Removing duplicates：正在执行一个SELECT DISTINCT方式的查询，但是MySQL无法在前一个阶段优化掉那些重复的记录。因此，MySQL需要再次去掉重复的记录，然后再把结果发送给客户端。 Reopen table：获得了对一个表的锁，但是必须在表结构修改之后才能获得这个锁。已经释放锁，关闭数据表，正尝试重新打开数据表。 Repair by sorting：修复指令正在排序以创建索引。 Repair with keycache：修复指令正在利用索引缓存一个一个地创建新索引。它会比Repair by sorting慢些。 Searching rows for update：正在讲符合条件的记录找出来以备更新。它必须在UPDATE要修改相关的记录之前就完成了。 Sleeping：正在等待客户端发送新请求. System lock：正在等待取得一个外部的系统锁。如果当前没有运行多个mysqld服务器同时请求同一个表，那么可以通过增加–skip-external-locking参数来禁止外部系统锁。 Upgrading lock：INSERT DELAYED正在尝试取得一个锁表以插入新记录。 Updating：正在搜索匹配的记录，并且修改它们。 User Lock：正在等待GET_LOCK()。 Waiting for tables：该线程得到通知，数据表结构已经被修改了，需要重新打开数据表以取得新的结构。然后，为了能的重新打开数据表，必须等到所有其他线程关闭这个表。以下几种情况下会产生这个通知：FLUSH TABLES tbl_name, ALTER TABLE, RENAME TABLE, REPAIR TABLE, ANALYZE TABLE,或OPTIMIZE TABLE。 waiting for handler insert：INSERT DELAYED已经处理完了所有待处理的插入操作，正在等待新的请求。]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux学习笔记：如何安装使用ftp]]></title>
+    <url>%2F2018%2F06%2F12%2FlinuxNotes-howToInstallFtpOnLinux%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记主要整理如何在linux上安装使用ftp。 第一步：安装ftp12345678//安装vsftpdyum install -y vsftpd//启动服务systemctl start vsftpd.service//校验进程是否启动ps -aux | grep vsftpd 如下图所示，说明已启动 第二步：修改 vsftpd 配置vcftpd 的配置文件地址为/etc/vsftpd/vsftpd.conf 如果不知道配置文件在那里，使用一下命令查询 1find / -name &apos;vsftpd.conf 查看已有的配置 1234567891011121314151617// grep -v参数表示取反，也就是显示不加#的行[root@steve ~]# cat /etc/vsftpd/vsftpd.conf | grep -v &apos;#&apos;anonymous_enable=NOlocal_enable=YESwrite_enable=YESlocal_umask=022dirmessage_enable=YESxferlog_enable=YESconnect_from_port_20=YESxferlog_std_format=YESchroot_local_user=YESlisten=NOlisten_ipv6=YESpam_service_name=vsftpduserlist_enable=YEStcp_wrappers=YES 修改配置文件 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132vi /etc/vsftpd/vsftpd.conf// 基本配置# 开启匿名登录anonymous_enable=YES# 允许使用本地帐户进行FTP用户登录验证local_enable=YES# 允许写write_enable=YES# 设置本地用户默认文件掩码022local_umask=022# 允许匿名上传anon_upload_enable=YES# 允许匿名创建新目录anon_mkdir_write_enable=YES# 同时开放其它权限anon_other_write_enable=YES# 可以发送消息当访问某个目录时dirmessage_enable=YES# 开启上传下载记录xferlog_enable=YES# 数据链通过20端口建立connect_from_port_20=YES# 允许其它用户上传匿名文件#chown_uploads=YES# 所有用户#chown_username=whoever# 日志保存到#xferlog_file=/var/log/xferlog# 日志标准输出xferlog_std_format=YES# 空闲会话时间#idle_session_timeout=600# 数据连接超时时间#data_connection_timeout=120# 隔离的安全用户#nopriv_user=ftpsecure# 开启异步数据线程#async_abor_enable=YES# 开启ASCII协议上传ascii_upload_enable=YES# 开启ASCII协议下载ascii_download_enable=YES# 开启邮箱验证#deny_email_enable=YES# 拒绝的邮箱列表#banned_email_file=/etc/vsftpd/banned_emails# 是否允许直接获取子目录信息#ls_recurse_enable=YES# 监听IPv4listen=NO# 监听IPv6和监听IPv4listen_ipv6=YES# 虚拟用户启用pam认证pam_service_name=vsftpd# 用户组管理userlist_enable=YES# 访问控制tcp_wrappers=YES# 允使用被动模式pasv_enable=YES# 指定使用被动模式时打开端口的最小值pasv_min_port=10060# 指定使用被动模式时打开端口的最大值。pasv_max_port=10090# 用户宽带限制200kps#local_max_rate=200000# 登录后欢迎内容ftpd_banner=Welcome to My FTP service.# ---------开启虚拟用户组参数--------# 开启虚拟用户guest_enable=YES# 主虚拟用户名vsftpd，等下会建立guest_username=vsftpd# 虚拟用户配置（可以对每一个虚拟用户进行单独的权限配置）user_config_dir=/etc/vsftpd/vconf# 启用限定用户在其主目录下chroot_local_user=YES# 开启用户列表chroot管理chroot_list_enable=YES# chroot管理的用户列表（一行一用户,虚拟用户都要添加进去）# 当设置用户只能在登录目录时，chroot管理的用户为不受限制，否则相反chroot_list_file=/etc/vsftpd/chroot_list# 允许chroot管理用户进行写操作allow_writeable_chroot=YES# ---------虚拟用户高级参数（请选择一组）--------# 虚拟用户和本地用户有相同的权限virtual_use_local_privs=YES# 虚拟用户和匿名用户有相同的权限，默认是NOvirtual_use_local_privs=NO# 虚拟用户具有写权限（上传、下载、删除、重命名）virtual_use_local_privs=YESwrite_enable=YES# 虚拟用户不能浏览目录，只能上传文件，无其他权限virtual_use_local_privs=NOwrite_enable=YESanon_world_readable_only=YESanon_upload_enable=YES# 虚拟用户只能下载文件，无其他权限virtual_use_local_privs=NOwrite_enable=YESanon_world_readable_only=NOanon_upload_enable=NO# 虚拟用户只能上传和下载文件，无其他权限virtual_use_local_privs=NOwrite_enable=YESanon_world_readable_only=NOanon_upload_enable=YES# 虚拟用户只能下载文件和创建文件夹，无其他权限virtual_use_local_privs=NOwrite_enable=YESanon_world_readable_only=NOanon_mkdir_write_enable=YES# 虚拟用户只能下载、删除和重命名文件，无其他权限virtual_use_local_privs=NOwrite_enable=YESanon_world_readable_only=NOanon_other_write_enable=YES 第三步：虚拟用户的建立和配置123456789101112131415161718192021222324252627282930313233343536373839//假如宿主用户为vsftpduseradd -s /sbin/nologin vsftpd//编辑虚拟用户名单文件：vim /etc/vsftpd/virtusers//第一行账号，第二行密码，注意：不能使用root做用户名，系统保留test123456//添加到chroot管理列表vim /etc/vsftpd/chroot_list//用户列表test//安装db工具包yum install-y compat-db47.x86_64//利用db_load命令生成数据文件db_load -T -t hash -f /etc/vsftpd/virtusers /etc/vsftpd/virtusers.db//更改数据库文件权限chmod 600 /etc/vsftpd/virtusers.db//添加vsftpd的虚拟用户的验证vim /etc/pam.d/vsftpd-------------内容如下-----------------#%PAM-1.0auth sufficient /lib64/security/pam_userdb.so db=/etc/vsftpd/virtusersaccount sufficient /lib64/security/pam_userdb.so db=/etc/vsftpd/virtuserssession optional pam_keyinit.so force revokeauth required pam_listfile.so item=user sense=deny file=/etc/vsftpd/ftpusers onerr=succeedauth required pam_shells.soauth include password-authaccount include password-authsession required pam_loginuid.sosession include password-auth 第四步：创建虚拟用户个人配置文件123456789101112131415161718192021222324252627282930// 建立虚拟用户个人vsftp的配置文件mkdir -p /etc/vsftpd/vconf// 进入目录cd /etc/vsftpd/vconf// 创建并编辑用户的配置文件vim test// 用户 test 配置目录local_root=/home/vsftpd/test// 允许本地用户对FTP服务器文件具有写权限write_enable=YESanon_world_readable_only=NO// 允许匿名用户上传文件(须将全局的write_enable=YES,默认YES)anon_upload_enable=YES// 允许匿名用户创建目录anon_mkdir_write_enable=YES// 允许匿名用户删除和重命名权限(自行添加)anon_other_write_enable=YES// 创建用户目录mkdir -p /home/vsftpd/test// 权限设置chown -R vsftpd:vsftpd /home/vsftpd 第五步：重启ftp123456// 设置开机自启systemctl enable vsftpd// 服务操作systemctl restart vsftpd.service # 重启服务systemctl start vsftpd.service # 启动服务systemctl status vsftpd.service # 服务状态查看 其它注意事项：修改阿里云服务的安全策略打开阿里云服务器控制台 https://home.console.aliyun.com，点“我的资源”下面的云服务器进入你的实例列表 选择右边的更多–安全组配置–添加规则–添加安全组规则 规则配置如下： 设置主动连接模式下载ftp 软件，我用的是yummy ftp pro 阿里云不支持ftp被动模式，需采用主动模式进行连接。 参考资料 阿里云下Centos 7简单配置FTP服务器+root账户管理（通用Linux） 在CentOS7.4中使用Vsftpd搭建FTP服务器 CentOS 7.2 安装和配置 FTP 服务器 CentOS 7 安装FTP服务器 CentOS7安装配置vsftp搭建FTP]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>ftp</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux学习笔记13-1：lnmp环境的搭建和配置（六）]]></title>
+    <url>%2F2018%2F06%2F11%2Fweek13-1-linuxNotes-lnmpPart1%2F</url>
+    <content type="text"><![CDATA[写在前面继续整理lnmp环境的配置知识，这则笔记主要是php-fpm相关的内容。 什么是php-fpm？php进程管理的基本概念：先回顾四个概念： CGI：是 Web Server 与 Web Application 之间数据交换的一种协议； FastCGI：同 CGI，是一种通信协议，但比 CGI 在效率上做了一些优化。同样，SCGI 协议与 FastCGI 类似； PHP-CGI：是 PHP （Web Application）对 Web Server 提供的 CGI 协议的接口程序； PHP-FPM：是 PHP（Web Application）对 Web Server 提供的 FastCGI 协议的接口程序，额外还提供了相对智能一些任务管理； php-cgi和php-fpm的关系PHP-CGI就是PHP实现的自带的FastCGI管理器，但是它本身不给力，有明显的不足： 只能解析请求，返回结果，不会进程管理； php-cgi变更php.ini配置后，需重启php-cgi才能让新的php-ini生效，不可以平滑重启； 直接杀死php-cgi进程，php就不能运行了； 基于上述因素，就出现了一些第三方补充解决方案，比如PHP-FPM，它的优点包括： 用于调度管理PHP解析器php-cgi的管理程序； PHP-FPM通过生成新的子进程可以实现php.ini修改后的平滑重启； 如上图所示，当nginx收到 index.php 这个请求后，会启动对应的 CGI 程序，这里就是PHP的解析器。接下来PHP解析器会解析php.ini文件，初始化执行环境，然后处理请求，再以规定CGI规定的格式返回处理后的结果，退出进程，Web server再把结果返回给浏览器。这就是一个完整的动态PHP Web访问流程。 php-fpm进程管理命令行格式： 1nginx -s [signal] 其中,signal常用选项如下： quit - 优雅的关闭，即处理完当前请求再关闭; reload - 重新载入配置文件; reopen - 重新打开日志文件; stop - 立即关闭; php-fpm的pool前面提到过，php-fpm的一个重要功能，就是可以管理进程，这里涉及到一个pool的概念，nginx启动服务后，会产生1个master进程+N个worker进程，共同构成一个进程池（pool），其中 master进程主要负责读取配置文件，并控制管理workder进程； worker进程具体负责处理请求； 先看目前的php-fpm 的pool，执行以下命令： 1ps -aux | grep php-fpm 配置文件解读php-fpm的配置文件在 /usr/local/php-fpm/etc/php-fpm.conf，查看该文件 1cat /usr/local/php-fpm/etc/php-fpm.conf 如上图所示： [global] 全局配置 pid 指定pid路径； error_log 指定php-fpm的错误日志； [www] 当前的pool设定 listen = /tmp/php-fcgi.sock 以sock的方式监听 user = php-fpm 指定运行的用户 group = php-fpm 指定运行的组 pm = dynamic //定义php-fpm的子进程启动模式，dynamic为动态进程管理，一开始只启动少量的子进程，根据实际需求，动态地增加或者减少子进程，最多不会超过pm.max_children定义的数值。另外一种模式是static，这种模式下子进程数量由pm.max_children决定，一次性启动这么多，不会减少也不会增加； pm.max_children = 50 //最大子进程数，ps -aux可以查看； pm.start_servers = 20 //针对dynamic模式，它定义php-fpm服务在启动服务时产生的子进程服务时产生的子进程数量； pm.min_spare_servers = 5 //针对dynamic模式，定义在空闲时段，子进程数的最少数量，如果达到这个数值时，php-fpm服务会自动派生新的子进程； pm.max_spare_servers = 35 //针对dynamic模式，定义在空闲时段，子进程数的最大值，如果高于这个数值就开始清理空闲的子进程； pm.max_requests = 500 //针对dynamic模式，定义一个子进程最多处理的请求数，也就是说在一个php-fpm的子进程最多可以处理这么多请求，当达到这个数值时，它会自动退出； 此外，在配置文件的末尾，还有一行很关键的配置； 与nginx虚拟主机的配置类似，当同一台服务器上多个网站是，我们可以把;include=/usr/local/php-fpm/etc/php-fpm.d/*.conf 注释分号去掉，这样就可以在/usr/local/php-fpm/etc/php-fpm.d 下，为每个虚拟主机配置不同的pool，各个网站之间的pool进程池彼此独立，互不影响。 设置多个pool方法一：在/usr/local/php-fpm/etc/php-fpm里面增加pool第一步：修改配置文件 123456789101112131415161718192021222324252627282930[root@hanfeng etc]# vi /usr/local/php-fpm/etc/php-fpm.conf[global]pid = /usr/local/php-fpm/var/run/php-fpm.piderror_log = /usr/local/php-fpm/var/log/php-fpm.log[www]listen = /tmp/php-fcgi.socklisten.mode = 666user = php-fpmgroup = php-fpmpm = dynamicpm.max_children = 50pm.start_servers = 20pm.min_spare_servers = 5pm.max_spare_servers = 35pm.max_requests = 500rlimit_files = 1024[steve.com]listen = /tmp/steve.socklisten.mode = 666user = php-fpmgroup = php-fpmpm = dynamicpm.max_children = 50pm.start_servers = 20pm.min_spare_servers = 5pm.max_spare_servers = 35pm.max_requests = 500rlimit_files = 1024 第二步：重新加载 nginx 服务 123nginx -tnginx -s reload 第三步：检测效果 1ps -aux | grep php-fpm 第四步：在nginx 中启用pool 默认主机的pool设定 12345678910111213141516//进入nigix虚拟主机配置文件夹[root@stevey etc]# cd /usr/local/nginx/conf/vhost/[root@stevey vhost]# lsdefault.conf test.com.conf//配置test.com.confvi test.com.conf//相关配置 location ~ \.php$ &#123; include fastcgi_params; fastcgi_pass unix:/tmp/php-fcgi.sock; //这个就是www的默认pool fastcgi_index index.php; fastcgi_param SCRIPT_FILENAME /data/nginx/test.com$fastcgi_script_name; &#125; 新建steve.com的pool设定（假设已经有新的steve.com虚拟主机） 12345678910111213141516[root@hanfeng vhost]# vim steve.com.confserver&#123; listen 80 default_server; server_name steve.com; index index.html index.htm index.php; root /data/nginx/steve.com;&#125;location ~ \.php$ &#123; include fastcgi_params; fastcgi_pass unix:/tmp/steve.com.sock; fastcgi_index index.php; fastcgi_param SCRIPT_FILENAME /data/nginx/steve.com$fastcgi_script_name; &#125; 方法二：跟nginx虚拟主机类似，php-fpmye也支持把配置文件拆分出来。第一步：修改php-fpm.conf 1234567vi php-fpm.conf//主文件只保留global设定[global]pid = /usr/local/php-fpm/var/run/php-fpm.piderror_log = /usr/local/php-fpm/var/log/php-fpm.loginclude = etc/php-fpm.d/*.conf //这行很关键，修改后各个虚拟主机的pool设定会保存在 `etc/php-fpm.d/` 目录下。 第二步：创新配置目录 1234567//创建/php-fpm.d/的目录mkdir -p etc/php-fpm.d进入配置目录cd etc/php-fpm.d//新建www.conf,并修改设定vim www.conf 第三步：创建配置文件 修改www的配置文件123456789101112[www]listen = /tmp/php-fcgi.socklisten.mode = 666user = php-fpmgroup = php-fpmpm = dynamicpm.max_children = 50pm.start_servers = 20pm.min_spare_servers = 5pm.max_spare_servers = 35pm.max_requests = 500rlimit_files = 1024 新建steve.com.conf,并修改相关设定 1234567891011121314vim steve.com.conf[steve.com]listen = /tmp/steve.com.socklisten.mode = 666user = php-fpmgroup = php-fpmpm = dynamicpm.max_children = 50pm.start_servers = 20pm.min_spare_servers = 5pm.max_spare_servers = 35pm.max_requests = 500rlimit_files = 1024 第四步：重新加载服务 1234//检查语法/usr/local/php-fpm/sbin/php-fpm -t重启服务/etc/init.d/php-fpm restart 第五步：校验结果 1ps -aux | grep php-fpm php-fpm慢执行日志slow log慢执行日志是php-fpm提供的一个很有用的功能，通过查询和分心慢执行日志，方便我们有针对性滴进行优化。 开启slow log第一步：编辑php-fpm配置文件 1234567//PHP 5.3.3 之前设置如下：&lt;value name=&quot;request_slowlog_timeout&quot;&gt;5s&lt;/value&gt;&lt;value name=&quot;slowlog&quot;&gt;logs/php-fpm-slowlog.log&lt;/value&gt;//PHP 5.3.3 之后设置以下如下：request_slowlog_timeout = 5sslowlog = /usr/local/php/log/php-fpm-slowlog.log 注： request_slowlog_timeout 是脚本超过多长时间 就可以记录到日志文件； slowlog 是日志文件的路径； 第二步：重启php-fpm服务 1234//检查语法/usr/local/php-fpm/sbin/php-fpm -t重启服务/etc/init.d/php-fpm restart 第三步：查看slow log 123456cat /usr/local/php/log/php-fpm-slowlog.log[19-Dec-2013 16:54:49] [pool www] pid 18575script_filename = /home/web/htdocs/sandbox_canglong/test/tt.php[0x0000000003a00dc8] curl_exec() /home/web/htdocs/sandbox_canglong/test/tt.php:2[0x0000000003a00cd0] exfilter_curl_get() /home/web/htdocs/sandbox_canglong/test/tt.php:6 说明： script_filename 是入口文件； curl_exec() ： 说明是执行这个方法的时候超过执行时间的； exfilter_curl_get() ：说明调用curl_exec()的方法 ； 每行冒号后面的数字是行号； 注：开启slow log后，在错误日志文件中也有相关记录 open_basediropen_basedir 是php的一个安全设定，就是就访问权限限定在某个文件夹；就算该网站被黑，也只能在特定的文件夹内操作，而不会危及整个服务器的安全。 可以配置open_basedir的地方一共有以下三处，修改方法如下： 方法一：编辑php-fpm.conf1php_admin_value[open_basedir]=/home/wwwroot/:/proc/:/tmp/ 方法二：编辑nginx fastcgi_param12# set php open_basedir fastcgi_param PHP_ADMIN_VALUE &quot;open_basedir=$document_root/:/tmp/:/proc/&quot;; 方法三：编辑php.ini1234[HOST=www.iamle.com]open_basedir=/home/wwwroot/www.iamle.com/:/proc/:/tmp/[PATH=/home/wwwroot/www.iamle.com/]open_basedir=/home/wwwroot/www.iamle.com/:/proc/:/tmp/ open_basedir 安全设置建议三管齐下： 先设置fpm-php中pool池中的总open_basedir； 再对nginx中单个server 通过 fastcgi_param PHP_ADMIN_VALUE 设置； 最后对php.ini设置 [HOST=XXX] [PATH=XXX] 12345678910111213//第一步：在php-fpm.conf对应的pool池中行尾配置php_admin_value[open_basedir]=/home/wwwroot/:/proc/:/tmp///第二步：在nginx fastcgi fastcgi_param配置#这里用$document_root是一种取巧的方法,也可以设置绝对路径# set php open_basedirfastcgi_param PHP_ADMIN_VALUE &quot;open_basedir=$document_root/:/tmp/:/proc/&quot;;//第三步：在php.ini行尾配置[HOST=www.iamle.com]open_basedir=/home/wwwroot/www.iamle.com/:/proc/:/tmp/[PATH=/home/wwwroot/www.iamle.com/]open_basedir=/home/wwwroot/www.iamle.com/:/proc/:/tmp/ 参考资料 浅谈PHP进程管理 CGI、FastCGI和PHP-FPM关系图解 php-fpm的pool 善用php-fpm的慢执行日志slow log，分析php性能问题 php-fpm慢日志查询 PHP-FPM配置文件参数解释 LNMP架构——php-fpm的进程pool设置 nginx+php(fpm-php fastcgi)open_basedir安全设置]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -21,8 +60,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -34,8 +73,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -47,8 +86,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -60,8 +99,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -74,8 +113,8 @@
       </categories>
       <tags>
         <tag>python</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -86,8 +125,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -99,8 +138,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -113,8 +152,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -127,8 +166,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
         <tag>mysql</tag>
@@ -142,8 +181,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -156,8 +195,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -170,8 +209,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
         <tag>mysql</tag>
@@ -185,8 +224,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -199,8 +238,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -213,8 +252,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>php</tag>
       </tags>
   </entry>
@@ -226,8 +265,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>sysV</tag>
       </tags>
   </entry>
@@ -239,8 +278,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>base64</tag>
       </tags>
   </entry>
@@ -252,8 +291,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -264,8 +303,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>raspberryPi</tag>
       </tags>
   </entry>
@@ -277,8 +316,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>php</tag>
         <tag>mysql</tag>
         <tag>apache</tag>
@@ -292,8 +331,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>php</tag>
         <tag>mysql</tag>
         <tag>apache</tag>
@@ -307,8 +346,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rsync</tag>
       </tags>
   </entry>
@@ -333,8 +372,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rsync</tag>
       </tags>
   </entry>
@@ -359,8 +398,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>crontab</tag>
         <tag>systemd</tag>
       </tags>
@@ -373,8 +412,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>pid</tag>
         <tag>tid</tag>
       </tags>
@@ -387,8 +426,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>firewalld</tag>
       </tags>
   </entry>
@@ -400,8 +439,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -412,8 +451,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tcpdump</tag>
         <tag>wireshark</tag>
       </tags>
@@ -426,8 +465,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>iptables</tag>
         <tag>netfilter</tag>
       </tags>
@@ -441,8 +480,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -453,8 +492,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tcpdump</tag>
         <tag>wireshark</tag>
       </tags>
@@ -468,8 +507,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -481,8 +520,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -494,8 +533,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -508,8 +547,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -521,8 +560,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -534,8 +573,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -547,8 +586,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -560,8 +599,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -574,8 +613,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -588,8 +627,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -602,8 +641,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -614,10 +653,10 @@
         <category>kindle</category>
       </categories>
       <tags>
+        <tag>notes</tag>
         <tag>dropbox</tag>
         <tag>IFTTT</tag>
         <tag>kinlde</tag>
-        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -629,8 +668,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -643,8 +682,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -657,8 +696,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -671,8 +710,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -685,8 +724,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -712,8 +751,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -726,8 +765,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>lvm</tag>
       </tags>
   </entry>
@@ -740,8 +779,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -753,8 +792,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -766,8 +805,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -779,8 +818,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -792,8 +831,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -805,8 +844,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -818,8 +857,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -831,8 +870,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -844,8 +883,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -857,8 +896,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -882,8 +921,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -895,8 +934,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rescueMode</tag>
       </tags>
   </entry>
@@ -909,8 +948,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>putty</tag>
         <tag>xshell</tag>
         <tag>iterm2</tag>
@@ -925,8 +964,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>ip</tag>
       </tags>
   </entry>
@@ -939,8 +978,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -1081,8 +1120,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -1218,8 +1257,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1332,8 +1371,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
         <tag>google</tag>
       </tags>
   </entry>
@@ -1345,8 +1384,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
       </tags>
   </entry>
   <entry>

@@ -1149,8 +1149,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>ls</tag>
         <tag>swap</tag>
+        <tag>ls</tag>
         <tag>bootloader</tag>
         <tag>grub</tag>
       </tags>
@@ -1264,8 +1264,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -1401,8 +1401,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1466,8 +1466,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>front-end</tag>
+        <tag>JavaScript</tag>
         <tag>ES6</tag>
       </tags>
   </entry>

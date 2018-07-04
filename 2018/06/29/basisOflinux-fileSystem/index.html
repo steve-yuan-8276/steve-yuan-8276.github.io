@@ -1,0 +1,316 @@
+<!DOCTYPE html><html class="theme-next gemini use-motion" lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3"><link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222"><meta name="keywords" content="centos,linux,notes,"><link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml"><meta name="description" content="写在前面linux是一个多用户、多任务系统，具有很好的稳定性和安全性，而这与linux的用户和权限管理机制密不可分。 我们在linux系统中的操作，实际上都是操作进程访问文件，这里的访问权限是基于Linux的安全管理机制的。linux上最初的安全模型，叫做DAC，Discretionary Access Contorl，主动访问控制；后来在此基础上又增加了额外的权限管理机制，成为MAC，Manda"><meta name="keywords" content="centos,linux,notes"><meta property="og:type" content="article"><meta property="og:title" content="linux笔记：用户权限和文件权限"><meta property="og:url" content="https://steve-yuan-8276.github.io/2018/06/29/basisOflinux-fileSystem/index.html"><meta property="og:site_name" content="Steve的折腾学习日志"><meta property="og:description" content="写在前面linux是一个多用户、多任务系统，具有很好的稳定性和安全性，而这与linux的用户和权限管理机制密不可分。 我们在linux系统中的操作，实际上都是操作进程访问文件，这里的访问权限是基于Linux的安全管理机制的。linux上最初的安全模型，叫做DAC，Discretionary Access Contorl，主动访问控制；后来在此基础上又增加了额外的权限管理机制，成为MAC，Manda"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="https://farm1.staticflickr.com/787/40206810334_bb89977f05_o.jpg"><meta property="og:image" content="https://farm1.staticflickr.com/846/29281844568_90c20b3e97_o.png"><meta property="og:updated_time" content="2018-07-02T14:57:36.096Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="linux笔记：用户权限和文件权限"><meta name="twitter:description" content="写在前面linux是一个多用户、多任务系统，具有很好的稳定性和安全性，而这与linux的用户和权限管理机制密不可分。 我们在linux系统中的操作，实际上都是操作进程访问文件，这里的访问权限是基于Linux的安全管理机制的。linux上最初的安全模型，叫做DAC，Discretionary Access Contorl，主动访问控制；后来在此基础上又增加了额外的权限管理机制，成为MAC，Manda"><meta name="twitter:image" content="https://farm1.staticflickr.com/787/40206810334_bb89977f05_o.jpg"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.3",sidebar:{position:"right",display:"post",offset:12,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://steve-yuan-8276.github.io/2018/06/29/basisOflinux-fileSystem/"><title>linux笔记：用户权限和文件权限 | Steve的折腾学习日志</title><script>!function(e,a,t,n,g,c,o){e.GoogleAnalyticsObject=g,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),o=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",o.parentNode.insertBefore(c,o)}(window,document,"script",0,"ga"),ga("create","UA-111158073-1","auto"),ga("send","pageview")</script></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-right page-post-detail"><div class="headband"></div> <a href="https://github.com/steve-yuan-8276"><img style="position:absolute;top:0;left:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">Steve的折腾学习日志</span><span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br> 首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br> 标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br> 分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br> 归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i><br> 关于</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br> 搜索</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i></span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"> <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/06/29/basisOflinux-fileSystem/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="Steve Yuan"><meta itemprop="description" content=""><meta itemprop="image" content="/uploads/logo.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Steve的折腾学习日志"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">linux笔记：用户权限和文件权限</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-29T15:24:20+08:00">2018-06-29</time></span> <span class="post-category"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span></span> <span class="post-comments-count"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-comment-o"></i></span><a href="/2018/06/29/basisOflinux-fileSystem/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/06/29/basisOflinux-fileSystem/" itemprop="commentCount"></span></a></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i></span> <span class="post-meta-item-text">字数统计&#58;</span> <span title="字数统计">1,653</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-clock-o"></i></span> <span class="post-meta-item-text">阅读时长 &asymp;</span> <span title="阅读时长">6</span></div></div></header><div class="post-body" itemprop="articleBody"><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>linux是一个多用户、多任务系统，具有很好的稳定性和安全性，而这与linux的用户和权限管理机制密不可分。</p><p>我们在linux系统中的操作，实际上都是操作进程访问文件，这里的访问权限是基于Linux的安全管理机制的。linux上最初的安全模型，叫做DAC，<code>Discretionary Access Contorl</code>，主动访问控制；后来在此基础上又增加了额外的权限管理机制，成为MAC，<code>Mandatory Access Contorl</code>，强制访问机制。为了区分两者，将支持MAC的linux系统成为selinux，意思是linux的安全加强系统。</p><p>在实际运行过程中，系统会先做DAC检查，如不通过则拒绝执行；如果通过DAC检查且支持MAC模块，则再做MAC检查。</p><p>这里整理的用户和权限管理，主要是针对DAC而言的。</p><h2 id="用户权限管理"><a href="#用户权限管理" class="headerlink" title="用户权限管理"></a>用户权限管理</h2><h3 id="用户权限概念"><a href="#用户权限概念" class="headerlink" title="用户权限概念"></a>用户权限概念</h3><h4 id="user-用户："><a href="#user-用户：" class="headerlink" title="user 用户："></a><code>user 用户：</code></h4><p>在linux当中，每个用户有一个唯一的uid (user identification)用来标示用户身份，这个道理大概就跟每个中国人有一个唯一的身份证号码一样。</p><p>在centos 7 中，有以下三种用户：</p><table><thead><tr><th>身份</th><th>uid</th><th>说明</th></tr></thead><tbody><tr><td>系统管理员</td><td>0</td><td>系统超级管理员，即root，拥有最高权限</td></tr><tr><td>系统用户</td><td>1-999</td><td>系统预留，linux默认服务程序都会有独立的系统用户进行运行，这部分账户由系统预留，我们设置普通账户的时候，不能将uid设为这个数字段</td></tr><tr><td>普通用户</td><td>1000以上</td><td>系统普通用户，系统权限受限，由root用户管理，uid从1000开始</td></tr></tbody></table><h4 id="group-组："><a href="#group-组：" class="headerlink" title="group 组："></a><code>group 组：</code></h4><p>group的概念，跟班级的概念类似，主要是方便Linux系统权限管理。每个用户只能从属于一个基本组，但可以加入多个拓展组。做个类别，不如张三是三年二班（基本组）的学生，但可以同时加入天文组、计算机组、唱诗班（拓展组），大概是这么个意思。</p><h3 id="用户权限管理的配置文件"><a href="#用户权限管理的配置文件" class="headerlink" title="用户权限管理的配置文件"></a>用户权限管理的配置文件</h3><ul><li><p><code>/etc/passwd</code> 存放用户信息，每条信息依次为：用户名/口令（这里只有星号，真正的密码在<code>/etc/shadow</code>中）/uid/gid（默认与uid相同）/描述注释/home目录/登陆shell；</p></li><li><p><code>/etc/group</code> 存放组信息，每条信息依次为：组名/口令/gid/组成员列表；</p></li><li><p><code>/etc/shadow</code>，存放密码信息，每条信息依次为：登录名/加密口令/最后一次修改时间/最小修改间隔/最大修改间隔/警告时间/不活动时间；</p></li></ul><h3 id="用户管理相关的命令"><a href="#用户管理相关的命令" class="headerlink" title="用户管理相关的命令"></a>用户管理相关的命令</h3><h4 id="useradd-命令-：新增用户"><a href="#useradd-命令-：新增用户" class="headerlink" title="useradd 命令 ：新增用户"></a><code>useradd</code> 命令 ：新增用户</h4><p>命令行格式</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd [options] [username]</span><br></pre></td></tr></table></figure><p>常用参数</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//-d 指定用户家目录</span><br><span class="line">useradd -d /home/steve  steve</span><br><span class="line"></span><br><span class="line">//-u 指定uid</span><br><span class="line">useradd -u 1000 steve</span><br><span class="line"></span><br><span class="line">//-g 指定所属组</span><br><span class="line">useradd -g steve steve</span><br><span class="line"></span><br><span class="line">//-G 指定拓展组</span><br><span class="line">useradd -G steve,IT,music  steve</span><br><span class="line"></span><br><span class="line">//-s 指定登陆shell，/sbin/nogin 表示不允许登陆</span><br><span class="line">useradd -s /sbin/nologin steve</span><br></pre></td></tr></table></figure><h4 id="groupadd-命令：增加组"><a href="#groupadd-命令：增加组" class="headerlink" title="groupadd 命令：增加组"></a>groupadd 命令：增加组</h4><p>命令行格式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">groupadd [options] [groupname]</span><br></pre></td></tr></table></figure><p>常见用法：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//增加一个名为work的组</span><br><span class="line">groupadd work</span><br></pre></td></tr></table></figure><h4 id="userdel-命令：删除用户"><a href="#userdel-命令：删除用户" class="headerlink" title="userdel 命令：删除用户"></a>userdel 命令：删除用户</h4><p>命令行格式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">userdel [options] [username]</span><br></pre></td></tr></table></figure><p>常见用法：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//-f 选项，强制删除某用户</span><br><span class="line">userdel -f steve</span><br><span class="line"></span><br><span class="line">//-r 选项，同时删除用户及其家目录</span><br><span class="line">userdel -r steve</span><br></pre></td></tr></table></figure><h4 id="passwd命令：-设置密码"><a href="#passwd命令：-设置密码" class="headerlink" title="passwd命令： 设置密码"></a>passwd命令： 设置密码</h4><p>命令行格式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd [options] [uername]</span><br></pre></td></tr></table></figure><p>常见用法</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//直接输入passwd，按照提示输入两次密码，即可设施密码</span><br><span class="line">[root@local-linux02 ~]# passwd</span><br><span class="line"></span><br><span class="line">//--stdin 参数，只需一行更改密码</span><br><span class="line">//newpasswd表示需要设置的新密码</span><br><span class="line">echo &apos;newpasswd&apos; | passwd --stdin username</span><br><span class="line"></span><br><span class="line">//-l 表示锁定用户，禁止该用户登陆</span><br><span class="line">passwd -l steve</span><br><span class="line"></span><br><span class="line">//-u 表示解锁，允许登陆</span><br><span class="line">passwd -u steve</span><br></pre></td></tr></table></figure><h2 id="文件权限管理"><a href="#文件权限管理" class="headerlink" title="文件权限管理"></a>文件权限管理</h2><p>在linux当中，一切都是文件。文件主要包括以下三个部分：</p><ol><li><p>普通权限</p></li><li><p>特殊权限</p></li><li><p>隐藏权限</p></li></ol><h3 id="linux文件目录结构："><a href="#linux文件目录结构：" class="headerlink" title="linux文件目录结构："></a>linux文件目录结构：</h3><p><img src="https://farm1.staticflickr.com/787/40206810334_bb89977f05_o.jpg" alt=""></p><h3 id="常用文件类型："><a href="#常用文件类型：" class="headerlink" title="常用文件类型："></a>常用文件类型：</h3><table><thead><tr><th>文件类型</th><th>描述</th><th>说明</th></tr></thead><tbody><tr><td>-</td><td>普通文件，包括文本文件</td><td>可用touch命令创建</td></tr><tr><td>d</td><td>文件目录</td><td>可用 mkdir 命令创建</td></tr><tr><td>l</td><td>链接文件(指向另一个文件,类似于windows下的快捷方式)</td><td>可用ln 命令创建</td></tr><tr><td>s</td><td>套接字文件，用于进程通信</td><td>一般由应用程序在执行过程中创建</td></tr><tr><td>b</td><td>块设备文件,二进制文件</td></tr><tr><td>c</td><td>字符设备文件，如鼠标、键盘、终端</td></tr><tr><td>p</td><td>管道文件</td><td>可用mkfifo命令创建</td></tr></tbody></table><h3 id="文件基本权限"><a href="#文件基本权限" class="headerlink" title="文件基本权限"></a>文件基本权限</h3><p>文件的基本权限包括读read、写write和执行execute，它与用户密不可分，分为三组进行管理：</p><ul><li><p><code>user：</code>对文件/目录所属用户设定权限；</p></li><li><p><code>group：</code>对文件/目录所属组设定权限；</p></li><li><p><code>other：</code>对文件/用户其他的组和用户设定权限；</p></li></ul><h5 id="对于文件而言："><a href="#对于文件而言：" class="headerlink" title="对于文件而言："></a>对于文件而言：</h5><ul><li><p>Read: 表示可读取文件内容；</p></li><li><p>Write：表示可编辑、新增、修改、删除文件内容；</p></li><li><p>execute：表示可执行一个脚本程序；</p></li></ul><h5 id="对于目录而言："><a href="#对于目录而言：" class="headerlink" title="对于目录而言："></a>对于目录而言：</h5><ul><li><p>Read: 表示可读取目录内的文件列表；</p></li><li><p>Write：表示可在目录内编辑、新增、修改、删除文件内容；</p></li><li><p>execute：表示能够进入目录；</p></li></ul><h4 id="权限的数字表示方法："><a href="#权限的数字表示方法：" class="headerlink" title="权限的数字表示方法："></a>权限的数字表示方法：</h4><p>read读、write写、execute执行，分别可以用4、2、1来表示；</p><h3 id="文件的特殊权限"><a href="#文件的特殊权限" class="headerlink" title="文件的特殊权限"></a>文件的特殊权限</h3><h4 id="suid"><a href="#suid" class="headerlink" title="suid"></a><code>suid</code></h4><p>这是一种对二进位制程序设置的特殊权限，临时允许二进位制程序执行者用户文件所属主的权限，这是一种临时的、特殊的、有条件的授权方法。</p><p>例如，前文提到的/etc/shadow 这个文件，用来保存用户信息，处于系统安全的考虑，这个文件读、写、执行的权限都没有；但是passwd命令拥有suid的特殊权限位，如下图所示，出现在x位置的那个s，即表示suid，这就好像尚方宝剑，赋予它临时修改密码配置文件，也就是更改密码的权限。</p><p><img src="https://farm1.staticflickr.com/846/29281844568_90c20b3e97_o.png" alt=""></p><h4 id="sgid"><a href="#sgid" class="headerlink" title="sgid"></a>sgid</h4><p>sgid 与suid相似，有一个重要特性，就是一旦对某个目录设置了sgid，该目录中创建的文件将继承该目录的所属组。</p><p>这就意味着如果我们要创建一个部门共享目录，可以早创建目录后，设置sgid权限，这样部门群组内的任何用户创建的文件都会属于该目录所属组。如此一来，该部门所有用户都能够顺利读取共享目录文件。</p></div><div><ul class="post-copyright"><li class="post-copyright-author"> <strong>本文作者：</strong> Steve Yuan</li><li class="post-copyright-link"> <strong>本文链接：</strong> <a href="https://steve-yuan-8276.github.io/2018/06/29/basisOflinux-fileSystem/" title="linux笔记：用户权限和文件权限">https://steve-yuan-8276.github.io/2018/06/29/basisOflinux-fileSystem/</a></li><li class="post-copyright-license"> <strong>版权声明：</strong> 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li></ul></div><footer class="post-footer"><div class="post-tags"> <a href="/tags/centos/" rel="tag"># centos</a> <a href="/tags/linux/" rel="tag"># linux</a> <a href="/tags/notes/" rel="tag"># notes</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2018/06/29/MacTrick-hexoUpgradeAndOptimization/" rel="next" title="mac技巧：ssh代理及hexo升级同步"><i class="fa fa-chevron-left"></i> mac技巧：ssh代理及hexo升级同步</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"> <a href="/2018/07/04/week15-1-linuxNotes-keepALived/" rel="prev" title="linux笔记：使用keepalived配置高可用集群">linux笔记：使用keepalived配置高可用集群<i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="disqus_thread"><noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan"><p class="site-author-name" itemprop="name">Steve Yuan</p><p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">120</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/index.html"><span class="site-state-item-count">12</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"> <a href="/tags/index.html"><span class="site-state-item-count">81</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/steve-yuan-8276" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i> GitHub</a></span><span class="links-of-author-item"><a href="https://twitter.com/feng8276" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i> Twitter</a></span><span class="links-of-author-item"><a href="https://www.facebook.com/feng74" target="_blank" title="Facebook"><i class="fa fa-fw fa-facebook"></i> Facebook</a></span><span class="links-of-author-item"><a href="mailto:yuanf02@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i> E-Mail</a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户权限管理"><span class="nav-number">2.</span> <span class="nav-text">用户权限管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户权限概念"><span class="nav-number">2.1.</span> <span class="nav-text">用户权限概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#user-用户："><span class="nav-number">2.1.1.</span> <span class="nav-text">user 用户：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#group-组："><span class="nav-number">2.1.2.</span> <span class="nav-text">group 组：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户权限管理的配置文件"><span class="nav-number">2.2.</span> <span class="nav-text">用户权限管理的配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户管理相关的命令"><span class="nav-number">2.3.</span> <span class="nav-text">用户管理相关的命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#useradd-命令-：新增用户"><span class="nav-number">2.3.1.</span> <span class="nav-text">useradd 命令 ：新增用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#groupadd-命令：增加组"><span class="nav-number">2.3.2.</span> <span class="nav-text">groupadd 命令：增加组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#userdel-命令：删除用户"><span class="nav-number">2.3.3.</span> <span class="nav-text">userdel 命令：删除用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#passwd命令：-设置密码"><span class="nav-number">2.3.4.</span> <span class="nav-text">passwd命令： 设置密码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件权限管理"><span class="nav-number">3.</span> <span class="nav-text">文件权限管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#linux文件目录结构："><span class="nav-number">3.1.</span> <span class="nav-text">linux文件目录结构：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用文件类型："><span class="nav-number">3.2.</span> <span class="nav-text">常用文件类型：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件基本权限"><span class="nav-number">3.3.</span> <span class="nav-text">文件基本权限</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#对于文件而言："><span class="nav-number">3.3.0.1.</span> <span class="nav-text">对于文件而言：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#对于目录而言："><span class="nav-number">3.3.0.2.</span> <span class="nav-text">对于目录而言：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#权限的数字表示方法："><span class="nav-number">3.3.1.</span> <span class="nav-text">权限的数字表示方法：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件的特殊权限"><span class="nav-number">3.4.</span> <span class="nav-text">文件的特殊权限</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#suid"><span class="nav-number">3.4.1.</span> <span class="nav-text">suid</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sgid"><span class="nav-number">3.4.2.</span> <span class="nav-text">sgid</span></a></li></ol></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">Steve Yuan</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-area-chart"></i></span> <span class="post-meta-item-text">Site words total count&#58;</span> <span title="Site words total count">176.7k</span></div><div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div> <span class="post-meta-divider">|</span><div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script type="text/javascript" src="/lib/three/three.min.js"></script><script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script><script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script><script type="text/javascript">var disqus_config=function(){this.page.url="https://steve-yuan-8276.github.io/2018/06/29/basisOflinux-fileSystem/",this.page.identifier="2018/06/29/basisOflinux-fileSystem/",this.page.title="linux笔记：用户权限和文件权限"},d=document,s=d.createElement("script");s.src="https://steve-yuan.disqus.com/embed.js",s.setAttribute("data-timestamp",""+ +new Date),(d.head||d.body).appendChild(s)</script><script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script></body></html>

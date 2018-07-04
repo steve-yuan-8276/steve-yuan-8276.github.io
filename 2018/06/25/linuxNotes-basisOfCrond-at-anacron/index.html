@@ -1,0 +1,316 @@
+<!DOCTYPE html><html class="theme-next gemini use-motion" lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#222"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3"><link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222"><meta name="keywords" content="linux,notes,at,crond,anacron,"><link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml"><meta name="description" content="写在前面之前学习第八章的时候，整理过linux计划任务方面的内容，参见Linux运维学习笔记8-1：系统定时任务，但当时并不太懂，今天看资料的时候恰好又看到这方面的内容，再来重新整理一下。 所谓计划任务服务，就是通过设定，让linux系统在无人值守的情况下，在指定时间，自动执行某些特定的命令或者服务，从而实现运维自动化。 这里主要整理了三个工具，分别是at、crond、anacron，分别整理如下"><meta name="keywords" content="linux,notes,at,crond,anacron"><meta property="og:type" content="article"><meta property="og:title" content="linux笔记：计划任务服务"><meta property="og:url" content="https://steve-yuan-8276.github.io/2018/06/25/linuxNotes-basisOfCrond-at-anacron/index.html"><meta property="og:site_name" content="Steve的折腾学习日志"><meta property="og:description" content="写在前面之前学习第八章的时候，整理过linux计划任务方面的内容，参见Linux运维学习笔记8-1：系统定时任务，但当时并不太懂，今天看资料的时候恰好又看到这方面的内容，再来重新整理一下。 所谓计划任务服务，就是通过设定，让linux系统在无人值守的情况下，在指定时间，自动执行某些特定的命令或者服务，从而实现运维自动化。 这里主要整理了三个工具，分别是at、crond、anacron，分别整理如下"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="https://farm2.staticflickr.com/1773/43013350581_fbe2d8ef8c_o.png"><meta property="og:image" content="https://farm2.staticflickr.com/1811/41203514040_ea614758fd_o.png"><meta property="og:image" content="https://farm2.staticflickr.com/1795/42296122784_65f37979fd_o.png"><meta property="og:image" content="https://farm2.staticflickr.com/1809/41206108840_888cc974b4_o.png"><meta property="og:image" content="https://farm2.staticflickr.com/1774/41205511850_6f472e8ac7_o.png"><meta property="og:image" content="https://farm2.staticflickr.com/1802/29143625118_3884a4b0c4_o.png"><meta property="og:updated_time" content="2018-06-26T07:36:33.773Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="linux笔记：计划任务服务"><meta name="twitter:description" content="写在前面之前学习第八章的时候，整理过linux计划任务方面的内容，参见Linux运维学习笔记8-1：系统定时任务，但当时并不太懂，今天看资料的时候恰好又看到这方面的内容，再来重新整理一下。 所谓计划任务服务，就是通过设定，让linux系统在无人值守的情况下，在指定时间，自动执行某些特定的命令或者服务，从而实现运维自动化。 这里主要整理了三个工具，分别是at、crond、anacron，分别整理如下"><meta name="twitter:image" content="https://farm2.staticflickr.com/1773/43013350581_fbe2d8ef8c_o.png"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Gemini",version:"5.1.3",sidebar:{position:"right",display:"post",offset:12,b2t:!1,scrollpercent:!1,onmobile:!1},fancybox:!0,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://steve-yuan-8276.github.io/2018/06/25/linuxNotes-basisOfCrond-at-anacron/"><title>linux笔记：计划任务服务 | Steve的折腾学习日志</title><script>!function(e,a,t,n,g,c,o){e.GoogleAnalyticsObject=g,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),o=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",o.parentNode.insertBefore(c,o)}(window,document,"script",0,"ga"),ga("create","UA-111158073-1","auto"),ga("send","pageview")</script></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-right page-post-detail"><div class="headband"></div> <a href="https://github.com/steve-yuan-8276"><img style="position:absolute;top:0;left:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">Steve的折腾学习日志</span><span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br> 首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br> 标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br> 分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br> 归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i><br> 关于</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br> 搜索</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i></span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"> <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/06/25/linuxNotes-basisOfCrond-at-anacron/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="Steve Yuan"><meta itemprop="description" content=""><meta itemprop="image" content="/uploads/logo.png"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Steve的折腾学习日志"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">linux笔记：计划任务服务</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-25T17:37:26+08:00">2018-06-25</time></span> <span class="post-category"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a></span></span> <span class="post-comments-count"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-comment-o"></i></span><a href="/2018/06/25/linuxNotes-basisOfCrond-at-anacron/#comments" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/06/25/linuxNotes-basisOfCrond-at-anacron/" itemprop="commentCount"></span></a></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i></span> <span class="post-meta-item-text">字数统计&#58;</span> <span title="字数统计">1,956</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-clock-o"></i></span> <span class="post-meta-item-text">阅读时长 &asymp;</span> <span title="阅读时长">7</span></div></div></header><div class="post-body" itemprop="articleBody"><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>之前学习第八章的时候，整理过linux计划任务方面的内容，参见<a href="https://www.steve-yuan.com/2018/05/10/week8-1-linuxnotes-cron/" target="_blank" rel="noopener">Linux运维学习笔记8-1：系统定时任务</a>，但当时并不太懂，今天看资料的时候恰好又看到这方面的内容，再来重新整理一下。</p><p>所谓计划任务服务，就是通过设定，让linux系统在无人值守的情况下，在指定时间，自动执行某些特定的命令或者服务，从而实现运维自动化。</p><p>这里主要整理了三个工具，分别是at、crond、anacron，分别整理如下：</p><h2 id="at命令"><a href="#at命令" class="headerlink" title="at命令"></a><code>at</code>命令</h2><p><strong>应用场景：</strong>指定的时间执行一个指定任务，且只能执行一次。</p><p><strong>命令行格式：</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">at [参数] [时间]</span><br></pre></td></tr></table></figure><p><strong>常用参数：</strong></p><ul><li><p><code>-v</code> 显示任务将被执行的时间；</p></li><li><p><code>-c</code> 打印任务的内容到标准输出；</p></li><li><p><code>-f&lt;文件&gt;</code> 从指定文件读入任务而不是从标准输入读入；</p></li></ul><p>at命令依赖atd服务，因此使用它的先决条件就是atd服务已经启动。</p><p><img src="https://farm2.staticflickr.com/1773/43013350581_fbe2d8ef8c_o.png" alt=""></p><a id="more"></a><p>如果没有启动，显示dead的话，需要执行以下命令重新启动：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 ~]# systemctl restart atd</span><br></pre></td></tr></table></figure><h3 id="使用方式一：默认为交互式输入"><a href="#使用方式一：默认为交互式输入" class="headerlink" title="使用方式一：默认为交互式输入"></a>使用方式一：默认为交互式输入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//5pm+3 days 表示三天后的下午5点</span><br><span class="line">[root@localhost ~]# at 5pm+3 days   </span><br><span class="line">at&gt; /bin/ls</span><br><span class="line">at&gt; &lt;EOT&gt;    按下control + d 组合键结束输入</span><br></pre></td></tr></table></figure><h3 id="使用方式二：结合管道符号"><a href="#使用方式二：结合管道符号" class="headerlink" title="使用方式二：结合管道符号"></a>使用方式二：结合管道符号</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;systemctl restart nginx&apos; | at 23:30</span><br></pre></td></tr></table></figure><h3 id="其他常用操作"><a href="#其他常用操作" class="headerlink" title="其他常用操作"></a>其他常用操作</h3><p><code>at -l</code> 列出当前的任务</p><p><img src="https://farm2.staticflickr.com/1811/41203514040_ea614758fd_o.png" alt=""></p><p><code>atrm [任务序号]</code> 删除指定的任务</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//删除编号为3的定时任务</span><br><span class="line">[root@local-linux02 ~]# atrm 3</span><br><span class="line">//校验是否删除</span><br><span class="line">[root@local-linux02 ~]# at -l</span><br><span class="line">2	Tue Jun 26 23:30:00 2018 a root</span><br></pre></td></tr></table></figure><h2 id="cron-服务：服务器周期性有规律滴执行特定任务"><a href="#cron-服务：服务器周期性有规律滴执行特定任务" class="headerlink" title="cron 服务：服务器周期性有规律滴执行特定任务"></a><code>cron</code> 服务：服务器周期性有规律滴执行特定任务</h2><p>cron是一个用于运行计划任务如系统备份、更新等的守护进程。它适合在那些 24X7 不间断运行的机器如服务器上运行的计划任务。</p><p>应用场景：假设我们有一台服务器，需要定期执行某项操作，比如备份，就适合使用crond服务。</p><p><strong>注意：</strong>crond服务有一个重要前提，就是假设系统会一直开机，所以如果恰好关机了，就会出问题。比如，设定了一个23:30分的备份操作，但是在23:29分断电了，过五分钟又来电了，这个备份操作就不会被执行。</p><h3 id="crond服务的设置方法："><a href="#crond服务的设置方法：" class="headerlink" title="crond服务的设置方法："></a>crond服务的设置方法：</h3><p>crond服务，实质上是调用vim对定时任务进行编辑，退出保存后，被保存在<code>/var/spool/cron/[username]</code>。比如，当前笔者是在用root用户操作，默认设置的就被保存在<code>/var/spool/cron/root</code>文件当中。</p><p><strong>常用命令包括：</strong></p><ul><li><p><code>crontab -e</code> 创建编辑定时任务；</p></li><li><p><code>crontab -l</code> 查看当前的定时任务；</p></li><li><p><code>crontab -r</code> 删除指定的定时任务；</p></li><li><p><code>crontab -u</code> 以管理员身份修改其他用户创建的定时任务（当前用户必须是root用户）；</p></li></ul><h4 id="部署定时任务工作流："><a href="#部署定时任务工作流：" class="headerlink" title="部署定时任务工作流："></a>部署定时任务工作流：</h4><ol><li><p>crontab -e 进入编辑状态；</p></li><li><p>写入定时任务，格式为：<code>min hour date month week command</code>;</p></li></ol><table><thead><tr><th>字段</th><th>说明</th></tr></thead><tbody><tr><td>min</td><td>分钟，0-59分之间的任意整数，不允许为空或*号</td></tr><tr><td>hour</td><td>小时，0-23之间的任意整数</td></tr><tr><td>date</td><td>日期，1-31之间的任意整数</td></tr><tr><td>month</td><td>月份，1-12之间的任意整数</td></tr><tr><td>week</td><td>星期几，0-7之间的任意整数，其中0和7均表示星期天</td></tr><tr><td>command</td><td>需要执行的命令或脚本，命令需要写绝对路径</td></tr></tbody></table><h4 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h4><ul><li>新建定时任务</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 ~]# crontab -e</span><br><span class="line"></span><br><span class="line">//在打开的编辑页面输入以下指令</span><br><span class="line">//意思是每天23:30 重启nginx</span><br><span class="line">30 23 * * * /usr/sbin/nginx restart</span><br></pre></td></tr></table></figure><ul><li>查看当前定时任务</li></ul><p><img src="https://farm2.staticflickr.com/1795/42296122784_65f37979fd_o.png" alt=""></p><ul><li>删除定时任务</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 ~]# crontab -r</span><br><span class="line">[root@local-linux02 ~]# crontab -l</span><br><span class="line">no crontab for root</span><br></pre></td></tr></table></figure><h2 id="anacron-工具"><a href="#anacron-工具" class="headerlink" title="anacron 工具"></a>anacron 工具</h2><p>anacron 不按照小时、分钟来执行定时任务，而是<strong>以天为单位运行定时任务</strong>。它的工作与 cron 稍有不同，它假设机器不会一直开机，因此更适合用在个人电脑上面。</p><p>也正因为anacron 是以天为单位的，并且也不是守护进程，所以它并不能完全取代cron，而只能作为cron的补充存在。</p><h3 id="安装启动annacron"><a href="#安装启动annacron" class="headerlink" title="安装启动annacron"></a>安装启动annacron</h3><p><img src="https://farm2.staticflickr.com/1809/41206108840_888cc974b4_o.png" alt=""></p><h3 id="anacron基本语法"><a href="#anacron基本语法" class="headerlink" title="anacron基本语法"></a>anacron基本语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">anacron [options] [job]</span><br></pre></td></tr></table></figure><p>常用选项如下：</p><ul><li><p><code>-s</code>：重要！开始所有的jobs，并根据时间戳判断是否开始相应的工作job；</p></li><li><p><code>-f</code>：强制进行，忽略时间戳的对比；</p></li><li><p><code>-n</code>：立即进行未进行的任务，忽略延迟等待时间；</p></li><li><p><code>-u</code>：仅升级相应的执行时间戳，实际不进行任何工作；</p></li><li><p><code>job</code>：/etc/anacrontab文件中定义的各项工作名称；</p></li></ul><h3 id="anacron任务是如何被执行的？"><a href="#anacron任务是如何被执行的？" class="headerlink" title="anacron任务是如何被执行的？"></a>anacron任务是如何被执行的？</h3><p>前文说过anacron是cron的有力补充，它是一个普通进程，而不是linux守护进程，也不是服务。这点很重要！！！</p><p>举个例子，我们在使用nginx的时候，会使用<code>systemctl start nginx</code> 和 <code>systemctl enable nginx</code>,让nginx随开机启动，并常驻在后台，但是在网上搜了一圈，也没有找到怎么启动后台守护进程的命令。那么，它是怎么被执行的呢？</p><h4 id="第一步：cron服务每小时读取0anacron脚本"><a href="#第一步：cron服务每小时读取0anacron脚本" class="headerlink" title="第一步：cron服务每小时读取0anacron脚本"></a>第一步：cron服务每小时读取0anacron脚本</h4><p>实际上，anacron的任务加载配置文件被写进了cron当中，有一个很神奇的脚本文件，叫做<code>/etc/cron.hourly/0anacron</code>，关键的秘密都在这里。</p><p><img src="https://farm2.staticflickr.com/1774/41205511850_6f472e8ac7_o.png" alt=""></p><p>与anacron任务运行的相关配置文件包括：</p><ul><li><p><code>/etc/anacrontab</code></p></li><li><p><code>/var/spool/anacron/cron.daily</code></p></li><li><p><code>/var/spool/anacron/cron.monthly</code></p></li><li><p><code>/var/spool/anacron/cron.weekly</code></p></li></ul><h4 id="第二步：加载-etc-anacrontab-配置文件"><a href="#第二步：加载-etc-anacrontab-配置文件" class="headerlink" title="第二步：加载/etc/anacrontab 配置文件"></a>第二步：加载<code>/etc/anacrontab</code> 配置文件</h4><p>在运行<code>/etc/cron.hourly/0anacron</code>之后，会执行<code>/usr/sbin/anacron -s</code>命令，重新加载配置文件<code>/etc/anacrontab</code>的内容，而我们<strong>的定时任务，就是通过编辑该配置文件，保存后即可呗调用执行。</strong></p><p><code>/etc/anacrontab</code> 对于执行的方式做了具体的规定：</p><p><img src="https://farm2.staticflickr.com/1802/29143625118_3884a4b0c4_o.png" alt=""></p><p>其中，红框框出来的几个部分很关键</p><p>先看定时任务的写法，共分为四个部分：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#period in days   delay in minutes   job-identifier   command</span><br><span class="line">1	5	cron.daily		nice run-parts /etc/cron.daily</span><br></pre></td></tr></table></figure><ul><li><p><code>period in days</code>： 任务执行的频率，以天为单位。可以是@daily（每天） 、@weekly（每周）、@monthly（每月）；也可以使用数字：1代表每天、7代表每周、30代表每月，或者直接用N指定以N天为一个周期；</p></li><li><p><code>delay</code> ： 这是在执行一个任务前等待的分钟数；</p></li><li><p><code>job-id</code> - 这是写在日志文件中任务的任务标示，任务标识，这个与/var/spool/anacron/ 目录下的时间戳文件名相一致，anacron任务通过此标识来获取对应的时间戳判断是否执行该任务；</p></li><li><p><code>command</code> - 这是要执行的命令或 shell 脚本；</p></li></ul><p>还有两个配置选项也很重要：</p><p><code>RANDOM_DELAY=45</code>：anacron任务添加的随机延迟的最大值，单位为分钟，一个anacron任务的运行的总延迟时间为<code>RANDOM_DELAY+Base_delay</code>；</p><p><code>START_HOURS_RANGE=3-22</code>：设置anacron任务执行的时间范围，此处表示anacron任务只能在3am-22pm的时间范围内执行；</p><h4 id="第三步：执行定时任务"><a href="#第三步：执行定时任务" class="headerlink" title="第三步：执行定时任务"></a>第三步：执行定时任务</h4><ol><li><p>anacron 会生成任务的时间戳，保存在 <code>/var/spool/anacron/cron.daily</code> 文件中；</p></li><li><p>在执行的过程中，会读取 <code>/var/spool/anacron/cron.daily</code> ，对比当前时间戳和上一次的时间戳，如差异天数为1天或以上，就会执行相应的任务；</p></li><li><p>任务执行完毕，修改对应的时间戳文件为当前时间，anacron程序结束。</p></li></ol><p>困扰多时的谜题终于解开，心情大好。</p><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><p><a href="https://www.jianshu.com/p/07cae3325854" target="_blank" rel="noopener">anacron命令开机唤醒计划任务</a></p></li><li><p><a href="https://www.benderfly.com/291.html" target="_blank" rel="noopener">Linux计划任务之 anacron</a></p></li><li><p><a href="https://www.howtoing.com/cron-vs-anacron-schedule-jobs-using-anacron-on-linux" target="_blank" rel="noopener">如何使用Anacron在Linux上安排作业</a></p></li></ul></div><div><ul class="post-copyright"><li class="post-copyright-author"> <strong>本文作者：</strong> Steve Yuan</li><li class="post-copyright-link"> <strong>本文链接：</strong> <a href="https://steve-yuan-8276.github.io/2018/06/25/linuxNotes-basisOfCrond-at-anacron/" title="linux笔记：计划任务服务">https://steve-yuan-8276.github.io/2018/06/25/linuxNotes-basisOfCrond-at-anacron/</a></li><li class="post-copyright-license"> <strong>版权声明：</strong> 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li></ul></div><footer class="post-footer"><div class="post-tags"> <a href="/tags/linux/" rel="tag"># linux</a> <a href="/tags/notes/" rel="tag"># notes</a> <a href="/tags/at/" rel="tag"># at</a> <a href="/tags/crond/" rel="tag"># crond</a> <a href="/tags/anacron/" rel="tag"># anacron</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/2018/06/25/linuxNotes-usefulLinuxComands/" rel="next" title="linux学习笔记：有用的linux命令"><i class="fa fa-chevron-left"></i> linux学习笔记：有用的linux命令</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"> <a href="/2018/06/27/week14-3-linuxNotes-tomcatPart2/" rel="prev" title="linux学习笔记: tomcat的基础知识(二)">linux学习笔记: tomcat的基础知识(二)<i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="disqus_thread"><noscript> Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan"><p class="site-author-name" itemprop="name">Steve Yuan</p><p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">120</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/index.html"><span class="site-state-item-count">12</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"> <a href="/tags/index.html"><span class="site-state-item-count">81</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/steve-yuan-8276" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i> GitHub</a></span><span class="links-of-author-item"><a href="https://twitter.com/feng8276" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i> Twitter</a></span><span class="links-of-author-item"><a href="https://www.facebook.com/feng74" target="_blank" title="Facebook"><i class="fa fa-fw fa-facebook"></i> Facebook</a></span><span class="links-of-author-item"><a href="mailto:yuanf02@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i> E-Mail</a></span></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#at命令"><span class="nav-number">2.</span> <span class="nav-text">at命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用方式一：默认为交互式输入"><span class="nav-number">2.1.</span> <span class="nav-text">使用方式一：默认为交互式输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用方式二：结合管道符号"><span class="nav-number">2.2.</span> <span class="nav-text">使用方式二：结合管道符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他常用操作"><span class="nav-number">2.3.</span> <span class="nav-text">其他常用操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cron-服务：服务器周期性有规律滴执行特定任务"><span class="nav-number">3.</span> <span class="nav-text">cron 服务：服务器周期性有规律滴执行特定任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#crond服务的设置方法："><span class="nav-number">3.1.</span> <span class="nav-text">crond服务的设置方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#部署定时任务工作流："><span class="nav-number">3.1.1.</span> <span class="nav-text">部署定时任务工作流：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#示例："><span class="nav-number">3.1.2.</span> <span class="nav-text">示例：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anacron-工具"><span class="nav-number">4.</span> <span class="nav-text">anacron 工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装启动annacron"><span class="nav-number">4.1.</span> <span class="nav-text">安装启动annacron</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#anacron基本语法"><span class="nav-number">4.2.</span> <span class="nav-text">anacron基本语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#anacron任务是如何被执行的？"><span class="nav-number">4.3.</span> <span class="nav-text">anacron任务是如何被执行的？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：cron服务每小时读取0anacron脚本"><span class="nav-number">4.3.1.</span> <span class="nav-text">第一步：cron服务每小时读取0anacron脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：加载-etc-anacrontab-配置文件"><span class="nav-number">4.3.2.</span> <span class="nav-text">第二步：加载/etc/anacrontab 配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：执行定时任务"><span class="nav-number">4.3.3.</span> <span class="nav-text">第三步：执行定时任务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">Steve Yuan</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-area-chart"></i></span> <span class="post-meta-item-text">Site words total count&#58;</span> <span title="Site words total count">176.7k</span></div><div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div> <span class="post-meta-divider">|</span><div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i></div></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script type="text/javascript" src="/lib/three/three.min.js"></script><script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script><script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script><script type="text/javascript">var disqus_config=function(){this.page.url="https://steve-yuan-8276.github.io/2018/06/25/linuxNotes-basisOfCrond-at-anacron/",this.page.identifier="2018/06/25/linuxNotes-basisOfCrond-at-anacron/",this.page.title="linux笔记：计划任务服务"},d=document,s=d.createElement("script");s.src="https://steve-yuan.disqus.com/embed.js",s.setAttribute("data-timestamp",""+ +new Date),(d.head||d.body).appendChild(s)</script><script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script></body></html>

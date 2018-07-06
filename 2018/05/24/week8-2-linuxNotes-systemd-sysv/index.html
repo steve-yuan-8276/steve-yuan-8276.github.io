@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux,notes,sysV," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="写在前面第一阶段复习，发现有很多内容掌握的不扎实，这个sysV、Systemd尤其是如此，所以单独提出来再查找资料，再整理一下。 预备知识：先从linux的历史说起init 守护进程sysV和Systemd是神马？这是一个很复杂的问题，需要Linux系统启动说起。 linux系统启动，主要可以分成以下几步：  读取 MBR 的信息,启动 Boot Manager（Windows 使用 NTLDR">
+<meta name="keywords" content="linux,notes,sysV">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux运维学习笔记：系统进程管理">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/05/24/week8-2-linuxNotes-systemd-sysv/index.html">
+<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:description" content="写在前面第一阶段复习，发现有很多内容掌握的不扎实，这个sysV、Systemd尤其是如此，所以单独提出来再查找资料，再整理一下。 预备知识：先从linux的历史说起init 守护进程sysV和Systemd是神马？这是一个很复杂的问题，需要Linux系统启动说起。 linux系统启动，主要可以分成以下几步：  读取 MBR 的信息,启动 Boot Manager（Windows 使用 NTLDR">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://farm1.staticflickr.com/948/42013365781_be673ef7c2_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/966/42312212441_aa09a27285_o.png">
+<meta property="og:updated_time" content="2018-05-24T14:00:11.386Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux运维学习笔记：系统进程管理">
+<meta name="twitter:description" content="写在前面第一阶段复习，发现有很多内容掌握的不扎实，这个sysV、Systemd尤其是如此，所以单独提出来再查找资料，再整理一下。 预备知识：先从linux的历史说起init 守护进程sysV和Systemd是神马？这是一个很复杂的问题，需要Linux系统启动说起。 linux系统启动，主要可以分成以下几步：  读取 MBR 的信息,启动 Boot Manager（Windows 使用 NTLDR">
+<meta name="twitter:image" content="https://farm1.staticflickr.com/948/42013365781_be673ef7c2_o.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/05/24/week8-2-linuxNotes-systemd-sysv/"/>
+
+
+
+
+
+  <title>linux运维学习笔记：系统进程管理 | Steve的折腾学习日志</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111158073-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/steve-yuan-8276"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/05/24/week8-2-linuxNotes-systemd-sysv/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">linux运维学习笔记：系统进程管理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-24T17:34:48+08:00">
+                2018-05-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/24/week8-2-linuxNotes-systemd-sysv/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/24/week8-2-linuxNotes-systemd-sysv/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,510
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  14
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>第一阶段复习，发现有很多内容掌握的不扎实，这个sysV、Systemd尤其是如此，所以单独提出来再查找资料，再整理一下。</p>
+<h2 id="预备知识：先从linux的历史说起"><a href="#预备知识：先从linux的历史说起" class="headerlink" title="预备知识：先从linux的历史说起"></a>预备知识：先从linux的历史说起</h2><h3 id="init-守护进程"><a href="#init-守护进程" class="headerlink" title="init 守护进程"></a><code>init</code> 守护进程</h3><p><code>sysV</code>和<code>Systemd</code>是神马？这是一个很复杂的问题，需要Linux系统启动说起。</p>
+<p>linux系统启动，主要可以分成以下几步：</p>
+<ul>
+<li><p>读取 MBR 的信息,启动 Boot Manager（Windows 使用 NTLDR 作为 Boot Manager；Linux 通常使用GRUB 作为 Boot Manager）；</p>
+</li>
+<li><p>加载系统内核,启动 init 进程，这是Linux 的根进程,所有的系统进程都是它的子进程；</p>
+</li>
+<li><p>init 进程读取 /etc/inittab 文件中的信息,并进入预设的运行级别,按顺序运行该运行级别对应文件夹下的脚本；</p>
+</li>
+<li><p>根据 /etc/rcS.d/ 文件夹中对应的脚本启动；</p>
+</li>
+<li><p>启动登录管理器,等待用户登录；</p>
+</li>
+</ul>
+<p>根据维基百科的解释，<code>init</code>是 Unix 和 类Unix 系统中用来产生其它所有进程的程序。它以守护进程的方式存在，其进程号pid为1。Linux系统在开机时加载Linux内核后，便由Linux内核加载init程序，由init程序完成余下的开机过程，比如加载运行级别，加载服务，引导Shell/图形化界面等等。</p>
+<a id="more"></a>
+<h4 id="SysV"><a href="#SysV" class="headerlink" title="SysV"></a>SysV</h4><p>PID 1 是一个非常特殊的进程，任务是把整个操作系统带入可操作的状态。传统的 Unix System V 相兼容的，所以也叫 sysvinit。</p>
+<p>在 sysvint中，有好几个允许级别，常见的级别，比如0代表关机，3代表多用户模式，6代表重启配置在 <code>/etc/inittab</code> 文件中。当然，这里还需要知道一个文件夹<code>/etc/init.d/</code>，存放各种进程的启停脚本。</p>
+<h4 id="UpStart"><a href="#UpStart" class="headerlink" title="UpStart"></a>UpStart</h4><p>linux是从unix系统衍生而来的，早期多用在服务器上。但是随着时代的发展，linux逐渐进入了桌面系统时代，sysV这种启动方式的弊端也就暴露的出来。由于他没有自动检测机制，只能一次性启动所有服务，所以系统系统的速度就很慢。</p>
+<p>为了解决这个痛点，2006年，一些大牛决定重新设计init系统，推出了upstart系统，upstart 基于事件驱动的机制，把之前的完全串行的同步启动服务的方式改成了由事件驱动的异步的方式。这样做的好处是，可以并行启动服务，他们之间的依赖关系，由相应的事件通知完成。听起来有点复杂，不过简单说，采用这套机制，系统启动速度更快了。</p>
+<h4 id="Systemd"><a href="#Systemd" class="headerlink" title="Systemd"></a>Systemd</h4><p>时间前进到2010年，又有大牛提出来这个UpStart也是不完美的，systemd 设计的首要目标是要让用户快速的进入可以操作OS的环境，其设计理念就是两条：</p>
+<ul>
+<li><p>To start less. 按需启动，能不启动就不启动</p>
+</li>
+<li><p>And to start more in parallel. 如果要启动，能并行启动就并行启动，即使程序之间有依赖，也并行启动；</p>
+</li>
+</ul>
+<p>目前，systemd 几乎成为了所有主流Linux 发行版的默认配置，包括：Arch Linux、CentOS、CoreOS、Debian、Fedora、Megeia、OpenSUSE、RHEL、SUSE企业版和 Ubuntu。</p>
+<p>sysV和systemd的对应指令</p>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>指令</th>
+<th>新指令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使某服务自动启动</td>
+<td>chkconfig –level 3 sshd on</td>
+<td>systemctl enable sshd.service</td>
+</tr>
+<tr>
+<td>使某服务不自动启动</td>
+<td>chkconfig –level 3 sshd off</td>
+<td>systemctl disable sshd.service</td>
+</tr>
+<tr>
+<td>检查服务状态</td>
+<td>service sshd status</td>
+<td>systemctl status sshd.service （服务详细信息）systemctl is-active sshd.service （仅显示是否 Active)</td>
+</tr>
+<tr>
+<td>显示所有已启动的服务</td>
+<td>chkconfig –list</td>
+<td>systemctl list-units –type=service</td>
+</tr>
+<tr>
+<td>启动某服务</td>
+<td>service sshd start</td>
+<td>systemctl start sshd.service</td>
+</tr>
+<tr>
+<td>停止某服务</td>
+<td>service sshd stop</td>
+<td>systemctl stop sshd.service</td>
+</tr>
+<tr>
+<td>重启某服务</td>
+<td>service sshd restart</td>
+<td>systemctl restart sshd.service</td>
+</tr>
+</tbody>
+</table>
+<p>好了，下面切入正题。</p>
+<h2 id="重新认识sysytemd"><a href="#重新认识sysytemd" class="headerlink" title="重新认识sysytemd"></a>重新认识sysytemd</h2><p><code>systemd</code>是一种新的linux系统服务管理器，用于取代SysV初始进程。它替换了init系统，能够管理系统的启动过程和一些系统服务，一旦启动起来，就将监管整个系统。</p>
+<p><strong>Systemd 架构图</strong></p>
+<p><img src="https://farm1.staticflickr.com/948/42013365781_be673ef7c2_o.png" alt=""></p>
+<p>这里有两个重要概念：<strong>unit</strong>和<strong>target</strong>，下面分别介绍：</p>
+<h3 id="unit介绍"><a href="#unit介绍" class="headerlink" title="unit介绍"></a>unit介绍</h3><p><code>Systemd</code> 可以管理所有系统资源，我们将不同的资源统称为 <code>unit</code>，一共分成12种：</p>
+<table>
+<thead>
+<tr>
+<th>unit</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Service</td>
+<td>系统服务</td>
+</tr>
+<tr>
+<td>Target</td>
+<td>多个 Unit 构成的一个组</td>
+</tr>
+<tr>
+<td>Device</td>
+<td>硬件设备</td>
+</tr>
+<tr>
+<td>Mount</td>
+<td>文件系统的挂载点</td>
+</tr>
+<tr>
+<td>Automount</td>
+<td>自动挂载点</td>
+</tr>
+<tr>
+<td>Path</td>
+<td>文件或路径</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>不是由 Systemd 启动的外部进程</td>
+</tr>
+<tr>
+<td>Slice</td>
+<td>进程组</td>
+</tr>
+<tr>
+<td>Snapshot</td>
+<td>Systemd 快照，可以切回某个快照</td>
+</tr>
+<tr>
+<td>Socket</td>
+<td>进程间通信的 socket</td>
+</tr>
+<tr>
+<td>Swap</td>
+<td>swap 文件</td>
+</tr>
+<tr>
+<td>Timer</td>
+<td>定时器</td>
+</tr>
+</tbody>
+</table>
+<h4 id="unit配置文件"><a href="#unit配置文件" class="headerlink" title="unit配置文件"></a>unit配置文件</h4><p>每一个 Unit 都有一个配置文件，<code>Systemd</code> 默认目录在 <code>/etc/systemd/system/</code>；但其中有很多配置文件都是软链接，指向 <code>/usr/lib/systemd/system/</code>，也就是说，<strong>真正的配置文件</strong>保存在 <code>/usr/lib/systemd/system/</code>目录下。</p>
+<p><strong>配置文件的格式</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey system]# cat auditd.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Security Auditing Service</span><br><span class="line">DefaultDependencies=no</span><br><span class="line">## If auditd.conf has tcp_listen_port enabled, copy this file to /etc/systemd/system/auditd.service and add network-online.target to the next line so it waits for the network to start before launching.</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/var/run/auditd.pid</span><br><span class="line">ExecStart=/sbin/auditd</span><br><span class="line">## To not use augenrules, copy this file to /etc/systemd/system/auditd.service and comment/delete the next line and uncomment the auditctl line.</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<p>unit配置文件通常包括几个部分：</p>
+<p><code>[Unit]</code> ：区块通常是配置文件的第一个区块，用来定义 Unit 的元数据，以及配置与其他 Unit 的关系，主要字段如下：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Description</td>
+<td>简短描述</td>
+</tr>
+<tr>
+<td>Documentation</td>
+<td>文档地址</td>
+</tr>
+<tr>
+<td>Requires</td>
+<td>当前 Unit 依赖的其他 Unit，如果它们没有运行，当前 Unit 会启动失败</td>
+</tr>
+<tr>
+<td>Wants</td>
+<td>与当前 Unit 配合的其他 Unit，如果它们没有运行，当前 Unit 不会启动失败</td>
+</tr>
+<tr>
+<td>BindsTo</td>
+<td>与Requires类似，它指定的 Unit 如果退出，会导致当前 Unit 停止运行</td>
+</tr>
+<tr>
+<td>Before</td>
+<td>如果该字段指定的 Unit 也要启动，那么必须在当前 Unit 之后启动</td>
+</tr>
+<tr>
+<td>After</td>
+<td>如果该字段指定的 Unit 也要启动，那么必须在当前 Unit 之前启动</td>
+</tr>
+<tr>
+<td>Conflicts</td>
+<td>这里指定的 Unit 不能与当前 Unit 同时运行</td>
+</tr>
+<tr>
+<td>Condition…</td>
+<td>当前 Unit 运行必须满足的条件，否则不会运行</td>
+</tr>
+<tr>
+<td>Assert…</td>
+<td>当前 Unit 运行必须满足的条件，否则会报启动失败</td>
+</tr>
+</tbody>
+</table>
+<p><code>[Install]</code>|通常是配置文件的最后一个区块，用来定义如何启动，以及是否开机启动，主要字段如下：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WantedBy</td>
+<td>它的值是一个或多个 Target，当前 Unit 激活时（enable）符号链接会放入/etc/systemd/system目录下面以 Target 名 + .wants后缀构成的子目录中</td>
+</tr>
+<tr>
+<td>RequiredBy</td>
+<td>它的值是一个或多个 Target，当前 Unit 激活时，符号链接会放入/etc/systemd/system目录下面以 Target 名 + .required后缀构成的子目录中</td>
+</tr>
+<tr>
+<td>Alias</td>
+<td>当前 Unit 可用于启动的别名</td>
+</tr>
+<tr>
+<td>Also</td>
+<td>当前 Unit 激活（enable）时，会被同时激活的其他 Unit</td>
+</tr>
+</tbody>
+</table>
+<p><code>[Service]</code>： Service 的配置，只有 Service 类型的 Unit 才有这个区块。它的主要字段如下。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td>定义启动时的进程行为。它有以下几种值。</td>
+</tr>
+<tr>
+<td>Type=simple</td>
+<td>默认值，执行ExecStart指定的命令，启动主进程</td>
+</tr>
+<tr>
+<td>Type=forking</td>
+<td>以 fork 方式从父进程创建子进程，创建后父进程会立即退出</td>
+</tr>
+<tr>
+<td>Type=oneshot</td>
+<td>一次性进程，Systemd 会等当前服务退出，再继续往下执行</td>
+</tr>
+<tr>
+<td>Type=dbus</td>
+<td>当前服务通过D-Bus启动</td>
+</tr>
+<tr>
+<td>Type=notify</td>
+<td>当前服务启动完毕，会通知Systemd，再继续往下执行</td>
+</tr>
+<tr>
+<td>Type=idle</td>
+<td>若有其他任务执行完毕，当前服务才会运行</td>
+</tr>
+<tr>
+<td>ExecStart</td>
+<td>启动当前服务的命令</td>
+</tr>
+<tr>
+<td>ExecStartPre</td>
+<td>启动当前服务之前执行的命令</td>
+</tr>
+<tr>
+<td>ExecStartPost</td>
+<td>启动当前服务之后执行的命令</td>
+</tr>
+<tr>
+<td>ExecReload</td>
+<td>重启当前服务时执行的命令</td>
+</tr>
+<tr>
+<td>ExecStop</td>
+<td>停止当前服务时执行的命令</td>
+</tr>
+<tr>
+<td>ExecStopPost</td>
+<td>停止当其服务之后执行的命令</td>
+</tr>
+<tr>
+<td>RestartSec</td>
+<td>自动重启当前服务间隔的秒数</td>
+</tr>
+<tr>
+<td>Restart</td>
+<td>定义何种情况 Systemd 会自动重启当前服务，可能的值包括always（总是重启）、on-success、on-failure、on-abnormal、on-abort、on-watchdog</td>
+</tr>
+<tr>
+<td>TimeoutSec</td>
+<td>定义 Systemd 停止当前服务之前等待的秒数</td>
+</tr>
+<tr>
+<td>Environment</td>
+<td>指定环境变量</td>
+</tr>
+</tbody>
+</table>
+<p>配置文件一共有四种状态：</p>
+<ul>
+<li><p><code>enabled</code>：已建立启动链接</p>
+</li>
+<li><p><code>disabled</code>：没建立启动链接</p>
+</li>
+<li><p><code>static</code>：该配置文件没有[Install]部分（无法执行），只能作为其他配置文件的依赖</p>
+</li>
+<li><p><code>masked</code>：该配置文件被禁止建立启动链接</p>
+</li>
+</ul>
+<h4 id="unit-依赖关系"><a href="#unit-依赖关系" class="headerlink" title="unit 依赖关系"></a><code>unit</code> 依赖关系</h4><p>Unit 之间存在依赖关系，如果<code>unit A</code> 依赖 <code>unit B</code>，在启动<code>unit A</code>的时候，会同时启动<code>unit B</code>。</p>
+<p>查看Unit 的依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl list-dependencies nginx.service</span><br></pre></td></tr></table></figure>
+<p>如果依赖是 Target 类型，默认不会展开；如果需要查询，需要加上<code>--all</code>参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl list-dependencies --all nginx.service</span><br></pre></td></tr></table></figure>
+<h3 id="target介绍"><a href="#target介绍" class="headerlink" title="target介绍"></a><code>target</code>介绍</h3><p>启动级别是一个旧的概念。现在，systemd 引入了一个和启动级别<code>runlevel</code>功能相似又不同的概念——目标<code>target</code>。</p>
+<p><code>Target</code> 就是一个 <code>Unit</code>组，包含许多相关的 <code>Unit</code> ，类似于”状态点”，启动某个 <code>Target</code> 的时候，会让机器启动到到某种状态。</p>
+<h4 id="Target-与-传统-RunLevel-的对应关系"><a href="#Target-与-传统-RunLevel-的对应关系" class="headerlink" title="Target 与 传统 RunLevel 的对应关系"></a>Target 与 传统 RunLevel 的对应关系</h4><p>在<code>/usr/lib/systemd/system/</code>目录下，查找<code>ls -l runlevel*</code>，可以看到：</p>
+<p><img src="https://farm1.staticflickr.com/966/42312212441_aa09a27285_o.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>SysV run level启动级别</th>
+<th>Systemd target 目标</th>
+<th>注释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>poweroff.target</code></td>
+<td>关机</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>rescue.target</code></td>
+<td>救援模式</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>multi-user.target</code></td>
+<td>多用户模式</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>multi-user.target</code></td>
+<td>多用户模式</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>multi-user.target</code></td>
+<td>多用户模式，在contos6之前，这是一个预留的模式</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>graphical.target</code></td>
+<td>多用户，图形界面。继承级别3的服务，并启动图形界面服务。</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>reboot.target</code></td>
+<td>重启</td>
+</tr>
+</tbody>
+</table>
+<p>好了，基础知识到此为止，下面到应用部分：</p>
+<h2 id="服务管理相关命令"><a href="#服务管理相关命令" class="headerlink" title="服务管理相关命令"></a>服务管理相关命令</h2><h3 id="sysV下如何管理服务"><a href="#sysV下如何管理服务" class="headerlink" title="sysV下如何管理服务"></a><code>sysV</code>下如何管理服务</h3><p><code>chkconfig</code>命令主要用来更新（启动或停止）和查询系统服务的运行级信息，主要跟sysV配合起来作用。具体的要管理服务，大概的操作流程是这样的：</p>
+<ol>
+<li><p>编写服务脚本<code>vim [servicename]</code>，保存在<code>/etc/ini.d/</code>目录下； 注：该文件必须为755 权限 <code>chown 755 [shellfilename]</code></p>
+</li>
+<li><p>增加指定的系统服务 <code>chkconfig --add [servicename]</code></p>
+</li>
+<li><p>设定服务的默认启动等级 <code>chkconfig --level 35 mysqld on</code></p>
+</li>
+</ol>
+<h4 id="sysV相关命令"><a href="#sysV相关命令" class="headerlink" title="sysV相关命令"></a>sysV相关命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">chkconfig --list                //列出所有的系统服务</span><br><span class="line"></span><br><span class="line">chkconfig --list mysqld         //列出mysqld服务设置情况  </span><br><span class="line"></span><br><span class="line">chkconfig --add httpd           //增加httpd服务 </span><br><span class="line"></span><br><span class="line">chkconfig --del httpd           //删除httpd服务</span><br></pre></td></tr></table></figure>
+<p>还有一种用法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkconfig [--level][系统服务][参数]</span><br></pre></td></tr></table></figure>
+<p><code>--level</code>，指定读系统服务要在哪一个执行等级中开启或关闭，centos6.x之前的版本中，共有以下7种级别。</p>
+<table>
+<thead>
+<tr>
+<th>级别代码</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>表示关机 </td>
+</tr>
+<tr>
+<td>1</td>
+<td>单用户模式 </td>
+</tr>
+<tr>
+<td>2</td>
+<td>无网络连接的多用户命令行模式 </td>
+</tr>
+<tr>
+<td>3</td>
+<td>有网络连接的多用户命令行模式 </td>
+</tr>
+<tr>
+<td>4</td>
+<td>不可用 </td>
+</tr>
+<tr>
+<td>5</td>
+<td>带图形界面的多用户模式 </td>
+</tr>
+<tr>
+<td>6</td>
+<td>重新启动 </td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>常见参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>on</td>
+<td>启动</td>
+</tr>
+<tr>
+<td>off</td>
+<td>关闭</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>重置服务</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注：</strong><code>on</code>和<code>off</code>默认只对运行级3，4，5有效；<code>reset</code>对所有运行级有效。</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">chkconfig --level httpd 2345 on //设置httpd在运行级别为2、3、4、5的情况下都是on（开启）的状态 </span><br><span class="line"></span><br><span class="line">chkconfig --level 35 mysqld on  //--level 35表示操作只在等级3和5执行，on表示启动，off表示关闭</span><br><span class="line"> </span><br><span class="line">chkconfig mysqld on             //设定mysqld在各等级为on，“各等级”包括2、3、4、5等级 </span><br><span class="line"></span><br><span class="line">chkconfig [service] off     //关闭指定服务</span><br></pre></td></tr></table></figure>
+<h3 id="Systemd-如何管理服务"><a href="#Systemd-如何管理服务" class="headerlink" title="Systemd 如何管理服务"></a>Systemd 如何管理服务</h3><h4 id="systemctl-Systemd-的主命令，用于管理系统。"><a href="#systemctl-Systemd-的主命令，用于管理系统。" class="headerlink" title="systemctl: Systemd 的主命令，用于管理系统。"></a><code>systemctl:</code> <code>Systemd</code> 的主命令，用于管理系统。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// 重启系统</span><br><span class="line">systemctl reboot</span><br><span class="line"></span><br><span class="line">// 关闭系统，切断电源</span><br><span class="line">systemctl poweroff</span><br><span class="line"></span><br><span class="line">// CPU停止工作</span><br><span class="line">systemctl halt</span><br><span class="line"></span><br><span class="line">// 暂停系统</span><br><span class="line">systemctl suspend</span><br><span class="line"></span><br><span class="line">// 让系统进入冬眠状态</span><br><span class="line">systemctl hibernate</span><br><span class="line"></span><br><span class="line">// 让系统进入交互式休眠状态</span><br><span class="line">systemctl hybrid-sleep</span><br><span class="line"></span><br><span class="line">// 启动进入救援状态（单用户状态）</span><br><span class="line">systemctl rescue</span><br></pre></td></tr></table></figure>
+<h5 id="与Unit有关的命令"><a href="#与Unit有关的命令" class="headerlink" title="与Unit有关的命令"></a>与Unit有关的命令</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">// 列出正在运行的 Unit</span><br><span class="line">$ systemctl list-units</span><br><span class="line"></span><br><span class="line">//列出列出所有配置文件</span><br><span class="line">$ systemctl list-unit-files</span><br><span class="line"></span><br><span class="line">// 列出所有Unit，包括没有找到配置文件的或者启动失败的</span><br><span class="line">$ systemctl list-units --all</span><br><span class="line"></span><br><span class="line">// 列出所有没有运行的 Unit</span><br><span class="line">$ systemctl list-units --all --state=inactive</span><br><span class="line"></span><br><span class="line">// 列出所有加载失败的 Unit</span><br><span class="line">$ systemctl list-units --failed</span><br><span class="line"></span><br><span class="line">// 列出所有正在运行的、类型为 service 的 Unit</span><br><span class="line">systemctl list-units --type=service</span><br><span class="line"></span><br><span class="line">//列出正在运行，状态为active的service</span><br><span class="line">systemctl list-units --type=service</span><br><span class="line"></span><br><span class="line">//查看某个服务是否为active</span><br><span class="line">systemctl is-active crond.service</span><br><span class="line"></span><br><span class="line">// 立即启动一个服务</span><br><span class="line">systemctl start apache.service</span><br><span class="line"></span><br><span class="line">// 立即停止一个服务</span><br><span class="line">systemctl stop apache.service</span><br><span class="line"></span><br><span class="line">// 重启一个服务</span><br><span class="line">systemctl restart apache.service</span><br><span class="line"></span><br><span class="line">// 杀死一个服务的所有子进程</span><br><span class="line">systemctl kill apache.service</span><br><span class="line"></span><br><span class="line">// 重新加载一个服务的配置文件</span><br><span class="line">systemctl reload apache.service</span><br><span class="line"></span><br><span class="line">// 重载所有修改过的配置文件</span><br><span class="line">systemctl daemon-reload</span><br><span class="line"></span><br><span class="line">// 显示某个 Unit 的所有底层参数</span><br><span class="line">systemctl show httpd.service</span><br><span class="line"></span><br><span class="line">// 显示某个 Unit 的指定属性的值</span><br><span class="line">systemctl show -p CPUShares httpd.service</span><br><span class="line"></span><br><span class="line">// 设置某个 Unit 的指定属性</span><br><span class="line">systemctl set-property httpd.service CPUShares=500</span><br><span class="line"></span><br><span class="line">//检查服务是否开机启动</span><br><span class="line">systemctl is-enabled crond</span><br></pre></td></tr></table></figure>
+<h4 id="与target有关的常用命令"><a href="#与target有关的常用命令" class="headerlink" title="与target有关的常用命令"></a>与<code>target</code>有关的常用命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 查看当前系统的所有 Target</span><br><span class="line">systemctl list-unit-files --type=target</span><br><span class="line"></span><br><span class="line">// 查看一个 Target 包含的所有 Unit</span><br><span class="line">systemctl list-dependencies multi-user.target</span><br><span class="line"></span><br><span class="line">// 查看启动时的默认 Target</span><br><span class="line">systemctl get-default</span><br><span class="line"></span><br><span class="line">// 设置启动时的默认 Target(类似于centos6之前设置启动级别)</span><br><span class="line">systemctl set-default multi-user.target</span><br><span class="line"></span><br><span class="line">// 切换 Target 时，默认不关闭前一个 Target 启动的进程，而是关闭前一个 Target 里面所有不属于后一个 Target 的进程</span><br><span class="line">systemctl isolate multi-user.target</span><br></pre></td></tr></table></figure>
+<h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><ul>
+<li><p><a href="https://my.oschina.net/junn/blog/215825" target="_blank" rel="noopener">Linux下chkconfig命令及守护进程</a></p>
+</li>
+<li><p><a href="http://roclinux.cn/?p=51" target="_blank" rel="noopener">《chkconfig命令》－linux命令五分钟系列之四</a></p>
+</li>
+<li><p><a href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html" target="_blank" rel="noopener">Systemd 入门教程：命令篇</a></p>
+</li>
+<li><p><a href="https://linux.cn/article-3801-1.html" target="_blank" rel="noopener">用systemd命令来管理linux系统</a></p>
+</li>
+<li><p><a href="https://linux.cn/article-5926-1.html" target="_blank" rel="noopener">systemctl 命令完全指南</a></p>
+</li>
+<li><p><a href="https://coolshell.cn/articles/17998.html" target="_blank" rel="noopener">LINUX PID 1 和 SYSTEMD</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/gatieme/article/details/45251389" target="_blank" rel="noopener">Ubuntu下使用sysv-rc-conf管理服务</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Steve Yuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://steve-yuan-8276.github.io/2018/05/24/week8-2-linuxNotes-systemd-sysv/" title="linux运维学习笔记：系统进程管理">https://steve-yuan-8276.github.io/2018/05/24/week8-2-linuxNotes-systemd-sysv/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
+          
+            <a href="/tags/sysV/" rel="tag"># sysV</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/22/linuxNotes-base64Practice/" rel="next" title="linux学习笔记：从一则招聘启示学base64编码">
+                <i class="fa fa-chevron-left"></i> linux学习笔记：从一则招聘启示学base64编码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/25/week9-3-linuxNotes-php-installition/" rel="prev" title="linux运维学习笔记9-3：php安装">
+                linux运维学习笔记9-3：php安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/logo.png"
+                alt="Steve Yuan" />
+            
+              <p class="site-author-name" itemprop="name">Steve Yuan</p>
+              <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">122</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">81</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/steve-yuan-8276" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/feng8276" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.facebook.com/feng74" target="_blank" title="Facebook">
+                    
+                      <i class="fa fa-fw fa-facebook"></i>Facebook</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yuanf02@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#预备知识：先从linux的历史说起"><span class="nav-number">2.</span> <span class="nav-text">预备知识：先从linux的历史说起</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#init-守护进程"><span class="nav-number">2.1.</span> <span class="nav-text">init 守护进程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SysV"><span class="nav-number">2.1.1.</span> <span class="nav-text">SysV</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UpStart"><span class="nav-number">2.1.2.</span> <span class="nav-text">UpStart</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Systemd"><span class="nav-number">2.1.3.</span> <span class="nav-text">Systemd</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重新认识sysytemd"><span class="nav-number">3.</span> <span class="nav-text">重新认识sysytemd</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unit介绍"><span class="nav-number">3.1.</span> <span class="nav-text">unit介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#unit配置文件"><span class="nav-number">3.1.1.</span> <span class="nav-text">unit配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#unit-依赖关系"><span class="nav-number">3.1.2.</span> <span class="nav-text">unit 依赖关系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#target介绍"><span class="nav-number">3.2.</span> <span class="nav-text">target介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Target-与-传统-RunLevel-的对应关系"><span class="nav-number">3.2.1.</span> <span class="nav-text">Target 与 传统 RunLevel 的对应关系</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务管理相关命令"><span class="nav-number">4.</span> <span class="nav-text">服务管理相关命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sysV下如何管理服务"><span class="nav-number">4.1.</span> <span class="nav-text">sysV下如何管理服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sysV相关命令"><span class="nav-number">4.1.1.</span> <span class="nav-text">sysV相关命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Systemd-如何管理服务"><span class="nav-number">4.2.</span> <span class="nav-text">Systemd 如何管理服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#systemctl-Systemd-的主命令，用于管理系统。"><span class="nav-number">4.2.1.</span> <span class="nav-text">systemctl: Systemd 的主命令，用于管理系统。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#与Unit有关的命令"><span class="nav-number">4.2.1.1.</span> <span class="nav-text">与Unit有关的命令</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#与target有关的常用命令"><span class="nav-number">4.2.2.</span> <span class="nav-text">与target有关的常用命令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料："><span class="nav-number">5.</span> <span class="nav-text">参考资料：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Steve Yuan</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">180.8k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/05/24/week8-2-linuxNotes-systemd-sysv/';
+          this.page.identifier = '2018/05/24/week8-2-linuxNotes-systemd-sysv/';
+          this.page.title = 'linux运维学习笔记：系统进程管理';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://steve-yuan.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

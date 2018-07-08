@@ -93,8 +93,11 @@
 <meta property="og:image" content="https://farm2.staticflickr.com/1804/41396035130_b3f82a1570_o.jpg">
 <meta property="og:image" content="https://farm2.staticflickr.com/1822/28336955027_bf66cfbb54_o.jpg">
 <meta property="og:image" content="https://farm1.staticflickr.com/918/42487540814_bbcbcd8151_o.jpg">
+<meta property="og:image" content="https://farm1.staticflickr.com/923/42366622215_270432b64c_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1766/42552258184_767b2c9024_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/844/42366871715_42d173238d_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/926/42322478455_05bffaec78_o.png">
-<meta property="og:updated_time" content="2018-07-06T02:20:15.484Z">
+<meta property="og:updated_time" content="2018-07-08T13:35:10.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux笔记：均衡负载集群的配置">
 <meta name="twitter:description" content="写在前面这则笔记整理关于均衡负载集群的配置方法。 负载均衡集群LB集群是load balance 集群的简写，也就是这里所说的负载均衡集群； 根据维基百科的解释，负载平衡（Load balancing）是一种计算机网络技术，用来在多个计算机（计算机集群）、网络连接、CPU、磁盘驱动器或其他资源中分配负载，以达到最佳化资源使用、最大化吞吐率、最小化响应时间、同时避免过载的目的。简而言之，负载均衡的目">
@@ -409,7 +412,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,812
+                  2,928
                 </span>
               
 
@@ -425,7 +428,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  10
+                  11
                 </span>
               
             </div>
@@ -509,14 +512,26 @@
 <h5 id="源地址散列调度-Source-Hashing-sh"><a href="#源地址散列调度-Source-Hashing-sh" class="headerlink" title="源地址散列调度 Source Hashing sh"></a>源地址散列调度 <code>Source Hashing sh</code></h5><p>该算法正好与目标地址散列调度算法相反，它根据请求的源IP地址，作为散列键从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。它的算法流程与目标地址散列调度算法的基本相似，只不过将请求的目标IP地址换成请求的源IP地址。</p>
 <h3 id="LVS-NAT模式搭建"><a href="#LVS-NAT模式搭建" class="headerlink" title="LVS NAT模式搭建"></a>LVS NAT模式搭建</h3><h4 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h4><p>测试安装LVS NAT模式，至少需要有三台虚拟机：</p>
 <ul>
-<li><p>调度器（dir）两张网卡，一个内网IP：172.16.155.120，一个外网IP：172.16.13.129（vmware仅主机模式）；</p>
+<li><p>调度器（dir）两张网卡，一个内网IP：172.16.155.120，一个”外网IP“：172.16.15.99（vmware仅主机模式）；</p>
 </li>
 <li><p>真实服务器rs2，内网IP：172.16.155.132，设置网关为172.16.155.120；</p>
 </li>
 <li><p>真实服务器rs1，内网IP：172.16.155.128，设置网关为172.16.155.120；</p>
 </li>
 </ul>
-<p>这里用来作为dir调度器的，是刚刚克隆的虚拟机local-linux00，这里有两个不要步骤：</p>
+<p>这里用来作为dir调度器的，是上一节笔记中克隆的虚拟机local-linux00，这里的”外网ip“是虚拟的，并非真实的外网ip。具体的设置方法如下：</p>
+<ul>
+<li>查看当前网课配置信息</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/923/42366622215_270432b64c_o.png" alt=""></p>
+<p>进入<code>/etc/sysconfig/network-scripts</code> 文件夹，复制网卡配置文件，并重命名为<code>ifcfg-ens33:1</code></p>
+<p><img src="https://farm2.staticflickr.com/1766/42552258184_767b2c9024_o.png" alt=""></p>
+<p>编辑<code>ifcfg-ens33:1</code>文件，修改ip地址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi ifcfg-ens33:1</span><br><span class="line"></span><br><span class="line">//将ip地址设定为172.16.15.99</span><br></pre></td></tr></table></figure>
+<p><img src="https://farm1.staticflickr.com/844/42366871715_42d173238d_o.png" alt=""></p>
+<p>保存后执行以下命令重启网卡</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/network restart</span><br></pre></td></tr></table></figure>
+<p>另外，还要关闭selinux和防火墙</p>
 <ul>
 <li>关闭selinux</li>
 </ul>
@@ -687,7 +702,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">122</span>
+                  <span class="site-state-item-count">123</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -709,7 +724,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">81</span>
+                  <span class="site-state-item-count">82</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -811,7 +826,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">180.8k</span>
+    <span title="Site words total count">182.6k</span>
   
 </div>
 

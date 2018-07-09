@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="github," />
+  <meta name="keywords" content="linux,notes,zabbix," />
 
 
 
@@ -81,22 +81,22 @@
 
 
 
-<meta name="description" content="写在前面最近一段时间一直在尝试换工作，感觉自己真是弱爆了，挫败感十足。痛定思痛，就是 梦想 - 实力 = 行动 好吧，既然选了这条折腾的路，打鱼不成，还是退而结网吧。 今天，先从git基础应用知识整理开始。 GIT基础篇github申请、安装及基础使用，这个之前整理过，想见这里。 GIT 进阶篇branch 分支branch的本意是树枝，这里是分支，指的是repo从初始commit到当前commi">
-<meta name="keywords" content="github">
+<meta name="description" content="写在前面这则笔记继续整理zabbix主机监控的相关知识。 主动模式和被动模式 被动模式，服务端会主动连接客户端获取监控项目数据，客户端被动地接受连接，并把监控信息传递给服务端  主动模式，客户端会主动把监控数据汇报给服务端，服务端只负责接收即可。   这里的主动或被动都是针对客户端而言，以下两种场景适合主动模式：  当客户端数量非常多时，建议使用主动模式，这样可以降低服务端的压力；  服务端有公网">
+<meta name="keywords" content="linux,notes,zabbix">
 <meta property="og:type" content="article">
-<meta property="og:title" content="github笔记：git进阶及实用案例">
-<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/01/22/advancedAit/index.html">
+<meta property="og:title" content="Linux学习笔记：linux监控平台基础知识(二)">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/09/week16-2-linuxNotes-basisOfzabbixPart2/index.html">
 <meta property="og:site_name" content="Steve的折腾学习日志">
-<meta property="og:description" content="写在前面最近一段时间一直在尝试换工作，感觉自己真是弱爆了，挫败感十足。痛定思痛，就是 梦想 - 实力 = 行动 好吧，既然选了这条折腾的路，打鱼不成，还是退而结网吧。 今天，先从git基础应用知识整理开始。 GIT基础篇github申请、安装及基础使用，这个之前整理过，想见这里。 GIT 进阶篇branch 分支branch的本意是树枝，这里是分支，指的是repo从初始commit到当前commi">
+<meta property="og:description" content="写在前面这则笔记继续整理zabbix主机监控的相关知识。 主动模式和被动模式 被动模式，服务端会主动连接客户端获取监控项目数据，客户端被动地接受连接，并把监控信息传递给服务端  主动模式，客户端会主动把监控数据汇报给服务端，服务端只负责接收即可。   这里的主动或被动都是针对客户端而言，以下两种场景适合主动模式：  当客户端数量非常多时，建议使用主动模式，这样可以降低服务端的压力；  服务端有公网">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://farm5.staticflickr.com/4648/26259667448_9766cde2da_o.jpg">
-<meta property="og:image" content="https://farm5.staticflickr.com/4721/26259670798_68fba6b81f_o.jpg">
-<meta property="og:image" content="https://farm5.staticflickr.com/4625/40100633492_68c5336a9f_o.jpg">
-<meta property="og:updated_time" content="2018-06-23T03:05:38.524Z">
+<meta property="og:image" content="https://farm2.staticflickr.com/1826/43251996722_1dd538381e_o.jpg">
+<meta property="og:image" content="https://farm2.staticflickr.com/1782/43252028222_a023994aaf_o.jpg">
+<meta property="og:image" content="https://farm2.staticflickr.com/1806/29431899638_bfca47dffe_o.jpg">
+<meta property="og:updated_time" content="2018-07-09T16:03:47.468Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="github笔记：git进阶及实用案例">
-<meta name="twitter:description" content="写在前面最近一段时间一直在尝试换工作，感觉自己真是弱爆了，挫败感十足。痛定思痛，就是 梦想 - 实力 = 行动 好吧，既然选了这条折腾的路，打鱼不成，还是退而结网吧。 今天，先从git基础应用知识整理开始。 GIT基础篇github申请、安装及基础使用，这个之前整理过，想见这里。 GIT 进阶篇branch 分支branch的本意是树枝，这里是分支，指的是repo从初始commit到当前commi">
-<meta name="twitter:image" content="https://farm5.staticflickr.com/4648/26259667448_9766cde2da_o.jpg">
+<meta name="twitter:title" content="Linux学习笔记：linux监控平台基础知识(二)">
+<meta name="twitter:description" content="写在前面这则笔记继续整理zabbix主机监控的相关知识。 主动模式和被动模式 被动模式，服务端会主动连接客户端获取监控项目数据，客户端被动地接受连接，并把监控信息传递给服务端  主动模式，客户端会主动把监控数据汇报给服务端，服务端只负责接收即可。   这里的主动或被动都是针对客户端而言，以下两种场景适合主动模式：  当客户端数量非常多时，建议使用主动模式，这样可以降低服务端的压力；  服务端有公网">
+<meta name="twitter:image" content="https://farm2.staticflickr.com/1826/43251996722_1dd538381e_o.jpg">
 
 
 
@@ -126,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/01/22/advancedAit/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/09/week16-2-linuxNotes-basisOfzabbixPart2/"/>
 
 
 
 
 
-  <title>github笔记：git进阶及实用案例 | Steve的折腾学习日志</title>
+  <title>Linux学习笔记：linux监控平台基础知识(二) | Steve的折腾学习日志</title>
   
 
 
@@ -313,7 +313,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/01/22/advancedAit/">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/09/week16-2-linuxNotes-basisOfzabbixPart2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
@@ -330,7 +330,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">github笔记：git进阶及实用案例</h1>
+          <h1 class="post-title" itemprop="name headline">Linux学习笔记：linux监控平台基础知识(二)</h1>
         
 
         <div class="post-meta">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-22T20:23:13+08:00">
-                2018-01-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-09T21:29:10+08:00">
+                2018-07-09
               </time>
             
 
@@ -365,8 +365,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/github/" itemprop="url" rel="index">
-                    <span itemprop="name">github</span>
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
                   </a>
                 </span>
 
@@ -383,9 +383,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/22/advancedAit/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/09/week16-2-linuxNotes-basisOfzabbixPart2/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/22/advancedAit/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/09/week16-2-linuxNotes-basisOfzabbixPart2/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -407,7 +407,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,539
+                  957
                 </span>
               
 
@@ -423,7 +423,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6
+                  3
                 </span>
               
             </div>
@@ -444,89 +444,52 @@
       
 
       
-        <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>最近一段时间一直在尝试换工作，感觉自己真是弱爆了，挫败感十足。痛定思痛，就是</p>
-<pre><code>梦想 - 实力 = 行动
-</code></pre><p>好吧，既然选了这条折腾的路，打鱼不成，还是退而结网吧。</p>
-<p>今天，先从git基础应用知识整理开始。</p>
-<h3 id="GIT基础篇"><a href="#GIT基础篇" class="headerlink" title="GIT基础篇"></a>GIT基础篇</h3><p>github申请、安装及基础使用，这个之前整理过，想见<a href="https://www.steve-yuan.com/2017/12/16/howToUseGithub/" target="_blank" rel="noopener">这里。</a></p>
-<h3 id="GIT-进阶篇"><a href="#GIT-进阶篇" class="headerlink" title="GIT 进阶篇"></a>GIT 进阶篇</h3><h4 id="branch-分支"><a href="#branch-分支" class="headerlink" title="branch 分支"></a>branch 分支</h4><p>branch的本意是树枝，这里是分支，指的是repo从初始commit到当前commit的一个串。每个github repo都有一个默认分支，叫做master。</p>
-<p><img src="https://farm5.staticflickr.com/4648/26259667448_9766cde2da_o.jpg" alt=""></p>
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记继续整理zabbix主机监控的相关知识。</p>
+<h2 id="主动模式和被动模式"><a href="#主动模式和被动模式" class="headerlink" title="主动模式和被动模式"></a>主动模式和被动模式</h2><ul>
+<li><p><code>被动模式</code>，服务端会主动连接客户端获取监控项目数据，客户端被动地接受连接，并把监控信息传递给服务端</p>
+</li>
+<li><p><code>主动模式</code>，客户端会主动把监控数据汇报给服务端，服务端只负责接收即可。</p>
+</li>
+</ul>
+<p>这里的主动或被动都是针对客户端而言，以下两种场景适合主动模式：</p>
+<ol>
+<li><p>当客户端数量非常多时，建议使用主动模式，这样可以降低服务端的压力；</p>
+</li>
+<li><p>服务端有公网ip，客户端采用路由器上午，只有内网ip，没有公网ip，这种场景也适合主动模式；</p>
+</li>
+</ol>
 <a id="more"></a>
-<h5 id="branch-基础操作"><a href="#branch-基础操作" class="headerlink" title="branch 基础操作"></a>branch 基础操作</h5><pre><code>git checkout feature1   //创建一个名为feature1的branch
-
-git checkout feature1  //切换到feature1 分制
-
-git branch -d feature1   //删除feature1分支
-</code></pre><p>需要注意的是：</p>
-<ol>
-<li>HEAD 指向的 branch 不能删除。如果要删除 HEAD 指向的 branch，需要先用 checkout 把 HEAD 指向其他地方。</li>
-<li>删除 branch 的操作也只会删掉这个引用，并不会删除任何的 commit。</li>
-<li><p>没有被合并到 master 过的 branch 在删除时会失败，如果需要强行删除，需要使用如下命令：</p>
-<p> git branch -d feature1</p>
+<h2 id="添加监控主机"><a href="#添加监控主机" class="headerlink" title="添加监控主机"></a>添加监控主机</h2><p>将需要监控的主机加入监控中心，就可以监控cpu、磁盘、内存及网络等情况了。</p>
+<p>实现步骤：</p>
+<h3 id="第一步：添加主机群组"><a href="#第一步：添加主机群组" class="headerlink" title="第一步：添加主机群组"></a>第一步：添加主机群组</h3><p>依次点击：配置-主机群组-创建主机群组-设置组名</p>
+<h3 id="第二步：添加主机"><a href="#第二步：添加主机" class="headerlink" title="第二步：添加主机"></a>第二步：添加主机</h3><p>依次点击：配置-主机-创建主机</p>
+<p>这里涉及的几个参数：</p>
+<ul>
+<li><p>应用集：应用集就是多个监控项的组合，比如CPU相关的应用集、内存相关的应用集，应用集里面有具体的监控项；</p>
 </li>
-</ol>
-<h5 id="Feature-Branching：最流行的工作流"><a href="#Feature-Branching：最流行的工作流" class="headerlink" title="Feature Branching：最流行的工作流"></a>Feature Branching：最流行的工作流</h5><ol>
-<li><p>每个新功能都新建一个 branch 来写；</p>
+<li><p>监控项：监控项就是要监控的项目，比如内存使用、cpu等；</p>
 </li>
-<li><p>写完以后，把代码分享给同事看；写的过程中，也可以分享给同事讨论。另外，借助 GitHub 等服务提供方的 Pull Request 功能，可以让代码分享变得更加方便；</p>
+<li><p>触发器：触发器是针对某个监控项做的告警规则，比如磁盘使用量超过80%就触发了告警规则，然后就告警；</p>
 </li>
-<li><p>分支确定可以合并后，把分支合并到 master ，并删除分支。</p>
+<li><p>图形：监控报表显示成图形；</p>
 </li>
-</ol>
-<p><strong>实现步骤：</strong></p>
-<h6 id="1）创建分支，编写代码，提交"><a href="#1）创建分支，编写代码，提交" class="headerlink" title="1）创建分支，编写代码，提交"></a>1）创建分支，编写代码，提交</h6><pre><code>// 假设要开发一个books的新功能
-git checkout -b books   //创建并切换到boos分支
-git push origin books   //提交代码到books分支
-</code></pre><h6 id="2）代码审阅"><a href="#2）代码审阅" class="headerlink" title="2）代码审阅"></a>2）代码审阅</h6><pre><code>//假设是另一个同事在审阅
-git pull
-git chekcout books
-</code></pre><h6 id="3）合并分支"><a href="#3）合并分支" class="headerlink" title="3）合并分支"></a>3）合并分支</h6><pre><code>git checkout master
-git pull # merge 之前 pull 一下，让 master 更新到和远程仓库同步
-git merge books
-</code></pre><h6 id="4）提交合并结果并删除books分支"><a href="#4）提交合并结果并删除books分支" class="headerlink" title="4）提交合并结果并删除books分支"></a>4）提交合并结果并删除books分支</h6><pre><code>git push
-git branch -d books
-git push origin -d books # 用 -d 参数把远程仓库的 branch 也删了
-</code></pre><h4 id="git-add"><a href="#git-add" class="headerlink" title="git add"></a>git add</h4><p>git add 用来将需要改动的内容添加到缓存区，这里有两个使用技巧：</p>
-<ol>
-<li>add 后面加个点 “.”：直接把工作目录下的所有改动全部放进暂存区</li>
-<li>add 添加的是文件改动，而不是文件名。假定在使用 git add a.txt 后，又对a.txt进行了更改，后来的更改并不会自动放入缓存区，需要再添加一遍。</li>
-</ol>
-<h4 id="git-log"><a href="#git-log" class="headerlink" title="git log"></a>git log</h4><pre><code>git log用来查看历史记录，常用参数如下：
-
-git log -p   //查看commit 的每一行改动，所以很适合用于代码 review
-
-log --stat   //查看大致更改内容，例如什么文件更改了，更改有几处
-
-git show 5e68b0d8   //查看具体的commit，后面的这串数字是commit的SHA-1码的前8位；
-
-git show 5e68b0d8 shopping\ list.txt   //查看某个commit下的指定文件
-
-git diff --staged    //比对暂存区和上一条提交，与git diff --cached完全等价，可以换用
-</code></pre><h3 id="GIT-高级篇"><a href="#GIT-高级篇" class="headerlink" title="GIT 高级篇"></a>GIT 高级篇</h3><h4 id="问题一：刚刚提交的代码，发现写错了怎么办？"><a href="#问题一：刚刚提交的代码，发现写错了怎么办？" class="headerlink" title="问题一：刚刚提交的代码，发现写错了怎么办？"></a>问题一：刚刚提交的代码，发现写错了怎么办？</h4><p><strong>基本思路：</strong>commit -—amend会把当前 commit 里的内容和暂存区（stageing area）里的内容合并起来后创建一个新的 commit，用这个<strong>新的 commit 把当前 commit 替换掉。</strong></p>
-<h5 id="第一步：修改错误文档-比如a-txt"><a href="#第一步：修改错误文档-比如a-txt" class="headerlink" title="第一步：修改错误文档 比如a.txt"></a>第一步：修改错误文档 比如a.txt</h5><h5 id="第二步：git-add-a-txt"><a href="#第二步：git-add-a-txt" class="headerlink" title="第二步：git add a.txt"></a>第二步：git add a.txt</h5><h5 id="第三步：git-commit-–amend"><a href="#第三步：git-commit-–amend" class="headerlink" title="第三步：git commit –amend"></a>第三步：git commit –amend</h5><h4 id="问题二：更进一步，如果要修改的不是最新的commit，而是之前的commit（吃饱了闲的），应该怎么做？"><a href="#问题二：更进一步，如果要修改的不是最新的commit，而是之前的commit（吃饱了闲的），应该怎么做？" class="headerlink" title="问题二：更进一步，如果要修改的不是最新的commit，而是之前的commit（吃饱了闲的），应该怎么做？"></a>问题二：更进一步，如果要修改的不是最新的commit，而是之前的commit（吃饱了闲的），应该怎么做？</h4><h5 id="第一步：git-log-查询具体是哪一个commit"><a href="#第一步：git-log-查询具体是哪一个commit" class="headerlink" title="第一步：git log 查询具体是哪一个commit"></a>第一步：git log 查询具体是哪一个commit</h5><h5 id="第二步：开启交互式-rebase-过程，有两种方式："><a href="#第二步：开启交互式-rebase-过程，有两种方式：" class="headerlink" title="第二步：开启交互式 rebase 过程，有两种方式："></a>第二步：开启交互式 rebase 过程，有两种方式：</h5><p>git rebase -i HEAD^^   // 在 commit 的后面加一个或多个 ^ 号，可以把 commit 往回偏移，偏移的数量是 ^ 的数量，这里指的是HEAD 所指向的 commit 往前数两个 commit。</p>
-<p>git rebase -i HEAD～5    //在 commit 的后面加上 ~ 号和一个数，可以把 commit 往回偏移，偏移的数量是 ~ 号后面的数。例如：HEAD~5 表示 HEAD 指向的 commit往前数 5 个 commit。</p>
-<h5 id="第三步：选择-需要更改的commit-，将pick改为edit，之后推出编辑界面"><a href="#第三步：选择-需要更改的commit-，将pick改为edit，之后推出编辑界面" class="headerlink" title="第三步：选择 需要更改的commit ，将pick改为edit，之后推出编辑界面"></a>第三步：选择 需要更改的commit ，将pick改为edit，之后推出编辑界面</h5><p><img src="https://farm5.staticflickr.com/4721/26259670798_68fba6b81f_o.jpg" alt=""></p>
-<h5 id="第四步：修改写错的-commit"><a href="#第四步：修改写错的-commit" class="headerlink" title="第四步：修改写错的 commit"></a>第四步：修改写错的 commit</h5><pre><code>git add 笑声
-git commit --amend
-</code></pre><h5 id="第五步：继续-rebase-过程"><a href="#第五步：继续-rebase-过程" class="headerlink" title="第五步：继续 rebase 过程"></a>第五步：继续 rebase 过程</h5><pre><code>git rebase --continue
-</code></pre><p>git rebase的详细用法<a href="https://blog.yorkxin.org/2011/07/29/git-rebase" target="_blank" rel="noopener">参见这里</a></p>
-<h4 id="问题三：之前提交的commit太烂，如何直接删除？"><a href="#问题三：之前提交的commit太烂，如何直接删除？" class="headerlink" title="问题三：之前提交的commit太烂，如何直接删除？"></a>问题三：之前提交的commit太烂，如何直接删除？</h4><p>删除最近提交的commit，可以用git reset</p>
-<pre><code>git reset --hard 目标commit  //这里可以用HEAD^ 来删除最近一条的commit
-</code></pre><h4 id="问题四：想删除的不是最近一条commit，而是之前的某一条，应该怎么做？"><a href="#问题四：想删除的不是最近一条commit，而是之前的某一条，应该怎么做？" class="headerlink" title="问题四：想删除的不是最近一条commit，而是之前的某一条，应该怎么做？"></a>问题四：想删除的不是最近一条commit，而是之前的某一条，应该怎么做？</h4><p>还是使用rebase -i 的方式来删除</p>
-<pre><code>git log   //查询commit历史记录
-git rebase -i HEAD^^     //找到要删除倒数第二条，之后直接删除掉需要删除的那一行
-</code></pre><h4 id="问题五：当你手头有一件临时工作要做，需要把工作目录暂时清理干净，处理完临时工作再切换回来，这个要怎么实现？"><a href="#问题五：当你手头有一件临时工作要做，需要把工作目录暂时清理干净，处理完临时工作再切换回来，这个要怎么实现？" class="headerlink" title="问题五：当你手头有一件临时工作要做，需要把工作目录暂时清理干净，处理完临时工作再切换回来，这个要怎么实现？"></a>问题五：当你手头有一件临时工作要做，需要把工作目录暂时清理干净，处理完临时工作再切换回来，这个要怎么实现？</h4><p>stash 指令可以帮你把工作目录的内容全部放在你本地的一个独立的地方，它不会被提交，也不会被删除，你把东西放起来之后就可以去做你的临时工作；完成临时工作后再切换回来，恢复之前的进度</p>
-<pre><code>git stash   // 没有add的文件不会被stash，如果所有的文件一起，需要用git stash -u，-u表示 --include-untracked的简写
-
-git checkout fearture1 //假定原来的工作再feature1分支
-
-git stash pop
-</code></pre><h4 id="问题六：误删了commit需要找回，应该怎么做？"><a href="#问题六：误删了commit需要找回，应该怎么做？" class="headerlink" title="问题六：误删了commit需要找回，应该怎么做？"></a>问题六：误删了commit需要找回，应该怎么做？</h4><p>git reflog   //reflog 是 “reference log” 的缩写，用来查看 Git 仓库中的引用的移动记录</p>
-<p><img src="https://farm5.staticflickr.com/4625/40100633492_68c5336a9f_o.jpg" alt=""></p>
-<p>从图中可以看出，HEAD 的最后一次移动行为是「从 branch1 移动到 master」。而在这之后，branch1 就被删除了。所以它之前的那个 commit 就是 branch1 被删除之前的位置了，也就是第二行的 c08de9a。</p>
-<pre><code>git checkout c08de9a
-git checkout -b branch1
-</code></pre><p>这样，之前误删的commit就回来了。</p>
+<li><p>自动发现：zabbix特有的一个机制，会自动地去发现服务器上监控项目，比如网卡浏览就可以自动发现网卡设备并监控起来；</p>
+</li>
+<li><p>web监测：监控指定网站的某个URL访问是否正常，比如状态码是否为200，或者访问时间是否超过某个设定的时间段。</p>
+</li>
+</ul>
+<h2 id="添加自定义模板"><a href="#添加自定义模板" class="headerlink" title="添加自定义模板"></a>添加自定义模板</h2><p>定义一个常用模板，方便给新增主机添加监控项目。</p>
+<p>依次点击：配置-模版-创建模版，就可以创建自己的模版了，按照要求填写模版名称、可见名称、群组，最后点击添加按钮，就创建了一个自己的模版。</p>
+<p>需要复制模版时，只要找到相应的模版，点击监控项，在对应的监控项左侧方框打勾选中，之后点击复制，目标类型选择模版，在弹出列表中选择之前我们自定义的模版，选中后点击复制即可。</p>
+<p>同时，还可以在模版中添加触发器。所谓触发器，就是trigger，当达到某种条件，就会触发影响的操作。依次点击右上角 创建触发器，名称填写<code>{HOST.NAME}1分钟负载（每核）</code>，点击添加按钮，按照提示设置条件、监控项、群组、主机，在功能项，设置为 <code>最新的T值&gt; N</code>,下面的N设置为2.之后点击插入，回到触发器界面，点击添加，就成功设置了一个触发器。</p>
+<h2 id="处理图形中的乱码-（服务端操作"><a href="#处理图形中的乱码-（服务端操作" class="headerlink" title="处理图形中的乱码 （服务端操作)"></a>处理图形中的乱码 （服务端操作)</h2><p>当系统界面设置为中文后，由于zabbix缺少中文字体，会出现无法正确显示的现象。</p>
+<p><img src="https://farm2.staticflickr.com/1826/43251996722_1dd538381e_o.jpg" alt=""></p>
+<p>解决思路：拷贝一个中文字体，上传到root目录下，在复制到/usr/share/zabbix/fonts/，把原来的graphfont.ttf改名拷贝起来，并且做软链接ln -s SIMLI.TTF graphfont.ttf</p>
+<h2 id="自动发现"><a href="#自动发现" class="headerlink" title="自动发现"></a>自动发现</h2><p><img src="https://farm2.staticflickr.com/1782/43252028222_a023994aaf_o.jpg" alt=""></p>
+<p>重启zabbix</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//重启服务端</span><br><span class="line">systemctl restart zabbix-server</span><br><span class="line"></span><br><span class="line">//重启客户端</span><br><span class="line">systemctl restart zabbix-agent</span><br></pre></td></tr></table></figure>
+<p>更新之后图形会出现网卡的流量图形</p>
+<p><img src="https://farm2.staticflickr.com/1806/29431899638_bfca47dffe_o.jpg" alt=""></p>
 
       
     </div>
@@ -547,7 +510,7 @@ git checkout -b branch1
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://steve-yuan-8276.github.io/2018/01/22/advancedAit/" title="github笔记：git进阶及实用案例">https://steve-yuan-8276.github.io/2018/01/22/advancedAit/</a>
+    <a href="https://steve-yuan-8276.github.io/2018/07/09/week16-2-linuxNotes-basisOfzabbixPart2/" title="Linux学习笔记：linux监控平台基础知识(二)">https://steve-yuan-8276.github.io/2018/07/09/week16-2-linuxNotes-basisOfzabbixPart2/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -562,7 +525,11 @@ git checkout -b branch1
       
         <div class="post-tags">
           
-            <a href="/tags/github/" rel="tag"># github</a>
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
+          
+            <a href="/tags/zabbix/" rel="tag"># zabbix</a>
           
         </div>
       
@@ -575,8 +542,8 @@ git checkout -b branch1
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/04/howToMoveHexoBlog/" rel="next" title="github折腾笔记：如何迁移hexo到新电脑">
-                <i class="fa fa-chevron-left"></i> github折腾笔记：如何迁移hexo到新电脑
+              <a href="/2018/07/08/week16-1-linuxNotes-basisOfzabbix/" rel="next" title="Linux学习笔记：linux监控平台基础知识(一)">
+                <i class="fa fa-chevron-left"></i> Linux学习笔记：linux监控平台基础知识(一)
               </a>
             
           </div>
@@ -584,10 +551,6 @@ git checkout -b branch1
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/23/blogOptimazation/" rel="prev" title="HEXO折腾笔记：给自己的博客做个美容">
-                HEXO折腾笔记：给自己的博客做个美容 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -768,7 +731,7 @@ git checkout -b branch1
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GIT基础篇"><span class="nav-number">2.</span> <span class="nav-text">GIT基础篇</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GIT-进阶篇"><span class="nav-number">3.</span> <span class="nav-text">GIT 进阶篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#branch-分支"><span class="nav-number">3.1.</span> <span class="nav-text">branch 分支</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#branch-基础操作"><span class="nav-number">3.1.1.</span> <span class="nav-text">branch 基础操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Feature-Branching：最流行的工作流"><span class="nav-number">3.1.2.</span> <span class="nav-text">Feature Branching：最流行的工作流</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1）创建分支，编写代码，提交"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">1）创建分支，编写代码，提交</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2）代码审阅"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">2）代码审阅</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3）合并分支"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">3）合并分支</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4）提交合并结果并删除books分支"><span class="nav-number">3.1.2.4.</span> <span class="nav-text">4）提交合并结果并删除books分支</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#git-add"><span class="nav-number">3.2.</span> <span class="nav-text">git add</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#git-log"><span class="nav-number">3.3.</span> <span class="nav-text">git log</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GIT-高级篇"><span class="nav-number">4.</span> <span class="nav-text">GIT 高级篇</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#问题一：刚刚提交的代码，发现写错了怎么办？"><span class="nav-number">4.1.</span> <span class="nav-text">问题一：刚刚提交的代码，发现写错了怎么办？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：修改错误文档-比如a-txt"><span class="nav-number">4.1.1.</span> <span class="nav-text">第一步：修改错误文档 比如a.txt</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：git-add-a-txt"><span class="nav-number">4.1.2.</span> <span class="nav-text">第二步：git add a.txt</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：git-commit-–amend"><span class="nav-number">4.1.3.</span> <span class="nav-text">第三步：git commit –amend</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题二：更进一步，如果要修改的不是最新的commit，而是之前的commit（吃饱了闲的），应该怎么做？"><span class="nav-number">4.2.</span> <span class="nav-text">问题二：更进一步，如果要修改的不是最新的commit，而是之前的commit（吃饱了闲的），应该怎么做？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：git-log-查询具体是哪一个commit"><span class="nav-number">4.2.1.</span> <span class="nav-text">第一步：git log 查询具体是哪一个commit</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：开启交互式-rebase-过程，有两种方式："><span class="nav-number">4.2.2.</span> <span class="nav-text">第二步：开启交互式 rebase 过程，有两种方式：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：选择-需要更改的commit-，将pick改为edit，之后推出编辑界面"><span class="nav-number">4.2.3.</span> <span class="nav-text">第三步：选择 需要更改的commit ，将pick改为edit，之后推出编辑界面</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第四步：修改写错的-commit"><span class="nav-number">4.2.4.</span> <span class="nav-text">第四步：修改写错的 commit</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第五步：继续-rebase-过程"><span class="nav-number">4.2.5.</span> <span class="nav-text">第五步：继续 rebase 过程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题三：之前提交的commit太烂，如何直接删除？"><span class="nav-number">4.3.</span> <span class="nav-text">问题三：之前提交的commit太烂，如何直接删除？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题四：想删除的不是最近一条commit，而是之前的某一条，应该怎么做？"><span class="nav-number">4.4.</span> <span class="nav-text">问题四：想删除的不是最近一条commit，而是之前的某一条，应该怎么做？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题五：当你手头有一件临时工作要做，需要把工作目录暂时清理干净，处理完临时工作再切换回来，这个要怎么实现？"><span class="nav-number">4.5.</span> <span class="nav-text">问题五：当你手头有一件临时工作要做，需要把工作目录暂时清理干净，处理完临时工作再切换回来，这个要怎么实现？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题六：误删了commit需要找回，应该怎么做？"><span class="nav-number">4.6.</span> <span class="nav-text">问题六：误删了commit需要找回，应该怎么做？</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主动模式和被动模式"><span class="nav-number">2.</span> <span class="nav-text">主动模式和被动模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加监控主机"><span class="nav-number">3.</span> <span class="nav-text">添加监控主机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：添加主机群组"><span class="nav-number">3.1.</span> <span class="nav-text">第一步：添加主机群组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：添加主机"><span class="nav-number">3.2.</span> <span class="nav-text">第二步：添加主机</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加自定义模板"><span class="nav-number">4.</span> <span class="nav-text">添加自定义模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理图形中的乱码-（服务端操作"><span class="nav-number">5.</span> <span class="nav-text">处理图形中的乱码 （服务端操作)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动发现"><span class="nav-number">6.</span> <span class="nav-text">自动发现</span></a></li></ol></div>
             
 
           </div>
@@ -960,9 +923,9 @@ git checkout -b branch1
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://steve-yuan-8276.github.io/2018/01/22/advancedAit/';
-          this.page.identifier = '2018/01/22/advancedAit/';
-          this.page.title = 'github笔记：git进阶及实用案例';
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/09/week16-2-linuxNotes-basisOfzabbixPart2/';
+          this.page.identifier = '2018/07/09/week16-2-linuxNotes-basisOfzabbixPart2/';
+          this.page.title = 'Linux学习笔记：linux监控平台基础知识(二)';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://steve-yuan.disqus.com/embed.js';

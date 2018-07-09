@@ -308,6 +308,228 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/11/week4-4-basisOfZipToolsPart1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/11/week4-4-basisOfZipToolsPart1/" itemprop="url">Linux运维学习笔记4-4：文件打包压缩工具（一）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-11T17:01:13+08:00">
+                2018-04-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/11/week4-4-basisOfZipToolsPart1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/11/week4-4-basisOfZipToolsPart1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,279
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记主要整理Linux文件压缩与打包方面的知识，主要涉及gzip、bzip、xz。</p>
+<h3 id="常见的Linux压缩打包文件"><a href="#常见的Linux压缩打包文件" class="headerlink" title="常见的Linux压缩打包文件"></a>常见的Linux压缩打包文件</h3><table>
+<thead>
+<tr>
+<th>后缀名</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.gz</td>
+<td>gzip压缩工具压缩的文件</td>
+</tr>
+<tr>
+<td>.bz2</td>
+<td>bzip2压缩工具压缩的文件</td>
+</tr>
+<tr>
+<td>.tar</td>
+<td>tar工具打包的文件（tar没有压缩功能，只能合并打包）</td>
+</tr>
+<tr>
+<td>.tar.gz</td>
+<td>先由tar打包，再由zip工具压缩的文件</td>
+</tr>
+<tr>
+<td>.tar.bz2</td>
+<td>先由tar打包，再由bzip2工具压缩的文件</td>
+</tr>
+<tr>
+<td>.tar.xz</td>
+<td>先由tar打包，再由xz工具压缩的文件</td>
+</tr>
+</tbody>
+</table>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/11/week4-4-basisOfZipToolsPart1/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/09/week4-3-basisOfVIM-Part2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2112,204 +2334,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/03/28/week2-5-howToSearchOnLinux/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/logo.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/28/week2-5-howToSearchOnLinux/" itemprop="url">Linux运维学习笔记2-5：如何在linux下进行文件搜素</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-28T21:19:15+08:00">
-                2018-03-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/03/28/week2-5-howToSearchOnLinux/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/28/week2-5-howToSearchOnLinux/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,516
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  6
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记简要总结文件类型，以及如何在linux系统进行文件搜索。</p>
-<h3 id="linux系统文件类型与后缀名"><a href="#linux系统文件类型与后缀名" class="headerlink" title="linux系统文件类型与后缀名"></a>linux系统文件类型与后缀名</h3><h4 id="linux文件类型"><a href="#linux文件类型" class="headerlink" title="linux文件类型"></a>linux文件类型</h4><p>在Linux当中，一切设备均为文件。使用<code>ll  [filename]</code> 或者 <code>ls -l [filename/dirname]</code>  查看文件类型。在<a href="https://www.steve-yuan.com/2018/03/15/week1-5-centOS-filesystem-ls-aliasCommand/#more" target="_blank" rel="noopener">这则笔记</a> 中已经进行总结。这里再整理一下常用类型用法：</p>
-<h5 id="普通文件："><a href="#普通文件：" class="headerlink" title="普通文件："></a>普通文件：</h5><p>一般类型的文件，主要包括：</p>
-<ol>
-<li><p>纯文本档<code>ASCII</code>：文件内容可以直接读到数据，例如：字母，数字等。这里文件可以用<code>cat</code> 命令进行查看。</p>
-</li>
-<li><p>二进制文件<code>binary</code>：Linux当中可执行文件就是属于这种格式。例如，ls、 rm、mkdir 等等常见命令。</p>
-</li>
-<li><p>数据文件<code>data</code>：有些程序在运行的过程中会读取某些特定格式的文件，那些特定格式的文件可以被称为数据文件。例如，系统登录数据会记录在<code>/var/log/wtmp</code> ，这就是一个数据文件，可以用<code>last -f /var/log/wtmp</code> 命令查看。</p>
-</li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/28/week2-5-howToSearchOnLinux/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2364,7 +2388,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">123</span>
+                  <span class="site-state-item-count">124</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2472,7 +2496,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">182.6k</span>
+    <span title="Site words total count">183.7k</span>
   
 </div>
 

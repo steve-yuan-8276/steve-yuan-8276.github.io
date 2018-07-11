@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[linux笔记：shell脚本基础知识]]></title>
+    <url>%2F2018%2F07%2F11%2Fweek17-1-linuxNotes-basisOfShellScript-Part1%2F</url>
+    <content type="text"><![CDATA[写在前面之前已经整理过几次关于shell脚本编写的知识了，笔记在这里： Linux运维学习笔记6-4：怎么写shell脚本？ 这次系统整理一下shell脚本的相关知识。 Shell脚本介绍shell脚本（shell script），是一种为shell编写的脚本程序。我们可以把需要执行的命令写在脚本当中，系统通过读取脚本执行命令。 shell脚本的特点如下； shell是一种脚本语言； 可以使用逻辑判断、循环等语法； 可以自定义函数； shell是系统命令的集合； shell脚本可以实现自动化运维，能大大增加我们的运维效率； Shell脚本结构和执行按照约定俗成的规则，shell脚本一般以.sh结尾，统一放在/usr/local/sbin/目录下，方便保管。 脚本结构一个shell脚本一般包括三个部分： 第一部分：#!/bin/sh，指定脚本解释器。 第二部分：# 开头的是注释。 第三部分：脚本代码。 脚本执行方式一： 12345//更改权限chmod 755 a.sh//执行脚本a.sh 方法二： 12345678//执行脚本bash a.sh//查看脚本执行过程 bash -x a.sh//查看脚本是否有语法错误 bash -n a.sh 编写第一个脚本123456789cd /usr/local/sbinvi a.sh#!/bin/bash # first shell scriptecho &quot;123&quot;wls 执行脚本效果 查看脚本执行过程 date用法date是在shell脚本当中最常用的命令，用来显示或者设置系统的日期和时间。 date基本用法命令行格式：date [参数] [+格式] 123456789date +%Y-%m-%d, date +%y-%m-%d 年月日date +%H:%M:%S = date +%T 时间date +%s 时间戳date -d @1504620492date -d &quot;+1day&quot; 一天后date -d &quot;-1 day&quot; 一天前date -d &quot;-1 month&quot; 一月前date -d &quot;-1 min&quot; 一分钟前date +%w, date +%W 星期 示例： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768//显示年[root@local-linux00 ~]# date +%Y2018//用两位数字表示的年份[root@local-linux00 ~]# date +%y18//显示月份root@local-linux00 ~]# date +%m07//显示日期root@local-linux00 ~]# date +%d11[root@local-linux00 ~]# date +%D07/11/18[root@local-linux00 ~]# date +%Y%m%d20180711[root@local-linux00 ~]# date +%F2018-07-11//显示小时[root@local-linux00 ~]# date +%H22//显示分钟[root@local-linux00 ~]# date +%M10//显示秒[root@local-linux00 ~]# date +%S19//时间戳（距离19700101过去多少秒）[root@local-linux00 ~]# date +%s1531318421[root@local-linux00 ~]# date -d @1517637599Sat Feb 3 13:59:59 HKT 2018[root@local-linux00 ~]# date +%s -d &quot;2018-02-03 13:59:59&quot;1517637599//显示时间[root@local-linux00 ~]# date +%T22:14:40[root@local-linux00 ~]# date +%H:%M:%S22:14:59//显示英文月份[root@local-linux00 ~]# date +%hJul//显示星期几[root@local-linux00 ~]# date +%w3//今年的第几周[root@local-linux00 ~]# date +%W28//显示日历[root@local-linux00 ~]# cal July 2018Su Mo Tu We Th Fr Sa 1 2 3 4 5 6 7 8 9 10 11 12 13 1415 16 17 18 19 20 2122 23 24 25 26 27 2829 30 31 脚本变量变量格式： var=value 其中，var是变量名，value是变量内容； 跟其他的编程语言，比如python、javascript了类似，以下情况均考虑使用变量： 某个字符串需要频繁使用，且很长； 使用条件语句时 if [ condition ]; then ... ; fi； 引用命令的结果时，用变量替代 n=wc -l 1.txt 写用户交互脚本，比如 read -p &quot;Input a number: &quot; n; echo $n //如果没写这个n，可以直接使用$REPLY； 内置变量 $0, $1, $n 其中，$0表示脚本本身，$1 第一个参数，$n表示参数个数； 数学运算a=1;b=2; c=$(($a+$b))或者$[$a+$b]]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Linux学习笔记：linux监控平台基础知识(三)]]></title>
     <url>%2F2018%2F07%2F10%2Fweek16-3-linuxNotes-basisOfzabbixPart3%2F</url>
     <content type="text"><![CDATA[写在前面这则笔记继续整理zabbix主机监控的相关知识。 添加自定义监控项目需求：监控某台web服务器的80端口并发连接数，并设置图形。 实现步骤： 第一步：在zabbix-agent端编辑自定义脚本 1234567vim /usr/local/sbin/estab.sh编辑脚本内容如下：#!/bin/bash##获取80端口并发连接数netstat -ant |grep &apos;:80 &apos; |grep -c ESTABLISHED 修改脚本权限 1chmod 755 /usr/local/sbin/estab.sh 在zabbix-agent端编辑配置文件，定义监控的key 1234567vim /etc/zabbix/zabbix_agentd.conf //增加如下配置内容：UnsafeUserParameters=1 //使用自定义脚本//自定义监控项的key为my.estab.count，后面的[*]里面写脚本的参数，如果没有参数则可以省略，脚本为/usr/local/sbin/estab.shUserParameter=my.estab.count[*],/usr/local/sbin/estab.sh 重启zabbix-agent服务 1systemctl restart zabbix-agent 服务端验证脚本 1zabbix_get -s 172.16.111.110 -p 10050 -k &apos;my.estab.count&apos; 然后在zabbix监控中心（浏览器）配置增加监控项目 键值写my.estab.count 添加该项目后，到“监测中”——“最新数据”查看刚添加的项目是否有数据出现，有了数据就可以添加图形了，“配置”——“主机” ——“图形” ——“创建图形” 添加触发器 配置邮件告警第一步：登录你的qq邮箱，设置开启POP3、IMAP、SMTP服务，开启并记录授权码。第二步：到监控中心设置邮件告警依次点击“管理”-“报警媒介类型”-“创建媒体类型” 脚本参数： {ALERT.SENDTO} ：表示接收邮件地址 {ALERT.SUBJECT} ：主题 {ALERT.MESSAGE} ：邮件内容 第三步：创建脚本，定义脚本路径（服务端）确定告警邮件脚本应该放到哪个位置下 1grep &apos;AlertScriptsPath=&apos; /etc/zabbix/zabbix_server.conf 按需求修改脚本内容 123456789101112131415161718192021222324252627282930313233343536373839vim /usr/lib/zabbix/alertscripts/mail.py//增加脚本以下内容：#!/usr/bin/env python#-*- coding: UTF-8 -*-import os,sysreload(sys)sys.setdefaultencoding(&apos;utf8&apos;)import getoptimport smtplibfrom email.MIMEText import MIMETextfrom email.MIMEMultipart import MIMEMultipartfrom subprocess import *def sendqqmail(username,password,mailfrom,mailto,subject,content): gserver = &apos;smtp.qq.com&apos; gport = 25 try: msg = MIMEText(unicode(content).encode(&apos;utf-8&apos;)) msg[&apos;from&apos;] = mailfrom msg[&apos;to&apos;] = mailto msg[&apos;Reply-To&apos;] = mailfrom msg[&apos;Subject&apos;] = subject smtp = smtplib.SMTP(gserver, gport) smtp.set_debuglevel(0) smtp.ehlo() smtp.login(username,password) smtp.sendmail(mailfrom, mailto, msg.as_string()) smtp.close() except Exception,err: print &quot;Send mail failed. Error: %s&quot; % errdef main(): to=sys.argv[1] subject=sys.argv[2] content=sys.argv[3]//定义QQ邮箱的账号和密码（请勿把真实的用户名和密码放到网上公开，否则你会死的很惨） sendqqmail(&apos;1234567@qq.com&apos;,&apos;aaaaaaaaaa&apos;,&apos;1234567@qq.com&apos;,to,subject,content)if __name__ == &quot;__main__&quot;: main() 脚本使用说明 首先定义好脚本中的邮箱账号和密码 脚本执行命令为：python mail.py 目标邮箱 “邮件主题” “邮件内容” 更改权限 1chmod 755 /usr/lib/zabbix/alertscripts/mail.py 测试邮件发送 1python /usr/lib/zabbix/alertscripts/mail.py aaaaaaaaaa@qq.com &quot;agagagag&quot; &quot;123313434324&quot; 第四步：创建一个接受告警邮件的用户依次“管理”，“用户”，“创建用户”，“报警媒介”，类型选择“baojing”，注意用户的权限，如果没有需要到用户组去设置权限。 第五步：设置动作依次点击“配置”，“动作”，“创建动作”，名称写“sendmail”（自定义），“操作”页面复制如下内容： 123456HOST:&#123;HOST.NAME&#125; &#123;HOST.IP&#125;TIME:&#123;EVENT.DATE&#125; &#123;EVENT.TIME&#125; LEVEL:&#123;TRIGGER.SEVERITY&#125; NAME:&#123;TRIGGER.NAME&#125;messages:&#123;ITEM.NAME&#125;:&#123;ITEM.VALUE&#125;ID:&#123;EVENT.ID&#125; 切换到“恢复操作”，把信息改成如下： 123456HOST:&#123;HOST.NAME&#125; &#123;HOST.IP&#125;TIME:&#123;EVENT.DATE&#125; &#123;EVENT.TIME&#125; LEVEL:&#123;TRIGGER.SEVERITY&#125; NAME:&#123;TRIGGER.NAME&#125;messages:&#123;ITEM.NAME&#125;:&#123;ITEM.VALUE&#125;ID:&#123;EVENT.ID&#125; “操作”，选择发送的用户为刚创建的用户，仅送到选择“baojing”； 点击“新的”，“操作”，选择发送的用户为刚创建的用户，仅送到选择“baojing” 测试告警第一步：创建自定义触发器 仪表板出现报错信息，邮件发送成功]]></content>
@@ -96,9 +109,9 @@
         <category>hexo</category>
       </categories>
       <tags>
+        <tag>github</tag>
         <tag>linux</tag>
         <tag>hexo</tag>
-        <tag>github</tag>
         <tag>notes</tag>
       </tags>
   </entry>
@@ -605,8 +618,8 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>mac</tag>
+        <tag>notes</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -631,8 +644,8 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>mac</tag>
+        <tag>notes</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -983,8 +996,8 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>mac</tag>
+        <tag>notes</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1330,8 +1343,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -1354,8 +1367,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1366,8 +1379,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -1503,8 +1516,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1542,8 +1555,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
         <tag>https</tag>
       </tags>
   </entry>
@@ -1581,8 +1594,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1605,8 +1618,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1642,8 +1655,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
 </search>

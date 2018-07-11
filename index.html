@@ -308,7 +308,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/10/week16-2-linuxNotes-basisOfzabbixPart3/">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/10/week16-3-linuxNotes-basisOfzabbixPart3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
@@ -327,7 +327,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/10/week16-2-linuxNotes-basisOfzabbixPart3/" itemprop="url">Linux学习笔记：linux监控平台基础知识(三)</a></h1>
+                <a class="post-title-link" href="/2018/07/10/week16-3-linuxNotes-basisOfzabbixPart3/" itemprop="url">Linux学习笔记：linux监控平台基础知识(三)</a></h1>
         
 
         <div class="post-meta">
@@ -380,9 +380,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/10/week16-2-linuxNotes-basisOfzabbixPart3/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/10/week16-3-linuxNotes-basisOfzabbixPart3/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/10/week16-2-linuxNotes-basisOfzabbixPart3/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/10/week16-3-linuxNotes-basisOfzabbixPart3/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -449,7 +449,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/local/sbin/estab.sh</span><br><span class="line"></span><br><span class="line">编辑脚本内容如下：</span><br><span class="line"></span><br><span class="line">#!/bin/bash</span><br><span class="line">##获取80端口并发连接数</span><br><span class="line">netstat -ant |grep &apos;:80 &apos; |grep -c ESTABLISHED</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/07/10/week16-2-linuxNotes-basisOfzabbixPart3/#more" rel="contents">
+            <a class="btn" href="/2018/07/10/week16-3-linuxNotes-basisOfzabbixPart3/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -596,7 +596,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  957
+                  1,724
                 </span>
               
 
@@ -612,7 +612,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  6
                 </span>
               
             </div>
@@ -635,19 +635,10 @@
       
         
           <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记继续整理zabbix主机监控的相关知识。</p>
-<h2 id="主动模式和被动模式"><a href="#主动模式和被动模式" class="headerlink" title="主动模式和被动模式"></a>主动模式和被动模式</h2><ul>
-<li><p><code>被动模式</code>，服务端会主动连接客户端获取监控项目数据，客户端被动地接受连接，并把监控信息传递给服务端</p>
-</li>
-<li><p><code>主动模式</code>，客户端会主动把监控数据汇报给服务端，服务端只负责接收即可。</p>
-</li>
-</ul>
-<p>这里的主动或被动都是针对客户端而言，以下两种场景适合主动模式：</p>
-<ol>
-<li><p>当客户端数量非常多时，建议使用主动模式，这样可以降低服务端的压力；</p>
-</li>
-<li><p>服务端有公网ip，客户端采用路由器上午，只有内网ip，没有公网ip，这种场景也适合主动模式；</p>
-</li>
-</ol>
+<h2 id="添加监控主机"><a href="#添加监控主机" class="headerlink" title="添加监控主机"></a>添加监控主机</h2><p>将需要监控的主机加入监控中心，就可以监控cpu、磁盘、内存及网络等情况了。</p>
+<p>实现步骤：</p>
+<h3 id="第一步：添加主机群组"><a href="#第一步：添加主机群组" class="headerlink" title="第一步：添加主机群组"></a>第一步：添加主机群组</h3><p>依次点击：配置-主机群组-创建主机群组-设置组名</p>
+<p><img src="https://farm1.staticflickr.com/835/43286328152_9f8ef06de3_o.png" alt=""></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/07/09/week16-2-linuxNotes-basisOfzabbixPart2/#more" rel="contents">
@@ -2394,7 +2385,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">185.0k</span>
+    <span title="Site words total count">185.8k</span>
   
 </div>
 

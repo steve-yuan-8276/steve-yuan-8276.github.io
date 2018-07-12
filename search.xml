@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[linux笔记：shell脚本基础知识]]></title>
+    <title><![CDATA[linux笔记：shell脚本基础知识(二)]]></title>
+    <url>%2F2018%2F07%2F12%2Fweek17-2-linuxNotes-basisOfShellScript-Part2%2F</url>
+    <content type="text"><![CDATA[写在前面继续整理shell脚本编写的基础知识。 shell脚本中的逻辑判断这里的逻辑判断特指if判断，跟python等其他的编程语言用法类似，大概想到如果满足条件，就执行以下操作。常见的if判断有一下三种形式,复杂程度依次上升。 if判断常见的三种形式第一种形式1234if 条件 ; then 语句; fi``` 示例： [root@local-linux01 ~]# if true; then echo ‘hello’; fihello1234&lt;!--more--&gt;#### 第二种形式： if 条件;then 语句;else 语句;fi123456789101112131415示例：```shell#!/bin/bash# if-practicea=2if [ $a -gt 3 ]then ehco &apos;A is greater than 3.&apos;else echo &quot;No, It&apos;s not true.&quot;fi 执行效果 12[root@local-linux01 sbin]# bash if*.shNo, It&apos;s not true. 第三种形式：123456789if 条件; then 语句; elif 条件; then 语句; else 语句; fi 示例： 123456789101112131415a=10b=20if [ $a == $b ]then echo "a is equal to b"elif [ $a -gt $b ]then echo "a is greater than b"elif [ $a -lt $b ]then echo "a is less than b"else echo "None of the condition met"fi 注意： if 判断中，expression 和方括号([ ])之间必须有空格，否则会有语法错误； 这里的条件[ expression ],其实返回的是一个布尔值，如果 expression 返回 true，then 后边的语句将会被执行；如果返回 false，就不会执行； [ ]中不能使用&lt;,&gt;,==,!=,&gt;=,&lt;=这样的符号 判断脚本最后必须以 fi 来结尾闭合 if，否则会报错。 文件目录属性判断 表达式 含义 [ -a FILE ] 如果 FILE 存在则为真 [ -b FILE ] 如果 FILE 存在且是一个块文件则返回为真 [ -c FILE ] 如果 FILE 存在且是一个字符文件则返回为真 [ -d FILE ] 如果 FILE 存在且是一个目录则返回为真; [ -e FILE ] 如果 指定的文件或目录存在时返回为真。 [ -f FILE ] 如果 FILE 存在且是一个普通文件则返回为真。 [ -g FILE ] 如果 FILE 存在且设置了SGID则返回为真。 [ -h FILE ] 如果 FILE 存在且是一个符号符号链接文件则返回为真。（该选项在一些老系统上无效） [ -k FILE ] 如果 FILE 存在且已经设置了冒险位则返回为真。 [ -p FILE ] 如果 FILE 存并且是命令管道时返回为真。 [ -r FILE ] 如果 FILE 存在且是可读的则返回为真。 [ -s FILE ] 如果 FILE 存在且大小非0时为真则返回为真。 [ -u FILE ] 如果 FILE 存在且设置了SUID位时返回为真。 [ -w FILE ] 如果 FILE 存在且是可写的则返回为真。（一个目录为了它的内容被访问必然是可执行的） [ -x FILE ] 如果 FILE 存在且是可执行的则返回为真。 [ -O FILE ] 如果 FILE 存在且属有效用户ID则返回为真。 [ -G FILE ] 如果 FILE 存在且默认组为当前组则返回为真。（只检查系统默认组） [ -L FILE ] 如果 FILE 存在且是一个符号连接则返回为真。 [ -N FILE ] 如果 FILE 存在 and has been mod如果ied since it was last read则返回为真。 [ -S FILE ] 如果 FILE 存在且是一个套接字则返回为真。 [ FILE1 -nt FILE2 ] 如果 FILE1 比 FILE2 新, 或者 FILE1 存在但是 FILE2 不存在则返回为真。 [ FILE1 -ot FILE2 ] 如果 FILE1 比 FILE2 老, 或者 FILE2 存在但是 FILE1 不存在则返回为真。 [ FILE1 -ef FILE2 ] 如果 FILE1 和 FILE2 指向相同的设备和节点号则返回为真。 示例： 123456789cat if-file.sh#!/bin/bashf="/tmp/if-test"if [ -f $f ]then echo $f existelse touch $ffi 执行效果 12345[root@local-linux01 sbin]# bash -x !$bash -x if-file.sh+ f=/tmp/if-test+ &apos;[&apos; -f /tmp/if-test &apos;]&apos;+ touch /tmp/if-test if特殊用法 表达式 含义 [ -z STRING ] 如果STRING的长度为零则返回为真，即空是真 [ -n STRING ] 如果STRING的长度非零则返回为真，即非空是真 [ STRING1 ] 如果字符串不为空则返回为真,与-n类似 示例： 12345678910#!/bin/bashn=`wc -l /tmp/if-test`if [ -z &quot;$n&quot; ]then echo error exitelif [ $n -gt 100 ]then echo &apos;greater than 100&apos;fi 执行效果 1234567[root@local-linux01 sbin]# bash -x if03.sh++ wc -l++ cat /tmp/if-test+ n=0+ &apos;[&apos; -z 0 &apos;]&apos;+ echo 00 case判断case判断有点像选择题，给你一堆选择，根据你的选择，执行不同的操作。 格式如下： 12345678910111213141516171819202122case "varname" in option1) command exit ;; option1) command exit ;; option1) command exit ;; option1) command exit ;; *) command exit ;;esac 注意： case需要一个esac（就是case反过来）作为结束标记，每个case分支用右圆括号，用两个分号表示break. *) 相当于其他语言中的default；除了*)模式，各个分支中;;是必须的，;;相当于其他语言中的break； 示例： 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748#!/bin/bashread -p "Please input a number: " nif [ -z "$n" ]then echo "Please input a number." exit 1fin1=`echo $n|sed 's/[0-9]//g'`if [ -n "$n1" ]then echo "Please input a number." exit 1fiif [ $n -lt 60 ] &amp;&amp; [ $n -ge 0 ]then tag=1elif [ $n -ge 60 ] &amp;&amp; [ $n -lt 80 ]then tag=2elif [ $n -ge 80 ] &amp;&amp; [ $n -lt 90 ]then tag=3elif [ $n -ge 90 ] &amp;&amp; [ $n -le 100 ]then tag=4else tag=0ficase $tag in 1) echo "not ok" ;; 2) echo "ok" ;; 3) echo "ook" ;; 4) echo "oook" ;; *) echo "The number range is 0-100." ;;esac 执行效果 1234[root@local-linux01 sbin]# bash !$bash case01.shPlease input a number: 1not ok 执行过程 123456789101112131415[root@local-linux01 sbin]# bash -x !$bash -x case01.sh+ read -p &apos;Please input a number: &apos; nPlease input a number: 4+ &apos;[&apos; -z 4 &apos;]&apos;++ echo 4++ sed &apos;s/[0-9]//g&apos;+ n1=+ &apos;[&apos; -n &apos;&apos; &apos;]&apos;+ &apos;[&apos; 4 -lt 60 &apos;]&apos;+ &apos;[&apos; 4 -ge 0 &apos;]&apos;+ tag=1+ case $tag in+ echo &apos;not ok&apos;not ok]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux笔记：shell脚本基础知识(一)]]></title>
     <url>%2F2018%2F07%2F11%2Fweek17-1-linuxNotes-basisOfShellScript-Part1%2F</url>
     <content type="text"><![CDATA[写在前面之前已经整理过几次关于shell脚本编写的知识了，笔记在这里： Linux运维学习笔记6-4：怎么写shell脚本？ 这次系统整理一下shell脚本的相关知识。 Shell脚本介绍shell脚本（shell script），是一种为shell编写的脚本程序。我们可以把需要执行的命令写在脚本当中，系统通过读取脚本执行命令。 shell脚本的特点如下； shell是一种脚本语言； 可以使用逻辑判断、循环等语法； 可以自定义函数； shell是系统命令的集合； shell脚本可以实现自动化运维，能大大增加我们的运维效率； Shell脚本结构和执行按照约定俗成的规则，shell脚本一般以.sh结尾，统一放在/usr/local/sbin/目录下，方便保管。 脚本结构一个shell脚本一般包括三个部分： 第一部分：#!/bin/sh，指定脚本解释器。 第二部分：# 开头的是注释。 第三部分：脚本代码。 脚本执行方式一： 12345//更改权限chmod 755 a.sh//执行脚本a.sh 方法二： 12345678//执行脚本bash a.sh//查看脚本执行过程 bash -x a.sh//查看脚本是否有语法错误 bash -n a.sh 编写第一个脚本123456789cd /usr/local/sbinvi a.sh#!/bin/bash # first shell scriptecho &quot;123&quot;wls 执行脚本效果 查看脚本执行过程 date用法date是在shell脚本当中最常用的命令，用来显示或者设置系统的日期和时间。 date基本用法命令行格式：date [参数] [+格式] 123456789date +%Y-%m-%d, date +%y-%m-%d 年月日date +%H:%M:%S = date +%T 时间date +%s 时间戳date -d @1504620492date -d &quot;+1day&quot; 一天后date -d &quot;-1 day&quot; 一天前date -d &quot;-1 month&quot; 一月前date -d &quot;-1 min&quot; 一分钟前date +%w, date +%W 星期 示例： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768//显示年[root@local-linux00 ~]# date +%Y2018//用两位数字表示的年份[root@local-linux00 ~]# date +%y18//显示月份root@local-linux00 ~]# date +%m07//显示日期root@local-linux00 ~]# date +%d11[root@local-linux00 ~]# date +%D07/11/18[root@local-linux00 ~]# date +%Y%m%d20180711[root@local-linux00 ~]# date +%F2018-07-11//显示小时[root@local-linux00 ~]# date +%H22//显示分钟[root@local-linux00 ~]# date +%M10//显示秒[root@local-linux00 ~]# date +%S19//时间戳（距离19700101过去多少秒）[root@local-linux00 ~]# date +%s1531318421[root@local-linux00 ~]# date -d @1517637599Sat Feb 3 13:59:59 HKT 2018[root@local-linux00 ~]# date +%s -d &quot;2018-02-03 13:59:59&quot;1517637599//显示时间[root@local-linux00 ~]# date +%T22:14:40[root@local-linux00 ~]# date +%H:%M:%S22:14:59//显示英文月份[root@local-linux00 ~]# date +%hJul//显示星期几[root@local-linux00 ~]# date +%w3//今年的第几周[root@local-linux00 ~]# date +%W28//显示日历[root@local-linux00 ~]# cal July 2018Su Mo Tu We Th Fr Sa 1 2 3 4 5 6 7 8 9 10 11 12 13 1415 16 17 18 19 20 2122 23 24 25 26 27 2829 30 31 脚本变量变量格式： var=value 其中，var是变量名，value是变量内容； 跟其他的编程语言，比如python、javascript了类似，以下情况均考虑使用变量： 某个字符串需要频繁使用，且很长； 使用条件语句时 if [ condition ]; then ... ; fi； 引用命令的结果时，用变量替代 n=wc -l 1.txt 写用户交互脚本，比如 read -p &quot;Input a number: &quot; n; echo $n //如果没写这个n，可以直接使用$REPLY； 内置变量 $0, $1, $n 其中，$0表示脚本本身，$1 第一个参数，$n表示参数个数； 数学运算a=1;b=2; c=$(($a+$b))或者$[$a+$b]]]></content>
       <categories>
@@ -109,9 +122,9 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>linux</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>notes</tag>
       </tags>
   </entry>
@@ -618,8 +631,8 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>mac</tag>
         <tag>notes</tag>
+        <tag>mac</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -644,8 +657,8 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>mac</tag>
         <tag>notes</tag>
+        <tag>mac</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -996,8 +1009,8 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>mac</tag>
         <tag>notes</tag>
+        <tag>mac</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1343,8 +1356,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -1367,8 +1380,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1379,8 +1392,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1516,8 +1529,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1555,8 +1568,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>https</tag>
       </tags>
   </entry>
@@ -1594,8 +1607,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1618,8 +1631,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1655,8 +1668,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
 </search>

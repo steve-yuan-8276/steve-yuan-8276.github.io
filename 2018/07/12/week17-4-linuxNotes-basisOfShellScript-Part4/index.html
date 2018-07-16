@@ -81,22 +81,23 @@
 
 
 
-<meta name="description" content="写在前面这则笔记主要整理shell 脚本函数方面的知识。 shell中的函数linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。 第一种： 123function function_name &amp;#123;     command &amp;#125; 第二种： 123456function_name () &amp;#123;     command &amp;#125;``` samples1">
+<meta name="description" content="写在前面这则笔记主要整理shell 脚本函数方面的知识。 hexo 博客更新真的可以称之为玄学了，在这样下去，我通篇博客职能写完之后转乘图片上传了。 shell中的函数linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。 第一种： 123function function_name &amp;#123;     command &amp;#125; 第二种：  samples1:定义函数">
 <meta name="keywords" content="linux,notes,shell">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux笔记：shell脚本基础知识(四)">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/12/week17-4-linuxNotes-basisOfShellScript-Part4/index.html">
 <meta property="og:site_name" content="Steve的折腾学习日志">
-<meta property="og:description" content="写在前面这则笔记主要整理shell 脚本函数方面的知识。 shell中的函数linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。 第一种： 123function function_name &amp;#123;     command &amp;#125; 第二种： 123456function_name () &amp;#123;     command &amp;#125;``` samples1">
+<meta property="og:description" content="写在前面这则笔记主要整理shell 脚本函数方面的知识。 hexo 博客更新真的可以称之为玄学了，在这样下去，我通篇博客职能写完之后转乘图片上传了。 shell中的函数linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。 第一种： 123function function_name &amp;#123;     command &amp;#125; 第二种：  samples1:定义函数">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://farm1.staticflickr.com/923/43447379941_f958d5b09c_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/924/43399339732_0742925303_o.png">
 <meta property="og:image" content="https://farm2.staticflickr.com/1781/43399309042_7031f301e4_o.png">
 <meta property="og:image" content="https://farm2.staticflickr.com/1781/43399309042_7031f301e4_o.png">
-<meta property="og:updated_time" content="2018-07-16T14:56:11.784Z">
+<meta property="og:updated_time" content="2018-07-16T15:01:53.382Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux笔记：shell脚本基础知识(四)">
-<meta name="twitter:description" content="写在前面这则笔记主要整理shell 脚本函数方面的知识。 shell中的函数linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。 第一种： 123function function_name &amp;#123;     command &amp;#125; 第二种： 123456function_name () &amp;#123;     command &amp;#125;``` samples1">
-<meta name="twitter:image" content="https://farm1.staticflickr.com/924/43399339732_0742925303_o.png">
+<meta name="twitter:description" content="写在前面这则笔记主要整理shell 脚本函数方面的知识。 hexo 博客更新真的可以称之为玄学了，在这样下去，我通篇博客职能写完之后转乘图片上传了。 shell中的函数linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。 第一种： 123function function_name &amp;#123;     command &amp;#125; 第二种：  samples1:定义函数">
+<meta name="twitter:image" content="https://farm1.staticflickr.com/923/43447379941_f958d5b09c_o.png">
 
 
 
@@ -407,7 +408,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  399
+                  554
                 </span>
               
 
@@ -423,7 +424,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  3
                 </span>
               
             </div>
@@ -445,28 +446,45 @@
 
       
         <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记主要整理shell 脚本函数方面的知识。</p>
+<p>hexo 博客更新真的可以称之为玄学了，在这样下去，我通篇博客职能写完之后转乘图片上传了。</p>
 <h2 id="shell中的函数"><a href="#shell中的函数" class="headerlink" title="shell中的函数"></a>shell中的函数</h2><p>linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。</p>
 <p>第一种：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function function_name &#123; </span><br><span class="line">    command </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>第二种：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function_name () &#123; </span><br><span class="line">    command </span><br><span class="line">&#125;</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">samples1:定义函数打印参数</span><br></pre></td></tr></table></figure>
-<p>#!/bin/bash<br>function inp(){<br>    echo “The first par is $1”<br>    echo “The second par is $2”<br>    echo “The third par is $3”<br>    echo “the scritp name is $0”<br>    echo “the number of par is $#”<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line"></span><br><span class="line">samples2:加法函数</span><br></pre></td></tr></table></figure></p>
-<p>#!/bin/bash<br>sum() {<br>    s=$[$a+$b]<br>    echo $s<br>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">samples3:显示IP</span><br></pre></td></tr></table></figure>
-<p>#!/bin/bash<br>ip(){<br>    ifconfig |grep -A1 “$1: “|awk ‘/inet/ {print $2}’<br>}</p>
-<p>read -p “Please input the eth name: “ eth<br>ip $eth<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## shell中的数组</span><br><span class="line"></span><br><span class="line">在Shell中，用括号来表示数组，数组元素用空格符号分割开。定义数组的一般形式为：</span><br></pre></td></tr></table></figure></p>
-<p>array_name=(value1 value2… valuen)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">bash支持一维数组（不支持多维数组），并且没有限定数组的大小。与C语言类似，shell数组元素的下标由0开始编号。获取数组中的元素要利用下标，下标可以是整数或算术表达式，其值应大于或等于0。</span><br><span class="line"></span><br><span class="line">### 定义数组</span><br><span class="line"></span><br><span class="line">第一种：</span><br></pre></td></tr></table></figure></p>
-<p>array_name=(val0 val1 val2 val3)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">第二种：</span><br></pre></td></tr></table></figure></p>
-<p>array_name=(<br>val0<br>val1<br>val2<br>val3<br>)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">第三种：也可以单独定义变量</span><br></pre></td></tr></table></figure></p>
-<p>array_name[0]=value0<br>array_name[1]=value1<br>array_name[2]=value2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 读取数组</span><br><span class="line"></span><br><span class="line">格式为：</span><br></pre></td></tr></table></figure></p>
-<p>${array_name[index]}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">samples:</span><br></pre></td></tr></table></figure></p>
-<p>#!/bin/sh<br>name=(<br>Zara<br>Qadir<br>Mahnaz<br>Ayan<br>Daisy<br>)<br>echo “First Index: ${name[0]}”<br>echo “Second Index: ${name[1]}”<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">执行效果</span><br></pre></td></tr></table></figure></p>
-<p>[root@local-linux01 sbin]# bash array01.sh<br>First Index: Zara<br>Second Index: Qadir<br><code>`</code></p>
+<p><img src="https://farm1.staticflickr.com/923/43447379941_f958d5b09c_o.png" alt=""></p>
+<p>samples1:定义函数打印参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">function inp()&#123;</span><br><span class="line">    echo &quot;The first par is $1&quot;</span><br><span class="line">    echo &quot;The second par is $2&quot;</span><br><span class="line">    echo &quot;The third par is $3&quot;</span><br><span class="line">    echo &quot;the scritp name is $0&quot;</span><br><span class="line">    echo &quot;the number of par is $#&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>samples2:加法函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">sum() &#123;</span><br><span class="line">    s=$[$a+$b]</span><br><span class="line">    echo $s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>samples3:显示IP</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">ip()&#123;</span><br><span class="line">    ifconfig |grep -A1 &quot;$1: &quot;|awk &apos;/inet/ &#123;print $2&#125;&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">read -p &quot;Please input the eth name: &quot; eth</span><br><span class="line">ip $eth</span><br></pre></td></tr></table></figure>
+<h2 id="shell中的数组"><a href="#shell中的数组" class="headerlink" title="shell中的数组"></a>shell中的数组</h2><p>在Shell中，用括号来表示数组，数组元素用空格符号分割开。定义数组的一般形式为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array_name=(value1 value2... valuen)</span><br></pre></td></tr></table></figure>
+<p>bash支持一维数组（不支持多维数组），并且没有限定数组的大小。与C语言类似，shell数组元素的下标由0开始编号。获取数组中的元素要利用下标，下标可以是整数或算术表达式，其值应大于或等于0。</p>
+<h3 id="定义数组"><a href="#定义数组" class="headerlink" title="定义数组"></a>定义数组</h3><p>第一种：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array_name=(val0 val1 val2 val3)</span><br></pre></td></tr></table></figure>
+<p>第二种：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">array_name=(</span><br><span class="line">val0</span><br><span class="line">val1</span><br><span class="line">val2</span><br><span class="line">val3</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>第三种：也可以单独定义变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array_name[0]=value0</span><br><span class="line">array_name[1]=value1</span><br><span class="line">array_name[2]=value2</span><br></pre></td></tr></table></figure>
+<h3 id="读取数组"><a href="#读取数组" class="headerlink" title="读取数组"></a>读取数组</h3><p>格式为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;array_name[index]&#125;</span><br></pre></td></tr></table></figure>
+<p>samples:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line">name=(</span><br><span class="line">Zara</span><br><span class="line">Qadir</span><br><span class="line">Mahnaz</span><br><span class="line">Ayan</span><br><span class="line">Daisy</span><br><span class="line">)</span><br><span class="line">echo &quot;First Index: $&#123;name[0]&#125;&quot;</span><br><span class="line">echo &quot;Second Index: $&#123;name[1]&#125;&quot;</span><br></pre></td></tr></table></figure>
+<p>执行效果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux01 sbin]# bash array01.sh</span><br><span class="line">First Index: Zara</span><br><span class="line">Second Index: Qadir</span><br></pre></td></tr></table></figure>
 <h3 id="获取数组长度"><a href="#获取数组长度" class="headerlink" title="获取数组长度"></a>获取数组长度</h3><p><img src="https://farm1.staticflickr.com/924/43399339732_0742925303_o.png" alt=""></p>
 <p>示例：</p>
 <p><img src="https://farm2.staticflickr.com/1781/43399309042_7031f301e4_o.png" alt=""></p>
 <p>执行效果</p>
 <p><img src="https://farm2.staticflickr.com/1781/43399309042_7031f301e4_o.png" alt=""></p>
+<h3 id="删除数组元素"><a href="#删除数组元素" class="headerlink" title="删除数组元素"></a>删除数组元素</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//删除数组</span><br><span class="line">unset arrayName</span><br><span class="line"></span><br><span class="line">//删除数组元素</span><br><span class="line">unset arrayName[n]</span><br></pre></td></tr></table></figure>
+<p>samples:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line">name=(</span><br><span class="line">Zara</span><br><span class="line">Qadir</span><br><span class="line">Mahnaz</span><br><span class="line">Ayan</span><br><span class="line">Daisy</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">echo $&#123;name[*]&#125;</span><br><span class="line">echo &quot;echo delete second name:$&#123;name[2]&#125;&quot;</span><br><span class="line">unset name[2]</span><br><span class="line">echo $&quot;The name remains: $&#123;name[*]&#125;&quot;</span><br></pre></td></tr></table></figure>
+<p>执行效果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux01 sbin]# vi array01.sh</span><br><span class="line">[root@local-linux01 sbin]# bash array01.sh</span><br><span class="line">Zara Qadir Mahnaz Ayan Daisy</span><br><span class="line">echo delete second name:Mahnaz</span><br><span class="line">The name remains: Zara Qadir Ayan Daisy</span><br></pre></td></tr></table></figure>
+<p>到此结束。</p>
 
       
     </div>
@@ -712,7 +730,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shell中的函数"><span class="nav-number">2.</span> <span class="nav-text">shell中的函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取数组长度"><span class="nav-number">2.1.</span> <span class="nav-text">获取数组长度</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shell中的函数"><span class="nav-number">2.</span> <span class="nav-text">shell中的函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shell中的数组"><span class="nav-number">3.</span> <span class="nav-text">shell中的数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义数组"><span class="nav-number">3.1.</span> <span class="nav-text">定义数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取数组"><span class="nav-number">3.2.</span> <span class="nav-text">读取数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取数组长度"><span class="nav-number">3.3.</span> <span class="nav-text">获取数组长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除数组元素"><span class="nav-number">3.4.</span> <span class="nav-text">删除数组元素</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -746,7 +764,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">190.8k</span>
+    <span title="Site words total count">190.9k</span>
   
 </div>
 

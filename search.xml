@@ -29,7 +29,7 @@
   <entry>
     <title><![CDATA[linux笔记：shell脚本基础知识(四)]]></title>
     <url>%2F2018%2F07%2F12%2Fweek17-4-linuxNotes-basisOfShellScript-Part4%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记主要整理shell 脚本函数方面的知识。 shell中的函数linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。 第一种： 123function function_name &#123; command &#125; 第二种： 123456function_name () &#123; command &#125;``` samples1:定义函数打印参数 #!/bin/bashfunction inp(){ echo “The first par is $1” echo “The second par is $2” echo “The third par is $3” echo “the scritp name is $0” echo “the number of par is $#”}1234&lt;!--more--&gt;samples2:加法函数 #!/bin/bashsum() { s=$[$a+$b] echo $s} 12samples3:显示IP #!/bin/baship(){ ifconfig |grep -A1 “$1: “|awk ‘/inet/ {print $2}’} read -p “Please input the eth name: “ ethip $eth1234## shell中的数组在Shell中，用括号来表示数组，数组元素用空格符号分割开。定义数组的一般形式为： array_name=(value1 value2… valuen)123456bash支持一维数组（不支持多维数组），并且没有限定数组的大小。与C语言类似，shell数组元素的下标由0开始编号。获取数组中的元素要利用下标，下标可以是整数或算术表达式，其值应大于或等于0。### 定义数组第一种： array_name=(val0 val1 val2 val3)12第二种： array_name=(val0val1val2val3)12第三种：也可以单独定义变量 array_name[0]=value0array_name[1]=value1array_name[2]=value21234### 读取数组格式为： ${array_name[index]}12samples: #!/bin/shname=(ZaraQadirMahnazAyanDaisy)echo “First Index: ${name[0]}”echo “Second Index: ${name[1]}”12执行效果 [root@local-linux01 sbin]# bash array01.shFirst Index: ZaraSecond Index: Qadir` 获取数组长度 示例： 执行效果]]></content>
+    <content type="text"><![CDATA[写在前面这则笔记主要整理shell 脚本函数方面的知识。 hexo 博客更新真的可以称之为玄学了，在这样下去，我通篇博客职能写完之后转乘图片上传了。 shell中的函数linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。 第一种： 123function function_name &#123; command &#125; 第二种： samples1:定义函数打印参数 12345678#!/bin/bashfunction inp()&#123; echo &quot;The first par is $1&quot; echo &quot;The second par is $2&quot; echo &quot;The third par is $3&quot; echo &quot;the scritp name is $0&quot; echo &quot;the number of par is $#&quot;&#125; samples2:加法函数 12345#!/bin/bashsum() &#123; s=$[$a+$b] echo $s&#125; samples3:显示IP 1234567#!/bin/baship()&#123; ifconfig |grep -A1 &quot;$1: &quot;|awk &apos;/inet/ &#123;print $2&#125;&apos;&#125;read -p &quot;Please input the eth name: &quot; ethip $eth shell中的数组在Shell中，用括号来表示数组，数组元素用空格符号分割开。定义数组的一般形式为： 1array_name=(value1 value2... valuen) bash支持一维数组（不支持多维数组），并且没有限定数组的大小。与C语言类似，shell数组元素的下标由0开始编号。获取数组中的元素要利用下标，下标可以是整数或算术表达式，其值应大于或等于0。 定义数组第一种： 1array_name=(val0 val1 val2 val3) 第二种： 123456array_name=(val0val1val2val3) 第三种：也可以单独定义变量 123array_name[0]=value0array_name[1]=value1array_name[2]=value2 读取数组格式为： 1$&#123;array_name[index]&#125; samples: 12345678910#!/bin/shname=(ZaraQadirMahnazAyanDaisy)echo &quot;First Index: $&#123;name[0]&#125;&quot;echo &quot;Second Index: $&#123;name[1]&#125;&quot; 执行效果 123[root@local-linux01 sbin]# bash array01.shFirst Index: ZaraSecond Index: Qadir 获取数组长度 示例： 执行效果 删除数组元素12345//删除数组unset arrayName//删除数组元素unset arrayName[n] samples: 12345678910111213#!/bin/shname=(ZaraQadirMahnazAyanDaisy)echo $&#123;name[*]&#125;echo &quot;echo delete second name:$&#123;name[2]&#125;&quot;unset name[2]echo $&quot;The name remains: $&#123;name[*]&#125;&quot; 执行效果 12345[root@local-linux01 sbin]# vi array01.sh[root@local-linux01 sbin]# bash array01.shZara Qadir Mahnaz Ayan Daisyecho delete second name:MahnazThe name remains: Zara Qadir Ayan Daisy 到此结束。]]></content>
       <categories>
         <category>linux</category>
       </categories>
@@ -174,9 +174,9 @@
         <category>hexo</category>
       </categories>
       <tags>
+        <tag>github</tag>
         <tag>linux</tag>
         <tag>hexo</tag>
-        <tag>github</tag>
         <tag>notes</tag>
       </tags>
   </entry>
@@ -1408,8 +1408,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -1432,8 +1432,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1444,8 +1444,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -1581,8 +1581,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1620,8 +1620,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
         <tag>https</tag>
       </tags>
   </entry>
@@ -1659,8 +1659,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1683,8 +1683,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1720,8 +1720,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
 </search>

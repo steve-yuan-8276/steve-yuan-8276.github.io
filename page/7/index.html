@@ -308,6 +308,444 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/05/03/week7-2-howToManageLinuxPart2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/03/week7-2-howToManageLinuxPart2/" itemprop="url">Linux运维学习笔记7-2：监控系统状态命令2.1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-03T10:34:40+08:00">
+                2018-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/03/week7-2-howToManageLinuxPart2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/03/week7-2-howToManageLinuxPart2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,614
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>接着上一期：<a href="https://www.steve-yuan.com/2018/04/28/week701-howToManageLinux/" target="_blank" rel="noopener">Linux运维学习笔记7-1：监控系统状态命令（一）</a>，继续整理监控系统状态的命令，包括free、ps、监控IO性能、Linux抓包方面的内容。</p>
+<p><strong>注：</strong>因为这则笔记太长，上传到博客后总是格式错误，所以拆成了两节分别上传，请老师见谅。</p>
+<h3 id="监控IO性能"><a href="#监控IO性能" class="headerlink" title="监控IO性能"></a>监控IO性能</h3><h4 id="iostat-命令-监视磁盘I-O输入输出情况"><a href="#iostat-命令-监视磁盘I-O输入输出情况" class="headerlink" title="iostat 命令 监视磁盘I/O输入输出情况"></a><code>iostat</code> 命令 监视磁盘I/O输入输出情况</h4><p><code>iostat</code> 与 <code>sar</code> 同属于sysstat包。</p>
+<p>命令格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iostat[参数][时间][次数]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>命令参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-C</td>
+<td>显示CPU使用情况</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>显示磁盘使用情况</td>
+</tr>
+<tr>
+<td>-k</td>
+<td>以 KB 为单位显示</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>以 M 为单位显示</td>
+</tr>
+<tr>
+<td>-N</td>
+<td>显示磁盘阵列(LVM) 信息</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>显示NFS 使用情况</td>
+</tr>
+<tr>
+<td>-p[磁盘]</td>
+<td>显示磁盘和分区的情况</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>显示终端和CPU的信息</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>显示详细信息</td>
+</tr>
+<tr>
+<td>-V</td>
+<td>显示版本信息</td>
+</tr>
+</tbody>
+</table>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/03/week7-2-howToManageLinuxPart2/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/05/02/linuxNotes-sedPractice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/02/linuxNotes-sedPractice/" itemprop="url">Linux运维学习笔记：sed命令练习题目</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-02T18:10:09+08:00">
+                2018-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/02/linuxNotes-sedPractice/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/02/linuxNotes-sedPractice/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  564
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记接着上期 <a href="https://www.steve-yuan.com/2018/04/20/week6-2-basisOfRegEx-part2/" target="_blank" rel="noopener">sed 笔记相关知识</a>，主要是一些练习题目。</p>
+<h3 id="打印某行到某行之间的内容"><a href="#打印某行到某行之间的内容" class="headerlink" title="打印某行到某行之间的内容"></a>打印某行到某行之间的内容</h3><p>新建a.txt，内容如下，打印<code>[abcfd]</code>到 <code>[rty]</code> </p>
+<p><img src="https://farm1.staticflickr.com/829/41845676901_a261b86c54_o.png" alt=""></p>
+<p><strong>解题思路：</strong></p>
+<p>主要考察<code>sed -n</code>， -n 选项表示打印指定行。</p>
+<p>方法一：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -n &apos;4,8p&apos; a.txt</span><br></pre></td></tr></table></figure>
+<p>方法二：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -n &apos;/\[abcfd\]/,/\[rty\]/p&apos; a.txt</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/02/linuxNotes-sedPractice/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2016,409 +2454,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/17/week5-4-basisOfShellPart2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/logo.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/17/week5-4-basisOfShellPart2/" itemprop="url">Linux运维学习笔记5-4：shell基础知识（二）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-17T15:53:39+08:00">
-                2018-04-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/04/17/week5-4-basisOfShellPart2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/04/17/week5-4-basisOfShellPart2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,266
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  9
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记接着整理shell基础知识，主要涉及管道符、作业控制，以及环境变量方面的知识。</p>
-<h3 id="管道符和作业控制"><a href="#管道符和作业控制" class="headerlink" title="管道符和作业控制"></a>管道符和作业控制</h3><h4 id="管道符用于将前一条指令的输出作为后一条指令的输入"><a href="#管道符用于将前一条指令的输出作为后一条指令的输入" class="headerlink" title="| 管道符用于将前一条指令的输出作为后一条指令的输入"></a><code>|</code> 管道符用于将前一条指令的输出作为后一条指令的输入</h4><p>示例：</p>
-<ul>
-<li><code>wc</code>命令用来统计指定文件中的字节数、字数、行数，并将统计结果显示输出。常见参数<code>-c</code>表示字节数；<code>-l</code>表示行数。与<code>wc</code>连用，可以实现统计的效果。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# cat /etc/passwd | wc -l  //统计passwd一共有多少行</span><br><span class="line">21</span><br><span class="line"></span><br><span class="line">[root@stevey ~]# ll | wc -l  //统计当前目录下一共有多少文件</span><br><span class="line">12</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>grep</code>命令是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。</li>
-</ul>
-<p><img src="https://farm1.staticflickr.com/792/27644203498_9ae6d37d78_o.png" alt=""></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/17/week5-4-basisOfShellPart2/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/17/week5-3-basisOfShellPart1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/logo.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/17/week5-3-basisOfShellPart1/" itemprop="url">Linux运维学习笔记5-3：shell基础知识（一）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-17T13:43:44+08:00">
-                2018-04-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/04/17/week5-3-basisOfShellPart1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/04/17/week5-3-basisOfShellPart1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,850
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  8
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这节课开始，整理shell基础知识，共分三节。第一节主要包括命令历史、别名、命令补全、通配符、输入输出重定向。</p>
-<h3 id="什么是shell？"><a href="#什么是shell？" class="headerlink" title="什么是shell？"></a>什么是<code>shell</code>？</h3><p>shell 是一种命令解释器，也是一种脚本语言。shell编写的程序成为脚本（script），能够调用所有的UNIX系统命令、实用程序、工具软件，以及二进位制文件;支持循环、判断等特定语法。</p>
-<p>CentOS 默认安装的shell，叫做bash（Bourne Again Shell），简称sh。</p>
-<p>目前，常见的shell，还有zsh、ksh等。</p>
-<h3 id="命令历史-history"><a href="#命令历史-history" class="headerlink" title="命令历史 history"></a>命令历史 <code>history</code></h3><h4 id="查看命令历史"><a href="#查看命令历史" class="headerlink" title="查看命令历史"></a>查看命令历史</h4><ul>
-<li><code>history</code> 命令可以查看命令历史</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# history | less</span><br></pre></td></tr></table></figure>
-<p><img src="https://farm1.staticflickr.com/810/39704270190_2f4e734d8c_o.png" alt=""></p>
-<ul>
-<li><code>history -c</code> 清空内存中的命令历史；</li>
-</ul>
-<p><strong>注：</strong></p>
-<ol>
-<li><p>该操作并不会清空<code>.bash_history</code> 内容。</p>
-</li>
-<li><p>命令历史只有在shell退出的时候，才会保存到<code>.bash_history</code> 当中。</p>
-</li>
-</ol>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/17/week5-3-basisOfShellPart1/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2473,7 +2508,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">128</span>
+                  <span class="site-state-item-count">130</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2581,7 +2616,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">188.8k</span>
+    <span title="Site words total count">190.4k</span>
   
 </div>
 

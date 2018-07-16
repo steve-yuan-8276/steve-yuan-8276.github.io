@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[linux笔记：shell告警系统(二)]]></title>
+    <url>%2F2018%2F07%2F13%2Fweek17-6-linuxNotes-basisOfShellScript-Part6%2F</url>
+    <content type="text"><![CDATA[写在前面继续整理shell告警系统的相关内容。 告警系统邮件引擎创建python脚本1234567891011121314151617181920212223242526272829303132333435363738394041cd mail/vi mail.py//增加如下内容：#!/usr/bin/env python#-*- coding: UTF-8 -*-import os,sysreload(sys)sys.setdefaultencoding('utf8')import getoptimport smtplibfrom email.MIMEText import MIMETextfrom email.MIMEMultipart import MIMEMultipartfrom subprocess import *def sendqqmail(username,password,mailfrom,mailto,subject,content): gserver = 'smtp.qq.com' gport = 25 try: msg = MIMEText(unicode(content).encode('utf-8')) msg['from'] = mailfrom msg['to'] = mailto msg['Reply-To'] = mailfrom msg['Subject'] = subject smtp = smtplib.SMTP(gserver, gport) smtp.set_debuglevel(0) smtp.ehlo() smtp.login(username,password) smtp.sendmail(mailfrom, mailto, msg.as_string()) smtp.close() except Exception,err: print "Send mail failed. Error: %s" % errdef main(): to=sys.argv[1] subject=sys.argv[2] content=sys.argv[3]##定义QQ邮箱的账号和密码，你需要修改成你自己的账号和密码 sendqqmail('1234567@qq.com','aaaaaaaaaa','1234567@qq.com',to,subject,content)if __name__ == "__main__": main() 脚本使用说明 首先定义好脚本中的邮箱账号和密码； 脚本执行命令为：python mail.py 目标邮箱 “邮件主题” “邮件内容”； 创建脚本mail.sh ,该脚本的作用是，当系统服务异常的时候就会调用mail.py123456789101112131415161718192021222324252627282930313233vi mail.sh//增加如下内容：log=$1t_s=`date +%s`t_s2=`date -d "2 hours ago" +%s`if [ ! -f /tmp/$log ]then echo $t_s2 &gt; /tmp/$logfit_s2=`tail -1 /tmp/$log|awk '&#123;print $1&#125;'`echo $t_s&gt;&gt;/tmp/$logv=$[$t_s-$t_s2]echo $vif [ $v -gt 3600 ]then ./mail.py $1 $2 $3 echo "0" &gt; /tmp/$log.txtelse if [ ! -f /tmp/$log.txt ] then echo "0" &gt; /tmp/$log.txt fi nu=`cat /tmp/$log.txt` nu2=$[$nu+1] echo $nu2&gt;/tmp/$log.txt if [ $nu2 -gt 10 ] then ./mail.py $1 "trouble continue 10 min $2" "$3" echo "0" &gt; /tmp/$log.txt fifi 运行告警系统1234567cd /usr/local/sbin/mon/mail//设定定时任务crontab -e//设定每分钟执行一次检测脚本包* * * * * cd /usr/local/sbin/mon/mail; bash main.sh]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux笔记：shell告警系统(一)]]></title>
+    <url>%2F2018%2F07%2F13%2Fweek17-5-linuxNotes-basisOfShellScript-Part5%2F</url>
+    <content type="text"><![CDATA[写在前面本则笔记主要整理shell告警系统的相关配置 告警系统需求分析需求描述：之前学习过了zabbix监控系统的使用，但是对于一些比较冷门的监控项目，还需要手动编写脚本进行监控。这节课主要内容就是定制个性化的告警工具，并进行统一化、标准化的管理。 解决思路：这里的监控脚本不是单独一个脚本，而是一个脚本包，包括主程序、子程序、配置文件、邮件引擎、输出日志等。 主程序：作为整个脚本的入口，是整个系统的命脉； 配置文件：是一个控制中心，用它来开关各个子程序，指定各个相关联的日志文件； 子程序：这个才是真正的监控脚本，用来监控各个指标； 邮件引擎：是由一个python程序来实现，它可以定义发邮件的服务器、发邮件人以及发件人密码； 输出日志：整个监控系统要有日志输出。 脚本包目录结构如下： 如上图所示： bin/目录下是主程序； conf/目录下是配置文件； shares/目录下是各个监控脚本； mail/目录下是邮件引擎； log/目录下是日志。 编写脚本包第一步：创建目录1234567cd /usr/local/sbin/mkdir moncd mon/mkdir bin conf shares log mail 第二步：编写主脚本 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849vim main.sh#!/bin/bash#Written by litongyao.//是否发送邮件的开关export send=1//过滤ip地址export addr=`/sbin/ifconfig |grep -A1 "ens33: "|awk '/inet/ &#123;print $2&#125;'`dir=`pwd`//只需要最后一级目录名last_dir=`echo $dir|awk -F'/' '&#123;print $NF&#125;'`//下面的判断目的是，保证执行脚本的时候，我们在bin目录里，不然监控脚本、邮件和日志很有可能找不到if [ $last_dir == "bin" ] || [ $last_dir == "bin/" ]; then conf_file="../conf/mon.conf"else echo "you shoud cd bin dir" exitfiexec 1&gt;&gt;../log/mon.log 2&gt;&gt;../log/err.logecho "`date +"%F %T"` load average"/bin/bash ../shares/load.sh//先检查配置文件中是否需要监控502if grep -q 'to_mon_502=1' $conf_file; then export log=`grep 'logfile=' $conf_file |awk -F '=' '&#123;print $2&#125;' |sed 's/ //g'` /bin/bash ../shares/502.shfi 第三步：编辑告警系统配置文件123456789101112131415161718192021222324252627282930313233343536373839vim mon.conf//to config the options if to monitor//定义mysql的服务器地址、端口以及user、passwordto_mon_cdb=0 ##0 or 1, default 0,0 not monitor, 1 monitordb_ip=10.20.3.13db_port=3315db_user=usernamedb_pass=passwd//httpd 如果是1则监控，为0不监控to_mon_httpd=0//php 如果是1则监控，为0不监控to_mon_php_socket=0//http_code_502 需要定义访问日志的路径to_mon_502=1logfile=/data/log/xxx.xxx.com/access.log//request_count 定义日志路径以及域名to_mon_request_count=0req_log=/data/log/www.discuz.net/access.logdomainname=www.discuz.net 第四步：编辑子脚本cd /usr/local/sbin/mon/shares 监控系统平均负载 12345678910111213141516171819vim load.sh#! /bin/bash//Writen by amingload=`uptime |awk -F 'average:' '&#123;print $2&#125;'|cut -d',' -f1|sed 's/ //g' |cut -d. -f1`if [ $load -gt 10 ] &amp;&amp; [ $send -eq "1" ]then echo "$addr `date +%T` load is $load" &gt;../log/load.tmp /bin/bash ../mail/mail.sh aming_test@163.com "$addr\_load:$load" `cat ../log/load.tmp`fiecho "`date +%T` load is $load" 监控nginx报错502 1234567891011121314151617vim 502.sh #! /bin/bashd=`date -d &quot;-1 min&quot; +%H:%M`c_502=`grep :$d: $log |grep &apos; 502 &apos;|wc -l`if [ $c_502 -gt 10 ] &amp;&amp; [ $send == 1 ]; then echo &quot;$addr $d 502 count is $c_502&quot;&gt;../log/502.tmp /bin/bash ../mail/mail.sh $addr\_502 $c_502 ../log/502.tmpfiecho &quot;`date +%T` 502 $c_502&quot; 监控磁盘使用率 12345678910111213141516171819202122vim disk.sh#! /bin/bashrm -f ../log/disk.tmpfor r in `df -h |awk -F '[ %]+' '&#123;print $5&#125;'|grep -v Use`doif [ $r -gt 90 ] &amp;&amp; [ $send -eq "1" ]then echo "$addr `date +%T` disk useage is $r" &gt;&gt;../log/disk.tmpfiif [ -f ../log/disk.tmp ]then df -h &gt;&gt; ../log/disk.tmp /bin/bash ../mail/mail.sh $addr\_disk $r ../log/disk.tmp echo "`date +%T` disk useage is nook"else echo "`date +%T` disk useage is ok"fi]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[linux笔记：shell脚本基础知识(三)]]></title>
     <url>%2F2018%2F07%2F12%2Fweek17-3-linuxNotes-basisOfShellScript-Part3%2F</url>
     <content type="text"><![CDATA[写在前面继续整理shell脚本编写的基础知识,主要是循环相关的知识。 shell循环跟python其他的高级语言类似，shell脚本也有for循环、while循环，以及break、continue。 for循环格式： 123for 变量名 in 循环条件；do commanddone 示例1： 12345#!/bin/bashfor i in `seq 1 100 `do echo $idone 示例2:累加计算 12345678#!/bin/bashsum=0for i in `seq 1 100`do echo "$sum + $i" sum=$[$sum+$i] echo $sumdone 示例3：遍历文件夹 12345678910#!/bin/bashcd /etc/for a in ls /etc/do if [ -d $a ] then echo $a ls $a fidone while循环while循环相当于一种特殊的for循环，当满足条件时，会一直执行，直到不再满足条件为止。 格式： 1234while conditiondo commanddone 如果将condition改为布尔值true，就会变成无限循环，一直执行下去。格式可以写成一下三种形式： 1234while :do commanddone 或者 1234while truedo commanddone 或者 1for (( ; ; )) 示例1： 12345678910#!/bin/bashwhile truedo load=`w|head -1|awk -F 'load average: ' '&#123;print $2&#125;'|cut -d. -f1` if [ $load -gt 10 ] then /usr/local/sbin/mail.py xxx@qq.com "load high" "$load" fi sleep 30done Samples2:在循环过程中需要人为的输入一个数字 1234567891011121314151617#!/bin/bashwhile :do read -p "Please input a number: " n if [ -z "$n" ] then echo "you need input sth." continue fi n1=`echo $n|sed 's/[0-9]//g'` if [ ! -z "$n1" ] then echo "you just only input numbers." continue fi breakdone break跳出循环把整个循环退出 samples: 12345678910#!/bin/bashfor i in `seq 1 5`do echo $i if [ $i -eq 3 ] then break fi echo $idone continue结束本次循环忽略continue之下的代码，直接进行下一次循环 samples: 12345678910#!/bin/bashfor i in `seq 1 5`do echo $i if [ $i -eq 3 ] then continue fi echo $idone exit退出整个脚本直接退出整个脚本 samples: 12345678910#!/bin/bashfor i in `seq 1 5`do echo $i if [ $i -eq 3 ] then exit fi echo $idone]]></content>
@@ -122,9 +148,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -149,9 +175,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -830,9 +856,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -896,9 +922,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -910,9 +936,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -924,9 +950,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -952,9 +978,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -966,9 +992,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -980,9 +1006,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -994,9 +1020,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -1008,9 +1034,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -1035,9 +1061,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -1049,9 +1075,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>lvm</tag>
       </tags>
   </entry>
@@ -1063,9 +1089,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1076,9 +1102,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1089,9 +1115,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1102,9 +1128,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1115,9 +1141,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1128,9 +1154,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1141,9 +1167,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1154,9 +1180,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1167,9 +1193,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1180,9 +1206,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1205,9 +1231,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1218,9 +1244,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>rescueMode</tag>
       </tags>
   </entry>
@@ -1232,9 +1258,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>putty</tag>
         <tag>xshell</tag>
         <tag>iterm2</tag>
@@ -1248,9 +1274,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>ip</tag>
       </tags>
   </entry>
@@ -1262,9 +1288,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1405,8 +1431,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -1542,8 +1568,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1656,8 +1682,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
         <tag>google</tag>
       </tags>
   </entry>
@@ -1669,8 +1695,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
       </tags>
   </entry>
   <entry>

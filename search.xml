@@ -2,19 +2,6 @@
 <search>
   <entry>
     <title><![CDATA[linux笔记：shell脚本基础知识(三)]]></title>
-    <url>%2F2018%2F07%2F12%2Fweek17-4-linuxNotes-basisOfShellScript-Part4%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记主要整理shell 脚本函数方面的知识。 shell中的函数inux shell 可以用户定义函数，然后在shell脚本中可以随便调用。 123function function_name &#123; command... &#125; or 123456789101112function_name () &#123; command... &#125;``` samples1:定义函数打印参数```shell#!/bin/bashfunction inp()&#123; echo $1 $2 $3 $0 $#&#125; samples2: 12345678#!/bin/bashfunction inp()&#123; echo "The first par is $1" echo "The second par is $2" echo "The third par is $3" echo "the scritp name is $0" echo "the number of par is $#"&#125; samples3:加法函数 1234567#!/bin/bashsum() &#123; s=$[$a+$b] echo $s&#125;sum 1 2 samples4:显示IP 12345678#!/bin/baship()&#123; ifconfig |grep -A1 "$1: "|awk '/inet/ &#123;print $2&#125;'&#125;read -p "Please input the eth name: " ethip $eth shell中的数组告警系统需求分析shell项目-告警系统需求：使用shell定制各种个性化告警工具，但需要统一化管理、规范化管理。思路：指定一个脚本包，包含主程序、子程序、配置文件、邮件引擎、输出日志等。主程序：作为整个脚本的入口，是整个系统的命脉。配置文件：是一个控制中心，用它来开关各个子程序，指定各个相关联的日志文件。子程序：这个才是真正的监控脚本，用来监控各个指标。邮件引擎：是由一个python程序来实现，它可以定义发邮件的服务器、发邮件人以及发件人密码输出日志：整个监控系统要有日志输出。 要求：我们的机器角色多种多样，但是所有机器上都要部署同样的监控系统，也就说所有机器不管什么角色，整个程序框架都是一致的，不同的地方在于根据不同的角色，定制不同的配置文件。 bin下是主程序；conf下是配置文件；shares下是各个监控脚本；mail下是邮件引擎；log下是日志。]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
-        <tag>shell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux笔记：shell脚本基础知识(三)]]></title>
     <url>%2F2018%2F07%2F12%2Fweek17-3-linuxNotes-basisOfShellScript-Part3%2F</url>
     <content type="text"><![CDATA[写在前面继续整理shell脚本编写的基础知识,主要是循环相关的知识。 shell循环跟python其他的高级语言类似，shell脚本也有for循环、while循环，以及break、continue。 for循环格式： 123for 变量名 in 循环条件；do commanddone 示例1： 12345#!/bin/bashfor i in `seq 1 100 `do echo $idone 示例2:累加计算 12345678#!/bin/bashsum=0for i in `seq 1 100`do echo "$sum + $i" sum=$[$sum+$i] echo $sumdone 示例3：遍历文件夹 12345678910#!/bin/bashcd /etc/for a in ls /etc/do if [ -d $a ] then echo $a ls $a fidone while循环while循环相当于一种特殊的for循环，当满足条件时，会一直执行，直到不再满足条件为止。 格式： 1234while conditiondo commanddone 如果将condition改为布尔值true，就会变成无限循环，一直执行下去。格式可以写成一下三种形式： 1234while :do commanddone 或者 1234while truedo commanddone 或者 1for (( ; ; )) 示例1： 12345678910#!/bin/bashwhile truedo load=`w|head -1|awk -F 'load average: ' '&#123;print $2&#125;'|cut -d. -f1` if [ $load -gt 10 ] then /usr/local/sbin/mail.py xxx@qq.com "load high" "$load" fi sleep 30done Samples2:在循环过程中需要人为的输入一个数字 1234567891011121314151617#!/bin/bashwhile :do read -p "Please input a number: " n if [ -z "$n" ] then echo "you need input sth." continue fi n1=`echo $n|sed 's/[0-9]//g'` if [ ! -z "$n1" ] then echo "you just only input numbers." continue fi breakdone break跳出循环把整个循环退出 samples: 12345678910#!/bin/bashfor i in `seq 1 5`do echo $i if [ $i -eq 3 ] then break fi echo $idone continue结束本次循环忽略continue之下的代码，直接进行下一次循环 samples: 12345678910#!/bin/bashfor i in `seq 1 5`do echo $i if [ $i -eq 3 ] then continue fi echo $idone exit退出整个脚本直接退出整个脚本 samples: 12345678910#!/bin/bashfor i in `seq 1 5`do echo $i if [ $i -eq 3 ] then exit fi echo $idone]]></content>
       <categories>
@@ -29,7 +16,7 @@
   <entry>
     <title><![CDATA[linux笔记：shell脚本基础知识(二)]]></title>
     <url>%2F2018%2F07%2F12%2Fweek17-2-linuxNotes-basisOfShellScript-Part2%2F</url>
-    <content type="text"><![CDATA[写在前面继续整理shell脚本编写的基础知识。 shell脚本中的逻辑判断这里的逻辑判断特指if判断，跟python等其他的编程语言用法类似，大概想到如果满足条件，就执行以下操作。常见的if判断有一下三种形式,复杂程度依次上升。 if判断常见的三种形式第一种形式1234if 条件 ; then 语句; fi``` 示例： [root@local-linux01 ~]# if true; then echo ‘hello’; fihello1234&lt;!--more--&gt;#### 第二种形式： if 条件;then 语句;else 语句;fi123456789101112131415示例：```shell#!/bin/bash# if-practicea=2if [ $a -gt 3 ]then ehco &apos;A is greater than 3.&apos;else echo &quot;No, It&apos;s not true.&quot;fi 执行效果 12[root@local-linux01 sbin]# bash if*.shNo, It&apos;s not true. 第三种形式：123456789if 条件; then 语句; elif 条件; then 语句; else 语句; fi 示例： 123456789101112131415a=10b=20if [ $a == $b ]then echo "a is equal to b"elif [ $a -gt $b ]then echo "a is greater than b"elif [ $a -lt $b ]then echo "a is less than b"else echo "None of the condition met"fi 注意： if 判断中，expression 和方括号([ ])之间必须有空格，否则会有语法错误； 这里的条件[ expression ],其实返回的是一个布尔值，如果 expression 返回 true，then 后边的语句将会被执行；如果返回 false，就不会执行； [ ]中不能使用&lt;,&gt;,==,!=,&gt;=,&lt;=这样的符号 判断脚本最后必须以 fi 来结尾闭合 if，否则会报错。 文件目录属性判断 表达式 含义 [ -a FILE ] 如果 FILE 存在则为真 [ -b FILE ] 如果 FILE 存在且是一个块文件则返回为真 [ -c FILE ] 如果 FILE 存在且是一个字符文件则返回为真 [ -d FILE ] 如果 FILE 存在且是一个目录则返回为真; [ -e FILE ] 如果 指定的文件或目录存在时返回为真。 [ -f FILE ] 如果 FILE 存在且是一个普通文件则返回为真。 [ -g FILE ] 如果 FILE 存在且设置了SGID则返回为真。 [ -h FILE ] 如果 FILE 存在且是一个符号符号链接文件则返回为真。（该选项在一些老系统上无效） [ -k FILE ] 如果 FILE 存在且已经设置了冒险位则返回为真。 [ -p FILE ] 如果 FILE 存并且是命令管道时返回为真。 [ -r FILE ] 如果 FILE 存在且是可读的则返回为真。 [ -s FILE ] 如果 FILE 存在且大小非0时为真则返回为真。 [ -u FILE ] 如果 FILE 存在且设置了SUID位时返回为真。 [ -w FILE ] 如果 FILE 存在且是可写的则返回为真。（一个目录为了它的内容被访问必然是可执行的） [ -x FILE ] 如果 FILE 存在且是可执行的则返回为真。 [ -O FILE ] 如果 FILE 存在且属有效用户ID则返回为真。 [ -G FILE ] 如果 FILE 存在且默认组为当前组则返回为真。（只检查系统默认组） [ -L FILE ] 如果 FILE 存在且是一个符号连接则返回为真。 [ -N FILE ] 如果 FILE 存在 and has been mod如果ied since it was last read则返回为真。 [ -S FILE ] 如果 FILE 存在且是一个套接字则返回为真。 [ FILE1 -nt FILE2 ] 如果 FILE1 比 FILE2 新, 或者 FILE1 存在但是 FILE2 不存在则返回为真。 [ FILE1 -ot FILE2 ] 如果 FILE1 比 FILE2 老, 或者 FILE2 存在但是 FILE1 不存在则返回为真。 [ FILE1 -ef FILE2 ] 如果 FILE1 和 FILE2 指向相同的设备和节点号则返回为真。 示例： 123456789cat if-file.sh#!/bin/bashf="/tmp/if-test"if [ -f $f ]then echo $f existelse touch $ffi 执行效果 12345[root@local-linux01 sbin]# bash -x !$bash -x if-file.sh+ f=/tmp/if-test+ &apos;[&apos; -f /tmp/if-test &apos;]&apos;+ touch /tmp/if-test if特殊用法 表达式 含义 [ -z STRING ] 如果STRING的长度为零则返回为真，即空是真 [ -n STRING ] 如果STRING的长度非零则返回为真，即非空是真 [ STRING1 ] 如果字符串不为空则返回为真,与-n类似 示例： 12345678910#!/bin/bashn=`wc -l /tmp/if-test`if [ -z &quot;$n&quot; ]then echo error exitelif [ $n -gt 100 ]then echo &apos;greater than 100&apos;fi 执行效果 1234567[root@local-linux01 sbin]# bash -x if03.sh++ wc -l++ cat /tmp/if-test+ n=0+ &apos;[&apos; -z 0 &apos;]&apos;+ echo 00 case判断case判断有点像选择题，给你一堆选择，根据你的选择，执行不同的操作。 格式如下： 12345678910111213141516171819202122case "varname" in option1) command exit ;; option1) command exit ;; option1) command exit ;; option1) command exit ;; *) command exit ;;esac 注意： case需要一个esac（就是case反过来）作为结束标记，每个case分支用右圆括号，用两个分号表示break. *) 相当于其他语言中的default；除了*)模式，各个分支中;;是必须的，;;相当于其他语言中的break； 示例： 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748#!/bin/bashread -p "Please input a number: " nif [ -z "$n" ]then echo "Please input a number." exit 1fin1=`echo $n|sed 's/[0-9]//g'`if [ -n "$n1" ]then echo "Please input a number." exit 1fiif [ $n -lt 60 ] &amp;&amp; [ $n -ge 0 ]then tag=1elif [ $n -ge 60 ] &amp;&amp; [ $n -lt 80 ]then tag=2elif [ $n -ge 80 ] &amp;&amp; [ $n -lt 90 ]then tag=3elif [ $n -ge 90 ] &amp;&amp; [ $n -le 100 ]then tag=4else tag=0ficase $tag in 1) echo "not ok" ;; 2) echo "ok" ;; 3) echo "ook" ;; 4) echo "oook" ;; *) echo "The number range is 0-100." ;;esac 执行效果 1234[root@local-linux01 sbin]# bash !$bash case01.shPlease input a number: 1not ok 执行过程 123456789101112131415[root@local-linux01 sbin]# bash -x !$bash -x case01.sh+ read -p &apos;Please input a number: &apos; nPlease input a number: 4+ &apos;[&apos; -z 4 &apos;]&apos;++ echo 4++ sed &apos;s/[0-9]//g&apos;+ n1=+ &apos;[&apos; -n &apos;&apos; &apos;]&apos;+ &apos;[&apos; 4 -lt 60 &apos;]&apos;+ &apos;[&apos; 4 -ge 0 &apos;]&apos;+ tag=1+ case $tag in+ echo &apos;not ok&apos;not ok]]></content>
+    <content type="text"><![CDATA[写在前面继续整理shell脚本编写的基础知识。 shell脚本中的逻辑判断这里的逻辑判断特指if判断，跟python等其他的编程语言用法类似，大概想到如果满足条件，就执行以下操作。常见的if判断有一下三种形式,复杂程度依次上升。 if判断常见的三种形式第一种形式1234if 条件 ; then 语句; fi``` 示例： [root@local-linux01 ~]# if true; then echo ‘hello’; fihello123#### 第二种形式： if 条件;then 语句;else 语句;fi1234567891011121314151617&lt;!--more--&gt;示例：```shell#!/bin/bash# if-practicea=2if [ $a -gt 3 ]then ehco &apos;A is greater than 3.&apos;else echo &quot;No, It&apos;s not true.&quot;fi 执行效果 12[root@local-linux01 sbin]# bash if*.shNo, It&apos;s not true. 第三种形式：123456789if 条件; then 语句; elif 条件; then 语句; else 语句; fi 示例： 123456789101112131415a=10b=20if [ $a == $b ]then echo "a is equal to b"elif [ $a -gt $b ]then echo "a is greater than b"elif [ $a -lt $b ]then echo "a is less than b"else echo "None of the condition met"fi 注意： if 判断中，expression 和方括号([ ])之间必须有空格，否则会有语法错误； 这里的条件[ expression ],其实返回的是一个布尔值，如果 expression 返回 true，then 后边的语句将会被执行；如果返回 false，就不会执行； [ ]中不能使用&lt;,&gt;,==,!=,&gt;=,&lt;=这样的符号 判断脚本最后必须以 fi 来结尾闭合 if，否则会报错。 文件目录属性判断 表达式 含义 [ -a FILE ] 如果 FILE 存在则为真 [ -b FILE ] 如果 FILE 存在且是一个块文件则返回为真 [ -c FILE ] 如果 FILE 存在且是一个字符文件则返回为真 [ -d FILE ] 如果 FILE 存在且是一个目录则返回为真; [ -e FILE ] 如果 指定的文件或目录存在时返回为真。 [ -f FILE ] 如果 FILE 存在且是一个普通文件则返回为真。 [ -g FILE ] 如果 FILE 存在且设置了SGID则返回为真。 [ -h FILE ] 如果 FILE 存在且是一个符号符号链接文件则返回为真。（该选项在一些老系统上无效） [ -k FILE ] 如果 FILE 存在且已经设置了冒险位则返回为真。 [ -p FILE ] 如果 FILE 存并且是命令管道时返回为真。 [ -r FILE ] 如果 FILE 存在且是可读的则返回为真。 [ -s FILE ] 如果 FILE 存在且大小非0时为真则返回为真。 [ -u FILE ] 如果 FILE 存在且设置了SUID位时返回为真。 [ -w FILE ] 如果 FILE 存在且是可写的则返回为真。（一个目录为了它的内容被访问必然是可执行的） [ -x FILE ] 如果 FILE 存在且是可执行的则返回为真。 [ -O FILE ] 如果 FILE 存在且属有效用户ID则返回为真。 [ -G FILE ] 如果 FILE 存在且默认组为当前组则返回为真。（只检查系统默认组） [ -L FILE ] 如果 FILE 存在且是一个符号连接则返回为真。 [ -N FILE ] 如果 FILE 存在 and has been mod如果ied since it was last read则返回为真。 [ -S FILE ] 如果 FILE 存在且是一个套接字则返回为真。 [ FILE1 -nt FILE2 ] 如果 FILE1 比 FILE2 新, 或者 FILE1 存在但是 FILE2 不存在则返回为真。 [ FILE1 -ot FILE2 ] 如果 FILE1 比 FILE2 老, 或者 FILE2 存在但是 FILE1 不存在则返回为真。 [ FILE1 -ef FILE2 ] 如果 FILE1 和 FILE2 指向相同的设备和节点号则返回为真。 示例： 123456789cat if-file.sh#!/bin/bashf="/tmp/if-test"if [ -f $f ]then echo $f existelse touch $ffi 执行效果 12345[root@local-linux01 sbin]# bash -x !$bash -x if-file.sh+ f=/tmp/if-test+ &apos;[&apos; -f /tmp/if-test &apos;]&apos;+ touch /tmp/if-test if特殊用法 表达式 含义 [ -z STRING ] 如果STRING的长度为零则返回为真，即空是真 [ -n STRING ] 如果STRING的长度非零则返回为真，即非空是真 [ STRING1 ] 如果字符串不为空则返回为真,与-n类似 示例： 12345678910#!/bin/bashn=`wc -l /tmp/if-test`if [ -z &quot;$n&quot; ]then echo error exitelif [ $n -gt 100 ]then echo &apos;greater than 100&apos;fi 执行效果 1234567[root@local-linux01 sbin]# bash -x if03.sh++ wc -l++ cat /tmp/if-test+ n=0+ &apos;[&apos; -z 0 &apos;]&apos;+ echo 00 case判断case判断有点像选择题，给你一堆选择，根据你的选择，执行不同的操作。 格式如下： 12345678910111213141516171819202122case "varname" in option1) command exit ;; option1) command exit ;; option1) command exit ;; option1) command exit ;; *) command exit ;;esac 注意： case需要一个esac（就是case反过来）作为结束标记，每个case分支用右圆括号，用两个分号表示break. *) 相当于其他语言中的default；除了*)模式，各个分支中;;是必须的，;;相当于其他语言中的break； 示例： 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748#!/bin/bashread -p "Please input a number: " nif [ -z "$n" ]then echo "Please input a number." exit 1fin1=`echo $n|sed 's/[0-9]//g'`if [ -n "$n1" ]then echo "Please input a number." exit 1fiif [ $n -lt 60 ] &amp;&amp; [ $n -ge 0 ]then tag=1elif [ $n -ge 60 ] &amp;&amp; [ $n -lt 80 ]then tag=2elif [ $n -ge 80 ] &amp;&amp; [ $n -lt 90 ]then tag=3elif [ $n -ge 90 ] &amp;&amp; [ $n -le 100 ]then tag=4else tag=0ficase $tag in 1) echo "not ok" ;; 2) echo "ok" ;; 3) echo "ook" ;; 4) echo "oook" ;; *) echo "The number range is 0-100." ;;esac 执行效果 1234[root@local-linux01 sbin]# bash !$bash case01.shPlease input a number: 1not ok 执行过程 123456789101112131415[root@local-linux01 sbin]# bash -x !$bash -x case01.sh+ read -p &apos;Please input a number: &apos; nPlease input a number: 4+ &apos;[&apos; -z 4 &apos;]&apos;++ echo 4++ sed &apos;s/[0-9]//g&apos;+ n1=+ &apos;[&apos; -n &apos;&apos; &apos;]&apos;+ &apos;[&apos; 4 -lt 60 &apos;]&apos;+ &apos;[&apos; 4 -ge 0 &apos;]&apos;+ tag=1+ case $tag in+ echo &apos;not ok&apos;not ok]]></content>
       <categories>
         <category>linux</category>
       </categories>
@@ -148,9 +135,9 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>linux</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>notes</tag>
       </tags>
   </entry>
@@ -657,8 +644,8 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>mac</tag>
         <tag>notes</tag>
+        <tag>mac</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -683,8 +670,8 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>mac</tag>
         <tag>notes</tag>
+        <tag>mac</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1035,8 +1022,8 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>mac</tag>
         <tag>notes</tag>
+        <tag>mac</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1382,8 +1369,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -1406,8 +1393,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1594,8 +1581,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>https</tag>
       </tags>
   </entry>
@@ -1607,8 +1594,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>hexo</tag>
+        <tag>front-end</tag>
         <tag>icon</tag>
       </tags>
   </entry>
@@ -1633,8 +1620,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1657,8 +1644,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1694,8 +1681,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
 </search>

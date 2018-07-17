@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[linux笔记：shell+ expect实现简易文件分发系统(二）]]></title>
+    <url>%2F2018%2F07%2F17%2Fweek18-2-linuxNotes-basisOfExpect-Part2%2F</url>
+    <content type="text"><![CDATA[expect脚本同步文件准备条件：安装rsync 1yum -y install rsync 编写脚本： 123456789101112 vi 4.expect增加如下脚本内容：#!/usr/bin/expectset passwd &quot;123456&quot;spawn rsync -av root@172.16.111.110:/tmp/12.txt /tmp/expect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect eof 执行脚本 123chmod a+x 4.expect ./4.expect expect脚本指定host和要同步的文件 编写脚本 1234567891011121314151617181920212223242526vi 5.expect增加如下内容：#!/usr/bin/expectset passwd &quot;123456&quot;set host [lindex $argv 0]set file [lindex $argv 1]spawn rsync -av $file root@$host:$fileexpect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect eof[root@garytao-01 shell]# cat 5.expect #!/usr/bin/expectset passwd &quot;123456&quot;set host [lindex $argv 0]set file [lindex $argv 1]spawn rsync -av $file root@$host:$fileexpect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect eof 执行脚本 123chmod a+x 5.expect ./5.expect]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>shell</tag>
+        <tag>expect</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux笔记：shell+ expect实现简易文件分发系统(一)]]></title>
+    <url>%2F2018%2F07%2F17%2Fweek18-1-linuxNotes-basisOfExpect-Part1%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记开始，整理文件分发系统。 什么是分发系统？所谓分发系统，就是一个主要用来上线代码或同步文件的脚本。 对于大公司而言，使用机器少则几台，多则几十甚至上百台。如何将网站更新、扩展代码全部都发布到这些服务器上呢？这里就用到了分发系统。 expect的安装使用准备工作：安装 expect1yum install -y expect expect自动远程登录 编写脚本 123456789101112131415161718192021vi 1.expect#! /usr/bin/expect//远程登录IPset host &quot;172.16.155.128&quot; //远程登录密码 set passwd &quot;123456&quot; //远程登录密码spawn ssh root@$host expect &#123;//初次登录需要输入yes才能进入&quot;yes/no&quot; &#123; send &quot;yes\r&quot;; exp_continue&#125; //自动输入密码&quot;assword:&quot; &#123; send &quot;$passwd\r&quot; &#125; &#125;//作用，表示要停留在远程机器了，不会退出来，如果不加就会退出来//如果是expect eof 就会在机器上停留一两秒退出来interact``` - 更改脚本权限并执行 chmod 744 1.expect ./1.expect1234### expect脚本运程传递参数编写脚本 vi 1.expect #!/usr/bin/expectset user “root”set passwd 123456”spawn ssh $user@172.16.111.110 expect {“yes/no” { send “yes\r”; exp_continue}“password:” { send “$passwd\r” }}//表示图中括号里的，表示当检测到这个符号时就执行我们要执行的命令expect “]“send “touch /tmp/12.txt\r”expect “]“send “echo 1212 &gt; /tmp/12.txt\r”expect “]*”send “exit\r”12- 更改脚本权限并执行 chmod 744 2.expect ./2.expect12345### expect脚本传递参数- 编写脚本 vi 3.expect 增加如下脚本内容： #!/usr/bin/expect //把第一个参数的值赋给userset user [lindex $argv 0]set host [lindex $argv 1]set passwd “123456”set cm [lindex $argv 2]spawn ssh $user@$host expect {“yes/no” { send “yes\r”}“password:” { send “$passwd\r” }}expect “]“send “$cm\r”//-1表示永远不超时，1表示1秒，2表示2秒，以此类推，表示执行命令几秒后停止set timeout -1expect “]“send “exit\r”123- 更改脚本权限并执行 chmod 744 2.expect ./2.expect123456789101112### 实践项目：构建一个简易的分发系统？#### 需求描述：假设有一个大公司，企业网站用PHP编写，在多台服务同时跑服务，如何将网站更新代码同步推送到各个服务器？#### 解决思路：利用Shell和Expect，就能构建一个简单的分发系统，首先，准备好一台模板机器，将需要分发的文件准备好，然后只要使用expect脚本批量把需要同步的文件分发到目标机器即可。核心命令： rsync -av –files-from=list.txt / root@host:/1234#### 实现步骤：##### step1:编写一个脚本文件rsync.expect vim rsync.expect #!/usr/bin/expect 目标机器的登录密码set passwd “123456”set host [lindex $argv 0]set file [lindex $argv 1] 核心命令，同步多个文件spawn rsync -avR –files-from=$file / root@$host:/expect {“yes/no” { send “yes\r”}“password:” { send “$passwd\r” }}expect eof123456更改脚本权限chmod 744 rsync.expect##### step2:编辑一个文本文件，用来放需要同步的文件列表 vim /tmp/list.txt/tmp/12.txt/root/test.sh/tmp/test.txt/root/expectFiles/hostFile.expect12##### step3: 编辑一个ip.list，用于存放需要同步的目标机器的IP地址 vim /tmp/ip.list192.16.155.128192.16.155.13212##### step4:编写shell脚本rsync.sh，执行同步操作 vim rsync.sh #!/bin/bashfor ip in cat /tmp/ip.listdo echo $ip # 第二个参数就是需要同步的文件列表 ./rsync.expect $ip /tmp/list.txt done12##### 本地执行同步： sh rsync.sh1234#### 远程执行同步##### 第一步：编写脚本 vim exe.expect #!/usr/bin/expectset host [lindex $argv 0]set passwd “123456”set cm [lindex $argv 1]spawn ssh root@$hostexpect {“yes/no” { send “yes\r”}“password:” { send “$passwd\r” }}expect “]“send “$cm\r”expect “]“send “exit\r”12更改权限 chmod a+x exe.expect12##### 需要写shell脚本exe.sh，用于执行操作 vim exe.sh #!/bin/bashfor ip in cat /tmp/ip.listdo echo $ip # 第二个参数就是需要执行的命令 ./exe.expect $ip &quot;who;ls&quot; done12##### 第三步：执行脚本 sh exe.sh`]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>shell</tag>
+        <tag>expect</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[linux笔记：shell告警系统(二)]]></title>
     <url>%2F2018%2F07%2F13%2Fweek17-6-linuxNotes-basisOfShellScript-Part6%2F</url>
     <content type="text"><![CDATA[写在前面继续整理shell告警系统的相关内容。 告警系统邮件引擎创建python脚本1234567891011121314151617181920212223242526272829303132333435363738394041cd mail/vi mail.py//增加如下内容：#!/usr/bin/env python#-*- coding: UTF-8 -*-import os,sysreload(sys)sys.setdefaultencoding('utf8')import getoptimport smtplibfrom email.MIMEText import MIMETextfrom email.MIMEMultipart import MIMEMultipartfrom subprocess import *def sendqqmail(username,password,mailfrom,mailto,subject,content): gserver = 'smtp.qq.com' gport = 25 try: msg = MIMEText(unicode(content).encode('utf-8')) msg['from'] = mailfrom msg['to'] = mailto msg['Reply-To'] = mailfrom msg['Subject'] = subject smtp = smtplib.SMTP(gserver, gport) smtp.set_debuglevel(0) smtp.ehlo() smtp.login(username,password) smtp.sendmail(mailfrom, mailto, msg.as_string()) smtp.close() except Exception,err: print "Send mail failed. Error: %s" % errdef main(): to=sys.argv[1] subject=sys.argv[2] content=sys.argv[3]##定义QQ邮箱的账号和密码，你需要修改成你自己的账号和密码 sendqqmail('1234567@qq.com','aaaaaaaaaa','1234567@qq.com',to,subject,content)if __name__ == "__main__": main() 脚本使用说明 首先定义好脚本中的邮箱账号和密码； 脚本执行命令为：python mail.py 目标邮箱 “邮件主题” “邮件内容”； 创建脚本mail.sh ,该脚本的作用是，当系统服务异常的时候就会调用mail.py123456789101112131415161718192021222324252627282930313233vi mail.sh//增加如下内容：log=$1t_s=`date +%s`t_s2=`date -d "2 hours ago" +%s`if [ ! -f /tmp/$log ]then echo $t_s2 &gt; /tmp/$logfit_s2=`tail -1 /tmp/$log|awk '&#123;print $1&#125;'`echo $t_s&gt;&gt;/tmp/$logv=$[$t_s-$t_s2]echo $vif [ $v -gt 3600 ]then ./mail.py $1 $2 $3 echo "0" &gt; /tmp/$log.txtelse if [ ! -f /tmp/$log.txt ] then echo "0" &gt; /tmp/$log.txt fi nu=`cat /tmp/$log.txt` nu2=$[$nu+1] echo $nu2&gt;/tmp/$log.txt if [ $nu2 -gt 10 ] then ./mail.py $1 "trouble continue 10 min $2" "$3" echo "0" &gt; /tmp/$log.txt fifi 运行告警系统1234567cd /usr/local/sbin/mon/mail//设定定时任务crontab -e//设定每分钟执行一次检测脚本包* * * * * cd /usr/local/sbin/mon/mail; bash main.sh]]></content>
@@ -174,9 +202,9 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>linux</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>notes</tag>
       </tags>
   </entry>
@@ -1408,8 +1436,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -1432,8 +1460,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1444,8 +1472,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1581,8 +1609,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1620,8 +1648,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>https</tag>
       </tags>
   </entry>
@@ -1646,8 +1674,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>front-end</tag>
+        <tag>JavaScript</tag>
         <tag>ES6</tag>
       </tags>
   </entry>
@@ -1659,8 +1687,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1683,8 +1711,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1720,8 +1748,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
 </search>

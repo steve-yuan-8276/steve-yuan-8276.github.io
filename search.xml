@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[hexoBlog-0To1]]></title>
+    <url>%2F2018%2F07%2F18%2FhexoBlog-0To1%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记主要描述如何利用hexo + github 搭建个人博客。主要包括以下几个方面： 博客搭建 博客更新 自定义域名 博客优化 博客迁移 博客搭建前提准备： 了解掌握git基本操作； 了解掌握markdown语法； 有一颗喜欢折腾的大心脏； 第一步：新建github账户 新建github账户 生成SSH密钥 12345ssh-keygen -t rsa -C xxx@xxx.com //此邮箱为github注册邮箱//之后一路下一步，会得到两个id_rsa和id_rsa.pub两个文件；//其中id_rsa是私钥，自己保管好；//id_rsa.pub是公钥，使用cat命令查看一下内容，复制出来，下面会用到。 打开github设置页面，点击New SSH key,然后粘贴id_rsa.pub内容，然后点击Add SSH key。 第三步：新建github.io 新建一个repo 克隆repo到本地 1git clone https://github.com/username/username.github.io [localDir] 新建index.html 12cd username.github.ioecho &quot;Hello World&quot; &gt; index.html push到github仓库 12345git add --allgit commit -m &quot;Initial commit&quot;git push -u origin master 访问测试： 12//浏览器输入，username是github注册用户名https://username.github.io. 第三步：本地安装HEXO 安装node.js,下载地址，直接安装最新版即可。 命令行安装hexo 1npm install -g hexo 新建一个blog文件夹，然后通过终端进入该文件夹 12//进入刚刚git.io本地文件夹cd [dir] 执行以下命令： 1hexo init 安装依赖包 1npm install 第四步：设置HEXO 在hexo文件夹内找到_config.yml配置文件，sublime打开编辑： 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475# Hexo Configuration ## Docs: https://hexo.io/docs/configuration.html## Source: https://github.com/hexojs/hexo/# Site 站点信息设置title: #站名subtitle: #副标题description: #站描述author: #作者language: zh-CN #语言timezone:# URL 链接设置## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;url: http://blog.prozin.xyzroot: /permalink: :year/:month/:day/:title/permalink_defaults:# Directory 文件目录source_dir: sourcepublic_dir: publictag_dir: tagsarchive_dir: archivescategory_dir: categoriescode_dir: downloads/codei18n_dir: :langskip_render:# Writing 文章new_post_name: :title.md # File name of new postsdefault_layout: posttitlecase: false # Transform title into titlecaseexternal_link: true # Open external links in new tabfilename_case: 0render_drafts: falsepost_asset_folder: falserelative_link: falsefuture: truehighlight: enable: true line_number: true auto_detect: true tab_replace:# Category &amp; Tagdefault_category: uncategorizedcategory_map:tag_map:# Date / Time format 日期## Hexo uses Moment.js to parse and display date## You can customize the date format as defined in## http://momentjs.com/docs/#/displaying/format/date_format: YYYY-MM-DDtime_format: HH:mm:ss# Pagination 分页## Set per_page to 0 to disable paginationper_page: 20pagination_dir: page# Extensions 扩展## Plugins: https://hexo.io/plugins/## Themes: https://hexo.io/themes/theme: landscape #默认主题# Deployment 这里设置了Git获#这里一定要注意不要写错了，否则部署到Github上会出问题## Docs: https://hexo.io/docs/deployment.htmldeploy: type: git repo: 仓库地址.git branch: master message: &apos;站点更新:&#123;&#123;now(&quot;YYYY-MM-DD HH/mm/ss&quot;)&#125;&#125;&apos; 注意事项： 配置文件的冒号:后面有一个空格； repo: 就是github地址.git ，这里的.git一定不能忘。 部署.deploy目录 1npm install hexo-deployer-git --save 第五步：更改主题为NEXT具体参见说明文档 内容详细到令人发指，step by step就好了。 博客更新hexo 常用命令行 序号 命令 含义 1 hexo help #查看帮助 2 hexo init #初始化一个目录 3 hexo new “postName” #新建文章 4 hexo new page “pageName” #新建页面 5 hexo generate #生成网页，可以在 public 目录查看整个网站的文件 6 hexo server #本地预览，’Ctrl+C’关闭 7 hexo deploy #部署.deploy目录 8 hexo clean #清除缓存 注：强烈建议每次执行命令前先清理缓存，每次部署前先删除 .deploy 文件夹 发布更新步骤： 新建文档 1hexo new &quot;标题&quot; 编辑文章 刚刚生成的文档在在sourse/ _posts文件夹下生，默认是 .md文件，推荐使用Mweb进行编辑。 发布文章 123hexo cleanhexo generatehexo deploy 出现以下提示，说明部署成功，等几分钟刷新页面就能看到了。 1[info] Deploy done: git 自定义域名域名绑定这个博客本身是搭建在github上的，已经有github.io结尾的https域名，不做更改也完全不影响使用。当然，如果喜欢折腾，也可以自定义域名。 注：配置域名解析需要0-72小时生效，实测通常是24小时左右，这里需要耐心。 step 1 ：购买域名在万网注册账户，实名认证，购买域名，一路按照流程走就OK了。 step 2: 域名设置解析 登陆万网，点击控制台 =&gt; 产品与服务 =&gt; 域名 =&gt; 解析 继续点击 添加解析 如图所示，这里只需要改动两处： 主机记录，写 “www” 记录值，就是github.io的ip地址。获取这个ip值，可以直接打开终端通过ping命令获取。 添加之后选择保存即可。 step3. 配置hexo在本地hexo文件根目录下找到source，进入这个目录后创建文件名为 CNAME 的文件，打开之后编辑文件写入刚买来的域名。 12345678终端输入：cd /Users/steveyuan/documents/github-file/steveBlog/source #这里是文件路径，需要根据实际情况进行调整touch CNAME #该文件不写后缀之后双击打开文档进行编辑，输入域名，保存www.steve-yuan.com #这里是自己的域名 step 4: github设置解析 进入自己的github.io 的Repository，点击 Create new file，创建一个文件，名字还是叫 CNAME 。 编辑CHAME 文件，内容还是域名，不过不包括 http://www，点击保存。 进入本地hexo文件夹，重新生成、部署网站。 添加https基本思路 在 Cloudflare中添加你的域名，设置2个A记录； 去你的域名注册商更改 DNS Server 成 Cloudflare 所提供的； 在 Cloudflare 中配置 Crypto ，选择 Full （这一步要一段时间才能起效）； 在 Cloudflare 配置 Page Rules ，一个是 always use https ，一个是 redirect http 到 https，保持等待生效。 具体操作：step1 :添加域名，设置解析记录登录Cloudflare后，在这里 添加 你的域名，如下图，输入你的域名，例如 thinktxt.com 并点击Begin Scan开始扫描； 完成域名解析扫描后，点击 Continue Setup 继续；看到DNS记录（包括子域）列表之后，按照下图提示设置后，点击 Continue，进入下一步注：此处设置cname是为了重定向www 选择免费服务计划，然后点击下一步 step 2: 更改DNS Server 以万网为例，在域名管理中选择DNS修改/创建，如下图： 在万网修改好DNS之后，在Cloudflare点击继续，如下图： 注：官方说域名服务器修改最长需要72小时生效，显示 Status: Active 即可。 step3: 重定向：点击 Page Rules =&gt; Create Page Rule 添加顶级域名重定向到https 强制使用SSL，可以使用通配符* 完成，剩下的就是耐心等待了，正常情况下一天左右就能以https访问了。 博客美化fork me on github 通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来。注：红框位置替换为自己的github地址 打开themes/next/layout/_layout.swig文件，把代码复制到&lt;div class=&quot;headband&quot;&gt;&lt;/div&gt;下面。 静态网页压缩 在站点的根目录下执行以下命令： 123$ npm install --global gulp-cli //全局安装$ npm install --save-dev gulp //npm install --save-dev gulp$ touch gulpfile.js //新建 gulpfile.js 注：gulp.js 官方使用说明 采用atom 打开gulpfile.js，复制粘贴以下代码： 123456789101112131415161718192021222324252627282930313233var gulp = require(&apos;gulp&apos;);var minifycss = require(&apos;gulp-minify-css&apos;);var uglify = require(&apos;gulp-uglify&apos;);var htmlmin = require(&apos;gulp-htmlmin&apos;);var htmlclean = require(&apos;gulp-htmlclean&apos;);// 压缩 public 目录 cssgulp.task(&apos;minify-css&apos;, function() &#123; return gulp.src(&apos;./public/**/*.css&apos;) .pipe(minifycss()) .pipe(gulp.dest(&apos;./public&apos;));&#125;);// 压缩 public 目录 htmlgulp.task(&apos;minify-html&apos;, function() &#123; return gulp.src(&apos;./public/**/*.html&apos;) .pipe(htmlclean()) .pipe(htmlmin(&#123; removeComments: true, minifyJS: true, minifyCSS: true, minifyURLs: true, &#125;)) .pipe(gulp.dest(&apos;./public&apos;))&#125;);// 压缩 public/js 目录 jsgulp.task(&apos;minify-js&apos;, function() &#123; return gulp.src(&apos;./public/**/*.js&apos;) .pipe(uglify()) .pipe(gulp.dest(&apos;./public&apos;));&#125;);// 执行 gulp 命令时执行的任务gulp.task(&apos;default&apos;, [ &apos;minify-html&apos;,&apos;minify-css&apos;,&apos;minify-js&apos;]); 更新推送 123hexo ggulphexo d 增加字数统计利用统计功能，显示文章字数统计,阅读时长,总字数 在站点的根目录下，输入命令： 1$ npm i --save hexo-wordcount 打开 themes/next/_config.yml，搜索关键字 post_wordcount： 1234567891011# Post wordcount display settings# Dependencies: https://github.com/willin/hexo-wordcountpost_wordcount: item_text: true #字数统计 wordcount: true #预览时间 min2read: true #总字数,显示在页面底部 totalcount: true separated_meta: true 实现动态背景这个比较酷炫，但是实现方法是最简单的，因为next V5.1.1主题自带，大牛已经写好了只要在设置文件中开启即可。 在站点目录，找到next主题文件夹，路径是themes/next/_config.yml，搜索找到canvas_nest: false，把它改为canvas_nest: true ，齐活。 云端保存博客内容hexo更新博客的流程大概是： hexo g 将本地md文件生成静态网页； hexo d 将优化后的静态网页推送到git.io 由于上述过程都是在本地电脑进行的，因此原始的md文件，也就保存在本地机器上，如果需要更换电脑的话，就需要自行拷贝文件，重新配置环境，这样以来就很不方便。 网上查了资料，有人说可以通过分支branch，master用来存放生成后的静态网页，source用来存储源文件。听起来确实是个很好的办法，但是还是那句话，本人是菜鸟，又怕搞不好把博客挂掉了，所以迟迟没有动手。 在网上找资料，查到一个很好的方法，而且使用简单，连我这样的菜鸟也能很容易配置成功。 该方法借助hexo-deployer-git插件完成，GitHub地址：https://github.com/hexojs/hexo-deployer-git 安装插件 1npm install hexo-deployer-git --save 登陆新建branch分支 最便捷的方法是登陆GitHub网站，进入github.io的repo，系统默认有一个master的分支，再新建一个source就OK，当然此处的名字随你喜欢，取什么都行。 也可以在本地命令行操作，先cd进入github.io目录 12345678//新建一个名为source的branchgit branch source//进入该分支git checkout source//上述两步还可以合并为一行git checkout -b source 修改hexo配置文件 注意：修改的是hexo文件夹根目录下的_config.yml，只需修改其中deploy那部分，示例代码如下： 123456789101112131415deploy: - type: git //这个repo地址是github.io的默认地址，如果你已经配置过了，这里是不需要更改的。 repo: git@github.com:&lt;username&gt;/&lt;username&gt;.github.io.git branch: master - type: git //跟上面的repo地址保持一致 repo: git@github.com:&lt;username&gt;/&lt;username&gt;.github.io.git //这里写的是需要保持的branch分支名 branch: source //这个是需要同步的文件夹路径，/表示从hexo博客根目录下的所有文件都同步 extend_dirs: / ignore_hidden: false ignore_pattern: public: . 基本上就是这样，设置完成保存，就可以在更新博客的同时，同步保存网站md文件。 TroubleShooting：icon无法显示 具体是这样的： 按照说明文档和isuues提示的操作方法，在fontawesome找到相应的图片名称，但是显示结果很预期的不一样。 实际显示效果是这样的（如图），只有facebook正常，其他三个图标都不对，不知道为什么。 问题分析解决你说怪不怪，为啥只有FB的icon正确显示，其他的不见踪迹呢？难道我只有在Facebook比较受欢迎，其他的都不受待见？试着更换了别的图标，还是不对！ 神马情况？直到我看到了这句话： 示例代码： 看到这里，突然有一种想抽自己的冲动。原来答案一直就杵在眼前，而我却一直视而不见，还花了三天的时间各种查资料！ 当然，这个social_icons: 也很有迷惑性，之前总在这里改来改去，其实该修改的在前面social目录下就已经修改完了，这里只要保持光溜溜就好。 博客迁移前提准备 安装git 安装node.js 安装hexo 1npm install hexo-cli -g troubleShooting前期准备部分就遭遇trouble到关键原因，当然还是自己太菜了。 这里有个坑，第一次在安装node.js的时候，装的是8.9.4LTS版本，本身没问题，但在安装hexo的时候遇到了错误提示：大概就是说权限不够，google了一翻，在stack overflow上找到了答案，具体见网址 简单说就是要授权，按照网页的提示，在终端中输入： 1sudo chown -R $USER /usr/local/lib/node_modules 迁移blog拷贝文件这里只需要拷贝以下5个文件/文件夹，其他的文件不用拷，直接忽略即可。 config.yml theme scaffolds #文章模板 package.json #说明使用哪些包 source 安装模块12cd blog-directory // 进入blog文件夹 npm install //安装模块 安装其他组件1234567npm install hexo-deployer-git --save //同步内容至githubnpm install hexo -server --save //servernpm install hexo-generator-feed --save //RSS订阅npm install hexo-generator-sitemap --save //站点地图 之后，正常情况下应该就可以部署更新blog了。 123hexo cleanhexo generate //可简写为 hexo ghexo deploy //可简写为 hexo d troubleShooting这里也遇到了一个坑，前面配置都没问题，最后在运行 hexo d 的时候，遇到了错误提示： 123456789101112fatal: unable to access &apos;https://github.com/steve-yuan-8276/steve-yuan-8276.github.io.git/&apos;: Failed to connect to github.com port 443: Operation timed outFATAL Something&apos;s wrong. Maybe you can find the solution here: http://hexo.io/docs/troubleshooting.htmlError: fatal: unable to access &apos;https://github.com/steve-yuan-8276/steve-yuan-8276.github.io.git/&apos;: Failed to connect to github.com port 443: Operation timed out at ChildProcess.&lt;anonymous&gt; (/Users/steveyuan/Documents/github-file/steveBlog/node_modules/hexo-util/lib/spawn.js:37:17) at emitTwo (events.js:126:13) at ChildProcess.emit (events.js:214:7) at maybeClose (internal/child_process.js:925:16) at Socket.stream.socket.on (internal/child_process.js:346:11) at emitOne (events.js:116:13) at Socket.emit (events.js:211:7) at Pipe._handle.close [as _onclose] (net.js:554:12) 解决方法：尝试了很久，最终发现还是网络环境问题，单位网络不行，换到家里的网络就OK了。]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[Linux运维学习笔记：centOS用户和文件管理（一）]]></title>
     <url>%2F2018%2F07%2F18%2FlinuxNotes-02-userManagementAndFileSystem-Part1%2F</url>
     <content type="text"><![CDATA[写在前面linux是一个多用户、多任务系统，具有很好的稳定性和安全性，而这与linux的用户和权限管理机制密不可分。 我们在linux系统中的操作，实际上都是操作进程访问文件，这里的访问权限是基于Linux的安全管理机制的。linux上最初的安全模型，叫做DAC，Discretionary Access Contorl，主动访问控制；后来在此基础上又增加了额外的权限管理机制，成为MAC，Mandatory Access Contorl，强制访问机制。为了区分两者，将支持MAC的linux系统成为selinux，意思是linux的安全加强系统。 在实际运行过程中，系统会先做DAC检查，如不通过则拒绝执行；如果通过DAC检查且支持MAC模块，则再做MAC检查。 这则笔记分为文件系统和用户管理两个部分进行整理。 linux的文件系统在linux当中，一切都是文件。使用ll [filename] 或者 ls -l [filename/dirname] 查看文件类型。 linux文件系统构成linux文件目录结构： 常用文件类型： 文件类型 描述 说明 - 普通文件，包括文本文件 可用touch命令创建 d 文件目录 可用 mkdir 命令创建 l 链接文件(指向另一个文件,类似于windows下的快捷方式) 可用ln 命令创建 s 套接字文件，用于进程通信 一般由应用程序在执行过程中创建 b 块设备文件,二进制文件 c 字符设备文件，如鼠标、键盘、终端 p 管道文件 可用mkfifo命令创建 普通文件：一般类型的文件，主要包括： 纯文本档ASCII：文件内容可以直接读到数据，例如：字母，数字等。这里文件可以用cat 命令进行查看。 二进制文件binary：Linux当中可执行文件就是属于这种格式。例如，ls、 rm、mkdir 等等常见命令。 数据文件data：有些程序在运行的过程中会读取某些特定格式的文件，那些特定格式的文件可以被称为数据文件。例如，系统登录数据会记录在/var/log/wtmp ，这就是一个数据文件，可以用last -f /var/log/wtmp 命令查看。 目录 directory ： 跟windows 下的文件夹类似，用 ll 命令查看属性的第一个字母为d 链接文件 link file类似Windows系统底下的快捷方式！ 第一个属性为l，分为软链接和硬链接，这个上一则笔记已经整理过了，下面会专门讲到。 设备文件 device 区块设备文件 block：就是一些储存数据， 以提供系统随机存取的接口设备，第一个属性为 b 。例如，硬盘、软盘等。 字符设备文件 character：串行端口的接口设备，第一个属性为c 。例如，键盘、鼠标等。 Linux 常用文件后缀名注意：与Windows系统不同，在Linux系统下， 一个文件是否能够被执行，关键是看有没有x 权限，与文件的后缀名无关。 这里的后缀名，仅仅是为了让我们便于区分，习惯在定义文件名是加上一个后缀名。 常见的文件后缀名包括： .sh ： shell脚本或批处理文件 (scripts)。 .tar, .tar.gz, .zip, .tgz： 经过打包的压缩文件。之所以有这么多后缀名，是对应不同的压缩软件，比如gunzip, tar 等。 .conf：系统的配置文件。 .pl：perl语言文件，通过perl语言开发的程序。 .html，.htm，.php，.jsp：网页文件。 .py：Python语言文件，通过Python语言开发的程序。 .rpm：rpm安装的文件。 创建删除文件目录mkdir 命令：创建文件夹命令格式：mkdir [参数] [文件目录] -m 设置文件权限 12mkdir -m 777 test3 //输入drwxrwxrwx 2 root root 4096 10-25 17:46 test3 //实现效果 -p 新建一个目录串 1mkdir -p /test1/test2 -v 创建新目录都显示信息 1mkdir -v /test3 在指定目录下创建多个目录（使用绝对路径） rmdir 命令：删除目录跟mkdir 相反，rmdir表示删除目录。命令格式为：mkdir [参数] [文件目录] 。这个命令的特点在于，只能删除空目录；即使加了 -p 参数，也只能删除一串空目录。如果目录当中有文件，这个命令就没有用了。 touch 命令：创建文件命令行格式： touch [参数] [filename] 选项 命令行格式 作用 -a touch -a file 改变档案的访问时间记录。 -d touch -d time file 设定时间与日期，可以使用各种不同的格式。 -m touch -m file 改变档案的修改时间记录。 -r touch -r file1 file2 使用参考文档的时间记录。 -t touch -t time file 设定档案的时间记录，格式与 date 指令相同。 示例： 1234567891011121314151617181920212223// 在当前目录创建 test.txt 文件touch test.txt// 创建多个文件touch test1.txt test2.txt//修改访问时间touch -a test.txt//查看访问修改文件的时间stat test.txt// 更改为自定义格式、自定义时间戳（更改访问时间、修改时间）touch -d &apos;18-May-2017&apos; test.txt// 更改修改时间touch -m test.txt//修改 test1.txt 为 test2.txt 文件的时间戳。touch -r test1.txt test2.txt// 更改为自定义时间戳touch -t 201703031558.28 test.txt rm命令：删除文件或目录用来删除文件或文件目录。命令格式为： 1rm [参数] [文件] 常用参数 含义 -f –force 忽略不存在的文件，从不给出提示。 -i –interactive 进行交互式删除 -r –recursive，将参数中列出的全部目录和子目录均递归地删除。 注意： 如果要删除非空目录，需要使用rm -rf [文件目录] 千万不要rm -rf / ，一旦输入这个命令，然后就没有然后了。 拓展：如何同时创建多个文件/目录 创建多个文件 123[root@steve test]# touch &#123;1..5&#125;.txt[root@steve test]# ls1.txt 2.txt 3.txt 4.txt 5.txt 创建多个目录 123[root@steve test]# mkdir dir&#123;1..5&#125;[root@steve test]# lsdir1 dir2 dir3 dir4 dir5 查看文件命令cat 和 tac1cat &lt;filename&gt; cat ：一次性显示整个文件内容 tac ：跟cat类似，只不过cat 是从前往后（第一行 =&gt; 最后一行），tac是从后往前（最后一行 =&gt; 第一行)。 常用参数： 参数名称 作用 cat -n -n 表示显示行号 cat -A -A 表示显示所有内容 head 和 tail这两个命令比前一组命令强的地方在于，如果文件的内容比较多，而你只需要查询文件开头或者结尾，使用这两条命令会轻松很多。 常见用法： 12head -n 10 &lt;filename&gt; //显示文件开头十行tail -n 10 &lt;filename&gt; //显示文件结尾十行 注意： 上述示例中n可以省略，直接写成head -10 &lt;filename&gt;，效果也是一样的； 如果-n 省略，默认显示10行内容。 tail特殊用法： 1tail -f &lt;filename&gt; 注：加 -f 参数，动态显示文件最后10行内容，在做日志监控的时候，可以方便直观的查看变化。 1tail -f /var/log/messages more和less这两个命令比head 和 tail更高级，使用起来也更加方便，能够一页一页地方便使用者逐页阅读。 more 的用法1more &lt;参数&gt; &lt;filename&gt; 常用参数: 参数名称 作用 d 在每屏的底部显示友好的提示信息 l 忽略 Ctrl+l （换页符）。如果没有给出这个选项，则more命令在显示了一个包含有 Ctrl+l 字符的行后将暂停显示，并等待接收命令。 f 计算行数时，以实际上的行数，而非自动换行过后的行数（有些单行字数太长的会被扩展为两行或两行以上） p 显示下一屏之前先清屏。 c 从顶部清屏然后显示。 s 文件中连续的空白行压缩成一个空白行显示。 u 不显示下划线 / 先搜索字符串，然后从字符串之后显示 常用操作命令 操作命令 作用 Enter 向下n行，需要定义。默认为1行 Ctrl+F 向下滚动一屏 space 向下滚动一屏 Ctrl+B 返回上一屏 = 输出当前行的行号 :f 输出文件名和当前行的行号 v 调用vi编辑器 ! 调用Shell，并执行命令 q 退出more less命令1less &lt;参数&gt; &lt;filename&gt; 常用参数： 参数名称 作用 b 设置缓冲区的大小 e 当文件显示结束后，自动离开 f 强迫打开特殊文件，例如外围设备代号、目录和二进制文件 g 只标志最后搜索的关键词 i 忽略搜索时的大小写 m 显示类似more命令的百分比 常用操作 参数名称 作用 space 翻页 j 光标向下移动一行 k 光标向上移动一行 / 按下 /后输入关键词enter即可搜索，查看多个搜索结果时，按n进行切换。 ？ 与 / 作用类似，不同之处在于/当千行向下搜索，？是当前行向上搜索。 搜索文件find 命令搜索文件注：find是常用命令，需要熟练掌握。 命令行格式： find [路径] [参数] -print 上述命令可以简单地理解为find + 限定条件 通过限定条件来查找所需的文件。-print将匹配的文件输出到标准输出，可省略。 结合路径进行搜索 路径，此选项可省略，指的是查找的目录路径，比如要在home目录下找某个文件，就是/home ；需要在etc 目录下找某个配置文件，就是 /etc。 查找$HOME目录中的文件 1find ~ -name &quot;*&quot; // ~ 表示家目录 在当前目录及子目录中查找所有的‘ *.log‘文件 1find . -name &quot;*.log&quot; //. 表示当前目录；*是通配符，表示任意字符 在当前目录及子目录中查找文件名以一个大写字母开头的文件 1find . -name &quot;[A-Z]*&quot; -name 按照文件名查找文件 1find . -name [filename] -type按照文件类型查找文件 12345678find . -type [filename]b - 块设备文件。 d - 目录。 c - 字符设备文件。 p - 管道文件。 l - 符号链接文件。 f - 普通文件。 -time -n/+n 按照文件的更改时间来查找文件 文件的inode当中，有三个时间time 信息，分别是： atime：Access time，在读取文件或者执行文件时更改，即文件最后一次被读取的时间。查看atime，使用 ls -lu filename mtime：Modified time，在写入文件时随文件内容的更改而更改，是指文件内容最后一次被修改的时间。查看atime，使用ls -l filename ctime：Change time，在写入文件、更改所有者、权限或链接设置时随 Inode 的内容更改而更改，即文件状态最后一次被改变的时间。查看atime，使用 ls -lc filename 后面的 n 表示天数，比如 -atime +n/-n 表示访问或者执行时间大于或小于n天的条件。 -perm 按照文件权限来查找文件 1find . -perm 755 –print //在当前目录下查找文件权限位为755的文件 -user 按照文件属主来查找文件 1find ~ -user sam –print //在$HOME目录中查找文件属主为sam的文件 which 查询可执行文件的绝对路径命令行格式： which [filename] whereis 查找文件命令行格式： whereis [参数] [filename] 参数 含义 -b 只查找二进位制文件 -m 只查找帮助文件（man 目录下的文件） -s 只查找代码文件 locate 查找文件跟whereis 作用类似，通过查找预先生产的文件列表库来查找文件。 locate命令 需要单独安装， 1yum -y install mlocate 安装完成后，初次使用需要生产文件列表库 1updatedb 查找文件 1locate [filename] 注：默认情况下，数据库每周更新一次；如果一个文件正在两次更新时间段之间的创建的，就搜不到结果。 文件路径相对路径和绝对路径顾名思义，文件路径就是用来描述存放文件的地方。这里有两种描述的方法： 绝对路径：从根目录写起的，叫做绝对路径,比如 /var/... 或者 ～/... 相对路径：与当前目录相对的写法，叫做相对路径。 举例来说： pwd //查询当前所在的绝对路径 上图中，红框标示出来的部分，就是当前所在的绝对路径，即 /Users/stevey/documents/github-file ，通过 ls 命令可以看到，下面有一个 steveBlog 的文件夹。 要进入这个文件夹可以采用两种方法： 123cd steveBlog //相对路径cd /Users/stevey/documents/github-file/steveBlog //绝对路径 文件路径相关的命令tree 命令查看目录结构tree命令是以树状形式显示目录下的文件或子目录；系统默认没有的，需要自行安装。 安装 1yum install -y tree 命令格式 123//n表示目录层级数//dir表示目录名称tree -L [n] [dir] 使用 1234567891011121314//-L 表示查看目录层级，2表示查看两级目录。[root@VM_0_7_centos ~]# tree -L 1 /tmp//tmp/├── cvm_init.log├── mysql.sock├── net_affinity.log├── nv_gpu_conf.log├── sess_cv242b2kg0v1n6lier3cavvskctvd1dn├── sess_d2360tgsa14ivnfsou9kspf4q6c70iq2├── sess_e68jsk46a5bqdm6ummjj0crir1teb4v1├── sess_vstbaspckikbfde14nqlh4ptvdbfgu36└── setRps.log0 directories, 9 files ls 命令查看目录信息 名称 作用 ls 列出当前目录下的文件和文件夹，不包括隐藏文件 ls -a 列出当前目录下的文件和文件夹，不包括隐藏文件 ls -l 列出除隐藏文件之外的所有文件和目录的详细信息，包括权限、所属主、所属组、文件创建日期时间 ls &lt;filename&gt; -l 查看某个文件的详细信息 ls &lt;file-Folder-name&gt; 查看指定目录下的文件和目录 ls -Rl 显示当前目录及所有子目录信息 ls -tl 以时间排序显示目录,查找最新文件有用 ls -Sl 以文件大小排序 ls -s -l -S 显示文件大小,并按大小排序 示例： pwd 命令：显示当前目录绝对路径用于显示当前所在目录。在linux系统中， .表示当前目录， ..表示上一级目录。 示例： 12[root@VM_0_7_centos ~]# pwd/root cd 命令：切换目录 名称 作用 cd 返回用户主目录 cd /etc 改变到其它路径 cd .. 返回到上一级目录 cd / 或 cd ～ 返回到根目录 cd - 返回之前的目录 alias 命令alias 命令用来设置指令别名，如果命令过长，那么就考虑可以设置一个别名。 命令行格式： 1alias 新的命令=&apos;原命令 -选项/参数&apos; 示例： 显示当前已设置的别名 1alias 设置vim别名 12// 设置别名，输入`vi` 调用 `vim`alias vi=&apos;/usr/bin/vim&apos; 删除别名 1unalias vi 查询alias 更多用法 1man alias //按 `space `下翻页，按` q `退出。 cp 命令：文件复制命令格式为 cp [参数] [源文件] [目标文件]，常见参数用法： -r复制目录及目录内的所有项目 -i覆盖前询问 mv 命令：移动或重命名命令格式为 mv [参数] [源文件或目录] [目标文件或目录] ，常见用法如下： 目标是目录，且目录已存在 目标是目录，但该目录不存在(实际相当于给文件重命名) 目标是文件，且该文件已存在(实际相当于覆盖目标文件) 目标是文件，但该文件不存在（实际相当于重命名源文件） 文件权限管理文件基本权限文件的基本权限包括读read、写write和执行execute，分别可以用4、2、1来表示； 它与用户密不可分，分为三组进行管理： user：对文件/目录所属用户设定权限； group：对文件/目录所属组设定权限； other：对文件/用户其他的组和用户设定权限； 对于文件而言： Read: 表示可读取文件内容； Write：表示可编辑、新增、修改、删除文件内容； execute：表示可执行一个脚本程序； 对于目录而言： Read: 表示可读取目录内的文件列表； Write：表示可在目录内编辑、新增、修改、删除文件内容； execute：表示能够进入目录； 文件的特殊权限set uid这是一种对二进位制程序设置的特殊权限，临时允许二进位制程序执行者用户文件所属主的权限，这是一种临时的、特殊的、有条件的授权方法。 这里有两个前提，缺一不可： 只有可执行的二进位制程序才能设定set uid权限； 命令执行者对该程序拥有执行（execute）权限； 例如/etc/shadow 这个文件，用来保存用户信息，处于系统安全的考虑，这个文件读、写、执行的权限都没有；但是passwd命令拥有suid的特殊权限位，如下图所示，出现在x位置的那个s，即表示suid，这就好像尚方宝剑，赋予它临时修改密码配置文件，也就是更改密码的权限。 由上图可知，/etc/shadow 默认的权限为000，rwx权限都没有的，也不能执行相应的操作。但 passwd赋予一个特殊权限，让我们在执行passwd命令时，临时拥有 root 权限，从而可以修改密码。 注意： 虽然常见的八位制权限掩码是三位数，但其实应该是四位数，第一位表示的特殊权限。set uid位采用八进制表示为4000。 passwd 是具有setuid的一个特殊命令。这样我们不需要是root用户，也可以对自己的密码进行修改。 设置set uid这个特殊权限很危险，不到万不得已，做好不要使用。 设置setuid的方法： 方法一： 123chmod 4755 [文件名] // 设置set uid chmod 755 [文件名] // 取消 set uid 方法二： 123chmod u+s [文件名] // 设置set uid chmod u-s [文件名] // 取消 set uid set gidset gid 就是将程序文件的 s 权限赋予组，当执行此程序时，此进程的属组不再是运行者本人所属的基本组，而是此程序文件的属组。 sgid 与suid相似，有一个重要特性，就是一旦对某个目录设置了sgid，该目录中创建的文件将继承该目录的所属组。 这就意味着如果我们要创建一个部门共享目录，可以早创建目录后，设置sgid权限，这样部门群组内的任何用户创建的文件都会属于该目录所属组。如此一来，该部门所有用户都能够顺利读取共享目录文件。 setgid位八进制表示为2000。 这里有两种情况： set gid 赋予文件：运行此文件的其它用户具有这个文件的属组特性； set gid 赋予目录：任何用户在该目录下创建的文件，则该文件属组都和目录的属组一致。 设置方法： 方法一： 123chmod 2755 [filename/dirname] // 设置set gid chmod 755 [filename/dirname] // 取消set gid 方法二： 123chmod g+s [filename/dirname] // 设置set gid chmod g-s [filename/dirname] // 取消 set gid sticky bit （防删除位）sticky bit（防删除位）：用户是否能够删除文件，关键在于是否拥有文件所在目录的写权限， 有写权限就能够删除，否则就不能。 sticky位八进制表示为1000，添加sticky bit（防删除位）后，用户能够该目录下添加文件，但不能删除或者重命名文件。 例如，如果我们用root用户给共享目录设置sticky bit 权限，除非root用户，其他用户只能够添加文件，但不能删除或者重命名文件。 设置方法： 方法一： 123chmod 1755 [dirname] // 设置sticky bitchmod 755 [dirname] // 取消sticky bit 方法二：123chmod o+t [dirname] // 设置sticky bitchmod o-t [dirname] // 取消sticky bit 修改文件的隐藏权限chatrr 命令命令格式 chatrr [ +-= ] [ 参数 ] [文件或目录名] 常见参数用法 命令 含义 A 文件或目录的atime不可修改 a 只能追加不能删除，非root用户不能设定该属性 s 会将数据同步写入磁盘 c 自动压缩文件，读取时自动解压 i 不能删除、重命名、设定链接、编辑写入及新增数据 常用用法 a 用法123456789# touch a.txt# lsanaconda-ks.cfg a.txt# chattr +a a.txt# rm -rf a.txtrm: cannot remove ‘a.txt’: Operation not permitted //不可删除# echo &apos;this is a test&apos; &gt;&gt; a.txt //只能追加内容# cat a.txtthis is a test 注：删除a权限用 chattr -a a.txt i 用法12345678910 # touch b.txt # lsanaconda-ks.cfg b.txt # chattr +i b.txt # rm -rf b.txt //不可删除rm: cannot remove ‘b.txt’: Operation not permitted # echo &apos;this is a test&apos; &gt; b.txt //不可编辑写入-bash: b.txt: Permission denied # echo &apos;this is a test&apos; &gt;&gt; b.txt //不可追加内容-bash: b.txt: Permission denied 注：删除i权限 用chattr -i b.txt lsattr 命令lsattr 用来读取文件或目录的特殊权限，命令格式为 lsattr [ 参数 ] [文件或目录名] 参数 含义 a 类似于ls -a ，表示连同隐藏文件一起列出 R 连同子目录的信息一起列出 举个栗子 12345 # mkdir c1 # lsattr c1 // c1是刚刚创建的一个空文件夹，因此里面没有文件，不会又显示 # lsattr -aR c1 //连同隐藏文件一起显示---------------- c1/.---------------- c1/.. 链接文件链接文件 ，即link file ，使用命令ls -l 查看文件信息，第一组属性首字母为l的文件，类似于 windows下的快捷方式。 链接文件link file 包括硬链接 hard link 和 软链接 symbolic link 两类。要搞清楚这两者的关系，需要先了解索引节点inode。 索引节点inode硬盘最小的文件单位位扇区“扇区” Sector，每个扇区储存512字节（相当于0.5KB）；而linux系统文件存取的最小单位，叫做块 block，最常见的块 block是4KB，由连续八个扇区 sector组成一个块block。 为了更方便的找到需要的文件，就需要有一个存储数据元信息的地方，比如文件的创建者、文件的创建日期、文件的大小等等。这种储存文件元信息的区域就叫做inode，中文译名为”索引节点”，作用就像目录索引一样。 Unix/Linux系统内部不使用文件名，而使用inode号码来识别文件。当我们打开文件时，系统大致将这个过程分为三步： 找到文件名对应的inode号码； 通过inode号码，获取inode信息； 根据inode信息，找到文件数据所在的块block，然后读出数据。 inode 查询查看某个文件的inode信息，使用命令行： 1stat [filename] 硬链接 hard linklinux系统允许多个文件名指向同一个inode号，打个比方，每个人可以有不同的名字，大名、小名、别名、外号等等，但都只向唯一的身份ID。因此，我们可以： 通过不同的文件名访问文件； 对文件内容进行修改，会影响到所有文件名； 删除一个文件名，不影响另一个文件名的访问； 注意：新建一个空目录，默认会生成两个目录项：.和..，前者.等同于当前目录的”硬链接”，后者 ..等同于父目录的”硬链接”。所以，任何一个目录的”硬链接”总数，总是等于2加上它的子目录总数（含隐藏目录）。 硬链接的不足硬链接虽然看起来很美好，但是有两个不能克服的缺点： 不能跨文件分区；每个分区在格式化之前就指定inode数据元信息存放区和文件数据存放区，inode和数据的对应关系就会在一个分区里面关联，所以不能够跨分区。 不能对目录做硬链接（原因不明）； 基于上述两个先天不足，就有了软链接的用武之地。 ln 命令 创建硬链接1ln [源文件] [目标文件] 软链接 symbolic link与硬链接不同，软链接是建立一个独立的文件。例如，文件A和文件B的inode号不一样，但A的内容是B的路径，相当于一个路标。 这个路标是真实存在的独立文件，尽管它通常都很小。读取A时，系统会自动将访问者导向B，此时A就是B的软链接symbolic link。 A依赖于B而存在，如果删除了B，打开文件A就会报错：No such file or directory。 A指向B的文件名，而不是B的inode号码，因此B的inode链接数不会因此发生变化。 ln -s命令可以创建软链接1ln -s [源文文件或目录] [目标文件或目录]]]></content>
@@ -8,9 +13,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -21,9 +26,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -34,9 +39,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
         <tag>expect</tag>
       </tags>
   </entry>
@@ -48,9 +53,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
         <tag>expect</tag>
       </tags>
   </entry>
@@ -62,9 +67,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -75,9 +80,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -88,9 +93,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -101,9 +106,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -114,9 +119,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -127,9 +132,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -140,8 +145,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>zabbix</tag>
       </tags>
   </entry>
@@ -153,8 +158,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>zabbix</tag>
       </tags>
   </entry>
@@ -166,8 +171,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>zabbix</tag>
       </tags>
   </entry>
@@ -179,8 +184,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -191,8 +196,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -203,22 +208,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[mac技巧：ssh代理及hexo升级同步]]></title>
-    <url>%2F2018%2F06%2F29%2FMacTrick-hexoUpgradeAndOptimization%2F</url>
-    <content type="text"><![CDATA[写在前面我的博客是采用的是hexo + github 方案，昨天在更新的时候，莫名其妙滴就卡在hexo d这一步了，怎么也过不去。原本五分钟应该搞定的事情，足足四十分钟也没成功，崩溃至极。 今天早上又冷静分析了一下，造成更新不成功，最大的可能无非两点： 网络原因 系统配置 于是，今天主要做两个修改，算是对个人博客的一次更新优化吧。 hexo 博客repo优化hexo更新博客的流程大概是： hexo g 将本地md文件生成静态网页； gulp 优化静态网页； hexo d 将优化后的静态网页推送到git.io 由于上述过程都是在本地电脑进行的，因此原始的md文件，也就保存在本地机器上，如果需要更换电脑的话，就需要自行拷贝文件，重新配置环境，这样以来就很不方便。 网上查了资料，有人说可以通过分支branch，master用来存放生成后的静态网页，source用来存储源文件。听起来确实是个很好的办法，但是还是那句话，本人是菜鸟，又怕搞不好把博客挂掉了，所以迟迟没有动手。 今天又在网上找资料，查到一个很好的方法，而且使用简单，连我这样的菜鸟也能很容易配置成功。 该方法借助hexo-deployer-git插件完成，GitHub地址：https://github.com/hexojs/hexo-deployer-git 实现步骤： 第一步：安装插件1npm install hexo-deployer-git --save 第二步：登陆新建branch分支最便捷的方法是登陆GitHub网站，进入github.io的repo，系统默认有一个master的分支，再新建一个source就OK，当然此处的名字随你喜欢，取什么都行。 也可以在本地命令行操作，先cd进入github.io目录 12345678//新建一个名为source的branchgit branch source//进入该分支git checkout source//上述两步还可以合并为一行git checkout -b source 第三步：修改hexo配置文件注意：修改的是hexo文件夹根目录下的_config.yml，只需修改其中deploy那部分，示例代码如下： 123456789101112131415deploy: - type: git //这个repo地址是github.io的默认地址，如果你已经配置过了，这里是不需要更改的。 repo: git@github.com:&lt;username&gt;/&lt;username&gt;.github.io.git branch: master - type: git //跟上面的repo地址保持一致 repo: git@github.com:&lt;username&gt;/&lt;username&gt;.github.io.git //这里写的是需要保持的branch分支名 branch: source //这个是需要同步的文件夹路径，/表示从hexo博客根目录下的所有文件都同步 extend_dirs: / ignore_hidden: false ignore_pattern: public: . 基本上就是这样，设置完成保存，就可以了。这个方法最大的好处，还是不会增加任何的额外步骤，仍然是老三样，非常简单。 配置iterm2走代理我的mac翻墙使用的是surge，终端用的是iterm2+zsh。虽然浏览器可以打开github，但是在iterm2终端却ping不通，查了一下，原来浏览器走的是http代理，但是ping用的是ICMP协议，两者并不一样。 以下是按照网上找到的设置方案，让iterm2走代理。 设置步骤： 第一：查看surge--&gt;通用--&gt;代理 第二：修改zsh配置文件12345678910vi ~/.zshrc//添加两行alias goproxy=&apos;export http_proxy=http://127.0.0.1:6152 https_proxy=http://127.0.0.1:6152&apos;alias disproxy=&apos;unset http_proxy https_proxy&apos;//保存退出后执行以下命令生效source ~/.zshrc 第三步：使用可以看到上面其实就是设置了两个alias命令，使用的时候，输入goproxy 启用代理；输入disproxy退出代理。]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>github</tag>
         <tag>linux</tag>
-        <tag>hexo</tag>
-        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -229,9 +220,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -242,8 +233,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -255,8 +246,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>tomcat</tag>
       </tags>
   </entry>
@@ -268,8 +259,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>at</tag>
         <tag>crond</tag>
         <tag>anacron</tag>
@@ -283,8 +274,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -295,8 +286,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>tomcat</tag>
       </tags>
   </entry>
@@ -308,8 +299,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>ftp</tag>
       </tags>
   </entry>
@@ -321,8 +312,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -334,8 +325,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -347,8 +338,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -360,8 +351,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -373,8 +364,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -386,8 +377,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -399,8 +390,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>ftp</tag>
       </tags>
   </entry>
@@ -412,8 +403,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -425,8 +416,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -438,8 +429,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -451,8 +442,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -464,8 +455,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -477,9 +468,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>python</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -490,8 +481,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -503,8 +494,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -517,8 +508,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -531,8 +522,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
         <tag>mysql</tag>
@@ -546,8 +537,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -560,8 +551,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -574,8 +565,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
         <tag>mysql</tag>
@@ -589,8 +580,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -603,8 +594,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -617,8 +608,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>php</tag>
       </tags>
   </entry>
@@ -630,8 +621,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>sysV</tag>
       </tags>
   </entry>
@@ -643,8 +634,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>base64</tag>
       </tags>
   </entry>
@@ -656,8 +647,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -668,8 +659,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>raspberryPi</tag>
       </tags>
   </entry>
@@ -681,8 +672,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>php</tag>
         <tag>mysql</tag>
         <tag>apache</tag>
@@ -696,8 +687,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>php</tag>
         <tag>mysql</tag>
         <tag>apache</tag>
@@ -711,8 +702,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>rsync</tag>
       </tags>
   </entry>
@@ -724,9 +715,9 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>mac</tag>
         <tag>bash</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -737,8 +728,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>rsync</tag>
       </tags>
   </entry>
@@ -750,9 +741,9 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>mac</tag>
         <tag>bash</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -763,8 +754,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>crontab</tag>
         <tag>systemd</tag>
       </tags>
@@ -777,8 +768,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>pid</tag>
         <tag>tid</tag>
       </tags>
@@ -791,8 +782,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>firewalld</tag>
       </tags>
   </entry>
@@ -804,8 +795,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -816,8 +807,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>tcpdump</tag>
         <tag>wireshark</tag>
       </tags>
@@ -830,8 +821,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>iptables</tag>
         <tag>netfilter</tag>
       </tags>
@@ -844,9 +835,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -857,8 +848,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>notes</tag>
+        <tag>linux</tag>
         <tag>tcpdump</tag>
         <tag>wireshark</tag>
       </tags>
@@ -871,9 +862,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>regularExpression</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -884,9 +875,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>regularExpression</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -897,9 +888,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>regularExpression</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -910,10 +901,10 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -924,9 +915,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>regularExpression</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -937,9 +928,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>regularExpression</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -950,9 +941,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>regularExpression</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -963,9 +954,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>regularExpression</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -976,10 +967,10 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -990,10 +981,10 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1004,10 +995,10 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
         <tag>shell</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1018,10 +1009,10 @@
         <category>kindle</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>dropbox</tag>
         <tag>IFTTT</tag>
         <tag>kinlde</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -1032,9 +1023,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -1046,9 +1037,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -1060,9 +1051,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -1074,9 +1065,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -1088,9 +1079,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -1102,9 +1093,9 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>mac</tag>
         <tag>bash</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -1115,9 +1106,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -1129,9 +1120,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
         <tag>lvm</tag>
       </tags>
   </entry>
@@ -1143,9 +1134,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1156,9 +1147,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1169,9 +1160,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1182,9 +1173,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1195,9 +1186,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1208,9 +1199,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>linux</tag>
-        <tag>notes</tag>
         <tag>centos</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1320,19 +1311,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[HEXO折腾笔记：给自己的博客做个美容]]></title>
-    <url>%2F2018%2F01%2F23%2FblogOptimazation%2F</url>
-    <content type="text"><![CDATA[写在前面其实早就想折腾，一来忙着换工作，没心情；二来水平很菜，怕一不小心搞坏了。不过就想很多事情一样，心急吃不热豆腐。有些事情还是急不来的，所以……让我coding一下，冷静冷静。 是的，学习，让我们感觉到很踏实。 fork me on github1）通过github-ribbons或github-corners，寻找合适的图标，把代码复制下来。注：红框位置替换为自己的github地址 2）打开themes/next/layout/_layout.swig文件，把代码复制到&lt;div class=&quot;headband&quot;&gt;&lt;/div&gt;下面。 静态网页压缩1）在站点的根目录下执行以下命令：123$ npm install --global gulp-cli //全局安装$ npm install --save-dev gulp //npm install --save-dev gulp$ touch gulpfile.js //新建 gulpfile.js 注：gulp.js 官方使用说明 2）采用atom 打开gulpfile.js，复制粘贴以下代码：123456789101112131415161718192021222324252627282930313233var gulp = require(&apos;gulp&apos;);var minifycss = require(&apos;gulp-minify-css&apos;);var uglify = require(&apos;gulp-uglify&apos;);var htmlmin = require(&apos;gulp-htmlmin&apos;);var htmlclean = require(&apos;gulp-htmlclean&apos;);// 压缩 public 目录 cssgulp.task(&apos;minify-css&apos;, function() &#123; return gulp.src(&apos;./public/**/*.css&apos;) .pipe(minifycss()) .pipe(gulp.dest(&apos;./public&apos;));&#125;);// 压缩 public 目录 htmlgulp.task(&apos;minify-html&apos;, function() &#123; return gulp.src(&apos;./public/**/*.html&apos;) .pipe(htmlclean()) .pipe(htmlmin(&#123; removeComments: true, minifyJS: true, minifyCSS: true, minifyURLs: true, &#125;)) .pipe(gulp.dest(&apos;./public&apos;))&#125;);// 压缩 public/js 目录 jsgulp.task(&apos;minify-js&apos;, function() &#123; return gulp.src(&apos;./public/**/*.js&apos;) .pipe(uglify()) .pipe(gulp.dest(&apos;./public&apos;));&#125;);// 执行 gulp 命令时执行的任务gulp.task(&apos;default&apos;, [ &apos;minify-html&apos;,&apos;minify-css&apos;,&apos;minify-js&apos;]); 3）更新推送 123hexo ggulphexo d 增加字数统计利用统计功能，显示文章字数统计,阅读时长,总字数 1）在站点的根目录下，输入命令： 1$ npm i --save hexo-wordcount 2）打开 themes/next/_config.yml，搜索关键字 post_wordcount： 1234567891011# Post wordcount display settings# Dependencies: https://github.com/willin/hexo-wordcountpost_wordcount: item_text: true #字数统计 wordcount: true #预览时间 min2read: true #总字数,显示在页面底部 totalcount: true separated_meta: true 实现动态背景这个比较酷炫，但是实现方法是最简单的，因为next V5.1.1主题自带，大牛已经写好了只要在设置文件中开启即可。 在站点目录，找到next主题文件夹，路径是themes/next/_config.yml，搜索找到canvas_nest: false，把它改为canvas_nest: true ，齐活。 预览效果最后的最后，所有的这些改动，会让blog看起来挺像那么回事。虽然也还是菜鸟，不过，怎么说呢……呵呵]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>github</tag>
-        <tag>hexo</tag>
-        <tag>next</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[github笔记：git进阶及实用案例]]></title>
     <url>%2F2018%2F01%2F22%2FadvancedAit%2F</url>
     <content type="text"><![CDATA[写在前面最近一段时间一直在尝试换工作，感觉自己真是弱爆了，挫败感十足。痛定思痛，就是 梦想 - 实力 = 行动 好吧，既然选了这条折腾的路，打鱼不成，还是退而结网吧。 今天，先从git基础应用知识整理开始。 GIT基础篇github申请、安装及基础使用，这个之前整理过，想见这里。 GIT 进阶篇branch 分支branch的本意是树枝，这里是分支，指的是repo从初始commit到当前commit的一个串。每个github repo都有一个默认分支，叫做master。 branch 基础操作git checkout feature1 //创建一个名为feature1的branch git checkout feature1 //切换到feature1 分制 git branch -d feature1 //删除feature1分支 需要注意的是： HEAD 指向的 branch 不能删除。如果要删除 HEAD 指向的 branch，需要先用 checkout 把 HEAD 指向其他地方。 删除 branch 的操作也只会删掉这个引用，并不会删除任何的 commit。 没有被合并到 master 过的 branch 在删除时会失败，如果需要强行删除，需要使用如下命令： git branch -d feature1 Feature Branching：最流行的工作流 每个新功能都新建一个 branch 来写； 写完以后，把代码分享给同事看；写的过程中，也可以分享给同事讨论。另外，借助 GitHub 等服务提供方的 Pull Request 功能，可以让代码分享变得更加方便； 分支确定可以合并后，把分支合并到 master ，并删除分支。 实现步骤： 1）创建分支，编写代码，提交// 假设要开发一个books的新功能 git checkout -b books //创建并切换到boos分支 git push origin books //提交代码到books分支 2）代码审阅//假设是另一个同事在审阅 git pull git chekcout books 3）合并分支git checkout master git pull # merge 之前 pull 一下，让 master 更新到和远程仓库同步 git merge books 4）提交合并结果并删除books分支git push git branch -d books git push origin -d books # 用 -d 参数把远程仓库的 branch 也删了 git addgit add 用来将需要改动的内容添加到缓存区，这里有两个使用技巧： add 后面加个点 “.”：直接把工作目录下的所有改动全部放进暂存区 add 添加的是文件改动，而不是文件名。假定在使用 git add a.txt 后，又对a.txt进行了更改，后来的更改并不会自动放入缓存区，需要再添加一遍。 git loggit log用来查看历史记录，常用参数如下： git log -p //查看commit 的每一行改动，所以很适合用于代码 review log --stat //查看大致更改内容，例如什么文件更改了，更改有几处 git show 5e68b0d8 //查看具体的commit，后面的这串数字是commit的SHA-1码的前8位； git show 5e68b0d8 shopping\ list.txt //查看某个commit下的指定文件 git diff --staged //比对暂存区和上一条提交，与git diff --cached完全等价，可以换用 GIT 高级篇问题一：刚刚提交的代码，发现写错了怎么办？基本思路：commit -—amend会把当前 commit 里的内容和暂存区（stageing area）里的内容合并起来后创建一个新的 commit，用这个新的 commit 把当前 commit 替换掉。 第一步：修改错误文档 比如a.txt第二步：git add a.txt第三步：git commit –amend问题二：更进一步，如果要修改的不是最新的commit，而是之前的commit（吃饱了闲的），应该怎么做？第一步：git log 查询具体是哪一个commit第二步：开启交互式 rebase 过程，有两种方式：git rebase -i HEAD^^ // 在 commit 的后面加一个或多个 ^ 号，可以把 commit 往回偏移，偏移的数量是 ^ 的数量，这里指的是HEAD 所指向的 commit 往前数两个 commit。 git rebase -i HEAD～5 //在 commit 的后面加上 ~ 号和一个数，可以把 commit 往回偏移，偏移的数量是 ~ 号后面的数。例如：HEAD~5 表示 HEAD 指向的 commit往前数 5 个 commit。 第三步：选择 需要更改的commit ，将pick改为edit，之后推出编辑界面 第四步：修改写错的 commitgit add 笑声 git commit --amend 第五步：继续 rebase 过程git rebase --continue git rebase的详细用法参见这里 问题三：之前提交的commit太烂，如何直接删除？删除最近提交的commit，可以用git reset git reset --hard 目标commit //这里可以用HEAD^ 来删除最近一条的commit 问题四：想删除的不是最近一条commit，而是之前的某一条，应该怎么做？还是使用rebase -i 的方式来删除 git log //查询commit历史记录 git rebase -i HEAD^^ //找到要删除倒数第二条，之后直接删除掉需要删除的那一行 问题五：当你手头有一件临时工作要做，需要把工作目录暂时清理干净，处理完临时工作再切换回来，这个要怎么实现？stash 指令可以帮你把工作目录的内容全部放在你本地的一个独立的地方，它不会被提交，也不会被删除，你把东西放起来之后就可以去做你的临时工作；完成临时工作后再切换回来，恢复之前的进度 git stash // 没有add的文件不会被stash，如果所有的文件一起，需要用git stash -u，-u表示 --include-untracked的简写 git checkout fearture1 //假定原来的工作再feature1分支 git stash pop 问题六：误删了commit需要找回，应该怎么做？git reflog //reflog 是 “reference log” 的缩写，用来查看 Git 仓库中的引用的移动记录 从图中可以看出，HEAD 的最后一次移动行为是「从 branch1 移动到 master」。而在这之后，branch1 就被删除了。所以它之前的那个 commit 就是 branch1 被删除之前的位置了，也就是第二行的 c08de9a。 git checkout c08de9a git checkout -b branch1 这样，之前误删的commit就回来了。]]></content>
@@ -1344,18 +1322,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[github折腾笔记：如何迁移hexo到新电脑]]></title>
-    <url>%2F2018%2F01%2F04%2FhowToMoveHexoBlog%2F</url>
-    <content type="text"><![CDATA[写在前面2018年1月1日，念叨了好久的新款macbook pro终于获批。开不开心？开心！意不意外？当然意外！ 当然，开心之余还伴随着“甜蜜的烦恼”，因为每次安装、配置新电脑，都是一次分心费力的事儿。最重要的，好不容易建立起来的个人博客一定要妥善搬迁过去。尤其是考虑到过去曾经两次把github Repo账户搞的乱七八糟最后被迫删号重建到情况下…… 前提准备 安装git 安装node.js 安装hexo 1npm install hexo-cli -g troubleShooting前期准备部分就遭遇trouble到关键原因，当然还是自己太菜了。 这里有个坑，第一次在安装node.js的时候，装的是8.9.4LTS版本，本身没问题，但在安装hexo的时候遇到了错误提示：大概就是说权限不够，google了一翻，在stack overflow上找到了答案，具体见网址 简单说就是要授权，按照网页的提示，在终端中输入： 1sudo chown -R $USER /usr/local/lib/node_modules 迁移blog拷贝文件这里只需要拷贝以下5个文件/文件夹，其他的文件不用拷，直接忽略即可。 config.yml theme scaffolds #文章模板 package.json #说明使用哪些包 source 安装模块12cd blog-directory // 进入blog文件夹 npm install //安装模块 安装其他组件1234567npm install hexo-deployer-git --save //同步内容至githubnpm install hexo -server --save //servernpm install hexo-generator-feed --save //RSS订阅npm install hexo-generator-sitemap --save //站点地图 之后，正常情况下应该就可以部署更新blog了。 hexo cleanhexo generate //可简写为 hexo ghexo deploy //可简写为 hexo d troubleShooting这里也遇到了一个坑，前面配置都没问题，最后在运行 hexo d 的时候，遇到了错误提示： 123456789101112fatal: unable to access &apos;https://github.com/steve-yuan-8276/steve-yuan-8276.github.io.git/&apos;: Failed to connect to github.com port 443: Operation timed outFATAL Something&apos;s wrong. Maybe you can find the solution here: http://hexo.io/docs/troubleshooting.htmlError: fatal: unable to access &apos;https://github.com/steve-yuan-8276/steve-yuan-8276.github.io.git/&apos;: Failed to connect to github.com port 443: Operation timed out at ChildProcess.&lt;anonymous&gt; (/Users/steveyuan/Documents/github-file/steveBlog/node_modules/hexo-util/lib/spawn.js:37:17) at emitTwo (events.js:126:13) at ChildProcess.emit (events.js:214:7) at maybeClose (internal/child_process.js:925:16) at Socket.stream.socket.on (internal/child_process.js:346:11) at emitOne (events.js:116:13) at Socket.emit (events.js:211:7) at Pipe._handle.close [as _onclose] (net.js:554:12) 后尝试了很久都没有结果，后来ping了一下github.com 发现丢包率100%，不管是走直连、代理（by rules 、global）都不行；诡异的是，chrome浏览器打开github却毫无压力。 无奈之下只好放弃，回到家里，重新又拾了一遍，突然又好了。好吧，大概下午时分人品不行吧。 这一整套下来，不知不觉已经十一点了，今天就到这里吧。]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>github</tag>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[Github折腾笔记：mac电脑如何配置ssh连接github]]></title>
     <url>%2F2018%2F01%2F04%2Fshh-github%2F</url>
     <content type="text"><![CDATA[准备工作 安装Apple公司的Xcode，最新版的Xcode已经默认安装好了git。完成安装之后，就可以使用 git 的命令行工具。 登陆github网站申请一个免费账号。 配置账号信息在终端下输入以下命令行： 12git config --global user.name &lt;name&gt;git config --global user.email &lt;mail-box&gt; 指的是账户名；指的是注册邮箱 创建本地sshSSH 是目前较可靠，专为远程登录会话和其他网络服务提供安全性的协议。 在终端输入以下命令行：1ssh-keygen -t rsa -C &quot;&lt;mail-box&gt;&quot; 一路下一步，看到下图的样子说明成功 在终端输入：1cat /users/admin-name/.ssh/id_rsa.pub 一切顺利的话，看到的信息应该是这样子的： 1ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDS0qLtpontavr43AQntX4oBOsg2R3QlWubMYvfgJsIDX6NWd5RaIDLBLEMwIFLDcpvpQKvk5S/bTy4vTuWqeY6fkQ/tZBKksQn1WuYDcSfjLF8BuPMfdkboTh9NaKESKnsiWdranEVbmB5vOAHm8T+HFGdzG7Tz4ygzCnTwvdpBYrd/4jgeazws2d7CuMeuyb+FxdDTQy9YmJJm+82ypfR//bLyzRJo3SYadnPO3VdOAZCO1Isky+p/0nNN/obC4t2y2+oHBAqJV9h37f9S8UShgDmZoVLicRi4poni0i70xj+t/hnOsT8fmEc+vM9USyN+ndawz2oWjikKgln1jOB 345823102@qq.com 登陆github输入key登陆github网站，点击Settings——SSH keys——点击右侧的Add SSH key，输入刚才得到的key 验证是否配置成功 :在终端输入： 1ssh -T git@github.com 然后出现如下信息，说明连接成功 123Warning: Permanently added the RSA host key for IP address &apos;192.30.252.131&apos; to the list of known hosts.Hi hawx1993! You&apos;ve successfully authenticated, but GitHub does not provide shell access.]]></content>
@@ -1363,8 +1329,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1500,8 +1466,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>ssh</tag>
+        <tag>github</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1529,32 +1495,6 @@
         <tag>feont-end</tag>
         <tag>CSS</tag>
         <tag>BRM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[为GitHub Pages自定义域名配置HTTPS]]></title>
-    <url>%2F2017%2F12%2F15%2FsetHttps%2F</url>
-    <content type="text"><![CDATA[原帖地址在这里，以下是笔记整理： WARNING: 亲测，使用此方法大概过了整整一天（24小时）才给网站加上那把绿色小锁。所以，每一步做对了也不见得就能看到立竿见影的效果，还需要耐心等待。 前提准备搭建完成github.io购买域名注册Cloudflare账号 基本思路 在 Cloudflare中添加你的域名，设置2个A记录； 去你的域名注册商更改 DNS Server 成 Cloudflare 所提供的； 在 Cloudflare 中配置 Crypto ，选择 Full （这一步要一段时间才能起效） 在 Cloudflare 配置 Page Rules ，一个是 always use https ，一个是 redirect http 到 https，保持等待生效。 具体操作：step 1 ：添加域名，设置解析记录登录Cloudflare后，在这里 添加 你的域名，如下图，输入你的域名，例如 thinktxt.com 并点击Begin Scan开始扫描； 完成域名解析扫描后，点击 Continue Setup 继续； 看到DNS记录（包括子域）列表之后，按照下图提示设置后，点击 Continue，进入下一步注：此处设置cname是为了重定向www 选择免费服务计划，然后点击下一步 step 2 ：更改DNS Server以万网为例，在域名管理中选择DNS修改/创建，如下图： 在万网修改好DNS之后，在Cloudflare点击继续，如下图： 注：官方说域名服务器修改最长需要72小时生效，显示 Status: Active 即可。 重定向：点击 Page Rules =&gt; Create Page Rule 添加顶级域名重定向到https 强制使用SSL，可以使用通配符* 完成，剩下的就是等待了，正常情况下过个把小时就能以https访问了。]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>github</tag>
-        <tag>hexo</tag>
-        <tag>https</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[HEXO NEXT设置社交图标social icon遇到的坑]]></title>
-    <url>%2F2017%2F12%2F15%2FhowToSetIcon%2F</url>
-    <content type="text"><![CDATA[写在前面一定要学会阅读说明文档！一定要学会阅读说明文档！一定要学会阅读说明文档！重要的事情说三遍！ 这是一个神马坑呢？作为一个有志于从事前端/全栈开发的青年，怎么可以没有blog呢？于是，果断按照网上教程照猫画虎做了一个，却在icon设置上栽了跟头。 具体是这样的： 按照说明文档和isuues提示的操作方法，在fontawesome找到相应的图片名称，但是显示结果很预期的不一样。 实际显示效果是这样的（如图），只有facebook正常，其他三个图标都不对，不知道为什么。 问题分析解决你说怪不怪，为啥只有FB的icon正确显示，其他的不见踪迹呢？难道我只有在Facebook比较受欢迎，其他的都不受待见？试着更换了别的图标，还是不对！ 神马情况？直到我看到了这句话： 示例代码： 看到这里，突然有一种想抽自己的冲动。原来答案一直就杵在眼前，而我却一直视而不见，还花了三天的时间各种查资料！ 当然，这个social_icons: 也很有迷惑性，之前总在这里改来改去，其实该修改的在前面social目录下就已经修改完了，这里只要保持光溜溜就好。 好吧！此处省略一万字感慨，今天的埋坑记录就到这里。]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>front-end</tag>
-        <tag>icon</tag>
       </tags>
   </entry>
   <entry>
@@ -1595,18 +1535,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Github折腾笔记：hexo+github 实现域名绑定]]></title>
-    <url>%2F2017%2F12%2F13%2FhowToSetDomain%2F</url>
-    <content type="text"><![CDATA[前提条件： 拥有github.io 了解bash基本操作 花一点点小钱 step 1 ：购买域名在万网注册账户，实名认证，购买域名，一路按照流程走就OK了。 step 2: 域名设置解析1.登陆万网，点击控制台 =&gt; 产品与服务 =&gt; 域名 =&gt; 解析 2. 继续点击 添加解析 如图所示，这里只需要改动两处：一是主机记录，写 “www”二是记录值，就是github.io的ip地址。获取这个ip值，可以直接打开终端通过ping命令获取。 添加之后选择保存即可。 step3. 配置hexo在本地hexo文件根目录下找到source，进入这个目录后创建文件名为 CNAME 的文件，打开之后编辑文件写入刚买来的域名。 12345678终端输入：cd /Users/steveyuan/documents/github-file/steveBlog/source #这里是文件路径，需要根据实际情况进行调整touch CNAME #该文件不写后缀之后双击打开文档进行编辑，输入域名，保存www.steve-yuan.com #这里是自己的域名 step 4: 修复Bug如果正确进行了以上几步，将会看到以下画面： google了一下，原来已经有人踩过这个坑了。虽然解析到了github服务器，但是并没有指向正确的页面。 解决方法： 1.进入自己的github.io 的Repository，点击 Create new file，创建一个文件，名字还是叫 CNAME 。2. 编辑CHAME 文件，内容还是域名，不过不包括“ http：// www ”，点击保存。3. 进入本地hexo文件夹，重新生成、部署网站。123hexo cleanhexo generate hexo deploy 然后，喝杯茶休息一下，重新在浏览器输入域名，齐活。]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>github</tag>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[前端学习笔记：如何使用Google官方推荐的webp进行图片压缩]]></title>
     <url>%2F2017%2F12%2F12%2Fweb-howToUseWebp%2F</url>
     <content type="text"><![CDATA[第一步：安装1. 安装Xcode，App Store直接下载安装2. 安装macport下载地址在这里 WARNING:) 注意选择支持本机的安装包，因为我的系统是machighSierra，所以选择MacPorts-2.4.2-10.13-HighSierra.pkg 打开终端，输入 port，正确显示版本号说明安装成功。 Update MacPorts： 用以下命令行sudo port selfupdate 3. Install libwebp:1sudo port install webp 第二步：使用Images to the WebP Format1cwebp -q 80 image.png -o image.webp More instruction, check ducumentation WebP Format to Images1dwebp image.webp -o image.png More instruction, check ducumentation]]></content>
@@ -1629,18 +1557,6 @@
       <tags>
         <tag>front-end</tag>
         <tag>web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Github折腾笔记：step by step 利用github.io建立个人博客]]></title>
-    <url>%2F2017%2F12%2F12%2Fgithub-HowToBuildBlogWithGithub-md%2F</url>
-    <content type="text"><![CDATA[折腾前提： 了解git基础知识，最好有github账户（没有的话，需要新建一个）。 了解并掌握MarkDown基本语法 已安装node.js 第一步：本地安装HEXO1.命令行输入：1npm install -g hexo 2.新建一个blog文件夹，然后通过终端进入该文件夹123cd documentstouch blog cd blog 3.执行以下命令：1hexo init 4.安装依赖包1npm install 到这里，hexo安装完毕。 第二步：新建github.ioWARNING: 对于已经配置好github账户的你，请跳过本章节，直接进入下一步。 1.新建github账户2.生成SSH密钥1ssh-keygen -t rsa -C XXX@gmail.com //此邮箱为github注册邮箱 一路下一步，会得到两个id_rsa和id_rsa.pub两个文件，其中id_rsa是私钥，自己偷偷看管好就行；id_rsa.pub是公钥，使用cat命令查看一下内容，复制出来，下面会用到。 3.打开github设置页面，点击New SSH key,然后粘贴id_rsa.pub内容，然后点击Add SSH key。4. 新建github.io，方法参见官方文档第三部：设置HEXO1.在hexo文件夹内找到_config.yml配置文件，sublime打开编辑：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475# Hexo Configuration ## Docs: https://hexo.io/docs/configuration.html## Source: https://github.com/hexojs/hexo/# Site 站点信息设置title: #站名subtitle: #副标题description: #站描述author: #作者language: zh-CN #语言timezone:# URL 链接设置## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;url: http://blog.prozin.xyzroot: /permalink: :year/:month/:day/:title/permalink_defaults:# Directory 文件目录source_dir: sourcepublic_dir: publictag_dir: tagsarchive_dir: archivescategory_dir: categoriescode_dir: downloads/codei18n_dir: :langskip_render:# Writing 文章new_post_name: :title.md # File name of new postsdefault_layout: posttitlecase: false # Transform title into titlecaseexternal_link: true # Open external links in new tabfilename_case: 0render_drafts: falsepost_asset_folder: falserelative_link: falsefuture: truehighlight: enable: true line_number: true auto_detect: true tab_replace:# Category &amp; Tagdefault_category: uncategorizedcategory_map:tag_map:# Date / Time format 日期## Hexo uses Moment.js to parse and display date## You can customize the date format as defined in## http://momentjs.com/docs/#/displaying/format/date_format: YYYY-MM-DDtime_format: HH:mm:ss# Pagination 分页## Set per_page to 0 to disable paginationper_page: 20pagination_dir: page# Extensions 扩展## Plugins: https://hexo.io/plugins/## Themes: https://hexo.io/themes/theme: landscape #默认主题# Deployment 这里设置了Git获#这里一定要注意不要写错了，否则部署到Github上会出问题## Docs: https://hexo.io/docs/deployment.htmldeploy: type: git repo: 仓库地址.git branch: master message: &apos;站点更新:&#123;&#123;now(&quot;YYYY-MM-DD HH/mm/ss&quot;)&#125;&#125;&apos; 划重点： 配置文件的冒号“:”后面有一个空格 repo: 就是github地址.git ，这里的“.git”一定不能忘。 2.生成网页1hexo generate 3. 部署.deploy目录1hexo deploy WARNING：这里有个坑 我进行到这一步的时候遇到了错误提示：ERROR Deployer not found: github, google了一下，找到了这个文档, 给出的填坑方法如下： 1npm install hexo-deployer-git --save 安装完成后，再运行deploy命令，顺利通过，进入下一关。 hexo 常用命令行 序号 命令 含义 1 hexo help #查看帮助 2 hexo init #初始化一个目录 3 hexo new “postName” #新建文章 4 hexo new page “pageName” #新建页面 5 hexo generate #生成网页，可以在 public 目录查看整个网站的文件 6 hexo server #本地预览，’Ctrl+C’关闭 7 hexo deploy #部署.deploy目录 8 hexo clean #清除缓存，强烈建议每次执行命令前先清理缓存，每次部署前先删除 .deploy 文件夹 第四步：更改主题为NEXT具体参见说明文档 内容详细到令人发指，step by step就好了。 第五步：修建并发布文章1.新建文档 1hexo new &quot;标题&quot; 2.编辑文章刚刚生成的文档在在sourse/ _posts文件夹下生，默认是 .md文件，推荐使用Mweb进行编辑。 3.发布文章 123hexo cleanhexo generatehexo deploy 以下提示说明部署成功 1[info] Deploy done: git 然后就齐活了，访问你自己的github.io 地址，就可以看到博客了。 参考文档： 手把手教你建github技术博客 Mac OS使用github+hexo搭建自己的博客 CentOS下搭建Hexo + github 博客 5分钟 搭建免费个人博客 手把手教你使用Hexo + Github Pages搭建个人独立博客 Github Pages说明文档]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>github</tag>
-        <tag>hexo</tag>
       </tags>
   </entry>
 </search>

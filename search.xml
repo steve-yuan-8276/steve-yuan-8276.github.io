@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[Linux运维学习笔记1-1：centOS的安装和基本配置]]></title>
+    <title><![CDATA[Linux运维学习笔记：centOS用户和文件管理（一）]]></title>
+    <url>%2F2018%2F07%2F18%2FlinuxNotes-02-userManagementAndFileSystem-Part1%2F</url>
+    <content type="text"><![CDATA[写在前面linux是一个多用户、多任务系统，具有很好的稳定性和安全性，而这与linux的用户和权限管理机制密不可分。 我们在linux系统中的操作，实际上都是操作进程访问文件，这里的访问权限是基于Linux的安全管理机制的。linux上最初的安全模型，叫做DAC，Discretionary Access Contorl，主动访问控制；后来在此基础上又增加了额外的权限管理机制，成为MAC，Mandatory Access Contorl，强制访问机制。为了区分两者，将支持MAC的linux系统成为selinux，意思是linux的安全加强系统。 在实际运行过程中，系统会先做DAC检查，如不通过则拒绝执行；如果通过DAC检查且支持MAC模块，则再做MAC检查。 这则笔记分为文件系统和用户管理两个部分进行整理。 linux的文件系统在linux当中，一切都是文件。使用ll [filename] 或者 ls -l [filename/dirname] 查看文件类型。 linux文件系统构成linux文件目录结构： 常用文件类型： 文件类型 描述 说明 - 普通文件，包括文本文件 可用touch命令创建 d 文件目录 可用 mkdir 命令创建 l 链接文件(指向另一个文件,类似于windows下的快捷方式) 可用ln 命令创建 s 套接字文件，用于进程通信 一般由应用程序在执行过程中创建 b 块设备文件,二进制文件 c 字符设备文件，如鼠标、键盘、终端 p 管道文件 可用mkfifo命令创建 普通文件：一般类型的文件，主要包括： 纯文本档ASCII：文件内容可以直接读到数据，例如：字母，数字等。这里文件可以用cat 命令进行查看。 二进制文件binary：Linux当中可执行文件就是属于这种格式。例如，ls、 rm、mkdir 等等常见命令。 数据文件data：有些程序在运行的过程中会读取某些特定格式的文件，那些特定格式的文件可以被称为数据文件。例如，系统登录数据会记录在/var/log/wtmp ，这就是一个数据文件，可以用last -f /var/log/wtmp 命令查看。 目录 directory ： 跟windows 下的文件夹类似，用 ll 命令查看属性的第一个字母为d 链接文件 link file类似Windows系统底下的快捷方式！ 第一个属性为l，分为软链接和硬链接，这个上一则笔记已经整理过了，下面会专门讲到。 设备文件 device 区块设备文件 block：就是一些储存数据， 以提供系统随机存取的接口设备，第一个属性为 b 。例如，硬盘、软盘等。 字符设备文件 character：串行端口的接口设备，第一个属性为c 。例如，键盘、鼠标等。 Linux 常用文件后缀名注意：与Windows系统不同，在Linux系统下， 一个文件是否能够被执行，关键是看有没有x 权限，与文件的后缀名无关。 这里的后缀名，仅仅是为了让我们便于区分，习惯在定义文件名是加上一个后缀名。 常见的文件后缀名包括： .sh ： shell脚本或批处理文件 (scripts)。 .tar, .tar.gz, .zip, .tgz： 经过打包的压缩文件。之所以有这么多后缀名，是对应不同的压缩软件，比如gunzip, tar 等。 .conf：系统的配置文件。 .pl：perl语言文件，通过perl语言开发的程序。 .html，.htm，.php，.jsp：网页文件。 .py：Python语言文件，通过Python语言开发的程序。 .rpm：rpm安装的文件。 创建删除文件目录mkdir 命令：创建文件夹命令格式：mkdir [参数] [文件目录] -m 设置文件权限 12mkdir -m 777 test3 //输入drwxrwxrwx 2 root root 4096 10-25 17:46 test3 //实现效果 -p 新建一个目录串 1mkdir -p /test1/test2 -v 创建新目录都显示信息 1mkdir -v /test3 在指定目录下创建多个目录（使用绝对路径） rmdir 命令：删除目录跟mkdir 相反，rmdir表示删除目录。命令格式为：mkdir [参数] [文件目录] 。这个命令的特点在于，只能删除空目录；即使加了 -p 参数，也只能删除一串空目录。如果目录当中有文件，这个命令就没有用了。 touch 命令：创建文件命令行格式： touch [参数] [filename] 选项 命令行格式 作用 -a touch -a file 改变档案的访问时间记录。 -d touch -d time file 设定时间与日期，可以使用各种不同的格式。 -m touch -m file 改变档案的修改时间记录。 -r touch -r file1 file2 使用参考文档的时间记录。 -t touch -t time file 设定档案的时间记录，格式与 date 指令相同。 示例： 1234567891011121314151617181920212223// 在当前目录创建 test.txt 文件touch test.txt// 创建多个文件touch test1.txt test2.txt//修改访问时间touch -a test.txt//查看访问修改文件的时间stat test.txt// 更改为自定义格式、自定义时间戳（更改访问时间、修改时间）touch -d &apos;18-May-2017&apos; test.txt// 更改修改时间touch -m test.txt//修改 test1.txt 为 test2.txt 文件的时间戳。touch -r test1.txt test2.txt// 更改为自定义时间戳touch -t 201703031558.28 test.txt rm命令：删除文件或目录用来删除文件或文件目录。命令格式为： 1rm [参数] [文件] 常用参数 含义 -f –force 忽略不存在的文件，从不给出提示。 -i –interactive 进行交互式删除 -r –recursive，将参数中列出的全部目录和子目录均递归地删除。 注意： 如果要删除非空目录，需要使用rm -rf [文件目录] 千万不要rm -rf / ，一旦输入这个命令，然后就没有然后了。 拓展：如何同时创建多个文件/目录 创建多个文件 123[root@steve test]# touch &#123;1..5&#125;.txt[root@steve test]# ls1.txt 2.txt 3.txt 4.txt 5.txt 创建多个目录 123[root@steve test]# mkdir dir&#123;1..5&#125;[root@steve test]# lsdir1 dir2 dir3 dir4 dir5 查看文件命令cat 和 tac1cat &lt;filename&gt; cat ：一次性显示整个文件内容 tac ：跟cat类似，只不过cat 是从前往后（第一行 =&gt; 最后一行），tac是从后往前（最后一行 =&gt; 第一行)。 常用参数： 参数名称 作用 cat -n -n 表示显示行号 cat -A -A 表示显示所有内容 head 和 tail这两个命令比前一组命令强的地方在于，如果文件的内容比较多，而你只需要查询文件开头或者结尾，使用这两条命令会轻松很多。 常见用法： 12head -n 10 &lt;filename&gt; //显示文件开头十行tail -n 10 &lt;filename&gt; //显示文件结尾十行 注意： 上述示例中n可以省略，直接写成head -10 &lt;filename&gt;，效果也是一样的； 如果-n 省略，默认显示10行内容。 tail特殊用法： 1tail -f &lt;filename&gt; 注：加 -f 参数，动态显示文件最后10行内容，在做日志监控的时候，可以方便直观的查看变化。 1tail -f /var/log/messages more和less这两个命令比head 和 tail更高级，使用起来也更加方便，能够一页一页地方便使用者逐页阅读。 more 的用法1more &lt;参数&gt; &lt;filename&gt; 常用参数: 参数名称 作用 d 在每屏的底部显示友好的提示信息 l 忽略 Ctrl+l （换页符）。如果没有给出这个选项，则more命令在显示了一个包含有 Ctrl+l 字符的行后将暂停显示，并等待接收命令。 f 计算行数时，以实际上的行数，而非自动换行过后的行数（有些单行字数太长的会被扩展为两行或两行以上） p 显示下一屏之前先清屏。 c 从顶部清屏然后显示。 s 文件中连续的空白行压缩成一个空白行显示。 u 不显示下划线 / 先搜索字符串，然后从字符串之后显示 常用操作命令 操作命令 作用 Enter 向下n行，需要定义。默认为1行 Ctrl+F 向下滚动一屏 space 向下滚动一屏 Ctrl+B 返回上一屏 = 输出当前行的行号 :f 输出文件名和当前行的行号 v 调用vi编辑器 ! 调用Shell，并执行命令 q 退出more less命令1less &lt;参数&gt; &lt;filename&gt; 常用参数： 参数名称 作用 b 设置缓冲区的大小 e 当文件显示结束后，自动离开 f 强迫打开特殊文件，例如外围设备代号、目录和二进制文件 g 只标志最后搜索的关键词 i 忽略搜索时的大小写 m 显示类似more命令的百分比 常用操作 参数名称 作用 space 翻页 j 光标向下移动一行 k 光标向上移动一行 / 按下 /后输入关键词enter即可搜索，查看多个搜索结果时，按n进行切换。 ？ 与 / 作用类似，不同之处在于/当千行向下搜索，？是当前行向上搜索。 搜索文件find 命令搜索文件注：find是常用命令，需要熟练掌握。 命令行格式： find [路径] [参数] -print 上述命令可以简单地理解为find + 限定条件 通过限定条件来查找所需的文件。-print将匹配的文件输出到标准输出，可省略。 结合路径进行搜索 路径，此选项可省略，指的是查找的目录路径，比如要在home目录下找某个文件，就是/home ；需要在etc 目录下找某个配置文件，就是 /etc。 查找$HOME目录中的文件 1find ~ -name &quot;*&quot; // ~ 表示家目录 在当前目录及子目录中查找所有的‘ *.log‘文件 1find . -name &quot;*.log&quot; //. 表示当前目录；*是通配符，表示任意字符 在当前目录及子目录中查找文件名以一个大写字母开头的文件 1find . -name &quot;[A-Z]*&quot; -name 按照文件名查找文件 1find . -name [filename] -type按照文件类型查找文件 12345678find . -type [filename]b - 块设备文件。 d - 目录。 c - 字符设备文件。 p - 管道文件。 l - 符号链接文件。 f - 普通文件。 -time -n/+n 按照文件的更改时间来查找文件 文件的inode当中，有三个时间time 信息，分别是： atime：Access time，在读取文件或者执行文件时更改，即文件最后一次被读取的时间。查看atime，使用 ls -lu filename mtime：Modified time，在写入文件时随文件内容的更改而更改，是指文件内容最后一次被修改的时间。查看atime，使用ls -l filename ctime：Change time，在写入文件、更改所有者、权限或链接设置时随 Inode 的内容更改而更改，即文件状态最后一次被改变的时间。查看atime，使用 ls -lc filename 后面的 n 表示天数，比如 -atime +n/-n 表示访问或者执行时间大于或小于n天的条件。 -perm 按照文件权限来查找文件 1find . -perm 755 –print //在当前目录下查找文件权限位为755的文件 -user 按照文件属主来查找文件 1find ~ -user sam –print //在$HOME目录中查找文件属主为sam的文件 which 查询可执行文件的绝对路径命令行格式： which [filename] whereis 查找文件命令行格式： whereis [参数] [filename] 参数 含义 -b 只查找二进位制文件 -m 只查找帮助文件（man 目录下的文件） -s 只查找代码文件 locate 查找文件跟whereis 作用类似，通过查找预先生产的文件列表库来查找文件。 locate命令 需要单独安装， 1yum -y install mlocate 安装完成后，初次使用需要生产文件列表库 1updatedb 查找文件 1locate [filename] 注：默认情况下，数据库每周更新一次；如果一个文件正在两次更新时间段之间的创建的，就搜不到结果。 文件路径相对路径和绝对路径顾名思义，文件路径就是用来描述存放文件的地方。这里有两种描述的方法： 绝对路径：从根目录写起的，叫做绝对路径,比如 /var/... 或者 ～/... 相对路径：与当前目录相对的写法，叫做相对路径。 举例来说： pwd //查询当前所在的绝对路径 上图中，红框标示出来的部分，就是当前所在的绝对路径，即 /Users/stevey/documents/github-file ，通过 ls 命令可以看到，下面有一个 steveBlog 的文件夹。 要进入这个文件夹可以采用两种方法： 123cd steveBlog //相对路径cd /Users/stevey/documents/github-file/steveBlog //绝对路径 文件路径相关的命令tree 命令查看目录结构tree命令是以树状形式显示目录下的文件或子目录；系统默认没有的，需要自行安装。 安装 1yum install -y tree 命令格式 123//n表示目录层级数//dir表示目录名称tree -L [n] [dir] 使用 1234567891011121314//-L 表示查看目录层级，2表示查看两级目录。[root@VM_0_7_centos ~]# tree -L 1 /tmp//tmp/├── cvm_init.log├── mysql.sock├── net_affinity.log├── nv_gpu_conf.log├── sess_cv242b2kg0v1n6lier3cavvskctvd1dn├── sess_d2360tgsa14ivnfsou9kspf4q6c70iq2├── sess_e68jsk46a5bqdm6ummjj0crir1teb4v1├── sess_vstbaspckikbfde14nqlh4ptvdbfgu36└── setRps.log0 directories, 9 files ls 命令查看目录信息 名称 作用 ls 列出当前目录下的文件和文件夹，不包括隐藏文件 ls -a 列出当前目录下的文件和文件夹，不包括隐藏文件 ls -l 列出除隐藏文件之外的所有文件和目录的详细信息，包括权限、所属主、所属组、文件创建日期时间 ls &lt;filename&gt; -l 查看某个文件的详细信息 ls &lt;file-Folder-name&gt; 查看指定目录下的文件和目录 ls -Rl 显示当前目录及所有子目录信息 ls -tl 以时间排序显示目录,查找最新文件有用 ls -Sl 以文件大小排序 ls -s -l -S 显示文件大小,并按大小排序 示例： pwd 命令：显示当前目录绝对路径用于显示当前所在目录。在linux系统中， .表示当前目录， ..表示上一级目录。 示例： 12[root@VM_0_7_centos ~]# pwd/root cd 命令：切换目录 名称 作用 cd 返回用户主目录 cd /etc 改变到其它路径 cd .. 返回到上一级目录 cd / 或 cd ～ 返回到根目录 cd - 返回之前的目录 alias 命令alias 命令用来设置指令别名，如果命令过长，那么就考虑可以设置一个别名。 命令行格式： 1alias 新的命令=&apos;原命令 -选项/参数&apos; 示例： 显示当前已设置的别名 1alias 设置vim别名 12// 设置别名，输入`vi` 调用 `vim`alias vi=&apos;/usr/bin/vim&apos; 删除别名 1unalias vi 查询alias 更多用法 1man alias //按 `space `下翻页，按` q `退出。 cp 命令：文件复制命令格式为 cp [参数] [源文件] [目标文件]，常见参数用法： -r复制目录及目录内的所有项目 -i覆盖前询问 mv 命令：移动或重命名命令格式为 mv [参数] [源文件或目录] [目标文件或目录] ，常见用法如下： 目标是目录，且目录已存在 目标是目录，但该目录不存在(实际相当于给文件重命名) 目标是文件，且该文件已存在(实际相当于覆盖目标文件) 目标是文件，但该文件不存在（实际相当于重命名源文件） 文件权限管理文件基本权限文件的基本权限包括读read、写write和执行execute，分别可以用4、2、1来表示； 它与用户密不可分，分为三组进行管理： user：对文件/目录所属用户设定权限； group：对文件/目录所属组设定权限； other：对文件/用户其他的组和用户设定权限； 对于文件而言： Read: 表示可读取文件内容； Write：表示可编辑、新增、修改、删除文件内容； execute：表示可执行一个脚本程序； 对于目录而言： Read: 表示可读取目录内的文件列表； Write：表示可在目录内编辑、新增、修改、删除文件内容； execute：表示能够进入目录； 文件的特殊权限set uid这是一种对二进位制程序设置的特殊权限，临时允许二进位制程序执行者用户文件所属主的权限，这是一种临时的、特殊的、有条件的授权方法。 这里有两个前提，缺一不可： 只有可执行的二进位制程序才能设定set uid权限； 命令执行者对该程序拥有执行（execute）权限； 例如/etc/shadow 这个文件，用来保存用户信息，处于系统安全的考虑，这个文件读、写、执行的权限都没有；但是passwd命令拥有suid的特殊权限位，如下图所示，出现在x位置的那个s，即表示suid，这就好像尚方宝剑，赋予它临时修改密码配置文件，也就是更改密码的权限。 由上图可知，/etc/shadow 默认的权限为000，rwx权限都没有的，也不能执行相应的操作。但 passwd赋予一个特殊权限，让我们在执行passwd命令时，临时拥有 root 权限，从而可以修改密码。 注意： 虽然常见的八位制权限掩码是三位数，但其实应该是四位数，第一位表示的特殊权限。set uid位采用八进制表示为4000。 passwd 是具有setuid的一个特殊命令。这样我们不需要是root用户，也可以对自己的密码进行修改。 设置set uid这个特殊权限很危险，不到万不得已，做好不要使用。 设置setuid的方法： 方法一： 123chmod 4755 [文件名] // 设置set uid chmod 755 [文件名] // 取消 set uid 方法二： 123chmod u+s [文件名] // 设置set uid chmod u-s [文件名] // 取消 set uid set gidset gid 就是将程序文件的 s 权限赋予组，当执行此程序时，此进程的属组不再是运行者本人所属的基本组，而是此程序文件的属组。 sgid 与suid相似，有一个重要特性，就是一旦对某个目录设置了sgid，该目录中创建的文件将继承该目录的所属组。 这就意味着如果我们要创建一个部门共享目录，可以早创建目录后，设置sgid权限，这样部门群组内的任何用户创建的文件都会属于该目录所属组。如此一来，该部门所有用户都能够顺利读取共享目录文件。 setgid位八进制表示为2000。 这里有两种情况： set gid 赋予文件：运行此文件的其它用户具有这个文件的属组特性； set gid 赋予目录：任何用户在该目录下创建的文件，则该文件属组都和目录的属组一致。 设置方法： 方法一： 123chmod 2755 [filename/dirname] // 设置set gid chmod 755 [filename/dirname] // 取消set gid 方法二： 123chmod g+s [filename/dirname] // 设置set gid chmod g-s [filename/dirname] // 取消 set gid sticky bit （防删除位）sticky bit（防删除位）：用户是否能够删除文件，关键在于是否拥有文件所在目录的写权限， 有写权限就能够删除，否则就不能。 sticky位八进制表示为1000，添加sticky bit（防删除位）后，用户能够该目录下添加文件，但不能删除或者重命名文件。 例如，如果我们用root用户给共享目录设置sticky bit 权限，除非root用户，其他用户只能够添加文件，但不能删除或者重命名文件。 设置方法： 方法一： 123chmod 1755 [dirname] // 设置sticky bitchmod 755 [dirname] // 取消sticky bit 方法二：123chmod o+t [dirname] // 设置sticky bitchmod o-t [dirname] // 取消sticky bit 修改文件的隐藏权限chatrr 命令命令格式 chatrr [ +-= ] [ 参数 ] [文件或目录名] 常见参数用法 命令 含义 A 文件或目录的atime不可修改 a 只能追加不能删除，非root用户不能设定该属性 s 会将数据同步写入磁盘 c 自动压缩文件，读取时自动解压 i 不能删除、重命名、设定链接、编辑写入及新增数据 常用用法 a 用法123456789# touch a.txt# lsanaconda-ks.cfg a.txt# chattr +a a.txt# rm -rf a.txtrm: cannot remove ‘a.txt’: Operation not permitted //不可删除# echo &apos;this is a test&apos; &gt;&gt; a.txt //只能追加内容# cat a.txtthis is a test 注：删除a权限用 chattr -a a.txt i 用法12345678910 # touch b.txt # lsanaconda-ks.cfg b.txt # chattr +i b.txt # rm -rf b.txt //不可删除rm: cannot remove ‘b.txt’: Operation not permitted # echo &apos;this is a test&apos; &gt; b.txt //不可编辑写入-bash: b.txt: Permission denied # echo &apos;this is a test&apos; &gt;&gt; b.txt //不可追加内容-bash: b.txt: Permission denied 注：删除i权限 用chattr -i b.txt lsattr 命令lsattr 用来读取文件或目录的特殊权限，命令格式为 lsattr [ 参数 ] [文件或目录名] 参数 含义 a 类似于ls -a ，表示连同隐藏文件一起列出 R 连同子目录的信息一起列出 举个栗子 12345 # mkdir c1 # lsattr c1 // c1是刚刚创建的一个空文件夹，因此里面没有文件，不会又显示 # lsattr -aR c1 //连同隐藏文件一起显示---------------- c1/.---------------- c1/.. 链接文件链接文件 ，即link file ，使用命令ls -l 查看文件信息，第一组属性首字母为l的文件，类似于 windows下的快捷方式。 链接文件link file 包括硬链接 hard link 和 软链接 symbolic link 两类。要搞清楚这两者的关系，需要先了解索引节点inode。 索引节点inode硬盘最小的文件单位位扇区“扇区” Sector，每个扇区储存512字节（相当于0.5KB）；而linux系统文件存取的最小单位，叫做块 block，最常见的块 block是4KB，由连续八个扇区 sector组成一个块block。 为了更方便的找到需要的文件，就需要有一个存储数据元信息的地方，比如文件的创建者、文件的创建日期、文件的大小等等。这种储存文件元信息的区域就叫做inode，中文译名为”索引节点”，作用就像目录索引一样。 Unix/Linux系统内部不使用文件名，而使用inode号码来识别文件。当我们打开文件时，系统大致将这个过程分为三步： 找到文件名对应的inode号码； 通过inode号码，获取inode信息； 根据inode信息，找到文件数据所在的块block，然后读出数据。 inode 查询查看某个文件的inode信息，使用命令行： 1stat [filename] 硬链接 hard linklinux系统允许多个文件名指向同一个inode号，打个比方，每个人可以有不同的名字，大名、小名、别名、外号等等，但都只向唯一的身份ID。因此，我们可以： 通过不同的文件名访问文件； 对文件内容进行修改，会影响到所有文件名； 删除一个文件名，不影响另一个文件名的访问； 注意：新建一个空目录，默认会生成两个目录项：.和..，前者.等同于当前目录的”硬链接”，后者 ..等同于父目录的”硬链接”。所以，任何一个目录的”硬链接”总数，总是等于2加上它的子目录总数（含隐藏目录）。 硬链接的不足硬链接虽然看起来很美好，但是有两个不能克服的缺点： 不能跨文件分区；每个分区在格式化之前就指定inode数据元信息存放区和文件数据存放区，inode和数据的对应关系就会在一个分区里面关联，所以不能够跨分区。 不能对目录做硬链接（原因不明）； 基于上述两个先天不足，就有了软链接的用武之地。 ln 命令 创建硬链接1ln [源文件] [目标文件] 软链接 symbolic link与硬链接不同，软链接是建立一个独立的文件。例如，文件A和文件B的inode号不一样，但A的内容是B的路径，相当于一个路标。 这个路标是真实存在的独立文件，尽管它通常都很小。读取A时，系统会自动将访问者导向B，此时A就是B的软链接symbolic link。 A依赖于B而存在，如果删除了B，打开文件A就会报错：No such file or directory。 A指向B的文件名，而不是B的inode号码，因此B的inode链接数不会因此发生变化。 ln -s命令可以创建软链接1ln -s [源文文件或目录] [目标文件或目录]]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>centos</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Linux运维学习笔记：centOS的安装和基本配置]]></title>
     <url>%2F2018%2F07%2F18%2FlinuxNotes-01-basisOfCentos7%2F</url>
     <content type="text"><![CDATA[写在前面这则笔记主要整理linux的基础知识，主要包括以下内容： Linux基础知识 centos7安装 初次登陆centos7 ssh远程登陆 单用户模式及救援模式 虚拟机的备份和克隆 Linux基础知识Linux跟MacOS、Windows一样，都是计算机操作系统，不同之处在有两点： 一是开源（大部分是免费的）； 二是多用在服务器领域; 常见的Linux发行版 系统名称 特点 备注 Ubuntu 目前最流行的个人版Linux系统，界面做得比较美观。 使用apt安装和更新软件 Red Hat Enterprise（RHEL） 面向企业的server版本，也是应用最广泛的server版本。 需要授权付费才能使用yum工具 centOS CentOS与RHEL 100%兼容，更重要的是完全免费。 使用yum工具安装和更新软件 Debian 元老级的linux版本，也非常适合英语server 使用apt安装和更新软件 注：课程中使用的是centos7 64位版本，它是RHEL的开源版本，两者操作习惯一致。 centos安装前提准备：虚拟机安装常见的虚拟机有以下三种，课程中选择的是虚拟机是vmware。 虚拟机 特点 备注 VirtualBox 免费，适用于mac、Windows VMware fusion 付费，使用与mac和wondows 价格居中，尤其是在某宝上 parallel desktop 付费，适用于mac和windows 价格最贵，不过近两年都有bundle。 下载centOS7注：推荐从国内的镜像网站下载安装ISO。 下载地址： 官方镜像：CentOS官网 国内镜像：搜狐、163、阿里巴巴 安装要点：1. 系统语言：有中文设置，不过我选择了默认英文 2. 时区设置：选择asia，shanghai或者hongkong都OK，反正都是东八区 3. 系统分区： 在系统“安装位置”中，选择“我要配置分区”，自定义系统分区； 在 LVM下拉菜单，选择 “标准分区”，之后点击加号手动进行修改 这里分了三个区： /boot 、/swap 、/。除/boot 、/swap之外的空间都可以分给/根目录。 4. 设置一下root用户密码，稍微复杂一点。 5. 接受分区，更改，点击继续，等到安装完成。安装注意事项：系统分区注意事项： 系统分区一般按照如下原则进行划分，但考虑到虚拟机主要是为了学习目的，总共只有20G硬盘空间，所以没有设置/data 分区。 分区名称 空间大小 /boot 200M /swap 4G / 20G /data 剩余磁盘空间 swap分区大小跟物理内存大小有关，通常建议如下： 物理内存 SWAP分区 4G以内 内存的2倍 4-8G 等于内存大小 8-64G 8G 64-256G 16G 虚拟机上网三种上网方式：NAT模式：就是让虚拟机借助NAT(网络地址转换)功能，通过宿主机器所在的网络来访问公网。 NAT模式中，虚拟机的网卡，是在vmware提供的一个虚拟网络，跟物理网卡的网络不在同一个网络。换句话说，宿主机可以虚拟机，虚拟机也可以访问局域网内的其他主机，但是局域网内的其他电脑不能访问虚拟机。 桥接模式桥接网络是指本地物理网卡和虚拟网卡通过VMnet0虚拟交换机进行桥接，物理网卡和虚拟网卡在拓扑图上处于同等地位，物理网卡和虚拟网卡处于同一个网段，虚拟交换机相当于一台现实网络中的交换机，所以两个网卡的IP地址也要设置为同一网段。 在这种模式下，虚拟机可以访问外网，局域网内的其他电脑也可以访问虚拟机。 Host-only 模式与NAT模式类似，不同之处在于，在Host-Only模式下，虚拟网络是一个全封闭的网络，虚拟机只能与虚拟机、主机互访，但虚拟机和外部的网络是被隔离开的，不能上Internet。局域网内的计算机也不能访问虚拟机。 初次登陆centos7初次登陆centos7，首先要做三件事：设置静态ip、设置语言环境变量、安装vim。 设置静态ip获取IP地址信息在登录框中输入以下命令，获取ip地址 1dhchlient // 自动获取ip地址 可以通过ping命令来验证网络是否联通 1ping -c 4 www.163.com 查看当前网络状况，使用命令 1ip addr // 查看ip地址信息 需要注意的是，这里需要记下来ip address、gateway、netmask、ensXX（网卡信息），后面设置静态ip会用到。 编辑网卡配置1# vi /etc/sysconfig/network-scripts/ifcfg-ens33 注：此处的XX，就是前面查到的网卡信息。 123456ONBOOT=yes；//表示网卡随系统一起启动BOOTPROTO=static // 用来设置网卡启动类型，dhcp表示自动获取ip地址，static表示手动设置ip地址IPADDR=xxx.xxx.xxx.xxx //dhclient获取的网址NETMASK=255.255.255.0 //子网掩码GATEWAEY=xxx.xxx.xxx.xxx //网关地址DNS1=119.29.29.29 //DNS服务器地址，这里提供的一个公共DNS 最后，先按“esc”退出编辑模式，之后再输入“:wq”进行保存。 重启ip设置1systemctl restart network.service 正常情况下，静态ip就设置好。检查是否成功，可以ping一下外网，如： 1ping -c 4 www.163.com Troubleshooting:网关及DNS配置错误新手设置静态ip后，有时会出现ping不通的现象，错误提示：name or service not know ，此处主要从以下两个方面排查错误： 网关gatewayip和网关gateway必须是在同一个网段，否则会报错； DNSDNS服务必须要有，至少设置两组： DNS1:119.29.29.29 DNS1:8.8.8.8 或者 8.8.4.4 注：其他可供选择的还包括，114.114.114.114 ，或者1.1.1.1 设置语言环境变量刚安装的centos7在登陆时，经常会有一个错误提示：：Centos warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory ,该如何解决？ 解决方法：修改环境变量配置文件 /etc/environment 12345vi /etc/environment// 增加以下两行内容LANG=en_US.utf-8LC_ALL=en_US.utf-8 之后，按esc键退出编辑状态，按:wq 保存退出。 安装vim第一步：查看相关的是不是安装了vim：1rpm -qa|grep vim 出现如下的命令 1vim-minimal-7.4.160-1.el7.x86_64 第二步：输入以下命令行安装：1yum -y install vim* 第三步：vim简单配置Vim编辑环境配置 有两种方式： 是在/etc/vimrc 进行设置，这种设置方法会作用与所有登录到Linux环境下的用户。不建议使用。 命令行 cd ~ ，在～目录下创建一个.vimrc文件，在其中进行自己习惯的编程环境的设置，这样当别的用户使用实并不互相影响。 编辑.vimrc文件，添加如下内容： 1234567vim .vimrc //编辑` .vimrc`文件 ，增加以下内容set nu // 这是设置显示行号set showmode //设置在命令行界面最下面显示当前模式等。set ruler // 在右下角显示光标所在的行数等信息set autoindent // 设置每次单击Enter键后，光标移动到下一行时与上一行的起始字符对齐syntax on // 即设置语法检测，当编辑C或者Shell脚本时，关键字会用特殊颜色显示 之后，按 esc 键，输入:wq进行保存。 ssh远程登陆由于服务器一般都安置在机房里，管理员一般都是通过远程进行操作，所以接下里要配置ssh免密码远程登陆。 在windows下，常用的ssh软件包括putty、xshell等；在mac下，系统自带的终端 terminal就可以，更推荐的方案是iterm2. 我的个人电脑是mac，所以这里重点记录iterm2免密码登陆的方法，putty、xshell大同小异，不再赘述。 前提准备：mac安装iterm2方法一：安装包官网 下载安装包，解压后拖到application文件夹即可。 方法二：brew安装12345678// 先安装 brew/usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;// 安装brew caskbrew install caskroom/cask/brew-cask// 安装iterm2brew cask install iterm2 ip连接虚拟机12// 终端输入ssh username@xxx.xxx.xxx.xxx -p 22 注意事项： 此处的username是cent os 中的账户名； xxx.xxx.xxx.xxx 是虚拟机刚刚设置的静态ip； 22 表示连接的默认端口号 秘钥认证连接虚拟机总体思路： 假设有两台电脑A和B，这里的A是你要操作的电脑；B是虚拟机。 先在A电脑生成密匙对（公钥、私钥各一个），私钥始终保存在A电脑不动，公钥复制出来，添加到电脑B的authorized_ keys 里面，再进行一些必要的设置，就可以从A电脑面输入密码登陆B电脑了。 注意：如果已经在A电脑上设置过keygen，比如笔者已经在搞github折腾过一回，密匙对已经存在，就不用重新生成了，只要公钥复制出来粘贴过去就可以了。 生成密钥对 (在A电脑操作)进入当前用户目录，一般root用户只需要这样即可1cd 创建.ssh目录并设置权限12mkdir -p .sshchmod 700 .ssh 进入 .ssh 目录和生成密钥对12cd .sshssh-keygen 然后，一路回车即可。 注意事项： ssh-keygen 的详细用法，参见ssh-keygen 中文手册 前面生成密钥的会显示地址，记住这个地址，需要使用 cat &lt;filename&gt; 查看，把id_rsa.pub 的内容复制出来，后面会用到。 编辑密钥认证文件 （在B电脑操作或者通过ssh 连接B电脑操作）创建认证文件1touch authorized_keys 编辑认证文件1vi /root/.ssh/authorized_keys 进入编辑界面后按i 开始编辑；把刚才复制的id_rsa.pub 内容复制到里面，稳妥起见，前面可以加一行注释，注释以#开头； 保存并退出按esc退出编辑状态，再按 :wq 保存退出 授权认证文件1chmod 600 authorized_keys 修改SSH配置（在B电脑操作或者通过ssh 连接B操作）使用root登录修改配置文件：/etc/ssh/sshd_config1vi /etc/ssh/sshd_config 将下面的内容的前面的 # 去掉123456# PubkeyAuthentication yes# AuthorizedKeysFile .ssh/authorized_keys// 然后，修改下面的内容的 yes 为 noPasswordAuthentication yes 修改后效果为 1234RSAAuthentication yesPubkeyAuthentication yesAuthorizedKeysFile .ssh/authorized_keysPasswordAuthentication no 关闭SElinux 临时关闭 1setenforce 0 永久关闭 输入vi /etc/selinux/config，编辑这个文件，找到SELINUX=enforcing这一行，将enforcing改为disabled，保存退出。 重启SSH服务CentOS 6.x： 1service sshd restart CentOS 7.x： 1systemctl restart sshd 检验是否成功重启虚拟机，然后使用如下命令登陆 1ssh root@xxx.xxx.xxx.xxx 单用户模式及救援模式单用户模式（emergency mode）centos 7 进入单用户模式修改root密码：1. 重启虚拟机 2. 三秒内按下下方向键，停留在开机选择界面，定位在第一行CentOS Linux,with Linux 3.10.0-123.e17.x86_64，按e进入编辑界面。 3. 将 箭头所指圆心处的 ro 改为 rw init=/sysroot/bin/bash，之后同时按 ctrl+x，进入emergency mode。 4.输入 chroot /sysroot/，切换到centos7系统，之后输入passwd，输入新密码（两遍）即可。 注意，如果系统语言是中文，此处可能会显示一对框框，是语言设置的问题，解决方法是输入 LANG=en ，就正常了。 5. 输入 touch /.autorelabel ,密码更高生效。之后，按 ctrl+d，在输入reboot 重启虚拟机，即可使用新密码进行登录。centos 7之前的版本进单用户模式的方法： Linux开机引导的时候，按键盘上的e进入GRUB菜单界面。 在出现GRUB引导画面时CentOS(2.6.18-274**)，按字母e键，进入GRUB编辑状态。 把光标移动到kernel …那一行，再敲入 e 进入命令行编辑， 在kernel 一行的最后加上空格single，回车 敲入 b ，启动系统，即进入单用户模式， passwd root修改密码。 reboot重启。 给GRUB添加一把密码锁进入单用户模式（emergency mode）固然很方便，但有的时候出于安全考虑，我们并不想让让别人随随便便修改root密码。这时候就需要给root密码加一把锁。 centOS 6修改grub密码的方法： vi /etc/grub.conf ，按 i 进入编辑模式，在hiddemenu下面新增一行，输入 password=密码，设置完成后。按 esc ，再输入 :wq 保存退出。 给grub添加密码之后，再次试图进入单用户模式，须先使用 p 命 令 ，输入正确的密码后才能够对启动标签进行编辑。 CentOS设置grub密码CentOS从7系列版本开始使用grub2，需要通过grub2-setpassword 命令来设置。 123grub2-setpasswordEnter password:Confirm password: 救援模式（rescue mode） 重启虚拟机，进入bios设置选项，默认是从硬盘启动，更改从光驱启动，保存并退出。 在光驱启动界面，选择Toubleshooting回车，使用下方向键选择 Rescue a CentOS Linux system，回车。 选择第一项，回车。 输入 chroot /mnt/sysimage进入初始系统，输入 passwd 修改密码，保存。 按ctrl+d 退出初始系统，输入 reboot重启；进入bios 界面，设置从硬盘启动，再次重启，输入新密码进入系统。 虚拟机的备份和克隆虚拟机备份 点击 virtual machine，接着点击 snapshots 如下图，点击curent state ，之后在弹出的对话框里如数名称和注释，标识一下目前进展到什么程度了，最后点击OK就完成备份了。 想要回复到之前到备份，只要选择 restore snashots 即可。 注意：备份的时机很重要，这一点跟git当中的commit有点像。建议完成一个阶段备份一次，不要太密集，浪费磁盘空间；也不要间隔时间太长，否则一旦回复，可能辛苦半天配置正确的操作也被覆盖掉了。 虚拟机克隆注意：虚拟机克隆有两个前提必须满足，否则无法创建快照。 把所有的快照snapshots都删除； 虚拟机shutdown； 第一步：点击菜单栏 virtual machine-> create full clone第二步：修改静态ip地址1234vi /etc/sysconfig/network-scripts/ifcfg-ens33//修改静态ip，保存退出后重启网卡systemctl restart network.service 第三步：修改主机名12//yuanfeng-02是修改后的名字hostnamectl set-hostname yuanfeng-02 延伸阅读： CentOS7中Grub2相对Grub的一些改进和注意事项 centos6设置grub密码 centos-7.x 设置grub 密码 CentOS 7 聚合链路及GRUB配置文件 putty和xsehll特点比较 手把手教给你使用putty和xshell远程连接linux putty使用教程(总结) Putty完全使用方法 Putty使用教程（linux） 在VMware中使CentOS利用桥接上网 VMware中三种网络连接的区别 实例讲解虚拟机3种网络模式(桥接、nat、Host-only) VMWare（NAT、桥接 ）模式]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -195,19 +208,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[linux笔记：用户权限和文件权限]]></title>
-    <url>%2F2018%2F06%2F29%2FbasisOflinux-fileSystem%2F</url>
-    <content type="text"><![CDATA[写在前面linux是一个多用户、多任务系统，具有很好的稳定性和安全性，而这与linux的用户和权限管理机制密不可分。 我们在linux系统中的操作，实际上都是操作进程访问文件，这里的访问权限是基于Linux的安全管理机制的。linux上最初的安全模型，叫做DAC，Discretionary Access Contorl，主动访问控制；后来在此基础上又增加了额外的权限管理机制，成为MAC，Mandatory Access Contorl，强制访问机制。为了区分两者，将支持MAC的linux系统成为selinux，意思是linux的安全加强系统。 在实际运行过程中，系统会先做DAC检查，如不通过则拒绝执行；如果通过DAC检查且支持MAC模块，则再做MAC检查。 这里整理的用户和权限管理，主要是针对DAC而言的。 用户权限管理用户权限概念user 用户：在linux当中，每个用户有一个唯一的uid (user identification)用来标示用户身份，这个道理大概就跟每个中国人有一个唯一的身份证号码一样。 在centos 7 中，有以下三种用户： 身份 uid 说明 系统管理员 0 系统超级管理员，即root，拥有最高权限 系统用户 1-999 系统预留，linux默认服务程序都会有独立的系统用户进行运行，这部分账户由系统预留，我们设置普通账户的时候，不能将uid设为这个数字段 普通用户 1000以上 系统普通用户，系统权限受限，由root用户管理，uid从1000开始 group 组：group的概念，跟班级的概念类似，主要是方便Linux系统权限管理。每个用户只能从属于一个基本组，但可以加入多个拓展组。做个类别，不如张三是三年二班（基本组）的学生，但可以同时加入天文组、计算机组、唱诗班（拓展组），大概是这么个意思。 用户权限管理的配置文件 /etc/passwd 存放用户信息，每条信息依次为：用户名/口令（这里只有星号，真正的密码在/etc/shadow中）/uid/gid（默认与uid相同）/描述注释/home目录/登陆shell； /etc/group 存放组信息，每条信息依次为：组名/口令/gid/组成员列表； /etc/shadow，存放密码信息，每条信息依次为：登录名/加密口令/最后一次修改时间/最小修改间隔/最大修改间隔/警告时间/不活动时间； 用户管理相关的命令useradd 命令 ：新增用户命令行格式 1useradd [options] [username] 常用参数 1234567891011121314//-d 指定用户家目录useradd -d /home/steve steve//-u 指定uiduseradd -u 1000 steve//-g 指定所属组useradd -g steve steve//-G 指定拓展组useradd -G steve,IT,music steve//-s 指定登陆shell，/sbin/nogin 表示不允许登陆useradd -s /sbin/nologin steve groupadd 命令：增加组命令行格式： 1groupadd [options] [groupname] 常见用法： 12//增加一个名为work的组groupadd work userdel 命令：删除用户命令行格式： 1userdel [options] [username] 常见用法： 12345//-f 选项，强制删除某用户userdel -f steve//-r 选项，同时删除用户及其家目录userdel -r steve passwd命令： 设置密码命令行格式： 1passwd [options] [uername] 常见用法 123456789101112//直接输入passwd，按照提示输入两次密码，即可设施密码[root@local-linux02 ~]# passwd//--stdin 参数，只需一行更改密码//newpasswd表示需要设置的新密码echo &apos;newpasswd&apos; | passwd --stdin username//-l 表示锁定用户，禁止该用户登陆passwd -l steve//-u 表示解锁，允许登陆passwd -u steve 文件权限管理在linux当中，一切都是文件。文件主要包括以下三个部分： 普通权限 特殊权限 隐藏权限 linux文件目录结构： 常用文件类型： 文件类型 描述 说明 - 普通文件，包括文本文件 可用touch命令创建 d 文件目录 可用 mkdir 命令创建 l 链接文件(指向另一个文件,类似于windows下的快捷方式) 可用ln 命令创建 s 套接字文件，用于进程通信 一般由应用程序在执行过程中创建 b 块设备文件,二进制文件 c 字符设备文件，如鼠标、键盘、终端 p 管道文件 可用mkfifo命令创建 文件基本权限文件的基本权限包括读read、写write和执行execute，它与用户密不可分，分为三组进行管理： user：对文件/目录所属用户设定权限； group：对文件/目录所属组设定权限； other：对文件/用户其他的组和用户设定权限； 对于文件而言： Read: 表示可读取文件内容； Write：表示可编辑、新增、修改、删除文件内容； execute：表示可执行一个脚本程序； 对于目录而言： Read: 表示可读取目录内的文件列表； Write：表示可在目录内编辑、新增、修改、删除文件内容； execute：表示能够进入目录； 权限的数字表示方法：read读、write写、execute执行，分别可以用4、2、1来表示； 文件的特殊权限suid这是一种对二进位制程序设置的特殊权限，临时允许二进位制程序执行者用户文件所属主的权限，这是一种临时的、特殊的、有条件的授权方法。 例如，前文提到的/etc/shadow 这个文件，用来保存用户信息，处于系统安全的考虑，这个文件读、写、执行的权限都没有；但是passwd命令拥有suid的特殊权限位，如下图所示，出现在x位置的那个s，即表示suid，这就好像尚方宝剑，赋予它临时修改密码配置文件，也就是更改密码的权限。 sgidsgid 与suid相似，有一个重要特性，就是一旦对某个目录设置了sgid，该目录中创建的文件将继承该目录的所属组。 这就意味着如果我们要创建一个部门共享目录，可以早创建目录后，设置sgid权限，这样部门群组内的任何用户创建的文件都会属于该目录所属组。如此一来，该部门所有用户都能够顺利读取共享目录文件。]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>linux</tag>
-        <tag>notes</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[mac技巧：ssh代理及hexo升级同步]]></title>
     <url>%2F2018%2F06%2F29%2FMacTrick-hexoUpgradeAndOptimization%2F</url>
     <content type="text"><![CDATA[写在前面我的博客是采用的是hexo + github 方案，昨天在更新的时候，莫名其妙滴就卡在hexo d这一步了，怎么也过不去。原本五分钟应该搞定的事情，足足四十分钟也没成功，崩溃至极。 今天早上又冷静分析了一下，造成更新不成功，最大的可能无非两点： 网络原因 系统配置 于是，今天主要做两个修改，算是对个人博客的一次更新优化吧。 hexo 博客repo优化hexo更新博客的流程大概是： hexo g 将本地md文件生成静态网页； gulp 优化静态网页； hexo d 将优化后的静态网页推送到git.io 由于上述过程都是在本地电脑进行的，因此原始的md文件，也就保存在本地机器上，如果需要更换电脑的话，就需要自行拷贝文件，重新配置环境，这样以来就很不方便。 网上查了资料，有人说可以通过分支branch，master用来存放生成后的静态网页，source用来存储源文件。听起来确实是个很好的办法，但是还是那句话，本人是菜鸟，又怕搞不好把博客挂掉了，所以迟迟没有动手。 今天又在网上找资料，查到一个很好的方法，而且使用简单，连我这样的菜鸟也能很容易配置成功。 该方法借助hexo-deployer-git插件完成，GitHub地址：https://github.com/hexojs/hexo-deployer-git 实现步骤： 第一步：安装插件1npm install hexo-deployer-git --save 第二步：登陆新建branch分支最便捷的方法是登陆GitHub网站，进入github.io的repo，系统默认有一个master的分支，再新建一个source就OK，当然此处的名字随你喜欢，取什么都行。 也可以在本地命令行操作，先cd进入github.io目录 12345678//新建一个名为source的branchgit branch source//进入该分支git checkout source//上述两步还可以合并为一行git checkout -b source 第三步：修改hexo配置文件注意：修改的是hexo文件夹根目录下的_config.yml，只需修改其中deploy那部分，示例代码如下： 123456789101112131415deploy: - type: git //这个repo地址是github.io的默认地址，如果你已经配置过了，这里是不需要更改的。 repo: git@github.com:&lt;username&gt;/&lt;username&gt;.github.io.git branch: master - type: git //跟上面的repo地址保持一致 repo: git@github.com:&lt;username&gt;/&lt;username&gt;.github.io.git //这里写的是需要保持的branch分支名 branch: source //这个是需要同步的文件夹路径，/表示从hexo博客根目录下的所有文件都同步 extend_dirs: / ignore_hidden: false ignore_pattern: public: . 基本上就是这样，设置完成保存，就可以了。这个方法最大的好处，还是不会增加任何的额外步骤，仍然是老三样，非常简单。 配置iterm2走代理我的mac翻墙使用的是surge，终端用的是iterm2+zsh。虽然浏览器可以打开github，但是在iterm2终端却ping不通，查了一下，原来浏览器走的是http代理，但是ping用的是ICMP协议，两者并不一样。 以下是按照网上找到的设置方案，让iterm2走代理。 设置步骤： 第一：查看surge--&gt;通用--&gt;代理 第二：修改zsh配置文件12345678910vi ~/.zshrc//添加两行alias goproxy=&apos;export http_proxy=http://127.0.0.1:6152 https_proxy=http://127.0.0.1:6152&apos;alias disproxy=&apos;unset http_proxy https_proxy&apos;//保存退出后执行以下命令生效source ~/.zshrc 第三步：使用可以看到上面其实就是设置了两个alias命令，使用的时候，输入goproxy 启用代理；输入disproxy退出代理。]]></content>
@@ -215,9 +215,9 @@
         <category>hexo</category>
       </categories>
       <tags>
+        <tag>github</tag>
         <tag>linux</tag>
         <tag>hexo</tag>
-        <tag>github</tag>
         <tag>notes</tag>
       </tags>
   </entry>
@@ -229,9 +229,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -910,9 +910,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -976,9 +976,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -990,9 +990,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -1004,9 +1004,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -1032,9 +1032,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -1046,9 +1046,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -1060,9 +1060,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -1074,9 +1074,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -1088,9 +1088,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -1115,9 +1115,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -1129,9 +1129,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
         <tag>lvm</tag>
       </tags>
   </entry>
@@ -1143,9 +1143,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1156,9 +1156,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1169,9 +1169,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1182,9 +1182,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
@@ -1195,74 +1195,22 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
+        <tag>centos</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[Linux运维学习笔记2-5：如何在linux下进行文件搜素]]></title>
     <url>%2F2018%2F03%2F28%2Fweek2-5-howToSearchOnLinux%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记简要总结文件类型，以及如何在linux系统进行文件搜索。 linux系统文件类型与后缀名linux文件类型在Linux当中，一切设备均为文件。使用ll [filename] 或者 ls -l [filename/dirname] 查看文件类型。在这则笔记 中已经进行总结。这里再整理一下常用类型用法： 普通文件：一般类型的文件，主要包括： 纯文本档ASCII：文件内容可以直接读到数据，例如：字母，数字等。这里文件可以用cat 命令进行查看。 二进制文件binary：Linux当中可执行文件就是属于这种格式。例如，ls、 rm、mkdir 等等常见命令。 数据文件data：有些程序在运行的过程中会读取某些特定格式的文件，那些特定格式的文件可以被称为数据文件。例如，系统登录数据会记录在/var/log/wtmp ，这就是一个数据文件，可以用last -f /var/log/wtmp 命令查看。 目录 directory ： 跟windows 下的文件夹类似，用 ll 命令查看属性的第一个字母为d 链接文件 link file类似Windows系统底下的快捷方式！ 第一个属性为l，分为软链接和硬链接，这个上一则笔记已经整理过了，看这里。 设备文件 device 区块设备文件 block：就是一些储存数据， 以提供系统随机存取的接口设备，第一个属性为 b 。例如，硬盘、软盘等。 字符设备文件 character：串行端口的接口设备，第一个属性为c 。例如，键盘、鼠标等。 Linux 常用文件后缀名注意：与Windows系统不同，在Linux系统下， 一个文件是否能够被执行，关键是看有没有x 权限，与文件的后缀名无关。 这里的后缀名，仅仅是为了让我们便于区分，习惯在定义文件名是加上一个后缀名。 常见的文件后缀名包括： .sh ： shell脚本或批处理文件 (scripts)。 .tar, .tar.gz, .zip, .tgz： 经过打包的压缩文件。之所以有这么多后缀名，是对应不同的压缩软件，比如gunzip, tar 等。 .conf：系统的配置文件。 .pl：perl语言文件，通过perl语言开发的程序。 .html，.htm，.php，.jsp：网页文件。 .py：Python语言文件，通过Python语言开发的程序。 .rpm：rpm安装的文件。 linux如何查询文件find 搜索文件注：find是常用命令，需要熟练掌握。 命令行格式： find [路径] [参数] -print 上述命令可以简单地理解为find + 限定条件 通过限定条件来查找所需的文件。-print将匹配的文件输出到标准输出，可省略。 结合路径进行搜索路径，此选项可省略，指的是查找的目录路径，比如要在home目录下找某个文件，就是/home ；需要在etc 目录下找某个配置文件，就是 /etc。 查找$HOME目录中的文件1find ~ -name &quot;*&quot; // ~ 表示家目录 在当前目录及子目录中查找所有的‘ *.log‘文件1find . -name &quot;*.log&quot; //. 表示当前目录；*是通配符，表示任意字符 在当前目录及子目录中查找文件名以一个大写字母开头的文件1find . -name &quot;[A-Z]*&quot; 结合参数进行搜索-name 按照文件名查找文件1find . -name [filename] -type按照文件类型查找文件1find . -type [filename] b - 块设备文件。 d - 目录。 c - 字符设备文件。 p - 管道文件。 l - 符号链接文件。 f - 普通文件。 -time -n/+n 按照文件的更改时间来查找文件文件的inode当中，有三个时间time 信息，分别是： atime：Access time，在读取文件或者执行文件时更改，即文件最后一次被读取的时间。查看atime，使用 ls -lu filename mtime：Modified time，在写入文件时随文件内容的更改而更改，是指文件内容最后一次被修改的时间。查看atime，使用ls -l filename ctime：Change time，在写入文件、更改所有者、权限或链接设置时随 Inode 的内容更改而更改，即文件状态最后一次被改变的时间。查看atime，使用 ls -lc filename 后面的 n 表示天数，比如 -atime +n/-n 表示访问或者执行时间大于或小于n天的条件。 -perm 按照文件权限来查找文件1find . -perm 755 –print //在当前目录下查找文件权限位为755的文件 -user 按照文件属主来查找文件1find ~ -user sam –print //在$HOME目录中查找文件属主为sam的文件 模糊搜索 更多find 参数，可以在这两个文章查询： inux中强大且常用命令：find、grep 每天一个linux命令（22）：find 命令的参数详解 which 查询可执行文件的绝对路径命令行格式： which [filename] whereis 查找文件命令行格式： whereis [参数] [filename] 参数 含义 -b 只查找二进位制文件 -m 只查找帮助文件（man 目录下的文件） -s 只查找代码文件 locate 查找文件跟whereis 作用类似，通过查找预先生产的文件列表库来查找文件。 locate命令 需要单独安装， 1yum -y install mlocate 安装完成后，初次使用需要生产文件列表库 1updatedb 查找文件 1locate [filename] 注：默认情况下，数据库每周更新一次；如果一个文件正在两次更新时间段之间的创建的，就搜不到结果。 参考资料： 每天一个linux命令(24)：Linux文件类型与扩展名 Linux文件类型与扩展名 Linux文件类型及文件扩展名 查看 /var/log/wtmp文件的方法 Linux 文件时间详解 ctime mtime atime inux中强大且常用命令：find、grep 每天一个linux命令（22）：find 命令的参数详解]]></content>
+    <content type="text"><![CDATA[写在前面这则笔记简要总结文件类型，以及如何在linux系统进行文件搜索。 linux系统文件类型与后缀名linux如何查询文件find 搜索文件注：find是常用命令，需要熟练掌握。 命令行格式： find [路径] [参数] -print 上述命令可以简单地理解为find + 限定条件 通过限定条件来查找所需的文件。-print将匹配的文件输出到标准输出，可省略。 结合路径进行搜索路径，此选项可省略，指的是查找的目录路径，比如要在home目录下找某个文件，就是/home ；需要在etc 目录下找某个配置文件，就是 /etc。 查找$HOME目录中的文件1find ~ -name &quot;*&quot; // ~ 表示家目录 在当前目录及子目录中查找所有的‘ *.log‘文件1find . -name &quot;*.log&quot; //. 表示当前目录；*是通配符，表示任意字符 在当前目录及子目录中查找文件名以一个大写字母开头的文件1find . -name &quot;[A-Z]*&quot; 结合参数进行搜索-name 按照文件名查找文件1find . -name [filename] -type按照文件类型查找文件1find . -type [filename] b - 块设备文件。 d - 目录。 c - 字符设备文件。 p - 管道文件。 l - 符号链接文件。 f - 普通文件。 -time -n/+n 按照文件的更改时间来查找文件文件的inode当中，有三个时间time 信息，分别是： atime：Access time，在读取文件或者执行文件时更改，即文件最后一次被读取的时间。查看atime，使用 ls -lu filename mtime：Modified time，在写入文件时随文件内容的更改而更改，是指文件内容最后一次被修改的时间。查看atime，使用ls -l filename ctime：Change time，在写入文件、更改所有者、权限或链接设置时随 Inode 的内容更改而更改，即文件状态最后一次被改变的时间。查看atime，使用 ls -lc filename 后面的 n 表示天数，比如 -atime +n/-n 表示访问或者执行时间大于或小于n天的条件。 -perm 按照文件权限来查找文件1find . -perm 755 –print //在当前目录下查找文件权限位为755的文件 -user 按照文件属主来查找文件1find ~ -user sam –print //在$HOME目录中查找文件属主为sam的文件 模糊搜索 更多find 参数，可以在这两个文章查询： inux中强大且常用命令：find、grep 每天一个linux命令（22）：find 命令的参数详解 which 查询可执行文件的绝对路径命令行格式： which [filename] whereis 查找文件命令行格式： whereis [参数] [filename] 参数 含义 -b 只查找二进位制文件 -m 只查找帮助文件（man 目录下的文件） -s 只查找代码文件 locate 查找文件跟whereis 作用类似，通过查找预先生产的文件列表库来查找文件。 locate命令 需要单独安装， 1yum -y install mlocate 安装完成后，初次使用需要生产文件列表库 1updatedb 查找文件 1locate [filename] 注：默认情况下，数据库每周更新一次；如果一个文件正在两次更新时间段之间的创建的，就搜不到结果。 参考资料： 每天一个linux命令(24)：Linux文件类型与扩展名 Linux文件类型与扩展名 Linux文件类型及文件扩展名 查看 /var/log/wtmp文件的方法 Linux 文件时间详解 ctime mtime atime inux中强大且常用命令：find、grep 每天一个linux命令（22）：find 命令的参数详解]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
-        <tag>centos</tag>
         <tag>linux</tag>
         <tag>notes</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux运维学习笔记2-4：文件目录特殊权限及链接文件]]></title>
-    <url>%2F2018%2F03%2F27%2Fweek2-4-centosSpecialPermision%2F</url>
-    <content type="text"><![CDATA[写在前面今天的笔记，主要总结文件目录的特殊权限，以及链接文件。 文件目录的特殊权限set uid该权限针对二进位制可执行程序，可使程序文件在执行阶段拥有该程序文件所有者的权限。 这里有两个前提，缺一不可： 只有可执行的二进位制程序才能设定set uid权限； 命令执行者对该程序拥有执行（execute）权限； 比如，在Linux系统中，用户密码保存在 /etc/shadow ，设置密码使用的命令是 passwd，分别看一下这两者的权限 由上图可知，/etc/shadow 默认的权限为000，rwx权限都没有的，也不能执行相应的操作。但 passwd赋予一个特殊权限，让我们在执行passwd命令时，临时拥有 root 权限，从而可以修改密码。 注意： 虽然常见的八位制权限掩码是三位数，但其实应该是四位数，第一位表示的特殊权限。set uid位采用八进制表示为4000。 passwd 是具有setuid的一个特殊命令。这样我们不需要是root用户，也可以对自己的密码进行修改。 设置set uid这个特殊权限很危险，不到万不得已，做好不要使用。 设置setuid的方法：方法一：123chmod 4755 [文件名] // 设置set uid chmod 755 [文件名] // 取消 set uid 方法二：123chmod u+s [文件名] // 设置set uid chmod u-s [文件名] // 取消 set uid set gidset gid 就是将程序文件的 s 权限赋予组，当执行此程序时，此进程的属组不再是运行者本人所属的基本组，而是此程序文件的属组。 setgid位八进制表示为2000。 这里有两种情况： set gid 赋予文件：运行此文件的其它用户具有这个文件的属组特性； set gid 赋予目录：任何用户在该目录下创建的文件，则该文件属组都和目录的属组一致。 设置方法：方法一：123chmod 2755 [filename/dirname] // 设置set gid chmod 755 [filename/dirname] // 取消set gid 方法二：123chmod g+s [filename/dirname] // 设置set gid chmod g-s [filename/dirname] // 取消 set gid sticky bit （防删除位）sticky bit（防删除位）：用户是否能够删除文件，关键在于是否拥有文件所在目录的写权限， 有写权限就能够删除，否则就不能。 sticky位八进制表示为1000，添加sticky bit（防删除位）后，用户能够该目录下添加文件，但不能删除或者重命名文件。 例如，如果我们用root用户给共享目录设置sticky bit 权限，除非root用户，其他用户只能够添加文件，但不能删除或者重命名文件。 设置方法：方法一：123chmod 1755 [dirname] // 设置sticky bitchmod 755 [dirname] // 取消sticky bit 方法二：123chmod o+t [dirname] // 设置sticky bitchmod o-t [dirname] // 取消sticky bit 链接文件链接文件 ，即link file ，使用命令ls -l 查看文件信息，第一组属性首字母为l的文件，类似于 windows下的快捷方式。 链接文件link file 包括硬链接 hard link 和 软链接 symbolic link 两类。要搞清楚这两者的关系，需要先了解索引节点inode。 索引节点inode硬盘最小的文件单位位扇区“扇区” Sector，每个扇区储存512字节（相当于0.5KB）；而linux系统文件存取的最小单位，叫做块 block，最常见的块 block是4KB，由连续八个扇区 sector组成一个块block。 为了更方便的找到需要的文件，就需要有一个存储数据元信息的地方，比如文件的创建者、文件的创建日期、文件的大小等等。这种储存文件元信息的区域就叫做inode，中文译名为”索引节点”，作用就像目录索引一样。 Unix/Linux系统内部不使用文件名，而使用inode号码来识别文件。当我们打开文件时，系统大致将这个过程分为三步： 找到文件名对应的inode号码； 通过inode号码，获取inode信息； 根据inode信息，找到文件数据所在的块block，然后读出数据。 inode 查询查看某个文件的inode信息，使用命令行： 1stat [filename] 硬链接 hard linklinux系统允许多个文件名指向同一个inode号，打个比方，每个人可以有不同的名字，大名、小名、别名、外号等等，但都只向唯一的身份ID。因此，我们可以： 通过不同的文件名访问文件； 对文件内容进行修改，会影响到所有文件名； 删除一个文件名，不影响另一个文件名的访问； 注意：新建一个空目录，默认会生成两个目录项：.和..，前者.等同于当前目录的”硬链接”，后者 ..等同于父目录的”硬链接”。所以，任何一个目录的”硬链接”总数，总是等于2加上它的子目录总数（含隐藏目录）。 硬链接的不足硬链接虽然看起来很美好，但是有两个不能克服的缺点： 不能跨文件分区；每个分区在格式化之前就指定inode数据元信息存放区和文件数据存放区，inode和数据的对应关系就会在一个分区里面关联，所以不能够跨分区。 不能对目录做硬链接（原因不明）； 基于上述两个先天不足，就有了软链接的用武之地。 ln 命令 创建硬链接1ln [源文件] [目标文件] 软链接 symbolic link与硬链接不同，软链接是建立一个独立的文件。例如，文件A和文件B的inode号不一样，但A的内容是B的路径，相当于一个路标。 这个路标是真实存在的独立文件，尽管它通常都很小。读取A时，系统会自动将访问者导向B，此时A就是B的软链接symbolic link。 A依赖于B而存在，如果删除了B，打开文件A就会报错：No such file or directory。 A指向B的文件名，而不是B的inode号码，因此B的inode链接数不会因此发生变化。 ln -s命令可以创建软链接1ln -s [源文文件或目录] [目标文件或目录] 参考资料 Linux文件特殊权限——SetUID、SetGID、Sticky BIT linux中一些特殊的权限（setuid/setgid/sticky） chmod 命令 set uid ,set gid,sticky bit 说明 硬链接、软链接及inode详解 linux 硬链接和软链接 关于硬链接和软链接（符号链接）的区别 5 分钟让你明白 “软链接” 和“硬链接”的区别]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
         <tag>centos</tag>
-        <tag>linux</tag>
-        <tag>notes</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux运维学习笔记2-3：文件及目录权限基础命令操作]]></title>
-    <url>%2F2018%2F03%2F22%2Fweek2-3-AccessToFileAndFolders%2F</url>
-    <content type="text"><![CDATA[写在前面今天主要总结的centos 系统文件、目录权限及其权限操作的相关命令。 文件和目录权限文件主要类型 名称 释义 d 目录 - 普通文件 l 链接文件 b 块设备，例如存盘分区文件 /dev/sda c 串行端口设备文件，例如鼠标、键盘、打印机、tty终端 s 嵌套字文件，用于进程通讯 3种权限 名称 权限名称 数字描述 解释 r 读权限（read） 4 可以打开文件、目录读取查看； w 写权限（write） 2 对文件、目录可以编写更改 x 执行权限（execute） 1 对文件可执行(可执行文件)、对目录可查找该目录下的内容 权限所属对象 名称 权限名称 解释 u 用户（user） 生成文件或目录时登录的当前用户 g 组（group） 所属群组 0 其他人（others） 除拥有者，同组人以外的人 a 所有人（all） 包括拥有者、同组人及其他人 举个栗子 如图所示，可分为7个部分： 1. 代表这个文件的类型与权限(permission)，例如第一行-rw-r--r--.，包含的信息包括： 第1位 - 表示这是一个普通文档； 第2位至第10位rw-r--r--，按照数字表示，也可以写为644。 第11位. ，在centos5之前是没有这一位的；之后的版本（centos6、centos7）如果使用了SElinux content属性，这里是 .；如果使用了acl属性，这里是+ 2. 表示有多少档名连结到此节点(i-node)；3. 表示这个文件(或目录)的拥有者账号；4. 表示这个文件的所属群组；5. 表示这个文件的容量大小，默认单位为bytes；6. 表示这个文件的创建日期或最近修改日期；7. 表示这个文件的名字；更改文件所属组及用户名chgrp 更改所属组（change group）命令行格式： chgrp [组名] [文件名/目录名] 更改文件所属组命令行格式： chgrp [组名] [文件名] 如下图所示，所属组由 root改为test-1-group 更改目录所属组命令行格式： chgrp [组名] [目录名] 默认只更改目录所属组，如下图所示，文件夹a1所属组已经由root 改为 test-1-group；而文件夹 a1中的b2 所属组仍为 root，并未改变。 如果希望一次性都改掉，则需要使用参数 -R ，格式为 chgrp -R [所属组] [目录名] 注：配图命令有点问题，应该是 chgrp - R test-1-group a1 chown 更改所有者和所属组chown (change owner) 既可以更改文件所有者，也可以连同所属组一起更改。具体用法： 更改所有者：chown [用户名] [文件名] 同时更改所有者和所属组： chown [ -R ] [用户名：组名] [文件名或目录名] 更改文件权限chmod 更改文件权限第一种方式：命令格式：chmod [ -R ] [number ] [文件名或目录]如前文所述，在描述文件权限的时候，可以用4代表r（read）、2代表w（write）、x代表 execute（执行）； 在linux中，目录的默认权限为755，即（user:rwx；group:rx；others:rx）；文件的默认权限为644 ，即（user:rw；group:r；others:r） 这里的-R 是可选项，表示级联修改，chmod [ -R ] [number ] [目录] ， 不但会更改目录权限，连同目录下的文件权限也一并更改。 第二种方式：针对某个分组设置权限文件所有者：chmod u+x a1/1.txt 文件所属组：chmod o=rwx a1/1.txt 其他用户：chmod o-x a1/1.txt 所有用户：chmod a+x a1/1.txt 注意：a代表all（所有组别用户） umask 文件默认权限WARNING： 一般不用修改文件默认权限，因此这一小节仅作为了解内容。 默认情况下，目录的权限为755，即 rwxr-xr-x ;默认普通文件的权限为644，即 rw-r--r-- ； 输入 umask ，可以查询默认权限；root账户的默认值为root账户为0022，一般用户为0002。以root用户为例，是将数字转为rwx，之后再“减去”相应的全选。具体而言， 第一位表示这是一个八进位制数字，没有特别含义，不用管它； 此时文件夹权限为777 - 022 = 755，即rwxrwxrwx - ----w--w- = rwxr-xr-x 此时文件权限为666 - 022 = 644 ，即rw-rw-rw- - ----w--w- = rw- r--r-- 文件默认权限，可以通过 umask [number]来更改,方法参照前面的例子即可。 修改文件的特殊权限chatrr 命令命令格式 chatrr [ +-= ] [ 参数 ] [文件或目录名] 常见参数用法 命令 含义 A 文件或目录的atime不可修改 a 只能追加不能删除，非root用户不能设定该属性 s 会将数据同步写入磁盘 c 自动压缩文件，读取时自动解压 i 不能删除、重命名、设定链接、编辑写入及新增数据 常用用法示例a 用法123456789# touch a.txt# lsanaconda-ks.cfg a.txt# chattr +a a.txt# rm -rf a.txtrm: cannot remove ‘a.txt’: Operation not permitted //不可删除# echo &apos;this is a test&apos; &gt;&gt; a.txt //只能追加内容# cat a.txtthis is a test 注：删除a权限用 chattr -a a.txt i 用法12345678910 # touch b.txt # lsanaconda-ks.cfg b.txt # chattr +i b.txt # rm -rf b.txt //不可删除rm: cannot remove ‘b.txt’: Operation not permitted # echo &apos;this is a test&apos; &gt; b.txt //不可编辑写入-bash: b.txt: Permission denied # echo &apos;this is a test&apos; &gt;&gt; b.txt //不可追加内容-bash: b.txt: Permission denied 注：删除i权限 用chattr -i b.txt lsattr 命令lsattr 用来读取文件或目录的特殊权限，命令格式为 lsattr [ 参数 ] [文件或目录名] 参数 含义 a 类似于ls -a ，表示连同隐藏文件一起列出 R 连同子目录的信息一起列出 举个栗子 12345 # mkdir c1 # lsattr c1 // c1是刚刚创建的一个空文件夹，因此里面没有文件，不会又显示 # lsattr -aR c1 //连同隐藏文件一起显示---------------- c1/.---------------- c1/.. 参考资料 Linux更改文件及目录权限 linux文件目录权限 Linux下文件及目录普通权限 linux用户组和权限管理]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>linux</tag>
-        <tag>notes</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux运维学习笔记2-2：环境变量、复制移动及文档查看]]></title>
-    <url>%2F2018%2F03%2F20%2Fweek2-2-path-CopyPaste-FileReview%2F</url>
-    <content type="text"><![CDATA[环境变量什么是环境变量Linux是多用户操作系统，每个用户都有自己的运行环境。这里的运行环境就是通过一组环境变量来定义。因此，我们就可以通过修改环境变量，对自己的系统运行环境进行自定义。 如何查看环境变量输入命令 echo $PATH 如何修改环境变量例如，将“/opt/au1200_rm/build_tools/bin”加入环境变量，有三种方法： 方法一：直接在shell下加入变量1export PATH=$PATH:/opt/au1200_rm/build_tools/bin 方法二：修改profile文件12345// 编辑profile配置文件vim /etc/profile // 加入以下内容export PATH=&quot;$PATH:/opt/au1200_rm/build_tools/bin&quot; 方法三：修改.bashrc文件12345// 编辑当前用户的.bashrc 文件 vi /~/.bashrc // 加入以下内容export PATH=&quot;$PATH:/opt/au1200_rm/build_tools/bin&quot; 三种修改方式的特点 修改方法 特点 安全性 备注 直接在shell下加入变量 临时修改，立即生效，退出当前shell即失效 安全 只对当前账户生效 修改profile文件 永久修改，需注销用户重新登陆 不安全 更改对所有用户生效 修改.bashrc文件 永久修改，需注销用户重新登录 安全 可以精确定义每个账户 复制移动命令cp 命令：copy命令格式为 cp [参数] [源文件] [目标文件]，常见参数用法： -r复制目录及目录内的所有项目 -i覆盖前询问 mv 命令：移动或重命名命令格式为 mv [参数] [源文件或目录] [目标文件或目录] ，常见用法如下： 目标是目录，且目录已存在 目标是目录，但该目录不存在(实际相当于给文件重命名) 目标是文件，且该文件已存在(实际相当于覆盖目标文件) 目标是文件，但该文件不存在（实际相当于重命名源文件） 文档查看命令cat 和 tac1cat &lt;filename&gt; cat ：一次性显示整个文件内容 tac ：跟cat类似，只不过cat 是从前往后（第一行 =&gt; 最后一行），tac是从后往前（最后一行 =&gt; 第一行)。 常用参数： 参数名称 作用 cat -n -n 表示显示行号 cat -A -A 表示显示所有内容 head 和 tail这两个命令比前一组命令强的地方在于，如果文件的内容比较多，而你只需要查询文件开头或者结尾，使用这两条命令会轻松很多。 常见用法：12head -n 10 &lt;filename&gt; //显示文件开头十行tail -n 10 &lt;filename&gt; //显示文件结尾十行 注意： 上述示例中n可以省略，直接写成head -10 &lt;filename&gt;，效果也是一样的； 如果-n 省略，默认显示10行内容。 tail特殊用法：1tail -f &lt;filename&gt; 注：加 -f 参数，动态显示文件最后10行内容，在做日志监控的时候，可以方便直观的查看变化。 1tail -f /var/log/messages more和less这两个命令比head 和 tail更高级，使用起来也更加方便，能够一页一页地方便使用者逐页阅读。 more 的用法1more &lt;参数&gt; &lt;filename&gt; 常用参数 参数名称 作用 d 在每屏的底部显示友好的提示信息 l 忽略 Ctrl+l （换页符）。如果没有给出这个选项，则more命令在显示了一个包含有 Ctrl+l 字符的行后将暂停显示，并等待接收命令。 f 计算行数时，以实际上的行数，而非自动换行过后的行数（有些单行字数太长的会被扩展为两行或两行以上） p 显示下一屏之前先清屏。 c 从顶部清屏然后显示。 s 文件中连续的空白行压缩成一个空白行显示。 u 不显示下划线 / 先搜索字符串，然后从字符串之后显示 常用操作命令 操作命令 作用 Enter 向下n行，需要定义。默认为1行 Ctrl+F 向下滚动一屏 space 向下滚动一屏 Ctrl+B 返回上一屏 = 输出当前行的行号 :f 输出文件名和当前行的行号 v 调用vi编辑器 ! 调用Shell，并执行命令 q 退出more less1less &lt;参数&gt; &lt;filename&gt; 常用参数 参数名称 作用 b 设置缓冲区的大小 e 当文件显示结束后，自动离开 f 强迫打开特殊文件，例如外围设备代号、目录和二进制文件 g 只标志最后搜索的关键词 i 忽略搜索时的大小写 m 显示类似more命令的百分比 常用操作 参数名称 作用 space 翻页 j 光标向下移动一行 k 光标向上移动一行 / 按下 /后输入关键词enter即可搜索，查看多个搜索结果时，按n进行切换。 ？ 与 / 作用类似，不同之处在于/当千行向下搜索，？是当前行向上搜索。 参考资料： linux中PATH环境变量的作用和使用方法 Linux环境变量详解 Linux环境变量总结]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>linux</tag>
-        <tag>notes</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux运维学习笔记2-1：文档路径及基本操作]]></title>
-    <url>%2F2018%2F03%2F19%2Fweek2-1-centos-fileFolderPathAndBisicOpration%2F</url>
-    <content type="text"><![CDATA[相对路径和绝对路径顾名思义，文件路径就是用来描述存放文件的地方。这里有两种描述的方法： 绝对路径：从根目录写起的，叫做绝对路径,比如 /var/... 或者 ～/... 相对路径：与当前目录相对的写法，叫做相对路径。 举例来说： pwd //查询当前所在的绝对路径 上图中，红框标示出来的部分，就是当前所在的绝对路径，即 /Users/stevey/documents/github-file ，通过 ls 命令可以看到，下面有一个 steveBlog 的文件夹。 要进入这个文件夹可以采用两种方法： 123cd steveBlog //相对路径cd /Users/stevey/documents/github-file/steveBlog //绝对路径 常见的文档操作命令pwd 命令用于显示当前所在目录。在linux系统中， .表示当前目录， ..表示上一级目录。 cd 命令：切换目录 名称 作用 cd 返回用户主目录 cd /etc 改变到其它路径 cd .. 返回到上一级目录 cd / 或 cd ～ 返回到根目录 cd - 返回之前的目录 mkdir 命令：创建文件夹命令格式：mkdir [参数] [文件目录] -m 设置文件权限 12mkdir -m 777 test3 //输入drwxrwxrwx 2 root root 4096 10-25 17:46 test3 //实现效果 -p 新建一个目录串 1mkdir -p /test1/test2 -v 创建新目录都显示信息 1mkdir -v /test3 在指定目录下创建多个目录（使用绝对路径） rmdir 命令：删除目录跟mkdir 相反，rmdir表示删除目录。命令格式为：mkdir [参数] [文件目录] 。这个命令的特点在于，只能删除空目录；即使加了 -p 参数，也只能删除一串空目录。如果目录当中有文件，这个命令就没有用了。 touch 命令：创建文件命令行格式： touch [参数] [filename] 选项 命令行格式 作用 -a touch -a file 改变档案的访问时间记录。 -d touch -d time file 设定时间与日期，可以使用各种不同的格式。 -m touch -m file 改变档案的修改时间记录。 -r touch -r file1 file2 使用参考文档的时间记录。 -t touch -t time file 设定档案的时间记录，格式与 date 指令相同。 示例： 1234567891011121314151617181920212223// 在当前目录创建 test.txt 文件touch test.txt// 创建多个文件touch test1.txt test2.txt//修改访问时间touch -a test.txt//查看访问修改文件的时间stat test.txt// 更改为自定义格式、自定义时间戳（更改访问时间、修改时间）touch -d &apos;18-May-2017&apos; test.txt// 更改修改时间touch -m test.txt//修改 test1.txt 为 test2.txt 文件的时间戳。touch -r test1.txt test2.txt// 更改为自定义时间戳touch -t 201703031558.28 test.txt rm命令：删除文件或目录用来删除文件或文件目录。命令格式为： 1rm [参数] [文件] 常用参数 含义 -f –force 忽略不存在的文件，从不给出提示。 -i –interactive 进行交互式删除 -r –recursive，将参数中列出的全部目录和子目录均递归地删除。 注意： 如果要删除非空目录，需要使用rm -rf [文件目录] 千万不要rm -rf / ，一旦输入这个命令，然后就没有然后了。 拓展：如何同时创建多个文件/目录 创建多个文件 123[root@steve test]# touch &#123;1..5&#125;.txt[root@steve test]# ls1.txt 2.txt 3.txt 4.txt 5.txt 创建多个目录 123[root@steve test]# mkdir dir&#123;1..5&#125;[root@steve test]# lsdir1 dir2 dir3 dir4 dir5]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>linux</tag>
-        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -1275,19 +1223,6 @@
       <tags>
         <tag>树莓派</tag>
         <tag>respbian</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux运维学习笔记1-5：文件目录、类型及ls、alias基本操作]]></title>
-    <url>%2F2018%2F03%2F15%2Fweek1-5-centOS-filesystem-ls-aliasCommand%2F</url>
-    <content type="text"><![CDATA[centos系统目录结构 目录名称 解释 备注 /home 用户目录 每个用户都有一个/home 目录，一般是以账户名命名。 /bin, /usr/bin 存储系统用户使用的命令 如 ls /sbin, /usr/sbin 存储root用户才能使用的命令 如 ifconfig /boot 引导加载程序文件 内核的initrd、vmlinux、grub文件位于/boot下。 /dev linux系统中特有的设备文件 例如： 光盘，鼠标，硬盘等连接到系统的设备。 /etc 系统配置文件 通常编辑的配置文件都在此目录下。 /lib和/lib64 存放系统的库文件 作用类似于windows中的DLL文件。 /media 媒介目录，通常为空 插入U盘、移动硬盘，默认挂载在/media下 /mnt 临时挂载的目录，通常为空 可以挂载光驱到该目录之后，进入目录查看内容 /var 存放日志的地方 例：/var/message 默认存放系统日志的地方 更详细的看这里[来源：网络] 文件类型输入 ls -l &lt;filename&gt; 查看文件详细信息，如下图所示： 红圈处的11位信息（包括末尾的.），表示文件的类型、所有者、所属组及其他用户的权限。 常见文件类型 文件类型 描述 d 文件目录。 l 链接文件(指向另一个文件,类似于windows下的快捷方式)。 s 套接字文件，用于进程通信 b 块设备文件,二进制文件。 c 字符设备文件，如鼠标、键盘、终端 p 命名管道文件。 - 普通文件 常用的几个命令安装tree 命令查看目录结构tree命令是以树状形式显示目录下的文件或子目录；系统默认没有的，需要自行安装。 安装1yum install -y tree 使用1tree -L 2 //-L 表示查看目录层级，2表示查看两级目录。 ls 查看目录信息 ls 命令 名称 作用 ls 列出当前目录下的文件和文件夹，不包括隐藏文件 ls -a 列出当前目录下的文件和文件夹，不包括隐藏文件 ls -l 列出除隐藏文件之外的所有文件和目录的详细信息，包括权限、所属主、所属组、文件创建日期时间 ls &lt;filename&gt; -l 查看某个文件的详细信息 ls &lt;file-Folder-name&gt; 查看指定目录下的文件和目录 ls -Rl 显示当前目录及所有子目录信息 ls -tl 以时间排序显示目录,查找最新文件有用 ls -Sl 以文件大小排序 ls -s -l -S 显示文件大小,并按大小排序 alias 命令alias 命令用来设置指令别名，如果命令过长，那么就考虑可以设置一个别名。 基本使用方法：1alias 新的命令=&apos;原命令 -选项/参数&apos; 显示当前已设置的别名 1alias 设置vim别名 12// 设置别名，输入`vi` 调用 `vim`alias vi=&apos;/usr/bin/vim&apos; 删除别名 1unalias vi 查询alias 更多用法 1man alias //按 `space `下翻页，按` q `退出。 更多资料 Linux文件系统目录结构 深入理解linux系统下proc文件系统内容 Linux根目录下各子目录的作用]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>linux</tag>
-        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -1392,8 +1327,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
         <tag>next</tag>
       </tags>
   </entry>
@@ -1416,8 +1351,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1428,8 +1363,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -1565,8 +1500,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
         <tag>bash</tag>
       </tags>
   </entry>
@@ -1604,8 +1539,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
         <tag>https</tag>
       </tags>
   </entry>
@@ -1643,8 +1578,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1667,8 +1602,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -1704,8 +1639,8 @@
         <category>hexo</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
 </search>

@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux,notes,centos," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="写在前面linux是一个多用户、多任务系统，具有很好的稳定性和安全性，而这与linux的用户和权限管理机制密不可分。 我们在linux系统中的操作，实际上都是操作进程访问文件，这里的访问权限是基于Linux的安全管理机制的。linux上最初的安全模型，叫做DAC，Discretionary Access Contorl，主动访问控制；后来在此基础上又增加了额外的权限管理机制，成为MAC，Manda">
+<meta name="keywords" content="linux,notes,centos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux运维学习笔记：centOS用户和文件管理（一）">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/index.html">
+<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:description" content="写在前面linux是一个多用户、多任务系统，具有很好的稳定性和安全性，而这与linux的用户和权限管理机制密不可分。 我们在linux系统中的操作，实际上都是操作进程访问文件，这里的访问权限是基于Linux的安全管理机制的。linux上最初的安全模型，叫做DAC，Discretionary Access Contorl，主动访问控制；后来在此基础上又增加了额外的权限管理机制，成为MAC，Manda">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://farm1.staticflickr.com/787/40206810334_bb89977f05_o.jpg">
+<meta property="og:image" content="https://farm1.staticflickr.com/805/39264033010_f44a3df2ca_o.png">
+<meta property="og:image" content="https://farm5.staticflickr.com/4776/27024999888_3e624dcbcd_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/806/40895559391_9279c2cc95_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/878/39590698680_863c8252b1_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/799/41046981492_381002a7b0_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/877/40380947864_168e70a3a8_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/808/27024710608_759c7aebd7_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/834/43483148681_fb39608605_o.png">
+<meta property="og:image" content="https://lh3.googleusercontent.com/-wCFJNyclSxs/Wq8hgnOzutI/AAAAAAABhlw/v12kCqp-610mvOQAqHoxq52xiHSaKzSlACHMYCw/I/15214268144359.jpg">
+<meta property="og:image" content="https://farm1.staticflickr.com/783/27064365958_41e8d5cb77_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/787/40227078774_24c2c183e5_o.png">
+<meta property="og:image" content="https://lh3.googleusercontent.com/-06StOHqE9TU/WrIs4knF1SI/AAAAAAABhoE/YQU6sJP5mEYYAbCQbiMBAoYPPbTZYHMBACHMYCw/I/15216263364690.jpg">
+<meta property="og:image" content="https://farm5.staticflickr.com/4794/40041669495_ba9d3081aa_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/794/40893873202_fb7d6eca0c_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/818/26062809817_041eae441d_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/886/40358699654_292fe93e3c_o.png">
+<meta property="og:updated_time" content="2018-07-18T08:53:51.919Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux运维学习笔记：centOS用户和文件管理（一）">
+<meta name="twitter:description" content="写在前面linux是一个多用户、多任务系统，具有很好的稳定性和安全性，而这与linux的用户和权限管理机制密不可分。 我们在linux系统中的操作，实际上都是操作进程访问文件，这里的访问权限是基于Linux的安全管理机制的。linux上最初的安全模型，叫做DAC，Discretionary Access Contorl，主动访问控制；后来在此基础上又增加了额外的权限管理机制，成为MAC，Manda">
+<meta name="twitter:image" content="https://farm1.staticflickr.com/787/40206810334_bb89977f05_o.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/"/>
+
+
+
+
+
+  <title>Linux运维学习笔记：centOS用户和文件管理（一） | Steve的折腾学习日志</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111158073-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/steve-yuan-8276"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux运维学习笔记：centOS用户和文件管理（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-18T15:02:33+08:00">
+                2018-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  6,415
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  24
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>linux是一个多用户、多任务系统，具有很好的稳定性和安全性，而这与linux的用户和权限管理机制密不可分。</p>
+<p>我们在linux系统中的操作，实际上都是操作进程访问文件，这里的访问权限是基于Linux的安全管理机制的。linux上最初的安全模型，叫做DAC，Discretionary Access Contorl，主动访问控制；后来在此基础上又增加了额外的权限管理机制，成为MAC，Mandatory Access Contorl，强制访问机制。为了区分两者，将支持MAC的linux系统成为selinux，意思是linux的安全加强系统。</p>
+<p>在实际运行过程中，系统会先做DAC检查，如不通过则拒绝执行；如果通过DAC检查且支持MAC模块，则再做MAC检查。</p>
+<p>这则笔记分为文件系统和用户管理两个部分进行整理。</p>
+<a id="more"></a>
+<h2 id="linux的文件系统"><a href="#linux的文件系统" class="headerlink" title="linux的文件系统"></a>linux的文件系统</h2><p>在linux当中，一切都是文件。使用<code>ll  [filename]</code> 或者 <code>ls -l [filename/dirname]</code>  查看文件类型。</p>
+<h3 id="linux文件系统构成"><a href="#linux文件系统构成" class="headerlink" title="linux文件系统构成"></a>linux文件系统构成</h3><h4 id="linux文件目录结构："><a href="#linux文件目录结构：" class="headerlink" title="linux文件目录结构："></a>linux文件目录结构：</h4><p><img src="https://farm1.staticflickr.com/787/40206810334_bb89977f05_o.jpg" alt=""></p>
+<h4 id="常用文件类型："><a href="#常用文件类型：" class="headerlink" title="常用文件类型："></a>常用文件类型：</h4><table>
+<thead>
+<tr>
+<th>文件类型</th>
+<th>描述</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-</td>
+<td>普通文件，包括文本文件</td>
+<td>可用touch命令创建</td>
+</tr>
+<tr>
+<td>d</td>
+<td>文件目录</td>
+<td>可用 mkdir 命令创建</td>
+</tr>
+<tr>
+<td>l</td>
+<td>链接文件(指向另一个文件,类似于windows下的快捷方式)</td>
+<td>可用ln 命令创建</td>
+</tr>
+<tr>
+<td>s</td>
+<td>套接字文件，用于进程通信</td>
+<td>一般由应用程序在执行过程中创建</td>
+</tr>
+<tr>
+<td>b</td>
+<td>块设备文件,二进制文件</td>
+</tr>
+<tr>
+<td>c</td>
+<td>字符设备文件，如鼠标、键盘、终端</td>
+</tr>
+<tr>
+<td>p</td>
+<td>管道文件</td>
+<td>可用mkfifo命令创建</td>
+</tr>
+</tbody>
+</table>
+<h5 id="普通文件："><a href="#普通文件：" class="headerlink" title="普通文件："></a>普通文件：</h5><p>一般类型的文件，主要包括：</p>
+<ol>
+<li><p>纯文本档<code>ASCII</code>：文件内容可以直接读到数据，例如：字母，数字等。这里文件可以用<code>cat</code> 命令进行查看。</p>
+</li>
+<li><p>二进制文件<code>binary</code>：Linux当中可执行文件就是属于这种格式。例如，ls、 rm、mkdir 等等常见命令。</p>
+</li>
+<li><p>数据文件<code>data</code>：有些程序在运行的过程中会读取某些特定格式的文件，那些特定格式的文件可以被称为数据文件。例如，系统登录数据会记录在<code>/var/log/wtmp</code> ，这就是一个数据文件，可以用<code>last -f /var/log/wtmp</code> 命令查看。</p>
+</li>
+</ol>
+<p><img src="https://farm1.staticflickr.com/805/39264033010_f44a3df2ca_o.png" alt=""></p>
+<h5 id="目录-directory-："><a href="#目录-directory-：" class="headerlink" title="目录 directory ："></a>目录 <code>directory</code> ：</h5><p> 跟<code>windows</code> 下的文件夹类似，用 <code>ll</code> 命令查看属性的第一个字母为<code>d</code></p>
+<h5 id="链接文件-link-file"><a href="#链接文件-link-file" class="headerlink" title="链接文件 link file"></a>链接文件 <code>link file</code></h5><p>类似<code>Windows</code>系统底下的快捷方式！ 第一个属性为<code>l</code>，分为软链接和硬链接，这个上一则笔记已经整理过了，下面会专门讲到。</p>
+<h5 id="设备文件-device"><a href="#设备文件-device" class="headerlink" title="设备文件 device"></a>设备文件 <code>device</code></h5><ol>
+<li><p>区块设备文件 <code>block</code>：就是一些储存数据， 以提供系统随机存取的接口设备，第一个属性为 <code>b</code> 。例如，硬盘、软盘等。</p>
+</li>
+<li><p>字符设备文件 <code>character</code>：串行端口的接口设备，第一个属性为<code>c</code> 。例如，键盘、鼠标等。</p>
+</li>
+</ol>
+<h4 id="Linux-常用文件后缀名"><a href="#Linux-常用文件后缀名" class="headerlink" title="Linux 常用文件后缀名"></a>Linux 常用文件后缀名</h4><p><strong>注意：</strong>与Windows系统不同，在Linux系统下， 一个文件是否能够被执行，关键是看有没有x 权限，与文件的后缀名无关。</p>
+<p>这里的后缀名，仅仅是为了让我们便于区分，习惯在定义文件名是加上一个后缀名。</p>
+<h5 id="常见的文件后缀名包括："><a href="#常见的文件后缀名包括：" class="headerlink" title="常见的文件后缀名包括："></a>常见的文件后缀名包括：</h5><ul>
+<li><p><code>.sh</code> ： shell脚本或批处理文件 (scripts)。</p>
+</li>
+<li><p><code>.tar</code>, <code>.tar.gz</code>, .<code>zip</code>, <code>.tgz</code>： 经过打包的压缩文件。之所以有这么多后缀名，是对应不同的压缩软件，比如gunzip, tar 等。</p>
+</li>
+<li><p><code>.conf</code>：系统的配置文件。</p>
+</li>
+<li><p><code>.pl</code>：perl语言文件，通过perl语言开发的程序。</p>
+</li>
+<li><p><code>.html</code>，<code>.htm</code>，<code>.php</code>，<code>.jsp</code>：网页文件。</p>
+</li>
+<li><p><code>.py</code>：Python语言文件，通过Python语言开发的程序。</p>
+</li>
+<li><p><code>.rpm</code>：rpm安装的文件。</p>
+</li>
+</ul>
+<h4 id="创建删除文件目录"><a href="#创建删除文件目录" class="headerlink" title="创建删除文件目录"></a>创建删除文件目录</h4><h5 id="mkdir-命令：创建文件夹"><a href="#mkdir-命令：创建文件夹" class="headerlink" title="mkdir 命令：创建文件夹"></a>mkdir 命令：创建文件夹</h5><p>命令格式：<code>mkdir  [参数] [文件目录]</code></p>
+<p>-m 设置文件权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -m 777 test3     //输入</span><br><span class="line">drwxrwxrwx 2 root root 4096 10-25 17:46 test3    //实现效果</span><br></pre></td></tr></table></figure>
+<p> -p 新建一个目录串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /test1/test2</span><br></pre></td></tr></table></figure>
+<p> <img src="https://farm5.staticflickr.com/4776/27024999888_3e624dcbcd_o.png" alt=""></p>
+<p>-v 创建新目录都显示信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -v /test3</span><br></pre></td></tr></table></figure>
+<p><img src="https://farm1.staticflickr.com/806/40895559391_9279c2cc95_o.png" alt=""></p>
+<p>在指定目录下创建多个目录<strong>（使用绝对路径）</strong></p>
+<p><img src="https://farm1.staticflickr.com/878/39590698680_863c8252b1_o.png" alt=""></p>
+<h5 id="rmdir-命令：删除目录"><a href="#rmdir-命令：删除目录" class="headerlink" title="rmdir 命令：删除目录"></a>rmdir 命令：删除目录</h5><p>跟mkdir 相反，rmdir表示删除目录。命令格式为：<code>mkdir  [参数] [文件目录]</code> 。这个命令的特点在于，只能删除空目录；即使加了 -p 参数，也只能删除一串空目录。如果目录当中有文件，这个命令就没有用了。</p>
+<h5 id="touch-命令：创建文件"><a href="#touch-命令：创建文件" class="headerlink" title="touch 命令：创建文件"></a>touch 命令：创建文件</h5><p>命令行格式： <code>touch [参数] [filename]</code></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>命令行格式</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td><code>touch -a file</code></td>
+<td>改变档案的访问时间记录。</td>
+</tr>
+<tr>
+<td>-d</td>
+<td><code>touch -d time file</code></td>
+<td>设定时间与日期，可以使用各种不同的格式。</td>
+</tr>
+<tr>
+<td>-m</td>
+<td><code>touch -m file</code></td>
+<td>改变档案的修改时间记录。</td>
+</tr>
+<tr>
+<td>-r</td>
+<td><code>touch -r file1 file2</code></td>
+<td>使用参考文档的时间记录。</td>
+</tr>
+<tr>
+<td>-t</td>
+<td><code>touch -t time file</code></td>
+<td>设定档案的时间记录，格式与 date 指令相同。</td>
+</tr>
+</tbody>
+</table>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 在当前目录创建 test.txt 文件</span><br><span class="line">touch test.txt</span><br><span class="line"></span><br><span class="line">// 创建多个文件</span><br><span class="line">touch test1.txt test2.txt</span><br><span class="line"></span><br><span class="line">//修改访问时间</span><br><span class="line">touch -a test.txt</span><br><span class="line"></span><br><span class="line">//查看访问修改文件的时间</span><br><span class="line">stat test.txt</span><br><span class="line"></span><br><span class="line">// 更改为自定义格式、自定义时间戳（更改访问时间、修改时间）</span><br><span class="line">touch -d &apos;18-May-2017&apos; test.txt</span><br><span class="line"></span><br><span class="line">// 更改修改时间</span><br><span class="line">touch -m test.txt</span><br><span class="line"></span><br><span class="line">//修改 test1.txt 为 test2.txt 文件的时间戳。</span><br><span class="line">touch -r test1.txt test2.txt</span><br><span class="line"></span><br><span class="line">// 更改为自定义时间戳</span><br><span class="line">touch -t 201703031558.28 test.txt</span><br></pre></td></tr></table></figure>
+<h5 id="rm命令：删除文件或目录"><a href="#rm命令：删除文件或目录" class="headerlink" title="rm命令：删除文件或目录"></a>rm命令：删除文件或目录</h5><p>用来删除文件或文件目录。命令格式为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm  [参数] [文件]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>常用参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-f</td>
+<td>–force    忽略不存在的文件，从不给出提示。</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>–interactive 进行交互式删除</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>–recursive，将参数中列出的全部目录和子目录均递归地删除。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意：</strong></p>
+<ul>
+<li>如果要删除非空目录，需要使用<code>rm -rf [文件目录]</code></li>
+<li>千万不要<code>rm -rf /</code> ，一旦输入这个命令，然后就没有然后了。</li>
+</ul>
+<h5 id="拓展：如何同时创建多个文件-目录"><a href="#拓展：如何同时创建多个文件-目录" class="headerlink" title="拓展：如何同时创建多个文件/目录"></a>拓展：如何同时创建多个文件/目录</h5><ul>
+<li>创建多个文件 </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@steve test]# touch &#123;1..5&#125;.txt</span><br><span class="line">[root@steve test]# ls</span><br><span class="line">1.txt  2.txt  3.txt  4.txt  5.txt</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建多个目录</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@steve test]# mkdir dir&#123;1..5&#125;</span><br><span class="line">[root@steve test]# ls</span><br><span class="line">dir1  dir2  dir3  dir4  dir5</span><br></pre></td></tr></table></figure>
+<h4 id="查看文件命令"><a href="#查看文件命令" class="headerlink" title="查看文件命令"></a>查看文件命令</h4><h5 id="cat-和-tac"><a href="#cat-和-tac" class="headerlink" title="cat 和 tac"></a><code>cat</code> 和 <code>tac</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;filename&gt;</span><br></pre></td></tr></table></figure>
+<p><code>cat</code> ：一次性显示整个文件内容</p>
+<p><code>tac</code> ：跟cat类似，只不过cat 是从前往后（第一行 =&gt; 最后一行），tac是从后往前（最后一行 =&gt; 第一行)。</p>
+<p><strong>常用参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cat -n <filename></filename></td>
+<td>-n 表示显示行号</td>
+</tr>
+<tr>
+<td>cat -A <filename></filename></td>
+<td>-A 表示显示所有内容</td>
+</tr>
+</tbody>
+</table>
+<h5 id="head-和-tail"><a href="#head-和-tail" class="headerlink" title="head 和 tail"></a><code>head</code> 和 <code>tail</code></h5><p>这两个命令比前一组命令强的地方在于，如果文件的内容比较多，而你只需要查询文件开头或者结尾，使用这两条命令会轻松很多。</p>
+<p><strong>常见用法：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">head -n 10 &lt;filename&gt;     //显示文件开头十行</span><br><span class="line">tail -n 10 &lt;filename&gt;     //显示文件结尾十行</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<p>上述示例中<code>n</code>可以省略，直接写成<code>head -10 &lt;filename&gt;</code>，效果也是一样的；</p>
+<p>如果<code>-n</code> 省略，默认显示10行内容。</p>
+<p><strong>tail特殊用法：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f &lt;filename&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>加 -f 参数，动态显示文件最后10行内容，在做日志监控的时候，可以方便直观的查看变化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f /var/log/messages</span><br></pre></td></tr></table></figure>
+<h5 id="more和less"><a href="#more和less" class="headerlink" title="more和less"></a><code>more</code>和<code>less</code></h5><p>这两个命令比<code>head</code> 和 <code>tail</code>更高级，使用起来也更加方便，能够一页一页地方便使用者逐页阅读。</p>
+<h6 id="more-的用法"><a href="#more-的用法" class="headerlink" title="more 的用法"></a>more 的用法</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">more &lt;参数&gt;  &lt;filename&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>常用参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>d</td>
+<td>在每屏的底部显示友好的提示信息  </td>
+</tr>
+<tr>
+<td>l</td>
+<td>忽略 Ctrl+l （换页符）。如果没有给出这个选项，则more命令在显示了一个包含有 Ctrl+l 字符的行后将暂停显示，并等待接收命令。  </td>
+</tr>
+<tr>
+<td>f</td>
+<td>计算行数时，以实际上的行数，而非自动换行过后的行数（有些单行字数太长的会被扩展为两行或两行以上）  </td>
+</tr>
+<tr>
+<td>p</td>
+<td>显示下一屏之前先清屏。  </td>
+</tr>
+<tr>
+<td>c</td>
+<td>从顶部清屏然后显示。  </td>
+</tr>
+<tr>
+<td>s</td>
+<td>文件中连续的空白行压缩成一个空白行显示。  </td>
+</tr>
+<tr>
+<td>u</td>
+<td>不显示下划线  </td>
+</tr>
+<tr>
+<td>/</td>
+<td>先搜索字符串，然后从字符串之后显示  </td>
+</tr>
+</tbody>
+</table>
+<p><strong>常用操作命令</strong></p>
+<table>
+<thead>
+<tr>
+<th>操作命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enter</td>
+<td>向下n行，需要定义。默认为1行  </td>
+</tr>
+<tr>
+<td>Ctrl+F</td>
+<td>向下滚动一屏  </td>
+</tr>
+<tr>
+<td>space</td>
+<td>向下滚动一屏  </td>
+</tr>
+<tr>
+<td>Ctrl+B</td>
+<td>返回上一屏  </td>
+</tr>
+<tr>
+<td>=</td>
+<td>输出当前行的行号  </td>
+</tr>
+<tr>
+<td>:f</td>
+<td>输出文件名和当前行的行号  </td>
+</tr>
+<tr>
+<td>v</td>
+<td>调用vi编辑器  </td>
+</tr>
+<tr>
+<td>!</td>
+<td>调用Shell，并执行命令   </td>
+</tr>
+<tr>
+<td>q</td>
+<td>退出more  </td>
+</tr>
+</tbody>
+</table>
+<h6 id="less命令"><a href="#less命令" class="headerlink" title="less命令"></a>less命令</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">less &lt;参数&gt;  &lt;filename&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>常用参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>b</td>
+<td>设置缓冲区的大小  </td>
+</tr>
+<tr>
+<td>e</td>
+<td>当文件显示结束后，自动离开  </td>
+</tr>
+<tr>
+<td>f</td>
+<td>强迫打开特殊文件，例如外围设备代号、目录和二进制文件  </td>
+</tr>
+<tr>
+<td>g</td>
+<td>只标志最后搜索的关键词  </td>
+</tr>
+<tr>
+<td>i</td>
+<td>忽略搜索时的大小写  </td>
+</tr>
+<tr>
+<td>m</td>
+<td>显示类似more命令的百分比 </td>
+</tr>
+</tbody>
+</table>
+<p><strong>常用操作</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>space</td>
+<td>翻页</td>
+</tr>
+<tr>
+<td>j</td>
+<td>光标向下移动一行</td>
+</tr>
+<tr>
+<td>k</td>
+<td>光标向上移动一行</td>
+</tr>
+<tr>
+<td>/</td>
+<td>按下 <code>/</code>后输入关键词<code>enter</code>即可搜索，查看多个搜索结果时，按n进行切换。</td>
+</tr>
+<tr>
+<td>？</td>
+<td>与 <code>/</code> 作用类似，不同之处在于<code>/</code>当千行向下搜索，<code>？</code>是当前行向上搜索。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="搜索文件"><a href="#搜索文件" class="headerlink" title="搜索文件"></a>搜索文件</h4><h5 id="find-命令搜索文件"><a href="#find-命令搜索文件" class="headerlink" title="find 命令搜索文件"></a><code>find</code> 命令搜索文件</h5><p><strong>注：find是常用命令，需要熟练掌握。</strong></p>
+<p>命令行格式： <code>find [路径] [参数] -print</code></p>
+<p>上述命令可以简单地理解为<code>find + 限定条件</code> 通过限定条件来查找所需的文件。<code>-print</code>将匹配的文件输出到标准输出，可省略。</p>
+<ul>
+<li>结合路径进行搜索</li>
+</ul>
+<p>路径，此选项可省略，指的是查找的目录路径，比如要在<code>home</code>目录下找某个文件，就是<code>/home</code> ；需要在<code>etc</code> 目录下找某个配置文件，就是 <code>/etc</code>。</p>
+<ul>
+<li>查找$HOME目录中的文件 </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~ -name &quot;*&quot;    // ~ 表示家目录</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在当前目录及子目录中查找所有的‘ *.log‘文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name &quot;*.log&quot; //. 表示当前目录；*是通配符，表示任意字符</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在当前目录及子目录中查找文件名以一个大写字母开头的文件  </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name &quot;[A-Z]*&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-name</code>  按照文件名查找文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name [filename]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-type</code>按照文件类型查找文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">find . -type [filename]</span><br><span class="line"></span><br><span class="line">b - 块设备文件。 </span><br><span class="line">d - 目录。 </span><br><span class="line">c - 字符设备文件。 </span><br><span class="line">p - 管道文件。 </span><br><span class="line">l - 符号链接文件。 </span><br><span class="line">f - 普通文件。</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-time -n/+n</code> 按照文件的更改时间来查找文件</li>
+</ul>
+<p>文件的inode当中，有三个时间time 信息，分别是：</p>
+<p><code>atime：Access time</code>，在读取文件或者执行文件时更改，即文件最后一次被读取的时间。查看atime，使用 <code>ls -lu filename</code></p>
+<p><code>mtime：Modified time</code>，在写入文件时随文件内容的更改而更改，是指文件内容最后一次被修改的时间。查看atime，使用<code>ls -l  filename</code></p>
+<p><code>ctime：Change time</code>，在写入文件、更改所有者、权限或链接设置时随 Inode 的内容更改而更改，即文件状态最后一次被改变的时间。查看atime，使用 <code>ls -lc filename</code></p>
+<p>后面的 n 表示天数，比如 -atime +n/-n 表示访问或者执行时间大于或小于n天的条件。</p>
+<ul>
+<li><code>-perm</code> 按照文件权限来查找文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -perm 755 –print    //在当前目录下查找文件权限位为755的文件</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-user</code> 按照文件属主来查找文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~ -user sam –print     //在$HOME目录中查找文件属主为sam的文件</span><br></pre></td></tr></table></figure>
+<h5 id="which-查询可执行文件的绝对路径"><a href="#which-查询可执行文件的绝对路径" class="headerlink" title="which 查询可执行文件的绝对路径"></a>which 查询可执行文件的绝对路径</h5><p>命令行格式： <code>which [filename]</code></p>
+<p><img src="https://farm1.staticflickr.com/799/41046981492_381002a7b0_o.png" alt=""></p>
+<h5 id="whereis-查找文件"><a href="#whereis-查找文件" class="headerlink" title="whereis 查找文件"></a>whereis 查找文件</h5><p>命令行格式： <code>whereis [参数] [filename]</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-b</td>
+<td>只查找二进位制文件</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>只查找帮助文件（<code>man</code> 目录下的文件）</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>只查找代码文件</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://farm1.staticflickr.com/877/40380947864_168e70a3a8_o.png" alt=""></p>
+<h5 id="locate-查找文件"><a href="#locate-查找文件" class="headerlink" title="locate 查找文件"></a>locate 查找文件</h5><p>跟whereis 作用类似，通过查找预先生产的文件列表库来查找文件。</p>
+<p><code>locate</code>命令 需要单独安装，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install mlocate</span><br></pre></td></tr></table></figure>
+<p>安装完成后，初次使用需要生产文件列表库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">updatedb</span><br></pre></td></tr></table></figure>
+<p>查找文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">locate [filename]</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>默认情况下，数据库每周更新一次；如果一个文件正在两次更新时间段之间的创建的，就搜不到结果。</p>
+<h3 id="文件路径"><a href="#文件路径" class="headerlink" title="文件路径"></a>文件路径</h3><h4 id="相对路径和绝对路径"><a href="#相对路径和绝对路径" class="headerlink" title="相对路径和绝对路径"></a>相对路径和绝对路径</h4><p>顾名思义，文件路径就是用来描述存放文件的地方。这里有两种描述的方法：</p>
+<ul>
+<li>绝对路径：从根目录写起的，叫做绝对路径,比如 <code>/var/...</code> 或者 <code>～/...</code></li>
+<li>相对路径：与当前目录相对的写法，叫做相对路径。</li>
+</ul>
+<p>举例来说：</p>
+<p>pwd        //查询当前所在的绝对路径</p>
+<p><img src="https://farm1.staticflickr.com/808/27024710608_759c7aebd7_o.png" alt=""></p>
+<p>上图中，红框标示出来的部分，就是当前所在的绝对路径，即 <code>/Users/stevey/documents/github-file</code> ，通过 ls 命令可以看到，下面有一个 steveBlog 的文件夹。</p>
+<p>要进入这个文件夹可以采用两种方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd steveBlog        //相对路径</span><br><span class="line"></span><br><span class="line">cd /Users/stevey/documents/github-file/steveBlog        //绝对路径</span><br></pre></td></tr></table></figure>
+<h4 id="文件路径相关的命令"><a href="#文件路径相关的命令" class="headerlink" title="文件路径相关的命令"></a>文件路径相关的命令</h4><h5 id="tree-命令查看目录结构"><a href="#tree-命令查看目录结构" class="headerlink" title="tree 命令查看目录结构"></a><code>tree</code> 命令查看目录结构</h5><p>tree命令是以树状形式显示目录下的文件或子目录；系统默认没有的，需要自行安装。</p>
+<ul>
+<li>安装</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y tree</span><br></pre></td></tr></table></figure>
+<ul>
+<li>命令格式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//n表示目录层级数</span><br><span class="line">//dir表示目录名称</span><br><span class="line">tree -L [n] [dir]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//-L 表示查看目录层级，2表示查看两级目录。</span><br><span class="line">[root@VM_0_7_centos ~]# tree -L 1 /tmp/</span><br><span class="line">/tmp/</span><br><span class="line">├── cvm_init.log</span><br><span class="line">├── mysql.sock</span><br><span class="line">├── net_affinity.log</span><br><span class="line">├── nv_gpu_conf.log</span><br><span class="line">├── sess_cv242b2kg0v1n6lier3cavvskctvd1dn</span><br><span class="line">├── sess_d2360tgsa14ivnfsou9kspf4q6c70iq2</span><br><span class="line">├── sess_e68jsk46a5bqdm6ummjj0crir1teb4v1</span><br><span class="line">├── sess_vstbaspckikbfde14nqlh4ptvdbfgu36</span><br><span class="line">└── setRps.log</span><br><span class="line"></span><br><span class="line">0 directories, 9 files</span><br></pre></td></tr></table></figure>
+<h5 id="ls-命令查看目录信息"><a href="#ls-命令查看目录信息" class="headerlink" title="ls 命令查看目录信息"></a><code>ls</code> 命令查看目录信息</h5><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ls</td>
+<td>列出当前目录下的文件和文件夹，不包括隐藏文件</td>
+</tr>
+<tr>
+<td>ls -a</td>
+<td>列出当前目录下的文件和文件夹，不包括隐藏文件</td>
+</tr>
+<tr>
+<td>ls -l</td>
+<td>列出除隐藏文件之外的所有文件和目录的详细信息，包括权限、所属主、所属组、文件创建日期时间</td>
+</tr>
+<tr>
+<td>ls <code>&lt;filename&gt;</code> -l</td>
+<td>查看某个文件的详细信息</td>
+</tr>
+<tr>
+<td>ls <code>&lt;file-Folder-name&gt;</code></td>
+<td>查看指定目录下的文件和目录</td>
+</tr>
+<tr>
+<td>ls -Rl</td>
+<td>显示当前目录及所有子目录信息</td>
+</tr>
+<tr>
+<td>ls -tl</td>
+<td>以时间排序显示目录,查找最新文件有用</td>
+</tr>
+<tr>
+<td>ls -Sl</td>
+<td>以文件大小排序</td>
+</tr>
+<tr>
+<td>ls -s -l -S</td>
+<td>显示文件大小,并按大小排序</td>
+</tr>
+</tbody>
+</table>
+<p>示例：</p>
+<p><img src="https://farm1.staticflickr.com/834/43483148681_fb39608605_o.png" alt=""></p>
+<h5 id="pwd-命令：显示当前目录绝对路径"><a href="#pwd-命令：显示当前目录绝对路径" class="headerlink" title="pwd 命令：显示当前目录绝对路径"></a>pwd 命令：显示当前目录绝对路径</h5><p>用于显示当前所在目录。在linux系统中， <code>.</code>表示当前目录，  <code>..</code>表示上一级目录。</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_0_7_centos ~]# pwd</span><br><span class="line">/root</span><br></pre></td></tr></table></figure>
+<h5 id="cd-命令：切换目录"><a href="#cd-命令：切换目录" class="headerlink" title="cd 命令：切换目录"></a>cd 命令：切换目录</h5><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cd</td>
+<td>返回用户主目录</td>
+</tr>
+<tr>
+<td>cd /etc</td>
+<td>改变到其它路径</td>
+</tr>
+<tr>
+<td>cd ..</td>
+<td>返回到上一级目录</td>
+</tr>
+<tr>
+<td>cd / 或 cd ～</td>
+<td>返回到根目录</td>
+</tr>
+<tr>
+<td>cd -</td>
+<td>返回之前的目录</td>
+</tr>
+</tbody>
+</table>
+<h5 id="alias-命令"><a href="#alias-命令" class="headerlink" title="alias 命令"></a>alias 命令</h5><p>alias 命令用来设置指令别名，如果命令过长，那么就考虑可以设置一个别名。</p>
+<p><strong>命令行格式：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias 新的命令=&apos;原命令 -选项/参数&apos;</span><br></pre></td></tr></table></figure>
+<p><strong>示例：</strong></p>
+<ul>
+<li>显示当前已设置的别名</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias</span><br></pre></td></tr></table></figure>
+<p><img src="https://lh3.googleusercontent.com/-wCFJNyclSxs/Wq8hgnOzutI/AAAAAAABhlw/v12kCqp-610mvOQAqHoxq52xiHSaKzSlACHMYCw/I/15214268144359.jpg" alt=""></p>
+<ul>
+<li>设置vim别名</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 设置别名，输入`vi` 调用 `vim`</span><br><span class="line">alias vi=&apos;/usr/bin/vim&apos;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>删除别名</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unalias vi</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查询<code>alias</code> 更多用法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">man alias  //按 `space `下翻页，按` q `退出。</span><br></pre></td></tr></table></figure>
+<h5 id="cp-命令：文件复制"><a href="#cp-命令：文件复制" class="headerlink" title="cp 命令：文件复制"></a>cp 命令：文件复制</h5><p>命令格式为 <code>cp [参数] [源文件] [目标文件]</code>，常见参数用法：</p>
+<ul>
+<li><code>-r</code>复制目录及目录内的所有项目</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/783/27064365958_41e8d5cb77_o.png" alt=""></p>
+<ul>
+<li><code>-i</code>覆盖前询问</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/787/40227078774_24c2c183e5_o.png" alt=""></p>
+<h5 id="mv-命令：移动或重命名"><a href="#mv-命令：移动或重命名" class="headerlink" title="mv 命令：移动或重命名"></a>mv 命令：移动或重命名</h5><p>命令格式为 <code>mv [参数] [源文件或目录] [目标文件或目录]</code> ，常见用法如下：</p>
+<ul>
+<li>目标是目录，且目录已存在</li>
+</ul>
+<p><img src="https://lh3.googleusercontent.com/-06StOHqE9TU/WrIs4knF1SI/AAAAAAABhoE/YQU6sJP5mEYYAbCQbiMBAoYPPbTZYHMBACHMYCw/I/15216263364690.jpg" alt=""></p>
+<ul>
+<li>目标是目录，但该目录不存在(实际相当于给文件重命名)</li>
+</ul>
+<p><img src="https://farm5.staticflickr.com/4794/40041669495_ba9d3081aa_o.png" alt=""></p>
+<ul>
+<li>目标是文件，且该文件已存在(实际相当于覆盖目标文件)</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/794/40893873202_fb7d6eca0c_o.png" alt=""></p>
+<ul>
+<li>目标是文件，但该文件不存在（实际相当于重命名源文件）</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/818/26062809817_041eae441d_o.png" alt=""></p>
+<h3 id="文件权限管理"><a href="#文件权限管理" class="headerlink" title="文件权限管理"></a>文件权限管理</h3><h4 id="文件基本权限"><a href="#文件基本权限" class="headerlink" title="文件基本权限"></a>文件基本权限</h4><p>文件的基本权限包括读read、写write和执行execute，分别可以用4、2、1来表示；</p>
+<p>它与用户密不可分，分为三组进行管理：</p>
+<ul>
+<li><p><code>user：</code>对文件/目录所属用户设定权限；</p>
+</li>
+<li><p><code>group：</code>对文件/目录所属组设定权限；</p>
+</li>
+<li><p><code>other：</code>对文件/用户其他的组和用户设定权限；</p>
+</li>
+</ul>
+<p><strong>对于文件而言：</strong></p>
+<ul>
+<li><p>Read: 表示可读取文件内容；</p>
+</li>
+<li><p>Write：表示可编辑、新增、修改、删除文件内容；</p>
+</li>
+<li><p>execute：表示可执行一个脚本程序；</p>
+</li>
+</ul>
+<p><strong>对于目录而言：</strong></p>
+<ul>
+<li><p>Read: 表示可读取目录内的文件列表；</p>
+</li>
+<li><p>Write：表示可在目录内编辑、新增、修改、删除文件内容；</p>
+</li>
+<li><p>execute：表示能够进入目录；</p>
+</li>
+</ul>
+<h4 id="文件的特殊权限"><a href="#文件的特殊权限" class="headerlink" title="文件的特殊权限"></a>文件的特殊权限</h4><h5 id="set-uid"><a href="#set-uid" class="headerlink" title="set uid"></a>set uid</h5><p>这是一种对二进位制程序设置的特殊权限，临时允许二进位制程序执行者用户文件所属主的权限，这是一种临时的、特殊的、有条件的授权方法。</p>
+<p>这里有两个前提，缺一不可：</p>
+<ul>
+<li><p>只有可执行的二进位制程序才能设定set uid权限；</p>
+</li>
+<li><p>命令执行者对该程序拥有执行（execute）权限；</p>
+</li>
+</ul>
+<p>例如<code>/etc/shadow</code> 这个文件，用来保存用户信息，处于系统安全的考虑，这个文件读、写、执行的权限都没有；但是passwd命令拥有suid的特殊权限位，如下图所示，出现在x位置的那个s，即表示suid，这就好像尚方宝剑，赋予它临时修改密码配置文件，也就是更改密码的权限。</p>
+<p><img src="https://farm1.staticflickr.com/886/40358699654_292fe93e3c_o.png" alt=""></p>
+<p>由上图可知，<code>/etc/shadow</code> 默认的权限为<code>000</code>，<code>rwx</code>权限都没有的，也不能执行相应的操作。但 <code>passwd</code>赋予一个特殊权限，让我们在执行<code>passwd</code>命令时，临时拥有 root 权限，从而可以修改密码。</p>
+<p><strong>注意：</strong> </p>
+<ol>
+<li><p>虽然常见的八位制权限掩码是三位数，但其实应该是四位数，第一位表示的特殊权限。<code>set uid</code>位采用八进制表示为<code>4000</code>。</p>
+</li>
+<li><p><code>passwd</code> 是具有<code>setuid</code>的一个特殊命令。这样我们不需要是root用户，也可以对自己的密码进行修改。</p>
+</li>
+<li><p>设置set uid这个特殊权限很危险，不到万不得已，做好不要使用。</p>
+</li>
+</ol>
+<h6 id="设置setuid的方法："><a href="#设置setuid的方法：" class="headerlink" title="设置setuid的方法："></a>设置setuid的方法：</h6><ul>
+<li>方法一：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chmod 4755 [文件名]   // 设置set uid </span><br><span class="line"></span><br><span class="line">chmod 755 [文件名]    // 取消 set uid</span><br></pre></td></tr></table></figure>
+<ul>
+<li>方法二：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chmod u+s [文件名]   // 设置set uid </span><br><span class="line"></span><br><span class="line">chmod u-s [文件名]    // 取消 set uid</span><br></pre></td></tr></table></figure>
+<h5 id="set-gid"><a href="#set-gid" class="headerlink" title="set gid"></a>set gid</h5><p><code>set gid</code> 就是将程序文件的 s 权限赋予组，当执行此程序时，此进程的属组不再是运行者本人所属的基本组，而是此程序文件的属组。</p>
+<p>sgid 与suid相似，有一个重要特性，就是一旦对某个目录设置了sgid，该目录中创建的文件将继承该目录的所属组。</p>
+<p>这就意味着如果我们要创建一个部门共享目录，可以早创建目录后，设置sgid权限，这样部门群组内的任何用户创建的文件都会属于该目录所属组。如此一来，该部门所有用户都能够顺利读取共享目录文件。</p>
+<p>setgid位八进制表示为2000。</p>
+<p>这里有两种情况：</p>
+<ol>
+<li><p><code>set gid</code> 赋予文件：运行此文件的其它用户具有这个文件的属组特性；</p>
+</li>
+<li><p><code>set gid</code> 赋予目录：任何用户在该目录下创建的文件，则该文件属组都和目录的属组一致。</p>
+</li>
+</ol>
+<h6 id="设置方法："><a href="#设置方法：" class="headerlink" title="设置方法："></a>设置方法：</h6><ul>
+<li>方法一：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chmod 2755 [filename/dirname]   // 设置set gid </span><br><span class="line"></span><br><span class="line">chmod 755 [filename/dirname]    // 取消set gid</span><br></pre></td></tr></table></figure>
+<ul>
+<li>方法二：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chmod g+s [filename/dirname]   // 设置set gid </span><br><span class="line"></span><br><span class="line">chmod g-s [filename/dirname]    // 取消 set gid</span><br></pre></td></tr></table></figure>
+<h5 id="sticky-bit-（防删除位）"><a href="#sticky-bit-（防删除位）" class="headerlink" title="sticky bit （防删除位）"></a>sticky bit （防删除位）</h5><p><code>sticky bit</code>（防删除位）：用户是否能够删除文件，<strong>关键在于是否拥有文件所在目录的写权限，</strong> 有写权限就能够删除，否则就不能。</p>
+<p>sticky位八进制表示为1000，添加<code>sticky bit</code>（防删除位）后，用户能够该目录下添加文件，但不能删除或者重命名文件。</p>
+<p>例如，如果我们用root用户给共享目录设置sticky bit 权限，除非root用户，其他用户只能够添加文件，但不能删除或者重命名文件。</p>
+<h6 id="设置方法：-1"><a href="#设置方法：-1" class="headerlink" title="设置方法："></a>设置方法：</h6><ul>
+<li>方法一：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chmod 1755 [dirname]   // 设置sticky bit</span><br><span class="line"></span><br><span class="line">chmod 755 [dirname]    // 取消sticky bit</span><br></pre></td></tr></table></figure>
+<h6 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chmod o+t [dirname]   // 设置sticky bit</span><br><span class="line"></span><br><span class="line">chmod o-t [dirname]    // 取消sticky bit</span><br></pre></td></tr></table></figure>
+<h4 id="修改文件的隐藏权限"><a href="#修改文件的隐藏权限" class="headerlink" title="修改文件的隐藏权限"></a>修改文件的隐藏权限</h4><h5 id="chatrr-命令"><a href="#chatrr-命令" class="headerlink" title="chatrr 命令"></a>chatrr 命令</h5><p>命令格式 <code>chatrr [ +-= ] [ 参数 ] [文件或目录名]</code></p>
+<p><strong>常见参数用法</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>文件或目录的atime不可修改</td>
+</tr>
+<tr>
+<td>a</td>
+<td>只能追加不能删除，非root用户不能设定该属性</td>
+</tr>
+<tr>
+<td>s</td>
+<td>会将数据同步写入磁盘</td>
+</tr>
+<tr>
+<td>c</td>
+<td>自动压缩文件，读取时自动解压</td>
+</tr>
+<tr>
+<td>i</td>
+<td>不能删除、重命名、设定链接、编辑写入及新增数据</td>
+</tr>
+</tbody>
+</table>
+<p><strong>常用用法</strong></p>
+<h6 id="a-用法"><a href="#a-用法" class="headerlink" title="a 用法"></a><code>a</code> 用法</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># touch a.txt</span><br><span class="line"># ls</span><br><span class="line">anaconda-ks.cfg  a.txt</span><br><span class="line"># chattr +a a.txt</span><br><span class="line"># rm -rf a.txt</span><br><span class="line">rm: cannot remove ‘a.txt’: Operation not permitted //不可删除</span><br><span class="line"># echo &apos;this is a test&apos; &gt;&gt; a.txt  //只能追加内容</span><br><span class="line"># cat a.txt</span><br><span class="line">this is a test</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>删除<code>a</code>权限用 <code>chattr -a a.txt</code></p>
+<h6 id="i-用法"><a href="#i-用法" class="headerlink" title="i 用法"></a><code>i</code> 用法</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> # touch b.txt</span><br><span class="line"> # ls</span><br><span class="line">anaconda-ks.cfg  b.txt</span><br><span class="line"> # chattr +i b.txt</span><br><span class="line"> # rm -rf b.txt     //不可删除</span><br><span class="line">rm: cannot remove ‘b.txt’: Operation not permitted</span><br><span class="line"> # echo &apos;this is a test&apos; &gt; b.txt    //不可编辑写入</span><br><span class="line">-bash: b.txt: Permission denied</span><br><span class="line"> # echo &apos;this is a test&apos; &gt;&gt; b.txt     //不可追加内容</span><br><span class="line">-bash: b.txt: Permission denied</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>删除<code>i</code>权限 用<code>chattr -i b.txt</code></p>
+<h4 id="lsattr-命令"><a href="#lsattr-命令" class="headerlink" title="lsattr 命令"></a>lsattr 命令</h4><p><code>lsattr</code> 用来读取文件或目录的特殊权限，命令格式为 <code>lsattr [ 参数 ] [文件或目录名]</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>类似于<code>ls -a</code>  ，表示连同隐藏文件一起列出</td>
+</tr>
+<tr>
+<td>R</td>
+<td>连同子目录的信息一起列出</td>
+</tr>
+</tbody>
+</table>
+<p>举个栗子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> # mkdir c1 </span><br><span class="line"> # lsattr c1    // c1是刚刚创建的一个空文件夹，因此里面没有文件，不会又显示</span><br><span class="line"> # lsattr -aR c1  //连同隐藏文件一起显示</span><br><span class="line">---------------- c1/.</span><br><span class="line">---------------- c1/..</span><br></pre></td></tr></table></figure>
+<h3 id="链接文件"><a href="#链接文件" class="headerlink" title="链接文件"></a>链接文件</h3><p>链接文件 ，即<code>link file</code> ，使用命令<code>ls -l</code> 查看文件信息，第一组属性首字母为<code>l</code>的文件，类似于 <code>windows</code>下的快捷方式。</p>
+<p>链接文件<code>link file</code> 包括硬链接 <code>hard link</code> 和 软链接 <code>symbolic link</code> 两类。要搞清楚这两者的关系，需要先了解索引节点<code>inode</code>。</p>
+<h4 id="索引节点inode"><a href="#索引节点inode" class="headerlink" title="索引节点inode"></a>索引节点<code>inode</code></h4><p>硬盘最小的文件单位位扇区“扇区” <code>Sector</code>，每个扇区储存512字节（相当于0.5KB）；而linux系统文件存取的最小单位，叫做块 <code>block</code>，最常见的块 <code>block</code>是4KB，由连续八个扇区 <code>sector</code>组成一个块<code>block</code>。</p>
+<p>为了更方便的找到需要的文件，就需要有一个存储数据元信息的地方，比如文件的创建者、文件的创建日期、文件的大小等等。这种储存文件元信息的区域就叫做inode，中文译名为”索引节点”，作用就像目录索引一样。</p>
+<p>Unix/Linux系统内部不使用文件名，而使用inode号码来识别文件。当我们打开文件时，系统大致将这个过程分为三步：</p>
+<ol>
+<li><p>找到文件名对应的inode号码； </p>
+</li>
+<li><p>通过inode号码，获取inode信息； </p>
+</li>
+<li><p>根据inode信息，找到文件数据所在的块<code>block</code>，然后读出数据。</p>
+</li>
+</ol>
+<h5 id="inode-查询"><a href="#inode-查询" class="headerlink" title="inode 查询"></a>inode 查询</h5><p>查看某个文件的inode信息，使用命令行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stat [filename]</span><br></pre></td></tr></table></figure>
+<h4 id="硬链接-hard-link"><a href="#硬链接-hard-link" class="headerlink" title="硬链接 hard link"></a>硬链接 <code>hard link</code></h4><p>linux系统允许多个文件名指向同一个inode号，打个比方，每个人可以有不同的名字，大名、小名、别名、外号等等，但都只向<br>唯一的身份ID。因此，我们可以：</p>
+<ul>
+<li><p>通过不同的文件名访问文件；</p>
+</li>
+<li><p>对文件内容进行修改，会影响到所有文件名；</p>
+</li>
+<li><p>删除一个文件名，不影响另一个文件名的访问；</p>
+</li>
+</ul>
+<p><strong>注意：</strong>新建一个空目录，默认会生成两个目录项：<code>.</code>和<code>..</code>，前者<code>.</code>等同于当前目录的”硬链接”，后者 <code>..</code>等同于父目录的”硬链接”。所以，任何一个目录的”硬链接”总数，总是等于2加上它的子目录总数（含隐藏目录）。</p>
+<h5 id="硬链接的不足"><a href="#硬链接的不足" class="headerlink" title="硬链接的不足"></a>硬链接的不足</h5><p>硬链接虽然看起来很美好，但是有两个不能克服的缺点：</p>
+<ol>
+<li><p>不能跨文件分区；每个分区在格式化之前就指定inode数据元信息存放区和文件数据存放区，inode和数据的对应关系就会在一个分区里面关联，所以不能够跨分区。</p>
+</li>
+<li><p>不能对目录做硬链接（原因不明）；</p>
+</li>
+</ol>
+<p>基于上述两个先天不足，就有了软链接的用武之地。</p>
+<h5 id="ln-命令-创建硬链接"><a href="#ln-命令-创建硬链接" class="headerlink" title="ln 命令 创建硬链接"></a>ln 命令 创建硬链接</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln [源文件] [目标文件]</span><br></pre></td></tr></table></figure>
+<h4 id="软链接-symbolic-link"><a href="#软链接-symbolic-link" class="headerlink" title="软链接 symbolic link"></a>软链接 <code>symbolic link</code></h4><p>与硬链接不同，软链接是建立一个独立的文件。例如，文件A和文件B的inode号不一样，但A的内容是B的路径，<strong>相当于一个路标</strong>。</p>
+<p>这个<strong>路标</strong>是真实存在的独立文件，尽管它通常都很小。读取A时，系统会自动将访问者导向B，此时A就是B的软链接<code>symbolic link</code>。</p>
+<ul>
+<li><p>A依赖于B而存在，如果删除了B，打开文件A就会报错：<code>No such file or directory</code>。 </p>
+</li>
+<li><p>A指向B的文件名，而不是B的<code>inode</code>号码，因此B的<code>inode</code>链接数不会因此发生变化。</p>
+</li>
+</ul>
+<h5 id="ln-s命令可以创建软链接"><a href="#ln-s命令可以创建软链接" class="headerlink" title="ln -s命令可以创建软链接"></a>ln -s命令可以创建软链接</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s [源文文件或目录] [目标文件或目录]</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Steve Yuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://steve-yuan-8276.github.io/2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/" title="Linux运维学习笔记：centOS用户和文件管理（一）">https://steve-yuan-8276.github.io/2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
+          
+            <a href="/tags/centos/" rel="tag"># centos</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/18/linuxNotes-01-basisOfCentos7/" rel="next" title="Linux运维学习笔记：centOS的安装和基本配置">
+                <i class="fa fa-chevron-left"></i> Linux运维学习笔记：centOS的安装和基本配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/logo.png"
+                alt="Steve Yuan" />
+            
+              <p class="site-author-name" itemprop="name">Steve Yuan</p>
+              <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">125</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">78</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/steve-yuan-8276" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/feng8276" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.facebook.com/feng74" target="_blank" title="Facebook">
+                    
+                      <i class="fa fa-fw fa-facebook"></i>Facebook</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yuanf02@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linux的文件系统"><span class="nav-number">2.</span> <span class="nav-text">linux的文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#linux文件系统构成"><span class="nav-number">2.1.</span> <span class="nav-text">linux文件系统构成</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#linux文件目录结构："><span class="nav-number">2.1.1.</span> <span class="nav-text">linux文件目录结构：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用文件类型："><span class="nav-number">2.1.2.</span> <span class="nav-text">常用文件类型：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#普通文件："><span class="nav-number">2.1.2.1.</span> <span class="nav-text">普通文件：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#目录-directory-："><span class="nav-number">2.1.2.2.</span> <span class="nav-text">目录 directory ：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#链接文件-link-file"><span class="nav-number">2.1.2.3.</span> <span class="nav-text">链接文件 link file</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#设备文件-device"><span class="nav-number">2.1.2.4.</span> <span class="nav-text">设备文件 device</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux-常用文件后缀名"><span class="nav-number">2.1.3.</span> <span class="nav-text">Linux 常用文件后缀名</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常见的文件后缀名包括："><span class="nav-number">2.1.3.1.</span> <span class="nav-text">常见的文件后缀名包括：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建删除文件目录"><span class="nav-number">2.1.4.</span> <span class="nav-text">创建删除文件目录</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#mkdir-命令：创建文件夹"><span class="nav-number">2.1.4.1.</span> <span class="nav-text">mkdir 命令：创建文件夹</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rmdir-命令：删除目录"><span class="nav-number">2.1.4.2.</span> <span class="nav-text">rmdir 命令：删除目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#touch-命令：创建文件"><span class="nav-number">2.1.4.3.</span> <span class="nav-text">touch 命令：创建文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rm命令：删除文件或目录"><span class="nav-number">2.1.4.4.</span> <span class="nav-text">rm命令：删除文件或目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#拓展：如何同时创建多个文件-目录"><span class="nav-number">2.1.4.5.</span> <span class="nav-text">拓展：如何同时创建多个文件/目录</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看文件命令"><span class="nav-number">2.1.5.</span> <span class="nav-text">查看文件命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#cat-和-tac"><span class="nav-number">2.1.5.1.</span> <span class="nav-text">cat 和 tac</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#head-和-tail"><span class="nav-number">2.1.5.2.</span> <span class="nav-text">head 和 tail</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#more和less"><span class="nav-number">2.1.5.3.</span> <span class="nav-text">more和less</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#more-的用法"><span class="nav-number">2.1.5.3.1.</span> <span class="nav-text">more 的用法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#less命令"><span class="nav-number">2.1.5.3.2.</span> <span class="nav-text">less命令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#搜索文件"><span class="nav-number">2.1.6.</span> <span class="nav-text">搜索文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#find-命令搜索文件"><span class="nav-number">2.1.6.1.</span> <span class="nav-text">find 命令搜索文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#which-查询可执行文件的绝对路径"><span class="nav-number">2.1.6.2.</span> <span class="nav-text">which 查询可执行文件的绝对路径</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#whereis-查找文件"><span class="nav-number">2.1.6.3.</span> <span class="nav-text">whereis 查找文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#locate-查找文件"><span class="nav-number">2.1.6.4.</span> <span class="nav-text">locate 查找文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件路径"><span class="nav-number">2.2.</span> <span class="nav-text">文件路径</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#相对路径和绝对路径"><span class="nav-number">2.2.1.</span> <span class="nav-text">相对路径和绝对路径</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件路径相关的命令"><span class="nav-number">2.2.2.</span> <span class="nav-text">文件路径相关的命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#tree-命令查看目录结构"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">tree 命令查看目录结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ls-命令查看目录信息"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">ls 命令查看目录信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#pwd-命令：显示当前目录绝对路径"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">pwd 命令：显示当前目录绝对路径</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#cd-命令：切换目录"><span class="nav-number">2.2.2.4.</span> <span class="nav-text">cd 命令：切换目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#alias-命令"><span class="nav-number">2.2.2.5.</span> <span class="nav-text">alias 命令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#cp-命令：文件复制"><span class="nav-number">2.2.2.6.</span> <span class="nav-text">cp 命令：文件复制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mv-命令：移动或重命名"><span class="nav-number">2.2.2.7.</span> <span class="nav-text">mv 命令：移动或重命名</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件权限管理"><span class="nav-number">2.3.</span> <span class="nav-text">文件权限管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件基本权限"><span class="nav-number">2.3.1.</span> <span class="nav-text">文件基本权限</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件的特殊权限"><span class="nav-number">2.3.2.</span> <span class="nav-text">文件的特殊权限</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#set-uid"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">set uid</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#设置setuid的方法："><span class="nav-number">2.3.2.1.1.</span> <span class="nav-text">设置setuid的方法：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#set-gid"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">set gid</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#设置方法："><span class="nav-number">2.3.2.2.1.</span> <span class="nav-text">设置方法：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#sticky-bit-（防删除位）"><span class="nav-number">2.3.2.3.</span> <span class="nav-text">sticky bit （防删除位）</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#设置方法：-1"><span class="nav-number">2.3.2.3.1.</span> <span class="nav-text">设置方法：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#方法二："><span class="nav-number">2.3.2.3.2.</span> <span class="nav-text">方法二：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改文件的隐藏权限"><span class="nav-number">2.3.3.</span> <span class="nav-text">修改文件的隐藏权限</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#chatrr-命令"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">chatrr 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#a-用法"><span class="nav-number">2.3.3.1.1.</span> <span class="nav-text">a 用法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#i-用法"><span class="nav-number">2.3.3.1.2.</span> <span class="nav-text">i 用法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lsattr-命令"><span class="nav-number">2.3.4.</span> <span class="nav-text">lsattr 命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接文件"><span class="nav-number">2.4.</span> <span class="nav-text">链接文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#索引节点inode"><span class="nav-number">2.4.1.</span> <span class="nav-text">索引节点inode</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#inode-查询"><span class="nav-number">2.4.1.1.</span> <span class="nav-text">inode 查询</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#硬链接-hard-link"><span class="nav-number">2.4.2.</span> <span class="nav-text">硬链接 hard link</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#硬链接的不足"><span class="nav-number">2.4.2.1.</span> <span class="nav-text">硬链接的不足</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ln-命令-创建硬链接"><span class="nav-number">2.4.2.2.</span> <span class="nav-text">ln 命令 创建硬链接</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#软链接-symbolic-link"><span class="nav-number">2.4.3.</span> <span class="nav-text">软链接 symbolic link</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ln-s命令可以创建软链接"><span class="nav-number">2.4.3.1.</span> <span class="nav-text">ln -s命令可以创建软链接</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Steve Yuan</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">189.8k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/';
+          this.page.identifier = '2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/';
+          this.page.title = 'Linux运维学习笔记：centOS用户和文件管理（一）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://steve-yuan.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

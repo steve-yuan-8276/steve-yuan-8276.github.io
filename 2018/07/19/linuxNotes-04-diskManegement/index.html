@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="centos,notes,linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="写在前面这则笔记主要整理linux磁盘管理的基础知识。 磁盘分区挂载的工作流：  磁盘分区 （fdisk、parted）  磁盘格式化  （mkfs.ext2、mkfs.ext3、mkfs.ext4和mkfs.xfs ）  挂载分区  （mount）  修改 /etc/fstab   除此之外，还会整理磁盘分区动态管理LVM，以及手动增加swap分区的相关知识。">
+<meta name="keywords" content="centos,notes,linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux运维学习笔记：centOS磁盘管理">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/19/linuxNotes-04-diskManegement/index.html">
+<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:description" content="写在前面这则笔记主要整理linux磁盘管理的基础知识。 磁盘分区挂载的工作流：  磁盘分区 （fdisk、parted）  磁盘格式化  （mkfs.ext2、mkfs.ext3、mkfs.ext4和mkfs.xfs ）  挂载分区  （mount）  修改 /etc/fstab   除此之外，还会整理磁盘分区动态管理LVM，以及手动增加swap分区的相关知识。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://farm1.staticflickr.com/814/41225770961_503ef1b094_o.png">
+<meta property="og:image" content="https://lh3.googleusercontent.com/-IMWI8LRKkqI/WsSBi8VE0dI/AAAAAAABiEE/0-bGw_lxJxcnVisgLOMGno80e09R8Y24gCHMYCw/I/15228276574394.jpg">
+<meta property="og:image" content="https://lh3.googleusercontent.com/-OPAKilt8CLY/WsSCreK2J8I/AAAAAAABiEQ/HzL92vF0KHI41_m298-d7LA6Irr4GFRSwCHMYCw/I/15228279476641.jpg">
+<meta property="og:image" content="https://lh3.googleusercontent.com/-eNcvEoz5X9E/WsSC2IG1z6I/AAAAAAABiEU/tCBpOknKPnsKiBCfUbAYumAtrvBTV3SrgCHMYCw/I/15228279907551.jpg">
+<meta property="og:image" content="https://farm1.staticflickr.com/794/39506950090_fff5cce919_o.png">
+<meta property="og:image" content="https://lh3.googleusercontent.com/-6PsUVosd6Zw/WsSFwUQ0kzI/AAAAAAABiEk/ceOJBHZTONci0SLYPQZ3OSDN214tTaqQgCHMYCw/I/15228287345586.jpg">
+<meta property="og:image" content="https://lh3.googleusercontent.com/-CTGZGx2qRB8/WsSGBgf-3oI/AAAAAAABiEo/liCA18cXV0guU278TUGoUSmzG6mejKoWwCHMYCw/I/15228288055580.jpg">
+<meta property="og:image" content="https://lh3.googleusercontent.com/--pPLOelccUs/WsSHtJ-cbtI/AAAAAAABiE0/QVNDZnan2Cgxkk-XGJEJioicja-w7JskQCHMYCw/I/15228292328939.jpg">
+<meta property="og:image" content="https://farm1.staticflickr.com/900/41182118502_f7a2323758_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/874/26353893207_0cc0d4f43c_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/864/27352848428_185185c7b1_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/804/41226806021_8fd282234b_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/818/39555652670_b9ef0984fb_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/807/39417218650_d06e284c49_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/813/40603141934_1abddd3362_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/869/26445115377_2691e2091f_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/876/39508454940_ba483bdca2_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/785/40604614524_759d353bbf_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/889/40417612895_e0886fbcb1_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/909/27291044237_7f5f58e556_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/827/41261959055_7b6c1dab11_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/909/27291044237_7f5f58e556_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/796/27487620198_4a8888491c_o.jpg">
+<meta property="og:updated_time" content="2018-07-19T09:57:15.941Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux运维学习笔记：centOS磁盘管理">
+<meta name="twitter:description" content="写在前面这则笔记主要整理linux磁盘管理的基础知识。 磁盘分区挂载的工作流：  磁盘分区 （fdisk、parted）  磁盘格式化  （mkfs.ext2、mkfs.ext3、mkfs.ext4和mkfs.xfs ）  挂载分区  （mount）  修改 /etc/fstab   除此之外，还会整理磁盘分区动态管理LVM，以及手动增加swap分区的相关知识。">
+<meta name="twitter:image" content="https://farm1.staticflickr.com/814/41225770961_503ef1b094_o.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/19/linuxNotes-04-diskManegement/"/>
+
+
+
+
+
+  <title>Linux运维学习笔记：centOS磁盘管理 | Steve的折腾学习日志</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111158073-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/steve-yuan-8276"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/19/linuxNotes-04-diskManegement/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux运维学习笔记：centOS磁盘管理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-19T16:30:21+08:00">
+                2018-07-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/19/linuxNotes-04-diskManegement/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/19/linuxNotes-04-diskManegement/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  5,064
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  20
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记主要整理linux磁盘管理的基础知识。</p>
+<p>磁盘分区挂载的工作流：</p>
+<ol>
+<li><p>磁盘分区 （fdisk、parted）</p>
+</li>
+<li><p>磁盘格式化  （mkfs.ext2、mkfs.ext3、mkfs.ext4和mkfs.xfs ）</p>
+</li>
+<li><p>挂载分区  （mount）</p>
+</li>
+<li><p>修改 <code>/etc/fstab</code></p>
+</li>
+</ol>
+<p>除此之外，还会整理磁盘分区动态管理LVM，以及手动增加swap分区的相关知识。</p>
+<a id="more"></a>
+<h2 id="查看磁盘"><a href="#查看磁盘" class="headerlink" title="查看磁盘"></a>查看磁盘</h2><h3 id="df命令-查看已挂载磁盘的容量"><a href="#df命令-查看已挂载磁盘的容量" class="headerlink" title="df命令 查看已挂载磁盘的容量"></a><code>df</code>命令 查看已挂载磁盘的容量</h3><p>命令行格式： <code>df [参数]</code></p>
+<p><img src="https://farm1.staticflickr.com/814/41225770961_503ef1b094_o.png" alt=""></p>
+<p>如上图所示，一共有6列：</p>
+<table>
+<thead>
+<tr>
+<th>列数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>分区名字</td>
+</tr>
+<tr>
+<td>2</td>
+<td>分区总容量</td>
+</tr>
+<tr>
+<td>3</td>
+<td>使用容量</td>
+</tr>
+<tr>
+<td>4</td>
+<td>剩余容量</td>
+</tr>
+<tr>
+<td>5</td>
+<td>已使用容量所占百分比</td>
+</tr>
+<tr>
+<td>6</td>
+<td>分区挂载点</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>df</code> 常见参数用法</strong></p>
+<p>常用的参数有<code>i</code>、 <code>h</code>、 <code>k</code>、 <code>m</code>，参数可省略。具体如下：</p>
+<ul>
+<li><code>-i</code> 查看inodes 使用情况，如果inodes已使用100%，即使磁盘空间仍有空余，也会提示磁盘空间已满。</li>
+</ul>
+<p><img src="https://lh3.googleusercontent.com/-IMWI8LRKkqI/WsSBi8VE0dI/AAAAAAABiEE/0-bGw_lxJxcnVisgLOMGno80e09R8Y24gCHMYCw/I/15228276574394.jpg" alt=""></p>
+<ul>
+<li><code>-h</code> 使用合适的存储单位显示。</li>
+</ul>
+<p><img src="https://lh3.googleusercontent.com/-OPAKilt8CLY/WsSCreK2J8I/AAAAAAABiEQ/HzL92vF0KHI41_m298-d7LA6Irr4GFRSwCHMYCw/I/15228279476641.jpg" alt=""></p>
+<ul>
+<li><code>-k、-m</code> 指定存储单位显示，k 表示KB；m表示MB。</li>
+</ul>
+<p><img src="https://lh3.googleusercontent.com/-eNcvEoz5X9E/WsSC2IG1z6I/AAAAAAABiEU/tCBpOknKPnsKiBCfUbAYumAtrvBTV3SrgCHMYCw/I/15228279907551.jpg" alt=""></p>
+<h3 id="free-命令-查看swap-分区情况"><a href="#free-命令-查看swap-分区情况" class="headerlink" title="free 命令 查看swap 分区情况"></a>free 命令 查看swap 分区情况</h3><p><img src="https://farm1.staticflickr.com/794/39506950090_fff5cce919_o.png" alt=""></p>
+<h3 id="du-命令-查看某个目录或者文件的大小"><a href="#du-命令-查看某个目录或者文件的大小" class="headerlink" title="du 命令 查看某个目录或者文件的大小"></a>du 命令 查看某个目录或者文件的大小</h3><p>命令行格式 <code>du [参数] [dirname/filename]</code></p>
+<p>不加任何参数，只会目录（包括子目录）的大小：</p>
+<p><img src="https://lh3.googleusercontent.com/-6PsUVosd6Zw/WsSFwUQ0kzI/AAAAAAABiEk/ceOJBHZTONci0SLYPQZ3OSDN214tTaqQgCHMYCw/I/15228287345586.jpg" alt=""></p>
+<p><strong>常用参数用法如下：</strong></p>
+<ul>
+<li><code>-a</code> 列出全部文件及目录的大小</li>
+</ul>
+<p><img src="https://lh3.googleusercontent.com/-CTGZGx2qRB8/WsSGBgf-3oI/AAAAAAABiEo/liCA18cXV0guU278TUGoUSmzG6mejKoWwCHMYCw/I/15228288055580.jpg" alt=""></p>
+<ul>
+<li><code>-b、 -k、 -m</code>  指定不同的存储单位，<code>b</code> 表示<code>bytes</code> 字节；<code>k</code>代表<code>KB</code> ；<code>m</code>代表 <code>MB</code>。</li>
+</ul>
+<p><img src="https://lh3.googleusercontent.com/--pPLOelccUs/WsSHtJ-cbtI/AAAAAAABiE0/QVNDZnan2Cgxkk-XGJEJioicja-w7JskQCHMYCw/I/15228292328939.jpg" alt=""></p>
+<p><strong>注：</strong>使用 -k 时，如果文件小于4KB，会显示4KB（inodes记录文件存储的最小的单位是块，通常是4KB大小。）</p>
+<ul>
+<li><code>-h</code> 自适应恰当的输出单位</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/900/41182118502_f7a2323758_o.png" alt=""></p>
+<ul>
+<li><code>-c</code> 表示最后加总和</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/874/26353893207_0cc0d4f43c_o.png" alt=""></p>
+<ul>
+<li><code>-s</code> 表示只列出总和</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/864/27352848428_185185c7b1_o.png" alt=""></p>
+<ul>
+<li>参数可以连用，例如 <code>du -sh [dirname/filename]</code></li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/804/41226806021_8fd282234b_o.png" alt=""></p>
+<ul>
+<li>利用管道符，对结果进行排序 <code>du -h [dir_name] | sort -n</code></li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/818/39555652670_b9ef0984fb_o.png" alt=""></p>
+<h2 id="磁盘分区"><a href="#磁盘分区" class="headerlink" title="磁盘分区"></a>磁盘分区</h2><h3 id="前提准备：添加虚拟分区"><a href="#前提准备：添加虚拟分区" class="headerlink" title="前提准备：添加虚拟分区"></a>前提准备：添加虚拟分区</h3><p>点击虚拟机设置，选择磁盘，调整大小。</p>
+<p><img src="https://farm1.staticflickr.com/807/39417218650_d06e284c49_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/813/40603141934_1abddd3362_o.png" alt=""></p>
+<h3 id="利用fdisk-进行磁盘分区"><a href="#利用fdisk-进行磁盘分区" class="headerlink" title="利用fdisk 进行磁盘分区"></a>利用fdisk 进行磁盘分区</h3><p><code>fdisk</code>是linux 下的磁盘分区工具，分区格式为MBR，特点是最多分4个主分区，磁盘大小不能超过2T。因此使用fdisk需要遵循以下原则：</p>
+<ul>
+<li><p>主分区（包括拓展分区）控制在4个以内，不得超过4个；</p>
+</li>
+<li><p>主分区在前，拓展分区在后；</p>
+</li>
+<li><p>拓展分区中划分逻辑分区（如果拓展分区被删除，其中的逻辑分区也会被删除）；</p>
+</li>
+</ul>
+<h4 id="第一步：查看硬盘使用情况"><a href="#第一步：查看硬盘使用情况" class="headerlink" title="第一步：查看硬盘使用情况"></a>第一步：查看硬盘使用情况</h4><p>输入 <code>fdisk -l /dev/sda</code>，观察硬盘使用情形。</p>
+<h4 id="第二步："><a href="#第二步：" class="headerlink" title="第二步："></a>第二步：</h4><p>输入 <code>fdisk /dev/sda</code>，进入分割硬盘模式。</p>
+<p><img src="https://farm1.staticflickr.com/869/26445115377_2691e2091f_o.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>m</td>
+<td>显示所有命令</td>
+</tr>
+<tr>
+<td>2</td>
+<td>p</td>
+<td>显示硬盘分区</td>
+</tr>
+<tr>
+<td>3</td>
+<td>a</td>
+<td>设定硬盘启动区</td>
+</tr>
+<tr>
+<td>4</td>
+<td>n</td>
+<td><strong>设定新的硬盘分区</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td>p</td>
+<td>硬盘为[主要]分区(primary)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>e</td>
+<td>硬盘为[延伸]分区(extend)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>t</td>
+<td>改变硬盘分区属性</td>
+</tr>
+<tr>
+<td>8</td>
+<td>d</td>
+<td><strong>删除硬盘分区</strong></td>
+</tr>
+<tr>
+<td>9</td>
+<td>q</td>
+<td><strong>不保存退出</strong></td>
+</tr>
+<tr>
+<td>10</td>
+<td>w</td>
+<td><strong>保持并退出</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="第三步：分区操作"><a href="#第三步：分区操作" class="headerlink" title="第三步：分区操作"></a>第三步：分区操作</h4><ol>
+<li><p>新建分区 ，按<code>n</code></p>
+</li>
+<li><p>设定分区类型（主分区按 <code>p</code> 或拓展分区 按 <code>e</code> ）</p>
+</li>
+<li><p>设定分区大小，比如设定2G大小，则输入 <code>+2G</code></p>
+</li>
+<li><p>如果之前设定不合理，按 <code>d</code> 选择相应分区删除。</p>
+</li>
+</ol>
+<h3 id="利用-parted进行磁盘分区"><a href="#利用-parted进行磁盘分区" class="headerlink" title="利用 parted进行磁盘分区"></a>利用 parted进行磁盘分区</h3><p>前面提到<code>fdisk</code>最大支持2T的分区，大于这个分区就要使用<code>parted</code>进行分区。</p>
+<p>parted是一个用于硬盘分区或调整分区大小的工具。使用它可以创建、清除、调整、移动和复制ext2、ext3、linux-swap、FAT、FAT32和reiserfs分区；也能创建、调整和移动苹果系统的HFS分区；还能检测jfs、ntfs、ufs和xfs分区。</p>
+<p>该工具常用于为新安装的操作系统创建空间，重新分配硬盘使用情况，在将数据拷贝到新硬盘的时候也常常使用。</p>
+<h4 id="parted-安装"><a href="#parted-安装" class="headerlink" title="parted 安装"></a>parted 安装</h4><p>对于 RHEL/CentOS：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install -y parted</span><br></pre></td></tr></table></figure>
+<p>对于 Debian/Ubuntu：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install -y parted</span><br></pre></td></tr></table></figure>
+<h4 id="parted-启动："><a href="#parted-启动：" class="headerlink" title="parted 启动："></a>parted 启动：</h4><p>命令行： <code>sudo parted [DeviceName]</code></p>
+<p>注：DeviceName 为指定的磁盘名称；如果不加，则启动系统默认的第一个磁盘。</p>
+<p>如果不清楚电脑磁盘情况，输入<code>parted -l device</code> 显示所有可用硬盘的名字，以及其它的有用信息比如储存空间、型号、扇区大小、硬盘标志以及分区信息。</p>
+<h4 id="创建硬盘分区"><a href="#创建硬盘分区" class="headerlink" title="创建硬盘分区"></a>创建硬盘分区</h4><p>Parted 命令分为两种模式：命令行模式和交互模式：</p>
+<p><strong>命令行模式：</strong></p>
+<ul>
+<li><code>parted [option] device [command]</code> ,该模式可以直接在命令行下对磁盘进行分区操作。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">parted /dev/sdb mklabel gpt mkpart 1 ext3 1 5T</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用所有剩余空间创建分区</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo parted /dev/sdb mkpart primary ext4 20.0GB 100%                </span><br><span class="line">// 命令创建了一个 33.7 GB 的分区，从 20 GB 开始到 53 GB 结束。 100% 使用率允许用户用硬盘上所有剩余的空余空间。</span><br></pre></td></tr></table></figure>
+<p><strong>交互模式：</strong></p>
+<ul>
+<li>进入交互模式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# parted /dev/sdb   // 使用parted来对GPT磁盘操作，进入交互式模式</span><br><span class="line">GNU Parted 1.8.1 Using /dev/sdb Welcome to GNU Parted! Type ‘help’ to view a list of commands.</span><br><span class="line">(parted) mklabel gpt           // 将MBR磁盘格式化为GPT</span><br><span class="line">(parted) print                       //打印当前分区</span><br><span class="line">(parted) mkpart primary 0 4.5TB         // 分一个4.5T的主分区</span><br><span class="line">(parted) mkpart primary 4.5TB 12TB     // 分一个7.5T的主分区</span><br><span class="line">(parted) print                         //打印当前分区</span><br><span class="line">(parted) quit     //退出</span><br><span class="line">Information: Don’t forget to update /etc/fstab, if necessary.</span><br></pre></td></tr></table></figure>
+<ul>
+<li>列出电脑上的所有的分区，使用 <code>sudo parted [DeviceName] print</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo parted /dev/sdb print   //列出 `/dev/sdb` 所有分区</span><br></pre></td></tr></table></figure>
+<ul>
+<li>分区完成之后，使用 <code>mkfs</code> 格式化后，挂载即可使用。</li>
+</ul>
+<h4 id="重新调整分区大小"><a href="#重新调整分区大小" class="headerlink" title="重新调整分区大小"></a>重新调整分区大小</h4><ul>
+<li>查询磁盘空闲空间，使用  <code>sudo parted [DeviceName] print free</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">parted /dev/sdb print free   //列出 `/dev/sdb` 所有分区的空闲空间</span><br></pre></td></tr></table></figure>
+<ul>
+<li>调整逻辑卷大小<code>sudo parted [Disk Name] [resizepart] [Partition Number] [Partition New End Size]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo parted /dev/sdb resizepart 3 33.0GB   //重新调整（增加）分区 3 的结束位置，增加到 33GB</span><br><span class="line"></span><br><span class="line">sudo parted /dev/sdb print    //确认是否扩容成功</span><br></pre></td></tr></table></figure>
+<ul>
+<li>重新调整文件系统大小  <code>sudo resize2fs [DeviceName]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo resize2fs /dev/sdb3</span><br></pre></td></tr></table></figure>
+<ul>
+<li>确认分区是否已经扩容</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ df -h /dev/sdb[1-3]</span><br></pre></td></tr></table></figure>
+<h4 id="删除分区"><a href="#删除分区" class="headerlink" title="删除分区"></a>删除分区</h4><p>命令行格式：<code>sudo parted [Disk Name] [rm] [Partition Number]</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo parted /dev/sdb rm 3    //删除分区 3 （/dev/sdb3）</span><br><span class="line"></span><br><span class="line">sudo parted /dev/sdb print    //查看磁盘情况，检查分区是否删除</span><br></pre></td></tr></table></figure>
+<h4 id="设置-更改分区标志"><a href="#设置-更改分区标志" class="headerlink" title="设置/更改分区标志"></a>设置/更改分区标志</h4><p>命令行格式： <code>sudo parted [Disk Name] [set] [Partition Number] [Flags Name] [Flag On/Off]</code></p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo parted /dev/sdb set 2 lvm on  //对 /dev/sdb2 设置 lvm 标志</span><br><span class="line"></span><br><span class="line">sudo parted /dev/sdb print   //查看更改是否成功</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看可用的标志<code>(parted) help set</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# (parted) help set</span><br><span class="line"> set NUMBER FLAG STATE change the FLAG on partition NUMBER</span><br><span class="line"></span><br><span class="line">    NUMBER is the partition number used by Linux. On MS-DOS disk labels, the primary partitions number from 1 to 4, logical partitions from 5 onwards.</span><br><span class="line"> FLAG is one of: boot, root, swap, hidden, raid, lvm, lba, hp-service, palo, prep, msftres, bios_grub, atvrecv, diag, legacy_boot, msftdata, irst, esp</span><br><span class="line"> STATE is one of: on, off</span><br></pre></td></tr></table></figure>
+<h2 id="磁盘格式化"><a href="#磁盘格式化" class="headerlink" title="磁盘格式化"></a>磁盘格式化</h2><h3 id="linux常见文件系统"><a href="#linux常见文件系统" class="headerlink" title="linux常见文件系统"></a>linux常见文件系统</h3><p>磁盘分区完成后，还需要“格式化”，其实就是安装文件系统。所谓文件系统（File System），是文件管理系统的简称，是用来组织数据在存储介质上的存储方式以及检索方式的。</p>
+<p>目前，主流操作系统的文件系统如下：</p>
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>文件系统</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>windows</td>
+<td>FAT、NTFS、ReFS</td>
+<td>win10最新的文件系统是ReFS，相比已经被广泛应用的NTFS，弹性文件系统的优势在于能够提供更高的稳定性，可以自动验证数据是否损坏，并尽力恢复数据</td>
+</tr>
+<tr>
+<td>linux</td>
+<td>ext2、2xt3、ext4、xfs等</td>
+<td>目前在学习的centos7的默认文件系统是xfs</td>
+</tr>
+<tr>
+<td>MacOS</td>
+<td>HFS、HFS+、APFS</td>
+<td>macOS最新的文件系统是APFS，这是一种专门针对SSD优化的文件系统，最大的特性是原生支持加密。</td>
+</tr>
+</tbody>
+</table>
+<p>重点看看Linux常用的文件系统：</p>
+<table>
+<thead>
+<tr>
+<th>文件系统</th>
+<th>最大文件名长度</th>
+<th>最大文件大小</th>
+<th>最大分区大小</th>
+<th>适用场景</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ext2</td>
+<td>255 bytes</td>
+<td>2 TB</td>
+<td>16 TB</td>
+<td>U盘</td>
+<td>U盘一般不会存很多文件，且U盘的文件在电脑上有备份，安全性要求没那么高，由于ext2不写日志（journal），所以写U盘性能比较好。当然由于ext2的兼容性没有fat好，目前大多数U盘格式还是用fat</td>
+</tr>
+<tr>
+<td>ext3</td>
+<td>255 bytes</td>
+<td>2 TB</td>
+<td>16 TB</td>
+<td>对稳定性要求高的地方</td>
+<td>与ext2相比，ext3实现了日志功能，但是ext2的缺点ext3也有</td>
+</tr>
+<tr>
+<td>ext4</td>
+<td>255 bytes</td>
+<td>16 TB</td>
+<td>1 EB</td>
+<td>小文件较少</td>
+<td>ext系列的文件系统都不支持inode动态分配，所以如果有大量小文件需要存储的话，不建议用ext4</td>
+</tr>
+<tr>
+<td>xfs</td>
+<td>255 bytes</td>
+<td>8 EB</td>
+<td>8 EB</td>
+<td>小文件多或者需要大的xttr空间，如openstack swift将数据文件的元数据放在了xttr里面</td>
+<td>xfs支持inode动态分配，所以不存在inode不够的情况，并且xttr的最大长度可以达到64K</td>
+</tr>
+<tr>
+<td>Btrfs</td>
+<td>255 bytes</td>
+<td>16 EB</td>
+<td>16 EB</td>
+<td>没有频繁的写操作，且需要btrfs的一些特性</td>
+<td>btrfs虽然还不稳定，但支持众多的功能，如果你需要这些功能，且不会频繁的写文件，那么选择btrfs</td>
+</tr>
+</tbody>
+</table>
+<h3 id="磁盘格式化工具"><a href="#磁盘格式化工具" class="headerlink" title="磁盘格式化工具"></a>磁盘格式化工具</h3><h4 id="mke2fs、mkfs-ext2、mkfs-ext3和mkfs-ext4"><a href="#mke2fs、mkfs-ext2、mkfs-ext3和mkfs-ext4" class="headerlink" title="mke2fs、mkfs.ext2、mkfs.ext3和mkfs.ext4"></a><code>mke2fs、mkfs.ext2、mkfs.ext3和mkfs.ext4</code></h4><p><strong>注：</strong>默认linux这个4个命令是一样的。</p>
+<p>命令行格式：<code>mke2fs [参数] [设备名称]</code></p>
+<table>
+<thead>
+<tr>
+<th>常用参数</th>
+<th>用法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-b</td>
+<td>指定数据块块大小，必须是1024的整数倍；centOS7默认是4KB</td>
+</tr>
+<tr>
+<td>-i [字节]</td>
+<td>i（小写）指定每个inode 的字节数</td>
+</tr>
+<tr>
+<td>-I [文件]</td>
+<td>I（大写）从指定的文件中读取坏的块大小</td>
+</tr>
+<tr>
+<td>-N</td>
+<td>设定inode的数量</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>格式化前先检测磁盘是否有问题；加上这个选项后，格式化速度会非常慢</td>
+</tr>
+<tr>
+<td>-L</td>
+<td>预设该分区的标签（label）</td>
+</tr>
+<tr>
+<td>-j</td>
+<td>建立ext3格式的分区</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>制定文件系统类型，如ext2、ext3、ext4等（常用）</td>
+</tr>
+</tbody>
+</table>
+<p>最常用参数： <code>-t</code> 指定分区类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mke2fs -t ext4 /dev/sdb1</span><br></pre></td></tr></table></figure>
+<h4 id="mkfs-xfs"><a href="#mkfs-xfs" class="headerlink" title="mkfs.xfs"></a>mkfs.xfs</h4><p><strong>注：</strong><code>mke2fs</code> 并不支持分区格式化为xfs类型，只能使用<code>mkfs.xfs</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# mkfs.xfs /dev/sdb1</span><br></pre></td></tr></table></figure>
+<h4 id="e2label-查看或修改分区标签"><a href="#e2label-查看或修改分区标签" class="headerlink" title="e2label 查看或修改分区标签"></a>e2label 查看或修改分区标签</h4><p><strong>注：</strong>该命令只支持<code>ext</code>格式的文件系统，不支持<code>xfs</code>文件系统</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e2label /dev/sdb5    //查看分区label</span><br><span class="line">e2label /dev/sdb5  TEST123   //修改分区label</span><br></pre></td></tr></table></figure>
+<h2 id="磁盘挂载-卸载"><a href="#磁盘挂载-卸载" class="headerlink" title="磁盘挂载/卸载"></a>磁盘挂载/卸载</h2><p>磁盘格式化后，需要挂载分区才能使用。在挂载分区前，需要先建立一个挂载点，该挂载点是以目录的形式存在的，<strong>这个挂载点必须是空目录</strong>。一旦把某个分区挂在到该挂载点（目录）下，再往该目录写数据时，就会写到相应的分区当中。</p>
+<h3 id="查看系统分区信息"><a href="#查看系统分区信息" class="headerlink" title="查看系统分区信息"></a>查看系统分区信息</h3><ul>
+<li><code>mount</code> 查看已挂载的分区</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/876/39508454940_ba483bdca2_o.png" alt=""></p>
+<ul>
+<li><code>blkid</code> 查看未挂载的分区</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/785/40604614524_759d353bbf_o.png" alt=""></p>
+<ul>
+<li><code>/etc/fstab</code>文件 </li>
+</ul>
+<p>输入命令行 <code>cat /etc/fstab</code> ,可以查看启动时需要挂载的分区信息</p>
+<p><img src="https://farm1.staticflickr.com/889/40417612895_e0886fbcb1_o.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>显示列</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>分区标示，label、UUID等</td>
+</tr>
+<tr>
+<td>2</td>
+<td>挂载点，比如第1行等挂载点是<code>/</code> 根目录</td>
+</tr>
+<tr>
+<td>3</td>
+<td>分区格式，如图，这里是xfs</td>
+</tr>
+<tr>
+<td>4</td>
+<td>mount等挂载参数（后面单列表格）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>是否被dump备份，1表示备份，0表示不备份</td>
+</tr>
+<tr>
+<td>6</td>
+<td>开机是否自检磁盘，1和2表示检测，1的优先级高于2，即根分区设置为1，其他的分区设置为2；0表示不检测</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>常用参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sync/async</td>
+<td>sync表示时时同步内存和磁盘数据；async 表示异步处理，每隔一段时间再把数据从内存写入磁盘</td>
+</tr>
+<tr>
+<td>auto/noauto</td>
+<td>auto开机自动挂载；noauto不自动挂载</td>
+</tr>
+<tr>
+<td>ro/rw</td>
+<td>ro表示以只读权限挂载；rw表示以读写权限挂载</td>
+</tr>
+<tr>
+<td>exec/noexec</td>
+<td>exec表示允许挂载可执行文件；noexec不允许挂载可执行文件，<strong><code>/</code>根目录不要设置为<code>noexec</code>，否则无法使用系统</strong></td>
+</tr>
+<tr>
+<td>user/nouser</td>
+<td>表示是否允许root用户之外的其他用户挂载分区。<strong>安全起见，使用<code>nouser</code>，只允许root用户挂载分区</strong></td>
+</tr>
+<tr>
+<td>suid/nosuid</td>
+<td>是否允许分区有suid属性</td>
+</tr>
+<tr>
+<td>usrquota</td>
+<td>启动磁盘配额模式，会针对用户限定其使用磁盘额度</td>
+</tr>
+<tr>
+<td>default</td>
+<td>按照默认值设置挂载定义，包括 rw、suid、 dev、exec、 auto、nouser和async</td>
+</tr>
+</tbody>
+</table>
+<h3 id="分区挂载"><a href="#分区挂载" class="headerlink" title="分区挂载"></a>分区挂载</h3><h4 id="方法一：修改-etc-fstab配置文件"><a href="#方法一：修改-etc-fstab配置文件" class="headerlink" title="方法一：修改/etc/fstab配置文件"></a>方法一：修改<code>/etc/fstab</code>配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/dev/sdb1       /bk          ext4            defaults,noatime       1 2</span><br></pre></td></tr></table></figure>
+<h4 id="方法二：mount命令挂载"><a href="#方法二：mount命令挂载" class="headerlink" title="方法二：mount命令挂载"></a>方法二：mount命令挂载</h4><p>命令行格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount [参数] [分区]</span><br></pre></td></tr></table></figure>
+<p>常用选项：</p>
+<ul>
+<li><p><code>-a</code> 将磁盘分区中所有的分区自动挂载上</p>
+</li>
+<li><p><code>-t</code>  指定挂载分区的类型，默认不指定，会自动识别</p>
+</li>
+<li><p><code>-o</code> 指定挂载分区的参数特性，即 <code>/etc/fstab</code> 第四列的内容。常见的参数比如 rw（可读写）、suid（允许设置uid）、exec（允许挂载可执行文件）等等。</p>
+</li>
+</ul>
+<h4 id="设置分区自动挂载"><a href="#设置分区自动挂载" class="headerlink" title="设置分区自动挂载"></a>设置分区自动挂载</h4><h5 id="方法一：编辑-etc-fstab"><a href="#方法一：编辑-etc-fstab" class="headerlink" title="方法一：编辑 /etc/fstab"></a>方法一：编辑 <code>/etc/fstab</code></h5><ul>
+<li>cat命令看一下配置文件的格式</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/909/27291044237_7f5f58e556_o.png" alt=""></p>
+<ul>
+<li>blkid命令查询需要添加的 UUID</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/827/41261959055_7b6c1dab11_o.png" alt=""></p>
+<ul>
+<li>vim编辑配置文件</li>
+</ul>
+<p>按照下面的格式，增加一行，替换UUID等内容即可；<br><img src="https://farm1.staticflickr.com/909/27291044237_7f5f58e556_o.png" alt=""></p>
+<p>修改保存后，重启电脑。</p>
+<h5 id="方法二：将挂载命令写入-etc-rc-d-rc-local"><a href="#方法二：将挂载命令写入-etc-rc-d-rc-local" class="headerlink" title="方法二：将挂载命令写入 /etc/rc.d/rc.local"></a>方法二：将挂载命令写入 <code>/etc/rc.d/rc.local</code></h5><ul>
+<li>编辑<code>/etc/rc.d/rc.local</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/rc.d/rc.local   //vim编辑，加入挂载命令</span><br><span class="line"></span><br><span class="line">/usr/bin/mount [设备UUID] [挂载点]    ///usr/bin/mount 是mount命令等绝对路径</span><br><span class="line"></span><br><span class="line">//编辑完成后，保存退出</span><br></pre></td></tr></table></figure>
+<ul>
+<li>写入后执行如下命令：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod a+x /etc/rc.d/rc.local</span><br></pre></td></tr></table></figure>
+<ul>
+<li>重启电脑</li>
+</ul>
+<h3 id="分区卸载"><a href="#分区卸载" class="headerlink" title="分区卸载"></a>分区卸载</h3><p>命令行格式： <code>unmount [参数] [挂载点]</code></p>
+<p>有时挂载点无法删除，是因为当前目录在需要删除的挂载点上，解决的思路：</p>
+<ol>
+<li><p>进入其他目录执行删除操作</p>
+</li>
+<li><p>使用-l 参数</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unmout -l /tmp/sd1</span><br></pre></td></tr></table></figure>
+<h3 id="手动增加swap空间"><a href="#手动增加swap空间" class="headerlink" title="手动增加swap空间"></a>手动增加swap空间</h3><p>swap分区就是虚拟内存，当虚拟内存不够的时候，就需要手动添加。基本思路是：建立swapfile -&gt; 格式化为swap格式 -&gt; 启动虚拟磁盘</p>
+<h4 id="建立swapfile"><a href="#建立swapfile" class="headerlink" title="建立swapfile"></a>建立swapfile</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dd if= /dev/zero of=/tmp/newdisk bs=1M count=1024</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>if</code>指定源，写<code>/dev/zero</code> ，这是一个很神奇的文件；</p>
+</li>
+<li><p><code>of</code> 指定目标文件；</p>
+</li>
+<li><p><code>bs</code> 指定块大小；</p>
+</li>
+<li><p><code>count</code> 指定块的数量；</p>
+</li>
+</ul>
+<p>注：目标文件大小 =  bs * count</p>
+<h4 id="格式化为swap格式"><a href="#格式化为swap格式" class="headerlink" title="格式化为swap格式"></a>格式化为swap格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkswap -f /tmp/newdisk</span><br></pre></td></tr></table></figure>
+<h4 id="启动虚拟磁盘"><a href="#启动虚拟磁盘" class="headerlink" title="启动虚拟磁盘"></a>启动虚拟磁盘</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swapon /tmp/newdisk</span><br></pre></td></tr></table></figure>
+<p>此时，系统提示有安全风险，对该分区修改权限，使用如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 0600 /tmp/newdisk</span><br></pre></td></tr></table></figure>
+<h4 id="卸载虚拟磁盘"><a href="#卸载虚拟磁盘" class="headerlink" title="卸载虚拟磁盘"></a>卸载虚拟磁盘</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swapoff /tmp/newdisk</span><br></pre></td></tr></table></figure>
+<p>主要是LVM相关知识。</p>
+<h2 id="逻辑卷管理器lvm"><a href="#逻辑卷管理器lvm" class="headerlink" title="逻辑卷管理器lvm"></a>逻辑卷管理器lvm</h2><h3 id="什么是lvm？"><a href="#什么是lvm？" class="headerlink" title="什么是lvm？"></a>什么是lvm？</h3><p>LVM全称是Logical Volume Manager，即逻辑卷管理器。它是Linux环境下对磁盘分区进行管理的一种机制；它可以将多个物理分区整合在一起，并且可以根据实际需要动态调整文件系统空间，从而实现磁盘的动态管理。</p>
+<p><img src="https://farm1.staticflickr.com/796/27487620198_4a8888491c_o.jpg" alt=""></p>
+<p>如上图所示：</p>
+<ul>
+<li><p><strong>Disk（磁盘）：</strong>接入系统的的物理磁盘。如图所示，就是disk A 和disk B。</p>
+</li>
+<li><p><strong>PV 物理卷(Physical Volume)：</strong>组成LVM的最底层的元素，即Linux上的磁盘物理分区。上图中，被分成了3个区。</p>
+</li>
+<li><p><strong>VG 卷组(Volume Group)：</strong>将各个独立的PV（物理卷）组合起来形成的一个存储空间就称为VG（卷组）。如上图所示，LVM总和 = VG1 + VG2</p>
+</li>
+<li><p><strong>LV 逻辑卷(Logical Volume)：</strong> VG被再次分割，成为可以被用户格式化、挂载并提供数据存储的对象就是LV（逻辑卷）。</p>
+</li>
+</ul>
+<p>由此可以看出，<strong>创建LVM的工作流</strong>大概是这样的：</p>
+<ol>
+<li><p>添加磁盘分区，在此基础上创建物理分区<code>PV</code>；</p>
+</li>
+<li><p>创建卷组<code>VG</code>，将物理分区加入卷组；</p>
+</li>
+<li><p>从卷组VG中划分逻辑卷LV，格式化挂载使用。</p>
+</li>
+</ol>
+<h3 id="为什么要使用lvm？"><a href="#为什么要使用lvm？" class="headerlink" title="为什么要使用lvm？"></a>为什么要使用lvm？</h3><p>磁盘分区动态管理，实现空间充分利用。</p>
+<p>当系统空间不足而加入新的硬盘时，不必把用户的数据从原硬盘迁 移到新硬盘，只需把新的分区加入卷组并扩充逻辑卷，不需要关机就可以实现磁盘扩容。</p>
+<h3 id="如何创建LVM？"><a href="#如何创建LVM？" class="headerlink" title="如何创建LVM？"></a>如何创建LVM？</h3><h4 id="前提准备：安装lvm2"><a href="#前提准备：安装lvm2" class="headerlink" title="前提准备：安装lvm2"></a>前提准备：安装lvm2</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y lvm2</span><br></pre></td></tr></table></figure>
+<h4 id="第一步：添加磁盘分区，在此基础上创建物理分区PV"><a href="#第一步：添加磁盘分区，在此基础上创建物理分区PV" class="headerlink" title="第一步：添加磁盘分区，在此基础上创建物理分区PV"></a>第一步：添加磁盘分区，在此基础上创建物理分区<code>PV</code></h4><h5 id="使用fdisk-设备名称-创建分区，按-n新建磁盘分区，创建过程与建立普通分区一样。"><a href="#使用fdisk-设备名称-创建分区，按-n新建磁盘分区，创建过程与建立普通分区一样。" class="headerlink" title="使用fdisk [设备名称]创建分区，按 n新建磁盘分区，创建过程与建立普通分区一样。"></a>使用<code>fdisk [设备名称]</code>创建分区，按 <code>n</code>新建磁盘分区，创建过程与建立普通分区一样。</h5><h5 id="创建完分区后，按t-将分区的类型改为8e"><a href="#创建完分区后，按t-将分区的类型改为8e" class="headerlink" title="创建完分区后，按t 将分区的类型改为8e"></a>创建完分区后，按<code>t</code> 将分区的类型改为<code>8e</code></h5><p><strong>注：</strong>此处如果写错的话，按 <code>Ctrl + u</code> 撤销重新输入。</p>
+<h5 id="创建PV，命令行格式-pvcreate-device-name"><a href="#创建PV，命令行格式-pvcreate-device-name" class="headerlink" title="创建PV，命令行格式 pvcreate [device_name]"></a>创建PV，命令行格式 <code>pvcreate [device_name]</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pvcreate /dev/sdb1</span><br></pre></td></tr></table></figure>
+<h5 id="查看PV信息"><a href="#查看PV信息" class="headerlink" title="查看PV信息"></a>查看PV信息</h5><ul>
+<li><code>pvs</code>简要查看PV信息</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# pvs</span><br><span class="line">  PV         VG   Fmt  Attr PSize PFree</span><br><span class="line">  /dev/sdb1       lvm2 ---  5.01g 5.01g</span><br><span class="line">  /dev/sdb2       lvm2 ---  5.01g 5.01g</span><br><span class="line">  /dev/sdc1       lvm2 ---  5.01g 5.01g</span><br><span class="line">  /dev/sdc2       lvm2 ---  5.01g 5.01g</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>pvsdisplay [PV_NAME]</code>详细查看PV信息</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# pvdisplay /dev/sdb1</span><br><span class="line">  &quot;/dev/sdb1&quot; is a new physical volume of &quot;5.01 GiB&quot;</span><br><span class="line">  --- NEW Physical volume ---</span><br><span class="line">  PV Name               /dev/sdb1</span><br><span class="line">  VG Name               </span><br><span class="line">  PV Size               5.01 GiB</span><br><span class="line">  Allocatable           NO</span><br><span class="line">  PE Size               0   </span><br><span class="line">  Total PE              0</span><br><span class="line">  Free PE               0</span><br><span class="line">  Allocated PE          0</span><br><span class="line">  PV UUID               rZsvZG-nMf0-To7I-3k2X-fzEL-jkvk-eNFd6h</span><br></pre></td></tr></table></figure>
+<h4 id="第二步：创建卷组VG，将物理分区加入卷组；"><a href="#第二步：创建卷组VG，将物理分区加入卷组；" class="headerlink" title="第二步：创建卷组VG，将物理分区加入卷组；"></a>第二步：创建卷组<code>VG</code>，将物理分区加入卷组；</h4><h5 id="创建卷组：vgcreate-VG-NAME-PV-NAME"><a href="#创建卷组：vgcreate-VG-NAME-PV-NAME" class="headerlink" title="创建卷组：vgcreate [VG_NAME] [PV_NAME]"></a>创建卷组：<code>vgcreate [VG_NAME] [PV_NAME]</code></h5><h5 id="删除卷组：-vgcreate-VG-NAME"><a href="#删除卷组：-vgcreate-VG-NAME" class="headerlink" title="删除卷组： vgcreate [VG_NAME]"></a>删除卷组： <code>vgcreate [VG_NAME]</code></h5><h5 id="查看VG信息"><a href="#查看VG信息" class="headerlink" title="查看VG信息"></a>查看VG信息</h5><ul>
+<li><p><code>vgs</code>简要查看VG信息</p>
+</li>
+<li><p><code>vgdisplay</code>详细查看VG信息</p>
+</li>
+</ul>
+<h5 id="缩减卷组相关操作"><a href="#缩减卷组相关操作" class="headerlink" title="缩减卷组相关操作"></a>缩减卷组相关操作</h5><ul>
+<li>确定要移除的PV，将此PV上的数据转移至其他的PV。</li>
+</ul>
+<p>命令：<code>pvmove PV_NAME</code></p>
+<ul>
+<li>从卷组中将此PV移除</li>
+</ul>
+<p>命令：<code>vgreduce /PATH/TO/PV</code></p>
+<h4 id="第三步：创建逻辑卷LV，格式化并挂载"><a href="#第三步：创建逻辑卷LV，格式化并挂载" class="headerlink" title="第三步：创建逻辑卷LV，格式化并挂载"></a>第三步：创建逻辑卷LV，格式化并挂载</h4><h5 id="创建逻辑卷"><a href="#创建逻辑卷" class="headerlink" title="创建逻辑卷"></a>创建逻辑卷</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lvcreate -L SIZE -n LV_NAME VG_NAME</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>L 指定逻辑卷的大小</p>
+</li>
+<li><p>n 指定逻辑卷的名称</p>
+</li>
+</ul>
+<p>查看LV信息</p>
+<ul>
+<li><p><code>lvs</code>简要查看VG信息。</p>
+</li>
+<li><p><code>lvdisplay</code>详细查看VG信息。</p>
+</li>
+</ul>
+<h5 id="将lv分区格式化"><a href="#将lv分区格式化" class="headerlink" title="将lv分区格式化"></a>将lv分区格式化</h5><p>命令行格式： <code>mke2fs -t ext4 [LV_NAME]</code></p>
+<p>注：建议格式化为<code>ext4</code>格式。</p>
+<h5 id="挂载lv分区挂载到某个目录使用"><a href="#挂载lv分区挂载到某个目录使用" class="headerlink" title="挂载lv分区挂载到某个目录使用"></a>挂载lv分区挂载到某个目录使用</h5><p>命令行格式：<code>mount [LV_NAME] [挂载点]</code></p>
+<p><strong>注：</strong>没有合适的挂载点的话，可以使用<code>mkdir /date</code> 命令创建一个空目录，之后将LV分区挂载到相应的目录下。至此创建的lvm分区就可以使用了。</p>
+<h3 id="逻辑卷LV的扩容和缩容"><a href="#逻辑卷LV的扩容和缩容" class="headerlink" title="逻辑卷LV的扩容和缩容"></a>逻辑卷<code>LV</code>的扩容和缩容</h3><h4 id="扩容逻辑卷"><a href="#扩容逻辑卷" class="headerlink" title="扩容逻辑卷"></a>扩容逻辑卷</h4><p><strong>针对 <code>ext4</code> 格式</strong></p>
+<ol>
+<li><p>卸载挂载点 <code>umount [LV_NAME]</code></p>
+</li>
+<li><p>重新设置逻辑卷大小 <code>lvresize -L [size] [LV_NAME]</code></p>
+</li>
+<li><p>检查磁盘错误 <code>e2fsck -f [LV_NAME]</code></p>
+</li>
+<li><p>更新逻辑卷信息 resize2fs [LV_NAME]</p>
+</li>
+<li><p>重新挂载 <code>mount [LV_NAME] [挂载点]</code></p>
+</li>
+</ol>
+<p><strong>示例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lvextend -L 120G /dev/mapper/centos-home     //增大至120G</span><br><span class="line">lvextend -L +20G /dev/mapper/centos-home     //增加20G</span><br><span class="line">lvreduce -L 50G /dev/mapper/centos-home      //减小至50G</span><br><span class="line">lvreduce -L -8G /dev/mapper/centos-home      //减小8G</span><br><span class="line">resize2fs /dev/mapper/centos-home            //执行调整</span><br></pre></td></tr></table></figure>
+<p><strong>针对 <code>xfs</code> 格式</strong></p>
+<p>执行命令：<code>xfs_growfs -L [size][LV_NAME]</code> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lvextend -L 120G /dev/mapper/centos-home    //增大至120G</span><br><span class="line">lvextend -L +20G /dev/mapper/centos-home    //增加20G</span><br><span class="line">xfs_growfs /dev/mapper/centos-home          //执行调整</span><br></pre></td></tr></table></figure>
+<p><strong>注意事项：</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>针对文件系统</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>resize2fs</td>
+<td>针对的是ext2、ext3、ext4文件系统</td>
+</tr>
+<tr>
+<td>xfs_growfs命令</td>
+<td>针对的是xfs文件系统</td>
+</tr>
+</tbody>
+</table>
+<h4 id="缩容逻辑卷"><a href="#缩容逻辑卷" class="headerlink" title="缩容逻辑卷"></a>缩容逻辑卷</h4><p>缩容与之前的扩容大同小异，主要注意到地方在于，缩容之前必须先删除逻辑卷。有时，会发现删除不了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# umount /home/</span><br><span class="line">umount: /home: device is busy.</span><br><span class="line">(In some cases useful info about processes that use</span><br><span class="line">the device is found by lsof(8) or fuser(1))</span><br></pre></td></tr></table></figure>
+<p>这表示有进程占用该目录，需要先结束进程 fuser [参数] [dir_name]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# fuser -m -k /home</span><br><span class="line">/home: 1409 1519ce 1531e 1532e 1533e 1534e 1535e 1536e 1537e 1538e 1539e 1541e 1543e 1544e 1545e 1546e 1547e 1548e 1549e 1550e 1601m</span><br></pre></td></tr></table></figure>
+<p>之后，再次卸载就可以了。</p>
+<h4 id="卷组扩容"><a href="#卷组扩容" class="headerlink" title="卷组扩容"></a>卷组扩容</h4><p>工作流：</p>
+<ol>
+<li><p>生成新的物理卷PV <code>pvcreate [分区名]</code></p>
+</li>
+<li><p>将新扩容的物理卷加入卷组 <code>vgextend [VG_NAME] [PV_NAME]</code></p>
+</li>
+<li><p>重新设置逻辑卷大小（按照之前LV扩容的方法进行）</p>
+</li>
+</ol>
+<h3 id="磁盘故障小案例"><a href="#磁盘故障小案例" class="headerlink" title="磁盘故障小案例"></a>磁盘故障小案例</h3><p>如果因为修改系统挂载点出现不能登陆的状况，只需要登录系统后，运行<code>vim /etc/fstab</code>，删除错误的配置项即可。</p>
+<h3 id="扩展学习"><a href="#扩展学习" class="headerlink" title="扩展学习"></a>扩展学习</h3><ul>
+<li><p><a href="http://www.ruanyifeng.com/blog/2011/12/inode.html" target="_blank" rel="noopener">理解inode</a></p>
+</li>
+<li><p><a href="http://www.dahouduan.com/2014/12/19/linux-inode-full/" target="_blank" rel="noopener">linux inode 占用100%的解决办法</a></p>
+</li>
+<li><p><a href="http://www.ruanyifeng.com/notes/2007/01/linux_3.html" target="_blank" rel="noopener">Linux系统合理规划您的硬盘分区</a></p>
+</li>
+<li><p><a href="http://www.ruanyifeng.com/notes/2007/01/linux_fdisk.html" target="_blank" rel="noopener">实例解说Linux中Fdisk分区使用方法</a></p>
+</li>
+<li><p><a href="https://my.oschina.net/guol/blog/61424" target="_blank" rel="noopener">使用parted划分GPT分区</a></p>
+</li>
+<li><p><a href="https://dingxuan.info/blog/read.php/356.htm" target="_blank" rel="noopener">Linux下使用parted分区工具为大于2T硬盘分区</a></p>
+</li>
+<li><p><a href="https://linux.cn/article-9536-1.html?utm_source=rss&amp;utm_medium=rss" target="_blank" rel="noopener">怎样用 parted 管理硬盘分区</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/u013301192/article/details/47859899" target="_blank" rel="noopener">常见文件系统的格式</a></p>
+</li>
+<li><p><a href="https://segmentfault.com/a/1190000008481493" target="_blank" rel="noopener">Linux下常见文件系统对比</a></p>
+</li>
+<li><p><a href="http://wuchong.me/blog/2014/07/19/linux-file-system/" target="_blank" rel="noopener">Linux基础：文件系统</a></p>
+</li>
+<li><p><a href="https://legacy.gitbook.com/book/wizardforcel/vbird-linux-basic-4e/details" target="_blank" rel="noopener">鸟哥的Linux私房菜：基础学习篇 第四版</a></p>
+</li>
+<li><p><a href="http://blog.51cto.com/3037673/1727744" target="_blank" rel="noopener">Linux文件系统及磁盘分区与格式化</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/jerry_1126/article/details/45769565" target="_blank" rel="noopener">Linux的LVM详解</a></p>
+</li>
+<li><p><a href="http://www.178linux.com/8227" target="_blank" rel="noopener">LVM详解</a></p>
+</li>
+<li><p><a href="https://www.jianshu.com/p/eca3869e3f5c" target="_blank" rel="noopener">LVM 详细讲解</a></p>
+</li>
+<li><p><a href="http://www.apelearn.com/bbs/thread-7243-1-1.html" target="_blank" rel="noopener">parted分区gpt格式</a>  </p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Steve Yuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://steve-yuan-8276.github.io/2018/07/19/linuxNotes-04-diskManegement/" title="Linux运维学习笔记：centOS磁盘管理">https://steve-yuan-8276.github.io/2018/07/19/linuxNotes-04-diskManegement/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/centos/" rel="tag"># centos</a>
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/18/hexoBlog-0To1/" rel="next" title="利用hexo + github 搭建个人博客">
+                <i class="fa fa-chevron-left"></i> 利用hexo + github 搭建个人博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/logo.png"
+                alt="Steve Yuan" />
+            
+              <p class="site-author-name" itemprop="name">Steve Yuan</p>
+              <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">114</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">74</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/steve-yuan-8276" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/feng8276" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.facebook.com/feng74" target="_blank" title="Facebook">
+                    
+                      <i class="fa fa-fw fa-facebook"></i>Facebook</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yuanf02@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看磁盘"><span class="nav-number">2.</span> <span class="nav-text">查看磁盘</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#df命令-查看已挂载磁盘的容量"><span class="nav-number">2.1.</span> <span class="nav-text">df命令 查看已挂载磁盘的容量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#free-命令-查看swap-分区情况"><span class="nav-number">2.2.</span> <span class="nav-text">free 命令 查看swap 分区情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#du-命令-查看某个目录或者文件的大小"><span class="nav-number">2.3.</span> <span class="nav-text">du 命令 查看某个目录或者文件的大小</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#磁盘分区"><span class="nav-number">3.</span> <span class="nav-text">磁盘分区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前提准备：添加虚拟分区"><span class="nav-number">3.1.</span> <span class="nav-text">前提准备：添加虚拟分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用fdisk-进行磁盘分区"><span class="nav-number">3.2.</span> <span class="nav-text">利用fdisk 进行磁盘分区</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：查看硬盘使用情况"><span class="nav-number">3.2.1.</span> <span class="nav-text">第一步：查看硬盘使用情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步："><span class="nav-number">3.2.2.</span> <span class="nav-text">第二步：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：分区操作"><span class="nav-number">3.2.3.</span> <span class="nav-text">第三步：分区操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用-parted进行磁盘分区"><span class="nav-number">3.3.</span> <span class="nav-text">利用 parted进行磁盘分区</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#parted-安装"><span class="nav-number">3.3.1.</span> <span class="nav-text">parted 安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#parted-启动："><span class="nav-number">3.3.2.</span> <span class="nav-text">parted 启动：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建硬盘分区"><span class="nav-number">3.3.3.</span> <span class="nav-text">创建硬盘分区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重新调整分区大小"><span class="nav-number">3.3.4.</span> <span class="nav-text">重新调整分区大小</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除分区"><span class="nav-number">3.3.5.</span> <span class="nav-text">删除分区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置-更改分区标志"><span class="nav-number">3.3.6.</span> <span class="nav-text">设置/更改分区标志</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#磁盘格式化"><span class="nav-number">4.</span> <span class="nav-text">磁盘格式化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#linux常见文件系统"><span class="nav-number">4.1.</span> <span class="nav-text">linux常见文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘格式化工具"><span class="nav-number">4.2.</span> <span class="nav-text">磁盘格式化工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mke2fs、mkfs-ext2、mkfs-ext3和mkfs-ext4"><span class="nav-number">4.2.1.</span> <span class="nav-text">mke2fs、mkfs.ext2、mkfs.ext3和mkfs.ext4</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mkfs-xfs"><span class="nav-number">4.2.2.</span> <span class="nav-text">mkfs.xfs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#e2label-查看或修改分区标签"><span class="nav-number">4.2.3.</span> <span class="nav-text">e2label 查看或修改分区标签</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#磁盘挂载-卸载"><span class="nav-number">5.</span> <span class="nav-text">磁盘挂载/卸载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看系统分区信息"><span class="nav-number">5.1.</span> <span class="nav-text">查看系统分区信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分区挂载"><span class="nav-number">5.2.</span> <span class="nav-text">分区挂载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法一：修改-etc-fstab配置文件"><span class="nav-number">5.2.1.</span> <span class="nav-text">方法一：修改/etc/fstab配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法二：mount命令挂载"><span class="nav-number">5.2.2.</span> <span class="nav-text">方法二：mount命令挂载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置分区自动挂载"><span class="nav-number">5.2.3.</span> <span class="nav-text">设置分区自动挂载</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#方法一：编辑-etc-fstab"><span class="nav-number">5.2.3.1.</span> <span class="nav-text">方法一：编辑 /etc/fstab</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#方法二：将挂载命令写入-etc-rc-d-rc-local"><span class="nav-number">5.2.3.2.</span> <span class="nav-text">方法二：将挂载命令写入 /etc/rc.d/rc.local</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分区卸载"><span class="nav-number">5.3.</span> <span class="nav-text">分区卸载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#手动增加swap空间"><span class="nav-number">5.4.</span> <span class="nav-text">手动增加swap空间</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#建立swapfile"><span class="nav-number">5.4.1.</span> <span class="nav-text">建立swapfile</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#格式化为swap格式"><span class="nav-number">5.4.2.</span> <span class="nav-text">格式化为swap格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动虚拟磁盘"><span class="nav-number">5.4.3.</span> <span class="nav-text">启动虚拟磁盘</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#卸载虚拟磁盘"><span class="nav-number">5.4.4.</span> <span class="nav-text">卸载虚拟磁盘</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逻辑卷管理器lvm"><span class="nav-number">6.</span> <span class="nav-text">逻辑卷管理器lvm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是lvm？"><span class="nav-number">6.1.</span> <span class="nav-text">什么是lvm？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要使用lvm？"><span class="nav-number">6.2.</span> <span class="nav-text">为什么要使用lvm？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何创建LVM？"><span class="nav-number">6.3.</span> <span class="nav-text">如何创建LVM？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#前提准备：安装lvm2"><span class="nav-number">6.3.1.</span> <span class="nav-text">前提准备：安装lvm2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：添加磁盘分区，在此基础上创建物理分区PV"><span class="nav-number">6.3.2.</span> <span class="nav-text">第一步：添加磁盘分区，在此基础上创建物理分区PV</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#使用fdisk-设备名称-创建分区，按-n新建磁盘分区，创建过程与建立普通分区一样。"><span class="nav-number">6.3.2.1.</span> <span class="nav-text">使用fdisk [设备名称]创建分区，按 n新建磁盘分区，创建过程与建立普通分区一样。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建完分区后，按t-将分区的类型改为8e"><span class="nav-number">6.3.2.2.</span> <span class="nav-text">创建完分区后，按t 将分区的类型改为8e</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建PV，命令行格式-pvcreate-device-name"><span class="nav-number">6.3.2.3.</span> <span class="nav-text">创建PV，命令行格式 pvcreate [device_name]</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看PV信息"><span class="nav-number">6.3.2.4.</span> <span class="nav-text">查看PV信息</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：创建卷组VG，将物理分区加入卷组；"><span class="nav-number">6.3.3.</span> <span class="nav-text">第二步：创建卷组VG，将物理分区加入卷组；</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#创建卷组：vgcreate-VG-NAME-PV-NAME"><span class="nav-number">6.3.3.1.</span> <span class="nav-text">创建卷组：vgcreate [VG_NAME] [PV_NAME]</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#删除卷组：-vgcreate-VG-NAME"><span class="nav-number">6.3.3.2.</span> <span class="nav-text">删除卷组： vgcreate [VG_NAME]</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看VG信息"><span class="nav-number">6.3.3.3.</span> <span class="nav-text">查看VG信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#缩减卷组相关操作"><span class="nav-number">6.3.3.4.</span> <span class="nav-text">缩减卷组相关操作</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：创建逻辑卷LV，格式化并挂载"><span class="nav-number">6.3.4.</span> <span class="nav-text">第三步：创建逻辑卷LV，格式化并挂载</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#创建逻辑卷"><span class="nav-number">6.3.4.1.</span> <span class="nav-text">创建逻辑卷</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#将lv分区格式化"><span class="nav-number">6.3.4.2.</span> <span class="nav-text">将lv分区格式化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#挂载lv分区挂载到某个目录使用"><span class="nav-number">6.3.4.3.</span> <span class="nav-text">挂载lv分区挂载到某个目录使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逻辑卷LV的扩容和缩容"><span class="nav-number">6.4.</span> <span class="nav-text">逻辑卷LV的扩容和缩容</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#扩容逻辑卷"><span class="nav-number">6.4.1.</span> <span class="nav-text">扩容逻辑卷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缩容逻辑卷"><span class="nav-number">6.4.2.</span> <span class="nav-text">缩容逻辑卷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#卷组扩容"><span class="nav-number">6.4.3.</span> <span class="nav-text">卷组扩容</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘故障小案例"><span class="nav-number">6.5.</span> <span class="nav-text">磁盘故障小案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展学习"><span class="nav-number">6.6.</span> <span class="nav-text">扩展学习</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Steve Yuan</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">189.3k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/19/linuxNotes-04-diskManegement/';
+          this.page.identifier = '2018/07/19/linuxNotes-04-diskManegement/';
+          this.page.title = 'Linux运维学习笔记：centOS磁盘管理';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://steve-yuan.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

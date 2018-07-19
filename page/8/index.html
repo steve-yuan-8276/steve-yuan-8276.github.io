@@ -308,6 +308,198 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/20/week6-3-basisOfRegEx-part3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/20/week6-3-basisOfRegEx-part3/" itemprop="url">Linux运维学习笔记6-3：正则之awk</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-20T16:03:20+08:00">
+                2018-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/20/week6-3-basisOfRegEx-part3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/20/week6-3-basisOfRegEx-part3/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,881
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记接着上一期：Linux运维学习笔记：正则之sed，继续整理正则基础知识，主要是awk 工具基础知识。</p>
+<h3 id="awk-命令"><a href="#awk-命令" class="headerlink" title="awk 命令"></a><code>awk</code> 命令</h3><p>awk 也是流式编辑器，用来进行高级文本处理，支持关联数组、归递函数、条件语句等。</p>
+<h4 id="语法结构"><a href="#语法结构" class="headerlink" title="语法结构"></a>语法结构</h4><h5 id="第一种：awk-选项参数-39-script-39-file-s"><a href="#第一种：awk-选项参数-39-script-39-file-s" class="headerlink" title="第一种：awk [选项参数] &#39;script&#39; file(s)"></a>第一种：<code>awk [选项参数] &#39;script&#39; file(s)</code></h5><p>在这种格式中，awk从一个或多个文件中读取内容，之后再用引号里的script进行处理。</p>
+<p><code>[选项参数]</code> 这里一般是<code>-F</code> 后面跟分割符，比如<code>/etc/passwd</code>，字段与字段之间使用<code>：</code>分割，处理时就要写成 <code>-F &#39;:&#39;</code>；如果不加 <code>-F</code> 默认使用空格分割。</p>
+<p>再来说后面script的部分，awk 之所以能够进行高级文本处理，是因为这里的script可以很复杂，通常可分为三个可选的部分：BEGIN、BODY和END。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/20/week6-3-basisOfRegEx-part3/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/20/week6-2-basisOfRegEx-part2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2184,254 +2376,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/11/week4-5-basisOfZipToolPart2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/logo.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/11/week4-5-basisOfZipToolPart2/" itemprop="url">Linux运维学习笔记4-5：文件打包压缩工具（二）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-11T17:01:54+08:00">
-                2018-04-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/04/11/week4-5-basisOfZipToolPart2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/04/11/week4-5-basisOfZipToolPart2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,344
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  5
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记书接上回，继续整理打包压缩软件的知识，主要涉及<code>zip</code>和 <code>tar</code> 两个工具。</p>
-<h3 id="tar-工具"><a href="#tar-工具" class="headerlink" title="tar 工具"></a>tar 工具</h3><p>由于<code>gzip、bzip2、xz</code>三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是<code>tar</code>。</p>
-<p>不仅如此，<code>tar</code> 强大之处在于，配合参数，可以打包压缩一起来。</p>
-<p>命令行格式：<code>tar [参数] [目标文件] [源文件或目录]</code></p>
-<p><strong>注：</strong></p>
-<ul>
-<li><p><code>目标文件</code> 指的是打包后的文件名</p>
-</li>
-<li><p><code>源文件或目录</code> 指的是需要打包的文件或目录</p>
-</li>
-</ul>
-<h4 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h4><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-c</td>
-<td>小写c，建立一个tar包或压缩包</td>
-</tr>
-<tr>
-<td>-C</td>
-<td>大写C，切换到指定目录</td>
-</tr>
-<tr>
-<td>-v</td>
-<td>表示可视化</td>
-</tr>
-<tr>
-<td>-f</td>
-<td>指定压缩文件包名称 （多个参数组合的情况下，把f放在最后，紧跟压缩文件包名）</td>
-</tr>
-<tr>
-<td>-t</td>
-<td>查看tar包里的内容</td>
-</tr>
-<tr>
-<td>-z</td>
-<td>指定gzip压缩</td>
-</tr>
-<tr>
-<td>-j（小写）</td>
-<td>指定bzip2压缩</td>
-</tr>
-<tr>
-<td>-J（大写）</td>
-<td>指定xz压缩</td>
-</tr>
-<tr>
-<td>-x</td>
-<td>解包或解压缩</td>
-</tr>
-<tr>
-<td>–exclude filename</td>
-<td>特殊用法，表示在打包或者压缩是，将该filename排除在外</td>
-</tr>
-</tbody>
-</table>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/11/week4-5-basisOfZipToolPart2/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2486,7 +2430,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">119</span>
+                  <span class="site-state-item-count">116</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2594,7 +2538,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">188.8k</span>
+    <span title="Site words total count">189.4k</span>
   
 </div>
 

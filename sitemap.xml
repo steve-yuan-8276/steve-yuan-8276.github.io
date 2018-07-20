@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2018/07/17/week18-1-linuxNotes-basisOfExpect-Part1/</loc>
+    
+    <lastmod>2018-07-20T00:45:21.543Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2018/07/19/linuxNotes-05-basisOfVim/</loc>
     
     <lastmod>2018-07-19T15:06:44.745Z</lastmod>
@@ -47,13 +54,6 @@
     <loc>https://steve-yuan-8276.github.io/about/index.html</loc>
     
     <lastmod>2018-07-18T06:37:09.355Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/07/17/week18-1-linuxNotes-basisOfExpect-Part1/</loc>
-    
-    <lastmod>2018-07-17T07:32:40.898Z</lastmod>
     
   </url>
   
@@ -625,13 +625,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/12/web-webStatusCode/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.766Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/12/web-howToUseWebp/</loc>
     
     <lastmod>2018-04-02T14:26:02.766Z</lastmod>
@@ -639,9 +632,9 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/30/reactNotes-environmentSetup/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/12/web-webStatusCode/</loc>
     
-    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
+    <lastmod>2018-04-02T14:26:02.766Z</lastmod>
     
   </url>
   
@@ -653,14 +646,21 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/04/shh-github/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/16/piNote-1-download-howToInstall/</loc>
     
     <lastmod>2018-04-02T14:26:02.765Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/16/piNote-1-download-howToInstall/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/01/30/reactNotes-environmentSetup/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/01/04/shh-github/</loc>
     
     <lastmod>2018-04-02T14:26:02.765Z</lastmod>
     
@@ -688,14 +688,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/22/freeCodeCampNotes-1/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/01/30/commandLineTrickConllection/</loc>
     
     <lastmod>2018-04-02T14:26:02.761Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/30/commandLineTrickConllection/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/27/freeCodeCampPractice-JS/</loc>
     
     <lastmod>2018-04-02T14:26:02.761Z</lastmod>
     
@@ -709,7 +709,7 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/27/freeCodeCampPractice-JS/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/22/freeCodeCampNotes-1/</loc>
     
     <lastmod>2018-04-02T14:26:02.761Z</lastmod>
     
@@ -730,14 +730,7 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/27/basisOfRegularExpressions/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/20/basisOfXpath/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/17/basisOfPthonScrapy/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
     
@@ -751,13 +744,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/17/basisOfPthonScrapy/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
@@ -765,14 +751,21 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/22/basisOfBootstrap/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/20/basisOfXpath/</loc>
     
-    <lastmod>2018-04-02T14:26:02.758Z</lastmod>
+    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/16/basisOfGoogleDevTools/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/27/basisOfRegularExpressions/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/03/06/basisOfAutomator/</loc>
     
     <lastmod>2018-04-02T14:26:02.758Z</lastmod>
     
@@ -786,7 +779,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/06/basisOfAutomator/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/16/basisOfGoogleDevTools/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.758Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/22/basisOfBootstrap/</loc>
     
     <lastmod>2018-04-02T14:26:02.758Z</lastmod>
     

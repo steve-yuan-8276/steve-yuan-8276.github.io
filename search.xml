@@ -88,7 +88,7 @@
   <entry>
     <title><![CDATA[linux笔记：shell+ expect实现简易文件分发系统(一)]]></title>
     <url>%2F2018%2F07%2F17%2Fweek18-1-linuxNotes-basisOfExpect-Part1%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记开始，整理文件分发系统。 什么是分发系统？所谓分发系统，就是一个主要用来上线代码或同步文件的脚本。 对于大公司而言，使用机器少则几台，多则几十甚至上百台。如何将网站更新、扩展代码全部都发布到这些服务器上呢？这里就用到了分发系统。 expect的安装使用准备工作：安装 expect1yum install -y expect expect自动远程登录 编写脚本 123456789101112131415161718192021vi 1.expect#! /usr/bin/expect//远程登录IPset host &quot;172.16.155.128&quot; //远程登录密码 set passwd &quot;123456&quot; //远程登录密码spawn ssh root@$host expect &#123;//初次登录需要输入yes才能进入&quot;yes/no&quot; &#123; send &quot;yes\r&quot;; exp_continue&#125; //自动输入密码&quot;assword:&quot; &#123; send &quot;$passwd\r&quot; &#125; &#125;//作用，表示要停留在远程机器了，不会退出来，如果不加就会退出来//如果是expect eof 就会在机器上停留一两秒退出来interact``` - 更改脚本权限并执行 chmod 744 1.expect ./1.expect1234### expect脚本运程传递参数编写脚本 vi 1.expect #!/usr/bin/expectset user “root”set passwd 123456”spawn ssh $user@172.16.111.110 expect {“yes/no” { send “yes\r”; exp_continue}“password:” { send “$passwd\r” }}//表示图中括号里的，表示当检测到这个符号时就执行我们要执行的命令expect “]“send “touch /tmp/12.txt\r”expect “]“send “echo 1212 &gt; /tmp/12.txt\r”expect “]*”send “exit\r”12- 更改脚本权限并执行 chmod 744 2.expect ./2.expect12345### expect脚本传递参数- 编写脚本 vi 3.expect 增加如下脚本内容： #!/usr/bin/expect //把第一个参数的值赋给userset user [lindex $argv 0]set host [lindex $argv 1]set passwd “123456”set cm [lindex $argv 2]spawn ssh $user@$host expect {“yes/no” { send “yes\r”}“password:” { send “$passwd\r” }}expect “]“send “$cm\r”//-1表示永远不超时，1表示1秒，2表示2秒，以此类推，表示执行命令几秒后停止set timeout -1expect “]“send “exit\r”123- 更改脚本权限并执行 chmod 744 2.expect ./2.expect123456789101112### 实践项目：构建一个简易的分发系统？#### 需求描述：假设有一个大公司，企业网站用PHP编写，在多台服务同时跑服务，如何将网站更新代码同步推送到各个服务器？#### 解决思路：利用Shell和Expect，就能构建一个简单的分发系统，首先，准备好一台模板机器，将需要分发的文件准备好，然后只要使用expect脚本批量把需要同步的文件分发到目标机器即可。核心命令： rsync -av –files-from=list.txt / root@host:/1234#### 实现步骤：##### step1:编写一个脚本文件rsync.expect vim rsync.expect #!/usr/bin/expect 目标机器的登录密码set passwd “123456”set host [lindex $argv 0]set file [lindex $argv 1] 核心命令，同步多个文件spawn rsync -avR –files-from=$file / root@$host:/expect {“yes/no” { send “yes\r”}“password:” { send “$passwd\r” }}expect eof123456更改脚本权限chmod 744 rsync.expect##### step2:编辑一个文本文件，用来放需要同步的文件列表 vim /tmp/list.txt/tmp/12.txt/root/test.sh/tmp/test.txt/root/expectFiles/hostFile.expect12##### step3: 编辑一个ip.list，用于存放需要同步的目标机器的IP地址 vim /tmp/ip.list192.16.155.128192.16.155.13212##### step4:编写shell脚本rsync.sh，执行同步操作 vim rsync.sh #!/bin/bashfor ip in cat /tmp/ip.listdo echo $ip # 第二个参数就是需要同步的文件列表 ./rsync.expect $ip /tmp/list.txt done12##### 本地执行同步： sh rsync.sh1234#### 远程执行同步##### 第一步：编写脚本 vim exe.expect #!/usr/bin/expectset host [lindex $argv 0]set passwd “123456”set cm [lindex $argv 1]spawn ssh root@$hostexpect {“yes/no” { send “yes\r”}“password:” { send “$passwd\r” }}expect “]“send “$cm\r”expect “]“send “exit\r”12更改权限 chmod a+x exe.expect12##### 需要写shell脚本exe.sh，用于执行操作 vim exe.sh #!/bin/bashfor ip in cat /tmp/ip.listdo echo $ip # 第二个参数就是需要执行的命令 ./exe.expect $ip &quot;who;ls&quot; done12##### 第三步：执行脚本 sh exe.sh`]]></content>
+    <content type="text"><![CDATA[写在前面这则笔记开始，整理文件分发系统。 什么是分发系统？所谓分发系统，就是一个主要用来上线代码或同步文件的脚本。 对于大公司而言，使用机器少则几台，多则几十甚至上百台。如何将网站更新、扩展代码全部都发布到这些服务器上呢？这里就用到了分发系统。 expect的安装使用准备工作：安装 expect1yum install -y expect expect自动远程登录 编写脚本 更改脚本权限并执行 123chmod 744 1.expect./1.expect expect脚本运程传递参数编写脚本 123456789101112131415161718vi 1.expect#!/usr/bin/expectset user &quot;root&quot;set passwd 123456&quot;spawn ssh $user@172.16.111.110expect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;; exp_continue&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;//表示图中括号里的，表示当检测到这个符号时就执行我们要执行的命令expect &quot;]*&quot; send &quot;touch /tmp/12.txt\r&quot;expect &quot;]*&quot;send &quot;echo 1212 &gt; /tmp/12.txt\r&quot;expect &quot;]*&quot;send &quot;exit\r&quot; 更改脚本权限并执行 123chmod 744 2.expect./2.expect expect脚本传递参数 编写脚本 1234567891011121314151617181920212223vi 3.expect增加如下脚本内容：#!/usr/bin/expect//把第一个参数的值赋给userset user [lindex $argv 0] set host [lindex $argv 1]set passwd &quot;123456&quot;set cm [lindex $argv 2]spawn ssh $user@$hostexpect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect &quot;]*&quot;send &quot;$cm\r&quot;//-1表示永远不超时，1表示1秒，2表示2秒，以此类推，表示执行命令几秒后停止set timeout -1 expect &quot;]*&quot;send &quot;exit\r&quot; 更改脚本权限并执行 123chmod 744 2.expect./2.expect 实践项目：构建一个简易的分发系统？需求描述：假设有一个大公司，企业网站用PHP编写，在多台服务同时跑服务，如何将网站更新代码同步推送到各个服务器？ 解决思路：利用Shell和Expect，就能构建一个简单的分发系统，首先，准备好一台模板机器，将需要分发的文件准备好，然后只要使用expect脚本批量把需要同步的文件分发到目标机器即可。 核心命令： 1rsync -av --files-from=list.txt / root@host:/ 实现步骤：step1:编写一个脚本文件rsync.expect12345678910111213vim rsync.expect#!/usr/bin/expect# 目标机器的登录密码set passwd &quot;123456&quot;set host [lindex $argv 0]set file [lindex $argv 1]# 核心命令，同步多个文件spawn rsync -avR --files-from=$file / root@$host:/expect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect eof 更改脚本权限 chmod 744 rsync.expect step2:编辑一个文本文件，用来放需要同步的文件列表12345vim /tmp/list.txt/tmp/12.txt/root/test.sh/tmp/test.txt/root/expectFiles/hostFile.expect step3: 编辑一个ip.list，用于存放需要同步的目标机器的IP地址123vim /tmp/ip.list192.16.155.128192.16.155.132 step4:编写shell脚本rsync.sh，执行同步操作12345678910vim rsync.sh#!/bin/bashfor ip in `cat /tmp/ip.list`do echo $ip # 第二个参数就是需要同步的文件列表 ./rsync.expect $ip /tmp/list.txtdone 本地执行同步：1sh rsync.sh 远程执行同步第一步：编写脚本1234567891011121314vim exe.expect#!/usr/bin/expectset host [lindex $argv 0]set passwd &quot;123456&quot;set cm [lindex $argv 1]spawn ssh root@$hostexpect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect &quot;]*&quot;send &quot;$cm\r&quot;expect &quot;]*&quot;send &quot;exit\r&quot; 更改权限 1chmod a+x exe.expect 需要写shell脚本exe.sh，用于执行操作12345678vim exe.sh#!/bin/bashfor ip in `cat /tmp/ip.list`do echo $ip # 第二个参数就是需要执行的命令 ./exe.expect $ip &quot;who;ls&quot;done 第三步：执行脚本1sh exe.sh]]></content>
       <categories>
         <category>linux</category>
       </categories>
@@ -1425,8 +1425,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>JavaScript</tag>
+        <tag>front-end</tag>
         <tag>ES6</tag>
       </tags>
   </entry>
@@ -1462,8 +1462,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
         <tag>google</tag>
       </tags>
   </entry>
@@ -1475,8 +1475,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
       </tags>
   </entry>
 </search>

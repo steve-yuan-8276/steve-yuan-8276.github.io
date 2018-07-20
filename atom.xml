@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2018-07-19T15:06:44.745Z</updated>
+  <updated>2018-07-20T03:08:18.186Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -15,6 +15,44 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux运维学习笔记：文件打包压缩工具</title>
+    <link href="https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-06-basisOfZipAndUnzip/"/>
+    <id>https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-06-basisOfZipAndUnzip/</id>
+    <published>2018-07-20T02:32:40.000Z</published>
+    <updated>2018-07-20T03:08:18.186Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记主要整理Linux文件压缩与打包方面的知识，主要包括以下内容：</p><ul><li><p>常见压缩工具介绍</p></li><li><p>打包工具</p></li><li><p>进阶知识：如何压缩/解压缩超过4G的大文件</p></li><li><p>不解压查看压缩包内容</p></li></ul><a id="more"></a><h2 id="常见压缩工具介绍"><a href="#常见压缩工具介绍" class="headerlink" title="常见压缩工具介绍"></a>常见压缩工具介绍</h2><table><thead><tr><th>压缩工具</th><th>优点</th><th>缺点</th><th>使用场景</th></tr></thead><tbody><tr><td>zip</td><td>资历最老，linux各种版本都支持，可以压缩目录</td><td>压缩比、压缩时间都不占优势</td><td>基本上是‘老油条’，哪儿都能用，但是不好用</td></tr><tr><td>gzip</td><td>优势是速度快，压缩比还不错，内存占用小，centos默认安装</td><td>压缩比不高，不支持目录压缩</td><td>在内存比较小的建议使用</td></tr><tr><td>bzip2</td><td>压缩比gzip高</td><td>压缩时间长；内存占用比gzip大；压缩比不如xz；不支持目录压缩</td><td>比gzip好一点，但是又不如xz，处境比较尴尬</td></tr><tr><td>xz</td><td>2009年诞生的新贵，优点是压缩比显著优于zip、gzip、bzip2等前辈</td><td>压缩时间较长，不支持目录压缩</td><td>适用于对存储或带宽有严格要求的场景</td></tr></tbody></table><h3 id="gzip压缩工具"><a href="#gzip压缩工具" class="headerlink" title="gzip压缩工具"></a>gzip压缩工具</h3><p>命令行格式： <code>gzip [参数] [filename]</code></p><p><strong>注：</strong></p><ul><li><p>gzip只能压缩文件，不能压缩目录;如果要压缩目录，可以加-r选项；</p></li><li><p>gzip默认压缩级别为6；</p></li></ul><p>常用参数：</p><table><thead><tr><th>参数</th><th>解释</th></tr></thead><tbody><tr><td>-n</td><td>n代表压缩等级，从1到9，默认为6，可不加。</td></tr><tr><td>-d</td><td>表示解压缩</td></tr><tr><td>-c</td><td>指定目录</td></tr></tbody></table><h4 id="压缩文件"><a href="#压缩文件" class="headerlink" title="压缩文件"></a>压缩文件</h4><p>不带任何参数，直接压缩</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//准备压缩文件</span><br><span class="line">[root@stevey ~]# find /etc/ -type f -name &apos;*conf&apos; -exec cat &#123;&#125; &gt;&gt; b.txt \;</span><br><span class="line">[root@stevey ~]# du -sh b.txt</span><br><span class="line">704Kb.txt</span><br><span class="line"></span><br><span class="line">//压缩b.txt</span><br><span class="line">[root@stevey ~]# gzip b.txt  </span><br><span class="line">[root@stevey ~]# ls</span><br><span class="line">1.txt            a.txt     test      test.tar.bz2  test.zip</span><br><span class="line">anaconda-ks.cfg  b.txt.gz  test.tar  test.tar.gz</span><br><span class="line">[root@stevey ~]# du -sh b.txt.gz</span><br><span class="line">616Kb.txt.gz</span><br></pre></td></tr></table></figure><h4 id="解压缩"><a href="#解压缩" class="headerlink" title="解压缩"></a>解压缩</h4><ul><li>方法一：<code>gzip -d [filename]</code></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# gzip -d b.txt.gz</span><br><span class="line">[root@stevey ~]# ls</span><br><span class="line">1.txt            a.txt  test      test.tar.bz2  test.zip</span><br><span class="line">anaconda-ks.cfg  b.txt  test.tar  test.tar.gz</span><br><span class="line">[root@stevey ~]# wc -l b.txt</span><br><span class="line">60410 b.txt</span><br></pre></td></tr></table></figure><ul><li>方法二：<code>gunzip [参数] [filename]</code></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# gunzip b.txt.gz</span><br></pre></td></tr></table></figure><p><strong>注意：</strong></p><ul><li><p><code>-r</code> 参数需记忆，表示归递处理，将指定目录下的所有文件及子目录一并处理。</p></li><li><p>平常参数可省略，直接使用<code>gunzip [filename]</code>  解压文件。</p></li></ul><h4 id="进阶：指定压缩-解压缩保存路径"><a href="#进阶：指定压缩-解压缩保存路径" class="headerlink" title="进阶：指定压缩/解压缩保存路径"></a>进阶：指定压缩/解压缩保存路径</h4><p>默认采用<code>gzip</code> 压缩，压缩包会放在当前目录下，并删除原文件；使用<code>-c</code>参数可以指定压缩包路径，这样原文件就不会被删除了。</p><ul><li>指定压缩目录 <code>gzip -c [filename] &gt; [保存目录]</code></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# gzip -c b.txt &gt; /tmp/test/b.txt.gz</span><br></pre></td></tr></table></figure><ul><li>指定解压缩目录 <code>gzip -d -c [压缩包名] &gt; [指定解压缩文件路径]</code></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# gzip -c b.txt /tmp/test/b.txt.gz &gt; /tmp/c.txt</span><br></pre></td></tr></table></figure><p><strong>注意：</strong></p><ul><li><p>这里的解压路径是绝对路径；</p></li><li><p>文件名支持重命名；</p></li></ul><p>校验一下，这两个文件是一模一样的。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# wc -l /tmp/test/b.txt</span><br><span class="line">60410 /tmp/test/b.txt</span><br><span class="line">[root@stevey ~]# wc -l b.txt</span><br><span class="line">60410 b.txt</span><br></pre></td></tr></table></figure><h3 id="bzip2压缩工具"><a href="#bzip2压缩工具" class="headerlink" title="bzip2压缩工具"></a>bzip2压缩工具</h3><p><strong>bzip2 安装：</strong></p><p>centOS 7 默认没有，需要单独安装 <code>yum install -y bzip2</code></p><p><strong>bzip2 使用：</strong></p><p>命令行格式：<code>bzip2 [参数] [filename]</code></p><p><strong>注：</strong></p><ul><li><p>bzip2 工具也是支持文件压缩，不支持目录压缩；</p></li><li><p>默认压缩级别为9；</p></li></ul><p>常用参数</p><table><thead><tr><th>参数</th><th>解释</th></tr></thead><tbody><tr><td>-z</td><td>表示压缩，可省略</td></tr><tr><td>-d</td><td>表示解压缩</td></tr></tbody></table><p>示例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bzip2 1.txt   //压缩1.txt</span><br><span class="line">bzip2 -d 1.txt   //解压缩 1.txt.bz2</span><br></pre></td></tr></table></figure><p><img src="https://farm1.staticflickr.com/813/26513702367_0a19c8db86_o.png" alt=""></p><h3 id="xz压缩工具"><a href="#xz压缩工具" class="headerlink" title="xz压缩工具"></a>xz压缩工具</h3><p>命令行格式： <code>xz [参数] [filename]</code></p><p><strong>注：</strong>bzip2 工具也是支持文件压缩，不支持目录压缩。</p><p>常见参数：</p><table><thead><tr><th>参数</th><th>解释</th></tr></thead><tbody><tr><td>-z</td><td>表示压缩，可省略</td></tr><tr><td>-d</td><td>表示解压缩</td></tr></tbody></table><p>示例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xz 1.txt   //压缩1.txt</span><br><span class="line">xz -d 1.txt   //解压缩 1.txt.xz</span><br></pre></td></tr></table></figure><p><img src="https://farm1.staticflickr.com/897/41384356831_60612e52d6_o.png" alt=""></p><h3 id="zip-压缩工具"><a href="#zip-压缩工具" class="headerlink" title="zip 压缩工具"></a><code>zip</code> 压缩工具</h3><p>除了上述这些打包压缩工具，还需要考虑到在windows、linux、 mac下通用的打包压缩格式 <code>.zip</code></p><h4 id="zip压缩"><a href="#zip压缩" class="headerlink" title="zip压缩"></a><code>zip</code>压缩</h4><p>zip 工具centos默认没有，需要单独安装 <code>yum install -y zip</code></p><p>命令行格式：<code>zip [参数] [压缩包名称] [源文件或目录]</code></p><p><img src="https://farm1.staticflickr.com/872/40505381985_0e6aaa078a_o.png" alt=""></p><p>如果目录下有还有二级甚至多级目录，zip命令 不加参数时，仅仅会讲二级目录压缩；</p><p>如果想一并压缩二级目录及多级目录，有两种方法：</p><ul><li>第一种方法：使用通配符</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip test.zip test/*</span><br></pre></td></tr></table></figure><ul><li>第二种方法：使用 -r 参数</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip -r test.zip test/</span><br></pre></td></tr></table></figure><h4 id="unzip-解压缩"><a href="#unzip-解压缩" class="headerlink" title="unzip 解压缩"></a><code>unzip</code> 解压缩</h4><p><code>zip</code>文件需要单独安装<code>unzip</code> 工具来解压，安装命令为 <code>yum install -y unzip</code></p><p>命令行格式: <code>unzip [filename]</code></p><p><img src="https://farm1.staticflickr.com/886/40687288864_77f7950b69_o.png" alt=""></p><h2 id="文件打包工具-tar"><a href="#文件打包工具-tar" class="headerlink" title="文件打包工具 tar"></a>文件打包工具 <code>tar</code></h2><p>由于<code>gzip、bzip2、xz</code>三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是<code>tar</code>。</p><p>不仅如此，<code>tar</code> 强大之处在于，配合参数，可以打包压缩一起来。</p><p>命令行格式：<code>tar [参数] [目标文件] [源文件或目录]</code></p><p><strong>注：</strong></p><ul><li><p><code>目标文件</code> 指的是打包后的文件名</p></li><li><p><code>源文件或目录</code> 指的是需要打包的文件或目录</p></li></ul><h3 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h3><table><thead><tr><th>参数</th><th>解释</th></tr></thead><tbody><tr><td>-c</td><td>小写c，建立一个tar包或压缩包</td></tr><tr><td>-C</td><td>大写C，切换到指定目录</td></tr><tr><td>-v</td><td>表示可视化</td></tr><tr><td>-f</td><td>指定压缩文件包名称 （多个参数组合的情况下，把f放在最后，紧跟压缩文件包名）</td></tr><tr><td>-t</td><td>查看tar包里的内容</td></tr><tr><td>-z</td><td>指定gzip压缩</td></tr><tr><td>-j（小写）</td><td>指定bzip2压缩</td></tr><tr><td>-J（大写）</td><td>指定xz压缩</td></tr><tr><td>-x</td><td>解包或解压缩</td></tr><tr><td>–exclude filename</td><td>特殊用法，表示在打包或者压缩是，将该filename排除在外</td></tr></tbody></table><h3 id="常见用法："><a href="#常见用法：" class="headerlink" title="常见用法："></a>常见用法：</h3><p><code>tar</code>命令的参数经常连用，示例如下：</p><h4 id="文件目录打包"><a href="#文件目录打包" class="headerlink" title="文件目录打包"></a>文件目录打包</h4><ul><li><code>-cvf</code> 可视化打包目录<code>test</code>，指定文件名为<code>test.tar</code></li></ul><p><img src="https://farm1.staticflickr.com/883/39591298120_b18c7565a1_o.png" alt=""></p><ul><li><code>-xvf</code> 解包<code>test.tar</code></li></ul><p><img src="https://farm1.staticflickr.com/898/41400341911_a94cdf644b_o.png" alt=""></p><ul><li>解包到指定目录 <code>-C</code></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# tar -xvf test.tar -C /root/test2/</span><br><span class="line">test/</span><br><span class="line">test/test1/</span><br><span class="line">test/test1/a.txt</span><br><span class="line">test/test2/</span><br><span class="line">test/test3/</span><br><span class="line">test/b.txt</span><br></pre></td></tr></table></figure><ul><li><code>--exclude filename</code> 特殊用法，将指定文建排除在外</li></ul><p>当前目录的情况</p><p><img src="https://farm1.staticflickr.com/817/41400575281_35e0e1c1a9_o.png" alt=""></p><p>打包压缩的情况</p><p><img src="https://farm1.staticflickr.com/877/41357789462_856b0f6d51_o.png" alt=""></p><p><code>-tf</code> 查看一下打包后的目录文件情况<br><img src="https://farm1.staticflickr.com/874/39591660990_3ab0620310_o.png" alt=""></p><p>注：<code>--exclude</code> 支持过滤多个文件，每个文件名都要用 <code>--exclude</code> 隔开。</p><h4 id="文件打包并用gzip处理"><a href="#文件打包并用gzip处理" class="headerlink" title="文件打包并用gzip处理"></a>文件打包并用gzip处理</h4><ul><li><code>-czvf</code> 打包文件并使用gzip压缩</li></ul><p><img src="https://farm1.staticflickr.com/811/26529628317_4e19a320e1_o.png" alt=""></p><ul><li><code>-zxvf</code> 解压缩 <code>.tar.gz</code> 格式的文件</li></ul><p><img src="https://farm1.staticflickr.com/865/27530040088_2c5b940f29_o.png" alt=""></p><ul><li><code>zcat</code> 查看压缩包文件内容</li></ul><p><strong>注：</strong> <code>zcat</code> 用于不真正解压缩文件，就能显示压缩包中文件的内容的场景。</p><p><img src="https://farm1.staticflickr.com/880/41400794141_9261292ff8_o.png" alt=""></p><h4 id="文件打包并用bzip2处理"><a href="#文件打包并用bzip2处理" class="headerlink" title="文件打包并用bzip2处理"></a>文件打包并用bzip2处理</h4><p><code>-cjvf</code> 打包文件并使用bzip2压缩</p><p><img src="https://farm1.staticflickr.com/896/27530217828_92ae2d4679_o.png" alt=""></p><p><code>-xjvf</code> 解压缩 <code>.tar.bz2</code> 格式的文件</p><p><img src="https://farm1.staticflickr.com/897/39591752720_776c467ac6_o.png" alt=""></p><ul><li><code>bzcat</code> 不解压包查看内容</li></ul><p><img src="https://farm1.staticflickr.com/815/40505243565_4c549ea55a_o.png" alt=""></p><h4 id="文件打包并用xz处理"><a href="#文件打包并用xz处理" class="headerlink" title="文件打包并用xz处理"></a>文件打包并用xz处理</h4><p>这里补充一点网上查到的资料：根据<a href="https://zh.wikipedia.org/wiki/Xz" target="_blank" rel="noopener">维基百科解释</a>，<code>xz</code>是一个使用 LZMA压缩算法的无损数据压缩文件格式。由于 xz 文件格式的压缩率更高，已在 Linux 各发行版中广泛使用。最典型的就是Linux内核，比如Linux内核3.12就是.xz后缀的文件，压缩包仅72.85MB，解压后能达到518.77MB。</p><p>-Jcvf 压缩文件 <strong>注：J为大写</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -Jcvf linux-3.12</span><br></pre></td></tr></table></figure><p>-Jxvf 解压缩文件 <strong>注：J为大写</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -Jxvf linux-3.12.tar.xz</span><br></pre></td></tr></table></figure><h2 id="进阶：如何压缩-解压缩超过4G的文件"><a href="#进阶：如何压缩-解压缩超过4G的文件" class="headerlink" title="进阶：如何压缩/解压缩超过4G的文件"></a>进阶：如何压缩/解压缩超过4G的文件</h2><p>linux 的unzip命令处理4G以上的压缩包会报错，解决办法是换个压缩工具，使用7zip工具。</p><h3 id="7zip-安装："><a href="#7zip-安装：" class="headerlink" title="7zip 安装："></a>7zip 安装：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget  //先安装wget ，已经安装过的可以跳过这一步</span><br><span class="line"></span><br><span class="line">wget https://jaist.dl.sourceforge.net/project/p7zip/p7zip/16.02/p7zip_16.02_src_all.tar.bz2  //下载安装包</span><br><span class="line"></span><br><span class="line">tar -jxvf p7zip_16.02_src_all.tar.bz2   //解压安装包</span><br><span class="line"></span><br><span class="line">cd p7zip_16.02     //进入安装目录</span><br><span class="line"></span><br><span class="line">make</span><br><span class="line"></span><br><span class="line">make install    //也可以直接输入 make &amp; make install</span><br></pre></td></tr></table></figure><p><strong>注意：这里遇到了两个坑</strong></p><p>第一，错误提示：<code>g++： Command not found</code>，如下图所示。估计是缺某个依赖包，网上查了一下，固然如此</p><p><img src="https://farm1.staticflickr.com/858/39700287160_faac972ae1_o.png" alt=""></p><p><strong>解决方案：</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install gcc+ gcc-c++</span><br></pre></td></tr></table></figure><p>第二，也是错误提示，就是上图中的这一句：<code>make[1]:Leaving directory /root/p7zip_16.02/CPP/7zip/Bundles/Alone</code></p><p>网上查了半天，也没查出所以然，后来试着<code>make install</code>安装了一下，输入7zip 显示如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey p7zip_16.02]# p7zip</span><br><span class="line">-bash: p7zip: command not found</span><br></pre></td></tr></table></figure><p>再后来，发现命令行输错了，正确的命令行格式是 <code>7za [参数] [文件或目录名]</code></p><p>此外，网上很多教程都提到 安装如果发现乱码,请执行命令<code>export LANG=zh_CN.GBK</code>不过，我没有遇到这个问题。</p><h3 id="7zip使用："><a href="#7zip使用：" class="headerlink" title="7zip使用："></a>7zip使用：</h3><p>命令行格式：<code>7za [参数] [文件或目录名]</code></p><p>常见用法：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">7za a -t 7z -r [压缩包名] [压缩文件/目录]  //压缩命令，-t指定压缩类型，默认7z；-r指归递处理，表示递归所有的子文件夹</span><br><span class="line"></span><br><span class="line">7za e [filename]   //解压到当前目录下,不保留原来的目录结构  </span><br><span class="line"></span><br><span class="line">7za x [filename]   //解压到当前目录下,但保留原来的目录结构</span><br></pre></td></tr></table></figure><h2 id="查看压缩文件"><a href="#查看压缩文件" class="headerlink" title="查看压缩文件"></a>查看压缩文件</h2><h3 id="查看压缩文件类型：file-压缩包名"><a href="#查看压缩文件类型：file-压缩包名" class="headerlink" title="查看压缩文件类型：file [压缩包名]"></a>查看压缩文件类型：<code>file [压缩包名]</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# file b.txt.gz  </span><br><span class="line">b.txt.gz: gzip compressed data, was &quot;b.txt&quot;, from Unix, last modified: Mon Apr 16 20:44:32 2018</span><br></pre></td></tr></table></figure><h3 id="查看压缩文件内容："><a href="#查看压缩文件内容：" class="headerlink" title="查看压缩文件内容："></a>查看压缩文件内容：</h3><p>zcat命令用于不真正解压缩文件，就能显示压缩包中文件的内。</p><p>命令行格式：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zcat [参数] [压缩包名]</span><br></pre></td></tr></table></figure><table><thead><tr><th>常用参数</th><th>含义</th></tr></thead><tbody><tr><td>-S</td><td>指定gzip格式的压缩包的后缀。当后缀不是标准压缩包后缀时使用此选项； </td></tr><tr><td>-c</td><td>将文件内容写到标注输出； </td></tr><tr><td>-d</td><td>执行解压缩操作； </td></tr><tr><td>-l</td><td>显示压缩包中文件的列表； </td></tr><tr><td>-L</td><td>显示软件许可信息； </td></tr><tr><td>-q</td><td>禁用警告信息； </td></tr><tr><td>-r</td><td>在目录上执行递归操作； </td></tr><tr><td>-t</td><td>测试压缩文件的完整性； </td></tr><tr><td>-V</td><td>显示指令的版本信息； </td></tr><tr><td>-l</td><td>更快的压缩速度；</td></tr></tbody></table><p>示例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# zcat !$ |head   //这里涉及`!$`特殊用法，指的是上一条bash命令的最后一个值，也就是 `b.txt.gz`</span><br><span class="line"></span><br><span class="line">zcat b.txt.gz |head</span><br><span class="line"># Generated by NetworkManager</span><br><span class="line">nameserver 129.29.29.29</span><br><span class="line"># The upstream Mozilla.org project tests all changes to the root CA</span><br><span class="line"># list with the NSS (Network Security Services) library.</span><br><span class="line">#</span><br><span class="line"># Occassionally, changes might cause compatibility issues with</span><br><span class="line"># other cryptographic libraries, such as openssl or gnutls.</span><br><span class="line">#</span><br><span class="line"># The package maintainers of the CA certificates package might decide</span><br><span class="line"># to temporarily keep certain (legacy) root CA certificates trusted,</span><br></pre></td></tr></table></figure><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><p><a href="https://blog.gtwang.org/linux/linux-why-are-tar-archive-formats-switching-to-xz-compression-to-replace-bzip2-and-what-about-gzip/" target="_blank" rel="noopener">linux中最佳的压缩格式</a></p></li><li><p><a href="https://www.jianshu.com/p/38b32107bc3e" target="_blank" rel="noopener">Linux下的文件打包和压缩</a></p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h2&gt;&lt;p&gt;这则笔记主要整理Linux文件压缩与打包方面的知识，主要包括以下内容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;常见压缩工具介绍&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;打包工具&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;进阶知识：如何压缩/解压缩超过4G的大文件&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;不解压查看压缩包内容&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
+    
+    
+      <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
+    
+      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+    
+      <category term="zip" scheme="https://steve-yuan-8276.github.io/tags/zip/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux运维学习笔记：vim基础知识</title>
@@ -48,9 +86,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="vim" scheme="https://steve-yuan-8276.github.io/tags/vim/"/>
     
@@ -88,9 +126,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -156,9 +194,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -185,9 +223,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -225,9 +263,9 @@
     
       <category term="centos" scheme="https://steve-yuan-8276.github.io/tags/centos/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -258,9 +296,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="expect" scheme="https://steve-yuan-8276.github.io/tags/expect/"/>
     
@@ -288,9 +326,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="expect" scheme="https://steve-yuan-8276.github.io/tags/expect/"/>
     
@@ -317,9 +355,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -357,9 +395,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -391,9 +429,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -424,9 +462,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -454,9 +492,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -496,9 +534,9 @@
     
       <category term="shell" scheme="https://steve-yuan-8276.github.io/tags/shell/"/>
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -524,9 +562,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="zabbix" scheme="https://steve-yuan-8276.github.io/tags/zabbix/"/>
     
@@ -554,9 +592,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="zabbix" scheme="https://steve-yuan-8276.github.io/tags/zabbix/"/>
     
@@ -584,9 +622,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
       <category term="zabbix" scheme="https://steve-yuan-8276.github.io/tags/zabbix/"/>
     
@@ -613,9 +651,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
+    
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   
@@ -640,39 +678,9 @@
       <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
       <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
-  </entry>
-  
-  <entry>
-    <title>linux笔记：使用keepalived配置高可用集群</title>
-    <link href="https://steve-yuan-8276.github.io/2018/07/04/week15-1-linuxNotes-keepALived/"/>
-    <id>https://steve-yuan-8276.github.io/2018/07/04/week15-1-linuxNotes-keepALived/</id>
-    <published>2018-07-04T14:03:06.000Z</published>
-    <updated>2018-07-05T09:02:14.215Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>最近几天忙着做公司的半年工作报告，忙的人仰马翻，今天抓紧时间赶紧把之前两天的课程补上。</p><p>这则笔记开始整理linux集群的知识。</p><h2 id="什么是集群？"><a href="#什么是集群？" class="headerlink" title="什么是集群？"></a>什么是集群？</h2><p>所谓linux集群，就是指在生产环境中，往往不是一台服务器，而是多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。</p><h3 id="集群类型划分"><a href="#集群类型划分" class="headerlink" title="集群类型划分"></a>集群类型划分</h3><h4 id="负载均衡集群"><a href="#负载均衡集群" class="headerlink" title="负载均衡集群"></a>负载均衡集群</h4><p>就是指将一台服务器作为任务分发器，负责把用户的请求分发给后端多台不同的服务器处理，实现负载均衡的开源软件有LVS、keepalived、haproxy、nginx，商业软件有F5、Netscaler等。</p><h4 id="高可用集群"><a href="#高可用集群" class="headerlink" title="高可用集群"></a>高可用集群</h4><p>即“HA”集群，也常称作“双机热备”，用于关键业务。核心原理都是通过心跳线连接两台服务器，正常情况下一台用于提供服务，另外一台作为冗余，当提供服务的机器宕机，冗余将接替继续提供服务。实现高可用的开源软件有：heartbeat、keepalived。</p><p><strong>注：</strong>心跳(heartbeat)是在群集中节点间传递的通讯包,用于监测群集中的节点、网络和网络接口的工作状态，防止节点的孤立，以保证群集的正常运作。</p><p><strong>高可用集群是这则笔记讲的重点，后面用keepalived这个进行配置。</strong></p><a id="more"></a><h3 id="Keepalived工作原理"><a href="#Keepalived工作原理" class="headerlink" title="Keepalived工作原理"></a><code>Keepalived</code>工作原理</h3><p>keepalived通过VRRP<code>Virtual Router Redundancy Protocol</code>，虚拟路由冗余协议来实现高可用。VRBP是实现路由高可用的一种通信协议，在这个协议里会将多台功能相同的路由器组成一个小组，这个小组里会有1个master角色和N（N&gt;=1）个backup角色。工作时，master会通过组播的形式向各个backup发送VRRP协议的数据包，当backup收不到master发来的VRRP数据包时，就会认为master宕机了。此时就需要根据各个backup的优先级来决定谁成为新的mater。</p><p>Keepalived要有三个模块，分别是core、check和vrrp，他们的作用如下：</p><ol><li><p>core模块为keepalived的核心，负责主进程的启动、维护以及全局配置文件的加载和解析；</p></li><li><p>check模块负责健康检查；</p></li><li><p>vrrp模块是来实现VRRP协议的；</p></li></ol><h3 id="keepalived配置高可用集群"><a href="#keepalived配置高可用集群" class="headerlink" title="keepalived配置高可用集群"></a>keepalived配置高可用集群</h3><p><strong>重要概念：Virtual IP</strong></p><p>开始配置之前，先要了解一个概念VIP，这里的VIP跟我们平常理解的不太一样，而是“Virtual IP”,即“虚拟IP”。这个IP是由Keepalived给服务器配置上的，服务器靠这个VIP对外提供服务，当master机器宕机，VIP被分配到backup上。在实际应用中，服务器的切换用户是感知不到的，所以称之为Virtual IP。</p><h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>准备两台虚拟机，其中</p><ul><li><p><code>master</code> 172.16.155.120（克隆一台虚拟机作为master，设置静态ip和hostname）</p></li><li><p><code>backup</code> 172.16.155.132</p></li></ul><p>这里还需要做一下几个步骤：</p><ul><li>两台机器分别安装上keepalived;</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y keepalived</span><br></pre></td></tr></table></figure><ul><li>master和backup关闭防火墙和selinux</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//临时关闭selinux</span><br><span class="line">setenforce 0</span><br><span class="line"></span><br><span class="line">//备份iptables规则</span><br><span class="line">cp /etc/sysconfig/iptables /etc/sysconfig/iptables.bak</span><br><span class="line"></span><br><span class="line">//关闭iptables</span><br><span class="line">systemctl stop iptables</span><br><span class="line"></span><br><span class="line">//禁止开机启动</span><br><span class="line">systemctl disable iptables</span><br></pre></td></tr></table></figure><ul><li>master机器上采用yum 安装nginx</li></ul><p><strong>说明：</strong>之所以要这样大费周章，是因为源码包安装和yum安装的版本是不同的，方便观察实验结果，在实际使用当中并没有影响。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//安装epel-release 源</span><br><span class="line">yum install -y epel-release </span><br><span class="line"></span><br><span class="line">//安装nginx</span><br><span class="line">yum install -y nginx</span><br></pre></td></tr></table></figure><h4 id="master机器配置"><a href="#master机器配置" class="headerlink" title="master机器配置"></a>master机器配置</h4><h5 id="第一步：编辑配置文件"><a href="#第一步：编辑配置文件" class="headerlink" title="第一步：编辑配置文件"></a>第一步：编辑配置文件</h5><p>keepalive的配置文件为<code>/etc/keepalived/keepalived.conf</code>，编辑此文件；</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">//首先清空配置文件内容</span><br><span class="line">[root@local-linux00 ~]# &gt; /etc/keepalived/keepalived.conf</span><br><span class="line"></span><br><span class="line">//编辑配置文件</span><br><span class="line">[root@local-linux00 ~]# vi /etc/keepalived/keepalived.conf</span><br><span class="line">//加入以下内容</span><br><span class="line"></span><br><span class="line">global_defs &#123;                   //全局定义参数</span><br><span class="line">   notification_email &#123;</span><br><span class="line">     root@steve-test.com          //定义接收告警的人</span><br><span class="line">   &#125;</span><br><span class="line">   notification_email_from root@steve-test.com  //定义发邮件地址</span><br><span class="line">   smtp_server 127.0.0.1  //定义发邮件地址，若为127.0.0.1则使用本机自带邮件服务器发送</span><br><span class="line">   smtp_connect_timeout 30</span><br><span class="line">   router_id LVS_DEVEL</span><br><span class="line">&#125;</span><br><span class="line">vrrp_script chk_nginx &#123;      //chk_nginx为自定义名字，后面还会用到它</span><br><span class="line">    script &quot;/usr/local/sbin/check_ng.sh&quot;  //自定义脚本，该脚本为监控nginx服务的脚本</span><br><span class="line">    interval 3   //每隔3S执行一次该脚本</span><br><span class="line">&#125;</span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state MASTER         //角色为master</span><br><span class="line">    interface ens33        //针对哪个网卡监听VIP</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 100            //权重为100，master要比backup大</span><br><span class="line">    advert_int 1   </span><br><span class="line">    authentication &#123;                        </span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass 123456       //定义密码，这个密码自定义</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        172.16.155.120    //定义VIP</span><br><span class="line">    &#125;</span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_nginx     //定义监控脚本，这里和上面vrr_script后面的字符串保持一致</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>如下图所示：</p><p><img src="https://farm1.staticflickr.com/842/43210136571_2c453ee9df_o.png" alt=""></p><h5 id="第二步：编辑监控脚本"><a href="#第二步：编辑监控脚本" class="headerlink" title="第二步：编辑监控脚本"></a>第二步：编辑监控脚本</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux00 ~]# vi /usr/local/sbin/check_ng.sh  </span><br><span class="line"></span><br><span class="line">//脚本内容如下：</span><br><span class="line">#!/bin/bash</span><br><span class="line">#时间变量，用于记录日志</span><br><span class="line">d=`date --date today +%Y%m%d_%H:%M:%S`</span><br><span class="line">#计算nginx进程数量</span><br><span class="line">n=`ps -C nginx --no-heading|wc -l`</span><br><span class="line">#如果进程为0，则启动nginx，并且再次检测nginx进程数量，</span><br><span class="line">#如果还为0，说明nginx无法启动，此时需要关闭keepalived</span><br><span class="line">if [ $n -eq &quot;0&quot; ]; then</span><br><span class="line">    /etc/init.d/nginx start</span><br><span class="line">    n2=`ps -C nginx --no-heading|wc -l`</span><br><span class="line">        if [ $n2 -eq &quot;0&quot;  ]; then</span><br><span class="line">            echo &quot;$d nginx down,keepalived will stop&quot; &gt;&gt; /var/log/check_ng.log</span><br><span class="line">            systemctl stop keepalived</span><br><span class="line">        fi</span><br><span class="line">fi</span><br></pre></td></tr></table></figure><p><img src="https://farm1.staticflickr.com/843/42305840335_a872ff5b18_o.png" alt=""></p><h5 id="第三步：启动keepalived"><a href="#第三步：启动keepalived" class="headerlink" title="第三步：启动keepalived"></a>第三步：启动keepalived</h5><ul><li>更改文件权限</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux00 ~]# chmod 755 /usr/local/sbin/check_ng.sh</span><br></pre></td></tr></table></figure><ul><li>启动keepalived</li></ul><p><img src="https://farm2.staticflickr.com/1789/43154021772_da1662af87_o.png" alt=""></p><h4 id="backup-服务器配置"><a href="#backup-服务器配置" class="headerlink" title="backup 服务器配置"></a>backup 服务器配置</h4><h5 id="第一步：编辑配置文件-1"><a href="#第一步：编辑配置文件-1" class="headerlink" title="第一步：编辑配置文件"></a>第一步：编辑配置文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">//首先清空配置文件内容</span><br><span class="line">[root@local-linux02 ~]# &gt; /etc/keepalived/keepalived.conf</span><br><span class="line"></span><br><span class="line">//编辑配置文件</span><br><span class="line">[root@local-linux02 ~]# vi /etc/keepalived/keepalived.conf</span><br><span class="line">//加入以下内容</span><br><span class="line">global_defs &#123;</span><br><span class="line">   notification_email &#123;</span><br><span class="line">     root@steve-test.com</span><br><span class="line">   &#125;</span><br><span class="line">   notification_email_from root@steve-test.com</span><br><span class="line">   smtp_server 127.0.0.1</span><br><span class="line">   smtp_connect_timeout 30</span><br><span class="line">   router_id LVS_DEVEL</span><br><span class="line">&#125;</span><br><span class="line">vrrp_script chk_nginx &#123;</span><br><span class="line">    script &quot;/usr/local/sbin/check_ng.sh&quot;  //检测脚本</span><br><span class="line">    interval 3</span><br><span class="line">&#125;</span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state BACKUP      //这个需要改，说明是从的状态</span><br><span class="line">    interface ens33</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 90      //这个权重比master少</span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass 123456</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        172.16.155.120   //跟master保持一致</span><br><span class="line">    &#125;</span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_nginx</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h5 id="第二步：编辑监控脚本-1"><a href="#第二步：编辑监控脚本-1" class="headerlink" title="第二步：编辑监控脚本"></a>第二步：编辑监控脚本</h5><p><strong>注：</strong>跟master服务器监控脚本一样</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 ~]# vi /usr/local/sbin/check_ng.sh</span><br><span class="line"></span><br><span class="line">//添加如下内容：</span><br><span class="line"></span><br><span class="line">#!/bin/bash</span><br><span class="line">d=`date --date today +%Y%m%d_%H:%M:%S`</span><br><span class="line">n=`ps -C nginx --no-heading|wc -l`</span><br><span class="line">if [ $n -eq &quot;0&quot; ]; then</span><br><span class="line">    /etc/init.d/nginx start</span><br><span class="line">    n2=`ps -C nginx --no-heading|wc -l`</span><br><span class="line">    if [ $n2 -eq &quot;0&quot;  ]; then</span><br><span class="line">        echo &quot;$d nginx down,keepalived will stop&quot; &gt;&gt; /var/log/check_ng.log</span><br><span class="line">        systemctl stop keepalived</span><br><span class="line">    fi</span><br><span class="line">fi</span><br></pre></td></tr></table></figure><h5 id="第三步：启动keepalived-1"><a href="#第三步：启动keepalived-1" class="headerlink" title="第三步：启动keepalived"></a>第三步：启动keepalived</h5><ul><li>更改文件权限</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 755 /usr/local/sbin/check_ng.sh</span><br></pre></td></tr></table></figure><ul><li>启动keepalived</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">systemctl start keepalived</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">##### TroubleShooting: keepalived 无法启动</span><br><span class="line"></span><br><span class="line">如图所示，在master和backup机器上都出现了keepalived无法启动的现象。</span><br><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/837/42306418775_2f0846498e_o.png)</span><br><span class="line"></span><br><span class="line">排查了一下，都跟nginx有关，解决方案如下：</span><br><span class="line"></span><br><span class="line">**master：**重启了nginx，再次启动keepalived就OK了。</span><br><span class="line"></span><br><span class="line">**backup：**这个排查比较复杂。先查了错误日志，没看明白；又实用nginx -t 检查了配置文件，发现了错误提示：</span><br><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/841/43160968952_5641af5817_o.png)</span><br><span class="line"></span><br><span class="line">提示缺少这个文件`/tmp/nginx/test.log`，touch目录创建一个，再检查发现OK。</span><br><span class="line"></span><br><span class="line">![](https://farm2.staticflickr.com/1808/28341514467_0741a2d649_o.png)</span><br><span class="line"></span><br><span class="line">之后，再次重启nginx、keepalived,终于都重新启动了。</span><br><span class="line"></span><br><span class="line">#### 测试效果</span><br><span class="line"></span><br><span class="line">基本思路，就是认为制造master机器故障，然后看看访问会不会自动切换到backup服务器上。</span><br><span class="line"></span><br><span class="line">![](https://farm2.staticflickr.com/1805/42306628125_c671148573_o.png)</span><br><span class="line"></span><br><span class="line">我们可以尝试：</span><br><span class="line"></span><br><span class="line">1. 关闭master的nginx服务；</span><br><span class="line"></span><br><span class="line">2. 在master上增加iptabls规则限制vrrp发包</span><br><span class="line"></span><br><span class="line">3. master主机关闭keepalived</span><br><span class="line"></span><br><span class="line">通过实验，来测试keepalived是否正常工作。</span><br><span class="line"></span><br><span class="line">注：iptables配置规则语句</span><br></pre></td></tr></table></figure><p>iptables -I OUTPUT -p vrrp -j DROP </p><p>systemctl restart iptables<br><code>`</code></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h2&gt;&lt;p&gt;最近几天忙着做公司的半年工作报告，忙的人仰马翻，今天抓紧时间赶紧把之前两天的课程补上。&lt;/p&gt;
-&lt;p&gt;这则笔记开始整理linux集群的知识。&lt;/p&gt;
-&lt;h2 id=&quot;什么是集群？&quot;&gt;&lt;a href=&quot;#什么是集群？&quot; class=&quot;headerlink&quot; title=&quot;什么是集群？&quot;&gt;&lt;/a&gt;什么是集群？&lt;/h2&gt;&lt;p&gt;所谓linux集群，就是指在生产环境中，往往不是一台服务器，而是多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。&lt;/p&gt;
-&lt;h3 id=&quot;集群类型划分&quot;&gt;&lt;a href=&quot;#集群类型划分&quot; class=&quot;headerlink&quot; title=&quot;集群类型划分&quot;&gt;&lt;/a&gt;集群类型划分&lt;/h3&gt;&lt;h4 id=&quot;负载均衡集群&quot;&gt;&lt;a href=&quot;#负载均衡集群&quot; class=&quot;headerlink&quot; title=&quot;负载均衡集群&quot;&gt;&lt;/a&gt;负载均衡集群&lt;/h4&gt;&lt;p&gt;就是指将一台服务器作为任务分发器，负责把用户的请求分发给后端多台不同的服务器处理，实现负载均衡的开源软件有LVS、keepalived、haproxy、nginx，商业软件有F5、Netscaler等。&lt;/p&gt;
-&lt;h4 id=&quot;高可用集群&quot;&gt;&lt;a href=&quot;#高可用集群&quot; class=&quot;headerlink&quot; title=&quot;高可用集群&quot;&gt;&lt;/a&gt;高可用集群&lt;/h4&gt;&lt;p&gt;即“HA”集群，也常称作“双机热备”，用于关键业务。核心原理都是通过心跳线连接两台服务器，正常情况下一台用于提供服务，另外一台作为冗余，当提供服务的机器宕机，冗余将接替继续提供服务。实现高可用的开源软件有：heartbeat、keepalived。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;注：&lt;/strong&gt;心跳(heartbeat)是在群集中节点间传递的通讯包,用于监测群集中的节点、网络和网络接口的工作状态，防止节点的孤立，以保证群集的正常运作。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;高可用集群是这则笔记讲的重点，后面用keepalived这个进行配置。&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/categories/linux/"/>
-    
-    
       <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
-    
-      <category term="linux" scheme="https://steve-yuan-8276.github.io/tags/linux/"/>
     
   </entry>
   

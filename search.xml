@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Linux运维学习笔记：文件打包压缩工具]]></title>
+    <url>%2F2018%2F07%2F20%2FlinuxNotes-06-basisOfZipAndUnzip%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记主要整理Linux文件压缩与打包方面的知识，主要包括以下内容： 常见压缩工具介绍 打包工具 进阶知识：如何压缩/解压缩超过4G的大文件 不解压查看压缩包内容 常见压缩工具介绍 压缩工具 优点 缺点 使用场景 zip 资历最老，linux各种版本都支持，可以压缩目录 压缩比、压缩时间都不占优势 基本上是‘老油条’，哪儿都能用，但是不好用 gzip 优势是速度快，压缩比还不错，内存占用小，centos默认安装 压缩比不高，不支持目录压缩 在内存比较小的建议使用 bzip2 压缩比gzip高 压缩时间长；内存占用比gzip大；压缩比不如xz；不支持目录压缩 比gzip好一点，但是又不如xz，处境比较尴尬 xz 2009年诞生的新贵，优点是压缩比显著优于zip、gzip、bzip2等前辈 压缩时间较长，不支持目录压缩 适用于对存储或带宽有严格要求的场景 gzip压缩工具命令行格式： gzip [参数] [filename] 注： gzip只能压缩文件，不能压缩目录;如果要压缩目录，可以加-r选项； gzip默认压缩级别为6； 常用参数： 参数 解释 -n n代表压缩等级，从1到9，默认为6，可不加。 -d 表示解压缩 -c 指定目录 压缩文件不带任何参数，直接压缩 123456789101112//准备压缩文件[root@stevey ~]# find /etc/ -type f -name &apos;*conf&apos; -exec cat &#123;&#125; &gt;&gt; b.txt \;[root@stevey ~]# du -sh b.txt704K b.txt//压缩b.txt[root@stevey ~]# gzip b.txt [root@stevey ~]# ls1.txt a.txt test test.tar.bz2 test.zipanaconda-ks.cfg b.txt.gz test.tar test.tar.gz[root@stevey ~]# du -sh b.txt.gz616K b.txt.gz 解压缩 方法一：gzip -d [filename] 123456[root@stevey ~]# gzip -d b.txt.gz[root@stevey ~]# ls1.txt a.txt test test.tar.bz2 test.zipanaconda-ks.cfg b.txt test.tar test.tar.gz[root@stevey ~]# wc -l b.txt60410 b.txt 方法二：gunzip [参数] [filename] 1[root@stevey ~]# gunzip b.txt.gz 注意： -r 参数需记忆，表示归递处理，将指定目录下的所有文件及子目录一并处理。 平常参数可省略，直接使用gunzip [filename] 解压文件。 进阶：指定压缩/解压缩保存路径默认采用gzip 压缩，压缩包会放在当前目录下，并删除原文件；使用-c参数可以指定压缩包路径，这样原文件就不会被删除了。 指定压缩目录 gzip -c [filename] &gt; [保存目录] 1[root@stevey ~]# gzip -c b.txt &gt; /tmp/test/b.txt.gz 指定解压缩目录 gzip -d -c [压缩包名] &gt; [指定解压缩文件路径] 1[root@stevey ~]# gzip -c b.txt /tmp/test/b.txt.gz &gt; /tmp/c.txt 注意： 这里的解压路径是绝对路径； 文件名支持重命名； 校验一下，这两个文件是一模一样的。 1234[root@stevey ~]# wc -l /tmp/test/b.txt60410 /tmp/test/b.txt[root@stevey ~]# wc -l b.txt60410 b.txt bzip2压缩工具bzip2 安装： centOS 7 默认没有，需要单独安装 yum install -y bzip2 bzip2 使用： 命令行格式：bzip2 [参数] [filename] 注： bzip2 工具也是支持文件压缩，不支持目录压缩； 默认压缩级别为9； 常用参数 参数 解释 -z 表示压缩，可省略 -d 表示解压缩 示例： 12bzip2 1.txt //压缩1.txtbzip2 -d 1.txt //解压缩 1.txt.bz2 xz压缩工具命令行格式： xz [参数] [filename] 注：bzip2 工具也是支持文件压缩，不支持目录压缩。 常见参数： 参数 解释 -z 表示压缩，可省略 -d 表示解压缩 示例： 12xz 1.txt //压缩1.txtxz -d 1.txt //解压缩 1.txt.xz zip 压缩工具除了上述这些打包压缩工具，还需要考虑到在windows、linux、 mac下通用的打包压缩格式 .zip zip压缩zip 工具centos默认没有，需要单独安装 yum install -y zip 命令行格式：zip [参数] [压缩包名称] [源文件或目录] 如果目录下有还有二级甚至多级目录，zip命令 不加参数时，仅仅会讲二级目录压缩； 如果想一并压缩二级目录及多级目录，有两种方法： 第一种方法：使用通配符 1zip test.zip test/* 第二种方法：使用 -r 参数 1zip -r test.zip test/ unzip 解压缩zip文件需要单独安装unzip 工具来解压，安装命令为 yum install -y unzip 命令行格式: unzip [filename] 文件打包工具 tar由于gzip、bzip2、xz三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是tar。 不仅如此，tar 强大之处在于，配合参数，可以打包压缩一起来。 命令行格式：tar [参数] [目标文件] [源文件或目录] 注： 目标文件 指的是打包后的文件名 源文件或目录 指的是需要打包的文件或目录 常用参数 参数 解释 -c 小写c，建立一个tar包或压缩包 -C 大写C，切换到指定目录 -v 表示可视化 -f 指定压缩文件包名称 （多个参数组合的情况下，把f放在最后，紧跟压缩文件包名） -t 查看tar包里的内容 -z 指定gzip压缩 -j（小写） 指定bzip2压缩 -J（大写） 指定xz压缩 -x 解包或解压缩 –exclude filename 特殊用法，表示在打包或者压缩是，将该filename排除在外 常见用法：tar命令的参数经常连用，示例如下： 文件目录打包 -cvf 可视化打包目录test，指定文件名为test.tar -xvf 解包test.tar 解包到指定目录 -C 1234567[root@stevey ~]# tar -xvf test.tar -C /root/test2/test/test/test1/test/test1/a.txttest/test2/test/test3/test/b.txt --exclude filename 特殊用法，将指定文建排除在外 当前目录的情况 打包压缩的情况 -tf 查看一下打包后的目录文件情况 注：--exclude 支持过滤多个文件，每个文件名都要用 --exclude 隔开。 文件打包并用gzip处理 -czvf 打包文件并使用gzip压缩 -zxvf 解压缩 .tar.gz 格式的文件 zcat 查看压缩包文件内容 注： zcat 用于不真正解压缩文件，就能显示压缩包中文件的内容的场景。 文件打包并用bzip2处理-cjvf 打包文件并使用bzip2压缩 -xjvf 解压缩 .tar.bz2 格式的文件 bzcat 不解压包查看内容 文件打包并用xz处理这里补充一点网上查到的资料：根据维基百科解释，xz是一个使用 LZMA压缩算法的无损数据压缩文件格式。由于 xz 文件格式的压缩率更高，已在 Linux 各发行版中广泛使用。最典型的就是Linux内核，比如Linux内核3.12就是.xz后缀的文件，压缩包仅72.85MB，解压后能达到518.77MB。 -Jcvf 压缩文件 注：J为大写 1tar -Jcvf linux-3.12 -Jxvf 解压缩文件 注：J为大写 1tar -Jxvf linux-3.12.tar.xz 进阶：如何压缩/解压缩超过4G的文件linux 的unzip命令处理4G以上的压缩包会报错，解决办法是换个压缩工具，使用7zip工具。 7zip 安装：1234567891011yum install -y wget //先安装wget ，已经安装过的可以跳过这一步wget https://jaist.dl.sourceforge.net/project/p7zip/p7zip/16.02/p7zip_16.02_src_all.tar.bz2 //下载安装包tar -jxvf p7zip_16.02_src_all.tar.bz2 //解压安装包cd p7zip_16.02 //进入安装目录makemake install //也可以直接输入 make &amp; make install 注意：这里遇到了两个坑 第一，错误提示：g++： Command not found，如下图所示。估计是缺某个依赖包，网上查了一下，固然如此 解决方案： 1yum -y install gcc+ gcc-c++ 第二，也是错误提示，就是上图中的这一句：make[1]:Leaving directory /root/p7zip_16.02/CPP/7zip/Bundles/Alone 网上查了半天，也没查出所以然，后来试着make install安装了一下，输入7zip 显示如下： 12[root@stevey p7zip_16.02]# p7zip-bash: p7zip: command not found 再后来，发现命令行输错了，正确的命令行格式是 7za [参数] [文件或目录名] 此外，网上很多教程都提到 安装如果发现乱码,请执行命令export LANG=zh_CN.GBK不过，我没有遇到这个问题。 7zip使用：命令行格式：7za [参数] [文件或目录名] 常见用法： 123457za a -t 7z -r [压缩包名] [压缩文件/目录] //压缩命令，-t指定压缩类型，默认7z；-r指归递处理，表示递归所有的子文件夹7za e [filename] //解压到当前目录下,不保留原来的目录结构 7za x [filename] //解压到当前目录下,但保留原来的目录结构 查看压缩文件查看压缩文件类型：file [压缩包名]12[root@stevey ~]# file b.txt.gz b.txt.gz: gzip compressed data, was &quot;b.txt&quot;, from Unix, last modified: Mon Apr 16 20:44:32 2018 查看压缩文件内容：zcat命令用于不真正解压缩文件，就能显示压缩包中文件的内。 命令行格式： 1zcat [参数] [压缩包名] 常用参数 含义 -S 指定gzip格式的压缩包的后缀。当后缀不是标准压缩包后缀时使用此选项； -c 将文件内容写到标注输出； -d 执行解压缩操作； -l 显示压缩包中文件的列表； -L 显示软件许可信息； -q 禁用警告信息； -r 在目录上执行递归操作； -t 测试压缩文件的完整性； -V 显示指令的版本信息； -l 更快的压缩速度； 示例： 12345678910111213[root@stevey ~]# zcat !$ |head //这里涉及`!$`特殊用法，指的是上一条bash命令的最后一个值，也就是 `b.txt.gz`zcat b.txt.gz |head# Generated by NetworkManagernameserver 129.29.29.29# The upstream Mozilla.org project tests all changes to the root CA# list with the NSS (Network Security Services) library.## Occassionally, changes might cause compatibility issues with# other cryptographic libraries, such as openssl or gnutls.## The package maintainers of the CA certificates package might decide# to temporarily keep certain (legacy) root CA certificates trusted, 参考资料 linux中最佳的压缩格式 Linux下的文件打包和压缩]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>zip</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Linux运维学习笔记：vim基础知识]]></title>
     <url>%2F2018%2F07%2F19%2FlinuxNotes-05-basisOfVim%2F</url>
     <content type="text"><![CDATA[写在前面vim 是 vi 的升级版，号称史上最好的文本编辑器。但是，学习vim确实一个很痛苦的过程，尤其是刚开始的一个礼拜。这里整理的是vim的基本知识，主要包括： 安装配置 普通模式基本操作 编辑模式基本操作 命令模式基本操作 打开保存文件 开始之前，先把vim最重要的两张图贴出来： vim命令： vim键位图： 安装配置vim 安装centOS 7安装： 1yum install -y vim-enhanced macOS 安装： 1brew install vim vim简单配置Vim编辑环境配置，涉及/etc/vimrc 和 ~/.vimrc。前者是全局配置，而后置只针对当前用户，所以就新建一个进行修改即可。 12345678910touch ～/.vimrc //新建当前用户目录下的配置文件vim ~/.vimrc //编辑` .vimrc`文件 //新增以下内容：set nu // 这是设置显示行号set showmode //设置在命令行界面最下面显示当前模式等。set ruler // 在右下角显示光标所在的行数等信息set autoindent // 设置每次单击Enter键后，光标移动到下一行时与上一行的起始字符对齐syntax on // 即设置语法检测，当编辑C或者Shell脚本时，关键字会用特殊颜色显示 之后，按 esc 键，输入:wq进行保存。 普通模式基本操作命令行格式: vim [filename] vim 有三种模式，包括普通模式、编辑模式和命令模式。首先是普通模式： 在普通模式下，可以进行的操作包括： 移动光标 使用h、l、k、j 代表左、右、上、下，如下图所示： Ctrl+B、ctrl+F 代表向前/向后翻页。 0、shift+6移动到本行行首；shift+4 移动到本行末尾。 gg 移动到第一行；G 移动到最后一行；nG移动到第n行（n代表数字） 删除字符或行 x表示向后删除一个字符；X表示向前删除一个字符；nx表示向后删除n的字符（n代表数字） dd 删除光标所在行；ndd 删除光标所在行之后的n行（n代表数字） 复制粘贴字符或者行 yy复制光标所在行；nyy 从光标所载行开始，向下复制n行； 小写 p 表示从光标所在行开始向后粘贴；大写 P 表示向前粘贴； 按 v 移动光标会选中指定文字,之后按 y 复制，按 p 粘贴； 按 u 还原上一步操作； 查看帮助文档vim 快捷键示意图 输入 :help 查看帮助文档 输入 /（向下） 或者 ?（向上） 查找关键字；如果有多个匹配项，按 n 键进行切换。 进入编辑模式 快捷键 解释 i 在当前字符插入 I 在光标所在行的行首插入 a 在光标后插入 A 在光标所在行的末尾插入 o 在当前行后插入新的一行 O 在当前行前插入新的一行 vim命令模式 快捷键 解释 /word 在光标之后查找关键词，如果存在多个匹配项，按n向后搜索 ?word 在光标之前查找关键词，如果存在多个匹配项，按n向前搜索 :1,$s/word1/word2/g （难点）将文档中的word1替换为word2，不加g则只替换每行的第一个word1 :m,ns/word1/word2/g （难点）将第m行和第n行之间的word1替换为word2，不加g则只替换每行的第一个word1 打开/保存/退出/改变文件 快捷键 解释 :e [path to file] 打开一个文件 :w 存盘 :saveas [path to file] 另存为 &lt;path/to/file&gt; :x、 ZZ 、:wq 保存并退出 (:x表示仅在需要时保存；ZZ不需要输入冒号并回车) :X 设置密码保存并退出，使用此命令后cat 该文件会显示乱码，再次打开需输入密码 :q! 退出不保存 wq! 强制保存退出 :qa! 强行退出所有的正在编辑的文件，就算别的文件有更改。 :bn、 :bp 你可以同时打开很多文件，使用这两个命令来切换下一个或上一个文件。 vim使用窍门窍门一：自动跳转到文件第n行 vim +10 [filename] ，即进入会光标自动跳转到第10行 bash 命令 !$ 自动重复上一条命令。 窍门二： 如何解决代码自动缩进造成乱码 方法一：命令模式，输入 :set noai nosi 方法二：paste模式 12:set paste :set nopaste 延伸阅读 vim的特殊用法 vim常用快捷键总结 vim快速删除一段字符]]></content>
@@ -9,8 +23,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -23,8 +37,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -41,8 +55,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -54,8 +68,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -67,8 +81,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -80,8 +94,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>expect</tag>
       </tags>
   </entry>
@@ -94,8 +108,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>expect</tag>
       </tags>
   </entry>
@@ -108,8 +122,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -121,8 +135,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -134,8 +148,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -147,8 +161,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -160,8 +174,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -173,8 +187,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -185,8 +199,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zabbix</tag>
       </tags>
   </entry>
@@ -198,8 +212,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zabbix</tag>
       </tags>
   </entry>
@@ -211,8 +225,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zabbix</tag>
       </tags>
   </entry>
@@ -224,8 +238,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -236,8 +250,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -248,8 +262,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -261,8 +275,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -273,8 +287,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -286,8 +300,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tomcat</tag>
       </tags>
   </entry>
@@ -299,8 +313,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>at</tag>
         <tag>crond</tag>
         <tag>anacron</tag>
@@ -314,8 +328,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -326,8 +340,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tomcat</tag>
       </tags>
   </entry>
@@ -339,8 +353,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>ftp</tag>
       </tags>
   </entry>
@@ -352,8 +366,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -365,8 +379,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -378,8 +392,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -391,8 +405,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -404,8 +418,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -417,8 +431,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -430,8 +444,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>ftp</tag>
       </tags>
   </entry>
@@ -443,8 +457,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -456,8 +470,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -469,8 +483,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -482,8 +496,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -495,8 +509,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -509,8 +523,8 @@
       </categories>
       <tags>
         <tag>python</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -521,8 +535,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -534,8 +548,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -548,8 +562,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -562,8 +576,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
         <tag>mysql</tag>
@@ -577,8 +591,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -591,8 +605,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -605,8 +619,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
         <tag>mysql</tag>
@@ -620,8 +634,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -634,8 +648,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
         <tag>php</tag>
       </tags>
@@ -648,8 +662,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>php</tag>
       </tags>
   </entry>
@@ -661,8 +675,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>sysV</tag>
       </tags>
   </entry>
@@ -674,8 +688,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>base64</tag>
       </tags>
   </entry>
@@ -687,8 +701,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -699,8 +713,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>raspberryPi</tag>
       </tags>
   </entry>
@@ -712,8 +726,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>php</tag>
         <tag>mysql</tag>
         <tag>apache</tag>
@@ -727,8 +741,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>php</tag>
         <tag>mysql</tag>
         <tag>apache</tag>
@@ -742,8 +756,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rsync</tag>
       </tags>
   </entry>
@@ -755,8 +769,8 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>mac</tag>
         <tag>bash</tag>
+        <tag>mac</tag>
         <tag>notes</tag>
       </tags>
   </entry>
@@ -768,8 +782,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rsync</tag>
       </tags>
   </entry>
@@ -781,8 +795,8 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>mac</tag>
         <tag>bash</tag>
+        <tag>mac</tag>
         <tag>notes</tag>
       </tags>
   </entry>
@@ -794,8 +808,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>crontab</tag>
         <tag>systemd</tag>
       </tags>
@@ -808,8 +822,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>pid</tag>
         <tag>tid</tag>
       </tags>
@@ -822,8 +836,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>firewalld</tag>
       </tags>
   </entry>
@@ -835,8 +849,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -847,8 +861,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tcpdump</tag>
         <tag>wireshark</tag>
       </tags>
@@ -861,8 +875,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>iptables</tag>
         <tag>netfilter</tag>
       </tags>
@@ -876,8 +890,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -888,8 +902,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tcpdump</tag>
         <tag>wireshark</tag>
       </tags>
@@ -903,8 +917,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -916,8 +930,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -929,8 +943,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -943,8 +957,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -956,8 +970,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -969,8 +983,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -982,8 +996,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -995,8 +1009,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -1009,8 +1023,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -1023,8 +1037,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -1037,8 +1051,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -1049,10 +1063,10 @@
         <category>kindle</category>
       </categories>
       <tags>
+        <tag>notes</tag>
         <tag>dropbox</tag>
         <tag>IFTTT</tag>
         <tag>kinlde</tag>
-        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -1064,8 +1078,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -1078,37 +1092,9 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>yum</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux运维学习笔记4-5：文件打包压缩工具（二）]]></title>
-    <url>%2F2018%2F04%2F11%2Fweek4-5-basisOfZipToolPart2%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记书接上回，继续整理打包压缩软件的知识，主要涉及zip和 tar 两个工具。 tar 工具由于gzip、bzip2、xz三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是tar。 不仅如此，tar 强大之处在于，配合参数，可以打包压缩一起来。 命令行格式：tar [参数] [目标文件] [源文件或目录] 注： 目标文件 指的是打包后的文件名 源文件或目录 指的是需要打包的文件或目录 常用参数 参数 解释 -c 小写c，建立一个tar包或压缩包 -C 大写C，切换到指定目录 -v 表示可视化 -f 指定压缩文件包名称 （多个参数组合的情况下，把f放在最后，紧跟压缩文件包名） -t 查看tar包里的内容 -z 指定gzip压缩 -j（小写） 指定bzip2压缩 -J（大写） 指定xz压缩 -x 解包或解压缩 –exclude filename 特殊用法，表示在打包或者压缩是，将该filename排除在外 常见用法：tar命令的参数经常连用，示例如下： 文件目录打包 -cvf 可视化打包目录test，指定文件名为test.tar -xvf 解包test.tar 解包到指定目录 -C 1234567[root@stevey ~]# tar -xvf test.tar -C /root/test2/test/test/test1/test/test1/a.txttest/test2/test/test3/test/b.txt --exclude filename 特殊用法，将指定文建排除在外 当前目录的情况 打包压缩的情况 -tf 查看一下打包后的目录文件情况 注：--exclude 支持过滤多个文件，每个文件名都要用 --exclude 隔开。 文件打包并用gzip处理 -czvf 打包文件并使用gzip压缩 -zxvf 解压缩 .tar.gz 格式的文件 zcat 查看压缩包文件内容 注： zcat 用于不真正解压缩文件，就能显示压缩包中文件的内容的场景。 文件打包并用bzip2处理-cjvf 打包文件并使用bzip2压缩 -xjvf 解压缩 .tar.bz2 格式的文件 bzcat 不解压包查看内容 文件打包并用xz处理这里补充一点网上查到的资料：根据维基百科解释，xz是一个使用 LZMA压缩算法的无损数据压缩文件格式。由于 xz 文件格式的压缩率更高，已在 Linux 各发行版中广泛使用。最典型的就是Linux内核，比如Linux内核3.12就是.xz后缀的文件，压缩包仅72.85MB，解压后能达到518.77MB。 -Jcvf 压缩文件 注：J为大写 1tar -Jcvf linux-3.12 -Jxvf 解压缩文件 注：J为大写 1tar -Jxvf linux-3.12.tar.xz zip 压缩工具除了上述这些打包压缩工具，还需要考虑到在windows、linux、 mac下通用的打包压缩格式 .zip zip 工具centos默认没有，需要单独安装 yum install -y zip zip 工具的使用zip压缩命令行格式：zip [参数] [压缩包名称] [源文件或目录] 如果目录下有还有二级甚至多级目录，zip命令 不加参数时，仅仅会讲二级目录压缩； 如果想一并压缩二级目录及多级目录，有两种方法： 第一种方法：使用通配符 1zip test.zip test/* 第二种方法：使用 -r 参数 1zip -r test.zip test/ unzip 解压缩zip文件需要单独安装unzip 工具来解压，安装命令为 yum install -y unzip 命令行格式: unzip [filename] 补充知识点：超过4G的压缩包如何处理linux 的unzip命令处理4G以上的压缩包会报错，解决办法是换个压缩工具，使用7zip工具。 7zip 安装：1234567891011yum install -y wget //先安装wget ，已经安装过的可以跳过这一步wget https://jaist.dl.sourceforge.net/project/p7zip/p7zip/16.02/p7zip_16.02_src_all.tar.bz2 //下载安装包tar -jxvf p7zip_16.02_src_all.tar.bz2 //解压安装包cd p7zip_16.02 //进入安装目录makemake install //也可以直接输入 make &amp; make install 注意：这里遇到了两个坑 第一，错误提示：g++： Command not found，如下图所示。估计是缺某个依赖包，网上查了一下，固然如此 解决方案： 1yum -y install gcc+ gcc-c++ 第二，也是错误提示，就是上图中的这一句：make[1]:Leaving directory /root/p7zip_16.02/CPP/7zip/Bundles/Alone 网上查了半天，也没查出所以然，后来试着make install安装了一下，输入7zip 显示如下： 12[root@stevey p7zip_16.02]# p7zip-bash: p7zip: command not found 再后来，发现命令行输错了，正确的命令行格式是 7za [参数] [文件或目录名] 此外，网上很多教程都提到 安装如果发现乱码,请执行命令export LANG=zh_CN.GBK不过，我没有遇到这个问题。 7zip使用：命令行格式：7za [参数] [文件或目录名] 常见用法： 123457za a -t 7z -r [压缩包名] [压缩文件/目录] //压缩命令，-t指定压缩类型，默认7z；-r指归递处理，表示递归所有的子文件夹7za e [filename] //解压到当前目录下,不保留原来的目录结构 7za x [filename] //解压到当前目录下,但保留原来的目录结构]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>zip</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux运维学习笔记4-4：文件打包压缩工具（一）]]></title>
-    <url>%2F2018%2F04%2F11%2Fweek4-4-basisOfZipToolsPart1%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记主要整理Linux文件压缩与打包方面的知识，主要涉及gzip、bzip、xz。 常见的Linux压缩打包文件 后缀名 解释 .gz gzip压缩工具压缩的文件 .bz2 bzip2压缩工具压缩的文件 .tar tar工具打包的文件（tar没有压缩功能，只能合并打包） .tar.gz 先由tar打包，再由zip工具压缩的文件 .tar.bz2 先由tar打包，再由bzip2工具压缩的文件 .tar.xz 先由tar打包，再由xz工具压缩的文件 gzip压缩工具命令行格式： gzip [参数] [filename] 注： gzip只能压缩文件，不能压缩目录;如果要压缩目录，可以加-r选项； gzip默认压缩级别为6； 常用参数： 参数 解释 -n n代表压缩等级，从1到9，默认为6，可不加。 -d 表示解压缩 -c 指定目录 示例：123gzip 1.txt //在当前目录下压缩1.txt，源文件会消失，只保留压缩文件gzip -d 1.txt.gz //解压1.txt.gz 到当前目录 补充视频案例：准备压缩文件123[root@stevey ~]# find /etc/ -type f -name &apos;*conf&apos; -exec cat &#123;&#125; &gt;&gt; b.txt \;[root@stevey ~]# du -sh b.txt704K b.txt 压缩文件123456[root@stevey ~]# gzip b.txt //压缩b.txt[root@stevey ~]# ls1.txt a.txt test test.tar.bz2 test.zipanaconda-ks.cfg b.txt.gz test.tar test.tar.gz[root@stevey ~]# du -sh b.txt.gz616K b.txt.gz 解压缩 方法一：gzip -d [filename] 123456[root@stevey ~]# gzip -d b.txt.gz[root@stevey ~]# ls1.txt a.txt test test.tar.bz2 test.zipanaconda-ks.cfg b.txt test.tar test.tar.gz[root@stevey ~]# wc -l b.txt60410 b.txt 方法二：gunzip [参数] [filename] 1[root@stevey ~]# gunzip b.txt.gz 注意： -r 参数需记忆，表示归递处理，将指定目录下的所有文件及子目录一并处理。 平常参数可省略，直接使用gunzip [filename] 解压文件。 查看压缩文件 查看压缩文件类型：file [压缩包名] 12[root@stevey ~]# file b.txt.gz b.txt.gz: gzip compressed data, was &quot;b.txt&quot;, from Unix, last modified: Mon Apr 16 20:44:32 2018 查看压缩文件内容：zcat [压缩包名] 12345678910111213[root@stevey ~]# zcat !$ |head //这里涉及`!$`特殊用法，指的是上一条bash命令的最后一个值，也就是 `b.txt.gz`zcat b.txt.gz |head# Generated by NetworkManagernameserver 129.29.29.29# The upstream Mozilla.org project tests all changes to the root CA# list with the NSS (Network Security Services) library.## Occassionally, changes might cause compatibility issues with# other cryptographic libraries, such as openssl or gnutls.## The package maintainers of the CA certificates package might decide# to temporarily keep certain (legacy) root CA certificates trusted, 进阶技巧：指定压缩/解压缩保存路径默认采用gzip 压缩，压缩包会放在当前目录下，并删除原文件；使用-c参数可以指定压缩包路径，这样原文件就不会被删除了。 指定压缩目录 gzip -c [filename] &gt; [保存目录] 1[root@stevey ~]# gzip -c b.txt &gt; /tmp/test/b.txt.gz 指定解压缩目录 gzip -d -c [压缩包名] &gt; [指定解压缩文件路径] 1[root@stevey ~]# gzip -c b.txt /tmp/test/b.txt.gz &gt; /tmp/c.txt 注意： 这里的解压路径是绝对路径； 文件名支持重命名； 校验一下，这两个文件是一模一样的。 1234[root@stevey ~]# wc -l /tmp/test/b.txt60410 /tmp/test/b.txt[root@stevey ~]# wc -l b.txt60410 b.txt bzip2压缩工具bzip2 安装：centOS 7 默认没有，需要单独安装 yum install -y bzip2 bzip2 使用：命令行格式：bzip2 [参数] [filename] 注： bzip2 工具也是支持文件压缩，不支持目录压缩； 默认压缩级别为9； 常用参数 参数 解释 -z 表示压缩，可省略 -d 表示解压缩 示例： 12bzip2 1.txt //压缩1.txtbzip2 -d 1.txt //解压缩 1.txt.bz2 xz压缩工具命令行格式： xz [参数] [filename] 注：bzip2 工具也是支持文件压缩，不支持目录压缩。 常见参数： 参数 解释 -z 表示压缩，可省略 -d 表示解压缩 示例： 12xz 1.txt //压缩1.txtxz -d 1.txt //解压缩 1.txt.xz 几种压缩工具的比较网上查了一下，主要是参考以下两篇文章： linux中最佳的压缩格式 Linux下的文件打包和压缩 简单归纳一下结论： 压缩工具 优点 缺点 使用场景 zip 资历最老，linux各种版本都支持，可以压缩目录 压缩比、压缩时间都不占优势 基本上是‘老油条’，哪儿都能用，但是不好用 gzip 优势是速度快，压缩比还不错，内存占用小，centos默认安装 压缩比不高，不支持目录压缩 在内存比较小的建议使用 bzip2 压缩比gzip高 压缩时间长；内存占用比gzip大；压缩比不如xz；不支持目录压缩 比gzip好一点，但是又不如xz，处境比较尴尬 xz 2009年诞生的新贵，优点是压缩比显著优于zip、gzip、bzip2等前辈 压缩时间较长，不支持目录压缩 适用于对存储或带宽有严格要求的场景]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>zip</tag>
       </tags>
   </entry>
   <entry>
@@ -1119,8 +1105,8 @@
         <category>mac</category>
       </categories>
       <tags>
-        <tag>mac</tag>
         <tag>bash</tag>
+        <tag>mac</tag>
         <tag>notes</tag>
       </tags>
   </entry>
@@ -1224,10 +1210,10 @@
         <category>react</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>react</tag>
         <tag>node</tag>
         <tag>npm</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1387,8 +1373,8 @@
       </categories>
       <tags>
         <tag>ssh</tag>
-        <tag>github</tag>
         <tag>bash</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -1462,8 +1448,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>web</tag>
         <tag>front-end</tag>
+        <tag>web</tag>
         <tag>google</tag>
       </tags>
   </entry>
@@ -1475,8 +1461,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>web</tag>
         <tag>front-end</tag>
+        <tag>web</tag>
       </tags>
   </entry>
 </search>

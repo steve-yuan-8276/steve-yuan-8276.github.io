@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="centos,notes,linux,zip," />
+  <meta name="keywords" content="centos,linux,notes,zip," />
 
 
 
@@ -81,14 +81,18 @@
 
 
 
-<meta name="description" content="写在前面这则笔记书接上回，继续整理打包压缩软件的知识，主要涉及zip和 tar 两个工具。 tar 工具由于gzip、bzip2、xz三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是tar。 不仅如此，tar 强大之处在于，配合参数，可以打包压缩一起来。 命令行格式：tar [参数] [目标文件] [源文件或目录] 注：  目标文件 指的是打包后的文件名  源文件">
-<meta name="keywords" content="centos,notes,linux,zip">
+<meta name="description" content="写在前面这则笔记主要整理Linux文件压缩与打包方面的知识，主要包括以下内容：  常见压缩工具介绍  打包工具  进阶知识：如何压缩/解压缩超过4G的大文件  不解压查看压缩包内容">
+<meta name="keywords" content="centos,linux,notes,zip">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux运维学习笔记4-5：文件打包压缩工具（二）">
-<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/04/11/week4-5-basisOfZipToolPart2/index.html">
+<meta property="og:title" content="Linux运维学习笔记：文件打包压缩工具">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-06-basisOfZipAndUnzip/index.html">
 <meta property="og:site_name" content="Steve的折腾学习日志">
-<meta property="og:description" content="写在前面这则笔记书接上回，继续整理打包压缩软件的知识，主要涉及zip和 tar 两个工具。 tar 工具由于gzip、bzip2、xz三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是tar。 不仅如此，tar 强大之处在于，配合参数，可以打包压缩一起来。 命令行格式：tar [参数] [目标文件] [源文件或目录] 注：  目标文件 指的是打包后的文件名  源文件">
+<meta property="og:description" content="写在前面这则笔记主要整理Linux文件压缩与打包方面的知识，主要包括以下内容：  常见压缩工具介绍  打包工具  进阶知识：如何压缩/解压缩超过4G的大文件  不解压查看压缩包内容">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://farm1.staticflickr.com/813/26513702367_0a19c8db86_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/897/41384356831_60612e52d6_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/872/40505381985_0e6aaa078a_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/886/40687288864_77f7950b69_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/883/39591298120_b18c7565a1_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/898/41400341911_a94cdf644b_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/817/41400575281_35e0e1c1a9_o.png">
@@ -100,14 +104,12 @@
 <meta property="og:image" content="https://farm1.staticflickr.com/896/27530217828_92ae2d4679_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/897/39591752720_776c467ac6_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/815/40505243565_4c549ea55a_o.png">
-<meta property="og:image" content="https://farm1.staticflickr.com/872/40505381985_0e6aaa078a_o.png">
-<meta property="og:image" content="https://farm1.staticflickr.com/886/40687288864_77f7950b69_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/858/39700287160_faac972ae1_o.png">
-<meta property="og:updated_time" content="2018-04-17T09:28:01.447Z">
+<meta property="og:updated_time" content="2018-07-20T03:08:18.186Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux运维学习笔记4-5：文件打包压缩工具（二）">
-<meta name="twitter:description" content="写在前面这则笔记书接上回，继续整理打包压缩软件的知识，主要涉及zip和 tar 两个工具。 tar 工具由于gzip、bzip2、xz三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是tar。 不仅如此，tar 强大之处在于，配合参数，可以打包压缩一起来。 命令行格式：tar [参数] [目标文件] [源文件或目录] 注：  目标文件 指的是打包后的文件名  源文件">
-<meta name="twitter:image" content="https://farm1.staticflickr.com/883/39591298120_b18c7565a1_o.png">
+<meta name="twitter:title" content="Linux运维学习笔记：文件打包压缩工具">
+<meta name="twitter:description" content="写在前面这则笔记主要整理Linux文件压缩与打包方面的知识，主要包括以下内容：  常见压缩工具介绍  打包工具  进阶知识：如何压缩/解压缩超过4G的大文件  不解压查看压缩包内容">
+<meta name="twitter:image" content="https://farm1.staticflickr.com/813/26513702367_0a19c8db86_o.png">
 
 
 
@@ -137,13 +139,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/04/11/week4-5-basisOfZipToolPart2/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-06-basisOfZipAndUnzip/"/>
 
 
 
 
 
-  <title>Linux运维学习笔记4-5：文件打包压缩工具（二） | Steve的折腾学习日志</title>
+  <title>Linux运维学习笔记：文件打包压缩工具 | Steve的折腾学习日志</title>
   
 
 
@@ -324,7 +326,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/11/week4-5-basisOfZipToolPart2/">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-06-basisOfZipAndUnzip/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
@@ -341,7 +343,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linux运维学习笔记4-5：文件打包压缩工具（二）</h1>
+          <h1 class="post-title" itemprop="name headline">Linux运维学习笔记：文件打包压缩工具</h1>
         
 
         <div class="post-meta">
@@ -353,8 +355,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-11T17:01:54+08:00">
-                2018-04-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-20T10:32:40+08:00">
+                2018-07-20
               </time>
             
 
@@ -394,9 +396,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/04/11/week4-5-basisOfZipToolPart2/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/20/linuxNotes-06-basisOfZipAndUnzip/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/04/11/week4-5-basisOfZipToolPart2/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/20/linuxNotes-06-basisOfZipAndUnzip/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -418,7 +420,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,344
+                  2,618
                 </span>
               
 
@@ -434,7 +436,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  5
+                  11
                 </span>
               
             </div>
@@ -455,8 +457,195 @@
       
 
       
-        <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记书接上回，继续整理打包压缩软件的知识，主要涉及<code>zip</code>和 <code>tar</code> 两个工具。</p>
-<h3 id="tar-工具"><a href="#tar-工具" class="headerlink" title="tar 工具"></a>tar 工具</h3><p>由于<code>gzip、bzip2、xz</code>三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是<code>tar</code>。</p>
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记主要整理Linux文件压缩与打包方面的知识，主要包括以下内容：</p>
+<ul>
+<li><p>常见压缩工具介绍</p>
+</li>
+<li><p>打包工具</p>
+</li>
+<li><p>进阶知识：如何压缩/解压缩超过4G的大文件</p>
+</li>
+<li><p>不解压查看压缩包内容</p>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="常见压缩工具介绍"><a href="#常见压缩工具介绍" class="headerlink" title="常见压缩工具介绍"></a>常见压缩工具介绍</h2><table>
+<thead>
+<tr>
+<th>压缩工具</th>
+<th>优点</th>
+<th>缺点</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>zip</td>
+<td>资历最老，linux各种版本都支持，可以压缩目录</td>
+<td>压缩比、压缩时间都不占优势</td>
+<td>基本上是‘老油条’，哪儿都能用，但是不好用</td>
+</tr>
+<tr>
+<td>gzip</td>
+<td>优势是速度快，压缩比还不错，内存占用小，centos默认安装</td>
+<td>压缩比不高，不支持目录压缩</td>
+<td>在内存比较小的建议使用</td>
+</tr>
+<tr>
+<td>bzip2</td>
+<td>压缩比gzip高</td>
+<td>压缩时间长；内存占用比gzip大；压缩比不如xz；不支持目录压缩</td>
+<td>比gzip好一点，但是又不如xz，处境比较尴尬</td>
+</tr>
+<tr>
+<td>xz</td>
+<td>2009年诞生的新贵，优点是压缩比显著优于zip、gzip、bzip2等前辈</td>
+<td>压缩时间较长，不支持目录压缩</td>
+<td>适用于对存储或带宽有严格要求的场景</td>
+</tr>
+</tbody>
+</table>
+<h3 id="gzip压缩工具"><a href="#gzip压缩工具" class="headerlink" title="gzip压缩工具"></a>gzip压缩工具</h3><p>命令行格式： <code>gzip [参数] [filename]</code></p>
+<p><strong>注：</strong></p>
+<ul>
+<li><p>gzip只能压缩文件，不能压缩目录;如果要压缩目录，可以加-r选项；</p>
+</li>
+<li><p>gzip默认压缩级别为6；</p>
+</li>
+</ul>
+<p>常用参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-n</td>
+<td>n代表压缩等级，从1到9，默认为6，可不加。</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>表示解压缩</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>指定目录</td>
+</tr>
+</tbody>
+</table>
+<h4 id="压缩文件"><a href="#压缩文件" class="headerlink" title="压缩文件"></a>压缩文件</h4><p>不带任何参数，直接压缩</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//准备压缩文件</span><br><span class="line">[root@stevey ~]# find /etc/ -type f -name &apos;*conf&apos; -exec cat &#123;&#125; &gt;&gt; b.txt \;</span><br><span class="line">[root@stevey ~]# du -sh b.txt</span><br><span class="line">704K	b.txt</span><br><span class="line"></span><br><span class="line">//压缩b.txt</span><br><span class="line">[root@stevey ~]# gzip b.txt  </span><br><span class="line">[root@stevey ~]# ls</span><br><span class="line">1.txt            a.txt     test      test.tar.bz2  test.zip</span><br><span class="line">anaconda-ks.cfg  b.txt.gz  test.tar  test.tar.gz</span><br><span class="line">[root@stevey ~]# du -sh b.txt.gz</span><br><span class="line">616K	b.txt.gz</span><br></pre></td></tr></table></figure>
+<h4 id="解压缩"><a href="#解压缩" class="headerlink" title="解压缩"></a>解压缩</h4><ul>
+<li>方法一：<code>gzip -d [filename]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# gzip -d b.txt.gz</span><br><span class="line">[root@stevey ~]# ls</span><br><span class="line">1.txt            a.txt  test      test.tar.bz2  test.zip</span><br><span class="line">anaconda-ks.cfg  b.txt  test.tar  test.tar.gz</span><br><span class="line">[root@stevey ~]# wc -l b.txt</span><br><span class="line">60410 b.txt</span><br></pre></td></tr></table></figure>
+<ul>
+<li>方法二：<code>gunzip [参数] [filename]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# gunzip b.txt.gz</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong></p>
+<ul>
+<li><p><code>-r</code> 参数需记忆，表示归递处理，将指定目录下的所有文件及子目录一并处理。</p>
+</li>
+<li><p>平常参数可省略，直接使用<code>gunzip [filename]</code>  解压文件。</p>
+</li>
+</ul>
+<h4 id="进阶：指定压缩-解压缩保存路径"><a href="#进阶：指定压缩-解压缩保存路径" class="headerlink" title="进阶：指定压缩/解压缩保存路径"></a>进阶：指定压缩/解压缩保存路径</h4><p>默认采用<code>gzip</code> 压缩，压缩包会放在当前目录下，并删除原文件；使用<code>-c</code>参数可以指定压缩包路径，这样原文件就不会被删除了。</p>
+<ul>
+<li>指定压缩目录 <code>gzip -c [filename] &gt; [保存目录]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# gzip -c b.txt &gt; /tmp/test/b.txt.gz</span><br></pre></td></tr></table></figure>
+<ul>
+<li>指定解压缩目录 <code>gzip -d -c [压缩包名] &gt; [指定解压缩文件路径]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# gzip -c b.txt /tmp/test/b.txt.gz &gt; /tmp/c.txt</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong></p>
+<ul>
+<li><p>这里的解压路径是绝对路径；</p>
+</li>
+<li><p>文件名支持重命名；</p>
+</li>
+</ul>
+<p>校验一下，这两个文件是一模一样的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# wc -l /tmp/test/b.txt</span><br><span class="line">60410 /tmp/test/b.txt</span><br><span class="line">[root@stevey ~]# wc -l b.txt</span><br><span class="line">60410 b.txt</span><br></pre></td></tr></table></figure>
+<h3 id="bzip2压缩工具"><a href="#bzip2压缩工具" class="headerlink" title="bzip2压缩工具"></a>bzip2压缩工具</h3><p><strong>bzip2 安装：</strong></p>
+<p>centOS 7 默认没有，需要单独安装 <code>yum install -y bzip2</code></p>
+<p><strong>bzip2 使用：</strong></p>
+<p>命令行格式：<code>bzip2 [参数] [filename]</code></p>
+<p><strong>注：</strong></p>
+<ul>
+<li><p>bzip2 工具也是支持文件压缩，不支持目录压缩；</p>
+</li>
+<li><p>默认压缩级别为9；</p>
+</li>
+</ul>
+<p>常用参数</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-z</td>
+<td>表示压缩，可省略</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>表示解压缩</td>
+</tr>
+</tbody>
+</table>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bzip2 1.txt   //压缩1.txt</span><br><span class="line">bzip2 -d 1.txt   //解压缩 1.txt.bz2</span><br></pre></td></tr></table></figure>
+<p><img src="https://farm1.staticflickr.com/813/26513702367_0a19c8db86_o.png" alt=""></p>
+<h3 id="xz压缩工具"><a href="#xz压缩工具" class="headerlink" title="xz压缩工具"></a>xz压缩工具</h3><p>命令行格式： <code>xz [参数] [filename]</code></p>
+<p><strong>注：</strong>bzip2 工具也是支持文件压缩，不支持目录压缩。</p>
+<p>常见参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-z</td>
+<td>表示压缩，可省略</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>表示解压缩</td>
+</tr>
+</tbody>
+</table>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xz 1.txt   //压缩1.txt</span><br><span class="line">xz -d 1.txt   //解压缩 1.txt.xz</span><br></pre></td></tr></table></figure>
+<p><img src="https://farm1.staticflickr.com/897/41384356831_60612e52d6_o.png" alt=""></p>
+<h3 id="zip-压缩工具"><a href="#zip-压缩工具" class="headerlink" title="zip 压缩工具"></a><code>zip</code> 压缩工具</h3><p>除了上述这些打包压缩工具，还需要考虑到在windows、linux、 mac下通用的打包压缩格式 <code>.zip</code></p>
+<h4 id="zip压缩"><a href="#zip压缩" class="headerlink" title="zip压缩"></a><code>zip</code>压缩</h4><p>zip 工具centos默认没有，需要单独安装 <code>yum install -y zip</code></p>
+<p>命令行格式：<code>zip [参数] [压缩包名称] [源文件或目录]</code></p>
+<p><img src="https://farm1.staticflickr.com/872/40505381985_0e6aaa078a_o.png" alt=""></p>
+<p>如果目录下有还有二级甚至多级目录，zip命令 不加参数时，仅仅会讲二级目录压缩；</p>
+<p>如果想一并压缩二级目录及多级目录，有两种方法：</p>
+<ul>
+<li>第一种方法：使用通配符</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip test.zip test/*</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第二种方法：使用 -r 参数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip -r test.zip test/</span><br></pre></td></tr></table></figure>
+<h4 id="unzip-解压缩"><a href="#unzip-解压缩" class="headerlink" title="unzip 解压缩"></a><code>unzip</code> 解压缩</h4><p><code>zip</code>文件需要单独安装<code>unzip</code> 工具来解压，安装命令为 <code>yum install -y unzip</code></p>
+<p>命令行格式: <code>unzip [filename]</code></p>
+<p><img src="https://farm1.staticflickr.com/886/40687288864_77f7950b69_o.png" alt=""></p>
+<h2 id="文件打包工具-tar"><a href="#文件打包工具-tar" class="headerlink" title="文件打包工具 tar"></a>文件打包工具 <code>tar</code></h2><p>由于<code>gzip、bzip2、xz</code>三个压缩工具都是针对文件进行压缩，对目录束手无策，因此一款打包工具呼之欲出，这就是<code>tar</code>。</p>
 <p>不仅如此，<code>tar</code> 强大之处在于，配合参数，可以打包压缩一起来。</p>
 <p>命令行格式：<code>tar [参数] [目标文件] [源文件或目录]</code></p>
 <p><strong>注：</strong></p>
@@ -466,7 +655,7 @@
 <li><p><code>源文件或目录</code> 指的是需要打包的文件或目录</p>
 </li>
 </ul>
-<h4 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h4><table>
+<h3 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h3><table>
 <thead>
 <tr>
 <th>参数</th>
@@ -516,9 +705,8 @@
 </tr>
 </tbody>
 </table>
-<a id="more"></a>
-<h4 id="常见用法："><a href="#常见用法：" class="headerlink" title="常见用法："></a>常见用法：</h4><p><code>tar</code>命令的参数经常连用，示例如下：</p>
-<h5 id="文件目录打包"><a href="#文件目录打包" class="headerlink" title="文件目录打包"></a>文件目录打包</h5><ul>
+<h3 id="常见用法："><a href="#常见用法：" class="headerlink" title="常见用法："></a>常见用法：</h3><p><code>tar</code>命令的参数经常连用，示例如下：</p>
+<h4 id="文件目录打包"><a href="#文件目录打包" class="headerlink" title="文件目录打包"></a>文件目录打包</h4><ul>
 <li><code>-cvf</code> 可视化打包目录<code>test</code>，指定文件名为<code>test.tar</code></li>
 </ul>
 <p><img src="https://farm1.staticflickr.com/883/39591298120_b18c7565a1_o.png" alt=""></p>
@@ -539,7 +727,7 @@
 <p><img src="https://farm1.staticflickr.com/877/41357789462_856b0f6d51_o.png" alt=""></p>
 <p><code>-tf</code> 查看一下打包后的目录文件情况<br><img src="https://farm1.staticflickr.com/874/39591660990_3ab0620310_o.png" alt=""></p>
 <p>注：<code>--exclude</code> 支持过滤多个文件，每个文件名都要用 <code>--exclude</code> 隔开。</p>
-<h5 id="文件打包并用gzip处理"><a href="#文件打包并用gzip处理" class="headerlink" title="文件打包并用gzip处理"></a>文件打包并用gzip处理</h5><ul>
+<h4 id="文件打包并用gzip处理"><a href="#文件打包并用gzip处理" class="headerlink" title="文件打包并用gzip处理"></a>文件打包并用gzip处理</h4><ul>
 <li><code>-czvf</code> 打包文件并使用gzip压缩</li>
 </ul>
 <p><img src="https://farm1.staticflickr.com/811/26529628317_4e19a320e1_o.png" alt=""></p>
@@ -552,7 +740,7 @@
 </ul>
 <p><strong>注：</strong> <code>zcat</code> 用于不真正解压缩文件，就能显示压缩包中文件的内容的场景。</p>
 <p><img src="https://farm1.staticflickr.com/880/41400794141_9261292ff8_o.png" alt=""></p>
-<h5 id="文件打包并用bzip2处理"><a href="#文件打包并用bzip2处理" class="headerlink" title="文件打包并用bzip2处理"></a>文件打包并用bzip2处理</h5><p><code>-cjvf</code> 打包文件并使用bzip2压缩</p>
+<h4 id="文件打包并用bzip2处理"><a href="#文件打包并用bzip2处理" class="headerlink" title="文件打包并用bzip2处理"></a>文件打包并用bzip2处理</h4><p><code>-cjvf</code> 打包文件并使用bzip2压缩</p>
 <p><img src="https://farm1.staticflickr.com/896/27530217828_92ae2d4679_o.png" alt=""></p>
 <p><code>-xjvf</code> 解压缩 <code>.tar.bz2</code> 格式的文件</p>
 <p><img src="https://farm1.staticflickr.com/897/39591752720_776c467ac6_o.png" alt=""></p>
@@ -560,43 +748,88 @@
 <li><code>bzcat</code> 不解压包查看内容</li>
 </ul>
 <p><img src="https://farm1.staticflickr.com/815/40505243565_4c549ea55a_o.png" alt=""></p>
-<h5 id="文件打包并用xz处理"><a href="#文件打包并用xz处理" class="headerlink" title="文件打包并用xz处理"></a>文件打包并用xz处理</h5><p>这里补充一点网上查到的资料：根据<a href="https://zh.wikipedia.org/wiki/Xz" target="_blank" rel="noopener">维基百科解释</a>，<code>xz</code>是一个使用 LZMA压缩算法的无损数据压缩文件格式。由于 xz 文件格式的压缩率更高，已在 Linux 各发行版中广泛使用。最典型的就是Linux内核，比如Linux内核3.12就是.xz后缀的文件，压缩包仅72.85MB，解压后能达到518.77MB。</p>
+<h4 id="文件打包并用xz处理"><a href="#文件打包并用xz处理" class="headerlink" title="文件打包并用xz处理"></a>文件打包并用xz处理</h4><p>这里补充一点网上查到的资料：根据<a href="https://zh.wikipedia.org/wiki/Xz" target="_blank" rel="noopener">维基百科解释</a>，<code>xz</code>是一个使用 LZMA压缩算法的无损数据压缩文件格式。由于 xz 文件格式的压缩率更高，已在 Linux 各发行版中广泛使用。最典型的就是Linux内核，比如Linux内核3.12就是.xz后缀的文件，压缩包仅72.85MB，解压后能达到518.77MB。</p>
 <p>-Jcvf 压缩文件 <strong>注：J为大写</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -Jcvf linux-3.12</span><br></pre></td></tr></table></figure>
 <p>-Jxvf 解压缩文件 <strong>注：J为大写</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -Jxvf linux-3.12.tar.xz</span><br></pre></td></tr></table></figure>
-<h3 id="zip-压缩工具"><a href="#zip-压缩工具" class="headerlink" title="zip 压缩工具"></a><code>zip</code> 压缩工具</h3><p>除了上述这些打包压缩工具，还需要考虑到在windows、linux、 mac下通用的打包压缩格式 <code>.zip</code></p>
-<p>zip 工具centos默认没有，需要单独安装 <code>yum install -y zip</code></p>
-<h4 id="zip-工具的使用"><a href="#zip-工具的使用" class="headerlink" title="zip 工具的使用"></a>zip 工具的使用</h4><h5 id="zip压缩"><a href="#zip压缩" class="headerlink" title="zip压缩"></a><code>zip</code>压缩</h5><p>命令行格式：<code>zip [参数] [压缩包名称] [源文件或目录]</code></p>
-<p><img src="https://farm1.staticflickr.com/872/40505381985_0e6aaa078a_o.png" alt=""></p>
-<p>如果目录下有还有二级甚至多级目录，zip命令 不加参数时，仅仅会讲二级目录压缩；</p>
-<p>如果想一并压缩二级目录及多级目录，有两种方法：</p>
-<ul>
-<li>第一种方法：使用通配符</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip test.zip test/*</span><br></pre></td></tr></table></figure>
-<ul>
-<li>第二种方法：使用 -r 参数</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip -r test.zip test/</span><br></pre></td></tr></table></figure>
-<h5 id="unzip-解压缩"><a href="#unzip-解压缩" class="headerlink" title="unzip 解压缩"></a><code>unzip</code> 解压缩</h5><p><code>zip</code>文件需要单独安装<code>unzip</code> 工具来解压，安装命令为 <code>yum install -y unzip</code></p>
-<p>命令行格式: <code>unzip [filename]</code></p>
-<p><img src="https://farm1.staticflickr.com/886/40687288864_77f7950b69_o.png" alt=""></p>
-<h5 id="补充知识点：超过4G的压缩包如何处理"><a href="#补充知识点：超过4G的压缩包如何处理" class="headerlink" title="补充知识点：超过4G的压缩包如何处理"></a>补充知识点：超过4G的压缩包如何处理</h5><p>linux 的unzip命令处理4G以上的压缩包会报错，解决办法是换个压缩工具，使用7zip工具。</p>
-<h6 id="7zip-安装："><a href="#7zip-安装：" class="headerlink" title="7zip 安装："></a>7zip 安装：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget  //先安装wget ，已经安装过的可以跳过这一步</span><br><span class="line"></span><br><span class="line">wget https://jaist.dl.sourceforge.net/project/p7zip/p7zip/16.02/p7zip_16.02_src_all.tar.bz2  //下载安装包</span><br><span class="line"></span><br><span class="line">tar -jxvf p7zip_16.02_src_all.tar.bz2   //解压安装包</span><br><span class="line"></span><br><span class="line">cd p7zip_16.02     //进入安装目录</span><br><span class="line"></span><br><span class="line">make</span><br><span class="line"></span><br><span class="line">make install    //也可以直接输入 make &amp; make install</span><br></pre></td></tr></table></figure>
+<h2 id="进阶：如何压缩-解压缩超过4G的文件"><a href="#进阶：如何压缩-解压缩超过4G的文件" class="headerlink" title="进阶：如何压缩/解压缩超过4G的文件"></a>进阶：如何压缩/解压缩超过4G的文件</h2><p>linux 的unzip命令处理4G以上的压缩包会报错，解决办法是换个压缩工具，使用7zip工具。</p>
+<h3 id="7zip-安装："><a href="#7zip-安装：" class="headerlink" title="7zip 安装："></a>7zip 安装：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget  //先安装wget ，已经安装过的可以跳过这一步</span><br><span class="line"></span><br><span class="line">wget https://jaist.dl.sourceforge.net/project/p7zip/p7zip/16.02/p7zip_16.02_src_all.tar.bz2  //下载安装包</span><br><span class="line"></span><br><span class="line">tar -jxvf p7zip_16.02_src_all.tar.bz2   //解压安装包</span><br><span class="line"></span><br><span class="line">cd p7zip_16.02     //进入安装目录</span><br><span class="line"></span><br><span class="line">make</span><br><span class="line"></span><br><span class="line">make install    //也可以直接输入 make &amp; make install</span><br></pre></td></tr></table></figure>
 <p><strong>注意：这里遇到了两个坑</strong></p>
 <p>第一，错误提示：<code>g++： Command not found</code>，如下图所示。估计是缺某个依赖包，网上查了一下，固然如此</p>
 <p><img src="https://farm1.staticflickr.com/858/39700287160_faac972ae1_o.png" alt=""></p>
-<p>解决方案：</p>
+<p><strong>解决方案：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install gcc+ gcc-c++</span><br></pre></td></tr></table></figure>
 <p>第二，也是错误提示，就是上图中的这一句：<code>make[1]:Leaving directory /root/p7zip_16.02/CPP/7zip/Bundles/Alone</code></p>
 <p>网上查了半天，也没查出所以然，后来试着<code>make install</code>安装了一下，输入7zip 显示如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey p7zip_16.02]# p7zip</span><br><span class="line">-bash: p7zip: command not found</span><br></pre></td></tr></table></figure>
 <p>再后来，发现命令行输错了，正确的命令行格式是 <code>7za [参数] [文件或目录名]</code></p>
 <p>此外，网上很多教程都提到 安装如果发现乱码,请执行命令<code>export LANG=zh_CN.GBK</code>不过，我没有遇到这个问题。</p>
-<h6 id="7zip使用："><a href="#7zip使用：" class="headerlink" title="7zip使用："></a>7zip使用：</h6><p>命令行格式：<code>7za [参数] [文件或目录名]</code></p>
+<h3 id="7zip使用："><a href="#7zip使用：" class="headerlink" title="7zip使用："></a>7zip使用：</h3><p>命令行格式：<code>7za [参数] [文件或目录名]</code></p>
 <p>常见用法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">7za a -t 7z -r [压缩包名] [压缩文件/目录]  //压缩命令，-t指定压缩类型，默认7z；-r指归递处理，表示递归所有的子文件夹</span><br><span class="line"></span><br><span class="line">7za e [filename]   //解压到当前目录下,不保留原来的目录结构  </span><br><span class="line"></span><br><span class="line">7za x [filename]   //解压到当前目录下,但保留原来的目录结构</span><br></pre></td></tr></table></figure>
+<h2 id="查看压缩文件"><a href="#查看压缩文件" class="headerlink" title="查看压缩文件"></a>查看压缩文件</h2><h3 id="查看压缩文件类型：file-压缩包名"><a href="#查看压缩文件类型：file-压缩包名" class="headerlink" title="查看压缩文件类型：file [压缩包名]"></a>查看压缩文件类型：<code>file [压缩包名]</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# file b.txt.gz  </span><br><span class="line">b.txt.gz: gzip compressed data, was &quot;b.txt&quot;, from Unix, last modified: Mon Apr 16 20:44:32 2018</span><br></pre></td></tr></table></figure>
+<h3 id="查看压缩文件内容："><a href="#查看压缩文件内容：" class="headerlink" title="查看压缩文件内容："></a>查看压缩文件内容：</h3><p>zcat命令用于不真正解压缩文件，就能显示压缩包中文件的内。</p>
+<p>命令行格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zcat [参数] [压缩包名]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>常用参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-S</td>
+<td>指定gzip格式的压缩包的后缀。当后缀不是标准压缩包后缀时使用此选项； </td>
+</tr>
+<tr>
+<td>-c</td>
+<td>将文件内容写到标注输出； </td>
+</tr>
+<tr>
+<td>-d</td>
+<td>执行解压缩操作； </td>
+</tr>
+<tr>
+<td>-l</td>
+<td>显示压缩包中文件的列表； </td>
+</tr>
+<tr>
+<td>-L</td>
+<td>显示软件许可信息； </td>
+</tr>
+<tr>
+<td>-q</td>
+<td>禁用警告信息； </td>
+</tr>
+<tr>
+<td>-r</td>
+<td>在目录上执行递归操作； </td>
+</tr>
+<tr>
+<td>-t</td>
+<td>测试压缩文件的完整性； </td>
+</tr>
+<tr>
+<td>-V</td>
+<td>显示指令的版本信息； </td>
+</tr>
+<tr>
+<td>-l</td>
+<td>更快的压缩速度；</td>
+</tr>
+</tbody>
+</table>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# zcat !$ |head   //这里涉及`!$`特殊用法，指的是上一条bash命令的最后一个值，也就是 `b.txt.gz`</span><br><span class="line"></span><br><span class="line">zcat b.txt.gz |head</span><br><span class="line"># Generated by NetworkManager</span><br><span class="line">nameserver 129.29.29.29</span><br><span class="line"># The upstream Mozilla.org project tests all changes to the root CA</span><br><span class="line"># list with the NSS (Network Security Services) library.</span><br><span class="line">#</span><br><span class="line"># Occassionally, changes might cause compatibility issues with</span><br><span class="line"># other cryptographic libraries, such as openssl or gnutls.</span><br><span class="line">#</span><br><span class="line"># The package maintainers of the CA certificates package might decide</span><br><span class="line"># to temporarily keep certain (legacy) root CA certificates trusted,</span><br></pre></td></tr></table></figure>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><p><a href="https://blog.gtwang.org/linux/linux-why-are-tar-archive-formats-switching-to-xz-compression-to-replace-bzip2-and-what-about-gzip/" target="_blank" rel="noopener">linux中最佳的压缩格式</a></p>
+</li>
+<li><p><a href="https://www.jianshu.com/p/38b32107bc3e" target="_blank" rel="noopener">Linux下的文件打包和压缩</a></p>
+</li>
+</ul>
 
       
     </div>
@@ -617,7 +850,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://steve-yuan-8276.github.io/2018/04/11/week4-5-basisOfZipToolPart2/" title="Linux运维学习笔记4-5：文件打包压缩工具（二）">https://steve-yuan-8276.github.io/2018/04/11/week4-5-basisOfZipToolPart2/</a>
+    <a href="https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-06-basisOfZipAndUnzip/" title="Linux运维学习笔记：文件打包压缩工具">https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-06-basisOfZipAndUnzip/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -634,9 +867,9 @@
           
             <a href="/tags/centos/" rel="tag"># centos</a>
           
-            <a href="/tags/notes/" rel="tag"># notes</a>
-          
             <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
           
             <a href="/tags/zip/" rel="tag"># zip</a>
           
@@ -651,8 +884,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/11/week4-4-basisOfZipToolsPart1/" rel="next" title="Linux运维学习笔记4-4：文件打包压缩工具（一）">
-                <i class="fa fa-chevron-left"></i> Linux运维学习笔记4-4：文件打包压缩工具（一）
+              <a href="/2018/07/19/linuxNotes-05-basisOfVim/" rel="next" title="Linux运维学习笔记：vim基础知识">
+                <i class="fa fa-chevron-left"></i> Linux运维学习笔记：vim基础知识
               </a>
             
           </div>
@@ -660,10 +893,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/13/week5-1-howToInstallSoftwareOnCentOS-part1/" rel="prev" title="Linux运维学习笔记5-1：centOS7 如何安装软件（一）">
-                Linux运维学习笔记5-1：centOS7 如何安装软件（一） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -754,7 +983,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">113</span>
+                  <span class="site-state-item-count">112</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -844,7 +1073,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-工具"><span class="nav-number">2.</span> <span class="nav-text">tar 工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常用参数"><span class="nav-number">2.1.</span> <span class="nav-text">常用参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常见用法："><span class="nav-number">2.2.</span> <span class="nav-text">常见用法：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#文件目录打包"><span class="nav-number">2.2.1.</span> <span class="nav-text">文件目录打包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文件打包并用gzip处理"><span class="nav-number">2.2.2.</span> <span class="nav-text">文件打包并用gzip处理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文件打包并用bzip2处理"><span class="nav-number">2.2.3.</span> <span class="nav-text">文件打包并用bzip2处理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文件打包并用xz处理"><span class="nav-number">2.2.4.</span> <span class="nav-text">文件打包并用xz处理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zip-压缩工具"><span class="nav-number">3.</span> <span class="nav-text">zip 压缩工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#zip-工具的使用"><span class="nav-number">3.1.</span> <span class="nav-text">zip 工具的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#zip压缩"><span class="nav-number">3.1.1.</span> <span class="nav-text">zip压缩</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#unzip-解压缩"><span class="nav-number">3.1.2.</span> <span class="nav-text">unzip 解压缩</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#补充知识点：超过4G的压缩包如何处理"><span class="nav-number">3.1.3.</span> <span class="nav-text">补充知识点：超过4G的压缩包如何处理</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#7zip-安装："><span class="nav-number">3.1.3.1.</span> <span class="nav-text">7zip 安装：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#7zip使用："><span class="nav-number">3.1.3.2.</span> <span class="nav-text">7zip使用：</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见压缩工具介绍"><span class="nav-number">2.</span> <span class="nav-text">常见压缩工具介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gzip压缩工具"><span class="nav-number">2.1.</span> <span class="nav-text">gzip压缩工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#压缩文件"><span class="nav-number">2.1.1.</span> <span class="nav-text">压缩文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解压缩"><span class="nav-number">2.1.2.</span> <span class="nav-text">解压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进阶：指定压缩-解压缩保存路径"><span class="nav-number">2.1.3.</span> <span class="nav-text">进阶：指定压缩/解压缩保存路径</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bzip2压缩工具"><span class="nav-number">2.2.</span> <span class="nav-text">bzip2压缩工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xz压缩工具"><span class="nav-number">2.3.</span> <span class="nav-text">xz压缩工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zip-压缩工具"><span class="nav-number">2.4.</span> <span class="nav-text">zip 压缩工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#zip压缩"><span class="nav-number">2.4.1.</span> <span class="nav-text">zip压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#unzip-解压缩"><span class="nav-number">2.4.2.</span> <span class="nav-text">unzip 解压缩</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件打包工具-tar"><span class="nav-number">3.</span> <span class="nav-text">文件打包工具 tar</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用参数"><span class="nav-number">3.1.</span> <span class="nav-text">常用参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见用法："><span class="nav-number">3.2.</span> <span class="nav-text">常见用法：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件目录打包"><span class="nav-number">3.2.1.</span> <span class="nav-text">文件目录打包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件打包并用gzip处理"><span class="nav-number">3.2.2.</span> <span class="nav-text">文件打包并用gzip处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件打包并用bzip2处理"><span class="nav-number">3.2.3.</span> <span class="nav-text">文件打包并用bzip2处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件打包并用xz处理"><span class="nav-number">3.2.4.</span> <span class="nav-text">文件打包并用xz处理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进阶：如何压缩-解压缩超过4G的文件"><span class="nav-number">4.</span> <span class="nav-text">进阶：如何压缩/解压缩超过4G的文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7zip-安装："><span class="nav-number">4.1.</span> <span class="nav-text">7zip 安装：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7zip使用："><span class="nav-number">4.2.</span> <span class="nav-text">7zip使用：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看压缩文件"><span class="nav-number">5.</span> <span class="nav-text">查看压缩文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看压缩文件类型：file-压缩包名"><span class="nav-number">5.1.</span> <span class="nav-text">查看压缩文件类型：file [压缩包名]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看压缩文件内容："><span class="nav-number">5.2.</span> <span class="nav-text">查看压缩文件内容：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
 
           </div>
@@ -878,7 +1107,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">189.3k</span>
+    <span title="Site words total count">189.2k</span>
   
 </div>
 
@@ -1036,9 +1265,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://steve-yuan-8276.github.io/2018/04/11/week4-5-basisOfZipToolPart2/';
-          this.page.identifier = '2018/04/11/week4-5-basisOfZipToolPart2/';
-          this.page.title = 'Linux运维学习笔记4-5：文件打包压缩工具（二）';
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-06-basisOfZipAndUnzip/';
+          this.page.identifier = '2018/07/20/linuxNotes-06-basisOfZipAndUnzip/';
+          this.page.title = 'Linux运维学习笔记：文件打包压缩工具';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://steve-yuan.disqus.com/embed.js';

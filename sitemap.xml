@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-09-linuxNetwork/</loc>
+    
+    <lastmod>2018-07-20T07:34:21.532Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-08-HowToCheckLinux/</loc>
+    
+    <lastmod>2018-07-20T07:09:56.807Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-07-HowToInstallSoftwareOnLinux/</loc>
     
-    <lastmod>2018-07-20T03:41:29.444Z</lastmod>
+    <lastmod>2018-07-20T03:52:25.162Z</lastmod>
     
   </url>
   
@@ -436,13 +450,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/05/07/week7-3-howToMnageLinuxPart3/</loc>
-    
-    <lastmod>2018-05-24T01:38:21.940Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2018/05/08/week7-5-howToMnageLinuxPart5/</loc>
     
     <lastmod>2018-05-22T06:50:05.271Z</lastmod>
@@ -464,23 +471,9 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/05/03/week7-2-howToManageLinuxPart2/</loc>
-    
-    <lastmod>2018-05-21T10:30:13.719Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2018/05/02/linuxNotes-sedPractice/</loc>
     
     <lastmod>2018-05-21T10:24:54.976Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/04/28/week701-howToManageLinux/</loc>
-    
-    <lastmod>2018-05-21T10:02:54.210Z</lastmod>
     
   </url>
   
@@ -562,20 +555,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/05/08/week7-3-process-thread/</loc>
-    
-    <lastmod>2018-05-08T14:59:31.760Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/05/08/week7-2-howToManageLinuxPart2-1/</loc>
-    
-    <lastmod>2018-05-08T01:28:44.550Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2018/05/03/shell100-practice1/</loc>
     
     <lastmod>2018-05-07T02:14:35.164Z</lastmod>
@@ -625,21 +604,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/04/shh-github/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/16/piNote-1-download-howToInstall/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/14/mapAndFilter/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/01/04/shh-github/</loc>
     
     <lastmod>2018-04-02T14:26:02.765Z</lastmod>
     
@@ -653,14 +625,21 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/13/howToUseJamine/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/16/piNote-1-download-howToInstall/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.765Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/20/howToUseGoogle/</loc>
     
     <lastmod>2018-04-02T14:26:02.763Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/20/howToUseGoogle/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/13/howToUseJamine/</loc>
     
     <lastmod>2018-04-02T14:26:02.763Z</lastmod>
     
@@ -702,13 +681,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/02/05/bogonErrFix/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.760Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2018/03/09/centOS-fileSystem/</loc>
     
     <lastmod>2018-04-02T14:26:02.760Z</lastmod>
@@ -716,21 +688,21 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/27/basisOfRegularExpressions/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/02/05/bogonErrFix/</loc>
     
-    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/20/basisOfXpath/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
+    <lastmod>2018-04-02T14:26:02.760Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/27/basisOfRegularExpressions/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
     
@@ -744,6 +716,13 @@
   </url>
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/20/basisOfXpath/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.759Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/17/basisOfPthonScrapy/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
@@ -751,14 +730,7 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/06/basisOfAutomator/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.758Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/16/basisOfGoogleDevTools/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/12/basisOfCat/</loc>
     
     <lastmod>2018-04-02T14:26:02.758Z</lastmod>
     
@@ -772,7 +744,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/12/basisOfCat/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/06/basisOfAutomator/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.758Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/16/basisOfGoogleDevTools/</loc>
     
     <lastmod>2018-04-02T14:26:02.758Z</lastmod>
     

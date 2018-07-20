@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="centos,linux,notes,yum," />
+  <meta name="keywords" content="centos,notes,linux,yum," />
 
 
 
@@ -81,14 +81,16 @@
 
 
 
-<meta name="description" content="写在前面接着上一篇：centOS7 如何安装软件（一），继续centos7整理软件的笔记，这要将源码包安装的问题。 注意：整理这期笔记的时候，遇到了超过的问题，troubleShooting随处可见，阅读的时候可以选择忽略troubleShooting，不影响学习思路。 源码包安装安装工作流： 第一步：./configure  第二步：make  第三步：make &amp;amp; install">
-<meta name="keywords" content="centos,linux,notes,yum">
+<meta name="description" content="写在前面在centOS系统中，安装软件主要有三种方法：  rpm包安装  yum安装  源码包安装   这则笔记分别对上述三种方法进行整理。">
+<meta name="keywords" content="centos,notes,linux,yum">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux运维学习笔记5-2：centOS7 如何安装软件（二）">
-<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/04/13/week5-2-howToInstallSoftwareOnCentOS-part2/index.html">
+<meta property="og:title" content="Linux运维学习笔记5-1：centOS7 如何安装软件">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-07-HowToInstallSoftwareOnLinux/index.html">
 <meta property="og:site_name" content="Steve的折腾学习日志">
-<meta property="og:description" content="写在前面接着上一篇：centOS7 如何安装软件（一），继续centos7整理软件的笔记，这要将源码包安装的问题。 注意：整理这期笔记的时候，遇到了超过的问题，troubleShooting随处可见，阅读的时候可以选择忽略troubleShooting，不影响学习思路。 源码包安装安装工作流： 第一步：./configure  第二步：make  第三步：make &amp;amp; install">
+<meta property="og:description" content="写在前面在centOS系统中，安装软件主要有三种方法：  rpm包安装  yum安装  源码包安装   这则笔记分别对上述三种方法进行整理。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://farm1.staticflickr.com/891/26555432037_da1278df2e_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/885/40712619574_3c555dc9f2_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/805/39681503340_99d72763e7_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/880/39681616650_61430932d8_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/814/40597531615_e85037f72d_o.png">
@@ -96,16 +98,23 @@
 <meta property="og:image" content="https://farm1.staticflickr.com/816/26620520847_d20807c982_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/805/41449980982_ef22d53ea8_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/819/40779076414_4df40e7f60_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/810/40535478815_09b16775bf_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/815/40593616335_cc11c4b86c_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/791/40535597995_ace51532a7_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/800/41388102862_6e9f9a6312_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/855/27669056188_60002a2be0_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/894/41388183482_fb656697b1_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/784/40645764255_5a30b39982_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/814/26682308657_db1c44374e_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/786/41492423351_c4421e54a4_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/791/26621539347_317125e226_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/784/27620989868_18c79369d5_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/795/39742008930_80689a07d2_o.png">
-<meta property="og:updated_time" content="2018-05-18T06:30:32.695Z">
+<meta property="og:updated_time" content="2018-07-20T03:41:29.444Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux运维学习笔记5-2：centOS7 如何安装软件（二）">
-<meta name="twitter:description" content="写在前面接着上一篇：centOS7 如何安装软件（一），继续centos7整理软件的笔记，这要将源码包安装的问题。 注意：整理这期笔记的时候，遇到了超过的问题，troubleShooting随处可见，阅读的时候可以选择忽略troubleShooting，不影响学习思路。 源码包安装安装工作流： 第一步：./configure  第二步：make  第三步：make &amp;amp; install">
-<meta name="twitter:image" content="https://farm1.staticflickr.com/805/39681503340_99d72763e7_o.png">
+<meta name="twitter:title" content="Linux运维学习笔记5-1：centOS7 如何安装软件">
+<meta name="twitter:description" content="写在前面在centOS系统中，安装软件主要有三种方法：  rpm包安装  yum安装  源码包安装   这则笔记分别对上述三种方法进行整理。">
+<meta name="twitter:image" content="https://farm1.staticflickr.com/891/26555432037_da1278df2e_o.png">
 
 
 
@@ -135,13 +144,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/04/13/week5-2-howToInstallSoftwareOnCentOS-part2/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-07-HowToInstallSoftwareOnLinux/"/>
 
 
 
 
 
-  <title>Linux运维学习笔记5-2：centOS7 如何安装软件（二） | Steve的折腾学习日志</title>
+  <title>Linux运维学习笔记5-1：centOS7 如何安装软件 | Steve的折腾学习日志</title>
   
 
 
@@ -322,7 +331,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/13/week5-2-howToInstallSoftwareOnCentOS-part2/">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-07-HowToInstallSoftwareOnLinux/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
@@ -339,7 +348,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linux运维学习笔记5-2：centOS7 如何安装软件（二）</h1>
+          <h1 class="post-title" itemprop="name headline">Linux运维学习笔记5-1：centOS7 如何安装软件</h1>
         
 
         <div class="post-meta">
@@ -351,8 +360,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-13T16:46:43+08:00">
-                2018-04-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-20T11:17:16+08:00">
+                2018-07-20
               </time>
             
 
@@ -392,9 +401,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/04/13/week5-2-howToInstallSoftwareOnCentOS-part2/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/20/linuxNotes-07-HowToInstallSoftwareOnLinux/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/04/13/week5-2-howToInstallSoftwareOnCentOS-part2/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/20/linuxNotes-07-HowToInstallSoftwareOnLinux/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -416,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,786
+                  3,531
                 </span>
               
 
@@ -432,7 +441,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  8
+                  15
                 </span>
               
             </div>
@@ -453,9 +462,152 @@
       
 
       
-        <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>接着上一篇：<a href="https://www.steve-yuan.com/2018/04/13/week5-1-howToInstallSoftwareOnCentOS-part1/" target="_blank" rel="noopener">centOS7 如何安装软件（一）</a>，继续centos7整理软件的笔记，这要将源码包安装的问题。</p>
-<p><strong>注意：</strong>整理这期笔记的时候，遇到了超过的问题，<code>troubleShooting</code>随处可见，阅读的时候可以选择忽略<code>troubleShooting</code>，不影响学习思路。</p>
-<h3 id="源码包安装"><a href="#源码包安装" class="headerlink" title="源码包安装"></a>源码包安装</h3><h4 id="安装工作流："><a href="#安装工作流：" class="headerlink" title="安装工作流："></a>安装工作流：</h4><ul>
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>在centOS系统中，安装软件主要有三种方法：</p>
+<ul>
+<li><p>rpm包安装</p>
+</li>
+<li><p>yum安装</p>
+</li>
+<li><p>源码包安装</p>
+</li>
+</ul>
+<p>这则笔记分别对上述三种方法进行整理。</p>
+<a id="more"></a>
+<h2 id="rpm工具"><a href="#rpm工具" class="headerlink" title="rpm工具"></a>rpm工具</h2><p>rpm，全称是red hat package manager, 是Red Hat公司提出了软件安装管理程序。</p>
+<h3 id="挂载-rpm-包安装源"><a href="#挂载-rpm-包安装源" class="headerlink" title="挂载 rpm 包安装源"></a>挂载 <code>rpm</code> 包安装源</h3><p>rpm 包是预先在linux系统上编译打包的文件，就藏在centos7 的光盘镜像里。要使用它，首先要把这些包都找出来。</p>
+<ul>
+<li>第一步：挂载光驱镜像</li>
+</ul>
+<p>依次点击<code>virtual machine</code> -&gt; <code>CD/DVD(IDE)</code> -&gt;<code>connect CD/DVD</code>，选择光驱镜像</p>
+<p>注：如果是已经加载了光驱镜像的，就会显示<code>disconnect CD/DVD</code></p>
+<p><img src="https://farm1.staticflickr.com/891/26555432037_da1278df2e_o.png" alt=""></p>
+<ul>
+<li>第二步：将光驱挂载到 <code>/mnt</code> 目录</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey mnt]# mount /dev/cdrom /mnt</span><br><span class="line">mount: /dev/sr0 is write-protected, mounting read-only    //出现这一行说明已经挂载上</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第三步：进入/mnt 目录，查看/mnt/Packages，就能找到rpm包了。</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/885/40712619574_3c555dc9f2_o.png" alt=""></p>
+<h3 id="rpm-初始化"><a href="#rpm-初始化" class="headerlink" title="rpm 初始化"></a>rpm 初始化</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm --initdb</span><br><span class="line">[root@stevey Packages]# rpm --rebuilddb</span><br></pre></td></tr></table></figure>
+<h3 id="rpm包安装："><a href="#rpm包安装：" class="headerlink" title="rpm包安装："></a><code>rpm</code>包安装：</h3><p>命令格式： <code>rpm [参数] [rpm包名称]</code></p>
+<table>
+<thead>
+<tr>
+<th>常见参数</th>
+<th>用法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-i</td>
+<td>安装</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>可视化</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>显示安装进度</td>
+</tr>
+<tr>
+<td>-U</td>
+<td>升级rpm包</td>
+</tr>
+<tr>
+<td>–force</td>
+<td>特殊用法，强制安装，即使覆盖其他包也会安装</td>
+</tr>
+<tr>
+<td>–nodeps</td>
+<td>即使依赖包没有安装，也要强制安装</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>安装检测：<code>--test</code> 用来检查依赖关系,并不是真正的安装；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -ivh --test gaim-1.3.0-1.fc4.i386.rpm</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装：<code>rpm -ivh [rpm包名称]</code> 这里的包名称必须包括平台信息、版本号等一长串信息，必须吐槽一下，简直是一夜回到解放前，好土著的感觉。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -ivh gaim-1.3.0-1.fc4.i386.rpm</span><br></pre></td></tr></table></figure>
+<ul>
+<li>升级 file.rpm，使用 <code>-U</code> 参数。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]#rpm -Uvh file.rpm</span><br></pre></td></tr></table></figure>
+<ul>
+<li>由新版本降级为旧版本，加<code>--oldpackage</code> 参数：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -Uvh --oldpackage gaim-1.3.0-1.fc4.i386.rpm</span><br></pre></td></tr></table></figure>
+<ul>
+<li>为软件包指定安装目录：要加 <code>--relocate</code> 参数：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -ivh --relocate /=/opt/gaim gaim-1.3.0-1.fc4.i386.rpm     //把gaim-1.3.0-1.fc4.i386.rpm指定安装在 /opt/gaim 目录中</span><br></pre></td></tr></table></figure>
+<p>注：通常情况下，centos执行文件都放在 /bin 或者 /sbin目录下，指定目录可能会导致找不到命令，解决方法:在 <code>/bin</code> 或者 <code>/sbin</code> 目录下建立一个软链接文件，然后设置软链接：<code>ln -s [源文件] [目标文件]</code> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# ln -s /opt/lynx/etc/lynx.cfg /etc/lynx.cfg</span><br></pre></td></tr></table></figure>
+<h3 id="rpm-包卸载"><a href="#rpm-包卸载" class="headerlink" title="rpm 包卸载"></a><code>rpm</code> 包卸载</h3><p>命令行格式： <code>rpm -e [软件包名]</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -e lynx</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>这里的 rpm 包名是不包括平台信息和后缀名的。</p>
+<h3 id="rpm-包的查询"><a href="#rpm-包的查询" class="headerlink" title="rpm 包的查询"></a>rpm 包的查询</h3><p>命令行格式： <code>rpm [参数] [rpm包名]</code></p>
+<p>以下是rpm的常见用法：</p>
+<h4 id="查看已安装文件"><a href="#查看已安装文件" class="headerlink" title="查看已安装文件"></a>查看已安装文件</h4><ul>
+<li>查询系统已安装的软件: <code>rpm -q [软件名]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -q gaim</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看系统中所有已经安装的包，要加 <code>-a</code> 参数 ；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -qa</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在所有已经安装的软件包中查找某个软件: 与管道符 <code>| grep</code> 连用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -qa |grep gaim</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查询已安装的文件属于哪个软件包：<code>rpm -qf [文件名]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -qf /usr/lib/libacl.la</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>此处的文件需要使用绝对路径</p>
+<ul>
+<li>查询已安装软件包信息：<code>rpm -qi [软件名]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -qi lynx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查询已安装软件位置：<code>rpm -ql [软件名]</code> </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -ql lynx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看已安装软件的配置文件:rpm -qc [软件名]</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -qc lynx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看已安装软件所依赖的软件包: <code>rpm -qR [软件名]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -qR rpm-python</span><br></pre></td></tr></table></figure>
+<h4 id="查看未安装文件"><a href="#查看未安装文件" class="headerlink" title="查看未安装文件"></a>查看未安装文件</h4><ul>
+<li>查看软件包的用途及版本等信息： <code>rpm -qpi [软件名]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -qpi lynx-2.8.5-23.i386.rpm</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看软件包所包含的文件：<code>rpm -qpl [软件名]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -qpl lynx-2.8.5-23.i386.rpm</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看软件包的文档所在位置：<code>rpm -qpd [软件名]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey Packages]# rpm -qpd lynx-2.8.5-23.i386.rpm</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看软件包的配置文件：<code>rpm -qpc [软件名]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost RPMS]# rpm -qpc lynx-2.8.5-23.i386.rpm</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看软件包的依赖关系：<code>rpm -qpR [软件名]</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost archives]# rpm -qpR yumex_0.42-3.0.fc4_noarch.rpm</span><br></pre></td></tr></table></figure>
+<h2 id="源码包安装"><a href="#源码包安装" class="headerlink" title="源码包安装"></a>源码包安装</h2><p><strong>源码包是所有安装方式里面最复杂的，如果可能，尽量不使用源码包安装。</strong></p>
+<p><strong>安装工作流：</strong></p>
+<ul>
 <li><p>第一步：<code>./configure</code></p>
 </li>
 <li><p>第二步：<code>make</code></p>
@@ -463,31 +615,21 @@
 <li><p>第三步：<code>make &amp; install</code></p>
 </li>
 </ul>
-<h4 id="前提条件："><a href="#前提条件：" class="headerlink" title="前提条件："></a>前提条件：</h4><p>采用源码包安装的方式，需要用编译器进行。linux下的c语言编译器是gcc，centos下运行 <code>yum install -y gcc</code> 进行安装。</p>
-<a id="more"></a>
-<h4 id="安装步骤："><a href="#安装步骤：" class="headerlink" title="安装步骤："></a>安装步骤：</h4><h5 id="第一步：下载源代码"><a href="#第一步：下载源代码" class="headerlink" title="第一步：下载源代码"></a>第一步：下载源代码</h5><p>命令行格式： <code>wget [源码包地址]</code></p>
-<p><strong>注意：</strong></p>
-<p>下载源码包一定要到官方镜像地址；</p>
-<p>建议源码包放置在固定目录，建议存放在<code>/usr/local/src/</code></p>
-<h6 id="示例：尝试编译安装php源码包（对应课后练习的第9题）"><a href="#示例：尝试编译安装php源码包（对应课后练习的第9题）" class="headerlink" title="示例：尝试编译安装php源码包（对应课后练习的第9题）"></a>示例：尝试编译安装php源码包（对应课后练习的第9题）</h6><p>php官网地址，这里选择了<a href="https://secure.php.net/get/php-7.2.4.tar.bz2/from/a/mirror" target="_blank" rel="noopener">香港镜像</a>下载。</p>
+<p>以安装php为例，具体过程如下；</p>
+<h3 id="前提条件："><a href="#前提条件：" class="headerlink" title="前提条件："></a>前提条件：</h3><p>采用源码包安装的方式，需要用编译器进行。linux下的c语言编译器是gcc，centos下运行 <code>yum install -y gcc</code> 进行安装。</p>
+<h3 id="第一步：下载源代码"><a href="#第一步：下载源代码" class="headerlink" title="第一步：下载源代码"></a>第一步：下载源代码</h3><p>命令行格式： <code>wget [源码包地址]</code></p>
 <p><img src="https://farm1.staticflickr.com/805/39681503340_99d72763e7_o.png" alt=""></p>
-<h5 id="第二步：解压源码包"><a href="#第二步：解压源码包" class="headerlink" title="第二步：解压源码包"></a>第二步：解压源码包</h5><p>命令行：tar [参数] [源码包名]</p>
+<p><strong>注意：</strong></p>
 <ul>
-<li>如果是tar.gz ，就用 -zvxf；</li>
-<li>如果是tar.bz2，就用 -jxvf；</li>
-</ul>
-<p>详细资料，参阅之前文件压缩工具笔记：</p>
-<ul>
-<li><p><a href="https://www.steve-yuan.com/2018/04/11/week4-4-basisOfZipToolsPart1/" target="_blank" rel="noopener">文件打包压缩工具（一）</a></p>
+<li><p>下载源码包一定要到官方镜像地址，这里选择了<a href="https://secure.php.net/get/php-7.2.4.tar.bz2/from/a/mirror" target="_blank" rel="noopener">香港镜像</a>下载；</p>
 </li>
-<li><p><a href="https://www.steve-yuan.com/2018/04/11/week4-5-basisOfZipToolPart2/" target="_blank" rel="noopener">文件打包压缩工具（二）</a></p>
+<li><p>建议源码包放置在固定目录，建议存放在<code>/usr/local/src/</code>；</p>
 </li>
 </ul>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -jxvf php-7.2.4.tar.bz2  //这里下载的`.tar.bz2` ，所以用`-jxvf` 解压。</span><br></pre></td></tr></table></figure>
+<h3 id="第二步：解压源码包"><a href="#第二步：解压源码包" class="headerlink" title="第二步：解压源码包"></a>第二步：解压源码包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -jxvf php-7.2.4.tar.bz2  //这里下载的`.tar.bz2` ，所以用`-jxvf` 解压。</span><br></pre></td></tr></table></figure>
 <p><strong>注：</strong>解压完成之后务必要进入文件目录，查看一下<code>README</code> 、 INSTSLL 这两个帮助文档，能够获得很多必要的说明信息。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey php-7.2.4]# less INSTALL</span><br></pre></td></tr></table></figure>
-<h5 id="第三步：配置选项并生成makefile"><a href="#第三步：配置选项并生成makefile" class="headerlink" title="第三步：配置选项并生成makefile"></a>第三步：配置选项并生成makefile</h5><p>cd 进入源码包目录，配置选项。运行 <code>./configure --help | less</code> 查看帮助文档；</p>
+<h3 id="第三步：配置选项并生成makefile"><a href="#第三步：配置选项并生成makefile" class="headerlink" title="第三步：配置选项并生成makefile"></a>第三步：配置选项并生成makefile</h3><p>进入源码包目录，配置选项。运行 <code>./configure --help | less</code> 查看帮助文档；</p>
 <p><strong>TroubleShooting：</strong>运行之后，出现了错误提示：<code>configure: error: xml2-config not found. Please check your libxml2 installation.</code> </p>
 <p><img src="https://farm1.staticflickr.com/880/39681616650_61430932d8_o.png" alt=""></p>
 <p>google了半天，最终在<a href="https://my.oschina.net/u/1377923/blog/617175" target="_blank" rel="noopener">这里找到了答案</a>，解决办法：</p>
@@ -498,7 +640,7 @@
 <p><strong>注：</strong>这里的路径一定要写绝对地址，否则会报错。</p>
 <p>配置完成后，输入 <code>echo $?</code> 进行验证，返回值为0，说明配置成功。</p>
 <p><img src="https://farm1.staticflickr.com/864/41449212892_9341c31a08_o.png" alt=""></p>
-<h5 id="第四步：编译安装包"><a href="#第四步：编译安装包" class="headerlink" title="第四步：编译安装包"></a>第四步：编译安装包</h5><p>命令行： <code>make</code></p>
+<h3 id="第四步：编译安装包"><a href="#第四步：编译安装包" class="headerlink" title="第四步：编译安装包"></a>第四步：编译安装包</h3><p>命令行： <code>make</code></p>
 <p><strong>TroubleShooting：</strong> 这里有遇到了坑，错误提示：<code>virtual memory exhausted: Cannot allocate memory</code> 虚拟内存不够，又折腾了很久，找到<a href="https://www.cnblogs.com/chenpingzhao/p/4820814.html" target="_blank" rel="noopener">解决思路</a></p>
 <p>错误原因：虚拟内存不够，从而导致编译失败。</p>
 <p><img src="https://farm1.staticflickr.com/816/26620520847_d20807c982_o.png" alt=""></p>
@@ -522,9 +664,104 @@
 <p><img src="https://farm1.staticflickr.com/819/40779076414_4df40e7f60_o.png" alt=""></p>
 <p>swap空间在编译完毕之后，就没用了，可以删掉。当然，也可以选择保留。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey php-7.2.4]# swapoff swap </span><br><span class="line">[root@stevey php-7.2.4]# rm -f /usr/img/swap</span><br></pre></td></tr></table></figure>
-<p>第五步：安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install</span><br></pre></td></tr></table></figure>
-<h3 id="关于yum的补充知识"><a href="#关于yum的补充知识" class="headerlink" title="关于yum的补充知识"></a>关于yum的补充知识</h3><h4 id="切换国内源"><a href="#切换国内源" class="headerlink" title="切换国内源"></a>切换国内源</h4><h5 id="国内源地址："><a href="#国内源地址：" class="headerlink" title="国内源地址："></a>国内源地址：</h5><table>
+<h3 id="第五步：安装"><a href="#第五步：安装" class="headerlink" title="第五步：安装"></a>第五步：安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install</span><br></pre></td></tr></table></figure>
+<h2 id="yum-工具"><a href="#yum-工具" class="headerlink" title="yum 工具"></a>yum 工具</h2><p><strong>注：</strong>比rpm更智能、更人性化的软件安装管理工具，</p>
+<h3 id="查询可用的安装包：-yum-list"><a href="#查询可用的安装包：-yum-list" class="headerlink" title="查询可用的安装包： yum list"></a>查询可用的安装包： <code>yum list</code></h3><p><img src="https://farm1.staticflickr.com/810/40535478815_09b16775bf_o.png" alt=""></p>
+<p><strong>注：</strong>左侧是软件名；中间是版本信息；右侧是安装信息。</p>
+<ul>
+<li><p>base、anaconda表示不同的<code>repos</code> 仓库；</p>
+</li>
+<li><p>加上@表示已安装，不加@表示本机未安装；</p>
+</li>
+<li><p>@updates 表示已安装需要升级； </p>
+</li>
+</ul>
+<p>以下是一些常用的查询命令：</p>
+<ul>
+<li>列出所有可更新的软件包：<code>yum list updates</code></li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/815/40593616335_cc11c4b86c_o.png" alt=""></p>
+<ul>
+<li>列出所有已安装的软件包: <code>yum list installed</code> </li>
+</ul>
+<ul>
+<li>列出所有已安装但不在 Yum Repository 内的软件包: <code>yum list extras</code></li>
+</ul>
+<ul>
+<li>使用YUM获取软件包信息: <code>yum info</code> </li>
+</ul>
+<ul>
+<li>列出所有软件包的信息: <code>yum info</code> </li>
+</ul>
+<ul>
+<li>列出所有可更新的软件包信息: <code>yum info updates</code></li>
+</ul>
+<ul>
+<li>列出所有已安装的软件包信息: <code>yum info installed</code> </li>
+</ul>
+<ul>
+<li>列出软件包提供哪些文件: <code>yum provides</code></li>
+</ul>
+<h3 id="搜索安装包："><a href="#搜索安装包：" class="headerlink" title="搜索安装包："></a>搜索安装包：</h3><ul>
+<li>第一种方式： <code>yum search [keyword]</code></li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/791/40535597995_ace51532a7_o.png" alt=""></p>
+<ul>
+<li>第二种方式：<code>yum list | grep ‘keyword’</code></li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/800/41388102862_6e9f9a6312_o.png" alt=""></p>
+<ul>
+<li>第三种方式：<code>yum provides &#39;/*/vim&#39;</code></li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/855/27669056188_60002a2be0_o.png" alt=""></p>
+<h3 id="yum安装卸载："><a href="#yum安装卸载：" class="headerlink" title="yum安装卸载："></a>yum安装卸载：</h3><h4 id="单独安装卸载"><a href="#单独安装卸载" class="headerlink" title="单独安装卸载"></a>单独安装卸载</h4><ul>
+<li>安装：<code>yum install -y [rpm 名]</code></li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/894/41388183482_fb656697b1_o.png" alt=""></p>
+<ul>
+<li><p>升级 rpm 包：<code>yum update [-y] [rpm 名]</code></p>
+</li>
+<li><p>卸载：<code>yum remove [rpm 名]</code></p>
+</li>
+</ul>
+<p>注：卸载跟安装类似，卸载也可以加上<code>-y</code>参数，省略交互环节；不过稳妥起见，还是不加<code>-y</code>比较好。</p>
+<h4 id="组团安装"><a href="#组团安装" class="headerlink" title="组团安装"></a>组团安装</h4><p>除了一个一个地安装，yum还支持一堆一堆的安装，就是按照功能把软件分组，一次安装一组软件。</p>
+<ul>
+<li><code>yum grouplist</code> 查询</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/784/40645764255_5a30b39982_o.png" alt=""></p>
+<ul>
+<li><code>yum groupinstall [组名]</code> 安装，注意此处的组名要用单引号括起来</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]#yum groupinstall &apos;Basic Web Server&apos;</span><br></pre></td></tr></table></figure>
+<h3 id="yum搭建本地仓库"><a href="#yum搭建本地仓库" class="headerlink" title="yum搭建本地仓库"></a>yum搭建本地仓库</h3><p>相较于rpm，使用yum安装要方便很多，但是当系统无法联网，就不能使用yum安装软件了。这里的变通的方法，是搭建本地仓库。</p>
+<p>实现办法如下：</p>
+<ul>
+<li>第一步：挂在光驱镜像</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/cdrom /mnt</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第二步：删除 /etc/yum.repos.d 目录下所有repos文件<strong>（强烈建议：先备份，再删除）</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp -r /etc/yum.repos.d /etc/yum.repos.d_bak //备份到/`etc/yum.repos.d_bak`</span><br><span class="line"></span><br><span class="line">rm- rf /etc/yum.repos.d/*  /删除repos文件</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第三步：创建dvd.repo</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/yum.repos.d/dvd.repo   //vim编辑，加入以下内容</span><br><span class="line"></span><br><span class="line">[dvd]</span><br><span class="line">name=install dvd</span><br><span class="line">baseurl=file:///mnt</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第四步：刷新repos生成缓存</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum clean all     //先清楚之前到缓存</span><br><span class="line">yum makecache     //生成缓存</span><br><span class="line">yum list          //保险起见，可以查看一下，列表中最后一列标识为dvd的都是本地repos</span><br></pre></td></tr></table></figure>
+<p>之后，就可以使用本地repos了。</p>
+<h3 id="yum-下载安装包"><a href="#yum-下载安装包" class="headerlink" title="yum 下载安装包"></a>yum 下载安装包</h3><h4 id="yum只下载安装包（注：该方法适用于未安装软件）"><a href="#yum只下载安装包（注：该方法适用于未安装软件）" class="headerlink" title="yum只下载安装包（注：该方法适用于未安装软件）"></a>yum只下载安装包（注：该方法适用于未安装软件）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y [包名] --downloadonly</span><br></pre></td></tr></table></figure>
+<p>默认情况下，下载的rpm包保存在这里：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/var/cache/yum/x86_64/[centos/fedora-version]/[repository]/packages     //[repository]表示下载包的来源仓库的名称(例如：base、fedora、updates)</span><br></pre></td></tr></table></figure>
+<p>上述方法，只适用于未安装软件，如果是已安装软件，则使用以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum reinstall -y [包名] --downloadonly</span><br></pre></td></tr></table></figure>
+<p>下载的安装包地址在：</p>
+<h4 id="设置保留yum安装包"><a href="#设置保留yum安装包" class="headerlink" title="设置保留yum安装包"></a>设置保留yum安装包</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/yum.conf   //修改 yum 配置文件，如下：</span><br><span class="line"></span><br><span class="line">cachedir=/home/soft/yumcache   //安装包保存地址</span><br><span class="line">keepcache=1   //1表示保存已下载安装包</span><br><span class="line">debuglevel=2</span><br></pre></td></tr></table></figure>
+<h3 id="切换国内源"><a href="#切换国内源" class="headerlink" title="切换国内源"></a>切换国内源</h3><p><strong>国内源地址：</strong></p>
+<table>
 <thead>
 <tr>
 <th>服务商</th>
@@ -542,7 +779,7 @@
 </tr>
 </tbody>
 </table>
-<h5 id="实践步骤："><a href="#实践步骤：" class="headerlink" title="实践步骤："></a>实践步骤：</h5><ul>
+<ul>
 <li>第一步：备份源地址</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br></pre></td></tr></table></figure>
@@ -554,9 +791,9 @@
 <li>第三步：生成缓存：</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum clean all     //先清空缓存</span><br><span class="line">yum makecache     //再重新生成yum源</span><br></pre></td></tr></table></figure>
-<h4 id="安装拓展源epel"><a href="#安装拓展源epel" class="headerlink" title="安装拓展源epel"></a>安装拓展源epel</h4><p>EPEL 是yum的一个软件源，包含了PHP、Redis、htop等基本源没有到软件。</p>
-<h5 id="epel安装"><a href="#epel安装" class="headerlink" title="epel安装"></a>epel安装</h5><h6 id="方法一：yum-安装"><a href="#方法一：yum-安装" class="headerlink" title="方法一：yum 安装"></a>方法一：yum 安装</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# yum install -y epel-release</span><br></pre></td></tr></table></figure>
-<h6 id="方法二：rpm安装"><a href="#方法二：rpm安装" class="headerlink" title="方法二：rpm安装"></a>方法二：rpm安装</h6><ul>
+<h3 id="安装拓展源epel"><a href="#安装拓展源epel" class="headerlink" title="安装拓展源epel"></a>安装拓展源epel</h3><p>EPEL 是yum的一个软件源，包含了PHP、Redis、htop等基本源没有到软件。</p>
+<h4 id="方法一：yum-安装"><a href="#方法一：yum-安装" class="headerlink" title="方法一：yum 安装"></a>方法一：yum 安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# yum install -y epel-release</span><br></pre></td></tr></table></figure>
+<h4 id="方法二：rpm安装"><a href="#方法二：rpm安装" class="headerlink" title="方法二：rpm安装"></a>方法二：rpm安装</h4><ul>
 <li>先查看系统版本</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# arch      //该命令用于显示当前主机的硬件架构类型</span><br><span class="line">x86_64       //表示64位系统，如果显示i686就是32位系统</span><br></pre></td></tr></table></figure>
@@ -569,9 +806,9 @@
 </ul>
 <p><img src="https://farm1.staticflickr.com/814/26682308657_db1c44374e_o.png" alt=""></p>
 <p>成功之后就可以使用yum 命令安装更多的命令了。</p>
-<h6 id="epel源删除（不推荐）"><a href="#epel源删除（不推荐）" class="headerlink" title="epel源删除（不推荐）"></a>epel源删除（不推荐）</h6><p>删除EPEL源需要同时删除配置和rpm文件。</p>
+<h4 id="epel源删除（不推荐）"><a href="#epel源删除（不推荐）" class="headerlink" title="epel源删除（不推荐）"></a>epel源删除（不推荐）</h4><p>删除EPEL源需要同时删除配置和rpm文件。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rm epel.repo epel-testing.repo             # 删除配置文件</span><br><span class="line"></span><br><span class="line">rm /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL</span><br><span class="line">yum remove $(rpm -qa | grep epel)          # 删除rpm文件</span><br><span class="line"></span><br><span class="line">yum clean all                              # 清理配置</span><br></pre></td></tr></table></figure>
-<h4 id="设置源优先级"><a href="#设置源优先级" class="headerlink" title="设置源优先级"></a>设置源优先级</h4><p>前提条件：需要安装<code>yum-priorities</code></p>
+<h3 id="yum设置源优先级"><a href="#yum设置源优先级" class="headerlink" title="yum设置源优先级"></a>yum设置源优先级</h3><p>前提条件：需要安装<code>yum-priorities</code></p>
 <p><img src="https://farm1.staticflickr.com/786/41492423351_c4421e54a4_o.png" alt=""></p>
 <p>安装完成后确认一下配置文件是否存在。<br><img src="https://farm1.staticflickr.com/791/26621539347_317125e226_o.png" alt=""></p>
 <p>编辑 /etc/yum.repos.d/目录下的*.repo 文件来设置优先级。</p>
@@ -586,7 +823,7 @@
 </li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[base], [addons], [updates], [extras] … priority=1 </span><br><span class="line"></span><br><span class="line">[centosplus],[contrib] … priority=2</span><br><span class="line"></span><br><span class="line">Third Party Repos such as rpmforge … priority=N   (where N is &gt; 10 and based on your preference)</span><br></pre></td></tr></table></figure>
-<h4 id="yum下载rpm包"><a href="#yum下载rpm包" class="headerlink" title="yum下载rpm包"></a>yum下载rpm包</h4><p>命令行格式：<code>yum install --downloadonly &lt;package-name&gt;</code></p>
+<h3 id="yum下载rpm包"><a href="#yum下载rpm包" class="headerlink" title="yum下载rpm包"></a>yum下载rpm包</h3><p>命令行格式：<code>yum install --downloadonly &lt;package-name&gt;</code></p>
 <p>例如，尝试下载zsh的rpm包：</p>
 <p><img src="https://farm1.staticflickr.com/795/39742008930_80689a07d2_o.png" alt=""></p>
 <p>默认情况下，下载的rpm包保存在这里，<code>/var/cache/yum/x86_64/7/[repository]/packages/</code> 。这里的[repository]表示下载包的来源仓库的名称(例如：base、fedora、updates)，也就是上图中红圈标出来的位置。</p>
@@ -600,7 +837,7 @@
 </li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install yum-utils  //下载安装插件</span><br><span class="line"></span><br><span class="line">yumdownloader &lt;package-name&gt;    //将指定包下载到当前目录下</span><br></pre></td></tr></table></figure>
-<h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><ul>
+<h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><ul>
 <li><p><a href="http://ask.apelearn.com/question/7168" target="_blank" rel="noopener">配置yum源优先级</a></p>
 </li>
 <li><p><a href="http://www.linuxidc.com/Linux/2012-09/70096.htm" target="_blank" rel="noopener">把源码包打包成rpm包 </a>  </p>
@@ -608,6 +845,12 @@
 <li><p><a href="https://linux.cn/article-5100-1.html" target="_blank" rel="noopener">如何使用yum来下载RPM包而不进行安装</a></p>
 </li>
 <li><p><a href="https://www.awaimai.com/1712.html" target="_blank" rel="noopener">CentOS安装EPEL软件源</a></p>
+</li>
+<li><p><a href="http://www.360doc.com/content/11/0218/15/4171006_94080041.shtml" target="_blank" rel="noopener">yum保留已经安装过的包 </a>  </p>
+</li>
+<li><p><a href="http://ask.apelearn.com/question/7627" target="_blank" rel="noopener">搭建局域网yum源</a> </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xiaochaohuashengmi/archive/2011/10/08/2203153.html" target="_blank" rel="noopener">Linux rpm 命令参数使用详解</a></p>
 </li>
 </ul>
 
@@ -630,7 +873,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://steve-yuan-8276.github.io/2018/04/13/week5-2-howToInstallSoftwareOnCentOS-part2/" title="Linux运维学习笔记5-2：centOS7 如何安装软件（二）">https://steve-yuan-8276.github.io/2018/04/13/week5-2-howToInstallSoftwareOnCentOS-part2/</a>
+    <a href="https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-07-HowToInstallSoftwareOnLinux/" title="Linux运维学习笔记5-1：centOS7 如何安装软件">https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-07-HowToInstallSoftwareOnLinux/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -647,9 +890,9 @@
           
             <a href="/tags/centos/" rel="tag"># centos</a>
           
-            <a href="/tags/linux/" rel="tag"># linux</a>
-          
             <a href="/tags/notes/" rel="tag"># notes</a>
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
           
             <a href="/tags/yum/" rel="tag"># yum</a>
           
@@ -664,8 +907,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/13/week5-1-howToInstallSoftwareOnCentOS-part1/" rel="next" title="Linux运维学习笔记5-1：centOS7 如何安装软件（一）">
-                <i class="fa fa-chevron-left"></i> Linux运维学习笔记5-1：centOS7 如何安装软件（一）
+              <a href="/2018/07/20/linuxNotes-06-basisOfZipAndUnzip/" rel="next" title="Linux运维学习笔记：文件打包压缩工具">
+                <i class="fa fa-chevron-left"></i> Linux运维学习笔记：文件打包压缩工具
               </a>
             
           </div>
@@ -673,10 +916,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/16/howToSendBooksToKindle/" rel="prev" title="HowTo:如何优雅滴将电子书同步到kindle">
-                HowTo:如何优雅滴将电子书同步到kindle <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -767,7 +1006,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">112</span>
+                  <span class="site-state-item-count">111</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -857,7 +1096,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源码包安装"><span class="nav-number">2.</span> <span class="nav-text">源码包安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装工作流："><span class="nav-number">2.1.</span> <span class="nav-text">安装工作流：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#前提条件："><span class="nav-number">2.2.</span> <span class="nav-text">前提条件：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装步骤："><span class="nav-number">2.3.</span> <span class="nav-text">安装步骤：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：下载源代码"><span class="nav-number">2.3.1.</span> <span class="nav-text">第一步：下载源代码</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#示例：尝试编译安装php源码包（对应课后练习的第9题）"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">示例：尝试编译安装php源码包（对应课后练习的第9题）</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：解压源码包"><span class="nav-number">2.3.2.</span> <span class="nav-text">第二步：解压源码包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：配置选项并生成makefile"><span class="nav-number">2.3.3.</span> <span class="nav-text">第三步：配置选项并生成makefile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第四步：编译安装包"><span class="nav-number">2.3.4.</span> <span class="nav-text">第四步：编译安装包</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于yum的补充知识"><span class="nav-number">3.</span> <span class="nav-text">关于yum的补充知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#切换国内源"><span class="nav-number">3.1.</span> <span class="nav-text">切换国内源</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#国内源地址："><span class="nav-number">3.1.1.</span> <span class="nav-text">国内源地址：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#实践步骤："><span class="nav-number">3.1.2.</span> <span class="nav-text">实践步骤：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装拓展源epel"><span class="nav-number">3.2.</span> <span class="nav-text">安装拓展源epel</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#epel安装"><span class="nav-number">3.2.1.</span> <span class="nav-text">epel安装</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#方法一：yum-安装"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">方法一：yum 安装</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#方法二：rpm安装"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">方法二：rpm安装</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#epel源删除（不推荐）"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">epel源删除（不推荐）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置源优先级"><span class="nav-number">3.3.</span> <span class="nav-text">设置源优先级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#yum下载rpm包"><span class="nav-number">3.4.</span> <span class="nav-text">yum下载rpm包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料："><span class="nav-number">4.</span> <span class="nav-text">参考资料：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rpm工具"><span class="nav-number">2.</span> <span class="nav-text">rpm工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#挂载-rpm-包安装源"><span class="nav-number">2.1.</span> <span class="nav-text">挂载 rpm 包安装源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpm-初始化"><span class="nav-number">2.2.</span> <span class="nav-text">rpm 初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpm包安装："><span class="nav-number">2.3.</span> <span class="nav-text">rpm包安装：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpm-包卸载"><span class="nav-number">2.4.</span> <span class="nav-text">rpm 包卸载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpm-包的查询"><span class="nav-number">2.5.</span> <span class="nav-text">rpm 包的查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看已安装文件"><span class="nav-number">2.5.1.</span> <span class="nav-text">查看已安装文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看未安装文件"><span class="nav-number">2.5.2.</span> <span class="nav-text">查看未安装文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码包安装"><span class="nav-number">3.</span> <span class="nav-text">源码包安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前提条件："><span class="nav-number">3.1.</span> <span class="nav-text">前提条件：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：下载源代码"><span class="nav-number">3.2.</span> <span class="nav-text">第一步：下载源代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：解压源码包"><span class="nav-number">3.3.</span> <span class="nav-text">第二步：解压源码包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步：配置选项并生成makefile"><span class="nav-number">3.4.</span> <span class="nav-text">第三步：配置选项并生成makefile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四步：编译安装包"><span class="nav-number">3.5.</span> <span class="nav-text">第四步：编译安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第五步：安装"><span class="nav-number">3.6.</span> <span class="nav-text">第五步：安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yum-工具"><span class="nav-number">4.</span> <span class="nav-text">yum 工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询可用的安装包：-yum-list"><span class="nav-number">4.1.</span> <span class="nav-text">查询可用的安装包： yum list</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索安装包："><span class="nav-number">4.2.</span> <span class="nav-text">搜索安装包：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yum安装卸载："><span class="nav-number">4.3.</span> <span class="nav-text">yum安装卸载：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单独安装卸载"><span class="nav-number">4.3.1.</span> <span class="nav-text">单独安装卸载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#组团安装"><span class="nav-number">4.3.2.</span> <span class="nav-text">组团安装</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yum搭建本地仓库"><span class="nav-number">4.4.</span> <span class="nav-text">yum搭建本地仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yum-下载安装包"><span class="nav-number">4.5.</span> <span class="nav-text">yum 下载安装包</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#yum只下载安装包（注：该方法适用于未安装软件）"><span class="nav-number">4.5.1.</span> <span class="nav-text">yum只下载安装包（注：该方法适用于未安装软件）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置保留yum安装包"><span class="nav-number">4.5.2.</span> <span class="nav-text">设置保留yum安装包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#切换国内源"><span class="nav-number">4.6.</span> <span class="nav-text">切换国内源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装拓展源epel"><span class="nav-number">4.7.</span> <span class="nav-text">安装拓展源epel</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法一：yum-安装"><span class="nav-number">4.7.1.</span> <span class="nav-text">方法一：yum 安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法二：rpm安装"><span class="nav-number">4.7.2.</span> <span class="nav-text">方法二：rpm安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#epel源删除（不推荐）"><span class="nav-number">4.7.3.</span> <span class="nav-text">epel源删除（不推荐）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yum设置源优先级"><span class="nav-number">4.8.</span> <span class="nav-text">yum设置源优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yum下载rpm包"><span class="nav-number">4.9.</span> <span class="nav-text">yum下载rpm包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料："><span class="nav-number">5.</span> <span class="nav-text">参考资料：</span></a></li></ol></div>
             
 
           </div>
@@ -891,7 +1130,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">189.2k</span>
+    <span title="Site words total count">189.1k</span>
   
 </div>
 
@@ -1049,9 +1288,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://steve-yuan-8276.github.io/2018/04/13/week5-2-howToInstallSoftwareOnCentOS-part2/';
-          this.page.identifier = '2018/04/13/week5-2-howToInstallSoftwareOnCentOS-part2/';
-          this.page.title = 'Linux运维学习笔记5-2：centOS7 如何安装软件（二）';
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-07-HowToInstallSoftwareOnLinux/';
+          this.page.identifier = '2018/07/20/linuxNotes-07-HowToInstallSoftwareOnLinux/';
+          this.page.title = 'Linux运维学习笔记5-1：centOS7 如何安装软件';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://steve-yuan.disqus.com/embed.js';

@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="notes,linux,rsync,ftp," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="写在前面这则笔记重点整理rsync 数据同步备份工具相关知识，主要包括两个方面的内容：  rsync安装及使用  ftp服务架设及使用  pureftp服务架设及使用  云服务使用何种同步备份工具？">
+<meta name="keywords" content="notes,linux,rsync,ftp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux运维学习笔记：数据备份和同步rsync">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/23/linuxNotes-12-rsyncAndFtp/index.html">
+<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:description" content="写在前面这则笔记重点整理rsync 数据同步备份工具相关知识，主要包括两个方面的内容：  rsync安装及使用  ftp服务架设及使用  pureftp服务架设及使用  云服务使用何种同步备份工具？">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://farm1.staticflickr.com/885/41392949015_e5a9f223a0_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/960/42247831092_922f257b94_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/875/40938717090_0438c2032c_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/888/27896822517_4fe15639cd_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1789/42942630462_e5b41054fa_o.jpg">
+<meta property="og:image" content="https://farm2.staticflickr.com/1791/28124191167_eec09e019f_o.jpg">
+<meta property="og:image" content="https://farm2.staticflickr.com/1734/41865905765_02d6ea3364_o.jpg">
+<meta property="og:image" content="https://farm2.staticflickr.com/1784/42943085652_6424f80169_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1798/42274322624_58c0685df5_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1814/41182572270_4a9a5296d0_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1779/42294559944_a5025f80d1_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1807/29140686268_e2b220634b_o.png">
+<meta property="og:updated_time" content="2018-07-23T07:18:58.507Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux运维学习笔记：数据备份和同步rsync">
+<meta name="twitter:description" content="写在前面这则笔记重点整理rsync 数据同步备份工具相关知识，主要包括两个方面的内容：  rsync安装及使用  ftp服务架设及使用  pureftp服务架设及使用  云服务使用何种同步备份工具？">
+<meta name="twitter:image" content="https://farm1.staticflickr.com/885/41392949015_e5a9f223a0_o.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/23/linuxNotes-12-rsyncAndFtp/"/>
+
+
+
+
+
+  <title>Linux运维学习笔记：数据备份和同步rsync | Steve的折腾学习日志</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111158073-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/steve-yuan-8276"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/23/linuxNotes-12-rsyncAndFtp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux运维学习笔记：数据备份和同步rsync</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-23T14:27:06+08:00">
+                2018-07-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/23/linuxNotes-12-rsyncAndFtp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/23/linuxNotes-12-rsyncAndFtp/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  8,860
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  41
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记重点整理<code>rsync</code> 数据同步备份工具相关知识，主要包括两个方面的内容：</p>
+<ul>
+<li><p><code>rsync</code>安装及使用</p>
+</li>
+<li><p><code>ftp</code>服务架设及使用</p>
+</li>
+<li><p>pureftp服务架设及使用</p>
+</li>
+<li><p>云服务使用何种同步备份工具？</p>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="rsync-工具"><a href="#rsync-工具" class="headerlink" title="rsync 工具"></a><code>rsync</code> 工具</h2><p>rsync 命令是一个远程数据同步工具，可以在本地和远程之间通过shell或rsync服务互相拷贝文件。</p>
+<p>它的优点在于：</p>
+<ul>
+<li><p>可以镜像保存整个目录树和文件系统；</p>
+</li>
+<li><p>可以很容易做到保持原来文件的权限、时间、软硬链接等；</p>
+</li>
+<li><p>无须特殊权限即可安装；</p>
+</li>
+<li><p>快速：第一次同步时 rsync 会复制全部内容，但在下一次只传输修改过的文件。rsync 在传输数据的过程中可以实行压缩及解压缩操作，因此可以使用更少的带宽；</p>
+</li>
+<li><p>安全：可以使用 scp、ssh 等方式来传输文件，当然也可以通过直接的 socket 连接；</p>
+</li>
+<li><p>支持匿名传输，以方便进行网站镜象；</p>
+</li>
+</ul>
+<h3 id="软件安装："><a href="#软件安装：" class="headerlink" title="软件安装："></a>软件安装：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y rsync</span><br></pre></td></tr></table></figure>
+<h3 id="rsync语法："><a href="#rsync语法：" class="headerlink" title="rsync语法："></a>rsync语法：</h3><p><strong>命令行格式：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//本地文件备份 Local:   </span><br><span class="line">    rsync [OPTION...] SRC... [DEST]</span><br><span class="line"></span><br><span class="line">//通过ssh远程同步备份 Access via remote shell:</span><br><span class="line">    //pull</span><br><span class="line">    rsync [OPTION...] [USER@]HOST:SRC... [DEST]</span><br><span class="line">    </span><br><span class="line">    //Push:</span><br><span class="line">    rsync [OPTION...] SRC... [USER@]HOST:DEST</span><br><span class="line"></span><br><span class="line">//通过服务远程同步备份 Access via rsync daemon:</span><br><span class="line">    //Pull: </span><br><span class="line">    rsync [OPTION...] [USER@]HOST::SRC... [DEST]</span><br><span class="line">    rsync [OPTION...] rsync://[USER@]HOST[:PORT]/SRC... [DEST]</span><br><span class="line">    </span><br><span class="line">    //Push: </span><br><span class="line">    rsync [OPTION...] SRC... [USER@]HOST::DEST</span><br><span class="line">    rsync [OPTION...] SRC... rsync://[USER@]HOST[:PORT]/DEST</span><br></pre></td></tr></table></figure>
+<p><strong>常用参数</strong></p>
+<table>
+<thead>
+<tr>
+<th>常用参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-v，–verbose</td>
+<td>详细模式输出；</td>
+</tr>
+<tr>
+<td>-a，–archive</td>
+<td>归档模式，表示以递归的方式传输文件，并保持所有文件属性不变，相当于使用了组合参数-rlptgoD; 后面跟–no-OPTION，option可以是rlptgoD中的任意一个，表示将这个选项去除。</td>
+</tr>
+<tr>
+<td>-r，–recursive</td>
+<td>对子目录以递归模式处理,传输目录时必须要加；</td>
+</tr>
+<tr>
+<td>-l, –links</td>
+<td>小写l，copy软链接文件;</td>
+</tr>
+<tr>
+<td>-L</td>
+<td>大写L，使用该选项后，会将软链接指向的目标文件复制到DST；</td>
+</tr>
+<tr>
+<td>-p, –perms</td>
+<td>保持文件权限;</td>
+</tr>
+<tr>
+<td>-t, –times</td>
+<td>保持文件时间信息;</td>
+</tr>
+<tr>
+<td>-g, –group</td>
+<td>保持文件属组信息;</td>
+</tr>
+<tr>
+<td>-o, –owner</td>
+<td>保持文件属主信息;</td>
+</tr>
+<tr>
+<td>-D, –devices</td>
+<td>保持设备文件信息;</td>
+</tr>
+<tr>
+<td>-H, –hard-links</td>
+<td>保留硬链接;</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>把目标文件夹DST 中比原文件SRC还新的文件排除掉，不会同步；</td>
+</tr>
+<tr>
+<td>-P, -partial</td>
+<td>显示同步过程，如速率等，比-v显示更详细;</td>
+</tr>
+<tr>
+<td>-z, –compress</td>
+<td>对备份的文件在传输时进行压缩处理；</td>
+</tr>
+<tr>
+<td>–delete</td>
+<td>删除那些DST中SRC没有的文件;</td>
+</tr>
+<tr>
+<td>–exclude=PATTERN</td>
+<td>排除满足特定条件的文件，这里的pattern也是具体的文件名，也可以是带有通配符，比如*.txt</td>
+</tr>
+<tr>
+<td>–progress</td>
+<td>显示同步的过程状态，包括同步文件数量、传输速度等；</td>
+</tr>
+</tbody>
+</table>
+<h3 id="本地文件同步备份"><a href="#本地文件同步备份" class="headerlink" title="本地文件同步备份"></a>本地文件同步备份</h3><h4 id="文件准备"><a href="#文件准备" class="headerlink" title="文件准备"></a>文件准备</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@stevey ~]# cd rsync</span><br><span class="line">[root@stevey rsync]# pwd</span><br><span class="line">/root/rsync</span><br><span class="line">[root@stevey rsync]# mkdir test</span><br><span class="line">[root@stevey rsync]# cd test</span><br><span class="line">[root@stevey test]# touch &#123;1,2,3&#125;.txt /root/b.txt</span><br><span class="line">[root@stevey test]# ln -s /root/b.txt ./a.txt</span><br><span class="line">[root@stevey test]# ll</span><br><span class="line">total 0</span><br><span class="line">-rw-r--r--. 1 root root  0 May 22 22:03 1.txt</span><br><span class="line">-rw-r--r--. 1 root root  0 May 22 22:03 2.txt</span><br><span class="line">-rw-r--r--. 1 root root  0 May 22 22:03 3.txt</span><br><span class="line">lrwxrwxrwx. 1 root root 11 May 22 22:10 a.txt -&gt; /root/b.txt</span><br></pre></td></tr></table></figure>
+<h4 id="a-选项：表示以递归的方式传输文件，并保持所有文件属性不变，相当于使用了组合参数-rlptgoD"><a href="#a-选项：表示以递归的方式传输文件，并保持所有文件属性不变，相当于使用了组合参数-rlptgoD" class="headerlink" title="-a 选项：表示以递归的方式传输文件，并保持所有文件属性不变，相当于使用了组合参数-rlptgoD"></a><code>-a</code> 选项：表示以递归的方式传输文件，并保持所有文件属性不变，相当于使用了组合参数-rlptgoD</h4><p><strong>如果目录<code>test</code> 不加斜杠，会新建一个<code>test2</code> 的目录，将<code>test1</code>放到新建目录下；加一个斜杠，才能得到我们想要的结果</strong></p>
+<ul>
+<li>示例1: 目录test不加斜杠</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey test2]# rsync -a test  test2</span><br><span class="line">[root@stevey test2]# tree -L 2 test2</span><br><span class="line">test2</span><br><span class="line">└── test</span><br><span class="line">    ├── 1.txt</span><br><span class="line">    ├── 2.txt</span><br><span class="line">    ├── 3.txt</span><br><span class="line">    └── a.txt -&gt; /root/b.txt</span><br><span class="line"></span><br><span class="line">1 directory, 4 files</span><br></pre></td></tr></table></figure>
+<ul>
+<li>示例2: 目录test加斜杠</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey rsync]# rsync -a test/ test2</span><br><span class="line">[root@stevey rsync]# ls</span><br><span class="line">test  test2</span><br><span class="line">[root@stevey rsync]# tree -L 2 test</span><br><span class="line">test</span><br><span class="line">├── 1.txt</span><br><span class="line">├── 2.txt</span><br><span class="line">├── 3.txt</span><br><span class="line">└── a.txt -&gt; /root/b.txt</span><br><span class="line"></span><br><span class="line">0 directories, 4 files</span><br><span class="line">[root@stevey rsync]# tree -L 2 test2</span><br><span class="line">test2</span><br><span class="line">├── 1.txt</span><br><span class="line">├── 2.txt</span><br><span class="line">├── 3.txt</span><br><span class="line">└── a.txt -&gt; /root/b.txt</span><br></pre></td></tr></table></figure>
+<p><code>-a</code>选项相当于使用了组合参数<code>-rlptgoD</code>；后面可以跟<code>--no-OPTION</code>，排除某个选项；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey test]# ll</span><br><span class="line">total 0</span><br><span class="line">-rw-r--r--. 1 root root  0 May 22 22:03 1.txt</span><br><span class="line">-rw-r--r--. 1 root root  0 May 22 22:03 2.txt</span><br><span class="line">-rw-r--r--. 1 root root  0 May 22 22:03 3.txt</span><br><span class="line">lrwxrwxrwx. 1 root root 11 May 22 22:10 a.txt -&gt; /root/b.txt</span><br><span class="line">[root@stevey test]# cd ..</span><br><span class="line">[root@stevey test2]# rsync -a --no-l test/ test2/   //--no-l 表示排除软链接文件</span><br><span class="line">skipping non-regular file &quot;a.txt&quot;</span><br><span class="line">[root@stevey test2]# tree -L 2 test2/</span><br><span class="line">test2/</span><br><span class="line">├── 1.txt</span><br><span class="line">├── 2.txt</span><br><span class="line">└── 3.txt</span><br><span class="line"></span><br><span class="line">0 directories, 3 files</span><br></pre></td></tr></table></figure>
+<h4 id="L-选项：使用该选项后，会将软链接指向的目标文件复制到DST"><a href="#L-选项：使用该选项后，会将软链接指向的目标文件复制到DST" class="headerlink" title="-L 选项：使用该选项后，会将软链接指向的目标文件复制到DST"></a><code>-L</code> 选项：使用该选项后，会将软链接指向的目标文件复制到DST</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">//文件准备</span><br><span class="line">[root@stevey rsync]# echo &apos;this is s test&apos; &gt; /root/b.txt</span><br><span class="line">[root@stevey rsync]# cat !$</span><br><span class="line">cat /root/b.txt</span><br><span class="line">this is s test</span><br><span class="line"></span><br><span class="line">//-v 选项表示详细模式输出；-L则会把软链接的目标文件一起同步到DST</span><br><span class="line">[root@stevey rsync]# rsync -avL test/ test2/</span><br><span class="line">sending incremental file list</span><br><span class="line">created directory test2</span><br><span class="line">./</span><br><span class="line">1.txt</span><br><span class="line">2.txt</span><br><span class="line">3.txt</span><br><span class="line">a.txt</span><br><span class="line"></span><br><span class="line">sent 298 bytes  received 123 bytes  842.00 bytes/sec</span><br><span class="line">total size is 15  speedup is 0.04</span><br><span class="line">[root@stevey rsync]# cd test2</span><br><span class="line">[root@stevey test2]# ll</span><br><span class="line">total 4</span><br><span class="line">-rw-r--r--. 1 root root  0 May 22 22:03 1.txt</span><br><span class="line">-rw-r--r--. 1 root root  0 May 22 22:03 2.txt</span><br><span class="line">-rw-r--r--. 1 root root  0 May 22 22:03 3.txt</span><br><span class="line">-rw-r--r--. 1 root root 15 May 22 22:42 a.txt</span><br><span class="line">[root@stevey test2]# cat a.txt</span><br><span class="line">this is s test</span><br></pre></td></tr></table></figure>
+<h4 id="u-选项：-仅仅进行更新，跳过所有已经存在于-DST，如果文件时间晚于要备份的文件，不覆盖更新的文件"><a href="#u-选项：-仅仅进行更新，跳过所有已经存在于-DST，如果文件时间晚于要备份的文件，不覆盖更新的文件" class="headerlink" title="-u 选项：    仅仅进行更新，跳过所有已经存在于 DST，如果文件时间晚于要备份的文件，不覆盖更新的文件"></a><code>-u</code> 选项：    仅仅进行更新，跳过所有已经存在于 DST，如果文件时间晚于要备份的文件，不覆盖更新的文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">//文件准备</span><br><span class="line"></span><br><span class="line">//test/1.txt与test2/1.txt的创建时间是一样的</span><br><span class="line">[root@stevey rsync]# ll test/1.txt test2/1.txt</span><br><span class="line">-rw-r--r--. 1 root root 0 May 22 22:03 test/1.txt</span><br><span class="line">-rw-r--r--. 1 root root 0 May 22 22:03 test2/1.txt</span><br><span class="line"></span><br><span class="line">//touch命令修改test2/1.txt的创建时间</span><br><span class="line">[root@stevey rsync]# touch test2/1.txt</span><br><span class="line">[root@stevey rsync]# ll test/1.txt test2/1.txt</span><br><span class="line">-rw-r--r--. 1 root root 0 May 22 22:03 test/1.txt</span><br><span class="line">-rw-r--r--. 1 root root 0 May 22 22:50 test2/1.txt</span><br><span class="line"></span><br><span class="line">//不使用-u选项，源目录文件会覆盖目标文件</span><br><span class="line">[root@stevey rsync]# rsync -a test/ test2/</span><br><span class="line">[root@stevey rsync]# ll test/1.txt test2/1.txt</span><br><span class="line">-rw-r--r--. 1 root root 0 May 22 22:03 test/1.txt</span><br><span class="line">-rw-r--r--. 1 root root 0 May 22 22:03 test2/1.txt</span><br><span class="line"></span><br><span class="line">//使用-u选项，源目录不会覆盖目标文件，因为目标文件更新</span><br><span class="line">[root@stevey rsync]# rsync -au test/ test2/</span><br><span class="line">[root@stevey rsync]# ll test/1.txt test2/1.txt</span><br><span class="line">-rw-r--r--. 1 root root 0 May 22 22:03 test/1.txt</span><br><span class="line">-rw-r--r--. 1 root root 0 May 22 22:57 test2/1.txt</span><br></pre></td></tr></table></figure>
+<h4 id="delete-选项：假设DST中有一个文件c-txt，而SRC中没有；执行同参数同步后，DST文件夹中的c-txt也会被删除"><a href="#delete-选项：假设DST中有一个文件c-txt，而SRC中没有；执行同参数同步后，DST文件夹中的c-txt也会被删除" class="headerlink" title="--delete 选项：假设DST中有一个文件c.txt，而SRC中没有；执行同参数同步后，DST文件夹中的c.txt也会被删除"></a><code>--delete</code> 选项：假设DST中有一个文件<code>c.txt</code>，而SRC中没有；执行同参数同步后，DST文件夹中的<code>c.txt</code>也会被删除</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">//准备文件</span><br><span class="line">[root@stevey rsync]# cd test2</span><br><span class="line">[root@stevey test2]# touch c.txt</span><br><span class="line">[root@stevey test2]# cd ..</span><br><span class="line">[root@stevey rsync]# tree -L 2 test2/</span><br><span class="line">test2/</span><br><span class="line">├── 1.txt</span><br><span class="line">├── 2.txt</span><br><span class="line">├── 3.txt</span><br><span class="line">├── a.txt -&gt; /root/b.txt</span><br><span class="line">└── c.txt</span><br><span class="line"></span><br><span class="line">0 directories, 5 files</span><br><span class="line"></span><br><span class="line">//--delete 选项，同步备份时会删掉源目录没有的文档</span><br><span class="line">[root@stevey rsync]# rsync -av --delete test/ test2/</span><br><span class="line">sending incremental file list</span><br><span class="line">deleting c.txt</span><br><span class="line"></span><br><span class="line">sent 132 bytes  received 21 bytes  306.00 bytes/sec</span><br><span class="line">total size is 11  speedup is 0.07</span><br><span class="line">[root@stevey rsync]# tree -L 2 test2/</span><br><span class="line">test2/</span><br><span class="line">├── 1.txt</span><br><span class="line">├── 2.txt</span><br><span class="line">├── 3.txt</span><br><span class="line">└── a.txt -&gt; /root/b.txt</span><br><span class="line"></span><br><span class="line">0 directories, 4 files</span><br></pre></td></tr></table></figure>
+<h4 id="exclude-选项：排除满足特定条件的文件，可以是具体的文件名，也可以包含通配符，如-txt"><a href="#exclude-选项：排除满足特定条件的文件，可以是具体的文件名，也可以包含通配符，如-txt" class="headerlink" title="--exclude 选项：排除满足特定条件的文件，可以是具体的文件名，也可以包含通配符，如*.txt"></a><code>--exclude</code> 选项：排除满足特定条件的文件，可以是具体的文件名，也可以包含通配符，如<code>*.txt</code></h4><ul>
+<li>排除具体文件 <code>c.txt</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey rsync]# rsync -av --exclude=&apos;1.txt&apos; test/ test2/</span><br><span class="line">sending incremental file list</span><br><span class="line">created directory test2</span><br><span class="line">./</span><br><span class="line">2.txt</span><br><span class="line">3.txt</span><br><span class="line">a.txt -&gt; /root/b.txt</span><br><span class="line"></span><br><span class="line">sent 204 bytes  received 88 bytes  584.00 bytes/sec</span><br><span class="line">total size is 11  speedup is 0.04</span><br><span class="line">[root@stevey rsync]# tree -L 2 test2</span><br><span class="line">test2</span><br><span class="line">├── 2.txt</span><br><span class="line">├── 3.txt</span><br><span class="line">└── a.txt -&gt; /root/b.txt</span><br><span class="line"></span><br><span class="line">0 directories, 3 files</span><br></pre></td></tr></table></figure>
+<ul>
+<li>排除选项与通配符连用 *.txt</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey rsync]# rsync -av --exclude=&quot;*.txt&quot; test/ test2/</span><br><span class="line">sending incremental file list</span><br><span class="line">created directory test2</span><br><span class="line">./</span><br><span class="line"></span><br><span class="line">sent 43 bytes  received 47 bytes  180.00 bytes/sec</span><br><span class="line">total size is 0  speedup is 0.00</span><br><span class="line">[root@stevey rsync]# tree -L 2 test2</span><br><span class="line">test2</span><br><span class="line"></span><br><span class="line">0 directories, 0 files</span><br></pre></td></tr></table></figure>
+<h4 id="progress-显示同步的过程状态，包括同步文件数量、传输速度等"><a href="#progress-显示同步的过程状态，包括同步文件数量、传输速度等" class="headerlink" title="--progress,显示同步的过程状态，包括同步文件数量、传输速度等"></a><code>--progress</code>,显示同步的过程状态，包括同步文件数量、传输速度等</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey rsync]# rsync -a --exclude=&quot;1.txt&quot; --progress test/ test2/</span><br><span class="line">sending incremental file list</span><br><span class="line">2.txt</span><br><span class="line">              0 100%    0.00kB/s    0:00:00 (xfr#1, to-chk=2/4)</span><br><span class="line">3.txt</span><br><span class="line">              0 100%    0.00kB/s    0:00:00 (xfr#2, to-chk=1/4)</span><br><span class="line">a.txt -&gt; /root/b.txt</span><br></pre></td></tr></table></figure>
+<h3 id="rsync通过ssh同步"><a href="#rsync通过ssh同步" class="headerlink" title="rsync通过ssh同步"></a>rsync通过ssh同步</h3><p><strong>前提：</strong></p>
+<p>准备两台机器，一台是我的mac，ip是172.16.155.1;另一台是虚拟机，ip是172.16.155.128;mac可以通过ssh访问虚拟机。</p>
+<ul>
+<li>push：把本地目录同步到远程主机：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//mac操作</span><br><span class="line">steve:rsync steveyuan$ rsync -a /Users/steveyuan/documents/rsync/test1/ root@172.16.155.128:/root/rsync</span><br><span class="line"></span><br><span class="line">//虚拟机验证效果</span><br><span class="line">[root@stevey rsync]# ls</span><br><span class="line">a.txt</span><br><span class="line">[root@stevey rsync]# cat a.txt</span><br><span class="line">rsync test</span><br></pre></td></tr></table></figure>
+<ul>
+<li>pull：把远程主机目录同步到本地：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//准备文件</span><br><span class="line">[root@stevey rsync]# touch b.txt</span><br><span class="line">[root@stevey rsync]# echo &apos;hello,steve&apos; &gt; b.txt</span><br><span class="line"></span><br><span class="line">//mac操作</span><br><span class="line">steve:rsync steveyuan$ rsync -av root@172.16.155.128:/root/rsync/ /Users/steveyuan/documents/rsync/</span><br><span class="line">receiving incremental file list</span><br><span class="line">./</span><br><span class="line">a.txt</span><br><span class="line">b.txt</span><br><span class="line">sent 65 bytes  received 209 bytes  182.67 bytes/sec</span><br><span class="line">total size is 23  speedup is 0.08</span><br><span class="line"></span><br><span class="line">//校验效果</span><br><span class="line">steve:rsync steveyuan$ ls</span><br><span class="line">a.txt	b.txt</span><br><span class="line">steve:rsync steveyuan$ cat b.txt</span><br><span class="line">hello,steve</span><br></pre></td></tr></table></figure>
+<h3 id="rsync通过服务同步"><a href="#rsync通过服务同步" class="headerlink" title="rsync通过服务同步"></a><code>rsync</code>通过服务同步</h3><p>这种方式相当于在远程主机上建一个rsync的服务器，在服务器上配置好之后，将本地主机作为rsync的一个客户端，在本地机器和服务器之间进行文件同步备份。</p>
+<p>要实现这个目标，首先要在在服务器端进行配置：</p>
+<h4 id="配置文件说明："><a href="#配置文件说明：" class="headerlink" title="配置文件说明："></a>配置文件说明：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"># cat /etc/rsyncd.conf  </span><br><span class="line"></span><br><span class="line">port = 873   //端口号</span><br><span class="line">uid = nobody  //指定当模块传输文件的守护进程UID</span><br><span class="line">gid = nobody  //指定当模块传输文件的守护进程GID</span><br><span class="line">use chroot = no  //安全选项，设定为true，会将同步目录限定在path指定的目录当中；如果有软链接文件到别的文件目录，就会报错</span><br><span class="line">max connections = 10  //最大并发连接数</span><br><span class="line">strict modes = yes  //指定是否检查口令文件的权限</span><br><span class="line"></span><br><span class="line">pid file = /usr/local/rsyncd/rsyncd.pid  //指定PID文件</span><br><span class="line">lock file = /usr/local/rsyncd/rsyncd.lock  //指定支持max connection的锁文件，默认为/var/run/rsyncd.lock</span><br><span class="line">motd file = /usr/local/rsyncd/rsyncd.motd  //定义服务器信息的，自己写 rsyncd.motd 文件内容</span><br><span class="line">log file = /usr/local/rsyncd/rsync.log  //rsync 服务器的日志</span><br><span class="line"></span><br><span class="line">log format = %t %a %m %f %b</span><br><span class="line">syslog facility = local3</span><br><span class="line">timeout = 300</span><br><span class="line"></span><br><span class="line">[conf]  //自定义模块名，这里写的名称在同步时需要用到</span><br><span class="line">path = /usr/local/nginx/conf  //用来指定要备份的目录</span><br><span class="line">comment = Nginx conf</span><br><span class="line">ignore errors  //可以忽略一些IO错误</span><br><span class="line">read only = no  //设置no，客户端可以上传文件，yes是只读</span><br><span class="line">write only = no  //no为客户端可以下载，yes 不能下载</span><br><span class="line">hosts allow = 192.168.2.0/24  //可以连接的IP段 </span><br><span class="line">hosts deny = *  //禁止连接的IP</span><br><span class="line">list = false  //客户请求时，使用模块列表</span><br><span class="line">uid = root</span><br><span class="line">gid = root</span><br><span class="line">auth users = backup  //连接用户名，和linux系统用户名无关系</span><br><span class="line">secrets file = /etc/rsyncd.pass  //验证密码文件</span><br></pre></td></tr></table></figure>
+<p>如上所示，服务器配置一般包括两个部分：全局配置、局部配置，具体如下：</p>
+<p><strong>全局配置：</strong></p>
+<ul>
+<li><p><code>port</code>：指定从rsyncd服务启动端口，默认从873端口启动；</p>
+</li>
+<li><p><code>log file</code>：指定日志文件；</p>
+</li>
+<li><p><code>pid file</code>：指定pid 文件，该文件设计服务的启动】停止等进程管理操作；</p>
+</li>
+<li><p><code>address</code>：指定启动rsync服务的ip；如果服务器有多个ip，就需要知道；如果不指定，默认从全部ip启动。</p>
+</li>
+</ul>
+<p><strong>局部配置：</strong></p>
+<ul>
+<li><p><code>[ftp]</code> 表示模块，模块名用 <code>[]</code> 括起来，这里的模块名在后面执行同步操作的时候需要用到。</p>
+</li>
+<li><p><code>path</code>：数据存放路径；</p>
+</li>
+<li><p><code>use chroot</code>：表示在传输文件前，先chroot到path指定的目录下，实现额外的安全保护。该服务默认开启状态，缺点是需要root权限，且不支持软链接同步；如果需要同步的数据中有软链接文件，建议设为false。</p>
+</li>
+<li><p><code>max connections</code>： 最大链接数，默认为0，表示没有限制。</p>
+</li>
+<li><p><code>read only</code>：该目录是否只读；</p>
+</li>
+<li><p><code>list</code>：表示当前用户查询服务器可用模块时，该模块是否列出；</p>
+</li>
+<li><p><code>uid/gid</code>：传输文件时，以那个用户/组的身份传输；</p>
+</li>
+<li><p><code>auth users</code>：指定传输时使用的用户名；</p>
+</li>
+<li><p><code>secret file</code>：指定密码文件，该文件权限要设为600；</p>
+</li>
+<li><p><code>host allow</code>：允许连接该模块的主机，可以是网段，也可以是具体的ip地址。</p>
+</li>
+</ul>
+<p>下面，来实际操作一下：</p>
+<h4 id="第一步：服务器端配置："><a href="#第一步：服务器端配置：" class="headerlink" title="第一步：服务器端配置："></a>第一步：服务器端配置：</h4><p>服务器端端配置文件在 <code>/etc/rsyncd.conf</code>,首先修改配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/rsyncd.conf    //编辑 rsync 的配置文件，加入以下内容</span><br><span class="line"></span><br><span class="line">port=8730   //自定义端口号</span><br><span class="line">log file=/var/log/rsync.log</span><br><span class="line">pid file=/var/run/rsyncd.pid</span><br><span class="line">address=172.16.155.128   //此处写的是服务器端ip</span><br><span class="line"></span><br><span class="line">[test]</span><br><span class="line">	path=/tmp/rsync</span><br><span class="line">	use chroot=true  //安全选项，如果此项设置为true，同步目录会被限定在path目录，软链接到其他目录的文件不会被同步；如果需要同步软链接文件，此项建议设为false</span><br><span class="line">	max connections=4   //最大链接数，同时允许几台机器远程备份同步</span><br><span class="line">	read only=false     //如果设置为true，就不能执行远程同步操作</span><br><span class="line">	list=true</span><br><span class="line">	uid=root</span><br><span class="line">	gid=root</span><br><span class="line">	auth users=test    //指定用来同步的用户名，与本地主机名无关</span><br><span class="line">	secrets file=/etc/rsyncd.passwd     //安全性选项，指定同步用户密码，此文件需要新建，内容格式为 name：passwd</span><br><span class="line">	host allow=172.16.155.1    //指定允许那一个ip访问，也可以设置为ip段，如果是0.0.0.0/24就是全网段</span><br></pre></td></tr></table></figure>
+<p>保存退出后，执行以下命令开启 <code>rsync</code> 服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//启动服务</span><br><span class="line">rsync --daemon  --config=/etc/rsyncd.conf</span><br><span class="line"></span><br><span class="line">//检查服务是否开启</span><br><span class="line">[root@stevey rsync]# ps -aux | grep rsync</span><br><span class="line">root      80564  0.0  0.0 114740   564 ?        Ss   05:34   0:00 rsync --daemon --config=/etc/rsyncd.conf</span><br><span class="line">root      82057  0.0  0.0 112704   972 pts/2    R+   13:34   0:00 grep --color=auto rsync</span><br><span class="line"></span><br><span class="line">//netstat命令检查端口状况；-l 列出listen端口状态，-n显示数字，-t显示tcp相关，-p显示建立链接的程序名</span><br><span class="line">[root@stevey rsync]# netstat -lntp</span><br><span class="line">Active Internet connections (only servers)</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name</span><br><span class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      7057/sshd</span><br><span class="line">tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN      971/master</span><br><span class="line">tcp        0      0 172.16.155.128:873      0.0.0.0:*               LISTEN      80564/rsync</span><br><span class="line">tcp6       0      0 :::22                   :::*                    LISTEN      7057/sshd</span><br><span class="line">tcp6       0      0 ::1:25                  :::*                    LISTEN      971/master</span><br></pre></td></tr></table></figure>
+<p>此外，配置文件中还提到了几个文件，需要创建：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//创建同步文件夹路径并更改权限</span><br><span class="line">[root@stevey rsync]# mkdir -p /tmp/rsync/</span><br><span class="line">[root@stevey rsync]# chmod 777 !$</span><br><span class="line">chmod 777 /tmp/rsync/</span><br></pre></td></tr></table></figure>
+<h4 id="第二步：同步操作"><a href="#第二步：同步操作" class="headerlink" title="第二步：同步操作"></a>第二步：同步操作</h4><p>命令行格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -avP [源文件夹] 远程主机ip::[模块名] [文件名称]</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong></p>
+<ul>
+<li><p>模块名，就是在/etc/rsyncd.conf 中定义的模块名，文件灰白放在该模块指定的path路径下；</p>
+</li>
+<li><p><code>rsync -P</code> 选项，表示断点续传，链接服务器是很有用；</p>
+</li>
+<li><p><code>[文件名称]</code>指的是，可以将同步过来的文件重命名，当然此项也可以省略；</p>
+</li>
+</ul>
+<p>尝试同步后，出现错误提示:connection refused</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/Users/steveyuan/documents/rsync</span><br><span class="line">steve:rsync steveyuan$ rsync -avP /Users/steveyuan/documents/rsync 172.16.155.128::test</span><br><span class="line">rsync: failed to connect to 172.16.155.128 (172.16.155.128): Connection refused (61)</span><br><span class="line">rsync error: error in socket IO (code 10) at clientserver.c(127) [sender=3.1.3]</span><br></pre></td></tr></table></figure>
+<h5 id="TroubleShooting"><a href="#TroubleShooting" class="headerlink" title="TroubleShooting:"></a>TroubleShooting:</h5><ul>
+<li>先看看网络是否能ping通</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//如下所示，网络没有问题</span><br><span class="line">steve:rsync steveyuan$ ping 172.16.155.128</span><br><span class="line">PING 172.16.155.128 (172.16.155.128): 56 data bytes</span><br><span class="line">64 bytes from 172.16.155.128: icmp_seq=0 ttl=64 time=0.417 ms</span><br><span class="line">64 bytes from 172.16.155.128: icmp_seq=1 ttl=64 time=0.424 ms</span><br><span class="line">64 bytes from 172.16.155.128: icmp_seq=2 ttl=64 time=0.423 ms</span><br><span class="line">64 bytes from 172.16.155.128: icmp_seq=3 ttl=64 time=0.566 ms</span><br><span class="line"></span><br><span class="line">--- 172.16.155.128 ping statistics ---</span><br><span class="line">4 packets transmitted, 4 packets received, 0.0% packet loss</span><br><span class="line">round-trip min/avg/max/stddev = 0.417/0.458/0.566/0.063 ms</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用telnet检查端口情况</li>
+</ul>
+<p>telnet 需单独安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// centos7</span><br><span class="line">yum install -y telnet</span><br><span class="line"></span><br><span class="line">// mac</span><br><span class="line">brew install telnet</span><br></pre></td></tr></table></figure>
+<p>命令行格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">telnet [IP] [端口号]   //注意没有短横线</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//测试端口情况</span><br><span class="line">steve:rsync steveyuan$ telnet 172.16.155.128 873</span><br><span class="line">Trying 172.16.155.128...</span><br><span class="line">telnet: connect to address 172.16.155.128: Connection refused</span><br><span class="line">telnet: Unable to connect to remote host   //说明端口没有开放</span><br></pre></td></tr></table></figure>
+<p>既然已经知道了原因是端口没有开放，那就增加一条iptables规则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey rsync]# iptables -I INPUT -s 172.16.155.0/24 -p tcp --dport 873 -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>再检查端口情况：，ok了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">steve:rsync steveyuan$ telnet 172.16.155.128 873</span><br><span class="line">Trying 172.16.155.128...</span><br><span class="line">Connected to bogon.</span><br><span class="line">Escape character is &apos;^]&apos;.</span><br><span class="line">@RSYNCD: 31.0</span><br></pre></td></tr></table></figure>
+<p>在执行同步操作，成功！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">steve:rsync steveyuan$ rsync -avP /Users/steveyuan/documents/rsync 172.16.155.128::test</span><br><span class="line">sending incremental file list</span><br><span class="line">rsync/</span><br><span class="line">rsync/a.txt</span><br><span class="line">             11 100%    0.00kB/s    0:00:00 (xfr#1, to-chk=1/3)</span><br><span class="line">rsync/b.txt</span><br><span class="line">             12 100%   11.72kB/s    0:00:00 (xfr#2, to-chk=0/3)</span><br><span class="line"></span><br><span class="line">sent 232 bytes  received 58 bytes  580.00 bytes/sec</span><br><span class="line">total size is 23  speedup is 0.08</span><br></pre></td></tr></table></figure>
+<h4 id="附加步骤：同步文件设置密码"><a href="#附加步骤：同步文件设置密码" class="headerlink" title="附加步骤：同步文件设置密码"></a>附加步骤：同步文件设置密码</h4><p>仅仅是这样设置，意味着任何人只要知道主机ip、端口号和mudule名，都可以执行同步操作，这显然是不安全的。所以，还需要设置密码。</p>
+<ul>
+<li>创建服务器密码文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//创建密码文件</span><br><span class="line">touch /etc/rsyncd.passwd</span><br><span class="line"></span><br><span class="line">//mkpasswd命令生成一个密码</span><br><span class="line">[root@stevey rsync]# mkpasswd -l 14</span><br><span class="line">rexGlkmvh97xI#</span><br><span class="line"></span><br><span class="line">//编辑密码文件</span><br><span class="line">vim /etc/rsyncd.passwd</span><br><span class="line">//密码格式为 name：passwd</span><br><span class="line">test：rexGlkmvh97xI#</span><br><span class="line"></span><br><span class="line">//修改文件权限</span><br><span class="line">chmod 600 /etc/rsyncd.passwd</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改服务端rsync 配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/rsyncd.conf</span><br></pre></td></tr></table></figure>
+<p><img src="https://farm1.staticflickr.com/885/41392949015_e5a9f223a0_o.png" alt=""></p>
+<ul>
+<li>创建本地密码文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">steve:~ steveyuan$ touch desktop/rsync_passwd</span><br><span class="line">steve:~ steveyuan$ vim !$</span><br><span class="line">vim desktop/rsync_passwd    //注意这个文件内容只包含密码</span><br><span class="line"></span><br><span class="line">steve:~ steveyuan$ chmod 600 !$    //修改文件权限</span><br><span class="line">chmod 600 desktop/rsync_passwd</span><br></pre></td></tr></table></figure>
+<ul>
+<li>再次尝试执行同步，就需要手动输入密码文件</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/960/42247831092_922f257b94_o.png" alt=""></p>
+<ul>
+<li><code>--password-file=[passwdfile]</code> 指定密码文件，就不用手动输入密码了。注：这里的文件要写绝对路径。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">steve:desktop steveyuan$ rsync -avP /Users/steveyuan/documents/rsync test@172.16.155.128::test --password-file=/Users/steveyuan/desktop/rsync_passwd</span><br><span class="line">sending incremental file list</span><br><span class="line"></span><br><span class="line">sent 120 bytes  received 17 bytes  274.00 bytes/sec</span><br><span class="line">total size is 23  speedup is 0.17</span><br></pre></td></tr></table></figure>
+<p>最后，这里的密码强度不够，同时保存路径也太随意了。在真正的生产环境中，不可以保存在桌面，太不安全了。</p>
+<h2 id="ftp工具架设及使用"><a href="#ftp工具架设及使用" class="headerlink" title="ftp工具架设及使用"></a>ftp工具架设及使用</h2><h3 id="ftp工具架设"><a href="#ftp工具架设" class="headerlink" title="ftp工具架设"></a>ftp工具架设</h3><h4 id="第一步：安装ftp"><a href="#第一步：安装ftp" class="headerlink" title="第一步：安装ftp"></a>第一步：安装ftp</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//安装vsftpd</span><br><span class="line">yum install -y vsftpd</span><br><span class="line"></span><br><span class="line">//启动服务</span><br><span class="line">systemctl start vsftpd.service</span><br><span class="line"></span><br><span class="line">//校验进程是否启动</span><br><span class="line">ps -aux | grep vsftpd</span><br></pre></td></tr></table></figure>
+<p>如下图所示，说明已启动</p>
+<p><img src="https://farm1.staticflickr.com/875/40938717090_0438c2032c_o.png" alt=""></p>
+<h4 id="第二步：修改-vsftpd-配置"><a href="#第二步：修改-vsftpd-配置" class="headerlink" title="第二步：修改 vsftpd 配置"></a>第二步：修改 vsftpd 配置</h4><p>vcftpd 的配置文件地址为<code>/etc/vsftpd/vsftpd.conf</code></p>
+<ul>
+<li>如果不知道配置文件在那里，使用一下命令查询</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name &apos;vsftpd.conf&apos;</span><br></pre></td></tr></table></figure>
+<p><img src="https://farm1.staticflickr.com/888/27896822517_4fe15639cd_o.png" alt=""></p>
+<ul>
+<li>查看已有的配置</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// grep -v参数表示取反，也就是显示不加#的行</span><br><span class="line">[root@steve ~]# cat /etc/vsftpd/vsftpd.conf | grep -v &apos;#&apos;</span><br><span class="line">anonymous_enable=NO</span><br><span class="line">local_enable=YES</span><br><span class="line">write_enable=YES</span><br><span class="line">local_umask=022</span><br><span class="line">dirmessage_enable=YES</span><br><span class="line">xferlog_enable=YES</span><br><span class="line">connect_from_port_20=YES</span><br><span class="line">xferlog_std_format=YES</span><br><span class="line">chroot_local_user=YES</span><br><span class="line">listen=NO</span><br><span class="line">listen_ipv6=YES</span><br><span class="line"></span><br><span class="line">pam_service_name=vsftpd</span><br><span class="line">userlist_enable=YES</span><br><span class="line">tcp_wrappers=YES</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/vsftpd/vsftpd.conf</span><br><span class="line"></span><br><span class="line">// 基本配置</span><br><span class="line"># 开启匿名登录</span><br><span class="line">anonymous_enable=YES</span><br><span class="line"># 允许使用本地帐户进行FTP用户登录验证</span><br><span class="line">local_enable=YES</span><br><span class="line"># 允许写</span><br><span class="line">write_enable=YES</span><br><span class="line"># 设置本地用户默认文件掩码022</span><br><span class="line">local_umask=022</span><br><span class="line"># 允许匿名上传</span><br><span class="line">anon_upload_enable=YES</span><br><span class="line"># 允许匿名创建新目录</span><br><span class="line">anon_mkdir_write_enable=YES</span><br><span class="line"># 同时开放其它权限</span><br><span class="line">anon_other_write_enable=YES</span><br><span class="line"># 可以发送消息当访问某个目录时</span><br><span class="line">dirmessage_enable=YES</span><br><span class="line"># 开启上传下载记录</span><br><span class="line">xferlog_enable=YES</span><br><span class="line"># 数据链通过20端口建立</span><br><span class="line">connect_from_port_20=YES</span><br><span class="line"></span><br><span class="line"># 允许其它用户上传匿名文件</span><br><span class="line">#chown_uploads=YES</span><br><span class="line"># 所有用户</span><br><span class="line">#chown_username=whoever</span><br><span class="line"># 日志保存到</span><br><span class="line">#xferlog_file=/var/log/xferlog</span><br><span class="line"># 日志标准输出</span><br><span class="line">xferlog_std_format=YES</span><br><span class="line"># 空闲会话时间</span><br><span class="line">#idle_session_timeout=600</span><br><span class="line"># 数据连接超时时间</span><br><span class="line">#data_connection_timeout=120</span><br><span class="line"># 隔离的安全用户</span><br><span class="line">#nopriv_user=ftpsecure</span><br><span class="line"># 开启异步数据线程</span><br><span class="line">#async_abor_enable=YES</span><br><span class="line"># 开启ASCII协议上传</span><br><span class="line">ascii_upload_enable=YES</span><br><span class="line"># 开启ASCII协议下载</span><br><span class="line">ascii_download_enable=YES</span><br><span class="line"># 开启邮箱验证</span><br><span class="line">#deny_email_enable=YES</span><br><span class="line"># 拒绝的邮箱列表</span><br><span class="line">#banned_email_file=/etc/vsftpd/banned_emails</span><br><span class="line"></span><br><span class="line"># 是否允许直接获取子目录信息</span><br><span class="line">#ls_recurse_enable=YES</span><br><span class="line"># 监听IPv4</span><br><span class="line">listen=NO</span><br><span class="line"># 监听IPv6和监听IPv4</span><br><span class="line">listen_ipv6=YES</span><br><span class="line"></span><br><span class="line"># 虚拟用户启用pam认证</span><br><span class="line">pam_service_name=vsftpd</span><br><span class="line"># 用户组管理</span><br><span class="line">userlist_enable=YES</span><br><span class="line"># 访问控制</span><br><span class="line">tcp_wrappers=YES</span><br><span class="line"></span><br><span class="line"># 允使用被动模式</span><br><span class="line">pasv_enable=YES</span><br><span class="line"># 指定使用被动模式时打开端口的最小值</span><br><span class="line">pasv_min_port=10060</span><br><span class="line"># 指定使用被动模式时打开端口的最大值。</span><br><span class="line">pasv_max_port=10090</span><br><span class="line"># 用户宽带限制200kps</span><br><span class="line">#local_max_rate=200000</span><br><span class="line"># 登录后欢迎内容</span><br><span class="line">ftpd_banner=Welcome to My FTP service.</span><br><span class="line"></span><br><span class="line"># ---------开启虚拟用户组参数--------</span><br><span class="line"># 开启虚拟用户</span><br><span class="line">guest_enable=YES</span><br><span class="line"># 主虚拟用户名vsftpd，等下会建立</span><br><span class="line">guest_username=vsftpd</span><br><span class="line"># 虚拟用户配置（可以对每一个虚拟用户进行单独的权限配置）</span><br><span class="line">user_config_dir=/etc/vsftpd/vconf</span><br><span class="line"></span><br><span class="line"># 启用限定用户在其主目录下</span><br><span class="line">chroot_local_user=YES</span><br><span class="line"># 开启用户列表chroot管理</span><br><span class="line">chroot_list_enable=YES</span><br><span class="line"># chroot管理的用户列表（一行一用户,虚拟用户都要添加进去）</span><br><span class="line"># 当设置用户只能在登录目录时，chroot管理的用户为不受限制，否则相反</span><br><span class="line">chroot_list_file=/etc/vsftpd/chroot_list</span><br><span class="line"># 允许chroot管理用户进行写操作</span><br><span class="line">allow_writeable_chroot=YES</span><br><span class="line"></span><br><span class="line"># ---------虚拟用户高级参数（请选择一组）--------</span><br><span class="line"># 虚拟用户和本地用户有相同的权限</span><br><span class="line">virtual_use_local_privs=YES</span><br><span class="line"></span><br><span class="line"># 虚拟用户和匿名用户有相同的权限，默认是NO</span><br><span class="line">virtual_use_local_privs=NO</span><br><span class="line"></span><br><span class="line"># 虚拟用户具有写权限（上传、下载、删除、重命名）</span><br><span class="line">virtual_use_local_privs=YES</span><br><span class="line">write_enable=YES</span><br><span class="line"></span><br><span class="line"># 虚拟用户不能浏览目录，只能上传文件，无其他权限</span><br><span class="line">virtual_use_local_privs=NO</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_world_readable_only=YES</span><br><span class="line">anon_upload_enable=YES</span><br><span class="line"></span><br><span class="line"># 虚拟用户只能下载文件，无其他权限</span><br><span class="line">virtual_use_local_privs=NO</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_world_readable_only=NO</span><br><span class="line">anon_upload_enable=NO</span><br><span class="line"></span><br><span class="line"># 虚拟用户只能上传和下载文件，无其他权限</span><br><span class="line">virtual_use_local_privs=NO</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_world_readable_only=NO</span><br><span class="line">anon_upload_enable=YES</span><br><span class="line"></span><br><span class="line"># 虚拟用户只能下载文件和创建文件夹，无其他权限</span><br><span class="line">virtual_use_local_privs=NO</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_world_readable_only=NO</span><br><span class="line">anon_mkdir_write_enable=YES</span><br><span class="line"></span><br><span class="line"># 虚拟用户只能下载、删除和重命名文件，无其他权限</span><br><span class="line">virtual_use_local_privs=NO</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_world_readable_only=NO</span><br><span class="line">anon_other_write_enable=YES</span><br></pre></td></tr></table></figure>
+<h4 id="第三步：虚拟用户的建立和配置"><a href="#第三步：虚拟用户的建立和配置" class="headerlink" title="第三步：虚拟用户的建立和配置"></a>第三步：虚拟用户的建立和配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">//假如宿主用户为vsftpd</span><br><span class="line">useradd -s /sbin/nologin vsftpd</span><br><span class="line"></span><br><span class="line">//编辑虚拟用户名单文件：</span><br><span class="line">vim /etc/vsftpd/virtusers</span><br><span class="line"></span><br><span class="line">//第一行账号，第二行密码，注意：不能使用root做用户名，系统保留</span><br><span class="line">test</span><br><span class="line">123456</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//添加到chroot管理列表</span><br><span class="line">vim /etc/vsftpd/chroot_list</span><br><span class="line">//用户列表</span><br><span class="line">test</span><br><span class="line"></span><br><span class="line">//安装db工具包</span><br><span class="line">yum install-y compat-db47.x86_64</span><br><span class="line"></span><br><span class="line">//利用db_load命令生成数据文件</span><br><span class="line">db_load -T -t hash -f /etc/vsftpd/virtusers /etc/vsftpd/virtusers.db</span><br><span class="line"></span><br><span class="line">//更改数据库文件权限</span><br><span class="line">chmod 600 /etc/vsftpd/virtusers.db</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//添加vsftpd的虚拟用户的验证</span><br><span class="line">vim /etc/pam.d/vsftpd</span><br><span class="line">-------------内容如下-----------------</span><br><span class="line">#%PAM-1.0</span><br><span class="line">auth sufficient /lib64/security/pam_userdb.so db=/etc/vsftpd/virtusers</span><br><span class="line">account sufficient /lib64/security/pam_userdb.so db=/etc/vsftpd/virtusers</span><br><span class="line">session    optional     pam_keyinit.so    force revoke</span><br><span class="line">auth       required pam_listfile.so item=user sense=deny file=/etc/vsftpd/ftpusers onerr=succeed</span><br><span class="line">auth       required pam_shells.so</span><br><span class="line">auth       include  password-auth</span><br><span class="line">account    include  password-auth</span><br><span class="line">session    required     pam_loginuid.so</span><br><span class="line">session    include  password-auth</span><br></pre></td></tr></table></figure>
+<h4 id="第四步：创建虚拟用户个人配置文件"><a href="#第四步：创建虚拟用户个人配置文件" class="headerlink" title="第四步：创建虚拟用户个人配置文件"></a>第四步：创建虚拟用户个人配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">// 建立虚拟用户个人vsftp的配置文件</span><br><span class="line">mkdir -p /etc/vsftpd/vconf</span><br><span class="line"></span><br><span class="line">// 进入目录</span><br><span class="line">cd /etc/vsftpd/vconf</span><br><span class="line"></span><br><span class="line">// 创建并编辑用户的配置文件</span><br><span class="line">vim test</span><br><span class="line"></span><br><span class="line">// 用户 test 配置目录</span><br><span class="line">local_root=/home/vsftpd/test</span><br><span class="line"></span><br><span class="line">// 允许本地用户对FTP服务器文件具有写权限</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_world_readable_only=NO</span><br><span class="line"></span><br><span class="line">// 允许匿名用户上传文件(须将全局的write_enable=YES,默认YES)</span><br><span class="line">anon_upload_enable=YES</span><br><span class="line"></span><br><span class="line">// 允许匿名用户创建目录</span><br><span class="line">anon_mkdir_write_enable=YES</span><br><span class="line"></span><br><span class="line">// 允许匿名用户删除和重命名权限(自行添加)</span><br><span class="line">anon_other_write_enable=YES</span><br><span class="line"></span><br><span class="line">// 创建用户目录</span><br><span class="line">mkdir -p /home/vsftpd/test</span><br><span class="line"></span><br><span class="line">// 权限设置</span><br><span class="line">chown -R vsftpd:vsftpd /home/vsftpd</span><br></pre></td></tr></table></figure>
+<h4 id="第五步：重启ftp"><a href="#第五步：重启ftp" class="headerlink" title="第五步：重启ftp"></a>第五步：重启ftp</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 设置开机自启</span><br><span class="line">systemctl enable vsftpd</span><br><span class="line">// 服务操作</span><br><span class="line">systemctl restart vsftpd.service  # 重启服务</span><br><span class="line">systemctl start vsftpd.service    # 启动服务</span><br><span class="line">systemctl status vsftpd.service   # 服务状态查看</span><br></pre></td></tr></table></figure>
+<h3 id="ftp的主动模式和被动模式"><a href="#ftp的主动模式和被动模式" class="headerlink" title="ftp的主动模式和被动模式"></a>ftp的主动模式和被动模式</h3><p>在ftp传输中，均包括命令连接和数据传输两个部分，根据传输方式的不同，分为以下两种：</p>
+<h4 id="ftp被动模式"><a href="#ftp被动模式" class="headerlink" title="ftp被动模式"></a>ftp被动模式</h4><ul>
+<li><p>命令连接：客户端 &gt;1024端口 -&gt; 服务器 21端口 </p>
+</li>
+<li><p>数据连接：客户端 &gt;1024端口 -&gt; 服务器 &gt;1024端口</p>
+</li>
+</ul>
+<p>被动模式是<strong>FTP服务器返回数据传输需要的端口，FTP客户端去连接FTP服务端</strong>。目前，绝大部分的互联网应用(比如Web/Http)，都是客户端向服务端发起连接。</p>
+<p><img src="https://farm2.staticflickr.com/1789/42942630462_e5b41054fa_o.jpg" alt=""></p>
+<h5 id="被动模式下iptables规则配置"><a href="#被动模式下iptables规则配置" class="headerlink" title="被动模式下iptables规则配置"></a>被动模式下iptables规则配置</h5><ul>
+<li>修改vsftpd配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/vsftpd/vsftpd.conf</span><br><span class="line"></span><br><span class="line">pasv_enable=YES</span><br><span class="line">pasv_min_port=2222</span><br><span class="line">pasv_max_port=2225</span><br></pre></td></tr></table></figure>
+<ul>
+<li>iptables配置端口</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/vsftpd/vsftpd.conf</span><br><span class="line"></span><br><span class="line">//添加规则</span><br><span class="line">-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</span><br><span class="line">-A INPUT -p tcp -m state --state NEW -m tcp --dport 21 -j ACCEPT</span><br><span class="line">-A INPUT -p tcp --dport 2222:2225 -j ACCEPT</span><br></pre></td></tr></table></figure>
+<h4 id="ftp主动模式"><a href="#ftp主动模式" class="headerlink" title="ftp主动模式"></a>ftp主动模式</h4><p>命令连接：客户端 &gt;1024端口 -&gt; 服务器 21端口  </p>
+<p>数据连接：客户端 &gt;1024端口 &lt;- 服务器 20端口 </p>
+<p><strong>主动模式是FTP客户端向FTP服务器发送数据传输需要的端口，FTP服务端去连接FTP客户端的端口，与被动模式刚好相反。</strong></p>
+<p><img src="https://farm2.staticflickr.com/1791/28124191167_eec09e019f_o.jpg" alt=""></p>
+<h5 id="主动模式下iptables设置原则"><a href="#主动模式下iptables设置原则" class="headerlink" title="主动模式下iptables设置原则"></a>主动模式下<code>iptables</code>设置原则</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</span><br><span class="line"></span><br><span class="line">iptables -A INPUT -p tcp  -m multiport --dport 20,21  -m state --state NEW -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li><p><code>NEW</code>: 该包想要开始一个新的连接（重新连接或连接重定向）；</p>
+</li>
+<li><p><code>RELATED</code>:该包是属于某个已经建立的连接所建立的新连接。如FTP的数据传输连接和控制连接之间就是RELATED关系；</p>
+</li>
+<li><p><code>ESTABLISHED</code>：该包属于某个已经建立的连接；</p>
+</li>
+<li><p><code>INVALID</code>:该包不匹配于任何连接，通常这些包被DROP；</p>
+</li>
+</ul>
+<h3 id="阿里云配置ftp服务注意事项："><a href="#阿里云配置ftp服务注意事项：" class="headerlink" title="阿里云配置ftp服务注意事项："></a>阿里云配置ftp服务注意事项：</h3><p>在阿里云主机配置ftp服务，只支持主动连接模式；除了上面的步骤，还要对安全策略进行配置。</p>
+<h4 id="修改阿里云服务的安全策略"><a href="#修改阿里云服务的安全策略" class="headerlink" title="修改阿里云服务的安全策略"></a>修改阿里云服务的安全策略</h4><p>打开阿里云服务器控制台 <code>https://home.console.aliyun.com</code>，点“我的资源”下面的云服务器进入你的实例列表</p>
+<p>选择右边的<code>更多–安全组配置–添加规则–添加安全组规则</code>，配置如下：</p>
+<p><img src="https://farm2.staticflickr.com/1734/41865905765_02d6ea3364_o.jpg" alt=""></p>
+<h4 id="设置主动连接模式"><a href="#设置主动连接模式" class="headerlink" title="设置主动连接模式"></a>设置主动连接模式</h4><p>下载ftp 软件，我用的是<code>yummy ftp pro</code></p>
+<p>阿里云不支持ftp被动模式，需采用主动模式进行连接。</p>
+<h2 id="使用pure-ftpd搭建ftp服务"><a href="#使用pure-ftpd搭建ftp服务" class="headerlink" title="使用pure-ftpd搭建ftp服务"></a>使用pure-ftpd搭建ftp服务</h2><h3 id="第一步：安装pure-ftpd"><a href="#第一步：安装pure-ftpd" class="headerlink" title="第一步：安装pure-ftpd"></a>第一步：安装pure-ftpd</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//安装拓展源</span><br><span class="line">yum install -y epel-release</span><br><span class="line"></span><br><span class="line">//安装pure-ftpd</span><br><span class="line">yum install -y pure-ftpd</span><br></pre></td></tr></table></figure>
+<h3 id="第二步：关闭vsftpd"><a href="#第二步：关闭vsftpd" class="headerlink" title="第二步：关闭vsftpd"></a>第二步：关闭vsftpd</h3><p><strong>注：</strong>由于在之前的实验中开启的vsftpd，为了避免端口冲突，需要先关闭vsftpd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//关闭vsftpd</span><br><span class="line">systemctl stop vsftpd</span><br><span class="line"></span><br><span class="line">//禁止vsftpd开机启动</span><br><span class="line">systemctl disable vsftpd</span><br></pre></td></tr></table></figure>
+<ul>
+<li>校验结果，查看vsftpd状态</li>
+</ul>
+<p><img src="https://farm2.staticflickr.com/1784/42943085652_6424f80169_o.png" alt=""></p>
+<h3 id="第三步：编辑pure-ftp配置文件"><a href="#第三步：编辑pure-ftp配置文件" class="headerlink" title="第三步：编辑pure-ftp配置文件"></a>第三步：编辑pure-ftp配置文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/pure-ftpd/pure-ftpd.conf</span><br><span class="line"></span><br><span class="line">//查找PureDB /etc/pure-ftpd/pureftpd.pdb，将前面的#删除</span><br></pre></td></tr></table></figure>
+<p><img src="https://farm2.staticflickr.com/1798/42274322624_58c0685df5_o.png" alt=""></p>
+<ul>
+<li>启动pure-ftp</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 ~]# systemctl start pure-ftpd</span><br><span class="line"></span><br><span class="line">[root@local-linux02 ~]# systemctl enable pure-ftpd</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/pure-ftpd.service to /usr/lib/systemd/system/pure-ftpd.service.</span><br></pre></td></tr></table></figure>
+<ul>
+<li>校验结果</li>
+</ul>
+<p><img src="https://farm2.staticflickr.com/1814/41182572270_4a9a5296d0_o.png" alt=""></p>
+<h3 id="第四步：建立虚拟账号"><a href="#第四步：建立虚拟账号" class="headerlink" title="第四步：建立虚拟账号"></a>第四步：建立虚拟账号</h3><p><strong>注：安全起见，pure-ftpd使用的账号并非linux的系统账号，而是虚拟账号。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//建立ftp文件夹</span><br><span class="line">[root@local-linux02 ~]# mkdir -p /data/ftp</span><br><span class="line"></span><br><span class="line">//建立系统账户</span><br><span class="line">[root@local-linux02 ~]# useradd -u 1010 pure-ftp</span><br><span class="line"></span><br><span class="line">//更改ftp文件夹的所属用户和组</span><br><span class="line">[root@local-linux02 ~]# chown -R pure-ftp:pure-ftp /data/ftp</span><br><span class="line"></span><br><span class="line">//创建虚拟账户；</span><br><span class="line">//-u是将虚拟用户ftp_usera与系统用户pure-ftp关联在一起，使用ftp_usera账号登录ftp后，会以pure-ftp的身份来读取和下载文件；</span><br><span class="line">//-d是指定ftp_usera账户的家目录，这样可以使用户ftp_usera只能访问其家目录/data/ftp/</span><br><span class="line">//提示，此处需要输入密码</span><br><span class="line">[root@local-linux02 ~]# pure-pw useradd ftp_usera -u pure-ftp  -d /data/ftp</span><br><span class="line">Password:</span><br><span class="line">Enter it again:</span><br><span class="line"></span><br><span class="line">//创建用户信息数据库文件</span><br><span class="line">[root@local-linux02 ~]# pure-pw mkdb</span><br></pre></td></tr></table></figure>
+<p><strong>账号常见操作：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//列出当前账号</span><br><span class="line">[root@local-linux02 ~]# pure-pw list</span><br><span class="line">ftp_usera           /data/ftp/./</span><br><span class="line"></span><br><span class="line">//删除账号</span><br><span class="line">pure-pw userdel ftp_usera</span><br></pre></td></tr></table></figure>
+<h3 id="第五步：测试连接"><a href="#第五步：测试连接" class="headerlink" title="第五步：测试连接"></a>第五步：测试连接</h3><p>命令行格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">lftp ftp://user:password@ip:port</span><br><span class="line"></span><br><span class="line">其中，</span><br><span class="line">- ftp:// 可省略；</span><br><span class="line">- user 登录名；</span><br><span class="line">- password 登陆密码，此处可不写，在后面交互界面输入；</span><br><span class="line">- ip 即服务器端的ip地址；</span><br><span class="line">- port 默认为21，也可另行指定。</span><br></pre></td></tr></table></figure>
+<p>示例：</p>
+<p><img src="https://farm2.staticflickr.com/1779/42294559944_a5025f80d1_o.png" alt=""></p>
+<p>TroubleShooting: 链接错误</p>
+<p>如下所示，虽然看起来连上了，但是执行ls命令的时候，却一直显示重新链接的状态。</p>
+<p><img src="https://farm2.staticflickr.com/1807/29140686268_e2b220634b_o.png" alt=""></p>
+<p><strong>排查思路：</strong></p>
+<p><strong>首先，</strong>排查<code>pure-ftpd</code>服务器端是否启动，执行 <code>systemctl status   pure-ftpd</code> 是正常的，runing状态。</p>
+<p><strong>其次，</strong>估计是端口设置的问题，google了一下pure-ftpd被动模式端口设置的方法：</p>
+<ul>
+<li>第一步：修改<code>pure-ftpd</code>配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">//查找pure-ftpd配置文件</span><br><span class="line">[root@local-linux02 ~]# find / -name &apos;pure-ftpd&apos;</span><br><span class="line">/run/pure-ftpd</span><br><span class="line">/etc/pki/pure-ftpd</span><br><span class="line">/etc/logrotate.d/pure-ftpd</span><br><span class="line">/etc/xinetd.d/pure-ftpd</span><br><span class="line">/etc/pam.d/pure-ftpd</span><br><span class="line">/etc/pure-ftpd</span><br><span class="line">/usr/sbin/pure-ftpd</span><br><span class="line">/home/sosreport/sosreport/etc/logrotate.d/pure-ftpd</span><br><span class="line">/home/sosreport/sosreport/etc/xinetd.d/pure-ftpd</span><br><span class="line">/home/sosreport/sosreport/etc/pam.d/pure-ftpd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//进入配置文件夹</span><br><span class="line">[root@local-linux02 pure-ftpd]# cd /etc/pure-ftpd</span><br><span class="line">[root@local-linux02 pure-ftpd]# ls</span><br><span class="line">pure-ftpd.conf      pureftpd-mysql.conf  pureftpd.pdb</span><br><span class="line">pureftpd-ldap.conf  pureftpd.passwd      pureftpd-pgsql.conf</span><br><span class="line"></span><br><span class="line">//编辑配置文件</span><br><span class="line">[root@local-linux02 pure-ftpd]# vi pure-ftpd.conf</span><br><span class="line"></span><br><span class="line">//找到#PassivePortRange 这一行，去掉注释，改为</span><br><span class="line">PassivePortRange 20000 30000</span><br><span class="line"></span><br><span class="line">//保存退出后，重启pure-ftpd服务</span><br><span class="line">systemctl restart pure-ftpd</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第二步：设置防火墙端口</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">iptabels -A INPUT -p tcp -m state --state NEW -m tcp --dport 21 -j ACCEPT</span><br><span class="line"></span><br><span class="line">iptabels -A INPUT -p tcp --dport 20000:30000 -j ACCEPT</span><br><span class="line"></span><br><span class="line">service iptables save</span><br></pre></td></tr></table></figure>
+<p><strong>个人更推荐第二种方法：直接修改<code>/etc/sysconfig/iptables</code>，将上述两行规则加入，保存退出并重启虚拟机。</strong></p>
+<ul>
+<li>校验结果：再尝试重新连接ftp服务器</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//客户端操作</span><br><span class="line">[root@local-linux01 ~]# lftp ftp_usera@172.16.155.132</span><br><span class="line">Password:</span><br><span class="line">lftp ftp_usera@172.16.155.132:~&gt; ls</span><br><span class="line">drwxr-xr-x    2 1010       pure-ftp            6 Jun 26 08:48 .</span><br><span class="line">drwxr-xr-x    2 1010       pure-ftp            6 Jun 26 08:48 ..</span><br><span class="line">//测试上传一个文件</span><br><span class="line">lftp ftp_usera@172.16.155.132:/&gt; put -c ~/test/a.txt</span><br><span class="line">26 bytes transferred</span><br><span class="line"></span><br><span class="line">//服务器端测试</span><br><span class="line">//存在a.txt，说明上传成功</span><br><span class="line">[root@local-linux02 ~]# ll /data/ftp</span><br><span class="line">total 4</span><br><span class="line">-rw-r--r-- 1 pure-ftp pure-ftp 26 Jun 14 14:33 a.txt</span><br></pre></td></tr></table></figure>
+<h3 id="lftp的常见命令"><a href="#lftp的常见命令" class="headerlink" title="lftp的常见命令"></a>lftp的常见命令</h3><h4 id="ls-和-cd命令"><a href="#ls-和-cd命令" class="headerlink" title="ls 和 cd命令"></a>ls 和 cd命令</h4><ul>
+<li><code>ls</code> 命令用来列出文件和目录；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">lftp ftp_usera@172.16.155.132:/&gt; ls</span><br><span class="line">drwxr-xr-x    4 1010       pure-ftp           45 Jun 26 10:25 .</span><br><span class="line">drwxr-xr-x    4 1010       pure-ftp           45 Jun 26 10:25 ..</span><br><span class="line">-rw-r--r--    1 1010       pure-ftp           26 Jun 14 14:33 a.txt</span><br><span class="line">drwxr-xr-x    2 0          0                   6 Jun 26 10:25 test1</span><br><span class="line">drwxr-xr-x    2 0          0                   6 Jun 26 10:25 test2</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>cd</code> 用来进入某个目录；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lftp ftp_usera@172.16.155.132:/&gt; cd test1</span><br><span class="line">lftp ftp_usera@172.16.155.132:/test1&gt; pwd</span><br><span class="line">ftp://ftp_usera@172.16.155.132/test1</span><br></pre></td></tr></table></figure>
+<h4 id="lpwd-和-lcd：显示和切换本地文件夹"><a href="#lpwd-和-lcd：显示和切换本地文件夹" class="headerlink" title="lpwd 和 lcd：显示和切换本地文件夹"></a>lpwd 和 lcd：显示和切换本地文件夹</h4><p><strong>注：local dir 本地文件夹，就是当前下载文件的保存目录，我们可以通过这两个目录来查看和修改。</strong></p>
+<p>lpwd：显示目前的本地文件夹 local dir</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lftp ftp_usera@172.16.155.132:~&gt; lpwd</span><br><span class="line">/root</span><br></pre></td></tr></table></figure>
+<p>lcd：切换文件夹</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lftp ftp_usera@172.16.155.132:~&gt; lcd /root/ftpsync/</span><br><span class="line">lcd ok, local cwd=/root/ftpsync</span><br></pre></td></tr></table></figure>
+<h4 id="下载文件：get-和-mget"><a href="#下载文件：get-和-mget" class="headerlink" title="下载文件：get 和 mget"></a>下载文件：get 和 mget</h4><p>get：下载单个文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//默认下载到当前用户的home目录下</span><br><span class="line">lftp ftp_usera@172.16.155.132:/&gt; get -c a.txt</span><br></pre></td></tr></table></figure>
+<p>mget: 下载多个文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lftp ftp_usera@172.16.155.132:/&gt; get -c a.txt b.txt</span><br></pre></td></tr></table></figure>
+<h4 id="上传文件：put、mput"><a href="#上传文件：put、mput" class="headerlink" title="上传文件：put、mput"></a>上传文件：put、mput</h4><ul>
+<li><code>put</code>: 上传单独文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//put常用选项</span><br><span class="line">//-c 选项，表示断点续传</span><br><span class="line">//-O 选项，表示指定文件存放路径</span><br><span class="line">lftp ftp_usera@172.16.155.132:/&gt; put -c ~/test/a.txt</span><br><span class="line">26 bytes transferred</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>mput</code>：上传多个文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lftp ftp_usera@172.16.155.132:/&gt; put -c ~/test/a.txt ~/test/b.txt</span><br></pre></td></tr></table></figure>
+<h4 id="同步目录"><a href="#同步目录" class="headerlink" title="同步目录"></a>同步目录</h4><ul>
+<li>下载目录<code>mirror [dir]</code>：从服务器端下载到客户端</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lftp ftp_usera@172.16.155.132:/&gt; mirror test1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>上传目录<code>mirror -R [dir]</code>:从客户端到服务器端</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lftp ftp_usera@172.16.155.132:/&gt; mirror -R /rrot/test1</span><br></pre></td></tr></table></figure>
+<h4 id="模式设置"><a href="#模式设置" class="headerlink" title="模式设置"></a>模式设置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//设置字符编码</span><br><span class="line">set ftp:charset gbk/utf-8</span><br><span class="line"></span><br><span class="line">//设置被动模式</span><br><span class="line">set ftp:passive-mode 1</span><br></pre></td></tr></table></figure>
+<h2 id="云服务使用何种同步备份工具？"><a href="#云服务使用何种同步备份工具？" class="headerlink" title="云服务使用何种同步备份工具？"></a>云服务使用何种同步备份工具？</h2><h3 id="为什么不推荐在云服务器上使用ftp？"><a href="#为什么不推荐在云服务器上使用ftp？" class="headerlink" title="为什么不推荐在云服务器上使用ftp？"></a>为什么不推荐在云服务器上使用ftp？</h3><p><code>配置困难：</code>ftp服务需要iptables端口放行，还需要对云服务器的安全组进行配置；</p>
+<p>安全性差：FTP传输默认是明文传输，包括客户端发送给服务器用于鉴权的用户名和密码的传输；尽管FTPS拥有基于SSL/TLS协议的新能力，但是新用户几乎不可能很快完成FTP和OpenSSL的配置，因此很多系统因此暴露在安全风险中。</p>
+<h3 id="云服务器使用那种同步备份工具？"><a href="#云服务器使用那种同步备份工具？" class="headerlink" title="云服务器使用那种同步备份工具？"></a>云服务器使用那种同步备份工具？</h3><h4 id="镭速RaySync传输软件："><a href="#镭速RaySync传输软件：" class="headerlink" title="镭速RaySync传输软件："></a>镭速RaySync传输软件：</h4><p>下载地址及安装教程：<a href="https://www.raysync.cn/supportforlinux.html" target="_blank" rel="noopener">https://www.raysync.cn/supportforlinux.html</a></p>
+<p><strong>特点：</strong>支持Windows和Linux两种平台，对个人用户完全免费，安装快速，配置简单，最重要的是对比FTP/SFTP，传输速度有100%的提升。</p>
+<h4 id="sftp"><a href="#sftp" class="headerlink" title="sftp"></a>sftp</h4><p>sftp是Linux SSH服务内置的一个文件服务，内置意味着你完全无需额外安装和配置，它共用ssh的22端口。</p>
+<p>特点：只支持sftp。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><p><a href="http://wangchujiang.com/linux-command/c/lftp.html" target="_blank" rel="noopener">lftp：优秀的文件客户端程序</a></p>
+</li>
+<li><p><a href="https://www.jianshu.com/p/8aab3a1016f7" target="_blank" rel="noopener">linux使用命令行操作ftp</a></p>
+</li>
+<li><p><a href="http://www.chenlianfu.com/?p=2321" target="_blank" rel="noopener">使用 lftp 进行 FTP 数据下载和上传</a></p>
+</li>
+<li><p><a href="https://havee.me/linux/2010-08/how-to-use-lftp.html" target="_blank" rel="noopener">lftp 使用方法</a></p>
+</li>
+<li><p><a href="https://www.xiaoweigod.com/network/963.html" target="_blank" rel="noopener">阿里云下Centos 7简单配置FTP服务器+root账户管理（通用Linux）</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/qq_32786873/article/details/78730303" target="_blank" rel="noopener">在CentOS7.4中使用Vsftpd搭建FTP服务器</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/aerchi/article/details/72820065" target="_blank" rel="noopener">CentOS 7.2 安装和配置 FTP 服务器</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/kxwinxp/article/details/78595044" target="_blank" rel="noopener">CentOS 7 安装FTP服务器</a></p>
+</li>
+<li><p><a href="https://segmentfault.com/a/1190000008161400" target="_blank" rel="noopener">CentOS7安装配置vsftp搭建FTP</a></p>
+</li>
+<li><p><a href="http://blog.topspeedsnail.com/archives/2668" target="_blank" rel="noopener">使用rsync命令同步本地目录和远程主机目录</a></p>
+</li>
+<li><p><a href="http://roclinux.cn/?p=2643" target="_blank" rel="noopener">《rsync同步的艺术》–linux命令五分钟系列之四十二</a></p>
+</li>
+<li><p><a href="https://www.jianshu.com/p/258ceb7b2223" target="_blank" rel="noopener">rsync 命令整理</a></p>
+</li>
+<li><p><a href="http://man.linuxde.net/rsync" target="_blank" rel="noopener">rsync命令</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/u010391029/article/details/51746641" target="_blank" rel="noopener">Rsync命令详解</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Steve Yuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://steve-yuan-8276.github.io/2018/07/23/linuxNotes-12-rsyncAndFtp/" title="Linux运维学习笔记：数据备份和同步rsync">https://steve-yuan-8276.github.io/2018/07/23/linuxNotes-12-rsyncAndFtp/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/rsync/" rel="tag"># rsync</a>
+          
+            <a href="/tags/ftp/" rel="tag"># ftp</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/22/linuxNotes-11-systemAndService/" rel="next" title="linux运维学习笔记：系统服务管理及定时任务">
+                <i class="fa fa-chevron-left"></i> linux运维学习笔记：系统服务管理及定时任务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/logo.png"
+                alt="Steve Yuan" />
+            
+              <p class="site-author-name" itemprop="name">Steve Yuan</p>
+              <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">103</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/steve-yuan-8276" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/feng8276" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.facebook.com/feng74" target="_blank" title="Facebook">
+                    
+                      <i class="fa fa-fw fa-facebook"></i>Facebook</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yuanf02@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rsync-工具"><span class="nav-number">2.</span> <span class="nav-text">rsync 工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#软件安装："><span class="nav-number">2.1.</span> <span class="nav-text">软件安装：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsync语法："><span class="nav-number">2.2.</span> <span class="nav-text">rsync语法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地文件同步备份"><span class="nav-number">2.3.</span> <span class="nav-text">本地文件同步备份</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件准备"><span class="nav-number">2.3.1.</span> <span class="nav-text">文件准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#a-选项：表示以递归的方式传输文件，并保持所有文件属性不变，相当于使用了组合参数-rlptgoD"><span class="nav-number">2.3.2.</span> <span class="nav-text">-a 选项：表示以递归的方式传输文件，并保持所有文件属性不变，相当于使用了组合参数-rlptgoD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#L-选项：使用该选项后，会将软链接指向的目标文件复制到DST"><span class="nav-number">2.3.3.</span> <span class="nav-text">-L 选项：使用该选项后，会将软链接指向的目标文件复制到DST</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#u-选项：-仅仅进行更新，跳过所有已经存在于-DST，如果文件时间晚于要备份的文件，不覆盖更新的文件"><span class="nav-number">2.3.4.</span> <span class="nav-text">-u 选项：    仅仅进行更新，跳过所有已经存在于 DST，如果文件时间晚于要备份的文件，不覆盖更新的文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#delete-选项：假设DST中有一个文件c-txt，而SRC中没有；执行同参数同步后，DST文件夹中的c-txt也会被删除"><span class="nav-number">2.3.5.</span> <span class="nav-text">--delete 选项：假设DST中有一个文件c.txt，而SRC中没有；执行同参数同步后，DST文件夹中的c.txt也会被删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exclude-选项：排除满足特定条件的文件，可以是具体的文件名，也可以包含通配符，如-txt"><span class="nav-number">2.3.6.</span> <span class="nav-text">--exclude 选项：排除满足特定条件的文件，可以是具体的文件名，也可以包含通配符，如*.txt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#progress-显示同步的过程状态，包括同步文件数量、传输速度等"><span class="nav-number">2.3.7.</span> <span class="nav-text">--progress,显示同步的过程状态，包括同步文件数量、传输速度等</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsync通过ssh同步"><span class="nav-number">2.4.</span> <span class="nav-text">rsync通过ssh同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsync通过服务同步"><span class="nav-number">2.5.</span> <span class="nav-text">rsync通过服务同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置文件说明："><span class="nav-number">2.5.1.</span> <span class="nav-text">配置文件说明：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：服务器端配置："><span class="nav-number">2.5.2.</span> <span class="nav-text">第一步：服务器端配置：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：同步操作"><span class="nav-number">2.5.3.</span> <span class="nav-text">第二步：同步操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#TroubleShooting"><span class="nav-number">2.5.3.1.</span> <span class="nav-text">TroubleShooting:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#附加步骤：同步文件设置密码"><span class="nav-number">2.5.4.</span> <span class="nav-text">附加步骤：同步文件设置密码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ftp工具架设及使用"><span class="nav-number">3.</span> <span class="nav-text">ftp工具架设及使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ftp工具架设"><span class="nav-number">3.1.</span> <span class="nav-text">ftp工具架设</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：安装ftp"><span class="nav-number">3.1.1.</span> <span class="nav-text">第一步：安装ftp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：修改-vsftpd-配置"><span class="nav-number">3.1.2.</span> <span class="nav-text">第二步：修改 vsftpd 配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：虚拟用户的建立和配置"><span class="nav-number">3.1.3.</span> <span class="nav-text">第三步：虚拟用户的建立和配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第四步：创建虚拟用户个人配置文件"><span class="nav-number">3.1.4.</span> <span class="nav-text">第四步：创建虚拟用户个人配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第五步：重启ftp"><span class="nav-number">3.1.5.</span> <span class="nav-text">第五步：重启ftp</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ftp的主动模式和被动模式"><span class="nav-number">3.2.</span> <span class="nav-text">ftp的主动模式和被动模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ftp被动模式"><span class="nav-number">3.2.1.</span> <span class="nav-text">ftp被动模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#被动模式下iptables规则配置"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">被动模式下iptables规则配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ftp主动模式"><span class="nav-number">3.2.2.</span> <span class="nav-text">ftp主动模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#主动模式下iptables设置原则"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">主动模式下iptables设置原则</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#阿里云配置ftp服务注意事项："><span class="nav-number">3.3.</span> <span class="nav-text">阿里云配置ftp服务注意事项：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#修改阿里云服务的安全策略"><span class="nav-number">3.3.1.</span> <span class="nav-text">修改阿里云服务的安全策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置主动连接模式"><span class="nav-number">3.3.2.</span> <span class="nav-text">设置主动连接模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用pure-ftpd搭建ftp服务"><span class="nav-number">4.</span> <span class="nav-text">使用pure-ftpd搭建ftp服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：安装pure-ftpd"><span class="nav-number">4.1.</span> <span class="nav-text">第一步：安装pure-ftpd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：关闭vsftpd"><span class="nav-number">4.2.</span> <span class="nav-text">第二步：关闭vsftpd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步：编辑pure-ftp配置文件"><span class="nav-number">4.3.</span> <span class="nav-text">第三步：编辑pure-ftp配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四步：建立虚拟账号"><span class="nav-number">4.4.</span> <span class="nav-text">第四步：建立虚拟账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第五步：测试连接"><span class="nav-number">4.5.</span> <span class="nav-text">第五步：测试连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lftp的常见命令"><span class="nav-number">4.6.</span> <span class="nav-text">lftp的常见命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ls-和-cd命令"><span class="nav-number">4.6.1.</span> <span class="nav-text">ls 和 cd命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lpwd-和-lcd：显示和切换本地文件夹"><span class="nav-number">4.6.2.</span> <span class="nav-text">lpwd 和 lcd：显示和切换本地文件夹</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#下载文件：get-和-mget"><span class="nav-number">4.6.3.</span> <span class="nav-text">下载文件：get 和 mget</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#上传文件：put、mput"><span class="nav-number">4.6.4.</span> <span class="nav-text">上传文件：put、mput</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#同步目录"><span class="nav-number">4.6.5.</span> <span class="nav-text">同步目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模式设置"><span class="nav-number">4.6.6.</span> <span class="nav-text">模式设置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#云服务使用何种同步备份工具？"><span class="nav-number">5.</span> <span class="nav-text">云服务使用何种同步备份工具？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么不推荐在云服务器上使用ftp？"><span class="nav-number">5.1.</span> <span class="nav-text">为什么不推荐在云服务器上使用ftp？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#云服务器使用那种同步备份工具？"><span class="nav-number">5.2.</span> <span class="nav-text">云服务器使用那种同步备份工具？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#镭速RaySync传输软件："><span class="nav-number">5.2.1.</span> <span class="nav-text">镭速RaySync传输软件：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sftp"><span class="nav-number">5.2.2.</span> <span class="nav-text">sftp</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Steve Yuan</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">188.1k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/23/linuxNotes-12-rsyncAndFtp/';
+          this.page.identifier = '2018/07/23/linuxNotes-12-rsyncAndFtp/';
+          this.page.title = 'Linux运维学习笔记：数据备份和同步rsync';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://steve-yuan.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="notes,linux,sysV," />
+  <meta name="keywords" content="notes,linux,sysV,crontab,systemd," />
 
 
 
@@ -81,20 +81,26 @@
 
 
 
-<meta name="description" content="写在前面第一阶段复习，发现有很多内容掌握的不扎实，这个sysV、Systemd尤其是如此，所以单独提出来再查找资料，再整理一下。 预备知识：先从linux的历史说起init 守护进程sysV和Systemd是神马？这是一个很复杂的问题，需要Linux系统启动说起。 linux系统启动，主要可以分成以下几步：  读取 MBR 的信息,启动 Boot Manager（Windows 使用 NTLDR">
-<meta name="keywords" content="notes,linux,sysV">
+<meta name="description" content="写在前面这则笔记主要整理linux系统服务管理及定时任务的相关知识，主要包括以下两个方面： 系统服务管理：  linux系统守护进程  systemd详细介绍  系统服务管理相关命令   定时任务设置  at命令  crontab  anacron">
+<meta name="keywords" content="notes,linux,sysV,crontab,systemd">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux运维学习笔记：系统进程管理">
-<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/05/24/week8-2-linuxNotes-systemd-sysv/index.html">
+<meta property="og:title" content="linux运维学习笔记：系统服务管理及定时任务">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/22/linuxNotes-11-systemAndService/index.html">
 <meta property="og:site_name" content="Steve的折腾学习日志">
-<meta property="og:description" content="写在前面第一阶段复习，发现有很多内容掌握的不扎实，这个sysV、Systemd尤其是如此，所以单独提出来再查找资料，再整理一下。 预备知识：先从linux的历史说起init 守护进程sysV和Systemd是神马？这是一个很复杂的问题，需要Linux系统启动说起。 linux系统启动，主要可以分成以下几步：  读取 MBR 的信息,启动 Boot Manager（Windows 使用 NTLDR">
+<meta property="og:description" content="写在前面这则笔记主要整理linux系统服务管理及定时任务的相关知识，主要包括以下两个方面： 系统服务管理：  linux系统守护进程  systemd详细介绍  系统服务管理相关命令   定时任务设置  at命令  crontab  anacron">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm1.staticflickr.com/948/42013365781_be673ef7c2_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/966/42312212441_aa09a27285_o.png">
-<meta property="og:updated_time" content="2018-05-24T14:00:11.386Z">
+<meta property="og:image" content="https://farm2.staticflickr.com/1773/43013350581_fbe2d8ef8c_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1811/41203514040_ea614758fd_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1795/42296122784_65f37979fd_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1809/41206108840_888cc974b4_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1774/41205511850_6f472e8ac7_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1802/29143625118_3884a4b0c4_o.png">
+<meta property="og:updated_time" content="2018-07-22T02:18:38.470Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux运维学习笔记：系统进程管理">
-<meta name="twitter:description" content="写在前面第一阶段复习，发现有很多内容掌握的不扎实，这个sysV、Systemd尤其是如此，所以单独提出来再查找资料，再整理一下。 预备知识：先从linux的历史说起init 守护进程sysV和Systemd是神马？这是一个很复杂的问题，需要Linux系统启动说起。 linux系统启动，主要可以分成以下几步：  读取 MBR 的信息,启动 Boot Manager（Windows 使用 NTLDR">
+<meta name="twitter:title" content="linux运维学习笔记：系统服务管理及定时任务">
+<meta name="twitter:description" content="写在前面这则笔记主要整理linux系统服务管理及定时任务的相关知识，主要包括以下两个方面： 系统服务管理：  linux系统守护进程  systemd详细介绍  系统服务管理相关命令   定时任务设置  at命令  crontab  anacron">
 <meta name="twitter:image" content="https://farm1.staticflickr.com/948/42013365781_be673ef7c2_o.png">
 
 
@@ -125,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/05/24/week8-2-linuxNotes-systemd-sysv/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/22/linuxNotes-11-systemAndService/"/>
 
 
 
 
 
-  <title>linux运维学习笔记：系统进程管理 | Steve的折腾学习日志</title>
+  <title>linux运维学习笔记：系统服务管理及定时任务 | Steve的折腾学习日志</title>
   
 
 
@@ -312,7 +318,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/05/24/week8-2-linuxNotes-systemd-sysv/">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/22/linuxNotes-11-systemAndService/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
@@ -329,7 +335,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">linux运维学习笔记：系统进程管理</h1>
+          <h1 class="post-title" itemprop="name headline">linux运维学习笔记：系统服务管理及定时任务</h1>
         
 
         <div class="post-meta">
@@ -341,8 +347,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-24T17:34:48+08:00">
-                2018-05-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-22T09:23:47+08:00">
+                2018-07-22
               </time>
             
 
@@ -382,9 +388,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/05/24/week8-2-linuxNotes-systemd-sysv/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/22/linuxNotes-11-systemAndService/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/24/week8-2-linuxNotes-systemd-sysv/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/22/linuxNotes-11-systemAndService/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -406,7 +412,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,510
+                  6,523
                 </span>
               
 
@@ -422,7 +428,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  14
+                  26
                 </span>
               
             </div>
@@ -443,10 +449,28 @@
       
 
       
-        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>第一阶段复习，发现有很多内容掌握的不扎实，这个sysV、Systemd尤其是如此，所以单独提出来再查找资料，再整理一下。</p>
-<h2 id="预备知识：先从linux的历史说起"><a href="#预备知识：先从linux的历史说起" class="headerlink" title="预备知识：先从linux的历史说起"></a>预备知识：先从linux的历史说起</h2><h3 id="init-守护进程"><a href="#init-守护进程" class="headerlink" title="init 守护进程"></a><code>init</code> 守护进程</h3><p><code>sysV</code>和<code>Systemd</code>是神马？这是一个很复杂的问题，需要Linux系统启动说起。</p>
-<p>linux系统启动，主要可以分成以下几步：</p>
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记主要整理linux系统服务管理及定时任务的相关知识，主要包括以下两个方面：</p>
+<p><strong>系统服务管理：</strong></p>
 <ul>
+<li><p>linux系统守护进程</p>
+</li>
+<li><p>systemd详细介绍</p>
+</li>
+<li><p>系统服务管理相关命令</p>
+</li>
+</ul>
+<p><strong>定时任务设置</strong></p>
+<ul>
+<li><p>at命令</p>
+</li>
+<li><p>crontab</p>
+</li>
+<li><p>anacron</p>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="linux系统守护进程"><a href="#linux系统守护进程" class="headerlink" title="linux系统守护进程"></a>linux系统守护进程</h2><h3 id="init-守护进程"><a href="#init-守护进程" class="headerlink" title="init 守护进程"></a><code>init</code> 守护进程</h3><p>linux系统启动，主要可以分成以下几步：</p>
+<ol>
 <li><p>读取 MBR 的信息,启动 Boot Manager（Windows 使用 NTLDR 作为 Boot Manager；Linux 通常使用GRUB 作为 Boot Manager）；</p>
 </li>
 <li><p>加载系统内核,启动 init 进程，这是Linux 的根进程,所有的系统进程都是它的子进程；</p>
@@ -457,9 +481,8 @@
 </li>
 <li><p>启动登录管理器,等待用户登录；</p>
 </li>
-</ul>
+</ol>
 <p>根据维基百科的解释，<code>init</code>是 Unix 和 类Unix 系统中用来产生其它所有进程的程序。它以守护进程的方式存在，其进程号pid为1。Linux系统在开机时加载Linux内核后，便由Linux内核加载init程序，由init程序完成余下的开机过程，比如加载运行级别，加载服务，引导Shell/图形化界面等等。</p>
-<a id="more"></a>
 <h4 id="SysV"><a href="#SysV" class="headerlink" title="SysV"></a>SysV</h4><p>PID 1 是一个非常特殊的进程，任务是把整个操作系统带入可操作的状态。传统的 Unix System V 相兼容的，所以也叫 sysvinit。</p>
 <p>在 sysvint中，有好几个允许级别，常见的级别，比如0代表关机，3代表多用户模式，6代表重启配置在 <code>/etc/inittab</code> 文件中。当然，这里还需要知道一个文件夹<code>/etc/init.d/</code>，存放各种进程的启停脚本。</p>
 <h4 id="UpStart"><a href="#UpStart" class="headerlink" title="UpStart"></a>UpStart</h4><p>linux是从unix系统衍生而来的，早期多用在服务器上。但是随着时代的发展，linux逐渐进入了桌面系统时代，sysV这种启动方式的弊端也就暴露的出来。由于他没有自动检测机制，只能一次性启动所有服务，所以系统系统的速度就很慢。</p>
@@ -472,8 +495,7 @@
 </li>
 </ul>
 <p>目前，systemd 几乎成为了所有主流Linux 发行版的默认配置，包括：Arch Linux、CentOS、CoreOS、Debian、Fedora、Megeia、OpenSUSE、RHEL、SUSE企业版和 Ubuntu。</p>
-<p>sysV和systemd的对应指令</p>
-<table>
+<h4 id="sysV和systemd的对应指令"><a href="#sysV和systemd的对应指令" class="headerlink" title="sysV和systemd的对应指令"></a>sysV和systemd的对应指令</h4><table>
 <thead>
 <tr>
 <th>任务</th>
@@ -519,7 +541,6 @@
 </tr>
 </tbody>
 </table>
-<p>好了，下面切入正题。</p>
 <h2 id="重新认识sysytemd"><a href="#重新认识sysytemd" class="headerlink" title="重新认识sysytemd"></a>重新认识sysytemd</h2><p><code>systemd</code>是一种新的linux系统服务管理器，用于取代SysV初始进程。它替换了init系统，能够管理系统的启动过程和一些系统服务，一旦启动起来，就将监管整个系统。</p>
 <p><strong>Systemd 架构图</strong></p>
 <p><img src="https://farm1.staticflickr.com/948/42013365781_be673ef7c2_o.png" alt=""></p>
@@ -811,7 +832,7 @@
 </tbody>
 </table>
 <p>好了，基础知识到此为止，下面到应用部分：</p>
-<h2 id="服务管理相关命令"><a href="#服务管理相关命令" class="headerlink" title="服务管理相关命令"></a>服务管理相关命令</h2><h3 id="sysV下如何管理服务"><a href="#sysV下如何管理服务" class="headerlink" title="sysV下如何管理服务"></a><code>sysV</code>下如何管理服务</h3><p><code>chkconfig</code>命令主要用来更新（启动或停止）和查询系统服务的运行级信息，主要跟sysV配合起来作用。具体的要管理服务，大概的操作流程是这样的：</p>
+<h2 id="系统服务管理相关命令"><a href="#系统服务管理相关命令" class="headerlink" title="系统服务管理相关命令"></a>系统服务管理相关命令</h2><h3 id="sysV下如何管理服务"><a href="#sysV下如何管理服务" class="headerlink" title="sysV下如何管理服务"></a><code>sysV</code>下如何管理服务</h3><p><code>chkconfig</code>命令主要用来更新（启动或停止）和查询系统服务的运行级信息，主要跟sysV配合起来作用。具体的要管理服务，大概的操作流程是这样的：</p>
 <ol>
 <li><p>编写服务脚本<code>vim [servicename]</code>，保存在<code>/etc/ini.d/</code>目录下； 注：该文件必须为755 权限 <code>chown 755 [shellfilename]</code></p>
 </li>
@@ -890,7 +911,309 @@
 <h3 id="Systemd-如何管理服务"><a href="#Systemd-如何管理服务" class="headerlink" title="Systemd 如何管理服务"></a>Systemd 如何管理服务</h3><h4 id="systemctl-Systemd-的主命令，用于管理系统。"><a href="#systemctl-Systemd-的主命令，用于管理系统。" class="headerlink" title="systemctl: Systemd 的主命令，用于管理系统。"></a><code>systemctl:</code> <code>Systemd</code> 的主命令，用于管理系统。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// 重启系统</span><br><span class="line">systemctl reboot</span><br><span class="line"></span><br><span class="line">// 关闭系统，切断电源</span><br><span class="line">systemctl poweroff</span><br><span class="line"></span><br><span class="line">// CPU停止工作</span><br><span class="line">systemctl halt</span><br><span class="line"></span><br><span class="line">// 暂停系统</span><br><span class="line">systemctl suspend</span><br><span class="line"></span><br><span class="line">// 让系统进入冬眠状态</span><br><span class="line">systemctl hibernate</span><br><span class="line"></span><br><span class="line">// 让系统进入交互式休眠状态</span><br><span class="line">systemctl hybrid-sleep</span><br><span class="line"></span><br><span class="line">// 启动进入救援状态（单用户状态）</span><br><span class="line">systemctl rescue</span><br></pre></td></tr></table></figure>
 <h5 id="与Unit有关的命令"><a href="#与Unit有关的命令" class="headerlink" title="与Unit有关的命令"></a>与Unit有关的命令</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">// 列出正在运行的 Unit</span><br><span class="line">$ systemctl list-units</span><br><span class="line"></span><br><span class="line">//列出列出所有配置文件</span><br><span class="line">$ systemctl list-unit-files</span><br><span class="line"></span><br><span class="line">// 列出所有Unit，包括没有找到配置文件的或者启动失败的</span><br><span class="line">$ systemctl list-units --all</span><br><span class="line"></span><br><span class="line">// 列出所有没有运行的 Unit</span><br><span class="line">$ systemctl list-units --all --state=inactive</span><br><span class="line"></span><br><span class="line">// 列出所有加载失败的 Unit</span><br><span class="line">$ systemctl list-units --failed</span><br><span class="line"></span><br><span class="line">// 列出所有正在运行的、类型为 service 的 Unit</span><br><span class="line">systemctl list-units --type=service</span><br><span class="line"></span><br><span class="line">//列出正在运行，状态为active的service</span><br><span class="line">systemctl list-units --type=service</span><br><span class="line"></span><br><span class="line">//查看某个服务是否为active</span><br><span class="line">systemctl is-active crond.service</span><br><span class="line"></span><br><span class="line">// 立即启动一个服务</span><br><span class="line">systemctl start apache.service</span><br><span class="line"></span><br><span class="line">// 立即停止一个服务</span><br><span class="line">systemctl stop apache.service</span><br><span class="line"></span><br><span class="line">// 重启一个服务</span><br><span class="line">systemctl restart apache.service</span><br><span class="line"></span><br><span class="line">// 杀死一个服务的所有子进程</span><br><span class="line">systemctl kill apache.service</span><br><span class="line"></span><br><span class="line">// 重新加载一个服务的配置文件</span><br><span class="line">systemctl reload apache.service</span><br><span class="line"></span><br><span class="line">// 重载所有修改过的配置文件</span><br><span class="line">systemctl daemon-reload</span><br><span class="line"></span><br><span class="line">// 显示某个 Unit 的所有底层参数</span><br><span class="line">systemctl show httpd.service</span><br><span class="line"></span><br><span class="line">// 显示某个 Unit 的指定属性的值</span><br><span class="line">systemctl show -p CPUShares httpd.service</span><br><span class="line"></span><br><span class="line">// 设置某个 Unit 的指定属性</span><br><span class="line">systemctl set-property httpd.service CPUShares=500</span><br><span class="line"></span><br><span class="line">//检查服务是否开机启动</span><br><span class="line">systemctl is-enabled crond</span><br></pre></td></tr></table></figure>
 <h4 id="与target有关的常用命令"><a href="#与target有关的常用命令" class="headerlink" title="与target有关的常用命令"></a>与<code>target</code>有关的常用命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 查看当前系统的所有 Target</span><br><span class="line">systemctl list-unit-files --type=target</span><br><span class="line"></span><br><span class="line">// 查看一个 Target 包含的所有 Unit</span><br><span class="line">systemctl list-dependencies multi-user.target</span><br><span class="line"></span><br><span class="line">// 查看启动时的默认 Target</span><br><span class="line">systemctl get-default</span><br><span class="line"></span><br><span class="line">// 设置启动时的默认 Target(类似于centos6之前设置启动级别)</span><br><span class="line">systemctl set-default multi-user.target</span><br><span class="line"></span><br><span class="line">// 切换 Target 时，默认不关闭前一个 Target 启动的进程，而是关闭前一个 Target 里面所有不属于后一个 Target 的进程</span><br><span class="line">systemctl isolate multi-user.target</span><br></pre></td></tr></table></figure>
-<h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><ul>
+<h2 id="linux定时任务计划"><a href="#linux定时任务计划" class="headerlink" title="linux定时任务计划"></a>linux定时任务计划</h2><p>所谓计划任务服务，就是通过设定，让linux系统在无人值守的情况下，在指定时间，自动执行某些特定的命令或者服务，从而实现运维自动化。</p>
+<p>这里主要整理了三个工具，分别是at、crond、anacron，分别整理如下：</p>
+<h3 id="at命令"><a href="#at命令" class="headerlink" title="at命令"></a><code>at</code>命令</h3><p><strong>应用场景：</strong>指定的时间执行一个指定任务，且只能执行一次。</p>
+<p><strong>命令行格式：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">at [参数] [时间]</span><br></pre></td></tr></table></figure>
+<p><strong>常用参数：</strong></p>
+<ul>
+<li><p><code>-v</code> 显示任务将被执行的时间；</p>
+</li>
+<li><p><code>-c</code> 打印任务的内容到标准输出；</p>
+</li>
+<li><p><code>-f&lt;文件&gt;</code> 从指定文件读入任务而不是从标准输入读入；</p>
+</li>
+</ul>
+<p>at命令依赖atd服务，因此使用它的先决条件就是atd服务已经启动。</p>
+<p><img src="https://farm2.staticflickr.com/1773/43013350581_fbe2d8ef8c_o.png" alt=""></p>
+<p>如果没有启动，显示dead的话，需要执行以下命令重新启动：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 ~]# systemctl restart atd</span><br></pre></td></tr></table></figure>
+<h4 id="使用方式一：默认为交互式输入"><a href="#使用方式一：默认为交互式输入" class="headerlink" title="使用方式一：默认为交互式输入"></a>使用方式一：默认为交互式输入</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//5pm+3 days 表示三天后的下午5点</span><br><span class="line">[root@localhost ~]# at 5pm+3 days   </span><br><span class="line">at&gt; /bin/ls</span><br><span class="line">at&gt; &lt;EOT&gt;    按下control + d 组合键结束输入</span><br></pre></td></tr></table></figure>
+<h4 id="使用方式二：结合管道符号"><a href="#使用方式二：结合管道符号" class="headerlink" title="使用方式二：结合管道符号"></a>使用方式二：结合管道符号</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;systemctl restart nginx&apos; | at 23:30</span><br></pre></td></tr></table></figure>
+<h4 id="其他常用操作"><a href="#其他常用操作" class="headerlink" title="其他常用操作"></a>其他常用操作</h4><p><code>at -l</code> 列出当前的任务</p>
+<p><img src="https://farm2.staticflickr.com/1811/41203514040_ea614758fd_o.png" alt=""></p>
+<p><code>atrm [任务序号]</code> 删除指定的任务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//删除编号为3的定时任务</span><br><span class="line">[root@local-linux02 ~]# atrm 3</span><br><span class="line">//校验是否删除</span><br><span class="line">[root@local-linux02 ~]# at -l</span><br><span class="line">2	Tue Jun 26 23:30:00 2018 a root</span><br></pre></td></tr></table></figure>
+<h3 id="cron-服务：服务器周期性有规律滴执行特定任务"><a href="#cron-服务：服务器周期性有规律滴执行特定任务" class="headerlink" title="cron 服务：服务器周期性有规律滴执行特定任务"></a><code>cron</code> 服务：服务器周期性有规律滴执行特定任务</h3><p>cron是一个用于运行计划任务如系统备份、更新等的守护进程。它适合在那些 24X7 不间断运行的机器如服务器上运行的计划任务。</p>
+<p>应用场景：假设我们有一台服务器，需要定期执行某项操作，比如备份，就适合使用crond服务。</p>
+<p><strong>注意：</strong>crond服务有一个重要前提，就是假设系统会一直开机，所以如果恰好关机了，就会出问题。比如，设定了一个23:30分的备份操作，但是在23:29分断电了，过五分钟又来电了，这个备份操作就不会被执行。</p>
+<h4 id="crontab-服务启用及停止"><a href="#crontab-服务启用及停止" class="headerlink" title="crontab 服务启用及停止"></a>crontab 服务启用及停止</h4><ul>
+<li>安装 Crontab 服务    <strong>注：</strong>centos 7默认已经安装</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y crontabs</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启用服务        注：默认此服务是没有启动的</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start crond</span><br></pre></td></tr></table></figure>
+<ul>
+<li>停止服务</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop crond</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看服务状态</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status crond</span><br></pre></td></tr></table></figure>
+<ul>
+<li>加入开机启动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable crond</span><br></pre></td></tr></table></figure>
+<ul>
+<li>取消开机启动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl disable crond</span><br></pre></td></tr></table></figure>
+<ul>
+<li>备份 crontab 文件（以root用户为例）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /var/spool/cron/root /var/spool/cron/root.backup</span><br></pre></td></tr></table></figure>
+<h4 id="crontab-配置文件"><a href="#crontab-配置文件" class="headerlink" title="crontab 配置文件"></a>crontab 配置文件</h4><p>注；crontab的配置文件在<code>/etc/crontab</code>，既然是定时任务，下面这部分就是演示如何表示时间的，很有用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# cat /etc/crontab      //查看crontab配置文件</span><br><span class="line">SHELL=/bin/bash</span><br><span class="line">PATH=/sbin:/bin:/usr/sbin:/usr/bin</span><br><span class="line">MAILTO=root</span><br><span class="line"></span><br><span class="line"># For details see man 4 crontabs</span><br><span class="line"></span><br><span class="line"># Example of job definition:</span><br><span class="line"># .---------------- minute (0 - 59)    //表示分数（0-59）</span><br><span class="line"># |  .------------- hour (0 - 23)      //表示24小时制（0-24）</span><br><span class="line"># |  |  .---------- day of month (1 - 31)    //表示天（1-31）</span><br><span class="line"># |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...   //表示月（1-12），也可以用英文简写也表示</span><br><span class="line"># |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat   //表示星期几，1-6分别对应星期一至星期六；星期天可以写为0或者7</span><br><span class="line"># |  |  |  |  |</span><br><span class="line"># *  *  *  *  * user-name  command to be executed</span><br></pre></td></tr></table></figure>
+<p>在表达时间的字段中，还可以使用以下特殊符号：</p>
+<ul>
+<li><p><code>*</code>星号：代表所任意值，如果在month字段使用，就是每个月都执行；</p>
+</li>
+<li><p><code>,</code>逗号：用逗号隔开的值，指定一个列表范围，例如，“1,2,5,7,8,9”；</p>
+</li>
+<li><p><code>-</code>短横线：整数之间的中杠表示一个整数范围，例如“2-6”表示“2,3,4,5,6”；</p>
+</li>
+<li><p><code>/</code>斜线：指定时间的间隔频率，例如“0-23/2”表示每两小时执行一次，对应的时间就是0、2、4、6、8、10、12、14、16、18、20、22；斜线可以和星号一起使用，如果在表示分钟的字段出现*/10，表示每十分钟执行一次。</p>
+</li>
+</ul>
+<p>除了<code>/etc/crontab</code>，跟crontab相关的其他配置文件<br>如下：</p>
+<ul>
+<li><p><code>/var/spool/cron/</code> 所有用户 crontab 任务文件存放的目录,文件名即用户名</p>
+</li>
+<li><p><code>/etc/cron.deny</code> 该文件中所列的用户不允许使用 crontab 命令</p>
+</li>
+<li><p><code>/etc/cron.allow</code> 该文件中所列的用户允许使用 crontab 命令</p>
+</li>
+<li><p><code>/etc/cron.d/</code> 该目录用来存放任何要执行的crontab文件或脚本</p>
+</li>
+</ul>
+<h4 id="crond服务的设置方法："><a href="#crond服务的设置方法：" class="headerlink" title="crond服务的设置方法："></a>crond服务的设置方法：</h4><p>crond服务，实质上是调用vim对定时任务进行编辑，退出保存后，被保存在<code>/var/spool/cron/[username]</code>。比如，当前笔者是在用root用户操作，默认设置的就被保存在<code>/var/spool/cron/root</code>文件当中。</p>
+<p><strong>常用命令包括：</strong></p>
+<ul>
+<li><p><code>crontab -e</code>  创建编辑定时任务；</p>
+</li>
+<li><p><code>crontab -l</code>  查看当前的定时任务；</p>
+</li>
+<li><p><code>crontab -r</code>  删除指定的定时任务；</p>
+</li>
+<li><p><code>crontab -u</code>  以管理员身份修改其他用户创建的定时任务（当前用户必须是root用户）；</p>
+</li>
+</ul>
+<p>修改编辑器，可以通过自定义环境变量的方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bashrc        //编辑当前当前用户的配置文件；也可以编辑 /etc/bashrc来更改全局用户变量</span><br><span class="line"></span><br><span class="line">export EDITOR=vim    //添加这一行，意思是指定vim作为默认编辑器；之后保存退出</span><br><span class="line"></span><br><span class="line">source ~/.bashrc     //重新加载配置文件</span><br></pre></td></tr></table></figure>
+<h4 id="部署定时任务工作流："><a href="#部署定时任务工作流：" class="headerlink" title="部署定时任务工作流："></a>部署定时任务工作流：</h4><ol>
+<li><p><code>crontab -e</code> 进入编辑状态；</p>
+</li>
+<li><p>写入定时任务，格式为：<code>min hour date month week command</code>;</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>min</td>
+<td>分钟，0-59分之间的任意整数，不允许为空或*号</td>
+</tr>
+<tr>
+<td>hour</td>
+<td>小时，0-23之间的任意整数</td>
+</tr>
+<tr>
+<td>date</td>
+<td>日期，1-31之间的任意整数</td>
+</tr>
+<tr>
+<td>month</td>
+<td>月份，1-12之间的任意整数</td>
+</tr>
+<tr>
+<td>week</td>
+<td>星期几，0-7之间的任意整数，其中0和7均表示星期天</td>
+</tr>
+<tr>
+<td>command</td>
+<td>需要执行的命令或脚本，命令需要写绝对路径</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注：</strong></p>
+<ol>
+<li><p>涉及路径时，需要使用绝对路径。</p>
+</li>
+<li><p>crontab 任务都是保存了之后立即执行的，但是有的时候却无法执行，将命令单独拿出来却可以使用，这个时候需要检查一下 crontab 文件的环境变量是否正常。</p>
+</li>
+</ol>
+<h4 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h4><ul>
+<li>新建定时任务</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 ~]# crontab -e</span><br><span class="line"></span><br><span class="line">//在打开的编辑页面输入以下指令</span><br><span class="line">//意思是每天23:30 重启nginx</span><br><span class="line">30 23 * * * /usr/sbin/nginx restart</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看当前定时任务</li>
+</ul>
+<p><img src="https://farm2.staticflickr.com/1795/42296122784_65f37979fd_o.png" alt=""></p>
+<ul>
+<li>删除定时任务</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 ~]# crontab -r</span><br><span class="line">[root@local-linux02 ~]# crontab -l</span><br><span class="line">no crontab for root</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每1分钟执行一次Command</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * Command</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每小时的第3和第15分钟执行</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3,15 * * * * Command</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在上午8点到11点的第3和第15分钟执行</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3,15 8-11 * * * Command</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每隔两天的上午8点到11点的第3和第15分钟执行</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3,15 8-11 */2  *  * myCommand</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每周一上午8点到11点的第3和第15分钟执行</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3,15 8-11 * * 1 myCommand</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每晚的21:30重启smb</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">30 21 * * * /etc/init.d/smb restart</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每月1、10、22日的4 : 45重启smb</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">45 4 1,10,22 * * /etc/init.d/smb restart</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每周六、周日的1 : 10重启smb</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10 1 * * 6,0 /etc/init.d/smb restart</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每天18 : 00至23 : 00之间每隔30分钟重启smb</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0,30 18-23 * * * /etc/init.d/smb restart</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每星期六的晚上11 : 00 pm重启smb</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 23 * * 6 /etc/init.d/smb restart</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每一小时重启smb</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* */1 * * * /etc/init.d/smb restart</span><br></pre></td></tr></table></figure>
+<ul>
+<li>晚上11点到早上7点之间，每隔一小时重启smb</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 23-7 * * * /etc/init.d/smb restart</span><br></pre></td></tr></table></figure>
+<h3 id="anacron-工具"><a href="#anacron-工具" class="headerlink" title="anacron 工具"></a>anacron 工具</h3><p>anacron 不按照小时、分钟来执行定时任务，而是<strong>以天为单位运行定时任务</strong>。它的工作与 cron 稍有不同，它假设机器不会一直开机，因此更适合用在个人电脑上面。</p>
+<p>也正因为anacron 是以天为单位的，并且也不是守护进程，所以它并不能完全取代cron，而只能作为cron的补充存在。</p>
+<p><strong>anacron与crontab 对比</strong></p>
+<table>
+<thead>
+<tr>
+<th>crontab</th>
+<th>anacron</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>适合服务器</td>
+<td>适合桌面/笔记本电脑</td>
+</tr>
+<tr>
+<td>它是守护进程</td>
+<td>它不是守护进程</td>
+</tr>
+<tr>
+<td>关机时不会执行计划任务</td>
+<td>如果计划任务到期，机器是关机的，那么它会在机器下次开机后执行计划任务</td>
+</tr>
+<tr>
+<td>可以让你以分钟级运行计划任务</td>
+<td>只能让你以天为基础来运行计划任务</td>
+</tr>
+<tr>
+<td>普通用户和 root 用户都可以使用</td>
+<td>只有 root 用户可以使用（使用特定的配置启动普通任务）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="安装启动annacron"><a href="#安装启动annacron" class="headerlink" title="安装启动annacron"></a>安装启动annacron</h4><p><img src="https://farm2.staticflickr.com/1809/41206108840_888cc974b4_o.png" alt=""></p>
+<h4 id="anacron基本语法"><a href="#anacron基本语法" class="headerlink" title="anacron基本语法"></a>anacron基本语法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">anacron [options] [job]</span><br></pre></td></tr></table></figure>
+<p>常用选项如下：</p>
+<ul>
+<li><p><code>-s</code>：重要！开始所有的jobs，并根据时间戳判断是否开始相应的工作job；</p>
+</li>
+<li><p><code>-f</code>：强制进行，忽略时间戳的对比；</p>
+</li>
+<li><p><code>-n</code>：立即进行未进行的任务，忽略延迟等待时间；</p>
+</li>
+<li><p><code>-u</code>：仅升级相应的执行时间戳，实际不进行任何工作；</p>
+</li>
+<li><p><code>job</code>：/etc/anacrontab文件中定义的各项工作名称；</p>
+</li>
+</ul>
+<h4 id="anacron任务是如何被执行的？"><a href="#anacron任务是如何被执行的？" class="headerlink" title="anacron任务是如何被执行的？"></a>anacron任务是如何被执行的？</h4><p>前文说过anacron是cron的有力补充，它是一个普通进程，而不是linux守护进程，也不是服务。这点很重要！！！</p>
+<p>举个例子，我们在使用nginx的时候，会使用<code>systemctl start nginx</code> 和 <code>systemctl enable nginx</code>,让nginx随开机启动，并常驻在后台，但是在网上搜了一圈，也没有找到怎么启动后台守护进程的命令。那么，它是怎么被执行的呢？</p>
+<h5 id="第一步：cron服务每小时读取0anacron脚本"><a href="#第一步：cron服务每小时读取0anacron脚本" class="headerlink" title="第一步：cron服务每小时读取0anacron脚本"></a>第一步：cron服务每小时读取0anacron脚本</h5><p>实际上，anacron的任务加载配置文件被写进了cron当中，有一个很神奇的脚本文件，叫做<code>/etc/cron.hourly/0anacron</code>，关键的秘密都在这里。</p>
+<p><img src="https://farm2.staticflickr.com/1774/41205511850_6f472e8ac7_o.png" alt=""></p>
+<p>与anacron任务运行的相关配置文件包括：</p>
+<ul>
+<li><p><code>/etc/anacrontab</code></p>
+</li>
+<li><p><code>/var/spool/anacron/cron.daily</code></p>
+</li>
+<li><p><code>/var/spool/anacron/cron.monthly</code></p>
+</li>
+<li><p><code>/var/spool/anacron/cron.weekly</code></p>
+</li>
+</ul>
+<h5 id="第二步：加载-etc-anacrontab-配置文件"><a href="#第二步：加载-etc-anacrontab-配置文件" class="headerlink" title="第二步：加载/etc/anacrontab 配置文件"></a>第二步：加载<code>/etc/anacrontab</code> 配置文件</h5><p>在运行<code>/etc/cron.hourly/0anacron</code>之后，会执行<code>/usr/sbin/anacron -s</code>命令，重新加载配置文件<code>/etc/anacrontab</code>的内容，而我们<strong>的定时任务，就是通过编辑该配置文件，保存后即可呗调用执行。</strong></p>
+<p><code>/etc/anacrontab</code> 对于执行的方式做了具体的规定：</p>
+<p><img src="https://farm2.staticflickr.com/1802/29143625118_3884a4b0c4_o.png" alt=""></p>
+<p>其中，红框框出来的几个部分很关键</p>
+<p>先看定时任务的写法，共分为四个部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#period in days   delay in minutes   job-identifier   command</span><br><span class="line">1	5	cron.daily		nice run-parts /etc/cron.daily</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>period in days</code>： 任务执行的频率，以天为单位。可以是@daily（每天） 、@weekly（每周）、@monthly（每月）；也可以使用数字：1代表每天、7代表每周、30代表每月，或者直接用N指定以N天为一个周期；</p>
+</li>
+<li><p><code>delay</code> ： 这是在执行一个任务前等待的分钟数；</p>
+</li>
+<li><p><code>job-id</code> - 这是写在日志文件中任务的任务标示，任务标识，这个与/var/spool/anacron/ 目录下的时间戳文件名相一致，anacron任务通过此标识来获取对应的时间戳判断是否执行该任务；</p>
+</li>
+<li><p><code>command</code> - 这是要执行的命令或 shell 脚本；</p>
+</li>
+</ul>
+<p>还有两个配置选项也很重要：</p>
+<p><code>RANDOM_DELAY=45</code>：anacron任务添加的随机延迟的最大值，单位为分钟，一个anacron任务的运行的总延迟时间为<code>RANDOM_DELAY+Base_delay</code>；</p>
+<p><code>START_HOURS_RANGE=3-22</code>：设置anacron任务执行的时间范围，此处表示anacron任务只能在3am-22pm的时间范围内执行；</p>
+<h5 id="第三步：执行定时任务"><a href="#第三步：执行定时任务" class="headerlink" title="第三步：执行定时任务"></a>第三步：执行定时任务</h5><ol>
+<li><p>anacron 会生成任务的时间戳，保存在 <code>/var/spool/anacron/cron.daily</code> 文件中；</p>
+</li>
+<li><p>在执行的过程中，会读取 <code>/var/spool/anacron/cron.daily</code> ，对比当前时间戳和上一次的时间戳，如差异天数为1天或以上，就会执行相应的任务；</p>
+</li>
+<li><p>任务执行完毕，修改对应的时间戳文件为当前时间，anacron程序结束。</p>
+</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><p><a href="https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/crontab.html" target="_blank" rel="noopener">crontab 定时任务</a></p>
+</li>
+<li><p><a href="https://www.ctolib.com/topics-83224.html" target="_blank" rel="noopener">Linux任务管理工具之Crontab</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/ithomer/article/details/6817019" target="_blank" rel="noopener">linux定时运行命令脚本——crontab</a></p>
+</li>
+<li><p><a href="https://linux.cn/article-8590-1.html" target="_blank" rel="noopener">cron 与 anacron：如何在 Linux 中计划任务</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/zyc_love_study/article/details/78893619" target="_blank" rel="noopener">anacron命令</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/itech/archive/2010/12/27/1914846.html" target="_blank" rel="noopener">Linux守护进程(init.d和xinetd)</a></p>
+</li>
 <li><p><a href="https://my.oschina.net/junn/blog/215825" target="_blank" rel="noopener">Linux下chkconfig命令及守护进程</a></p>
 </li>
 <li><p><a href="http://roclinux.cn/?p=51" target="_blank" rel="noopener">《chkconfig命令》－linux命令五分钟系列之四</a></p>
@@ -926,7 +1249,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://steve-yuan-8276.github.io/2018/05/24/week8-2-linuxNotes-systemd-sysv/" title="linux运维学习笔记：系统进程管理">https://steve-yuan-8276.github.io/2018/05/24/week8-2-linuxNotes-systemd-sysv/</a>
+    <a href="https://steve-yuan-8276.github.io/2018/07/22/linuxNotes-11-systemAndService/" title="linux运维学习笔记：系统服务管理及定时任务">https://steve-yuan-8276.github.io/2018/07/22/linuxNotes-11-systemAndService/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -947,6 +1270,10 @@
           
             <a href="/tags/sysV/" rel="tag"># sysV</a>
           
+            <a href="/tags/crontab/" rel="tag"># crontab</a>
+          
+            <a href="/tags/systemd/" rel="tag"># systemd</a>
+          
         </div>
       
 
@@ -958,8 +1285,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/22/linuxNotes-base64Practice/" rel="next" title="linux学习笔记：从一则招聘启示学base64编码">
-                <i class="fa fa-chevron-left"></i> linux学习笔记：从一则招聘启示学base64编码
+              <a href="/2018/07/20/linuxNotes-10-selinuxAndfirewall/" rel="next" title="Linux运维学习笔记：系统防火墙设置">
+                <i class="fa fa-chevron-left"></i> Linux运维学习笔记：系统防火墙设置
               </a>
             
           </div>
@@ -968,8 +1295,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/25/week9-3-linuxNotes-php-installition/" rel="prev" title="linux运维学习笔记9-3：php安装">
-                linux运维学习笔记9-3：php安装 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/23/linuxNotes-12-rsyncAndFtp/" rel="prev" title="Linux运维学习笔记：数据备份和同步rsync">
+                Linux运维学习笔记：数据备份和同步rsync <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -1061,7 +1388,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">107</span>
+                  <span class="site-state-item-count">103</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1083,7 +1410,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1151,7 +1478,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#预备知识：先从linux的历史说起"><span class="nav-number">2.</span> <span class="nav-text">预备知识：先从linux的历史说起</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#init-守护进程"><span class="nav-number">2.1.</span> <span class="nav-text">init 守护进程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SysV"><span class="nav-number">2.1.1.</span> <span class="nav-text">SysV</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UpStart"><span class="nav-number">2.1.2.</span> <span class="nav-text">UpStart</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Systemd"><span class="nav-number">2.1.3.</span> <span class="nav-text">Systemd</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重新认识sysytemd"><span class="nav-number">3.</span> <span class="nav-text">重新认识sysytemd</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unit介绍"><span class="nav-number">3.1.</span> <span class="nav-text">unit介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#unit配置文件"><span class="nav-number">3.1.1.</span> <span class="nav-text">unit配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#unit-依赖关系"><span class="nav-number">3.1.2.</span> <span class="nav-text">unit 依赖关系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#target介绍"><span class="nav-number">3.2.</span> <span class="nav-text">target介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Target-与-传统-RunLevel-的对应关系"><span class="nav-number">3.2.1.</span> <span class="nav-text">Target 与 传统 RunLevel 的对应关系</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务管理相关命令"><span class="nav-number">4.</span> <span class="nav-text">服务管理相关命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sysV下如何管理服务"><span class="nav-number">4.1.</span> <span class="nav-text">sysV下如何管理服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sysV相关命令"><span class="nav-number">4.1.1.</span> <span class="nav-text">sysV相关命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Systemd-如何管理服务"><span class="nav-number">4.2.</span> <span class="nav-text">Systemd 如何管理服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#systemctl-Systemd-的主命令，用于管理系统。"><span class="nav-number">4.2.1.</span> <span class="nav-text">systemctl: Systemd 的主命令，用于管理系统。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#与Unit有关的命令"><span class="nav-number">4.2.1.1.</span> <span class="nav-text">与Unit有关的命令</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#与target有关的常用命令"><span class="nav-number">4.2.2.</span> <span class="nav-text">与target有关的常用命令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料："><span class="nav-number">5.</span> <span class="nav-text">参考资料：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linux系统守护进程"><span class="nav-number">2.</span> <span class="nav-text">linux系统守护进程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#init-守护进程"><span class="nav-number">2.1.</span> <span class="nav-text">init 守护进程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SysV"><span class="nav-number">2.1.1.</span> <span class="nav-text">SysV</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UpStart"><span class="nav-number">2.1.2.</span> <span class="nav-text">UpStart</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Systemd"><span class="nav-number">2.1.3.</span> <span class="nav-text">Systemd</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sysV和systemd的对应指令"><span class="nav-number">2.1.4.</span> <span class="nav-text">sysV和systemd的对应指令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重新认识sysytemd"><span class="nav-number">3.</span> <span class="nav-text">重新认识sysytemd</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unit介绍"><span class="nav-number">3.1.</span> <span class="nav-text">unit介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#unit配置文件"><span class="nav-number">3.1.1.</span> <span class="nav-text">unit配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#unit-依赖关系"><span class="nav-number">3.1.2.</span> <span class="nav-text">unit 依赖关系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#target介绍"><span class="nav-number">3.2.</span> <span class="nav-text">target介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Target-与-传统-RunLevel-的对应关系"><span class="nav-number">3.2.1.</span> <span class="nav-text">Target 与 传统 RunLevel 的对应关系</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统服务管理相关命令"><span class="nav-number">4.</span> <span class="nav-text">系统服务管理相关命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sysV下如何管理服务"><span class="nav-number">4.1.</span> <span class="nav-text">sysV下如何管理服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sysV相关命令"><span class="nav-number">4.1.1.</span> <span class="nav-text">sysV相关命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Systemd-如何管理服务"><span class="nav-number">4.2.</span> <span class="nav-text">Systemd 如何管理服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#systemctl-Systemd-的主命令，用于管理系统。"><span class="nav-number">4.2.1.</span> <span class="nav-text">systemctl: Systemd 的主命令，用于管理系统。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#与Unit有关的命令"><span class="nav-number">4.2.1.1.</span> <span class="nav-text">与Unit有关的命令</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#与target有关的常用命令"><span class="nav-number">4.2.2.</span> <span class="nav-text">与target有关的常用命令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linux定时任务计划"><span class="nav-number">5.</span> <span class="nav-text">linux定时任务计划</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#at命令"><span class="nav-number">5.1.</span> <span class="nav-text">at命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用方式一：默认为交互式输入"><span class="nav-number">5.1.1.</span> <span class="nav-text">使用方式一：默认为交互式输入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用方式二：结合管道符号"><span class="nav-number">5.1.2.</span> <span class="nav-text">使用方式二：结合管道符号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他常用操作"><span class="nav-number">5.1.3.</span> <span class="nav-text">其他常用操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cron-服务：服务器周期性有规律滴执行特定任务"><span class="nav-number">5.2.</span> <span class="nav-text">cron 服务：服务器周期性有规律滴执行特定任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#crontab-服务启用及停止"><span class="nav-number">5.2.1.</span> <span class="nav-text">crontab 服务启用及停止</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#crontab-配置文件"><span class="nav-number">5.2.2.</span> <span class="nav-text">crontab 配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#crond服务的设置方法："><span class="nav-number">5.2.3.</span> <span class="nav-text">crond服务的设置方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署定时任务工作流："><span class="nav-number">5.2.4.</span> <span class="nav-text">部署定时任务工作流：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用实例"><span class="nav-number">5.2.5.</span> <span class="nav-text">使用实例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#anacron-工具"><span class="nav-number">5.3.</span> <span class="nav-text">anacron 工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装启动annacron"><span class="nav-number">5.3.1.</span> <span class="nav-text">安装启动annacron</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#anacron基本语法"><span class="nav-number">5.3.2.</span> <span class="nav-text">anacron基本语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#anacron任务是如何被执行的？"><span class="nav-number">5.3.3.</span> <span class="nav-text">anacron任务是如何被执行的？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：cron服务每小时读取0anacron脚本"><span class="nav-number">5.3.3.1.</span> <span class="nav-text">第一步：cron服务每小时读取0anacron脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：加载-etc-anacrontab-配置文件"><span class="nav-number">5.3.3.2.</span> <span class="nav-text">第二步：加载/etc/anacrontab 配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：执行定时任务"><span class="nav-number">5.3.3.3.</span> <span class="nav-text">第三步：执行定时任务</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
 
           </div>
@@ -1185,7 +1512,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">188.8k</span>
+    <span title="Site words total count">188.1k</span>
   
 </div>
 
@@ -1343,9 +1670,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://steve-yuan-8276.github.io/2018/05/24/week8-2-linuxNotes-systemd-sysv/';
-          this.page.identifier = '2018/05/24/week8-2-linuxNotes-systemd-sysv/';
-          this.page.title = 'linux运维学习笔记：系统进程管理';
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/22/linuxNotes-11-systemAndService/';
+          this.page.identifier = '2018/07/22/linuxNotes-11-systemAndService/';
+          this.page.title = 'linux运维学习笔记：系统服务管理及定时任务';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://steve-yuan.disqus.com/embed.js';

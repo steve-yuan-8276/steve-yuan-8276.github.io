@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[linux学习笔记：lamp环境安装及配置(二)]]></title>
+    <url>%2F2018%2F07%2F23%2FlinuxNotes-lampPart2%2F</url>
+    <content type="text"><![CDATA[写在前面LAMP，是目前较为常用的网站运行环境，这则笔记主要整理lamp环境下 discuz 论坛的安装及基础配置。 工作流： lamp环境搭建完毕； 安装discuz； 基础配置： 安装discuzdiscuz 官网下载包地址：https://gitee.com/ComsenzDiscuz/DiscuzX/attach_files 注：使用discuz需要先在官方论坛注册。 第一步：新建discuz安装目录123mkdir /data/discuz.comcd /data/discuz.com 第二步：下载安装包1234567891011121314//下载安装包wget http://files.git.oschina.net/group1/M00/02/9B/PaAvDFpFnk2AEQzMALUt346QSGo609.ziptoken=1250298e943fe82fcca4870032ddc7d8&amp;ts=1527834100&amp;attname=Discuz_X3.4_GIT_SC_UTF8.zip//这里遇到一个小错误，文件被重命名成一堆乱码，使用mv命令改一下名字mv PaAvDFpFnk2AEQzMALUt346QSGo609.zip?token=1250298e943fe82fcca4870032ddc7d8 Discuz_X3.4_GIT_SC_UTF8.zip//解压unzip Discuz_X3.4_GIT_SC_UTF8.zip//移动安装文件（只需移动upload即可）mv upload/* /data/discuz.com/ //删除无用的文件m -rf dir_SC_UTF8 Discuz_X3.4_GIT_SC_UTF8.zip 第三步：编辑配置文件编辑主文件 /usr/local/apache2.4/conf/httpd.conf ： 去掉servername前面的#号注释 编辑http主配置文件，并删除vhost这一行的注释# 编辑虚拟机文件1234567891011[root@stevey ~]# vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf//修改以下内容&lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve-discuz-test.com DocumentRoot &quot;/data/discuz.com&quot; //填写刚才新建的discuz文件目录 ServerName steve-discuz-test.com //域名，必须填写 ServerAlias www.steve-discuz.com //网站别名 #ErrorLog &quot;logs/steve.com-error_log&quot; #CustomLog &quot;logs/steve.com-access_log&quot; common&lt;/VirtualHost&gt; 第四步：启动httpd服务12345678//检查错误/usr/local/apache2.4/bin/apachectl -t//启动服务/usr/local/apache2.4/bin/apachectl start//重新加载/usr/local/apache2.4/bin/apachectl graceful 第五步：配置hosts文件mac的hosts配置文件在/etc/hosts，可以直接修改；这里借助了一个叫做ihosts的软件，方便实验。 第六步：浏览器安装在浏览器输入刚刚的网址steve.com就可以访问测试页面了。这里有一个小窍门，因为笔者的chrome浏览器安装了一个插件，强制所有访问https，所以这里需要手动改成http前缀，就可以正常进行安装了。 这里还有一个插件检查，会提示权限错误。 解决方法：这里的错误主要是由于文件权限不足造成的，我们使用chown目录将文件的owner做一下更改即可。 1[root@stevey discuz.com]# chown -R daemon config/ data/ uc_client/data/ uc_server/data/ 注：这里要使用-R选项，将目录及其字目录的用户名同时更改。 选择 全新安装 这里需要创建数据库、用户 1234//创建数据库mysql&gt; create database discuz;//创建用户steve及密码steve-testmysql&gt; grant all on discuz.* to &apos;steve&apos;@&apos;localhost&apos; identified by &apos;steve-test&apos;； 之后继续安装，填写上面设置的信息 看到下面的提示，说明安装成功。 lamp 环境的基本配置禁止默认虚拟主机apache当中的默认虚拟主机，就是配置文件中的第一个主机。假如我们在hosts当中做如下改动，增加一个服务器上并不存在的域名www.thisisateststeve.com，同样会访问steve-discuz-test.com。 1172.16.155.128 steve-discuz-test.com www.steve-discuz.com www.thisisateststeve.com 如下图所示： 这显然不是我们希望看到的效果。为了避免这种情况我们就要禁止默认虚拟主机 实现步骤： 第一步：修改虚拟主机配置12345678910111213&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/dddcom&quot; ServerName whatDoYouWant.com&lt;/VirtualHost&gt;&lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve-discuz-test.com DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-discuz.com #ErrorLog &quot;logs/steve.com-error_log&quot; #CustomLog &quot;logs/steve.com-access_log&quot; common&lt;/VirtualHost&gt; 第二步：建立目录1234//创建目录[root@stevey discuz.com]# mkdir -p /data/dddcom//设置权限，不允许除root用户之外的人访问[root@stevey discuz.com]# chmod 600 /data/dddcom 第三步：重新加载服务123[root@stevey discuz.com]# /usr/local/apache2.4/bin/apachectl -tSyntax OK[root@stevey discuz.com]# /usr/local/apache2.4/bin/apachectl graceful 成果检测 域名跳转(配置https)这样做的好处： 增加SEO权重； 如果老的域名被放弃了，可以很方便地重定向到新的域名； 实现步骤如下： 第一步：编辑虚拟主机配置文件12345678910111213141516&lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve-discuz-test.com DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com #ErrorLog &quot;logs/steve.com-error_log&quot; #CustomLog &quot;logs/steve.com-access_log&quot; common &lt;IfModule mod_rewrite.c&gt; //使用rewrite模块 RewriteEngine on 以下两行是条件 [OR]表示或者 RewriteCond %&#123;HTTP_HOST&#125; !^www.steve-aaa.com$ [OR] RewriteCond %&#123;HTTP_HOST&#125; !^www.steve-bbb.com$ RewriteRule ^/(.*)$ http://steve-discuz-test.com/$1 [R=301,L] 这里使用的是301永久跳转 &lt;/IfModule&gt;&lt;/VirtualHost&gt; 第二步：修改apache主配置文件，加载rewrite模块12345678//检测是否已加载rewrite模块[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -M | grep -i rewrite //没有输出结果，说明未加载//编辑主配置文件vim /usr/local/apache2.4/conf/httpd.conf //找到rewrite，把前面注释#去掉LoadModule rewrite_module modules/mod_rewrite.so 第三步：重新加载模块12345678910//检查语法错误[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -tSyntax OK//重新加载配置文件[root@stevey ~]# /usr/local/apache2.4/bin/apachectl graceful//查看是否加载模块[root@gary-tao local]# /usr/local/apache2.4/bin/apachectl -M|grep -i rewrite rewrite_module (shared) 成果检验 访问日志切割修改日志设置这里是利用了apache的rotatelogs命令对文件进行切割 123456789101112131415161718vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve-discuz-test.com DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com ErrorLog &quot;logs/steve-discuz-test.com-error_log&quot; //定义访问日志切割 CustomLog &quot;|/usr/local/apache2.4/bin/rotatelogs -l logs/steve-discuz-test.com-access_%Y%m%d.log 86400&quot; combined env=!img-request &lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %&#123;HTTP_HOST&#125; !^www.steve-aaa.com$ [OR] RewriteCond %&#123;HTTP_HOST&#125; !^www.steve-bbb.com$ RewriteRule ^/(.*)$ http://steve-discuz-test.com/$1 [R=301,L] &lt;/IfModule&gt;&lt;/VirtualHost&gt; 注：这里使用了管道符，将文件交由rotatelogs命令按照时间单位进行切割，86400单位是秒，相当于一天保存一个文档； 访问日志查看日志文档保存在 /usr/local/apache2.4/logs 目录下，打开盖文件夹就能看到刚刚的访问记录 使用cat 命令就可以查看日志 访问日志不记录指定类型的静态文件这样做的目的是控制访问日志的大小，便于后期的查询维护。 12345678910111213141516171819202122232425vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve-discuz-test.com DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com ErrorLog &quot;logs/steve-discuz-test.com-error_log&quot; //不记录指定类型的静态文件 SetEnvIf Request_URI &quot;.*\.gif$&quot; img-request SetEnvIf Request_URI &quot;.*\.jpg$&quot; img-request SetEnvIf Request_URI &quot;.*\.png$&quot; img-request SetEnvIf Request_URI &quot;.*\.bmp$&quot; img-request SetEnvIf Request_URI &quot;.*\.swf$&quot; img-request SetEnvIf Request_URI &quot;.*\.js$&quot; img-request SetEnvIf Request_URI &quot;.*\.css$&quot; img-request CustomLog &quot;|/usr/local/apache2.4/bin/rotatelogs -l logs/steve-discuz-test.com-access_%Y%m%d.log 86400&quot; combined env=!img-request &lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %&#123;HTTP_HOST&#125; !^www.steve-aaa.com$ [OR] RewriteCond %&#123;HTTP_HOST&#125; !^www.steve-bbb.com$ RewriteRule ^/(.*)$ http://steve-discuz-test.com/$1 [R=301,L] &lt;/IfModule&gt;&lt;/VirtualHost&gt; 设置静态缓存设置静态缓存的目的是优化网页设置，提升访问体验。 第一步：修改主机配置1234567891011121314vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf//增加配置&lt;IfModule mod_expires.c&gt; ExpiresActive on //打开该功能的开关 ExpiresByType image/gif &quot;access plus 1 days&quot; ExpiresByType image/jpeg &quot;access plus 24 hours&quot; ExpiresByType image/png &quot;access plus 24 hours&quot; ExpiresByType text/css &quot;now plus 2 hour&quot; ExpiresByType application/x-javascript &quot;now plus 2 hours&quot; ExpiresByType application/javascript &quot;now plus 2 hours&quot; ExpiresByType application/x-shockwave-flash &quot;now plus 2 hours&quot; ExpiresDefault &quot;now plus 0 min&quot;&lt;/IfModule&gt; 第二步：修改apache主配置文件，加载expires模块1234vim /usr/local/apache2.4/conf/httpd.conf//取消注释LoadModule expires_module modules/mod_expires.so 第三步：重启加载apache服务12345678//检查语法错误[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -t//重新加载配置文件[root@stevey ~]# /usr/local/apache2.4/bin/apachectl graceful//查看是否加载模块[root@gary-tao local]# /usr/local/apache2.4/bin/apachectl -M|grep -i rewrite 防盗链防盗链是针对盗链行为的一种预防策略，就是通过设置黑名单或者白名单，有选择性地对允许或者拒绝。 12345678910111213141516171819vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/discuz.com&gt; //定义防盗链目录 SetEnvNoCase Referer &quot;http://steve-discuz-test.com&quot; local_ref [NC] SetEnvNoCase Referer &quot;http://www.steve-aaa.com&quot; local_ref [NC] SetEnvNoCase Referer &quot;http://www.steve-bbb.com&quot; local_ref [NC] SetEnvNoCase Referer &quot;^$&quot; local_ref &lt;filesmatch &quot;\.(txt|doc|mp3|zip|rar|jpg|gif|pdf)&quot;&gt; Order allow,deny Allow from env=local_ref &lt;/filesmatch&gt; &lt;/Directory&gt;&lt;/VirtualHost&gt; 限制ip配置方法： 12345678910111213141516171819vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/discuz.com&gt; //定义防盗链目录 Order deny,allow //默认拒绝 Deny from all //先拒绝所有访问请求 Allow from 127.0.0.1 //再对指定ip开放 &lt;filesmatch &quot;(.*)admin(.*)&quot;&gt; //admin请求只允许在本地访问 Order deny,allow //默认拒绝 Deny from all //先拒绝所有访问请求 Allow from 127.0.0.1 //再对指定ip开放 &lt;/filesmatch&gt; &lt;/Directory&gt;&lt;/VirtualHost&gt; 安全设置：限制php解析1234567891011121314151617vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/discuz.com/data&gt; //定义目录 php_admin_flag engine off //禁止php解析 &lt;filesmatch &quot;(.*)php&quot;&gt; Order deny,allow Deny from all Allow from 127.0.0.1 &lt;/filesmatch&gt; &lt;/Directory&gt;&lt;/VirtualHost&gt; 限制user_agent123456789101112131415vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/discuz.com-access_log&quot; combined &lt;Directory /data/discuz.com&gt; //定义目录 RewriteEngine on RewriteCond %&#123;HTTP_USER_AGENT&#125; ^.*curl.* [NC,OR] RewriteCond %&#123;HTTP_USER_AGENT&#125; ^.*baidu.com.* [NC] RewriteRule .* - [F] &lt;/Directory&gt;&lt;/VirtualHost&gt;]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>LAMP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux学习笔记：lamp环境安装及配置(一)]]></title>
+    <url>%2F2018%2F07%2F23%2FlinuxNotes-lampPart1%2F</url>
+    <content type="text"><![CDATA[写在前面LAMP，是linux、apache、mysql、php的简写，也就是把apache、mysql、php安装在linux系统上，共同构成一个网络服务的运行环境。 lamp工作流： 系统防火墙配置 mysql、apache、php安装 lamp基础配置 lamp环境介绍mysq介绍了解mysql，需要从数据库说起。 数据库是一种用于存储数据集合的独立应用程序。每种数据库都会有一个或多个独特的 API，用来创建、访问、管理、搜索或复制数据库中保存的数据。 现在业界一般采用关系型数据库管理系统（RDBMS）来存储并管理海量数据。之所以称其为关系型数据库，是因为所有数据都存储在不同的表中，表之间的关系是建立在主键或其他键（被称为外键）的基础之上的。 关系型数据库管理系统（RDBMS）具有以下特点： 能够实现一种具有表、列与索引的数据库； 保证不同表的行之间的引用完整性； 能自动更新索引； 能解释 SQL 查询，组合多张表的信息； MySQL是一个开放源代码的关系数据库管理系统（DBMS），由于性能高、成本低、可靠性好，已经成为最流行的开源数据库，因此被广泛地应用在Internet上的中小型网站中。 MySQL 的特点： 使用C和C++编写，并使用了多种编译器进行测试，保证源代码的可移植性； 支持linux、macos、windows等系统，跨平台； 为多种編程语言提供了API，包括php、python、perl等等； 多语言支持，常见的编码如中文的GB 2312、BIG5等等； apache介绍Apache是世界使用排名第一的Web服务器软件。它可以运行在几乎所有广泛使用的计算机平台上，由于其跨平台和安全性被广泛使用，是最流行的Web服务器端软件之一。 phpPHP（全称：PHP：Hypertext Preprocessor，即“PHP：超文本预处理器”）是一种开源的通用计算机脚本语言，应用范围相当广泛，尤其适用于网络开发并可嵌入HTML中使用。 LAMP环境搭建 系统版本：centos7.4 64位 mysql：5.6 apache：2.4.33 php：7 前提准备：系统防火墙设置 第一步：关闭firewalld 注：因为系统版本centos7，所以关闭默认的防火墙，该用iptables 1234//关闭firewalld[root@stevey ~]# systemctl stop firewalld.service//禁止开机启动[root@stevey ~]# systemctl disable firewalld.service 第二步：安装配置iptables 123456789101112131415161718192021222324//安装iptables[root@stevey ~]# yum install -y iptables-services//编辑配置文件，重点是开放80、3306端口[root@stevey ~]# vim /etc/sysconfig/iptables # sample configuration for iptables service # you can edit this manually or use system-config-firewall # please do not ask us to add additional ports/services to this default configuration *filter :INPUT ACCEPT [0:0] :FORWARD ACCEPT [0:0] :OUTPUT ACCEPT [0:0] -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT -A INPUT -p icmp -j ACCEPT -A INPUT -i lo -j ACCEPT -A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT -A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT //开放80端口，针对httpd -A INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT //开放3306端口，针对mysql -A INPUT -j REJECT --reject-with icmp-host-prohibited -A FORWARD -j REJECT --reject-with icmp-host-prohibited COMMIT//重启防火墙使配置生效[root@stevey ~]# systemctl restart iptables.service//设置防火墙开机启动 [root@stevey ~]# systemctl enable iptables.service 第三步：关闭selinux 注：selinux是centos7一种安全策略，这里选择关闭。 123[root@stevey ~]# vim /etc/selinux/config//找到SELINUX=enforcing这一行，将enforcing 改为 disabled，保存退出并重启虚拟机 mysql安装mysql是数据库管理软件，目前最新的版本是5.7；因为mysql到源码包很大，编译起来比较费劲，所以这里下载的是已经编译好的二进位制安装包，版本是5.6。 在日常使用中，更多的是使用mysql的开源版本mariaDB，最新的版本是10.2，对应mysql的5.7版本。 MySQL安装包地址： 5.5_64位二进制包： 5.6_64位二进制包： 5.5源码包： 5.6源码包： 第一步：下载源码包12//这里使用wget下载工具，如果没有，则执行 yum install -y wget 安装wget http://mirrors.sohu.com/mysql/MySQL-5.6/mysql-5.6.36-linux-glibc2.5-x86_64.tar.gz 注：这个包有300M，我花了一个小时才下载下来，so喝杯咖啡，别着急。 第二步：源码包解压并移动到/usr/local/mysql1234567891011//解压tar -zvxf mysql-5.6.36-linux-glibc2.5-x86_64.tar.gz//判断是否已有/usr/local/mysql，如果有则改名，避免影响后面的操作[ -d /usr/local/mysql ] &amp;&amp; mv /usr/local/mysql /usr/local/mysql-old//移动文件到/usr/local/mysqlmv mysql-5.6.36-linux-glibc2.5-x86_64 /usr/local/mysql//cd到/usr/local/mysqlcd /usr/local/mysql 第三步：创建mysql用户及数据库文件夹12345678//创建mysql用户 -s指定shelluseradd -s /sbin/nologin mysql//创建数据库文件mkdir -p /data/mysql//更改用户名和所属组权限chown -R mysql:mysql /data/mysql 第四步：安装依赖项12345//安装依赖包perl-Module-Installyum install -y perl-Module-Install//安装依赖包libaioyum install -y libaio 第五步：安装数据库12//当前目录为/usr/local/mysql./scripts/mysql_install_db --user=mysql --datadir=/data/mysql 第六步：校验是否安装成功12[root@stevey mysql]# echo $?0 MariaDB：mysql的开源免费替代注：同一台机器，不要同时安装mysql和mariaDB！ MariaDB的是甲骨文收购MySQL的项目的一个替代方案，免费。其安装步骤如下： 第一步：备份数据库12//备份数据库cp -a /var/lib/mysql/ /var/lib/mysql.bak 第2步：添加MariaDB存储库 升级yum 源 编辑配置文件 12345678910vim /etc/yum.repos.d/MariaDB10.repo//加入以下内容：# MariaDB 10.2 CentOS repository list - created 2018-05-15 06:14 UTC# http://downloads.mariadb.org/mariadb/repositories/[mariadb]name = MariaDBbaseurl = http://yum.mariadb.org/10.2/centos7-amd64gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDBgpgcheck=1 注：该配置文件来自这里)，选择需要的版本即可，如下图所示： 第三步：删除MariaDB 5.51yum remove mariadb-server mariadb mariadb-libs 第四步：安装MariaDB 101yum -y install MariaDB-server MariaDB-client 第五步：mariadb开启关闭1234567891011121314151617//启动服务systemctl start mariadb//设置开机启动systemctl enable mariadb//停止MariaDBsystemctl stop mariadb //重启MariaDBsystemctl restart mariadb //升级MariaDBmysql_upgrade//查看mariadb版本号mysql -V 第六步：mariadb基本操作12345678910111213//修改root的密码update mysql.user set password=PASSWORD(&apos;abc&apos;) where user=&apos;root&apos;;// 更新权限flush privileges; //新建用户// 格式为： create user &apos;用户名&apos;@&apos;主机&apos; identified by &apos;密码&apos; create user &apos;read_visa&apos;@&apos;%&apos; identified by &apos;123456&apos;； //用户分配权限// grant 操作类型 on 数据库.表 to 用户@&apos;主机&apos; grant all on visa.* to &apos;read_visa&apos;@&apos;%&apos;； // all 表示所有权限grant select on visa.* to &apos;read_visa&apos;@&apos;%&apos;; apache 安装工作流： 安装依赖包apr 安装依赖包apr-util 安装apache 第一步：下载安装包12345wget http://mirrors.cnnic.cn/apache/httpd/httpd-2.4.33.tar.gz wget http://mirrors.cnnic.cn/apache/apr/apr-1.6.3.tar.gzwget http://mirrors.cnnic.cn/apache/apr/apr-util-1.6.1.tar.bz2 第二步：安装依赖包apr1234567891011121314//解压apr源码包tar -zvxf apr-1.6.3.tar.gz//进入tar安装包cd apr-1.6.3//配置编辑参数./configure --prefix=/usr/local/apr//编译安装make &amp;&amp; make install//校验是否安装成功echo $? //如果输出0，说明安装成功；否则，执行不成功 第三步：安装依赖包apr-util1234567891011121314151617181920//安装bzip2压缩工具yum install -y bzip2//安装expat-devel，这是apr-util的依赖包yum install -y expat-devel//解压源码包tar -jvxf apr-util-1.6.1.tar.bz2//进入安装包目录cd apr-util-1.6.1//配置编辑参数./configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr//编译安装make &amp;&amp; make install//校验是否安装成功echo $? //如果输出0，说明安装成功；否则，执行不成功 第四步：安装apache12345678910111213141516171819//解压源码包tar -zvxf httpd-2.4.33.tar.gz//进入安装文件夹cd httpd-2.4.33//安装依赖项pcre-develyum install -y pcre-devel//编译参数[root@stevey httpd-2.4.33]# ./configure \&gt; --prefix=/usr/local/apache2.4 \&gt; --with-apr=/usr/local/apr \&gt; --with-apr-util=/usr/local/apr-util \&gt; --enable-so \&gt; --enable-mods-shared=most//编译安装make &amp;&amp; make install 第五步：校验是否安装成功12[root@stevey mysql]# echo $?0 php安装工作流： 下载源码包 安装依赖包 编译安装php源码包 第一步：下载源码包1234567[root@steve src]# wget http://cn2.php.net/distributions/php-7.2.6.tar.gz//解压源码包[root@steve src]# tar -zxvf php-7.2.6.tar.gz//进入安装目录[root@steve src]# cd php-7.2.6 第二步：安装依赖包1[root@steve src]# yum install -y libxml2 libxml2-devel openssl openssl-devel bzip2 bzip2-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel gmp gmp-devel libmcrypt libmcrypt-devel readline readline-devel libxslt libxslt-devel 第三步：编译参数12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667./configure \--prefix=/usr/local/php \--with-apxs2=/usr/local/apache2.4/bin/apxs \--with-config-file-path=/usr/local/php/etc \--enable-fpm \--with-fpm-user=nginx \--with-fpm-group=nginx \--enable-inline-optimization \--disable-debug \--disable-rpath \--enable-shared \--enable-soap \--with-libxml-dir \--with-xmlrpc \--with-openssl \--with-mhash \--with-pcre-regex \--with-sqlite3 \--with-zlib \--enable-bcmath \--with-iconv \--with-bz2 \--enable-calendar \--with-curl \--with-cdb \--enable-dom \--enable-exif \--enable-fileinfo \--enable-filter \--with-pcre-dir \--enable-ftp \--with-gd \--with-openssl-dir \--with-jpeg-dir \--with-png-dir \--with-zlib-dir \--with-freetype-dir \--enable-gd-jis-conv \--with-gettext \--with-gmp \--with-mhash \--enable-json \--enable-mbstring \--enable-mbregex \--enable-mbregex-backtrack \--with-libmbfl \--with-onig \--enable-pdo \--with-mysqli=mysqlnd \--with-pdo-mysql=mysqlnd \--with-zlib-dir \--with-pdo-sqlite \--with-readline \--enable-session \--enable-shmop \--enable-simplexml \--enable-sockets \--enable-sysvmsg \--enable-sysvsem \--enable-sysvshm \--enable-wddx \--with-libxml-dir \--with-xsl \--enable-zip \--enable-mysqlnd-compression-support \--with-pear \--enable-opcache 第四步：编译安装1make &amp;&amp; make install TroubleShooting: 虚拟内存不足 解决方法： 手动增加swap 建立swapfile 123456[root@stevey php-7.2.6]# mkdir -p /usr/img/[root@stevey php-7.2.6]# rm -rf /usr/img/swap[root@stevey php-7.2.6]# dd if=/dev/zero of=/usr/img/swap bs=1024 count=20480002048000+0 records in2048000+0 records out2097152000 bytes (2.1 GB) copied, 7.43002 s, 282 MB/s 格式化swap 123[root@stevey php-7.2.6]# mkswap /usr/img/swapSetting up swapspace version 1, size = 2047996 KiBno label, UUID=db4f95a9-d67c-4d8c-b32f-a5f07ab4f051 挂载swap 12[root@stevey php-7.2.6]# swapon /usr/img/swapswapon: /usr/img/swap: insecure permissions 0644, 0600 suggested. 修改文件夹权限 1chmod 0600 /usr/img/swap 增加swap空间后，再次执行编译安装 1make &amp;&amp; make install 第五步：校验安装是否成功12[root@stevey php-7.2.6]# echo $?0 环境变量问题至此，mysql、apache、php安装部分结束。不过，这里还有一个重要的问题没有解决。因为我们在采用源码包安装时自定义了安装目录，而不是linux系统的默认目录，所以如果这时查找命令是找不到的，就像这样。 12[root@stevey init.d]# mysql -v-bash: mysql: command not found 解决方案： 方法一：修改环境变量系统环境变量的配置文件在/etc/profile（全局修改）或者~/.bash_profile（只影响当前用户），直接修改配置文件。 PATH声明用法： 12PATH=$PAHT:&lt;PATH 1&gt;:&lt;PATH 2&gt;:&lt;PATH 3&gt;:&lt; PATH n &gt; //变量之间用逗号隔开export PATH 示例： 123456vim ～/.bash_profile //加入以下内容PATH=$PATH:$HOME/bin:/usr/local/mysql/bin:/usr/local/apache2.4/bin:/usr/local/php/bin//保存退出执行以下命令生效source ～/.bash_profile 验证一下 1234567[root@stevey php]# php -vPHP 7.2.6 (cli) (built: May 30 2018 14:37:03) ( NTS )Copyright (c) 1997-2018 The PHP GroupZend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies[root@stevey php]# httpd -vServer version: Apache/2.4.33 (Unix)Server built: May 30 2018 13:54:01 第二种方法：软链接如果我们不想修改环境变量，也可以采取软链接的办法。 比如： 1ln -s /usr/local/mysql/bin/ /usr/bin 验证一下，也是可以的。 12[root@stevey ~]# mysql -Vmysql Ver 14.14 Distrib 5.6.36, for linux-glibc2.5 (x86_64) using EditLine wrapper lamp环境启动mysql启动服务第一步：配置mysql12345678910111213141516171819202122//进入mysql 目录[root@stevey src]# cd /usr/local/mysql//复制配置文件cp support-files/my-default.cnf /etc/my.cnf//编辑配置文件vim /etc/my.cnf//修改以下配置log_bin = root //15行basedir = /usr/local/mysqldatadir = /data/mysqlport = 3306server_id = 128socket = /tmp/mysql.sock//去掉以下配置前面的的型号innodb_buffer_pool_size = 128M join_buffer_size = 128Msort_buffer_size = 2Mread_rnd_buffer_size = 2M 第二步：配置mysql启动脚本123456789101112//复制启动脚本到/etc/init.d/mysqldcp support-files/mysql.server /etc/init.d/mysqld//修改文件权限chmod 755 /etc/init.d/mysqld//编辑启动脚本vim /etc/init.d/mysqld//更改data保存目录basedir=/usr/local/mysqldatadir=/data/mysql 第三步：设置开机启动1234567891011//进入系统服务目录 /etc/init.d/cd /etc/init.d///将mysqld 服务加入系统服务列表chkconfig --add mysqld //设置开机启动chkconfig mysqld on//启动mysqldservice mysqld start 第四步：校验是否启动12345678910//方法一：查看进程，结果应大于2行[root@stevey init.d]# ps -aux |grep mysqld root 84371 0.0 0.1 11816 1620 pts/1 S 15:06 0:00 /bin/sh /usr/local/mysql/bin/mysqld_safe --datadir=/data/mysql --pid-file=/data/mysql/stevey.pidmysql 84607 1.2 44.9 1300832 449812 pts/1 Sl 15:06 0:01 /usr/local/mysql/bin/mysqld --basedir=/usr/local/mysql --datadir=/data/mysql --plugin-dir=/usr/local/mysql/lib/plugin --user=mysql --log-error=/data/mysql/stevey.err --pid-file=/data/mysql/stevey.pid --socket=/tmp/mysql.sock --port=3306root 84633 0.0 0.0 112704 976 pts/1 S+ 15:07 0:00 grep --color=auto mysqld方法二：查看端口监听情况[root@stevey init.d]# netstat -lnp |grep mysqldtcp6 0 0 :::3306 :::* LISTEN 84607/mysqldunix 2 [ ACC ] STREAM LISTENING 169619 84607/mysqld /tmp/mysql.sock lamp服务配置配置httpd支持PHP实现步骤：httpd 的主配置文件为 /usr/local/apache2.4/conf/httpd.conf,编辑该文件并进行修改。 1vim /usr/local/apache2.4/conf/httpd.conf 修改以下几处： 去掉servername前面的#号注释 denied 改为 granted，允许所有请求；否则访问会报错 新增两行 AddType application/x-httpd-php .php 、AddType application/x-httpd-php-source .phps 在index，html 后面增加 index.php 保存退出之后，重新启动httpd服务 1234567891011121314//检查配置文件是否正确[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -t //命令要写绝对路径Syntax OK //说明配置正确//启动httpd[root@stevey ~]# /usr/local/apache2.4/bin/apachectl start//查看httpd是否启动[root@stevey ~]# netstat -lnp | grep httpdtcp6 0 0 :::80 :::* LISTEN 14882/httpd //说明正常启动//也可以通过curl命令进行检测[root@stevey ~]# curl localhost&lt;html&gt;&lt;body&gt;&lt;h1&gt;It works!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt; 通过浏览器，也可以检测服务是否启动 检查http是否支持php，出现404错误123456//新建一个测试文件，并添加内容vim /usr/local/apache2.4/htdocs/test.php&lt;?php echo &apos;php格式能够被正确解析&apos;?&gt; 解决方案： 网上查了一下，说是因为php7安装的时候忘记了配置--with-apxs2=/usr/local/apache2.4/bin/apxs ，只能重新编译安装 123//编译参数[root@stevey php-7.2.6]# ./configure --prefix=/usr/local/php --with-apxs2=/usr/local/apache2.4/bin/apxs --with-config-file-path=/etc --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx --enable-inline-optimization --disable-debug --disable-rpath --enable-shared --enable-soap --with-libxml-dir --with-xmlrpc --with-openssl --with-mhash --with-pcre-regex --with-sqlite3 --with-zlib --enable-bcmath --with-iconv --with-bz2 --enable-calendar --with-curl --with-cdb --enable-dom --enable-exif --enable-fileinfo --enable-filter --with-pcre-dir --enable-ftp --with-gd --with-openssl-dir --with-jpeg-dir --with-png-dir --with-zlib-dir --with-freetype-dir --enable-gd-jis-conv --with-gettext --with-gmp --with-mhash --enable-json --enable-mbstring --enable-mbregex --enable-mbregex-backtrack --with-libmbfl --with-onig --enable-pdo --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-zlib-dir --with-pdo-sqlite --with-pdo-sqlite --enable-session --enable-shmop --enable-simplexml --enable-sockets --enable-sysvmsg --enable-sysvsem --enable-sysvshm --enable-wddx --with-libxml-dir --with-xsl --enable-zip --enable-mysqlnd-compression-support --with-pear --enable-opcache 重新编译安装，又遇到错误提示： 123456make: *** [sapi/cli/php] Error 1//重新编译make clean make &amp;&amp; make install Apache默认虚拟主机第一步：编辑http主配置文件，并删除vhost这一行的注释 第二步：编辑虚拟机配置文件 http/-vhosts.conf1[root@stevey ~]# vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf 目录 注释 ServerAdmin 管理员邮箱 DocumentRoot 虚拟主机站点的根目录，网站的程序就放在该目录下 ServerName 网站域名，只能写一个 ServerAlias 网站别名，可以写很多个，中间用空格分开 ErrorLog 错误日志 CustomLog 站点访问日志 1234567891011121314151617// 编辑虚拟机配置文件[root@stevey ~]# vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf//修改一下内容 &lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve.com DocumentRoot &quot;/data/wwwroot/steve.com&quot; ServerName steve.com ServerAlias www.steve.com ErrorLog &quot;logs/steve.com-error_log&quot; CustomLog &quot;logs/steve.com-access_log&quot; common &lt;/VirtualHost&gt; &lt;VirtualHost *:&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com &lt;/VirtualHost&gt; 通过上述设置，steve.com 这个域名就成为了默认虚拟主机，如果有第三个域名同样指向该主机，默认会访问steve.com 1234//文件准备 [root@stevey ~]# mkdir -p /data/wwwroot/steve.com /data/wwwroot/www.abc.com[root@stevey ~]# echo &apos;steve.com&apos; &gt; /data/wwwroot/steve.com/index.html[root@stevey ~]# echo &apos;abc.com&apos; &gt; /data/wwwroot/www.abc.com/index.com 第三步：重新加载apache服务12345//语法检查[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -t//重新加载httpd服务[root@stevey ~]# /usr/local/apache2.4/bin/apachectl graceful TroubleShooting:403拒绝访问 解决方案： 查了一下，发现是把安装目录写错了，修改后即可正常访问 1DocumentRoot &quot;/data/wwwroot/steve.com&quot; 校验配置成果测试虚拟主机 1234567[root@stevey www.abc.com]# curl -x127.0.0.1:80 steve.comsteve.com[root@stevey www.abc.com]# curl -x127.0.0.1:80 www.abc.comabc.com//注：将第三个域名指向该服务器时，就会访问默认主机域名[root@stevey www.abc.com]# curl -x127.0.0.1:80 www.123.comsteve.com 测试php是否能正确解析 文件准备： 12345[root@stevey steve.com]# vim test.php&lt;?php echo &apos;php格式能够被正确解析&apos;?&gt; curl命令测试 12[root@stevey steve.com]# curl -x127.0.0.1:80 steve.com/test.phpphp格式能够被正确解析 浏览器测试 Apache用户认证有时候，我们不希望自己的网站所有人都能看到或者访问，就可以使用密码认证，也就是只有特定的用户才能够访问，apache提供了这样一种用户认证的功能。 全站用户用户认证 第一步：编辑虚拟主机配置文件 1234567891011121314vim /usr/local/apache2/conf/extra/httpd-vhosts.conf//此处修改的是www.abc.com的配置文件&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com &lt;Directory /data/wwwroot/www.abc.com&gt; //指定认证目录 AllowOverride AuthConfig //认证开关 AuthName &quot;steveY&quot; //认证用户提示 AuthType Basic //认证类型 AuthUserFile /data/.htpasswd //认证文件路径 require valid-user //指定所有用户都必须认证 &lt;/Directory&gt;&lt;/VirtualHost&gt; 第二步：创建访问用户密码文件 123456//htppasswd 命令为密码创建工具，-c表示create创建，-m指定加密方式为MD5；/data/.htpasswd 为密码文件，steveY 为用户名/usr/local/apache2.4/bin/htpasswd -cm /data/.htpasswd steveY New password: *************Re-type new password: *************Adding password for user steveY 第三步：重启Apache 12345678//验证格式是否有错误\/usr/local/apache2.4/bin/apachectl -t//重启apache服务/usr/local/apache2.4/bin/apachectl restart//或者重新加载配置文件/usr/local/apache2.4/bin/apachectl graceful 第四步：修改客户端host 这里的客户端指的是要用那个电脑去访问www.abc.com,那笔者来说，lamp环境搭建在本地mac电脑上的虚拟机，之后在mac电脑访问虚拟机，此时mac就是客户端。 mac的host配置文件是/etc/hosts ，我们就来修改这个文件 123steve:~ steveyuan$ sudo vim /etc/hosts//增加一行172.16.155.128 www.abc.com 目录认证跟上面的全站认证类似，只需要修改一个地方，即将认证目录改为需要进行密码认证加密的文件夹目录，修改保存后重新加载配置文件即可。 文件认证与目录认证类似，只不过这里要将Directory 改为 FilesMatch，其他步骤不变。修改保存后，重新加载配置文件。 1234567&lt;FilesMatch admin.php&gt; //指定认证文件 AllowOverride AuthConfig //认证开关 AuthName &quot;steveY&quot; //认证用户提示 AuthType Basic //认证类型 AuthUserFile /data/.htpasswd //认证文件路径 require valid-user //指定所有用户都必须认证&lt;/FilesMatch&gt; 域名跳转这样做的好处： 增加SEO权重； 如果老的域名被放弃了，可以很方便地重定向到新的域名； 实现步骤如下： 第一步：修改虚拟主机配置1234567891011121314vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf//仍然对www.abc.com进行修改&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com &lt;IfModule mod_rewrite.c&gt; //需要mod_rewrite模块支持 RewriteEngine on //打开rewrite功能 RewriteCond %&#123;HTTP_HOST&#125; !^www.abc.com$ //定义rewrite的条件，主机名（域名）不是www.123.com满足条件 RewriteRule ^/(.*)$ http://www.abc.com/$1 [R=301,L] //定义rewrite规则，当满足上面的条件时，这条规则才会执行 &lt;/IfModule&gt;&lt;/VirtualHost&gt; 第二步：修改apache主配置文件，加载rewrite模块12345678//检测是否已加载rewrite模块[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -M | grep -i rewrite //没有输出结果，说明未加载//编辑主配置文件vim /usr/local/apache2.4/conf/httpd.conf //找到rewrite，把前面注释#去掉LoadModule rewrite_module modules/mod_rewrite.so 第三步：重新加载模块12345678910//检查语法错误[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -tSyntax OK//重新加载配置文件[root@stevey ~]# /usr/local/apache2.4/bin/apachectl graceful//查看是否加载模块[root@gary-tao local]# /usr/local/apache2.4/bin/apachectl -M|grep -i rewrite rewrite_module (shared) 出现以下结果说明模块已成功加载 第四步：测试结果123456[root@stevey ~]# curl -x127.0.0.1:80 -I abc.comHTTP/1.1 301 Moved PermanentlyDate: Wed, 30 May 2018 14:46:03 GMTServer: Apache/2.4.33 (Unix) PHP/7.2.6Location: http://www.abc.com/ //表示永久跳转至www.abc.comContent-Type: text/html; charset=iso-8859-1 Apache访问日志网站日志文件保存在/usr/local/apache2.4/logs/，通过访问日志，能给了解系统的运行情况。 查看系统访问日志12[root@stevey ~]# cat /usr/local/apache2.4/logs/abc.com-access_log127.0.0.1 - - [30/May/2018:22:56:15 +0800] &quot;HEAD HTTP://abc.com/ HTTP/1.1&quot; 301 - &quot;-&quot; &quot;curl/7.29.0&quot; 修改日志配置文件查看配置文件 1cat /usr/local/apache2.4/conf/httpd.conf 这里要关注的是记录格式说明 标示 含义 %h 访问网站的IP; %l 访问远程登录名,这个字段基本上为”-“; %u 用户名,当使用用户认证时,这个字段为认证的用户名; %t 时间; %r 请求的动作(比如用ctrl-I是就为HEADE); %s 请求的状态,写成%&gt;s为最后的状态码; %b 传输数据大小; %{Referer}i referer信息(访问来源网页信息,比如通过百度找到阿铭论坛,那么referer就是baidu); %{User-Agent}i 浏览器标识; 注：在示例文件中给出了两种日志格式：common和combined，后者比前者多了访问来源%{Referer}i和浏览器标示信息%{User-Agent}i。 配置虚拟主机配置文本日志格式 1234567891011121314151617181920vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com &lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %&#123;HTTP_HOST&#125; !^www.abc.com$ RewriteRule ^/(.*)$ http://www.abc.com/$1 [R=301,L] &lt;/IfModule&gt; //增加一行 CustomLog &quot;logs/abc.com-access_log&quot; combined&lt;/VirtualHost&gt;//退出保持后测试语法错误/usr/local/apache2.4/bin/apachectl -t//重新加载/usr/local/apache2.4/bin/apachectl graceful 技巧一：访问日志不记录指定类型的静态文件1234567891011121314151617181920212223vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf//仍然对www.abc.com进行修改&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com &lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %&#123;HTTP_HOST&#125; !^www.abc.com$ RewriteRule ^/(.*)$ http://www.abc.com/$1 [R=301,L] &lt;/IfModule&gt; //增加以下内容 SetEnvIf Request_URI &quot;.*\.gif$&quot; img-request SetEnvIf Request_URI &quot;.*\.jpg$&quot; img-request SetEnvIf Request_URI &quot;.*\.png$&quot; img-request SetEnvIf Request_URI &quot;.*\.bmp$&quot; img-request SetEnvIf Request_URI &quot;.*\.swf$&quot; img-request SetEnvIf Request_URI &quot;.*\.js$&quot; img-request SetEnvIf Request_URI &quot;.*\.css$&quot; img-request CustomLog &quot;logs/111.com-access_log&quot; common env=!img-request&lt;/VirtualHost&gt; 注：此处更改主要包括两个部分： SetEnvIf 语句，先建立img-request，把gif、jpg、png、bmp、js、css等文件全部归到img-request； 第二部分定义日志名，这里使用！取反，将这些img-request都排除在外，相当于不记录这些信息。 配置修改完成后检查语法错误，重新加载即生效，不再赘述。 技巧二：访问日志切割1234vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf在不记录静态文件的配置语句后面再加上一条CustomLog &quot;|/usr/local/apache2.4/bin/rotatelogs -l logs/abc.com-access_%Y%m%d.log 86400&quot; combined env=!img-request 注：这里使用了管道符，将文件交由rotatelogs命令按照时间单位进行切割，86400单位是秒，相当于一天保存一个文档； 静态元素过期时间第一步：编辑配置文件1234567891011121314vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf//增加配置&lt;IfModule mod_expires.c&gt; ExpiresActive on //打开该功能的开关 ExpiresByType image/gif &quot;access plus 1 days&quot; ExpiresByType image/jpeg &quot;access plus 24 hours&quot; ExpiresByType image/png &quot;access plus 24 hours&quot; ExpiresByType text/css &quot;now plus 2 hour&quot; ExpiresByType application/x-javascript &quot;now plus 2 hours&quot; ExpiresByType application/javascript &quot;now plus 2 hours&quot; ExpiresByType application/x-shockwave-flash &quot;now plus 2 hours&quot; ExpiresDefault &quot;now plus 0 min&quot;&lt;/IfModule&gt; 第二步：修改apache主配置文件，加载expires模块1234vim /usr/local/apache2.4/conf/httpd.conf//取消注释LoadModule expires_module modules/mod_expires.so 第三步：重新加载模块12345678910//检查语法错误[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -tSyntax OK//重新加载配置文件[root@stevey ~]# /usr/local/apache2.4/bin/apachectl graceful//查看是否加载模块[root@gary-tao local]# /usr/local/apache2.4/bin/apachectl -M|grep -i rewrite rewrite_module (shared) 配置防盗链盗链，就是未经授权使用了别人的服务器资源、损害别人利益的行为。比如，A未经同意使用了B服务器上的图片、视频等资源，提供给了C；对于资源所有者B而言，这种行为白白占用了我的带宽，又没有从中获取什么好处，就定义为盗链行为。 防盗链，这是针对盗链行为的一种策略，就是通过技术手段防止别人揩油盗链。简单说，就是通过设置黑名单或者白名单，有选择性地对允许或者拒绝。 HTTP 协议支持的 Referer 机制，因此可以通过Header 中的 referer 字段识别访问请求来源，从而采取相应的措施。 配置方法： 1234567891011121314151617vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/wwwroot/www.abc.com&gt; //定义防盗链目录 SetEnvNoCase Referer &quot;http://www.abc.com&quot; local_ref SetEnvNoCase Referer &quot;http://abc.com&quot; local_ref SetEnvNoCase Referer &quot;^$&quot; local_ref &lt;filesmatch &quot;\.(txt|doc|mp3|zip|rar|jpg|gif|pdf)&quot;&gt; Order allow,deny Allow from env=local_ref &lt;/filesmatch&gt; &lt;/Directory&gt;&lt;/VirtualHost&gt; 注：这是一个白名单策略，分为三个部分： 第一部分：referer可以是http://www.abc.com 、http://abc.com，也可以为^$，意思是为空； 第二部分：filesMatch，这里采用了通配符，意思是说该策略对后缀为txt、doc、mp3、zip、rar、jpg、gif、pdf的文件生效； 第三部分：执行什么操作，Order Allow,Deny，说明默认操作是允许，也就是这是符合上述条件的请求允许访问； 修改完成后，检查语法错误，重新加载即生效。 访问控制前面已经学习了用户认证限制访问，除此之外还可以对来源ip、执行权限或者user_agent进行限制。 限制ip限制访问者ip，常用的使用的使用场景，比如企业网站后台只允许公司内网或者指定的外网ip段可以访问，防止黑客访问企业网站后台获取数据。 配置方法： 12345678910111213vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/wwwroot/www.abc.com&gt; //定义防盗链目录 Order deny,allow //默认拒绝 Deny from all //先拒绝所有访问请求 Allow from 127.0.0.1 //再对指定ip开放 &lt;/Directory&gt;&lt;/VirtualHost&gt; 保存退出后，检查语法错误，httpd重新加载生效。 限制php解析这个在之前学习前端课程的时候学过一点。如果不做限制，我们用html、js或者php写的脚本会被解析执行。为了避免这种情况的出现，我们可以在上传目录禁止php代码解析。 配置方法： 1234567891011vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/wwwroot/www.abc.com/upload&gt; //定义目录 php_admin_flag engine off //禁止php解析 &lt;/Directory&gt;&lt;/VirtualHost&gt; 限制user_agentUser Agent中文名为用户代理，简称 UA，它是一个特殊字符串头，使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本、浏览器渲染引擎、浏览器语言、浏览器插件等。 利用google chrome浏览器的DevTools，可以查看user0agent等信息。在网络传输的过程中，这些信息都是明文传输的，服务器可以通过这些内容来判断是真实用户访问，还是网络爬虫在访问。 限制user_agent，这个操作的应用场景就是为了防止网络爬虫。所谓“爬虫”，就是一种程序，比如我们可以用python写一个爬虫，把知乎上的好友名单都抓取出来。这当然是一种很便捷的获取信息的手段。但是，站在知乎网站管理员的校对，频繁访问加大了服务器的压力、站用了有限的带宽，当然是不鼓励的，所以就需要限制。 配置方法： 1234567891011121314vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/wwwroot/www.abc.com/upload&gt; //定义目录 RewriteEngine on RewriteCond %&#123;HTTP_USER_AGENT&#125; .*curl.* [NC,OR] RewriteCond %&#123;HTTP_USER_AGENT&#125; .*baidu.com.* [NC] RewriteRule .* - [F] &lt;/Directory&gt;&lt;/VirtualHost&gt; 保存退出后，检查语法错误后，重新加载服务生效。 注：这里用到的是hettp的rewrite模块，%{HTTP_USER_AGENT}是user_agent的内置变量，方括号中的OR表示或者，NC表示不区分大小写。在示例中，当匹配规则时，就会触发下面的规则，F表示forbidden禁止。 禁止解析php从系统安全的角度，我们不希望用户上传的脚本能够被解析执行，就需要在配置中进行设置。 1234567891011121314151617vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/discuz.com/data&gt; //定义目录 php_admin_flag engine off //禁止php解析 &lt;filesmatch &quot;(.*)php&quot;&gt; Order deny,allow Deny from all Allow from 127.0.0.1 &lt;/filesmatch&gt; &lt;/Directory&gt;&lt;/VirtualHost&gt; 限制user_agent限制user-agent的主要目的是防止网络爬虫，从而节约带宽资源，优化网站体验。 全站限制user-agent123456789101112131415vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/discuz.com-access_log&quot; combined &lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %&#123;HTTP_USER_AGENT&#125; ^.*curl.* [NC,OR] RewriteCond %&#123;HTTP_USER_AGENT&#125; ^.*baidu.com.* [NC] RewriteRule .* - [F] &lt;/IfModule&gt;&lt;/VirtualHost&gt; 限制某个目录访问1234567891011121314vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/discuz.com-access_log&quot; combined &lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %&#123;REQUEST_URI&#125; ^.*/tmp/.* [NC] RewriteRule .* - [F] &lt;/IfModule&gt;&lt;/VirtualHost&gt; PHP配置php配置文件格式：php的配置文件在/usr/local/php/etc/php.ini 配置文件语法： 1directive = value 指令名(directive)是大小写敏感的！所以”foo=bar”不同于”FOO=bar”。 值(value)可以是： 用引号界定的字符串(如：”foo”)； 数字(整数或浮点数，如：0, 1, 34, -1, 33.55)； PHP常量(如：E_ALL, M_PI)； INI常量(On, Off, none)； 表达式(如：E_ALL &amp; ~E_NOTICE)； 注释符号为；，以；开头的行会被自动忽略。 查询php相关信息使用如下命令：1/usr/local/php/bin/php -i | head TroubleShooting:找不到配置文件目录 如下图所示，php的配置文件目录找不到了，显示是none。 解决思路：重新编译安装 12345678//重新编译安装make clean//编译参数如下：./configure --prefix=/usr/local/php --with-apxs2=/usr/local/apache2.4/bin/apxs --with-config-file-path=/usr/local/php/etc/ --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx --enable-inline-optimization --disable-debug --disable-rpath --enable-shared --enable-soap --with-libxml-dir --with-xmlrpc --with-openssl --with-mhash --with-pcre-regex --with-sqlite3 --with-zlib --enable-bcmath --with-iconv --with-bz2 --enable-calendar --with-curl --with-cdb --enable-dom --enable-exif --enable-fileinfo --enable-filter --with-pcre-dir --enable-ftp --with-gd --with-openssl-dir --with-jpeg-dir --with-png-dir --with-zlib-dir --with-freetype-dir --enable-gd-jis-conv --with-gettext --with-gmp --with-mhash --enable-json --enable-mbstring --enable-mbregex --enable-mbregex-backtrack --with-libmbfl --with-onig --enable-pdo --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-zlib-dir --with-pdo-sqlite --with-readline --enable-session --enable-shmop --enable-simplexml --enable-sockets --enable-sysvmsg --enable-sysvsem --enable-sysvshm --enable-wddx --with-libxml-dir --with-xsl --enable-zip --enable-mysqlnd-compression-support --with-pear --enable-opcache//编译安装make &amp;&amp; make install 如果过程中报错，很有可能是虚拟内存不足; 1234dd if=/dev/zero of=/swapfile bs=1024 count=262144mkswap /swapfilechmod 600 /swapfileswapon /swapfile 增加虚拟内存之后，再来一遍 12make cleanmake &amp;&amp; make install 重装完成，在检查php虚拟文件，一切正常 disable_functions设置处于安全考虑，禁用一部分function 1disable_functions = chdir,chroot,dir,getcwd,opendir,readdir,scandir,fopen,unlink,delete,copy,mkdir, rmdir,rename,file,file_get_contents,fputs,fwrite,chgrp,chmod,chown 配置error_log一般php在没有连接到数据库或者其他情况下会有提示错误，包含php脚本路径或者查询的SQL语句等，这类信息暴露在网络上是不安全的，所以一般建议禁止错误提示，具体配置如下： 12345678//禁止错误提示display_errors = Off//定义错误日志log_errors = On//定义错误日志路径error_log = /var/local/php/logs/php_errors.logerror_reporting = E_ALL &amp; ~E_NOTICE 设置错误日志保存路径后，还需要修改权限 123mkdir -p /var/local/php/logschmod -R 777 /var/local/php/logs 错误日志的级别 标示 说明 E_ALL 所有错误和警告（除E_STRICT外） E_ERROR 致命的错误。脚本的执行被暂停。 E_RECOVERABLE_ERROR 大多数的致命错误。 E_WARNING 非致命的运行时错误，只是警告，脚本的执行不会停止。 E_PARSE 编译时解析错误，解析错误应该只由分析器生成。 E_NOTICE 脚本运行时产生的提醒（往往是我们写的脚本里面的一些bug，比如某个变量没有定义），这个错误不会导致任务中断。 E_STRICT 脚本运行时产生的提醒信息，会包含一些php抛出的让我们要如何修改的建议信息。 E_CORE_ERROR 在php启动后发生的致命性错误 E_CORE_WARNING 在php启动后发生的非致命性错误，也就是警告信息 E_COMPILE_ERROR php编译时产生的致命性错误 E_COMPILE_WARNING php编译时产生的警告信息 E_USER_ERROR 用户生成的错误 E_USER_WARNING 用户生成的警告 E_USER_NOTICE 用户生成的提醒 同时，还支持逻辑符号 标示 说明 &amp; 并且 ~ 示非 或者 error_reporting = E_ALL &amp; ~E_NOTICE 表示表示除了警告之外的所有错误日志； 配置open_basedir这是一种网络安全策略：主要针对的是同一台服务器上同时有多个网站，防止一个网站被攻击之后殃及其他的网站。 open_basedir 将php所能打开的文件限制在指定的目录树中，包括文件本身。当程序要使用例如fopen()或file_get_contents()打开一个文件时，这个文件的位置将会被检查。当文件在指定的目录树之外，程序将拒绝打开。 配置方法： 方法一：在php.ini进行限定1234vim /usr/local/php/etc/php.ini//修改以下内容open_basedir = /tmp:/data/discuz.com 这种方法的局限性在于，如果一个服务器上拥有多台虚拟主机，没办法对多个虚拟主机分别进行设置。 方法二：在httpd配置文件进行设置 123456789101112vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve-discuz-test.com DocumentRoot &quot;/data/discuz.com&quot; //填写刚才新建的discuz文件目录 ServerName steve-discuz-test.com //域名，必须填写 ServerAlias www.steve-discuz.com //网站别名 ErrorLog &quot;logs/steve.com-error_log&quot; CustomLog &quot;logs/steve.com-access_log&quot; common //配置open——basedir php_admin_value open_basedir &quot;/data/discuz.com/:/tmp/&quot; //仅对本虚拟主机生效&lt;/VirtualHost&gt; 拓展学习：rewrite 模块Rewirte主要的功能就是实现URL的跳转，它的正则表达式是基于Perl语言。可基于服务器级的(httpd.conf)和目录级的 (.htaccess)两种方式。如果要想用到rewrite模块，必须先安装或加载rewrite模块。 方法有两种： 一是编译apache的时候就直接 安装rewrite模块； 二是编译apache时以DSO模式安装apache,然后再利用源码和apxs来安装rewrite模块。 rewrite 包括两个部分: 一是条件： 12345//语法RewriteCond TestString CondPattern//示例RewriteCond %&#123;HTTP_HOST&#125; ^www.example.net [NC] 默认当存在多个条件时，彼此之间是and的关系，rewrite会检测所有条件，只有前一条符合，才会继续检测后一条；如果不符合就会退出； 为此，还有两个重要的参数： nocase|NC 忽略大小写； ornext|OR 表示或者，而不是隐含的AND； 二是指令： 12345//语法RewriteRule Pattern Substitution//示例RewriteRule ^(.*)$ http://www.9med.net/$1 [R=permanent,L] 常用参数 含义 R [=code] 强制重定向，默认是302 F 强制URL为被禁止的 forbidden P 强制代理；要使用这个功能，代理模块必须编译在Apache服务器中。 如果你不能确定，可以检查“httpd -l”的输出中是否有mod_proxy.c。 如果有，则mod_rewrite可以使用这个功能； 如果没有，则必须启用mod_proxy并重新编译“httpd”程序。 php动态模块当php安装完成后，如果发现没有某个模块，解决思路有两种：一是重新编译安装；而是安装动态模块。 php常用的动态模块源码包，都在安装目录ext目录 查询已安装模块执行命令： 1php -m 查询模块安装目录： 123[root@stevey no-debug-zts-20170718]# php -i | grep extension_dirextension_dir =&gt; /usr/local/php/lib/php/extensions/no-debug-zts-20170718 =&gt; /usr/local/php/lib/php/extensions/no-debug-zts-20170718 源码包安装 安装redis模块：网络下载源码包安装。 1234567891011121314151617181920//下载rediswget https://codeload.github.com/phpredis/phpredis/zip/develop//文件包重命名mv develop phpredis-develop.zip//进入安装包cd phpredis-develop//安装依赖项yum install -y autoconf//生成configure文件usr/local/php/bin/phpize//编译参数./configure --with-php-config=/usr/local/php/bin/php-config//编译安装make &amp;&amp; make install 出现如下提示，说明安装成功 redis被安装在/usr/local/php/lib/php/extensions/no-debug-zts-20170718/，查看结果： 安装成功后，还需要更改配置文件 12345678910111213[root@stevey src]# vim /usr/local/php/etc/php.ini//搜索extension，在末尾增加一行后保存退出extension = redis.so//重启服务[root@stevey src]# apachectl -tSyntax OK[root@stevey src]# apachectl graceful//检查redis是否加载[root@stevey src]# php -m | grep redisredis 安装soap：本地源码包 本地源码包php源码包目录下的ext目录下， 12345678910111213141516171819202122232425262728//进入源码包cd ext/ldap//生成configure文件/usr/local/php/bin/phpize//编译参数./configure --with-php-config=/usr/local/php/bin/php-config --enable-soap//编译安装make &amp;&amp; make install//生成一个目录来存放扩展的模块并复制soap.so到模块目录mkdir /usr/local/php/etc/php/extcp /usr/local/php/lib/php/extensions/no-debug-zts-20170718/soap.so /usr/local/php/etc/php/ext//编辑php.ini文件,指定PHP到哪个目录读模块vim /usr/local/php/etc/php.ini//修改以下内容extension_dir=&quot;/usr/local/php/etc/php/ext&quot;extension=soap.so//检查语法错误并重启httpd服务apachectl -tapachectl graceful//检查是否已加载/usr/local/php/bin/php -m|grep ftp 拓展库安装除了采用源码包安装拓展，还可以使用拓展库进行安装，常见的拓展库包括pecl、pear两个库： PECL PHP的标准扩展库，它提供了一系列已知的扩展库，由C++等其他语言编写而成，多数以Dll（动态链接库）的形式体现；主页地址：pecl.php.net PEAR PHP的官方开源类库（the PHP Extension and Application Repository）的缩写，涵盖了页面呈面、数据库访问、文件操作、数据结构、缓存操作、网络协议等许多方面，用户可以很方便地使用。主页地址：pear.php.net pecl 拓展库安装 语法： 12345678//搜索pecl search [软件包名]//安装pecl install [软件包名]//列出已经安装的软件pecl list 示例：(安装apc为例) APC，全称是Alternative PHP Cache，官方翻译叫”可选PHP缓存”。它为我们提供了缓存和优化PHP的中间代码的框架。 APC的缓存分两部分:系统缓存和用户数据缓存。 搜索 安装 pecl install apc 安装完成后，编辑php.ini，加入一行： 1extension = apc.so -重新加载apache配置 1apachectl graceful pear 跟pecl的用法类似，不再赘述。]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>LAMP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Linux运维学习笔记：数据备份和同步rsync]]></title>
     <url>%2F2018%2F07%2F23%2FlinuxNotes-12-rsyncAndFtp%2F</url>
     <content type="text"><![CDATA[写在前面这则笔记重点整理rsync 数据同步备份工具相关知识，主要包括两个方面的内容： rsync安装及使用 ftp服务架设及使用 pureftp服务架设及使用 云服务使用何种同步备份工具？ rsync 工具rsync 命令是一个远程数据同步工具，可以在本地和远程之间通过shell或rsync服务互相拷贝文件。 它的优点在于： 可以镜像保存整个目录树和文件系统； 可以很容易做到保持原来文件的权限、时间、软硬链接等； 无须特殊权限即可安装； 快速：第一次同步时 rsync 会复制全部内容，但在下一次只传输修改过的文件。rsync 在传输数据的过程中可以实行压缩及解压缩操作，因此可以使用更少的带宽； 安全：可以使用 scp、ssh 等方式来传输文件，当然也可以通过直接的 socket 连接； 支持匿名传输，以方便进行网站镜象； 软件安装：1yum install -y rsync rsync语法：命令行格式： 123456789101112131415161718//本地文件备份 Local: rsync [OPTION...] SRC... [DEST]//通过ssh远程同步备份 Access via remote shell: //pull rsync [OPTION...] [USER@]HOST:SRC... [DEST] //Push: rsync [OPTION...] SRC... [USER@]HOST:DEST//通过服务远程同步备份 Access via rsync daemon: //Pull: rsync [OPTION...] [USER@]HOST::SRC... [DEST] rsync [OPTION...] rsync://[USER@]HOST[:PORT]/SRC... [DEST] //Push: rsync [OPTION...] SRC... [USER@]HOST::DEST rsync [OPTION...] SRC... rsync://[USER@]HOST[:PORT]/DEST 常用参数 常用参数 说明 -v，–verbose 详细模式输出； -a，–archive 归档模式，表示以递归的方式传输文件，并保持所有文件属性不变，相当于使用了组合参数-rlptgoD; 后面跟–no-OPTION，option可以是rlptgoD中的任意一个，表示将这个选项去除。 -r，–recursive 对子目录以递归模式处理,传输目录时必须要加； -l, –links 小写l，copy软链接文件; -L 大写L，使用该选项后，会将软链接指向的目标文件复制到DST； -p, –perms 保持文件权限; -t, –times 保持文件时间信息; -g, –group 保持文件属组信息; -o, –owner 保持文件属主信息; -D, –devices 保持设备文件信息; -H, –hard-links 保留硬链接; -u 把目标文件夹DST 中比原文件SRC还新的文件排除掉，不会同步； -P, -partial 显示同步过程，如速率等，比-v显示更详细; -z, –compress 对备份的文件在传输时进行压缩处理； –delete 删除那些DST中SRC没有的文件; –exclude=PATTERN 排除满足特定条件的文件，这里的pattern也是具体的文件名，也可以是带有通配符，比如*.txt –progress 显示同步的过程状态，包括同步文件数量、传输速度等； 本地文件同步备份文件准备1234567891011121314[root@stevey ~]# cd rsync[root@stevey rsync]# pwd/root/rsync[root@stevey rsync]# mkdir test[root@stevey rsync]# cd test[root@stevey test]# touch &#123;1,2,3&#125;.txt /root/b.txt[root@stevey test]# ln -s /root/b.txt ./a.txt[root@stevey test]# lltotal 0-rw-r--r--. 1 root root 0 May 22 22:03 1.txt-rw-r--r--. 1 root root 0 May 22 22:03 2.txt-rw-r--r--. 1 root root 0 May 22 22:03 3.txtlrwxrwxrwx. 1 root root 11 May 22 22:10 a.txt -&gt; /root/b.txt -a 选项：表示以递归的方式传输文件，并保持所有文件属性不变，相当于使用了组合参数-rlptgoD如果目录test 不加斜杠，会新建一个test2 的目录，将test1放到新建目录下；加一个斜杠，才能得到我们想要的结果 示例1: 目录test不加斜杠 12345678910[root@stevey test2]# rsync -a test test2[root@stevey test2]# tree -L 2 test2test2└── test ├── 1.txt ├── 2.txt ├── 3.txt └── a.txt -&gt; /root/b.txt1 directory, 4 files 示例2: 目录test加斜杠 1234567891011121314151617[root@stevey rsync]# rsync -a test/ test2[root@stevey rsync]# lstest test2[root@stevey rsync]# tree -L 2 testtest├── 1.txt├── 2.txt├── 3.txt└── a.txt -&gt; /root/b.txt0 directories, 4 files[root@stevey rsync]# tree -L 2 test2test2├── 1.txt├── 2.txt├── 3.txt└── a.txt -&gt; /root/b.txt -a选项相当于使用了组合参数-rlptgoD；后面可以跟--no-OPTION，排除某个选项； 12345678910111213141516[root@stevey test]# lltotal 0-rw-r--r--. 1 root root 0 May 22 22:03 1.txt-rw-r--r--. 1 root root 0 May 22 22:03 2.txt-rw-r--r--. 1 root root 0 May 22 22:03 3.txtlrwxrwxrwx. 1 root root 11 May 22 22:10 a.txt -&gt; /root/b.txt[root@stevey test]# cd ..[root@stevey test2]# rsync -a --no-l test/ test2/ //--no-l 表示排除软链接文件skipping non-regular file &quot;a.txt&quot;[root@stevey test2]# tree -L 2 test2/test2/├── 1.txt├── 2.txt└── 3.txt0 directories, 3 files -L 选项：使用该选项后，会将软链接指向的目标文件复制到DST123456789101112131415161718192021222324252627//文件准备[root@stevey rsync]# echo &apos;this is s test&apos; &gt; /root/b.txt[root@stevey rsync]# cat !$cat /root/b.txtthis is s test//-v 选项表示详细模式输出；-L则会把软链接的目标文件一起同步到DST[root@stevey rsync]# rsync -avL test/ test2/sending incremental file listcreated directory test2./1.txt2.txt3.txta.txtsent 298 bytes received 123 bytes 842.00 bytes/sectotal size is 15 speedup is 0.04[root@stevey rsync]# cd test2[root@stevey test2]# lltotal 4-rw-r--r--. 1 root root 0 May 22 22:03 1.txt-rw-r--r--. 1 root root 0 May 22 22:03 2.txt-rw-r--r--. 1 root root 0 May 22 22:03 3.txt-rw-r--r--. 1 root root 15 May 22 22:42 a.txt[root@stevey test2]# cat a.txtthis is s test -u 选项： 仅仅进行更新，跳过所有已经存在于 DST，如果文件时间晚于要备份的文件，不覆盖更新的文件123456789101112131415161718192021222324//文件准备//test/1.txt与test2/1.txt的创建时间是一样的[root@stevey rsync]# ll test/1.txt test2/1.txt-rw-r--r--. 1 root root 0 May 22 22:03 test/1.txt-rw-r--r--. 1 root root 0 May 22 22:03 test2/1.txt//touch命令修改test2/1.txt的创建时间[root@stevey rsync]# touch test2/1.txt[root@stevey rsync]# ll test/1.txt test2/1.txt-rw-r--r--. 1 root root 0 May 22 22:03 test/1.txt-rw-r--r--. 1 root root 0 May 22 22:50 test2/1.txt//不使用-u选项，源目录文件会覆盖目标文件[root@stevey rsync]# rsync -a test/ test2/[root@stevey rsync]# ll test/1.txt test2/1.txt-rw-r--r--. 1 root root 0 May 22 22:03 test/1.txt-rw-r--r--. 1 root root 0 May 22 22:03 test2/1.txt//使用-u选项，源目录不会覆盖目标文件，因为目标文件更新[root@stevey rsync]# rsync -au test/ test2/[root@stevey rsync]# ll test/1.txt test2/1.txt-rw-r--r--. 1 root root 0 May 22 22:03 test/1.txt-rw-r--r--. 1 root root 0 May 22 22:57 test2/1.txt --delete 选项：假设DST中有一个文件c.txt，而SRC中没有；执行同参数同步后，DST文件夹中的c.txt也会被删除1234567891011121314151617181920212223242526272829//准备文件[root@stevey rsync]# cd test2[root@stevey test2]# touch c.txt[root@stevey test2]# cd ..[root@stevey rsync]# tree -L 2 test2/test2/├── 1.txt├── 2.txt├── 3.txt├── a.txt -&gt; /root/b.txt└── c.txt0 directories, 5 files//--delete 选项，同步备份时会删掉源目录没有的文档[root@stevey rsync]# rsync -av --delete test/ test2/sending incremental file listdeleting c.txtsent 132 bytes received 21 bytes 306.00 bytes/sectotal size is 11 speedup is 0.07[root@stevey rsync]# tree -L 2 test2/test2/├── 1.txt├── 2.txt├── 3.txt└── a.txt -&gt; /root/b.txt0 directories, 4 files --exclude 选项：排除满足特定条件的文件，可以是具体的文件名，也可以包含通配符，如*.txt 排除具体文件 c.txt 1234567891011121314151617[root@stevey rsync]# rsync -av --exclude=&apos;1.txt&apos; test/ test2/sending incremental file listcreated directory test2./2.txt3.txta.txt -&gt; /root/b.txtsent 204 bytes received 88 bytes 584.00 bytes/sectotal size is 11 speedup is 0.04[root@stevey rsync]# tree -L 2 test2test2├── 2.txt├── 3.txt└── a.txt -&gt; /root/b.txt0 directories, 3 files 排除选项与通配符连用 *.txt 1234567891011[root@stevey rsync]# rsync -av --exclude=&quot;*.txt&quot; test/ test2/sending incremental file listcreated directory test2./sent 43 bytes received 47 bytes 180.00 bytes/sectotal size is 0 speedup is 0.00[root@stevey rsync]# tree -L 2 test2test20 directories, 0 files --progress,显示同步的过程状态，包括同步文件数量、传输速度等1234567[root@stevey rsync]# rsync -a --exclude=&quot;1.txt&quot; --progress test/ test2/sending incremental file list2.txt 0 100% 0.00kB/s 0:00:00 (xfr#1, to-chk=2/4)3.txt 0 100% 0.00kB/s 0:00:00 (xfr#2, to-chk=1/4)a.txt -&gt; /root/b.txt rsync通过ssh同步前提： 准备两台机器，一台是我的mac，ip是172.16.155.1;另一台是虚拟机，ip是172.16.155.128;mac可以通过ssh访问虚拟机。 push：把本地目录同步到远程主机： 12345678//mac操作steve:rsync steveyuan$ rsync -a /Users/steveyuan/documents/rsync/test1/ root@172.16.155.128:/root/rsync//虚拟机验证效果[root@stevey rsync]# lsa.txt[root@stevey rsync]# cat a.txtrsync test pull：把远程主机目录同步到本地： 12345678910111213141516171819//准备文件[root@stevey rsync]# touch b.txt[root@stevey rsync]# echo &apos;hello,steve&apos; &gt; b.txt//mac操作steve:rsync steveyuan$ rsync -av root@172.16.155.128:/root/rsync/ /Users/steveyuan/documents/rsync/receiving incremental file list./a.txtb.txtsent 65 bytes received 209 bytes 182.67 bytes/sectotal size is 23 speedup is 0.08//校验效果steve:rsync steveyuan$ lsa.txt b.txtsteve:rsync steveyuan$ cat b.txthello,steve rsync通过服务同步这种方式相当于在远程主机上建一个rsync的服务器，在服务器上配置好之后，将本地主机作为rsync的一个客户端，在本地机器和服务器之间进行文件同步备份。 要实现这个目标，首先要在在服务器端进行配置： 配置文件说明：12345678910111213141516171819202122232425262728293031# cat /etc/rsyncd.conf port = 873 //端口号uid = nobody //指定当模块传输文件的守护进程UIDgid = nobody //指定当模块传输文件的守护进程GIDuse chroot = no //安全选项，设定为true，会将同步目录限定在path指定的目录当中；如果有软链接文件到别的文件目录，就会报错max connections = 10 //最大并发连接数strict modes = yes //指定是否检查口令文件的权限pid file = /usr/local/rsyncd/rsyncd.pid //指定PID文件lock file = /usr/local/rsyncd/rsyncd.lock //指定支持max connection的锁文件，默认为/var/run/rsyncd.lockmotd file = /usr/local/rsyncd/rsyncd.motd //定义服务器信息的，自己写 rsyncd.motd 文件内容log file = /usr/local/rsyncd/rsync.log //rsync 服务器的日志log format = %t %a %m %f %bsyslog facility = local3timeout = 300[conf] //自定义模块名，这里写的名称在同步时需要用到path = /usr/local/nginx/conf //用来指定要备份的目录comment = Nginx confignore errors //可以忽略一些IO错误read only = no //设置no，客户端可以上传文件，yes是只读write only = no //no为客户端可以下载，yes 不能下载hosts allow = 192.168.2.0/24 //可以连接的IP段 hosts deny = * //禁止连接的IPlist = false //客户请求时，使用模块列表uid = rootgid = rootauth users = backup //连接用户名，和linux系统用户名无关系secrets file = /etc/rsyncd.pass //验证密码文件 如上所示，服务器配置一般包括两个部分：全局配置、局部配置，具体如下： 全局配置： port：指定从rsyncd服务启动端口，默认从873端口启动； log file：指定日志文件； pid file：指定pid 文件，该文件设计服务的启动】停止等进程管理操作； address：指定启动rsync服务的ip；如果服务器有多个ip，就需要知道；如果不指定，默认从全部ip启动。 局部配置： [ftp] 表示模块，模块名用 [] 括起来，这里的模块名在后面执行同步操作的时候需要用到。 path：数据存放路径； use chroot：表示在传输文件前，先chroot到path指定的目录下，实现额外的安全保护。该服务默认开启状态，缺点是需要root权限，且不支持软链接同步；如果需要同步的数据中有软链接文件，建议设为false。 max connections： 最大链接数，默认为0，表示没有限制。 read only：该目录是否只读； list：表示当前用户查询服务器可用模块时，该模块是否列出； uid/gid：传输文件时，以那个用户/组的身份传输； auth users：指定传输时使用的用户名； secret file：指定密码文件，该文件权限要设为600； host allow：允许连接该模块的主机，可以是网段，也可以是具体的ip地址。 下面，来实际操作一下： 第一步：服务器端配置：服务器端端配置文件在 /etc/rsyncd.conf,首先修改配置文件： 123456789101112131415161718vim /etc/rsyncd.conf //编辑 rsync 的配置文件，加入以下内容port=8730 //自定义端口号log file=/var/log/rsync.logpid file=/var/run/rsyncd.pidaddress=172.16.155.128 //此处写的是服务器端ip[test] path=/tmp/rsync use chroot=true //安全选项，如果此项设置为true，同步目录会被限定在path目录，软链接到其他目录的文件不会被同步；如果需要同步软链接文件，此项建议设为false max connections=4 //最大链接数，同时允许几台机器远程备份同步 read only=false //如果设置为true，就不能执行远程同步操作 list=true uid=root gid=root auth users=test //指定用来同步的用户名，与本地主机名无关 secrets file=/etc/rsyncd.passwd //安全性选项，指定同步用户密码，此文件需要新建，内容格式为 name：passwd host allow=172.16.155.1 //指定允许那一个ip访问，也可以设置为ip段，如果是0.0.0.0/24就是全网段 保存退出后，执行以下命令开启 rsync 服务 1234567891011121314151617//启动服务rsync --daemon --config=/etc/rsyncd.conf//检查服务是否开启[root@stevey rsync]# ps -aux | grep rsyncroot 80564 0.0 0.0 114740 564 ? Ss 05:34 0:00 rsync --daemon --config=/etc/rsyncd.confroot 82057 0.0 0.0 112704 972 pts/2 R+ 13:34 0:00 grep --color=auto rsync//netstat命令检查端口状况；-l 列出listen端口状态，-n显示数字，-t显示tcp相关，-p显示建立链接的程序名[root@stevey rsync]# netstat -lntpActive Internet connections (only servers)Proto Recv-Q Send-Q Local Address Foreign Address State PID/Program nametcp 0 0 0.0.0.0:22 0.0.0.0:* LISTEN 7057/sshdtcp 0 0 127.0.0.1:25 0.0.0.0:* LISTEN 971/mastertcp 0 0 172.16.155.128:873 0.0.0.0:* LISTEN 80564/rsynctcp6 0 0 :::22 :::* LISTEN 7057/sshdtcp6 0 0 ::1:25 :::* LISTEN 971/master 此外，配置文件中还提到了几个文件，需要创建： 1234//创建同步文件夹路径并更改权限[root@stevey rsync]# mkdir -p /tmp/rsync/[root@stevey rsync]# chmod 777 !$chmod 777 /tmp/rsync/ 第二步：同步操作命令行格式： 1rsync -avP [源文件夹] 远程主机ip::[模块名] [文件名称] 注： 模块名，就是在/etc/rsyncd.conf 中定义的模块名，文件灰白放在该模块指定的path路径下； rsync -P 选项，表示断点续传，链接服务器是很有用； [文件名称]指的是，可以将同步过来的文件重命名，当然此项也可以省略； 尝试同步后，出现错误提示:connection refused 1234/Users/steveyuan/documents/rsyncsteve:rsync steveyuan$ rsync -avP /Users/steveyuan/documents/rsync 172.16.155.128::testrsync: failed to connect to 172.16.155.128 (172.16.155.128): Connection refused (61)rsync error: error in socket IO (code 10) at clientserver.c(127) [sender=3.1.3] TroubleShooting: 先看看网络是否能ping通 1234567891011//如下所示，网络没有问题steve:rsync steveyuan$ ping 172.16.155.128PING 172.16.155.128 (172.16.155.128): 56 data bytes64 bytes from 172.16.155.128: icmp_seq=0 ttl=64 time=0.417 ms64 bytes from 172.16.155.128: icmp_seq=1 ttl=64 time=0.424 ms64 bytes from 172.16.155.128: icmp_seq=2 ttl=64 time=0.423 ms64 bytes from 172.16.155.128: icmp_seq=3 ttl=64 time=0.566 ms--- 172.16.155.128 ping statistics ---4 packets transmitted, 4 packets received, 0.0% packet lossround-trip min/avg/max/stddev = 0.417/0.458/0.566/0.063 ms 使用telnet检查端口情况 telnet 需单独安装 12345// centos7yum install -y telnet// macbrew install telnet 命令行格式： 1telnet [IP] [端口号] //注意没有短横线 12345//测试端口情况steve:rsync steveyuan$ telnet 172.16.155.128 873Trying 172.16.155.128...telnet: connect to address 172.16.155.128: Connection refusedtelnet: Unable to connect to remote host //说明端口没有开放 既然已经知道了原因是端口没有开放，那就增加一条iptables规则 1[root@stevey rsync]# iptables -I INPUT -s 172.16.155.0/24 -p tcp --dport 873 -j ACCEPT 再检查端口情况：，ok了 12345steve:rsync steveyuan$ telnet 172.16.155.128 873Trying 172.16.155.128...Connected to bogon.Escape character is &apos;^]&apos;.@RSYNCD: 31.0 在执行同步操作，成功！ 12345678910steve:rsync steveyuan$ rsync -avP /Users/steveyuan/documents/rsync 172.16.155.128::testsending incremental file listrsync/rsync/a.txt 11 100% 0.00kB/s 0:00:00 (xfr#1, to-chk=1/3)rsync/b.txt 12 100% 11.72kB/s 0:00:00 (xfr#2, to-chk=0/3)sent 232 bytes received 58 bytes 580.00 bytes/sectotal size is 23 speedup is 0.08 附加步骤：同步文件设置密码仅仅是这样设置，意味着任何人只要知道主机ip、端口号和mudule名，都可以执行同步操作，这显然是不安全的。所以，还需要设置密码。 创建服务器密码文件 1234567891011121314//创建密码文件touch /etc/rsyncd.passwd//mkpasswd命令生成一个密码[root@stevey rsync]# mkpasswd -l 14rexGlkmvh97xI#//编辑密码文件vim /etc/rsyncd.passwd//密码格式为 name：passwdtest：rexGlkmvh97xI#//修改文件权限chmod 600 /etc/rsyncd.passwd 修改服务端rsync 配置文件 1vim /etc/rsyncd.conf 创建本地密码文件 123456steve:~ steveyuan$ touch desktop/rsync_passwdsteve:~ steveyuan$ vim !$vim desktop/rsync_passwd //注意这个文件内容只包含密码steve:~ steveyuan$ chmod 600 !$ //修改文件权限chmod 600 desktop/rsync_passwd 再次尝试执行同步，就需要手动输入密码文件 --password-file=[passwdfile] 指定密码文件，就不用手动输入密码了。注：这里的文件要写绝对路径。 12345steve:desktop steveyuan$ rsync -avP /Users/steveyuan/documents/rsync test@172.16.155.128::test --password-file=/Users/steveyuan/desktop/rsync_passwdsending incremental file listsent 120 bytes received 17 bytes 274.00 bytes/sectotal size is 23 speedup is 0.17 最后，这里的密码强度不够，同时保存路径也太随意了。在真正的生产环境中，不可以保存在桌面，太不安全了。 ftp工具架设及使用ftp工具架设第一步：安装ftp12345678//安装vsftpdyum install -y vsftpd//启动服务systemctl start vsftpd.service//校验进程是否启动ps -aux | grep vsftpd 如下图所示，说明已启动 第二步：修改 vsftpd 配置vcftpd 的配置文件地址为/etc/vsftpd/vsftpd.conf 如果不知道配置文件在那里，使用一下命令查询 1find / -name &apos;vsftpd.conf&apos; 查看已有的配置 1234567891011121314151617// grep -v参数表示取反，也就是显示不加#的行[root@steve ~]# cat /etc/vsftpd/vsftpd.conf | grep -v &apos;#&apos;anonymous_enable=NOlocal_enable=YESwrite_enable=YESlocal_umask=022dirmessage_enable=YESxferlog_enable=YESconnect_from_port_20=YESxferlog_std_format=YESchroot_local_user=YESlisten=NOlisten_ipv6=YESpam_service_name=vsftpduserlist_enable=YEStcp_wrappers=YES 修改配置文件 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132vi /etc/vsftpd/vsftpd.conf// 基本配置# 开启匿名登录anonymous_enable=YES# 允许使用本地帐户进行FTP用户登录验证local_enable=YES# 允许写write_enable=YES# 设置本地用户默认文件掩码022local_umask=022# 允许匿名上传anon_upload_enable=YES# 允许匿名创建新目录anon_mkdir_write_enable=YES# 同时开放其它权限anon_other_write_enable=YES# 可以发送消息当访问某个目录时dirmessage_enable=YES# 开启上传下载记录xferlog_enable=YES# 数据链通过20端口建立connect_from_port_20=YES# 允许其它用户上传匿名文件#chown_uploads=YES# 所有用户#chown_username=whoever# 日志保存到#xferlog_file=/var/log/xferlog# 日志标准输出xferlog_std_format=YES# 空闲会话时间#idle_session_timeout=600# 数据连接超时时间#data_connection_timeout=120# 隔离的安全用户#nopriv_user=ftpsecure# 开启异步数据线程#async_abor_enable=YES# 开启ASCII协议上传ascii_upload_enable=YES# 开启ASCII协议下载ascii_download_enable=YES# 开启邮箱验证#deny_email_enable=YES# 拒绝的邮箱列表#banned_email_file=/etc/vsftpd/banned_emails# 是否允许直接获取子目录信息#ls_recurse_enable=YES# 监听IPv4listen=NO# 监听IPv6和监听IPv4listen_ipv6=YES# 虚拟用户启用pam认证pam_service_name=vsftpd# 用户组管理userlist_enable=YES# 访问控制tcp_wrappers=YES# 允使用被动模式pasv_enable=YES# 指定使用被动模式时打开端口的最小值pasv_min_port=10060# 指定使用被动模式时打开端口的最大值。pasv_max_port=10090# 用户宽带限制200kps#local_max_rate=200000# 登录后欢迎内容ftpd_banner=Welcome to My FTP service.# ---------开启虚拟用户组参数--------# 开启虚拟用户guest_enable=YES# 主虚拟用户名vsftpd，等下会建立guest_username=vsftpd# 虚拟用户配置（可以对每一个虚拟用户进行单独的权限配置）user_config_dir=/etc/vsftpd/vconf# 启用限定用户在其主目录下chroot_local_user=YES# 开启用户列表chroot管理chroot_list_enable=YES# chroot管理的用户列表（一行一用户,虚拟用户都要添加进去）# 当设置用户只能在登录目录时，chroot管理的用户为不受限制，否则相反chroot_list_file=/etc/vsftpd/chroot_list# 允许chroot管理用户进行写操作allow_writeable_chroot=YES# ---------虚拟用户高级参数（请选择一组）--------# 虚拟用户和本地用户有相同的权限virtual_use_local_privs=YES# 虚拟用户和匿名用户有相同的权限，默认是NOvirtual_use_local_privs=NO# 虚拟用户具有写权限（上传、下载、删除、重命名）virtual_use_local_privs=YESwrite_enable=YES# 虚拟用户不能浏览目录，只能上传文件，无其他权限virtual_use_local_privs=NOwrite_enable=YESanon_world_readable_only=YESanon_upload_enable=YES# 虚拟用户只能下载文件，无其他权限virtual_use_local_privs=NOwrite_enable=YESanon_world_readable_only=NOanon_upload_enable=NO# 虚拟用户只能上传和下载文件，无其他权限virtual_use_local_privs=NOwrite_enable=YESanon_world_readable_only=NOanon_upload_enable=YES# 虚拟用户只能下载文件和创建文件夹，无其他权限virtual_use_local_privs=NOwrite_enable=YESanon_world_readable_only=NOanon_mkdir_write_enable=YES# 虚拟用户只能下载、删除和重命名文件，无其他权限virtual_use_local_privs=NOwrite_enable=YESanon_world_readable_only=NOanon_other_write_enable=YES 第三步：虚拟用户的建立和配置123456789101112131415161718192021222324252627282930313233343536373839//假如宿主用户为vsftpduseradd -s /sbin/nologin vsftpd//编辑虚拟用户名单文件：vim /etc/vsftpd/virtusers//第一行账号，第二行密码，注意：不能使用root做用户名，系统保留test123456//添加到chroot管理列表vim /etc/vsftpd/chroot_list//用户列表test//安装db工具包yum install-y compat-db47.x86_64//利用db_load命令生成数据文件db_load -T -t hash -f /etc/vsftpd/virtusers /etc/vsftpd/virtusers.db//更改数据库文件权限chmod 600 /etc/vsftpd/virtusers.db//添加vsftpd的虚拟用户的验证vim /etc/pam.d/vsftpd-------------内容如下-----------------#%PAM-1.0auth sufficient /lib64/security/pam_userdb.so db=/etc/vsftpd/virtusersaccount sufficient /lib64/security/pam_userdb.so db=/etc/vsftpd/virtuserssession optional pam_keyinit.so force revokeauth required pam_listfile.so item=user sense=deny file=/etc/vsftpd/ftpusers onerr=succeedauth required pam_shells.soauth include password-authaccount include password-authsession required pam_loginuid.sosession include password-auth 第四步：创建虚拟用户个人配置文件123456789101112131415161718192021222324252627282930// 建立虚拟用户个人vsftp的配置文件mkdir -p /etc/vsftpd/vconf// 进入目录cd /etc/vsftpd/vconf// 创建并编辑用户的配置文件vim test// 用户 test 配置目录local_root=/home/vsftpd/test// 允许本地用户对FTP服务器文件具有写权限write_enable=YESanon_world_readable_only=NO// 允许匿名用户上传文件(须将全局的write_enable=YES,默认YES)anon_upload_enable=YES// 允许匿名用户创建目录anon_mkdir_write_enable=YES// 允许匿名用户删除和重命名权限(自行添加)anon_other_write_enable=YES// 创建用户目录mkdir -p /home/vsftpd/test// 权限设置chown -R vsftpd:vsftpd /home/vsftpd 第五步：重启ftp123456// 设置开机自启systemctl enable vsftpd// 服务操作systemctl restart vsftpd.service # 重启服务systemctl start vsftpd.service # 启动服务systemctl status vsftpd.service # 服务状态查看 ftp的主动模式和被动模式在ftp传输中，均包括命令连接和数据传输两个部分，根据传输方式的不同，分为以下两种： ftp被动模式 命令连接：客户端 &gt;1024端口 -&gt; 服务器 21端口 数据连接：客户端 &gt;1024端口 -&gt; 服务器 &gt;1024端口 被动模式是FTP服务器返回数据传输需要的端口，FTP客户端去连接FTP服务端。目前，绝大部分的互联网应用(比如Web/Http)，都是客户端向服务端发起连接。 被动模式下iptables规则配置 修改vsftpd配置文件 12345vi /etc/vsftpd/vsftpd.confpasv_enable=YESpasv_min_port=2222pasv_max_port=2225 iptables配置端口 123456vi /etc/vsftpd/vsftpd.conf//添加规则-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT-A INPUT -p tcp -m state --state NEW -m tcp --dport 21 -j ACCEPT-A INPUT -p tcp --dport 2222:2225 -j ACCEPT ftp主动模式命令连接：客户端 &gt;1024端口 -&gt; 服务器 21端口 数据连接：客户端 &gt;1024端口 &lt;- 服务器 20端口 主动模式是FTP客户端向FTP服务器发送数据传输需要的端口，FTP服务端去连接FTP客户端的端口，与被动模式刚好相反。 主动模式下iptables设置原则123iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPTiptables -A INPUT -p tcp -m multiport --dport 20,21 -m state --state NEW -j ACCEPT 说明： NEW: 该包想要开始一个新的连接（重新连接或连接重定向）； RELATED:该包是属于某个已经建立的连接所建立的新连接。如FTP的数据传输连接和控制连接之间就是RELATED关系； ESTABLISHED：该包属于某个已经建立的连接； INVALID:该包不匹配于任何连接，通常这些包被DROP； 阿里云配置ftp服务注意事项：在阿里云主机配置ftp服务，只支持主动连接模式；除了上面的步骤，还要对安全策略进行配置。 修改阿里云服务的安全策略打开阿里云服务器控制台 https://home.console.aliyun.com，点“我的资源”下面的云服务器进入你的实例列表 选择右边的更多–安全组配置–添加规则–添加安全组规则，配置如下： 设置主动连接模式下载ftp 软件，我用的是yummy ftp pro 阿里云不支持ftp被动模式，需采用主动模式进行连接。 使用pure-ftpd搭建ftp服务第一步：安装pure-ftpd12345//安装拓展源yum install -y epel-release//安装pure-ftpdyum install -y pure-ftpd 第二步：关闭vsftpd注：由于在之前的实验中开启的vsftpd，为了避免端口冲突，需要先关闭vsftpd 12345//关闭vsftpdsystemctl stop vsftpd//禁止vsftpd开机启动systemctl disable vsftpd 校验结果，查看vsftpd状态 第三步：编辑pure-ftp配置文件123vi /etc/pure-ftpd/pure-ftpd.conf//查找PureDB /etc/pure-ftpd/pureftpd.pdb，将前面的#删除 启动pure-ftp 1234[root@local-linux02 ~]# systemctl start pure-ftpd[root@local-linux02 ~]# systemctl enable pure-ftpdCreated symlink from /etc/systemd/system/multi-user.target.wants/pure-ftpd.service to /usr/lib/systemd/system/pure-ftpd.service. 校验结果 第四步：建立虚拟账号注：安全起见，pure-ftpd使用的账号并非linux的系统账号，而是虚拟账号。 12345678910111213141516171819//建立ftp文件夹[root@local-linux02 ~]# mkdir -p /data/ftp//建立系统账户[root@local-linux02 ~]# useradd -u 1010 pure-ftp//更改ftp文件夹的所属用户和组[root@local-linux02 ~]# chown -R pure-ftp:pure-ftp /data/ftp//创建虚拟账户；//-u是将虚拟用户ftp_usera与系统用户pure-ftp关联在一起，使用ftp_usera账号登录ftp后，会以pure-ftp的身份来读取和下载文件；//-d是指定ftp_usera账户的家目录，这样可以使用户ftp_usera只能访问其家目录/data/ftp///提示，此处需要输入密码[root@local-linux02 ~]# pure-pw useradd ftp_usera -u pure-ftp -d /data/ftpPassword:Enter it again://创建用户信息数据库文件[root@local-linux02 ~]# pure-pw mkdb 账号常见操作： 123456//列出当前账号[root@local-linux02 ~]# pure-pw listftp_usera /data/ftp/.///删除账号pure-pw userdel ftp_usera 第五步：测试连接命令行格式： 12345678lftp ftp://user:password@ip:port其中，- ftp:// 可省略；- user 登录名；- password 登陆密码，此处可不写，在后面交互界面输入；- ip 即服务器端的ip地址；- port 默认为21，也可另行指定。 示例： TroubleShooting: 链接错误 如下所示，虽然看起来连上了，但是执行ls命令的时候，却一直显示重新链接的状态。 排查思路： 首先，排查pure-ftpd服务器端是否启动，执行 systemctl status pure-ftpd 是正常的，runing状态。 其次，估计是端口设置的问题，google了一下pure-ftpd被动模式端口设置的方法： 第一步：修改pure-ftpd配置文件 12345678910111213141516171819202122232425262728//查找pure-ftpd配置文件[root@local-linux02 ~]# find / -name &apos;pure-ftpd&apos;/run/pure-ftpd/etc/pki/pure-ftpd/etc/logrotate.d/pure-ftpd/etc/xinetd.d/pure-ftpd/etc/pam.d/pure-ftpd/etc/pure-ftpd/usr/sbin/pure-ftpd/home/sosreport/sosreport/etc/logrotate.d/pure-ftpd/home/sosreport/sosreport/etc/xinetd.d/pure-ftpd/home/sosreport/sosreport/etc/pam.d/pure-ftpd//进入配置文件夹[root@local-linux02 pure-ftpd]# cd /etc/pure-ftpd[root@local-linux02 pure-ftpd]# lspure-ftpd.conf pureftpd-mysql.conf pureftpd.pdbpureftpd-ldap.conf pureftpd.passwd pureftpd-pgsql.conf//编辑配置文件[root@local-linux02 pure-ftpd]# vi pure-ftpd.conf//找到#PassivePortRange 这一行，去掉注释，改为PassivePortRange 20000 30000//保存退出后，重启pure-ftpd服务systemctl restart pure-ftpd 第二步：设置防火墙端口 12345iptabels -A INPUT -p tcp -m state --state NEW -m tcp --dport 21 -j ACCEPTiptabels -A INPUT -p tcp --dport 20000:30000 -j ACCEPTservice iptables save 个人更推荐第二种方法：直接修改/etc/sysconfig/iptables，将上述两行规则加入，保存退出并重启虚拟机。 校验结果：再尝试重新连接ftp服务器 123456789101112131415//客户端操作[root@local-linux01 ~]# lftp ftp_usera@172.16.155.132Password:lftp ftp_usera@172.16.155.132:~&gt; lsdrwxr-xr-x 2 1010 pure-ftp 6 Jun 26 08:48 .drwxr-xr-x 2 1010 pure-ftp 6 Jun 26 08:48 ..//测试上传一个文件lftp ftp_usera@172.16.155.132:/&gt; put -c ~/test/a.txt26 bytes transferred//服务器端测试//存在a.txt，说明上传成功[root@local-linux02 ~]# ll /data/ftptotal 4-rw-r--r-- 1 pure-ftp pure-ftp 26 Jun 14 14:33 a.txt lftp的常见命令ls 和 cd命令 ls 命令用来列出文件和目录； 123456lftp ftp_usera@172.16.155.132:/&gt; lsdrwxr-xr-x 4 1010 pure-ftp 45 Jun 26 10:25 .drwxr-xr-x 4 1010 pure-ftp 45 Jun 26 10:25 ..-rw-r--r-- 1 1010 pure-ftp 26 Jun 14 14:33 a.txtdrwxr-xr-x 2 0 0 6 Jun 26 10:25 test1drwxr-xr-x 2 0 0 6 Jun 26 10:25 test2 cd 用来进入某个目录； 123lftp ftp_usera@172.16.155.132:/&gt; cd test1lftp ftp_usera@172.16.155.132:/test1&gt; pwdftp://ftp_usera@172.16.155.132/test1 lpwd 和 lcd：显示和切换本地文件夹注：local dir 本地文件夹，就是当前下载文件的保存目录，我们可以通过这两个目录来查看和修改。 lpwd：显示目前的本地文件夹 local dir 12lftp ftp_usera@172.16.155.132:~&gt; lpwd/root lcd：切换文件夹 12lftp ftp_usera@172.16.155.132:~&gt; lcd /root/ftpsync/lcd ok, local cwd=/root/ftpsync 下载文件：get 和 mgetget：下载单个文件 12//默认下载到当前用户的home目录下lftp ftp_usera@172.16.155.132:/&gt; get -c a.txt mget: 下载多个文件 1lftp ftp_usera@172.16.155.132:/&gt; get -c a.txt b.txt 上传文件：put、mput put: 上传单独文件 12345//put常用选项//-c 选项，表示断点续传//-O 选项，表示指定文件存放路径lftp ftp_usera@172.16.155.132:/&gt; put -c ~/test/a.txt26 bytes transferred mput：上传多个文件 1lftp ftp_usera@172.16.155.132:/&gt; put -c ~/test/a.txt ~/test/b.txt 同步目录 下载目录mirror [dir]：从服务器端下载到客户端 1lftp ftp_usera@172.16.155.132:/&gt; mirror test1 上传目录mirror -R [dir]:从客户端到服务器端 1lftp ftp_usera@172.16.155.132:/&gt; mirror -R /rrot/test1 模式设置12345//设置字符编码set ftp:charset gbk/utf-8//设置被动模式set ftp:passive-mode 1 云服务使用何种同步备份工具？为什么不推荐在云服务器上使用ftp？配置困难：ftp服务需要iptables端口放行，还需要对云服务器的安全组进行配置； 安全性差：FTP传输默认是明文传输，包括客户端发送给服务器用于鉴权的用户名和密码的传输；尽管FTPS拥有基于SSL/TLS协议的新能力，但是新用户几乎不可能很快完成FTP和OpenSSL的配置，因此很多系统因此暴露在安全风险中。 云服务器使用那种同步备份工具？镭速RaySync传输软件：下载地址及安装教程：https://www.raysync.cn/supportforlinux.html 特点：支持Windows和Linux两种平台，对个人用户完全免费，安装快速，配置简单，最重要的是对比FTP/SFTP，传输速度有100%的提升。 sftpsftp是Linux SSH服务内置的一个文件服务，内置意味着你完全无需额外安装和配置，它共用ssh的22端口。 特点：只支持sftp。 参考资料 lftp：优秀的文件客户端程序 linux使用命令行操作ftp 使用 lftp 进行 FTP 数据下载和上传 lftp 使用方法 阿里云下Centos 7简单配置FTP服务器+root账户管理（通用Linux） 在CentOS7.4中使用Vsftpd搭建FTP服务器 CentOS 7.2 安装和配置 FTP 服务器 CentOS 7 安装FTP服务器 CentOS7安装配置vsftp搭建FTP 使用rsync命令同步本地目录和远程主机目录 《rsync同步的艺术》–linux命令五分钟系列之四十二 rsync 命令整理 rsync命令 Rsync命令详解]]></content>
@@ -8,8 +34,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rsync</tag>
         <tag>ftp</tag>
       </tags>
@@ -22,8 +48,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>sysV</tag>
         <tag>crontab</tag>
         <tag>systemd</tag>
@@ -37,8 +63,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>iptables</tag>
         <tag>firewalld</tag>
       </tags>
@@ -51,8 +77,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>DNS</tag>
       </tags>
   </entry>
@@ -64,8 +90,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -77,8 +103,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -91,8 +117,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -105,8 +131,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -119,8 +145,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -137,8 +163,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -150,8 +176,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -163,8 +189,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -176,8 +202,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>expect</tag>
       </tags>
   </entry>
@@ -190,8 +216,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>expect</tag>
       </tags>
   </entry>
@@ -204,8 +230,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -217,8 +243,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -230,8 +256,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -243,8 +269,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -256,8 +282,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -269,8 +295,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -281,8 +307,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zabbix</tag>
       </tags>
   </entry>
@@ -294,8 +320,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zabbix</tag>
       </tags>
   </entry>
@@ -307,8 +333,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zabbix</tag>
       </tags>
   </entry>
@@ -320,8 +346,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -332,8 +358,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -344,21 +370,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux笔记之一：虚拟机安装centos]]></title>
-    <url>%2F2018%2F06%2F27%2FlinuxNotes-oTo1-HowToInstallCentos%2F</url>
-    <content type="text"><![CDATA[写在前面最近几个月一直在学习Linux运维的课程，因为之前的笔记都是随堂整理的，不是很系统；在复习的过程中，越发感觉到太过零散，所以利用这段时间把之前学到的东西整理一下。 这个笔记的提纲如下： 第一部分：Linux基础 虚拟机安装及基本配置 文件权限 用户管理 网络管理 软件安装 进程管理 字符处理 第二部分：linux进阶 iptables和firewalld selinux vim编辑器 正则表达式 shell编程 第三部分：常用网络环境搭建及维护 lamp环境搭建配置 lnmp环境搭建配置 tomcat安装及配置 mysql nginx 第四部分：待补充]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
         <tag>notes</tag>
-        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -369,8 +382,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -382,8 +395,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tomcat</tag>
       </tags>
   </entry>
@@ -395,8 +408,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -407,8 +420,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tomcat</tag>
       </tags>
   </entry>
@@ -420,8 +433,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -433,8 +446,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -446,8 +459,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -459,8 +472,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -472,8 +485,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -485,8 +498,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -498,8 +511,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -511,8 +524,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -524,8 +537,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -537,8 +550,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -550,8 +563,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -564,8 +577,8 @@
       </categories>
       <tags>
         <tag>python</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -576,136 +589,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux运维学习笔记10-3：httpd的基本配置(六)]]></title>
-    <url>%2F2018%2F06%2F04%2FlinuxNotes-Lamp-0To1Part4%2F</url>
-    <content type="text"><![CDATA[写在前面本章节LAMP最后一个部分，php动态模块的安装。 php动态模块的安装当php安装完成后，如果发现没有某个模块，解决思路有两种：一是重新编译安装；而是安装动态模块。 php常用的动态模块源码包，都在安装目录ext目录 查询已安装模块执行命令： 1php -m 查询模块安装目录： 123[root@stevey no-debug-zts-20170718]# php -i | grep extension_dirextension_dir =&gt; /usr/local/php/lib/php/extensions/no-debug-zts-20170718 =&gt; /usr/local/php/lib/php/extensions/no-debug-zts-20170718 安装动态模块：源码包安装安装redis模块：网络下载源码包安装。1234567891011121314151617181920//下载rediswget https://codeload.github.com/phpredis/phpredis/zip/develop//文件包重命名mv develop phpredis-develop.zip//进入安装包cd phpredis-develop//安装依赖项yum install -y autoconf//生成configure文件usr/local/php/bin/phpize//编译参数./configure --with-php-config=/usr/local/php/bin/php-config//编译安装make &amp;&amp; make install 出现如下提示，说明安装成功 redis被安装在/usr/local/php/lib/php/extensions/no-debug-zts-20170718/，查看结果： 安装成功后，还需要更改配置文件 12345678910111213[root@stevey src]# vim /usr/local/php/etc/php.ini//搜索extension，在末尾增加一行后保存退出extension = redis.so//重启服务[root@stevey src]# apachectl -tSyntax OK[root@stevey src]# apachectl graceful//检查redis是否加载[root@stevey src]# php -m | grep redisredis 安装soap：本地源码包本地源码包php源码包目录下的ext目录下， 12345678910111213141516171819202122232425262728//进入源码包cd ext/ldap//生成configure文件/usr/local/php/bin/phpize//编译参数./configure --with-php-config=/usr/local/php/bin/php-config --enable-soap//编译安装make &amp;&amp; make install//生成一个目录来存放扩展的模块并复制soap.so到模块目录mkdir /usr/local/php/etc/php/extcp /usr/local/php/lib/php/extensions/no-debug-zts-20170718/soap.so /usr/local/php/etc/php/ext//编辑php.ini文件,指定PHP到哪个目录读模块vim /usr/local/php/etc/php.ini//修改以下内容extension_dir=&quot;/usr/local/php/etc/php/ext&quot;extension=soap.so//检查语法错误并重启httpd服务apachectl -tapachectl graceful//检查是否已加载/usr/local/php/bin/php -m|grep ftp 拓展库安装除了采用源码包安装拓展，还可以使用拓展库进行安装，常见的拓展库包括pecl、pear两个库： PECL PHP的标准扩展库，它提供了一系列已知的扩展库，由C++等其他语言编写而成，多数以Dll（动态链接库）的形式体现；主页地址：pecl.php.net PEAR PHP的官方开源类库（the PHP Extension and Application Repository）的缩写，涵盖了页面呈面、数据库访问、文件操作、数据结构、缓存操作、网络协议等许多方面，用户可以很方便地使用。主页地址：pear.php.net pecl 拓展库安装语法： 12345678//搜索pecl search [软件包名]//安装pecl install [软件包名]//列出已经安装的软件pecl list 示例：(安装apc为例) APC，全称是Alternative PHP Cache，官方翻译叫”可选PHP缓存”。它为我们提供了缓存和优化PHP的中间代码的框架。 APC的缓存分两部分:系统缓存和用户数据缓存。 搜索 安装 pecl install apc 安装完成后，编辑php.ini，加入一行： 1extension = apc.so -重新加载apache配置 1apachectl graceful pear 跟pecl的用法类似，不再赘述。 参考资料 apache rewrite教程 Apache Rewrite 规则详解 php错误日志级别参考 php开启短标签 php.ini详解 PHP扩展模块Pecl、Pear以及Perl的区别]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>LAMP</tag>
-        <tag>php</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux运维学习笔记10-3：httpd的基本配置(五)]]></title>
-    <url>%2F2018%2F06%2F03%2FlinuxNotes-Lamp-0To1Part3%2F</url>
-    <content type="text"><![CDATA[写在前面继续学习http配置的知识，主要包括禁止解析php、限制user_agent、php相关配置。 禁止解析php从系统安全的角度，我们不希望用户上传的脚本能够被解析执行，就需要在配置中进行设置。 1234567891011121314151617vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/discuz.com/data&gt; //定义目录 php_admin_flag engine off //禁止php解析 &lt;filesmatch &quot;(.*)php&quot;&gt; Order deny,allow Deny from all Allow from 127.0.0.1 &lt;/filesmatch&gt; &lt;/Directory&gt;&lt;/VirtualHost&gt; 限制user_agent限制user-agent的主要目的是防止网络爬虫，从而节约带宽资源，优化网站体验。 全站限制user-agent123456789101112131415vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/discuz.com-access_log&quot; combined &lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %&#123;HTTP_USER_AGENT&#125; ^.*curl.* [NC,OR] RewriteCond %&#123;HTTP_USER_AGENT&#125; ^.*baidu.com.* [NC] RewriteRule .* - [F] &lt;/IfModule&gt;&lt;/VirtualHost&gt; 限制某个目录访问1234567891011121314vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/discuz.com-access_log&quot; combined &lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %&#123;REQUEST_URI&#125; ^.*/tmp/.* [NC] RewriteRule .* - [F] &lt;/IfModule&gt;&lt;/VirtualHost&gt; PHP配置php配置文件格式：php的配置文件在/usr/local/php/etc/php.ini 配置文件语法： 1directive = value 指令名(directive)是大小写敏感的！所以”foo=bar”不同于”FOO=bar”。 值(value)可以是： 用引号界定的字符串(如：”foo”)； 数字(整数或浮点数，如：0, 1, 34, -1, 33.55)； PHP常量(如：E_ALL, M_PI)； INI常量(On, Off, none)； 表达式(如：E_ALL &amp; ~E_NOTICE)； 注释符号为；，以；开头的行会被自动忽略。 查询php相关信息使用如下命令：1/usr/local/php/bin/php -i | head TroubleShooting:找不到配置文件目录 如下图所示，php的配置文件目录找不到了，显示是none。 解决思路：重新编译安装 12345678//重新编译安装make clean//编译参数如下：./configure --prefix=/usr/local/php --with-apxs2=/usr/local/apache2.4/bin/apxs --with-config-file-path=/usr/local/php/etc/ --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx --enable-inline-optimization --disable-debug --disable-rpath --enable-shared --enable-soap --with-libxml-dir --with-xmlrpc --with-openssl --with-mhash --with-pcre-regex --with-sqlite3 --with-zlib --enable-bcmath --with-iconv --with-bz2 --enable-calendar --with-curl --with-cdb --enable-dom --enable-exif --enable-fileinfo --enable-filter --with-pcre-dir --enable-ftp --with-gd --with-openssl-dir --with-jpeg-dir --with-png-dir --with-zlib-dir --with-freetype-dir --enable-gd-jis-conv --with-gettext --with-gmp --with-mhash --enable-json --enable-mbstring --enable-mbregex --enable-mbregex-backtrack --with-libmbfl --with-onig --enable-pdo --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-zlib-dir --with-pdo-sqlite --with-readline --enable-session --enable-shmop --enable-simplexml --enable-sockets --enable-sysvmsg --enable-sysvsem --enable-sysvshm --enable-wddx --with-libxml-dir --with-xsl --enable-zip --enable-mysqlnd-compression-support --with-pear --enable-opcache//编译安装make &amp;&amp; make install 如果过程中报错，很有可能是虚拟内存不足; 1234dd if=/dev/zero of=/swapfile bs=1024 count=262144mkswap /swapfilechmod 600 /swapfileswapon /swapfile 增加虚拟内存之后，再来一遍 12make cleanmake &amp;&amp; make install 重装完成，在检查php虚拟文件，一切正常 disable_functions设置处于安全考虑，禁用一部分function 1disable_functions = chdir,chroot,dir,getcwd,opendir,readdir,scandir,fopen,unlink,delete,copy,mkdir, rmdir,rename,file,file_get_contents,fputs,fwrite,chgrp,chmod,chown 配置error_log一般php在没有连接到数据库或者其他情况下会有提示错误，包含php脚本路径或者查询的SQL语句等，这类信息暴露在网络上是不安全的，所以一般建议禁止错误提示，具体配置如下： 12345678//禁止错误提示display_errors = Off//定义错误日志log_errors = On//定义错误日志路径error_log = /var/local/php/logs/php_errors.logerror_reporting = E_ALL &amp; ~E_NOTICE 设置错误日志保存路径后，还需要修改权限 123mkdir -p /var/local/php/logschmod -R 777 /var/local/php/logs 错误日志的级别 标示 说明 E_ALL 所有错误和警告（除E_STRICT外） E_ERROR 致命的错误。脚本的执行被暂停。 E_RECOVERABLE_ERROR 大多数的致命错误。 E_WARNING 非致命的运行时错误，只是警告，脚本的执行不会停止。 E_PARSE 编译时解析错误，解析错误应该只由分析器生成。 E_NOTICE 脚本运行时产生的提醒（往往是我们写的脚本里面的一些bug，比如某个变量没有定义），这个错误不会导致任务中断。 E_STRICT 脚本运行时产生的提醒信息，会包含一些php抛出的让我们要如何修改的建议信息。 E_CORE_ERROR 在php启动后发生的致命性错误 E_CORE_WARNING 在php启动后发生的非致命性错误，也就是警告信息 E_COMPILE_ERROR php编译时产生的致命性错误 E_COMPILE_WARNING php编译时产生的警告信息 E_USER_ERROR 用户生成的错误 E_USER_WARNING 用户生成的警告 E_USER_NOTICE 用户生成的提醒 同时，还支持逻辑符号 标示 说明 &amp; 并且 ~ 示非 或者 error_reporting = E_ALL &amp; ~E_NOTICE 表示表示除了警告之外的所有错误日志； 配置open_basedir这是一种网络安全策略：主要针对的是同一台服务器上同时有多个网站，防止一个网站被攻击之后殃及其他的网站。 open_basedir 将php所能打开的文件限制在指定的目录树中，包括文件本身。当程序要使用例如fopen()或file_get_contents()打开一个文件时，这个文件的位置将会被检查。当文件在指定的目录树之外，程序将拒绝打开。 配置方法： 方法一：在php.ini进行限定1234vim /usr/local/php/etc/php.ini//修改以下内容open_basedir = /tmp:/data/discuz.com 这种方法的局限性在于，如果一个服务器上拥有多台虚拟主机，没办法对多个虚拟主机分别进行设置。 方法二：在httpd配置文件进行设置 123456789101112vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve-discuz-test.com DocumentRoot &quot;/data/discuz.com&quot; //填写刚才新建的discuz文件目录 ServerName steve-discuz-test.com //域名，必须填写 ServerAlias www.steve-discuz.com //网站别名 ErrorLog &quot;logs/steve.com-error_log&quot; CustomLog &quot;logs/steve.com-access_log&quot; common //配置open——basedir php_admin_value open_basedir &quot;/data/discuz.com/:/tmp/&quot; //仅对本虚拟主机生效&lt;/VirtualHost&gt; 拓展学习：rewrite 模块Rewirte主要的功能就是实现URL的跳转，它的正则表达式是基于Perl语言。可基于服务器级的(httpd.conf)和目录级的 (.htaccess)两种方式。如果要想用到rewrite模块，必须先安装或加载rewrite模块。 方法有两种： 一是编译apache的时候就直接 安装rewrite模块； 二是编译apache时以DSO模式安装apache,然后再利用源码和apxs来安装rewrite模块。 rewrite 语法：包括两个部分 一是条件：12345//语法RewriteCond TestString CondPattern//示例RewriteCond %&#123;HTTP_HOST&#125; ^www.example.net [NC] 默认当存在多个条件时，彼此之间是and的关系，rewrite会检测所有条件，只有前一条符合，才会继续检测后一条；如果不符合就会退出； 为此，还有两个重要的参数： nocase|NC 忽略大小写； ornext|OR 表示或者，而不是隐含的AND； 二是指令：12345//语法RewriteRule Pattern Substitution//示例RewriteRule ^(.*)$ http://www.9med.net/$1 [R=permanent,L] 常用参数 含义 R [=code] 强制重定向，默认是302 F 强制URL为被禁止的 forbidden P 强制代理；要使用这个功能，代理模块必须编译在Apache服务器中。 如果你不能确定，可以检查“httpd -l”的输出中是否有mod_proxy.c。 如果有，则mod_rewrite可以使用这个功能； 如果没有，则必须启用mod_proxy并重新编译“httpd”程序。]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>LAMP</tag>
-        <tag>php</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux学习笔记：lamp的基础配置]]></title>
-    <url>%2F2018%2F06%2F01%2FlinuxNotes-Lamp-0To1Part2%2F</url>
-    <content type="text"><![CDATA[写在前面按照计划，lamp环境安装配置这部分课程，我打算重新整理成三个部分： lamp环境的安装 lamp的基础配置（本地安装discuz及其配置） 网络云主机实践 今天是第二部分的内容，在本地虚拟机安装discuz 并进行相关的配置测试。 准备工作：安装discuzdiscuz 官网下载包地址：https://gitee.com/ComsenzDiscuz/DiscuzX/attach_files 注：使用discuz需要先在官方论坛注册。 第一步：新建discuz安装目录123mkdir /data/discuz.comcd /data/discuz.com 第二步：下载安装包1234567891011121314//下载安装包wget http://files.git.oschina.net/group1/M00/02/9B/PaAvDFpFnk2AEQzMALUt346QSGo609.ziptoken=1250298e943fe82fcca4870032ddc7d8&amp;ts=1527834100&amp;attname=Discuz_X3.4_GIT_SC_UTF8.zip//这里遇到一个小错误，文件被重命名成一堆乱码，使用mv命令改一下名字mv PaAvDFpFnk2AEQzMALUt346QSGo609.zip?token=1250298e943fe82fcca4870032ddc7d8 Discuz_X3.4_GIT_SC_UTF8.zip//解压unzip Discuz_X3.4_GIT_SC_UTF8.zip//移动安装文件（只需移动upload即可）mv upload/* /data/discuz.com/ //删除无用的文件m -rf dir_SC_UTF8 Discuz_X3.4_GIT_SC_UTF8.zip 第三步：编辑配置文件编辑主文件 /usr/local/apache2.4/conf/httpd.conf ： 去掉servername前面的#号注释 编辑http主配置文件，并删除vhost这一行的注释# 编辑虚拟机文件1234567891011[root@stevey ~]# vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf//修改以下内容&lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve-discuz-test.com DocumentRoot &quot;/data/discuz.com&quot; //填写刚才新建的discuz文件目录 ServerName steve-discuz-test.com //域名，必须填写 ServerAlias www.steve-discuz.com //网站别名 #ErrorLog &quot;logs/steve.com-error_log&quot; #CustomLog &quot;logs/steve.com-access_log&quot; common&lt;/VirtualHost&gt; 第四步：启动httpd服务12345678//检查错误/usr/local/apache2.4/bin/apachectl -t//启动服务/usr/local/apache2.4/bin/apachectl start//重新加载/usr/local/apache2.4/bin/apachectl graceful 第五步：配置hosts文件mac的hosts配置文件在/etc/hosts，可以直接修改；这里借助了一个叫做ihosts的软件，方便实验。 第六步：浏览器安装在浏览器输入刚刚的网址steve.com就可以访问测试页面了。这里有一个小窍门，因为笔者的chrome浏览器安装了一个插件，强制所有访问https，所以这里需要手动改成http前缀，就可以正常进行安装了。 这里还有一个插件检查，会提示权限错误。 解决方法：这里的错误主要是由于文件权限不足造成的，我们使用chown目录将文件的owner做一下更改即可。 1[root@stevey discuz.com]# chown -R daemon config/ data/ uc_client/data/ uc_server/data/ 注：这里要使用-R选项，将目录及其字目录的用户名同时更改。 选择 全新安装 这里需要创建数据库、用户 1234//创建数据库mysql&gt; create database discuz;//创建用户steve及密码steve-testmysql&gt; grant all on discuz.* to &apos;steve&apos;@&apos;localhost&apos; identified by &apos;steve-test&apos;； 之后继续安装，填写上面设置的信息 看到下面的提示，说明安装成功。 lamp 环境的基本配置禁止默认虚拟主机apache当中的默认虚拟主机，就是配置文件中的第一个主机。假如我们在hosts当中做如下改动，增加一个服务器上并不存在的域名www.thisisateststeve.com，同样会访问steve-discuz-test.com。 1172.16.155.128 steve-discuz-test.com www.steve-discuz.com www.thisisateststeve.com 如下图所示： 这显然不是我们希望看到的效果。为了避免这种情况我们就要禁止默认虚拟主机 实现步骤： 第一步：修改虚拟主机配置12345678910111213&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/dddcom&quot; ServerName whatDoYouWant.com&lt;/VirtualHost&gt;&lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve-discuz-test.com DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-discuz.com #ErrorLog &quot;logs/steve.com-error_log&quot; #CustomLog &quot;logs/steve.com-access_log&quot; common&lt;/VirtualHost&gt; 第二步：建立目录1234//创建目录[root@stevey discuz.com]# mkdir -p /data/dddcom//设置权限，不允许除root用户之外的人访问[root@stevey discuz.com]# chmod 600 /data/dddcom 第三步：重新加载服务123[root@stevey discuz.com]# /usr/local/apache2.4/bin/apachectl -tSyntax OK[root@stevey discuz.com]# /usr/local/apache2.4/bin/apachectl graceful 成果检测 域名跳转这样做的好处： 增加SEO权重； 如果老的域名被放弃了，可以很方便地重定向到新的域名； 实现步骤如下： 第一步：编辑虚拟主机配置文件12345678910111213141516&lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve-discuz-test.com DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com #ErrorLog &quot;logs/steve.com-error_log&quot; #CustomLog &quot;logs/steve.com-access_log&quot; common &lt;IfModule mod_rewrite.c&gt; //使用rewrite模块 RewriteEngine on 以下两行是条件 [OR]表示或者 RewriteCond %&#123;HTTP_HOST&#125; !^www.steve-aaa.com$ [OR] RewriteCond %&#123;HTTP_HOST&#125; !^www.steve-bbb.com$ RewriteRule ^/(.*)$ http://steve-discuz-test.com/$1 [R=301,L] 这里使用的是301永久跳转 &lt;/IfModule&gt;&lt;/VirtualHost&gt; 第二步：修改apache主配置文件，加载rewrite模块12345678//检测是否已加载rewrite模块[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -M | grep -i rewrite //没有输出结果，说明未加载//编辑主配置文件vim /usr/local/apache2.4/conf/httpd.conf //找到rewrite，把前面注释#去掉LoadModule rewrite_module modules/mod_rewrite.so 第三步：重新加载模块12345678910//检查语法错误[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -tSyntax OK//重新加载配置文件[root@stevey ~]# /usr/local/apache2.4/bin/apachectl graceful//查看是否加载模块[root@gary-tao local]# /usr/local/apache2.4/bin/apachectl -M|grep -i rewrite rewrite_module (shared) 成果检验 访问日志切割修改日志设置这里是利用了apache的rotatelogs命令对文件进行切割 123456789101112131415161718vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve-discuz-test.com DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com ErrorLog &quot;logs/steve-discuz-test.com-error_log&quot; //定义访问日志切割 CustomLog &quot;|/usr/local/apache2.4/bin/rotatelogs -l logs/steve-discuz-test.com-access_%Y%m%d.log 86400&quot; combined env=!img-request &lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %&#123;HTTP_HOST&#125; !^www.steve-aaa.com$ [OR] RewriteCond %&#123;HTTP_HOST&#125; !^www.steve-bbb.com$ RewriteRule ^/(.*)$ http://steve-discuz-test.com/$1 [R=301,L] &lt;/IfModule&gt;&lt;/VirtualHost&gt; 注：这里使用了管道符，将文件交由rotatelogs命令按照时间单位进行切割，86400单位是秒，相当于一天保存一个文档； 访问日志查看日志文档保存在 /usr/local/apache2.4/logs 目录下，打开盖文件夹就能看到刚刚的访问记录 使用cat 命令就可以查看日志 访问日志不记录指定类型的静态文件这样做的目的是控制访问日志的大小，便于后期的查询维护。 12345678910111213141516171819202122232425vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve-discuz-test.com DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com ErrorLog &quot;logs/steve-discuz-test.com-error_log&quot; //不记录指定类型的静态文件 SetEnvIf Request_URI &quot;.*\.gif$&quot; img-request SetEnvIf Request_URI &quot;.*\.jpg$&quot; img-request SetEnvIf Request_URI &quot;.*\.png$&quot; img-request SetEnvIf Request_URI &quot;.*\.bmp$&quot; img-request SetEnvIf Request_URI &quot;.*\.swf$&quot; img-request SetEnvIf Request_URI &quot;.*\.js$&quot; img-request SetEnvIf Request_URI &quot;.*\.css$&quot; img-request CustomLog &quot;|/usr/local/apache2.4/bin/rotatelogs -l logs/steve-discuz-test.com-access_%Y%m%d.log 86400&quot; combined env=!img-request &lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %&#123;HTTP_HOST&#125; !^www.steve-aaa.com$ [OR] RewriteCond %&#123;HTTP_HOST&#125; !^www.steve-bbb.com$ RewriteRule ^/(.*)$ http://steve-discuz-test.com/$1 [R=301,L] &lt;/IfModule&gt;&lt;/VirtualHost&gt; 设置静态缓存设置静态缓存的目的是优化网页设置，提升访问体验。 第一步：修改主机配置1234567891011121314vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf//增加配置&lt;IfModule mod_expires.c&gt; ExpiresActive on //打开该功能的开关 ExpiresByType image/gif &quot;access plus 1 days&quot; ExpiresByType image/jpeg &quot;access plus 24 hours&quot; ExpiresByType image/png &quot;access plus 24 hours&quot; ExpiresByType text/css &quot;now plus 2 hour&quot; ExpiresByType application/x-javascript &quot;now plus 2 hours&quot; ExpiresByType application/javascript &quot;now plus 2 hours&quot; ExpiresByType application/x-shockwave-flash &quot;now plus 2 hours&quot; ExpiresDefault &quot;now plus 0 min&quot;&lt;/IfModule&gt; 第二步：修改apache主配置文件，加载expires模块1234vim /usr/local/apache2.4/conf/httpd.conf//取消注释LoadModule expires_module modules/mod_expires.so 第三步：重启加载apache服务12345678//检查语法错误[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -t//重新加载配置文件[root@stevey ~]# /usr/local/apache2.4/bin/apachectl graceful//查看是否加载模块[root@gary-tao local]# /usr/local/apache2.4/bin/apachectl -M|grep -i rewrite 防盗链防盗链是针对盗链行为的一种预防策略，就是通过设置黑名单或者白名单，有选择性地对允许或者拒绝。 12345678910111213141516171819vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/discuz.com&gt; //定义防盗链目录 SetEnvNoCase Referer &quot;http://steve-discuz-test.com&quot; local_ref [NC] SetEnvNoCase Referer &quot;http://www.steve-aaa.com&quot; local_ref [NC] SetEnvNoCase Referer &quot;http://www.steve-bbb.com&quot; local_ref [NC] SetEnvNoCase Referer &quot;^$&quot; local_ref &lt;filesmatch &quot;\.(txt|doc|mp3|zip|rar|jpg|gif|pdf)&quot;&gt; Order allow,deny Allow from env=local_ref &lt;/filesmatch&gt; &lt;/Directory&gt;&lt;/VirtualHost&gt; 限制ip配置方法： 12345678910111213141516171819vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/discuz.com&gt; //定义防盗链目录 Order deny,allow //默认拒绝 Deny from all //先拒绝所有访问请求 Allow from 127.0.0.1 //再对指定ip开放 &lt;filesmatch &quot;(.*)admin(.*)&quot;&gt; //admin请求只允许在本地访问 Order deny,allow //默认拒绝 Deny from all //先拒绝所有访问请求 Allow from 127.0.0.1 //再对指定ip开放 &lt;/filesmatch&gt; &lt;/Directory&gt;&lt;/VirtualHost&gt; 安全设置：限制php解析1234567891011121314151617vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/discuz.com/data&gt; //定义目录 php_admin_flag engine off //禁止php解析 &lt;filesmatch &quot;(.*)php&quot;&gt; Order deny,allow Deny from all Allow from 127.0.0.1 &lt;/filesmatch&gt; &lt;/Directory&gt;&lt;/VirtualHost&gt; 限制user_agent123456789101112131415vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/discuz.com&quot; ServerName steve-discuz-test.com ServerAlias www.steve-aaa.com ServerAlias www.steve-bbb.com CustomLog &quot;logs/discuz.com-access_log&quot; combined &lt;Directory /data/discuz.com&gt; //定义目录 RewriteEngine on RewriteCond %&#123;HTTP_USER_AGENT&#125; ^.*curl.* [NC,OR] RewriteCond %&#123;HTTP_USER_AGENT&#125; ^.*baidu.com.* [NC] RewriteRule .* - [F] &lt;/Directory&gt;&lt;/VirtualHost&gt;]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>LAMP</tag>
-        <tag>php</tag>
-        <tag>mysql</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux运维学习笔记10-2：httpd的基本配置(四)]]></title>
-    <url>%2F2018%2F05%2F31%2Fweek10-2-linuxNotes-LampSettingPart4%2F</url>
-    <content type="text"><![CDATA[写在前面接着整理关于Lamp环境配置的知识，主要包括防盗链、访问控制等， 配置防盗链盗链和防盗链盗链，就是未经授权使用了别人的服务器资源、损害别人利益的行为。比如，A未经同意使用了B服务器上的图片、视频等资源，提供给了C；对于资源所有者B而言，这种行为白白占用了我的带宽，又没有从中获取什么好处，就定义为盗链行为。 防盗链，这是针对盗链行为的一种策略，就是通过技术手段防止别人揩油盗链。简单说，就是通过设置黑名单或者白名单，有选择性地对允许或者拒绝。 HTTP 协议支持的 Referer 机制，因此可以通过Header 中的 referer 字段识别访问请求来源，从而采取相应的措施。 配置方法： 1234567891011121314151617vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/wwwroot/www.abc.com&gt; //定义防盗链目录 SetEnvNoCase Referer &quot;http://www.abc.com&quot; local_ref SetEnvNoCase Referer &quot;http://abc.com&quot; local_ref SetEnvNoCase Referer &quot;^$&quot; local_ref &lt;filesmatch &quot;\.(txt|doc|mp3|zip|rar|jpg|gif|pdf)&quot;&gt; Order allow,deny Allow from env=local_ref &lt;/filesmatch&gt; &lt;/Directory&gt;&lt;/VirtualHost&gt; 注：这是一个白名单策略，分为三个部分： 第一部分：referer可以是http://www.abc.com 、http://abc.com，也可以为^$，意思是为空； 第二部分：filesMatch，这里采用了通配符，意思是说该策略对后缀为txt、doc、mp3、zip、rar、jpg、gif、pdf的文件生效； 第三部分：执行什么操作，Order Allow,Deny，说明默认操作是允许，也就是这是符合上述条件的请求允许访问； 修改完成后，检查语法错误，重新加载即生效。 访问控制前面已经学习了用户认证限制访问，除此之外还可以对来源ip、执行权限或者user_agent进行限制。 限制ip限制访问者ip，常用的使用的使用场景，比如企业网站后台只允许公司内网或者指定的外网ip段可以访问，防止黑客访问企业网站后台获取数据。 配置方法： 12345678910111213vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/wwwroot/www.abc.com&gt; //定义防盗链目录 Order deny,allow //默认拒绝 Deny from all //先拒绝所有访问请求 Allow from 127.0.0.1 //再对指定ip开放 &lt;/Directory&gt;&lt;/VirtualHost&gt; 保存退出后，检查语法错误，httpd重新加载生效。 限制php解析这个在之前学习前端课程的时候学过一点。如果不做限制，我们用html、js或者php写的脚本会被解析执行。为了避免这种情况的出现，我们可以在上传目录禁止php代码解析。 配置方法： 1234567891011vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/wwwroot/www.abc.com/upload&gt; //定义目录 php_admin_flag engine off //禁止php解析 &lt;/Directory&gt;&lt;/VirtualHost&gt; 限制user_agentUser Agent中文名为用户代理，简称 UA，它是一个特殊字符串头，使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本、浏览器渲染引擎、浏览器语言、浏览器插件等。 利用google chrome浏览器的DevTools，可以查看user0agent等信息。在网络传输的过程中，这些信息都是明文传输的，服务器可以通过这些内容来判断是真实用户访问，还是网络爬虫在访问。 限制user_agent，这个操作的应用场景就是为了防止网络爬虫。所谓“爬虫”，就是一种程序，比如我们可以用python写一个爬虫，把知乎上的好友名单都抓取出来。这当然是一种很便捷的获取信息的手段。但是，站在知乎网站管理员的校对，频繁访问加大了服务器的压力、站用了有限的带宽，当然是不鼓励的，所以就需要限制。 配置方法： 1234567891011121314vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com CustomLog &quot;logs/abc.com-access_log&quot; combined &lt;Directory /data/wwwroot/www.abc.com/upload&gt; //定义目录 RewriteEngine on RewriteCond %&#123;HTTP_USER_AGENT&#125; .*curl.* [NC,OR] RewriteCond %&#123;HTTP_USER_AGENT&#125; .*baidu.com.* [NC] RewriteRule .* - [F] &lt;/Directory&gt;&lt;/VirtualHost&gt; 保存退出后，检查语法错误后，重新加载服务生效。 注：这里用到的是hettp的rewrite模块，%{HTTP_USER_AGENT}是user_agent的内置变量，方括号中的OR表示或者，NC表示不区分大小写。在示例中，当匹配规则时，就会触发下面的规则，F表示forbidden禁止。 参考资料 什么是User Agent?简单了解一下 浏览器User-Agent（用户代理）的介绍 防盗链和反盗链的原理 谈谈网站防盗链 图片和视频防盗链简单介绍]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>LAMP</tag>
-        <tag>php</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux运维学习笔记10-1：httpd的基本配置(三)]]></title>
-    <url>%2F2018%2F05%2F30%2Fweek10-1-linuxNotes-lamp-logfiles%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记紧接上一则笔记内容，主要整理日志管理的两个小技巧，以及静态元素过期时间设置。 日志管理的两个小技巧技巧一：访问日志不记录指定类型的静态文件1234567891011121314151617181920212223vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf//仍然对www.abc.com进行修改&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com &lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %&#123;HTTP_HOST&#125; !^www.abc.com$ RewriteRule ^/(.*)$ http://www.abc.com/$1 [R=301,L] &lt;/IfModule&gt; //增加以下内容 SetEnvIf Request_URI &quot;.*\.gif$&quot; img-request SetEnvIf Request_URI &quot;.*\.jpg$&quot; img-request SetEnvIf Request_URI &quot;.*\.png$&quot; img-request SetEnvIf Request_URI &quot;.*\.bmp$&quot; img-request SetEnvIf Request_URI &quot;.*\.swf$&quot; img-request SetEnvIf Request_URI &quot;.*\.js$&quot; img-request SetEnvIf Request_URI &quot;.*\.css$&quot; img-request CustomLog &quot;logs/111.com-access_log&quot; common env=!img-request&lt;/VirtualHost&gt; 注：此处更改主要包括两个部分： SetEnvIf 语句，先建立img-request，把gif、jpg、png、bmp、js、css等文件全部归到img-request； 第二部分定义日志名，这里使用！取反，将这些img-request都排除在外，相当于不记录这些信息。 配置修改完成后检查语法错误，重新加载即生效，不再赘述。 技巧二：访问日志切割1234vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf在不记录静态文件的配置语句后面再加上一条CustomLog &quot;|/usr/local/apache2.4/bin/rotatelogs -l logs/abc.com-access_%Y%m%d.log 86400&quot; combined env=!img-request 注：这里使用了管道符，将文件交由rotatelogs命令按照时间单位进行切割，86400单位是秒，相当于一天保存一个文档； 静态元素过期时间第一步：编辑配置文件1234567891011121314vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf//增加配置&lt;IfModule mod_expires.c&gt; ExpiresActive on //打开该功能的开关 ExpiresByType image/gif &quot;access plus 1 days&quot; ExpiresByType image/jpeg &quot;access plus 24 hours&quot; ExpiresByType image/png &quot;access plus 24 hours&quot; ExpiresByType text/css &quot;now plus 2 hour&quot; ExpiresByType application/x-javascript &quot;now plus 2 hours&quot; ExpiresByType application/javascript &quot;now plus 2 hours&quot; ExpiresByType application/x-shockwave-flash &quot;now plus 2 hours&quot; ExpiresDefault &quot;now plus 0 min&quot;&lt;/IfModule&gt; 第二步：修改apache主配置文件，加载expires模块1234vim /usr/local/apache2.4/conf/httpd.conf//取消注释LoadModule expires_module modules/mod_expires.so 第三步：重新加载模块12345678910//检查语法错误[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -tSyntax OK//重新加载配置文件[root@stevey ~]# /usr/local/apache2.4/bin/apachectl graceful//查看是否加载模块[root@gary-tao local]# /usr/local/apache2.4/bin/apachectl -M|grep -i rewrite rewrite_module (shared)]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>LAMP</tag>
-        <tag>php</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux学习笔记：源码包安装lamp环境]]></title>
-    <url>%2F2018%2F05%2F30%2FlinuxNotes-Lamp-0To1Part1%2F</url>
-    <content type="text"><![CDATA[写在前面最近家里事情很多，学习过程也很不顺利，lamp搞得乱七八糟，干脆推倒重来。通过这篇笔记把这周的笔记全部梳理一遍。 这个笔记计划分成两部分： mysql、apache、php安装 lamp启动服务 lamp环境安装前提准备：采用源码包安装的方式，需要用编译器进行。linux下的c语言编译器是gcc，centos下运行 yum install -y gcc 进行安装。 lamp工作流： 系统防火墙配置 mysql、apache、php安装 lamp基础配置 废话不多说，直接开始吧。 系统防火墙设置第一步：关闭firewalld注：因为系统版本centos7，所以关闭默认的防火墙，该用iptables 1234//关闭firewalld[root@stevey ~]# systemctl stop firewalld.service//禁止开机启动[root@stevey ~]# systemctl disable firewalld.service 第二步：安装配置iptables123456789101112131415161718192021222324//安装iptables[root@stevey ~]# yum install -y iptables-services//编辑配置文件，重点是开放80、3306端口[root@stevey ~]# vim /etc/sysconfig/iptables # sample configuration for iptables service # you can edit this manually or use system-config-firewall # please do not ask us to add additional ports/services to this default configuration *filter :INPUT ACCEPT [0:0] :FORWARD ACCEPT [0:0] :OUTPUT ACCEPT [0:0] -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT -A INPUT -p icmp -j ACCEPT -A INPUT -i lo -j ACCEPT -A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT -A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT //开放80端口，针对httpd -A INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT //开放3306端口，针对mysql -A INPUT -j REJECT --reject-with icmp-host-prohibited -A FORWARD -j REJECT --reject-with icmp-host-prohibited COMMIT//重启防火墙使配置生效[root@stevey ~]# systemctl restart iptables.service//设置防火墙开机启动 [root@stevey ~]# systemctl enable iptables.service 第三步：关闭selinux注：selinux是centos7一种安全策略，这里选择关闭。 123[root@stevey ~]# vim /etc/selinux/config//找到SELINUX=enforcing这一行，将enforcing 改为 disabled，保存退出并重启虚拟机 mysql 安装mysql是数据库管理软件，目前最新的版本是5.7；因为mysql到源码包很大，编译起来比较费劲，所以这里下载的是已经编译好的二进位制安装包，版本是5.6。 在日常使用中，更多的是使用mysql的开源版本mariaDB，最新的版本是10.2，对应mysql的5.7版本。 第一步：下载源码包12//这里使用wget下载工具，如果没有，则执行 yum install -y wget 安装wget http://mirrors.sohu.com/mysql/MySQL-5.6/mysql-5.6.36-linux-glibc2.5-x86_64.tar.gz 注：这个包有300M，我花了一个小时才下载下来，so喝杯咖啡，别着急。 第二步：源码包解压并移动到/usr/local/mysql1234567891011//解压tar -zvxf mysql-5.6.36-linux-glibc2.5-x86_64.tar.gz//判断是否已有/usr/local/mysql，如果有则改名，避免影响后面的操作[ -d /usr/local/mysql ] &amp;&amp; mv /usr/local/mysql /usr/local/mysql-old//移动文件到/usr/local/mysqlmv mysql-5.6.36-linux-glibc2.5-x86_64 /usr/local/mysql//cd到/usr/local/mysqlcd /usr/local/mysql 第三步：创建mysql用户及数据库文件夹12345678//创建mysql用户 -s指定shelluseradd -s /sbin/nologin mysql//创建数据库文件mkdir -p /data/mysql//更改用户名和所属组权限chown -R mysql:mysql /data/mysql 第四步：安装依赖项12345//安装依赖包perl-Module-Installyum install -y perl-Module-Install//安装依赖包libaioyum install -y libaio 第五步：安装数据库12//当前目录为/usr/local/mysql./scripts/mysql_install_db --user=mysql --datadir=/data/mysql 第六步：校验是否安装成功12[root@stevey mysql]# echo $?0 apache 安装工作流： 安装依赖包apr 安装依赖包apr-util 安装apache 第一步：下载安装包12345wget http://mirrors.cnnic.cn/apache/httpd/httpd-2.4.33.tar.gz wget http://mirrors.cnnic.cn/apache/apr/apr-1.6.3.tar.gzwget http://mirrors.cnnic.cn/apache/apr/apr-util-1.6.1.tar.bz2 第二步：安装依赖包apr1234567891011121314//解压apr源码包tar -zvxf apr-1.6.3.tar.gz//进入tar安装包cd apr-1.6.3//配置编辑参数./configure --prefix=/usr/local/apr//编译安装make &amp;&amp; make install//校验是否安装成功echo $? //如果输出0，说明安装成功；否则，执行不成功 第三步：安装依赖包apr-util1234567891011121314151617181920//安装bzip2压缩工具yum install -y bzip2//安装expat-devel，这是apr-util的依赖包yum install -y expat-devel//解压源码包tar -jvxf apr-util-1.6.1.tar.bz2//进入安装包目录cd apr-util-1.6.1//配置编辑参数./configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr//编译安装make &amp;&amp; make install//校验是否安装成功echo $? //如果输出0，说明安装成功；否则，执行不成功 第四步：安装apache12345678910111213141516171819//解压源码包tar -zvxf httpd-2.4.33.tar.gz//进入安装文件夹cd httpd-2.4.33//安装依赖项pcre-develyum install -y pcre-devel//编译参数[root@stevey httpd-2.4.33]# ./configure \&gt; --prefix=/usr/local/apache2.4 \&gt; --with-apr=/usr/local/apr \&gt; --with-apr-util=/usr/local/apr-util \&gt; --enable-so \&gt; --enable-mods-shared=most//编译安装make &amp;&amp; make install 第五步：校验是否安装成功12[root@stevey mysql]# echo $?0 php安装工作流： 下载源码包 安装依赖包 编译安装php源码包 第一步：下载源码包1234567[root@steve src]# wget http://cn2.php.net/distributions/php-7.2.6.tar.gz//解压源码包[root@steve src]# tar -zxvf php-7.2.6.tar.gz//进入安装目录[root@steve src]# cd php-7.2.6 第二步：安装依赖包1[root@steve src]# yum install -y libxml2 libxml2-devel openssl openssl-devel bzip2 bzip2-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel gmp gmp-devel libmcrypt libmcrypt-devel readline readline-devel libxslt libxslt-devel 第三步：编译参数12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667./configure \--prefix=/usr/local/php \--with-apxs2=/usr/local/apache2.4/bin/apxs \--with-config-file-path=/usr/local/php/etc \--enable-fpm \--with-fpm-user=nginx \--with-fpm-group=nginx \--enable-inline-optimization \--disable-debug \--disable-rpath \--enable-shared \--enable-soap \--with-libxml-dir \--with-xmlrpc \--with-openssl \--with-mhash \--with-pcre-regex \--with-sqlite3 \--with-zlib \--enable-bcmath \--with-iconv \--with-bz2 \--enable-calendar \--with-curl \--with-cdb \--enable-dom \--enable-exif \--enable-fileinfo \--enable-filter \--with-pcre-dir \--enable-ftp \--with-gd \--with-openssl-dir \--with-jpeg-dir \--with-png-dir \--with-zlib-dir \--with-freetype-dir \--enable-gd-jis-conv \--with-gettext \--with-gmp \--with-mhash \--enable-json \--enable-mbstring \--enable-mbregex \--enable-mbregex-backtrack \--with-libmbfl \--with-onig \--enable-pdo \--with-mysqli=mysqlnd \--with-pdo-mysql=mysqlnd \--with-zlib-dir \--with-pdo-sqlite \--with-readline \--enable-session \--enable-shmop \--enable-simplexml \--enable-sockets \--enable-sysvmsg \--enable-sysvsem \--enable-sysvshm \--enable-wddx \--with-libxml-dir \--with-xsl \--enable-zip \--enable-mysqlnd-compression-support \--with-pear \--enable-opcache 第四步：编译安装1make &amp;&amp; make install TroubleShooting: 虚拟内存不足 解决方法： 手动增加swap 建立swapfile 123456[root@stevey php-7.2.6]# mkdir -p /usr/img/[root@stevey php-7.2.6]# rm -rf /usr/img/swap[root@stevey php-7.2.6]# dd if=/dev/zero of=/usr/img/swap bs=1024 count=20480002048000+0 records in2048000+0 records out2097152000 bytes (2.1 GB) copied, 7.43002 s, 282 MB/s 格式化swap 123[root@stevey php-7.2.6]# mkswap /usr/img/swapSetting up swapspace version 1, size = 2047996 KiBno label, UUID=db4f95a9-d67c-4d8c-b32f-a5f07ab4f051 挂载swap 12[root@stevey php-7.2.6]# swapon /usr/img/swapswapon: /usr/img/swap: insecure permissions 0644, 0600 suggested. 修改文件夹权限 1chmod 0600 /usr/img/swap 增加swap空间后，再次执行编译安装 1make &amp;&amp; make install 第五步：校验安装是否成功12[root@stevey php-7.2.6]# echo $?0 环境变量问题至此，mysql、apache、php安装部分结束。不过，这里还有一个重要的问题没有解决。因为我们在采用源码包安装时自定义了安装目录，而不是linux系统的默认目录，所以如果这时查找命令是找不到的，就像这样。 12[root@stevey init.d]# mysql -v-bash: mysql: command not found 解决方案： 方法一：修改环境变量系统环境变量的配置文件在/etc/profile（全局修改）或者~/.bash_profile（只影响当前用户），直接修改配置文件。 PATH声明用法： 12PATH=$PAHT:&lt;PATH 1&gt;:&lt;PATH 2&gt;:&lt;PATH 3&gt;:&lt; PATH n &gt; //变量之间用逗号隔开export PATH 示例： 123456vim ～/.bash_profile //加入以下内容PATH=$PATH:$HOME/bin:/usr/local/mysql/bin:/usr/local/apache2.4/bin:/usr/local/php/bin//保存退出执行以下命令生效source ～/.bash_profile 验证一下 1234567[root@stevey php]# php -vPHP 7.2.6 (cli) (built: May 30 2018 14:37:03) ( NTS )Copyright (c) 1997-2018 The PHP GroupZend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies[root@stevey php]# httpd -vServer version: Apache/2.4.33 (Unix)Server built: May 30 2018 13:54:01 第二种方法：软链接如果我们不想修改环境变量，也可以采取软链接的办法。 比如： 1ln -s /usr/local/mysql/bin/ /usr/bin 验证一下，也是可以的。 12[root@stevey ~]# mysql -Vmysql Ver 14.14 Distrib 5.6.36, for linux-glibc2.5 (x86_64) using EditLine wrapper lamp环境启动mysql启动服务第一步：配置mysql12345678910111213141516171819202122//进入mysql 目录[root@stevey src]# cd /usr/local/mysql//复制配置文件cp support-files/my-default.cnf /etc/my.cnf//编辑配置文件vim /etc/my.cnf//修改以下配置log_bin = root //15行basedir = /usr/local/mysqldatadir = /data/mysqlport = 3306server_id = 128socket = /tmp/mysql.sock//去掉以下配置前面的的型号innodb_buffer_pool_size = 128M join_buffer_size = 128Msort_buffer_size = 2Mread_rnd_buffer_size = 2M 第二步：配置mysql启动脚本123456789101112//复制启动脚本到/etc/init.d/mysqldcp support-files/mysql.server /etc/init.d/mysqld//修改文件权限chmod 755 /etc/init.d/mysqld//编辑启动脚本vim /etc/init.d/mysqld//更改data保存目录basedir=/usr/local/mysqldatadir=/data/mysql 第三步：设置开机启动1234567891011//进入系统服务目录 /etc/init.d/cd /etc/init.d///将mysqld 服务加入系统服务列表chkconfig --add mysqld //设置开机启动chkconfig mysqld on//启动mysqldservice mysqld start 第四步：校验是否启动12345678910//方法一：查看进程，结果应大于2行[root@stevey init.d]# ps -aux |grep mysqld root 84371 0.0 0.1 11816 1620 pts/1 S 15:06 0:00 /bin/sh /usr/local/mysql/bin/mysqld_safe --datadir=/data/mysql --pid-file=/data/mysql/stevey.pidmysql 84607 1.2 44.9 1300832 449812 pts/1 Sl 15:06 0:01 /usr/local/mysql/bin/mysqld --basedir=/usr/local/mysql --datadir=/data/mysql --plugin-dir=/usr/local/mysql/lib/plugin --user=mysql --log-error=/data/mysql/stevey.err --pid-file=/data/mysql/stevey.pid --socket=/tmp/mysql.sock --port=3306root 84633 0.0 0.0 112704 976 pts/1 S+ 15:07 0:00 grep --color=auto mysqld方法二：查看端口监听情况[root@stevey init.d]# netstat -lnp |grep mysqldtcp6 0 0 :::3306 :::* LISTEN 84607/mysqldunix 2 [ ACC ] STREAM LISTENING 169619 84607/mysqld /tmp/mysql.sock 至此，这一部分就结束了，后面的内容在接着整理。]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>LAMP</tag>
-        <tag>php</tag>
-        <tag>mysql</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux运维学习笔记9-5：httpd的基本配置(二)]]></title>
-    <url>%2F2018%2F05%2F29%2Fweek9-5-linuxNotes-LampPart2%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记继续整理Lamp相关知识，主要包括apache用户认证、域名跳转、访问日志。 Apache用户认证有时候，我们不希望自己的网站所有人都能看到或者访问，就可以使用密码认证，也就是只有特定的用户才能够访问，apache提供了这样一种用户认证的功能。 全站用户用户认证具体的设置分三步： 第一步：编辑虚拟主机配置文件1234567891011121314vim /usr/local/apache2/conf/extra/httpd-vhosts.conf//此处修改的是www.abc.com的配置文件&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com &lt;Directory /data/wwwroot/www.abc.com&gt; //指定认证目录 AllowOverride AuthConfig //认证开关 AuthName &quot;steveY&quot; //认证用户提示 AuthType Basic //认证类型 AuthUserFile /data/.htpasswd //认证文件路径 require valid-user //指定所有用户都必须认证 &lt;/Directory&gt;&lt;/VirtualHost&gt; 第二步：创建访问用户密码文件123456//htppasswd 命令为密码创建工具，-c表示create创建，-m指定加密方式为MD5；/data/.htpasswd 为密码文件，steveY 为用户名/usr/local/apache2.4/bin/htpasswd -cm /data/.htpasswd steveY New password: *************Re-type new password: *************Adding password for user steveY 第三步：重启Apache12345678//验证格式是否有错误\/usr/local/apache2.4/bin/apachectl -t//重启apache服务/usr/local/apache2.4/bin/apachectl restart//或者重新加载配置文件/usr/local/apache2.4/bin/apachectl graceful 第四步：修改客户端host这里的客户端指的是要用那个电脑去访问www.abc.com,那笔者来说，lamp环境搭建在本地mac电脑上的虚拟机，之后在mac电脑访问虚拟机，此时mac就是客户端。 mac的host配置文件是/etc/hosts ，我们就来修改这个文件 123steve:~ steveyuan$ sudo vim /etc/hosts//增加一行172.16.155.128 www.abc.com 目录或文件认证目录认证跟上面的全站认证类似，只需要修改一个地方，即将认证目录改为需要进行密码认证加密的文件夹目录，修改保存后重新加载配置文件即可。 文件认证与目录认证类似，只不过这里要将Directory 改为 FilesMatch，其他步骤不变。修改保存后，重新加载配置文件。 1234567&lt;FilesMatch admin.php&gt; //指定认证文件 AllowOverride AuthConfig //认证开关 AuthName &quot;steveY&quot; //认证用户提示 AuthType Basic //认证类型 AuthUserFile /data/.htpasswd //认证文件路径 require valid-user //指定所有用户都必须认证&lt;/FilesMatch&gt; 域名跳转这样做的好处： 增加SEO权重； 如果老的域名被放弃了，可以很方便地重定向到新的域名； 实现步骤如下： 第一步：修改虚拟主机配置1234567891011121314vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf//仍然对www.abc.com进行修改&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com &lt;IfModule mod_rewrite.c&gt; //需要mod_rewrite模块支持 RewriteEngine on //打开rewrite功能 RewriteCond %&#123;HTTP_HOST&#125; !^www.abc.com$ //定义rewrite的条件，主机名（域名）不是www.123.com满足条件 RewriteRule ^/(.*)$ http://www.abc.com/$1 [R=301,L] //定义rewrite规则，当满足上面的条件时，这条规则才会执行 &lt;/IfModule&gt;&lt;/VirtualHost&gt; 第二步：修改apache主配置文件，加载rewrite模块12345678//检测是否已加载rewrite模块[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -M | grep -i rewrite //没有输出结果，说明未加载//编辑主配置文件vim /usr/local/apache2.4/conf/httpd.conf //找到rewrite，把前面注释#去掉LoadModule rewrite_module modules/mod_rewrite.so 第三步：重新加载模块12345678910//检查语法错误[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -tSyntax OK//重新加载配置文件[root@stevey ~]# /usr/local/apache2.4/bin/apachectl graceful//查看是否加载模块[root@gary-tao local]# /usr/local/apache2.4/bin/apachectl -M|grep -i rewrite rewrite_module (shared) 出现以下结果说明模块已成功加载 第四步：测试结果123456[root@stevey ~]# curl -x127.0.0.1:80 -I abc.comHTTP/1.1 301 Moved PermanentlyDate: Wed, 30 May 2018 14:46:03 GMTServer: Apache/2.4.33 (Unix) PHP/7.2.6Location: http://www.abc.com/ //表示永久跳转至www.abc.comContent-Type: text/html; charset=iso-8859-1 Apache访问日志网站日志文件保存在/usr/local/apache2.4/logs/，通过访问日志，能给了解系统的运行情况。 查看系统访问日志12[root@stevey ~]# cat /usr/local/apache2.4/logs/abc.com-access_log127.0.0.1 - - [30/May/2018:22:56:15 +0800] &quot;HEAD HTTP://abc.com/ HTTP/1.1&quot; 301 - &quot;-&quot; &quot;curl/7.29.0&quot; 修改日志配置文件查看配置文件执行以下命令1cat /usr/local/apache2.4/conf/httpd.conf 这里要关注的是记录格式说明 标示 含义 %h 访问网站的IP; %l 访问远程登录名,这个字段基本上为”-“; %u 用户名,当使用用户认证时,这个字段为认证的用户名; %t 时间; %r 请求的动作(比如用ctrl-I是就为HEADE); %s 请求的状态,写成%&gt;s为最后的状态码; %b 传输数据大小; %{Referer}i referer信息(访问来源网页信息,比如通过百度找到阿铭论坛,那么referer就是baidu); %{User-Agent}i 浏览器标识; 注：在示例文件中给出了两种日志格式：common和combined，后者比前者多了访问来源%{Referer}i和浏览器标示信息%{User-Agent}i。 配置虚拟主机配置文本日志格式1234567891011121314151617181920vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf&lt;VirtualHost *:80&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com ServerAlias abc.com &lt;IfModule mod_rewrite.c&gt; RewriteEngine on RewriteCond %&#123;HTTP_HOST&#125; !^www.abc.com$ RewriteRule ^/(.*)$ http://www.abc.com/$1 [R=301,L] &lt;/IfModule&gt; //增加一行 CustomLog &quot;logs/abc.com-access_log&quot; combined&lt;/VirtualHost&gt;//退出保持后测试语法错误/usr/local/apache2.4/bin/apachectl -t//重新加载/usr/local/apache2.4/bin/apachectl graceful]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>LAMP</tag>
-        <tag>php</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux运维学习笔记9-4：httpd的基本配置(一)]]></title>
-    <url>%2F2018%2F05%2F28%2Fweek9-4-linuxNotes-apache-php%2F</url>
-    <content type="text"><![CDATA[写在前面LAMP是由一系列操作系统/开发软件名称首字母集合而成的一种说法，它包括Linux、Apache、MySQL、PHP，通过这一系列组合而成的开发环境能够让你顺利地开发Web应用。 这则笔记继续整理LAMP环境的基本配置相关知识。 配置httpd支持PHP编辑httpd配置文件httpd 的主配置文件为 /usr/local/apache2.4/conf/httpd.conf,编辑该文件并进行修改。 1vim /usr/local/apache2.4/conf/httpd.conf 修改以下几处： 去掉servername前面的#号注释 denied 改为 granted，允许所有请求；否则访问会报错 新增两行 AddType application/x-httpd-php .php 、AddType application/x-httpd-php-source .phps 在index，html 后面增加 index.php 之后保存退出。 启动httpd服务1234567891011121314//检查配置文件是否正确[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -t //命令要写绝对路径Syntax OK //说明配置正确//启动httpd[root@stevey ~]# /usr/local/apache2.4/bin/apachectl start//查看httpd是否启动[root@stevey ~]# netstat -lnp | grep httpdtcp6 0 0 :::80 :::* LISTEN 14882/httpd //说明正常启动//也可以通过curl命令进行检测[root@stevey ~]# curl localhost&lt;html&gt;&lt;body&gt;&lt;h1&gt;It works!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt; 或者也要在浏览器输入虚拟机网址 检查http是否支持php123456//新建一个测试文件，并添加内容vim /usr/local/apache2.4/htdocs/test.php&lt;?php echo &apos;php格式能够被正确解析&apos;?&gt; TroubleShooting ：php未能正确解析，404错误解决方案： 网上查了一下，说是因为php7安装的时候忘记了配置--with-apxs2=/usr/local/apache2.4/bin/apxs ，只能重新编译安装 123//编译参数[root@stevey php-7.2.6]# ./configure --prefix=/usr/local/php --with-apxs2=/usr/local/apache2.4/bin/apxs --with-config-file-path=/etc --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx --enable-inline-optimization --disable-debug --disable-rpath --enable-shared --enable-soap --with-libxml-dir --with-xmlrpc --with-openssl --with-mhash --with-pcre-regex --with-sqlite3 --with-zlib --enable-bcmath --with-iconv --with-bz2 --enable-calendar --with-curl --with-cdb --enable-dom --enable-exif --enable-fileinfo --enable-filter --with-pcre-dir --enable-ftp --with-gd --with-openssl-dir --with-jpeg-dir --with-png-dir --with-zlib-dir --with-freetype-dir --enable-gd-jis-conv --with-gettext --with-gmp --with-mhash --enable-json --enable-mbstring --enable-mbregex --enable-mbregex-backtrack --with-libmbfl --with-onig --enable-pdo --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-zlib-dir --with-pdo-sqlite --with-pdo-sqlite --enable-session --enable-shmop --enable-simplexml --enable-sockets --enable-sysvmsg --enable-sysvsem --enable-sysvshm --enable-wddx --with-libxml-dir --with-xsl --enable-zip --enable-mysqlnd-compression-support --with-pear --enable-opcache 重新编译安装，又遇到错误提示： 1make: *** [sapi/cli/php] Error 1 解决方案： 123make clean make &amp;&amp; make install Apache默认虚拟主机预备动作编辑http主配置文件，并删除vhost这一行的注释# 编辑虚拟机配置文件 http/-vhosts.conf1[root@stevey ~]# vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf 目录 注释 ServerAdmin 管理员邮箱 DocumentRoot 虚拟主机站点的根目录，网站的程序就放在该目录下 ServerName 网站域名，只能写一个 ServerAlias 网站别名，可以写很多个，中间用空格分开 ErrorLog 错误日志 CustomLog 站点访问日志 1234567891011121314151617// 编辑虚拟机配置文件[root@stevey ~]# vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf//修改一下内容 &lt;VirtualHost *:80&gt; ServerAdmin webmaster@steve.com DocumentRoot &quot;/data/wwwroot/steve.com&quot; ServerName steve.com ServerAlias www.steve.com ErrorLog &quot;logs/steve.com-error_log&quot; CustomLog &quot;logs/steve.com-access_log&quot; common &lt;/VirtualHost&gt; &lt;VirtualHost *:&gt; DocumentRoot &quot;/data/wwwroot/www.abc.com&quot; ServerName www.abc.com &lt;/VirtualHost&gt; 通过上述设置，steve.com 这个域名就成为了默认虚拟主机，如果有第三个域名同样指向该主机，默认会访问steve.com 1234//文件准备 [root@stevey ~]# mkdir -p /data/wwwroot/steve.com /data/wwwroot/www.abc.com[root@stevey ~]# echo &apos;steve.com&apos; &gt; /data/wwwroot/steve.com/index.html[root@stevey ~]# echo &apos;abc.com&apos; &gt; /data/wwwroot/www.abc.com/index.com 重新加载apache服务12345//语法检查[root@stevey ~]# /usr/local/apache2.4/bin/apachectl -t//重新加载httpd服务[root@stevey ~]# /usr/local/apache2.4/bin/apachectl graceful TroubleShooting:403拒绝访问 解决方案： 查了一下，发现是把安装目录写错了，修改后即可正常访问 1DocumentRoot &quot;/data/wwwroot/steve.com&quot; 校验配置成果测试虚拟主机1234567[root@stevey www.abc.com]# curl -x127.0.0.1:80 steve.comsteve.com[root@stevey www.abc.com]# curl -x127.0.0.1:80 www.abc.comabc.com//注：将第三个域名指向该服务器时，就会访问默认主机域名[root@stevey www.abc.com]# curl -x127.0.0.1:80 www.123.comsteve.com 测试php是否能正确解析 文件准备： 12345[root@stevey steve.com]# vim test.php&lt;?php echo &apos;php格式能够被正确解析&apos;?&gt; curl命令测试 12[root@stevey steve.com]# curl -x127.0.0.1:80 steve.com/test.phpphp格式能够被正确解析 浏览器测试]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>LAMP</tag>
-        <tag>php</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux运维学习笔记9-3：php安装]]></title>
-    <url>%2F2018%2F05%2F25%2Fweek9-3-linuxNotes-php-installition%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记的目的也很简单，就是安装php，按照课程要求，分别安装php5.5和php7两个版本。为了防止相互影响，分别在两台机器上实验。 源码包安装php7 安装php7.2源码包地址：http://cn2.php.net/distributions/php-7.2.6.tar.gz 第一步：下载并解压源码包首先，还是来规矩，把源码包下载到/usr/local/src目录下，方便统一管理。当然，我还机智滴给这个路径设置了一个alias别名，这样又可以少敲几个按键了。 12345//wget命令下载[root@steve src]# wget http://cn2.php.net/distributions/php-7.2.6.tar.gz//解压源码包[root@steve src]# tar -zxvf php-7.2.6.tar.gz 第二步：安装依赖包先看了一下INSTALL和README两个说明文档，但是好像也没什么用，直接开始编译安装吧。 12345//进入安装目录[root@steve src]# cd php-7.2.6//安装依赖包[root@steve src]# yum install -y libxml2 libxml2-devel openssl openssl-devel bzip2 bzip2-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel gmp gmp-devel libmcrypt libmcrypt-devel readline readline-devel libxslt libxslt-devel 第三步：编译参数123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566./configure \--prefix=/usr/local/php \--with-config-file-path=/etc \--enable-fpm \--with-fpm-user=nginx \--with-fpm-group=nginx \--enable-inline-optimization \--disable-debug \--disable-rpath \--enable-shared \--enable-soap \--with-libxml-dir \--with-xmlrpc \--with-openssl \--with-mhash \--with-pcre-regex \--with-sqlite3 \--with-zlib \--enable-bcmath \--with-iconv \--with-bz2 \--enable-calendar \--with-curl \--with-cdb \--enable-dom \--enable-exif \--enable-fileinfo \--enable-filter \--with-pcre-dir \--enable-ftp \--with-gd \--with-openssl-dir \--with-jpeg-dir \--with-png-dir \--with-zlib-dir \--with-freetype-dir \--enable-gd-jis-conv \--with-gettext \--with-gmp \--with-mhash \--enable-json \--enable-mbstring \--enable-mbregex \--enable-mbregex-backtrack \--with-libmbfl \--with-onig \--enable-pdo \--with-mysqli=mysqlnd \--with-pdo-mysql=mysqlnd \--with-zlib-dir \--with-pdo-sqlite \--with-readline \--enable-session \--enable-shmop \--enable-simplexml \--enable-sockets \--enable-sysvmsg \--enable-sysvsem \--enable-sysvshm \--enable-wddx \--with-libxml-dir \--with-xsl \--enable-zip \--enable-mysqlnd-compression-support \--with-pear \--enable-opcache ok,编译完成 第四步：编译安装1[root@steve php-7.2.6]# make &amp;&amp; make install 第五步：配置php1234vim /etc/profile //修改系统变量配置文件，加入以下内容PATH=$PATH:/usr/local/php/binexport PATH 保存退出后，执行命令生效 1source /etc/profile 安装php5.5第一步：下载源码包12345//下载源码包[root@steve src] wget http://cn2.php.net/distributions/php-5.6.32.tar.bz2//解压[root@steve src] tar -jxvf php-5.6.32.tar.bz2 第二步：安装依赖1yum install -y autoconf libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel libpng libpng-devel libxml2 libxml2-devel zlib zlib-devel glibc glibc-devel glib2 glib2-devel bzip2 bzip2-devel ncurses curl openssl-devel gdbm-devel db4-devel libXpm-devel libX11-devel gd-devel gmp-devel readline-devel libxslt-devel expat-devel xmlrpc-c xmlrpc-c-devel 第三步：编译参数1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768//进入源码包cd php-5.6//编译参数./configure --prefix=/usr/local/php-5.6.0 --with-mysql=/usr/local/mysql \--with-mysql-sock \--with-mysqli=\usr\local\mysql\bin\mysql_config \--enable-fpm \--with-ncurses \--enable-soap \--with-libxml-dir \--with-XMLrpc \--with-openssl \--with-mcrypt \--with-mhash \--with-pcre-regex \--with-sqlite3 \--with-zlib \--enable-bcmath \--with-iconv \--with-bz2 \--enable-calendar \--with-curl \--with-cdb \--enable-dom \--enable-exif \--enable-fileinfo \--enable-filter \--with-pcre-dir \--enable-ftp \--with-gd \--with-openssl-dir \--with-jpeg-dir \--with-png-dir \--with-zlib-dir \--with-freetype-dir \--enable-gd-native-ttf \--enable-gd-jis-conv \--with-gettext \--with-gmp \--with-mhash \--enable-json \--enable-mbstring \--disable-mbregex \--disable-mbregex-backtrack \--with-libmbfl \--with-onig \--enable-pdo \--with-pdo-mysql \--with-zlib-dir \--with-pdo-sqlite \--with-readline \--enable-session \--enable-shmop \--enable-simplexml \--enable-sockets \--enable-sqlite-utf8 \--enable-sysvmsg \--enable-sysvsem \--enable-sysvshm \--enable-wddx \--with-libxml-dir \--with-xsl \--enable-zip \--enable-mysqlnd-compression-support \--with-pear 第四步：编译安装1make &amp;&amp; make install yum安装php源码包安装太繁琐了，在网上找到使用yum安装到方法，一起测试一下。 安装流程第一步：安装php7的源123rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpmyum install https://centos7.iuscommunity.org/ius-release.rpm 第二步：搜索新版 PHP1yum search php70u 第三步： 安装php1yum install -y php70u-common php70u-fpm php70u-cli php70u-gd php70u-mysqlnd php70u-pdo php70u-mcrypt php70u-mbstring php70u-json php70u-opcache php70u-xml 第四步：检查php版本1php -v 话说，被源码包蹂躏了半天，能够用yum安装，简直是神清气爽啊。 不过，为了继续做实验，我们还要把这个卸载掉。 卸载流程第一步：查看已安装PHP 相关的包1yum list installed | grep php 第二步：卸载包 1yum uninstall php70u-cli.x86_64 php70u-common.x86_64 php70u-fpm.x86_64 php70u-gd.x86_64 php70u-json.x86_64 php70u-mbstring.x86_64 php70u-mcrypt.x86_64 php70u-mysqlnd.x86_64 php70u-opcache.x86_64 php70u-pdo.x86_64 php70u-xml.x86_64 参考资料：CentOS 7 安装 PHP 7 CentOS：删除旧版 PHP，安装新版 PHP]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>php</tag>
       </tags>
   </entry>
   <entry>
@@ -716,8 +602,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>base64</tag>
       </tags>
   </entry>
@@ -729,8 +615,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -741,39 +627,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>raspberryPi</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux运维学习笔记9-2：apache安装]]></title>
-    <url>%2F2018%2F05%2F15%2Fweek9-2-linuxNotesLampPart-2%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记继续整理lamp环境安装，主要是apache安装。 apache 安装Apache是世界使用排名第一的Web服务器软件。它可以运行在几乎所有广泛使用的计算机平台上，由于其跨平台和安全性被广泛使用，是最流行的Web服务器端软件之一。 工作流： 下载rpm包 安装依赖包 apr 、apr-util 编译安装httpd 第一步：下载并解压安装包安装包地址： 2.4源码包：http://mirrors.cnnic.cn/apache/httpd/httpd-2.4.33.tar.gz apr安装包: http://mirrors.cnnic.cn/apache/apr/apr-1.6.3.tar.gz apr-util安装包: http://mirrors.cnnic.cn/apache/apr/apr-util-1.6.1.tar.bz2 第二步：安装依赖包： 安装apr 1234567891011121314//解压apr源码包tar -zvxf apr-1.6.3.tar.gz//进入tar安装包cd apr-1.6.3//配置编辑参数./configure --prefix=/usr/local/apr//编译安装make &amp;&amp; make install//校验是否安装成功echo $? //如果输出0，说明安装成功；否则，执行不成功 安装expat-devel 注：expat-devel是apr-util的依赖包 1yum install -y expat-devel 安装apr-util 1234567891011121314//解压源码包tar -jvxf apr-util-1.6.1.tar.bz2//进入安装包目录cd apr-util-1.6.1//配置编辑参数./configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr//编译安装make &amp;&amp; make install//校验是否安装成功echo $? //如果输出0，说明安装成功；否则，执行不成功 第三步：安装httpd 解压源码包 1tar -zvxf httpd-2.4.33.tar.gz 进入安装文件夹 1cd httpd-2.4.33 配置编译参数 注：\是转义字符，编译参数比较多的时候，可以分行写，用转义符号\分行。 123456[root@stevey httpd-2.4.33]# ./configure \&gt; --prefix=/usr/local/apache2.4 \&gt; --with-apr=/usr/local/apr \&gt; --with-apr-util=/usr/local/apr-util \&gt; --enable-so \&gt; --enable-mods-shared=most 注：trebleShooting 前一步结束之后，遇到错误提示： 安装pcre-devel 1yum install -y pcre-devel 重新编译安装 1make &amp;&amp; make install TroubleShooting 这里曾经遇到错误提示如下： [更新] 重新下载码包，操作了一遍，好了。所以，应该是前面参数写错了。 安装完成后，看看都加载了哪些模块 第四步：配置启动httpd12345678//将链接apachectl 复制到系统启动目录下并命名为httpdcp /usr/local/apache2.4/bin/apachectl /etc/init.d/httpd//修改文件权限chmod 755 /etc/init.d/httpd//编辑启动脚本,更改监听端口（这部分内容不太清楚，后面再补充）vim /etc/init.d/httpd 配置开机启动 1234567891011121314//进入系统服务目录 /etc/init.d/cd /etc/init.d///将mysqld 服务加入系统服务列表chkconfig --add httpd //设置开机启动chkconfig httpd on//启动mysqldservice httpd start//最后，再吸取之前的教训，做一个软链接解决环境变量配置错误的问题ln -s /usr/local/apache2.4/bin/apachectl /usr/bin 参考资料：Linux 下apache 服务器安装与配置教程(配置文件虚拟主机多站点详解) 在Linux下Apache配置完全教程]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>php</tag>
-        <tag>mysql</tag>
-        <tag>apache</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux运维学习笔记9-1：mysql安装]]></title>
-    <url>%2F2018%2F05%2F15%2Fweek9-1-linuxNotesLampPart-1%2F</url>
-    <content type="text"><![CDATA[写在前面LAMP，是linux、apache、mysql、php的简写，也就是把apache、mysql、php安装在linux系统上，共同构成一个运行php语言的网络环境。 mysql什么是数据库？数据库是一种用于存储数据集合的独立应用程序。每种数据库都会有一个或多个独特的 API，用来创建、访问、管理、搜索或复制数据库中保存的数据。 现在业界一般采用关系型数据库管理系统（RDBMS）来存储并管理海量数据。之所以称其为关系型数据库，是因为所有数据都存储在不同的表中，表之间的关系是建立在主键或其他键（被称为外键）的基础之上的。 关系型数据库管理系统（RDBMS）具有以下特点： 能够实现一种具有表、列与索引的数据库； 保证不同表的行之间的引用完整性； 能自动更新索引； 能解释 SQL 查询，组合多张表的信息； 什么是mysql？MySQL是一个开放源代码的关系数据库管理系统（DBMS），由于性能高、成本低、可靠性好，已经成为最流行的开源数据库，因此被广泛地应用在Internet上的中小型网站中。 MySQL 的特点： 使用C和C++编写，并使用了多种编译器进行测试，保证源代码的可移植性； 支持linux、macos、windows等系统，跨平台； 为多种編程语言提供了API，包括php、python、perl等等； 多语言支持，常见的编码如中文的GB 2312、BIG5等等； MySQL安装下载rpm包rpm包地址： 5.1 32位二进制包： 5.1_64位二进制包： 5.5_64位二进制包： 5.5_32位二进制包： 5.6_32位二进制包： 5.6_64位二进制包： 5.5源码包： 5.6源码包： 查询系统版本 12[root@stevey ~]# uname -ix86_64 下载对应的rpm包（这里写在的已经编译好的二进位制包） 1wget http://mirrors.sohu.com/mysql/MySQL-5.6/mysql-5.6.36-linux-glibc2.5-x86_64.tar.gz 解压压缩包 1tar -zvxf mysql-5.6.36-linux-glibc2.5-x86_64.tar.gz 将文件包移动到/usr/local/mysql 12345678//判断是否已有/usr/local/mysql，如果有则改名，避免影响后面的操作[ -d /usr/local/mysql ] &amp;&amp; mv /usr/local/mysql /usr/local/mysql-old//移动文件到/usr/local/mysqlmv mysql-5.6.36-linux-glibc2.5-x86_64 /usr/local/mysql//cd到/usr/local/mysqlcd /usr/local/mysql 创建mysql用户及数据库文件夹 12345678创建mysql用户useradd -s /sbin/nologin mysql创建数据库文件mkdir -p /data/mysql更改用户名和所属组权限chown -R mysql:mysql /data/mysql 安装mysql 123456//安装依赖包，注意perl-Module-Install写法yum install -y perl-Module-Install//安装数据库./scripts/mysql_install_db --user=mysql --datadir=/data/mysql 这里遇到了一个错误提示： google了一下，stackoverflow 给出了答案： 执行命令，成功安装： 1yum install -y libaio 配置mysql 复制配置文件 12[root@stevey mysql]# cp support-files/my-default.cnf /etc/my.cnfcp: overwrite ‘/etc/my.cnf’? y //选择y 编辑配置文件 1vim /etc/my.cnf 按照下面的设置进行配置 配置启动脚本 123456789101112//复制启动脚本到/etc/init.d/mysqldcp support-files/mysql.server /etc/init.d/mysqld//修改文件权限chmod 755 /etc/init.d/mysqld//编辑启动脚本vim /etc/init.d/mysqld//更改data保存目录basedir=/usr/local/mysqldatadir=/data/mysql 设置开机启动 1234567891011//进入系统服务目录 /etc/init.d/cd /etc/init.d///将mysqld 服务加入系统服务列表chkconfig --add mysqld //设置开机启动chkconfig mysqld on//启动mysqldservice mysqld start 判断服务是否启动 12345678910//查看进程，结果应大于两行[root@steve ~]# ps -aux |grep mysqld root 14858 0.0 0.0 11772 1592 ? S May23 0:00 /bin/sh /usr/local/mysql/bin/mysqld_safe --datadir=/data/mysql --pid-file=/data/mysql/steve.pidmysql 15094 0.0 23.9 1301736 450716 ? Sl May23 0:29 /usr/local/mysql/bin/mysqld --basedir=/usr/local/mysql --datadir=/data/mysql --plugin-dir=/usr/local/mysql/lib/plugin --user=mysql --log-error=/data/mysql/steve.err --pid-file=/data/mysql/steve.pid --socket=/tmp/mysql.sock --port=3306root 18381 0.0 0.0 112660 968 pts/0 R+ 21:26 0:00 grep --color=auto mysqld//查看端口监听情况[root@steve ~]# netstat -lnp |grep mysqldtcp6 0 0 :::3306 :::* LISTEN 15094/mysqldunix 2 [ ACC ] STREAM LISTENING 195472 15094/mysqld /tmp/mysql.sock TroubleShooting问题1:But，这里有一个很奇怪的现象,貌似这个mysql是inactive的状态，这是什么意思呢？ 12[root@steve ~]# systemctl is-active mysqldinactive [更新] 找到问题答案了，重启服务即可。 1systemctl restart mysql.service 再次测试，齐活儿！ 问题2:试试查看系统版本，这又是什么鬼？ 12[root@steve ~]# mysql -V-bash: mysql: command not found 结合前面的安装过程，我们知道在源码包安装是自定义的安装目录，所以怀疑是环境变量的问题，在网上google一下，果然也有人这么说？那怎么办呢？ 设置一个软链接吧 1ln -s /usr/local/mysql/bin/mysql /usr/bin 再试一下 mysql -v 查看系统版本，齐活儿。 拓展：MariaDBMariaDB的是甲骨文收购MySQL的项目的一个替代方案，免费。其安装步骤如下： 第一步：备份数据库123//备份数据库cp -a /var/lib/mysql/ /var/lib/mysql.bak 第2步：添加MariaDB存储库 升级yum 源 编辑配置文件 12345678910vim /etc/yum.repos.d/MariaDB10.repo//加入以下内容：# MariaDB 10.2 CentOS repository list - created 2018-05-15 06:14 UTC# http://downloads.mariadb.org/mariadb/repositories/[mariadb]name = MariaDBbaseurl = http://yum.mariadb.org/10.2/centos7-amd64gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDBgpgcheck=1 注：该配置文件来自这里)，选择需要的版本即可，如下图所示： 第三步：删除MariaDB 5.51yum remove mariadb-server mariadb mariadb-libs 第四步：安装MariaDB 101yum -y install MariaDB-server MariaDB-client 第五步：mariadb开启关闭1234567891011121314151617//启动服务systemctl start mariadb//设置开机启动systemctl enable mariadb//停止MariaDBsystemctl stop mariadb //重启MariaDBsystemctl restart mariadb //升级MariaDBmysql_upgrade//查看mariadb版本号mysql -V 第六步：mariadb基本操作12345678910111213//修改root的密码update mysql.user set password=PASSWORD(&apos;abc&apos;) where user=&apos;root&apos;;// 更新权限flush privileges; //新建用户// 格式为： create user &apos;用户名&apos;@&apos;主机&apos; identified by &apos;密码&apos; create user &apos;read_visa&apos;@&apos;%&apos; identified by &apos;123456&apos;； //用户分配权限// grant 操作类型 on 数据库.表 to 用户@&apos;主机&apos; grant all on visa.* to &apos;read_visa&apos;@&apos;%&apos;； // all 表示所有权限grant select on visa.* to &apos;read_visa&apos;@&apos;%&apos;; 参考资料： 如何在CentOS / RHEL 7和Debian系统上将MariaDB 5.5升级到MariaDB 10.1 aminglinux培训资源 MySQL 安装 什么是MySQL]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>php</tag>
-        <tag>mysql</tag>
-        <tag>apache</tag>
       </tags>
   </entry>
   <entry>
@@ -784,8 +640,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rsync</tag>
       </tags>
   </entry>
@@ -824,8 +680,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -837,8 +693,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -850,8 +706,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -864,8 +720,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -877,8 +733,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -890,8 +746,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -903,8 +759,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -916,8 +772,8 @@
       </categories>
       <tags>
         <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -930,8 +786,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -944,8 +800,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -958,8 +814,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -970,10 +826,10 @@
         <category>kindle</category>
       </categories>
       <tags>
+        <tag>notes</tag>
         <tag>dropbox</tag>
         <tag>IFTTT</tag>
         <tag>kinlde</tag>
-        <tag>notes</tag>
       </tags>
   </entry>
   <entry>

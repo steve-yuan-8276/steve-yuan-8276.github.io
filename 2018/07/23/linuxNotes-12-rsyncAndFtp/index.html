@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://farm2.staticflickr.com/1814/41182572270_4a9a5296d0_o.png">
 <meta property="og:image" content="https://farm2.staticflickr.com/1779/42294559944_a5025f80d1_o.png">
 <meta property="og:image" content="https://farm2.staticflickr.com/1807/29140686268_e2b220634b_o.png">
-<meta property="og:updated_time" content="2018-07-23T07:18:58.507Z">
+<meta property="og:updated_time" content="2018-07-25T14:29:47.342Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux运维学习笔记：数据备份和同步rsync">
 <meta name="twitter:description" content="写在前面这则笔记重点整理rsync 数据同步备份工具相关知识，主要包括两个方面的内容：  rsync安装及使用  ftp服务架设及使用  pureftp服务架设及使用  云服务使用何种同步备份工具？">
@@ -416,7 +416,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  8,860
+                  8,977
                 </span>
               
 
@@ -696,7 +696,8 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">steve:desktop steveyuan$ rsync -avP /Users/steveyuan/documents/rsync test@172.16.155.128::test --password-file=/Users/steveyuan/desktop/rsync_passwd</span><br><span class="line">sending incremental file list</span><br><span class="line"></span><br><span class="line">sent 120 bytes  received 17 bytes  274.00 bytes/sec</span><br><span class="line">total size is 23  speedup is 0.17</span><br></pre></td></tr></table></figure>
 <p>最后，这里的密码强度不够，同时保存路径也太随意了。在真正的生产环境中，不可以保存在桌面，太不安全了。</p>
-<h2 id="ftp工具架设及使用"><a href="#ftp工具架设及使用" class="headerlink" title="ftp工具架设及使用"></a>ftp工具架设及使用</h2><h3 id="ftp工具架设"><a href="#ftp工具架设" class="headerlink" title="ftp工具架设"></a>ftp工具架设</h3><h4 id="第一步：安装ftp"><a href="#第一步：安装ftp" class="headerlink" title="第一步：安装ftp"></a>第一步：安装ftp</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//安装vsftpd</span><br><span class="line">yum install -y vsftpd</span><br><span class="line"></span><br><span class="line">//启动服务</span><br><span class="line">systemctl start vsftpd.service</span><br><span class="line"></span><br><span class="line">//校验进程是否启动</span><br><span class="line">ps -aux | grep vsftpd</span><br></pre></td></tr></table></figure>
+<h2 id="ftp工具架设及使用"><a href="#ftp工具架设及使用" class="headerlink" title="ftp工具架设及使用"></a>ftp工具架设及使用</h2><p>vsftpd是一款在Linux发行版中最受推崇的FTP服务器程序，全称是“very secure FTP daemon”，它可以运行在诸如 Linux、BSD、Solaris、 HP-UNIX等系统上，是一个完全免费的、开发源代码的ftp服务器软件，支持很多其他的 FTP 服务器所不支持的特征。比如：非常高的安全性需求、带宽限制、良好的可伸缩性、可创建虚拟用户、支持IPv6、速率高等。</p>
+<h3 id="ftp工具架设"><a href="#ftp工具架设" class="headerlink" title="ftp工具架设"></a>ftp工具架设</h3><h4 id="第一步：安装ftp"><a href="#第一步：安装ftp" class="headerlink" title="第一步：安装ftp"></a>第一步：安装ftp</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//安装vsftpd</span><br><span class="line">yum install -y vsftpd</span><br><span class="line"></span><br><span class="line">//启动服务</span><br><span class="line">systemctl start vsftpd.service</span><br><span class="line"></span><br><span class="line">//校验进程是否启动</span><br><span class="line">ps -aux | grep vsftpd</span><br></pre></td></tr></table></figure>
 <p>如下图所示，说明已启动</p>
 <p><img src="https://farm1.staticflickr.com/875/40938717090_0438c2032c_o.png" alt=""></p>
 <h4 id="第二步：修改-vsftpd-配置"><a href="#第二步：修改-vsftpd-配置" class="headerlink" title="第二步：修改 vsftpd 配置"></a>第二步：修改 vsftpd 配置</h4><p>vcftpd 的配置文件地址为<code>/etc/vsftpd/vsftpd.conf</code></p>
@@ -1026,7 +1027,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">82</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1048,7 +1049,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1150,7 +1151,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">168.1k</span>
+    <span title="Site words total count">167.3k</span>
   
 </div>
 

@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="notes,linux,log," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="写在前面这则笔记主要整理linux日志管理的相关知识，主要包括：  系统日志介绍  日志服务：rsyslogd  日志查看：dmesg、last、lastb  日志管理：journalctl">
+<meta name="keywords" content="notes,linux,log">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux运维学习笔记：日志管理">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/25/linuxNotes-13-linuxLog/index.html">
+<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:description" content="写在前面这则笔记主要整理linux日志管理的相关知识，主要包括：  系统日志介绍  日志服务：rsyslogd  日志查看：dmesg、last、lastb  日志管理：journalctl">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-25T08:43:55.444Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux运维学习笔记：日志管理">
+<meta name="twitter:description" content="写在前面这则笔记主要整理linux日志管理的相关知识，主要包括：  系统日志介绍  日志服务：rsyslogd  日志查看：dmesg、last、lastb  日志管理：journalctl">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/25/linuxNotes-13-linuxLog/"/>
+
+
+
+
+
+  <title>Linux运维学习笔记：日志管理 | Steve的折腾学习日志</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111158073-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/steve-yuan-8276"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/25/linuxNotes-13-linuxLog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux运维学习笔记：日志管理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-25T15:29:15+08:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/25/linuxNotes-13-linuxLog/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/25/linuxNotes-13-linuxLog/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,443
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  14
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记主要整理linux日志管理的相关知识，主要包括：</p>
+<ul>
+<li><p>系统日志介绍</p>
+</li>
+<li><p>日志服务：rsyslogd</p>
+</li>
+<li><p>日志查看：dmesg、last、lastb</p>
+</li>
+<li><p>日志管理：journalctl</p>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="linux系统日志简介"><a href="#linux系统日志简介" class="headerlink" title="linux系统日志简介"></a>linux系统日志简介</h2><p>系统日志是了解linux系统运行状况的重要途径，centos系统日志保存在<code>/var/log/</code>目录下。</p>
+<p>从centOS6.x开始，已经用syslogd取代了原先的syslogd服务。syslogd特点如下：</p>
+<ol>
+<li><p>基于TCP网络协议传输日志信息；</p>
+</li>
+<li><p>更安全的网络传输方式；</p>
+</li>
+<li><p>有日志消息的及时分析框架；</p>
+</li>
+<li><p>后台数据库；</p>
+</li>
+<li><p>配置文件中可以写简单的逻辑判断；</p>
+</li>
+<li><p>与syslog配置文件相兼容；</p>
+</li>
+</ol>
+<h3 id="查看系统日志是否启动"><a href="#查看系统日志是否启动" class="headerlink" title="查看系统日志是否启动"></a>查看系统日志是否启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">//查看服务是否启动</span><br><span class="line">ps aux | grep rsyslogd                   </span><br><span class="line"></span><br><span class="line">//查看服务是否自启动</span><br><span class="line">chkconfig --list | grep rsyslog</span><br><span class="line">```        </span><br><span class="line"></span><br><span class="line">### 常见日志类型</span><br><span class="line"></span><br><span class="line">文件名|内容说明</span><br><span class="line">---|---</span><br><span class="line">message |系统启动后的信息和错误日志，是Red Hat Linux中最常用的日志之一 </span><br><span class="line">secure |与安全相关的日志信息 </span><br><span class="line">maillog |与邮件相关的日志信息 </span><br><span class="line">cron |与定时任务相关的日志信息 </span><br><span class="line">spooler |与UUCP和news设备相关的日志信息</span><br><span class="line">boot.log |守护进程启动和停止相关的日志消息</span><br><span class="line">access-log　　　|纪录HTTP/web的传输 </span><br><span class="line">btmp　　　　　　|纪录失败的纪录 </span><br><span class="line">lastlog　　　　 |纪录最近几次成功登录的事件和最后一次不成功的登录 </span><br><span class="line">sudolog　　　　 |纪录使用sudo发出的命令 </span><br><span class="line">sulog　　　　　 |纪录使用su命令的使用 </span><br><span class="line">syslog　　　　　|从syslog中记录信息（通常链接到messages文件） </span><br><span class="line">utmp　　　　　　|纪录当前登录的每个用户 </span><br><span class="line">wtmp　　　　　　|一个用户每次登录进入和退出时间的永久纪录 </span><br><span class="line">xferlog　　　　 |纪录FTP会话 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 日志服务：rsyslogd</span><br><span class="line"></span><br><span class="line">### 日志文件格式（四列）：</span><br><span class="line"></span><br><span class="line">* 时间产生的时间</span><br><span class="line"></span><br><span class="line">* 发生事件的服务器的主机名</span><br><span class="line"></span><br><span class="line">* 产生事件的服务名或进程名</span><br><span class="line"></span><br><span class="line">* 事件的具体信息</span><br><span class="line"></span><br><span class="line">### 配置文件</span><br><span class="line"></span><br><span class="line">rsyslogd 配置文件为 `/etc/rsyslog.conf` </span><br><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/846/41819706080_bb1204a76b_o.png)</span><br><span class="line"></span><br><span class="line">配置文件格式为：</span><br></pre></td></tr></table></figure>
+<p>服务名称[连接符号]日志等级                  日志记录位置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">服务名称 |说明</span><br><span class="line">---|---</span><br><span class="line">auth|安全和认证相关消息(不推荐使用authpriv替代)</span><br><span class="line">authpriv|安全和认证相关消息(私有的)</span><br><span class="line">cron|系统定时任务cront和at产生的日志</span><br><span class="line">daemon|和各个守护进程相关的日志</span><br><span class="line">ftp|ftp守护进程产生的日志</span><br><span class="line">kern|内核产生的日志(不是用户进程产生的)</span><br><span class="line">local0-local7|为本地使用预留的服务</span><br><span class="line">lpr|打印产生的日志</span><br><span class="line">mail |邮件收发信息</span><br><span class="line">news | 与新闻服务器相关的日志</span><br><span class="line">syslog |由syslogd服务产生的日志信息</span><br><span class="line">user|用户等级类别的日志信息</span><br><span class="line">uucp |uucp子系统的日志信息，uucp是早期linux系统进行数据传递的协议，后来也常用在新闻组服务中</span><br><span class="line"></span><br><span class="line">#### 连接符号</span><br><span class="line"></span><br><span class="line">`*`代表所有日志等级，比如：&quot;authpriv&quot;代表authpriv认证服务产生的日志，所有的日志等级都记录</span><br><span class="line"></span><br><span class="line">`.`代表只要比后面的等级高的(包含该等级)日志都记录下来。比如：&quot;cron.info&quot;代表cron服务产生的日志，只要日志等级大于info级别，就记录；</span><br><span class="line"></span><br><span class="line">`.=`代表只记录所需等级的日志，其他等级的都不记录。比如：&quot;*.=emerg&quot;代表人和日志服务产生的日志，只要等级是emerg等级就记录。这种用法及少见。</span><br><span class="line"></span><br><span class="line">`.!`代表不等于，也就是除了该等级的日志外，其他等级的日志都记录；</span><br><span class="line"></span><br><span class="line">#### 日志等级</span><br><span class="line"></span><br><span class="line">debug ：一般的调试信息说明</span><br><span class="line"></span><br><span class="line">info：基本的通知信息</span><br><span class="line"></span><br><span class="line">notice ：普通信息，但是有一定的重要性</span><br><span class="line"></span><br><span class="line">warning ：警告信息，但是还不会影响到服务或系统的运行</span><br><span class="line"></span><br><span class="line">err ：错误信息，一般达到err等级的信息就影响到服务或系统的运行了</span><br><span class="line"></span><br><span class="line">crit：临界状况信息，比err等级还要严重</span><br><span class="line"></span><br><span class="line">alert：警告状态信息，比crit还要严重，必须立即采取行动</span><br><span class="line"></span><br><span class="line">emerg ：疼痛等级信息，系统已经无法使用了；</span><br><span class="line"></span><br><span class="line">#### 日志保存位置</span><br><span class="line"></span><br><span class="line">* 日志文件的绝对路径，如 “/var/log/secure”;</span><br><span class="line"></span><br><span class="line">* 系统设备文件，如 “/dev/lp0”;</span><br><span class="line"></span><br><span class="line">* 转发给远程主机，如 “@192.168.0.210:514”;</span><br><span class="line"></span><br><span class="line">* 发给在线的用户，如 “root”，”*”;</span><br><span class="line"></span><br><span class="line">* 忽略或丢弃日志，如 “~”;</span><br><span class="line"></span><br><span class="line">**说明：* 星号代表任何内容。**</span><br><span class="line"></span><br><span class="line">* 如果是在服务名称处，代表任何服务；</span><br><span class="line"></span><br><span class="line">* 如果是在日志等级处，代表任何日志等级；</span><br><span class="line"></span><br><span class="line">* 如果是在保存位置处，代表发给所有的在线用户。</span><br><span class="line"></span><br><span class="line">### 日志论替切割 ：logrotate 命令</span><br><span class="line"></span><br><span class="line">`logrotate`程序是一个日志文件管理工具。用于分割日志文件，删除旧的日志文件，并创建新的日志文件，起到“转储”作用，从而节省磁盘空间。</span><br><span class="line"></span><br><span class="line">**日志轮转是系统自动完成的** 为了方便管理将每个服务类型的日志轮替配置信息形成独立文件存储在`/etc/logrotate.d/*`。</span><br><span class="line"></span><br><span class="line">* `如果配置文件中拥有 dateext 参数`，那么日志会用日期来作为日志文件的后缀。例如 secure-20140609。这样，日志文件就不会重名，也就不需要更改日志的文件名，只需保存指定的日志个数，删除其他的日志文件即可。</span><br><span class="line"></span><br><span class="line">* `如果配置文件中没有 dateext 参数`，那么日志文件就需要进行改名了。当第一次进行日志轮替时，当前的 secure 日志会自动更名为 secure.1 ，然后新建 secure 日志，用来保存新的日志。当第二次进行日志轮替时， secure.1 会自动改名为 secure.2 ，当前的 secure 日志会自动更名为 secure.1 ，然后新建 secure 日志，用来保存新的日志。</span><br><span class="line"></span><br><span class="line">#### `logrotate` 配置文件</span><br><span class="line"></span><br><span class="line">Logrotate的配置信息保存在`/etc/logrotate.conf`文件中。</span><br><span class="line"></span><br><span class="line">参数	|说明</span><br><span class="line">---|---</span><br><span class="line">daily	|日志的轮替周期是每天。</span><br><span class="line">weekly	|日志的轮替周期是每周。</span><br><span class="line">monthly	|日志的轮替周期是每月。</span><br><span class="line">rotate 数字	|保留的日志文件的个数。0指没有备份。</span><br><span class="line">compress	|日志轮替时，旧的日志进行压缩</span><br><span class="line">create mode owner group	|建立新日志，同时指定新日志的权限、所有者和所属组。 如 create 0600 root utmp。</span><br><span class="line">mail address	|当日志轮替时，输出内容通过邮件发送到指定的邮箱。</span><br><span class="line">missingok	|如果日志不存在，则忽略该日志的警告信息。</span><br><span class="line">notifempty	|如果日志为空文件，则不进行日志轮替。</span><br><span class="line">minisize 大小	|日志轮替的最小值。也就是日志一定要达到这个最小值才会轮替，否则就算时间达到也不轮替。</span><br><span class="line">size 大小	|日志只有大于指定大小才进行日志轮替，而不是按照时间轮替。 如 size 100k。</span><br><span class="line">dateext	|使用日期作为日志轮替文件的后缀。 如 secure-20140609</span><br></pre></td></tr></table></figure></p>
+<p>[root@localhost ~]# cat /etc/logrotate.conf</p>
+<p>=&gt;下面为默认值。如不单独配置将才有下面的默认值<br>weekly    &lt;==默认每周进行一次 rotate 的工作<br>rotate 4  &lt;==默认保留4个登录文件<br>create    &lt;==以新创建文件继续存储日志文件</p>
+<p>#compress &lt;==被更动的登录文件是否需要压缩？如果登录文件太大则可考虑此参数启动</p>
+<p>include /etc/logrotate.d</p>
+<p>/var/log/wtmp {       &lt;==仅针对 /var/log/wtmp 所配置的参数<br>    monthly           &lt;==每个月一次，取代每周！<br>    minsize 1M        &lt;==文件容量一定要超过 1M 后才进行<br>    create 0664 root utmp &lt;==指定新建文件的权限与所属帐号/群组<br>    rotate 1          &lt;==仅保留一个<br>}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### `logrotate` 语法</span><br><span class="line"></span><br><span class="line">命令格式：</span><br></pre></td></tr></table></figure>
+<p>logrotate [OPTION] [configfile]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">常用参数|说明</span><br><span class="line">---|---</span><br><span class="line">-d, --debug |debug模式，测试配置文件是否有错误；</span><br><span class="line">-f, --force |强制转储文件；</span><br><span class="line">-m, --mail=command |压缩日志后，发送日志到指定邮箱；</span><br><span class="line">-s, --state=statefile |使用指定的状态文件；</span><br><span class="line">-v, --verbose |显示转储过程；</span><br><span class="line"></span><br><span class="line">常见用法：</span><br></pre></td></tr></table></figure></p>
+<p>//强制进行日志文件都进行轮替操作</p>
+<p>logrotate -vf /etc/logrotate.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 查看日志的常见命令</span><br><span class="line"></span><br><span class="line">### `dmesg` 命令</span><br><span class="line"></span><br><span class="line">`dmesg`命令显示linux内核的环形缓冲区信息，我们可以从中获得诸如系统架构、cpu、挂载的硬件，RAM等多个运行级别的大量的系统信息。</span><br><span class="line"></span><br><span class="line">命令行格式：</span><br></pre></td></tr></table></figure>
+<p>dmesg [options]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">参数|说明</span><br><span class="line">---|---</span><br><span class="line">-c 　|显示信息后，清除ring buffer中的内容</span><br><span class="line">-s&lt;缓冲区大小&gt; 　|预设置为8196，刚好等于ring buffer的大小</span><br><span class="line">-n 　|设置记录信息的层级</span><br><span class="line"></span><br><span class="line">示例：</span><br><span class="line"></span><br><span class="line">- 列出加载到内核中的所有驱动</span><br></pre></td></tr></table></figure></p>
+<p>dmesg | less<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 搜索包含特定字符串的被检测到的硬件，-i 表示忽略大小写</span><br></pre></td></tr></table></figure></p>
+<p>dmesg | grep -i usb<br>dmesg | grep -i tty<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 实时监控dmesg日志输出</span><br></pre></td></tr></table></figure></p>
+<p>watch ‘dmesg | tail -f’ </p>
+<p>或者</p>
+<p>tail -f /var/log/dmesg<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 只输出dmesg命令开头/结尾20行日志</span><br></pre></td></tr></table></figure></p>
+<p>dmesg | head -n 20   //开头20行</p>
+<p>dmesg | tail -n 20   //结尾20行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### `last`命令</span><br><span class="line"></span><br><span class="line">`last`命令，用来显示`/var/log/wtmp`文件，这是一个二进位制文件，内容是所有登录、登出的用户。</span><br><span class="line"></span><br><span class="line">命令行格式：</span><br></pre></td></tr></table></figure></p>
+<p>last [options]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">选项|说明</span><br><span class="line">---|---</span><br><span class="line">-a 　|把从何处登入系统的主机名称或IP地址，显示在最后一行；</span><br><span class="line">-d |将IP地址转换成主机名称。</span><br><span class="line">-f &lt;记录文件&gt; 　|指定记录文件，默认是显示/var/log目录下的wtmp文件的记录，但/var/log目录下得btmp能显示的内容更丰富，可以显示远程登录，例如ssh登录 ，包括失败的登录请求。</span><br><span class="line">-n &lt;显示列数&gt;或-&lt;显示列数&gt; 　|设置列出名单的显示列数。</span><br><span class="line">-R 　|不显示登入系统的主机名称或IP地址。</span><br><span class="line">-x 　|显示系统关机，重新开机，以及执行等级的改变等信息。</span><br><span class="line">-i |显示特定ip登录的情况</span><br><span class="line">-t  |显示特定时刻之前的信息</span><br><span class="line">-num |展示前 num 个</span><br><span class="line">username |展示 username 的登入讯息</span><br><span class="line">tty |限制登入讯息包含终端机代号</span><br><span class="line"></span><br><span class="line">**last 命令能查看哪些信息**</span><br><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/946/28225927548_49efe7fb88_o.png)</span><br><span class="line"></span><br><span class="line">字段|说明</span><br><span class="line">---|---</span><br><span class="line">第一列|用户名</span><br><span class="line">第二列|终端位置</span><br><span class="line">第三列|登录ip或者内核</span><br><span class="line">第四列|开始时间</span><br><span class="line">第五列|结束时间（still login in 还未退出  down 直到正常关机 crash 直到强制关机）</span><br><span class="line">第六列|持续时间</span><br><span class="line"></span><br><span class="line">**示例：**</span><br><span class="line"></span><br><span class="line">- 显示特定的用户名</span><br></pre></td></tr></table></figure></p>
+<p>last root     //root可替换为需要查询的username<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 最后一列显示主机IP地址</span><br></pre></td></tr></table></figure></p>
+<p>last -n 5 -a -i<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### `lastb `查看失败登录</span><br><span class="line"></span><br><span class="line">`lastb `命令记录失败的登录尝试。你必须拥有root权限才能运行lastb命令。</span><br><span class="line"></span><br><span class="line">**示例：**</span><br></pre></td></tr></table></figure></p>
+<p>[root@stevey log]# lastb</p>
+<p>btmp begins Mon May 14 09:58:37 2018<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### `lastlog`命令 查看每一个用户最近一次的登录信息</span><br></pre></td></tr></table></figure></p>
+<p>[root@local-linux00 ~]# lastlog<br>Username         Port     From             Latest<br>root             pts/0    172.16.155.1     Wed Jul 25 15:29:15 +0800 2018<br>bin                                        <strong>Never logged in</strong><br>daemon                                     <strong>Never logged in</strong><br>adm                                        <strong>Never logged in</strong><br>lp                                         <strong>Never logged in</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 日志管理</span><br><span class="line"></span><br><span class="line">Systemd统一管理所有Unit 的启动日志。带来的好处就是，可以只用journalctl一个命令，查看所有内核日志和应用日志，其配置文件`/etc/systemd/journald.conf`</span><br><span class="line"></span><br><span class="line">### journalctl用法</span><br></pre></td></tr></table></figure></p>
+<p>// 查看所有日志（默认情况下 ，只保存本次启动的日志）<br>$ sudo journalctl</p>
+<p>// 查看内核日志（不显示应用日志）<br>$ sudo journalctl -k</p>
+<p>// 查看系统本次启动的日志<br>$ sudo journalctl -b<br>$ sudo journalctl -b -0</p>
+<p>// 查看上一次启动的日志（需更改设置）<br>$ sudo journalctl -b -1</p>
+<p>// 查看指定时间的日志<br>$ sudo journalctl –since=”2012-10-30 18:17:16”<br>$ sudo journalctl –since “20 min ago”<br>$ sudo journalctl –since yesterday<br>$ sudo journalctl –since “2015-01-10” –until “2015-01-11 03:00”<br>$ sudo journalctl –since 09:00 –until “1 hour ago”</p>
+<p>// 显示尾部的最新10行日志<br>$ sudo journalctl -n</p>
+<p>// 显示尾部指定行数的日志<br>$ sudo journalctl -n 20</p>
+<p>// 实时滚动显示最新日志<br>$ sudo journalctl -f</p>
+<p>// 查看指定服务的日志<br>$ sudo journalctl /usr/lib/systemd/systemd</p>
+<p>// 查看指定进程的日志<br>$ sudo journalctl _PID=1</p>
+<p>// 查看某个路径的脚本的日志<br>$ sudo journalctl /usr/bin/bash</p>
+<p>// 查看指定用户的日志<br>$ sudo journalctl _UID=33 –since today</p>
+<p>// 查看某个 Unit 的日志<br>$ sudo journalctl -u nginx.service<br>$ sudo journalctl -u nginx.service –since today</p>
+<p>// 实时滚动显示某个 Unit 的最新日志<br>$ sudo journalctl -u nginx.service -f</p>
+<p>// 合并显示多个 Unit 的日志<br>$ journalctl -u nginx.service -u php-fpm.service –since today</p>
+<p>// 查看指定优先级（及其以上级别）的日志，共有8级<br>// 0: emerg<br>// 1: alert<br>// 2: crit<br>// 3: err<br>// 4: warning<br>// 5: notice<br>// 6: info<br>// 7: debug<br>$ sudo journalctl -p err -b</p>
+<p>// 日志默认分页输出，–no-pager 改为正常的标准输出<br>$ sudo journalctl –no-pager</p>
+<p>// 以 JSON 格式（单行）输出<br>$ sudo journalctl -b -u nginx.service -o json</p>
+<p>// 以 JSON 格式（多行）输出，可读性更好<br>$ sudo journalctl -b -u nginx.serviceqq<br> -o json-pretty</p>
+<p>// 显示日志占据的硬盘空间<br>$ sudo journalctl –disk-usage</p>
+<p>// 指定日志文件占据的最大空间<br>$ sudo journalctl –vacuum-size=1G</p>
+<p>// 指定日志文件保存多久<br>$ sudo journalctl –vacuum-time=1years<br><code>`</code></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Steve Yuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://steve-yuan-8276.github.io/2018/07/25/linuxNotes-13-linuxLog/" title="Linux运维学习笔记：日志管理">https://steve-yuan-8276.github.io/2018/07/25/linuxNotes-13-linuxLog/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/log/" rel="tag"># log</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/23/linuxNotes-lampPart2/" rel="next" title="linux学习笔记：lamp环境安装及配置(二)">
+                <i class="fa fa-chevron-left"></i> linux学习笔记：lamp环境安装及配置(二)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/25/linuxNotes-basisOfLnmp/" rel="prev" title="linux学习笔记：lnmp环境的搭建和配置">
+                linux学习笔记：lnmp环境的搭建和配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/logo.png"
+                alt="Steve Yuan" />
+            
+              <p class="site-author-name" itemprop="name">Steve Yuan</p>
+              <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/steve-yuan-8276" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/feng8276" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.facebook.com/feng74" target="_blank" title="Facebook">
+                    
+                      <i class="fa fa-fw fa-facebook"></i>Facebook</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yuanf02@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linux系统日志简介"><span class="nav-number">2.</span> <span class="nav-text">linux系统日志简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看系统日志是否启动"><span class="nav-number">2.1.</span> <span class="nav-text">查看系统日志是否启动</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Steve Yuan</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">168.1k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/25/linuxNotes-13-linuxLog/';
+          this.page.identifier = '2018/07/25/linuxNotes-13-linuxLog/';
+          this.page.title = 'Linux运维学习笔记：日志管理';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://steve-yuan.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

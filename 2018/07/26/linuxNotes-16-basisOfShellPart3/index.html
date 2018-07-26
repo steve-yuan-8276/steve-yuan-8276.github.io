@@ -81,26 +81,20 @@
 
 
 
-<meta name="description" content="写在前面这则笔记接着整理shell基础知识，主要涉及管道符、作业控制，以及环境变量方面的知识。 管道符和作业控制| 管道符用于将前一条指令的输出作为后一条指令的输入示例：  wc命令用来统计指定文件中的字节数、字数、行数，并将统计结果显示输出。常见参数-c表示字节数；-l表示行数。与wc连用，可以实现统计的效果。  12345[root@stevey ~]# cat /etc/passwd | w">
+<meta name="description" content="写在前面之前学习过了zabbix监控系统的使用，但是对于一些比较冷门的监控项目，还需要手动编写脚本进行监控。这节课主要内容就是定制个性化的告警工具，并进行统一化、标准化的管理。 主要包括一下内容：  告警系统整体设计；  编写告警系统脚本包；  运行告警系统；">
 <meta name="keywords" content="centos,shell,notes,linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux运维学习笔记5-4：shell基础知识（二）">
-<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/04/17/week5-4-basisOfShellPart2/index.html">
+<meta property="og:title" content="linux运维学习笔记:shell告警系统">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-16-basisOfShellPart3/index.html">
 <meta property="og:site_name" content="Steve的折腾学习日志">
-<meta property="og:description" content="写在前面这则笔记接着整理shell基础知识，主要涉及管道符、作业控制，以及环境变量方面的知识。 管道符和作业控制| 管道符用于将前一条指令的输出作为后一条指令的输入示例：  wc命令用来统计指定文件中的字节数、字数、行数，并将统计结果显示输出。常见参数-c表示字节数；-l表示行数。与wc连用，可以实现统计的效果。  12345[root@stevey ~]# cat /etc/passwd | w">
+<meta property="og:description" content="写在前面之前学习过了zabbix监控系统的使用，但是对于一些比较冷门的监控项目，还需要手动编写脚本进行监控。这节课主要内容就是定制个性化的告警工具，并进行统一化、标准化的管理。 主要包括一下内容：  告警系统整体设计；  编写告警系统脚本包；  运行告警系统；">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://farm1.staticflickr.com/792/27644203498_9ae6d37d78_o.png">
-<meta property="og:image" content="https://farm1.staticflickr.com/800/27644458708_9e2d6ae771_o.png">
-<meta property="og:image" content="https://farm1.staticflickr.com/896/26646203017_71006971e2_o.png">
-<meta property="og:image" content="https://farm1.staticflickr.com/841/41474873582_2fb48e1075_o.png">
-<meta property="og:image" content="https://farm1.staticflickr.com/888/39834264590_5dc723eb62_o.png">
-<meta property="og:image" content="https://farm1.staticflickr.com/828/27773365728_2236e477bd_o.png">
-<meta property="og:image" content="https://farm1.staticflickr.com/893/41642032071_e4c1cdde68_o.png">
-<meta property="og:updated_time" content="2018-05-18T07:34:59.261Z">
+<meta property="og:image" content="https://farm1.staticflickr.com/844/42658534224_9692a09c68_o.jpg">
+<meta property="og:updated_time" content="2018-07-26T03:59:33.553Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux运维学习笔记5-4：shell基础知识（二）">
-<meta name="twitter:description" content="写在前面这则笔记接着整理shell基础知识，主要涉及管道符、作业控制，以及环境变量方面的知识。 管道符和作业控制| 管道符用于将前一条指令的输出作为后一条指令的输入示例：  wc命令用来统计指定文件中的字节数、字数、行数，并将统计结果显示输出。常见参数-c表示字节数；-l表示行数。与wc连用，可以实现统计的效果。  12345[root@stevey ~]# cat /etc/passwd | w">
-<meta name="twitter:image" content="https://farm1.staticflickr.com/792/27644203498_9ae6d37d78_o.png">
+<meta name="twitter:title" content="linux运维学习笔记:shell告警系统">
+<meta name="twitter:description" content="写在前面之前学习过了zabbix监控系统的使用，但是对于一些比较冷门的监控项目，还需要手动编写脚本进行监控。这节课主要内容就是定制个性化的告警工具，并进行统一化、标准化的管理。 主要包括一下内容：  告警系统整体设计；  编写告警系统脚本包；  运行告警系统；">
+<meta name="twitter:image" content="https://farm1.staticflickr.com/844/42658534224_9692a09c68_o.jpg">
 
 
 
@@ -130,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/04/17/week5-4-basisOfShellPart2/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-16-basisOfShellPart3/"/>
 
 
 
 
 
-  <title>Linux运维学习笔记5-4：shell基础知识（二） | Steve的折腾学习日志</title>
+  <title>linux运维学习笔记:shell告警系统 | Steve的折腾学习日志</title>
   
 
 
@@ -317,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/04/17/week5-4-basisOfShellPart2/">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-16-basisOfShellPart3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
@@ -334,7 +328,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linux运维学习笔记5-4：shell基础知识（二）</h1>
+          <h1 class="post-title" itemprop="name headline">linux运维学习笔记:shell告警系统</h1>
         
 
         <div class="post-meta">
@@ -346,8 +340,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-17T15:53:39+08:00">
-                2018-04-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-26T10:34:45+08:00">
+                2018-07-26
               </time>
             
 
@@ -387,9 +381,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/04/17/week5-4-basisOfShellPart2/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/26/linuxNotes-16-basisOfShellPart3/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/04/17/week5-4-basisOfShellPart2/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/26/linuxNotes-16-basisOfShellPart3/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -411,7 +405,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,266
+                  1,553
                 </span>
               
 
@@ -427,7 +421,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  9
+                  8
                 </span>
               
             </div>
@@ -448,354 +442,77 @@
       
 
       
-        <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><p>这则笔记接着整理shell基础知识，主要涉及管道符、作业控制，以及环境变量方面的知识。</p>
-<h3 id="管道符和作业控制"><a href="#管道符和作业控制" class="headerlink" title="管道符和作业控制"></a>管道符和作业控制</h3><h4 id="管道符用于将前一条指令的输出作为后一条指令的输入"><a href="#管道符用于将前一条指令的输出作为后一条指令的输入" class="headerlink" title="| 管道符用于将前一条指令的输出作为后一条指令的输入"></a><code>|</code> 管道符用于将前一条指令的输出作为后一条指令的输入</h4><p>示例：</p>
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>之前学习过了zabbix监控系统的使用，但是对于一些比较冷门的监控项目，还需要手动编写脚本进行监控。这节课主要内容就是定制个性化的告警工具，并进行统一化、标准化的管理。</p>
+<p>主要包括一下内容：</p>
 <ul>
-<li><code>wc</code>命令用来统计指定文件中的字节数、字数、行数，并将统计结果显示输出。常见参数<code>-c</code>表示字节数；<code>-l</code>表示行数。与<code>wc</code>连用，可以实现统计的效果。</li>
+<li><p>告警系统整体设计；</p>
+</li>
+<li><p>编写告警系统脚本包；</p>
+</li>
+<li><p>运行告警系统；</p>
+</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# cat /etc/passwd | wc -l  //统计passwd一共有多少行</span><br><span class="line">21</span><br><span class="line"></span><br><span class="line">[root@stevey ~]# ll | wc -l  //统计当前目录下一共有多少文件</span><br><span class="line">12</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>grep</code>命令是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。</li>
-</ul>
-<p><img src="https://farm1.staticflickr.com/792/27644203498_9ae6d37d78_o.png" alt=""></p>
 <a id="more"></a>
-<h4 id="作业控制"><a href="#作业控制" class="headerlink" title="作业控制"></a>作业控制</h4><p>指的是在shell运行当中的过程控制，主要包括：</p>
+<h2 id="告警系统整体设计："><a href="#告警系统整体设计：" class="headerlink" title="告警系统整体设计："></a>告警系统整体设计：</h2><p>脚本包目录结构如下：</p>
+<p><img src="https://farm1.staticflickr.com/844/42658534224_9692a09c68_o.jpg" alt=""></p>
+<p>如上图所示：</p>
 <ul>
-<li><p>暂停：<code>ctrl + Z</code></p>
+<li><p><code>bin/</code>目录下是主程序；</p>
 </li>
-<li><p>前台恢复：<code>fg</code>  （指的是foreground）</p>
+<li><p><code>conf/</code>目录下是配置文件；</p>
 </li>
-<li><p>后台运行：<code>bg</code>  （指的是background）</p>
+<li><p><code>shares/</code>目录下是各个监控脚本；</p>
 </li>
-<li><p>撤销：<code>ctrl + c</code>   （这个最常用，尤其是输错命令的时候）</p>
+<li><p><code>mail/</code>目录下是邮件引擎；</p>
+</li>
+<li><p><code>log/</code>目录下是日志。</p>
 </li>
 </ul>
-<p>练习环节：</p>
-<p>实验了一下教材练习，有几个需要注意的点：</p>
+<p>这里的监控脚本不是单独一个脚本，而是一个脚本包，包括主程序、子程序、配置文件、邮件引擎、输出日志等。</p>
 <ul>
-<li>当有两个以上的任务都被暂停的时候，bash 会给暂停的任务编号。此时，输入 jobs 可查看；切换任务使用 <code>fg n</code>，其中 <code>n</code> 为任务编号。</li>
-</ul>
-<p><img src="https://farm1.staticflickr.com/800/27644458708_9e2d6ae771_o.png" alt=""></p>
-<p>使用<code>&amp;</code>，命令在后台运行，就会显示该任务的<code>pid</code>，如果要结束任务，使<code>用kill + pid</code> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# vmstat 1 &gt; a.txt &amp;</span><br><span class="line">[3] 76388</span><br><span class="line">[root@stevey ~]# kill 76388   //结束该任务</span><br><span class="line">[root@stevey ~]# ps    //ps命令查询当前进程</span><br><span class="line">   PID TTY          TIME CMD</span><br><span class="line">   993 pts/0    00:00:00 bash</span><br><span class="line"> 76367 pts/0    00:00:00 vi</span><br><span class="line"> 76368 pts/0    00:00:00 vmstat</span><br><span class="line"> 76389 pts/0    00:00:00 ps</span><br><span class="line">[3]   Terminated              vmstat 1 &gt; a.txt      //这就是刚才被结束的进程</span><br></pre></td></tr></table></figure>
-<h3 id="shell变量"><a href="#shell变量" class="headerlink" title="shell变量"></a>shell变量</h3><p>变量，可以理解为通过一些比较简单的字符来替代某些具有特殊意义的设定或者数据。比如，因为有了PATH变量，查看目录的时候，只需要<code>ls</code>即可。</p>
-<h4 id="系统环境变量都存在哪里？"><a href="#系统环境变量都存在哪里？" class="headerlink" title="系统环境变量都存在哪里？"></a>系统环境变量都存在哪里？</h4><h5 id="系统级配置文件："><a href="#系统级配置文件：" class="headerlink" title="系统级配置文件："></a>系统级配置文件：</h5><p><strong>注：</strong>对系统级配置的更改会影响到所有用户；</p>
-<table>
-<thead>
-<tr>
-<th>文件名</th>
-<th>特性</th>
-<th>包含内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>/etc/profile</code></td>
-<td>login shell</td>
-<td>该文件预置了PATH、USER、LOGNAME、MAIL、INPUTRC、HOSTNAME、HISTSIZE、umask</td>
-</tr>
-<tr>
-<td><code>/etc/bashrc</code></td>
-<td>no-login shell</td>
-<td>该文件预设umask，以及PS1；PS1的格式为<code>[user@hostname dir]#</code> user是用户名；hostname是主机名；dir是当前目录；$是一个特殊字符，root用户此处是# </td>
-</tr>
-</tbody>
-</table>
-<h6 id="etc-profile-与-etc-bashrc的区别"><a href="#etc-profile-与-etc-bashrc的区别" class="headerlink" title="/etc/profile 与 /etc/bashrc的区别"></a><code>/etc/profile</code> 与 <code>/etc/bashrc</code>的区别</h6><ul>
-<li><p><code>/etc/profile</code> 是<code>login shell</code>，通过终端输入用户名和密码进入到terminal，此时进入的shell环境就是<code>login shell</code>，例如，通过ssh远程进入到主机。因此，<strong>通过login shell运行的shell命令放入到<code>.bash_profile</code>中。</strong></p>
+<li><p>主程序：</p>
 </li>
-<li><p><code>/etc/bashrc</code>是<code>no-login shell</code>，不需要输入用户名密码而进入的shell环境，通过gnome,KDE等桌面环境进入终端，此时进入的shell环境就是<code>no-login shell</code>。因此，<strong>通过no-login shell运行的shell命令放入到<code>.bashrc</code>文件中。</strong></p>
+<li><p>配置文件：是一个控制中心，用它来开关各个子程序，指定各个相关联的日志文件；</p>
 </li>
-<li><p>在centos当中，’profile’系列文件的主要目的在于为登录shell设置环境变量和启动程序；而’rc’系列文件的主要目的在于设置功能和别名。</p>
+<li><p>子程序：这个才是真正的监控脚本，用来监控各个指标；</p>
 </li>
-<li><p>在Mac OS系统中，每次运行terminal，系统会默认运行一个login shell环境，因此mac系统配置都在<code>/etc/profile</code>和<code>.bash_profile</code>这两个文件中，一般安全起见，修改当前目录下的<code>.bash_profile</code>就可以了。</p>
+<li><p>邮件引擎：是由一个python程序来实现，它可以定义发邮件的服务器、发邮件人以及发件人密码；</p>
+</li>
+<li><p>输出日志：整个监控系统要有日志输出。</p>
 </li>
 </ul>
-<p><strong>延伸阅读：</strong></p>
+<h2 id="编写脚本包"><a href="#编写脚本包" class="headerlink" title="编写脚本包"></a>编写脚本包</h2><h3 id="第一步：创建目录"><a href="#第一步：创建目录" class="headerlink" title="第一步：创建目录"></a>第一步：创建目录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/sbin/</span><br><span class="line"></span><br><span class="line">mkdir mon</span><br><span class="line"></span><br><span class="line">cd mon/</span><br><span class="line"></span><br><span class="line">mkdir bin conf shares log mail</span><br></pre></td></tr></table></figure>
+<h3 id="第二步：编写主脚本"><a href="#第二步：编写主脚本" class="headerlink" title="第二步：编写主脚本"></a>第二步：编写主脚本</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">vim main.sh</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>Written by litongyao.</span><br><span class="line"></span><br><span class="line">//是否发送邮件的开关</span><br><span class="line"></span><br><span class="line">export send=1</span><br><span class="line"></span><br><span class="line">//过滤ip地址</span><br><span class="line"></span><br><span class="line">export addr=`/sbin/ifconfig |grep -A1 "ens33: "|awk '/inet/ &#123;print $2&#125;'`</span><br><span class="line"></span><br><span class="line">dir=`pwd`</span><br><span class="line"></span><br><span class="line">//只需要最后一级目录名</span><br><span class="line"></span><br><span class="line">last_dir=`echo $dir|awk -F'/' '&#123;print $NF&#125;'`</span><br><span class="line"></span><br><span class="line">//下面的判断目的是，保证执行脚本的时候，我们在bin目录里，不然监控脚本、邮件和日志很有可能找不到</span><br><span class="line"></span><br><span class="line">if [ $last_dir == "bin" ] || [ $last_dir == "bin/" ]; then</span><br><span class="line"></span><br><span class="line">    conf_file="../conf/mon.conf"</span><br><span class="line"></span><br><span class="line">else</span><br><span class="line"></span><br><span class="line">    echo "you shoud cd bin dir"</span><br><span class="line"></span><br><span class="line">    exit</span><br><span class="line"></span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">exec 1&gt;&gt;../log/mon.log 2&gt;&gt;../log/err.log</span><br><span class="line"></span><br><span class="line">echo "`date +"%F %T"` load average"</span><br><span class="line"></span><br><span class="line">/bin/bash ../shares/load.sh</span><br><span class="line"></span><br><span class="line">//先检查配置文件中是否需要监控502</span><br><span class="line"></span><br><span class="line">if grep -q 'to_mon_502=1' $conf_file; then</span><br><span class="line"></span><br><span class="line">    export log=`grep 'logfile=' $conf_file |awk -F '=' '&#123;print $2&#125;' |sed 's/ //g'`</span><br><span class="line"></span><br><span class="line">    /bin/bash  ../shares/502.sh</span><br><span class="line"></span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<h3 id="第三步：编辑告警系统配置文件"><a href="#第三步：编辑告警系统配置文件" class="headerlink" title="第三步：编辑告警系统配置文件"></a>第三步：编辑告警系统配置文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">vim mon.conf</span><br><span class="line"></span><br><span class="line">//to config the options if to monitor</span><br><span class="line"></span><br><span class="line">//定义mysql的服务器地址、端口以及user、password</span><br><span class="line"></span><br><span class="line">to_mon_cdb=0   ##0 or 1, default 0,0 not monitor, 1 monitor</span><br><span class="line"></span><br><span class="line">db_ip=10.20.3.13</span><br><span class="line"></span><br><span class="line">db_port=3315</span><br><span class="line"></span><br><span class="line">db_user=username</span><br><span class="line"></span><br><span class="line">db_pass=passwd</span><br><span class="line"></span><br><span class="line">//httpd   如果是1则监控，为0不监控</span><br><span class="line"></span><br><span class="line">to_mon_httpd=0</span><br><span class="line"></span><br><span class="line">//php 如果是1则监控，为0不监控</span><br><span class="line"></span><br><span class="line">to_mon_php_socket=0</span><br><span class="line"></span><br><span class="line">//http_code_502  需要定义访问日志的路径</span><br><span class="line"></span><br><span class="line">to_mon_502=1</span><br><span class="line"></span><br><span class="line">logfile=/data/log/xxx.xxx.com/access.log</span><br><span class="line"></span><br><span class="line">//request_count   定义日志路径以及域名</span><br><span class="line"></span><br><span class="line">to_mon_request_count=0</span><br><span class="line"></span><br><span class="line">req_log=/data/log/www.discuz.net/access.log</span><br><span class="line"></span><br><span class="line">domainname=</span><br><span class="line"></span><br><span class="line">www.discuz.net</span><br></pre></td></tr></table></figure>
+<h3 id="第四步：编辑子脚本"><a href="#第四步：编辑子脚本" class="headerlink" title="第四步：编辑子脚本"></a>第四步：编辑子脚本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/sbin/mon/shares</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p><a href="https://segmentfault.com/a/1190000004413842" target="_blank" rel="noopener"><code>.bashrc</code>和<code>.bash_profile</code>之间的不同</a></p>
-</li>
-<li><p><a href="https://blog.csdn.net/sch0120/article/details/70256318" target="_blank" rel="noopener">关于“.bash_profile”和“.bashrc”区别的总结</a></p>
-</li>
+<li>监控系统平均负载</li>
 </ul>
-<h5 id="用户级别配置文件："><a href="#用户级别配置文件：" class="headerlink" title="用户级别配置文件："></a>用户级别配置文件：</h5><p><strong>注：</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">vim load.sh</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>! /bin/bash</span><br><span class="line"></span><br><span class="line">//Writen by aming</span><br><span class="line"></span><br><span class="line">load=`uptime |awk -F 'average:' '&#123;print $2&#125;'|cut -d',' -f1|sed 's/ //g' |cut -d. -f1`</span><br><span class="line"></span><br><span class="line">if [ $load -gt 10 ] &amp;&amp; [ $send -eq "1" ]</span><br><span class="line"></span><br><span class="line">then</span><br><span class="line"></span><br><span class="line">    echo "$addr `date +%T` load is $load" &gt;../log/load.tmp</span><br><span class="line"></span><br><span class="line">    /bin/bash ../mail/mail.sh aming_test@163.com "$addr\_load:$load" `cat ../log/load.tmp`</span><br><span class="line"></span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo "`date +%T` load is $load"</span><br></pre></td></tr></table></figure>
+<ul>
+<li>监控nginx报错502</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">vim 502.sh </span><br><span class="line"></span><br><span class="line">#! /bin/bash</span><br><span class="line"></span><br><span class="line">d=`date -d &quot;-1 min&quot; +%H:%M`</span><br><span class="line"></span><br><span class="line">c_502=`grep :$d:  $log  |grep &apos; 502 &apos;|wc -l`</span><br><span class="line"></span><br><span class="line">if [ $c_502 -gt 10 ] &amp;&amp; [ $send == 1 ]; then</span><br><span class="line"></span><br><span class="line">     echo &quot;$addr $d 502 count is $c_502&quot;&gt;../log/502.tmp</span><br><span class="line"></span><br><span class="line">     /bin/bash ../mail/mail.sh $addr\_502 $c_502  ../log/502.tmp</span><br><span class="line"></span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo &quot;`date +%T` 502 $c_502&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>监控磁盘使用率</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">vim disk.sh</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span>! /bin/bash</span><br><span class="line"></span><br><span class="line">rm -f ../log/disk.tmp</span><br><span class="line"></span><br><span class="line">for r in `df -h |awk -F '[ %]+' '&#123;print $5&#125;'|grep -v Use`</span><br><span class="line">do</span><br><span class="line"></span><br><span class="line">if [ $r -gt 90 ] &amp;&amp; [ $send -eq "1" ]</span><br><span class="line">then</span><br><span class="line">    echo "$addr `date +%T` disk useage is $r" &gt;&gt;../log/disk.tmp</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ -f ../log/disk.tmp ]</span><br><span class="line">then</span><br><span class="line">    df -h &gt;&gt; ../log/disk.tmp</span><br><span class="line">    /bin/bash ../mail/mail.sh $addr\_disk $r ../log/disk.tmp</span><br><span class="line">    echo "`date +%T` disk useage is nook"</span><br><span class="line">else</span><br><span class="line">    echo "`date +%T` disk useage is ok"</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<h3 id="第五步：告警系统邮件引擎"><a href="#第五步：告警系统邮件引擎" class="headerlink" title="第五步：告警系统邮件引擎"></a>第五步：告警系统邮件引擎</h3><ul>
+<li>创建python脚本</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cd mail/</span><br><span class="line"></span><br><span class="line">vi mail.py</span><br><span class="line"></span><br><span class="line">//增加如下内容：</span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding: UTF-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> os,sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">'utf8'</span>)</span><br><span class="line"><span class="keyword">import</span> getopt</span><br><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"><span class="keyword">from</span> email.MIMEText <span class="keyword">import</span> MIMEText</span><br><span class="line"><span class="keyword">from</span> email.MIMEMultipart <span class="keyword">import</span> MIMEMultipart</span><br><span class="line"><span class="keyword">from</span>  subprocess <span class="keyword">import</span> *</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sendqqmail</span><span class="params">(username,password,mailfrom,mailto,subject,content)</span>:</span></span><br><span class="line">    gserver = <span class="string">'smtp.qq.com'</span></span><br><span class="line">    gport = <span class="number">25</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        msg = MIMEText(unicode(content).encode(<span class="string">'utf-8'</span>))</span><br><span class="line">        msg[<span class="string">'from'</span>] = mailfrom</span><br><span class="line">        msg[<span class="string">'to'</span>] = mailto</span><br><span class="line">        msg[<span class="string">'Reply-To'</span>] = mailfrom</span><br><span class="line">        msg[<span class="string">'Subject'</span>] = subject</span><br><span class="line">        smtp = smtplib.SMTP(gserver, gport)</span><br><span class="line">        smtp.set_debuglevel(<span class="number">0</span>)</span><br><span class="line">        smtp.ehlo()</span><br><span class="line">        smtp.login(username,password)</span><br><span class="line">        smtp.sendmail(mailfrom, mailto, msg.as_string())</span><br><span class="line">        smtp.close()</span><br><span class="line">    <span class="keyword">except</span> Exception,err:</span><br><span class="line">        <span class="keyword">print</span> <span class="string">"Send mail failed. Error: %s"</span> % err</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    to=sys.argv[<span class="number">1</span>]</span><br><span class="line">    subject=sys.argv[<span class="number">2</span>]</span><br><span class="line">    content=sys.argv[<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">##定义QQ邮箱的账号和密码，你需要修改成你自己的账号和密码    sendqqmail('1234567@qq.com','aaaaaaaaaa','1234567@qq.com',to,subject,content)</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p><strong>脚本使用说明</strong></p>
 <ol>
-<li><p>用户级别的配置文件都是隐藏文件，以 <code>.</code>  开头，如果没有，可以新建；</p>
+<li><p>首先定义好脚本中的邮箱账号和密码；</p>
 </li>
-<li><p>对这里的配置文件进行修改，只会影响当前用户。</p>
+<li><p>脚本执行命令为：python mail.py 目标邮箱 “邮件主题” “邮件内容”；</p>
 </li>
 </ol>
-<table>
-<thead>
-<tr>
-<th>文件名</th>
-<th>包含内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.bash_profile</code></td>
-<td>定义当前用户个人华路径及环境变量的文件名称，当用户登陆时，该文件仅执行一次</td>
-</tr>
-<tr>
-<td><code>.bashrc</code></td>
-<td>专属用户的shell的bash信息，可将别名、自定义变量写在这里，当登陆或每次打开新的shell，该文件都会被读取</td>
-</tr>
-<tr>
-<td><code>.bash_history</code></td>
-<td>记录命令历史</td>
-</tr>
-<tr>
-<td><code>.bash_logout</code></td>
-<td>定义用户退出时，需要执行的动作；当退出shell时，该文件会被执行</td>
-</tr>
-</tbody>
-</table>
-<h4 id="如何查看变量？"><a href="#如何查看变量？" class="headerlink" title="如何查看变量？"></a>如何查看变量？</h4><h5 id="env-显示及设置用户变量"><a href="#env-显示及设置用户变量" class="headerlink" title="env 显示及设置用户变量"></a><code>env</code> 显示及设置用户变量</h5><p><img src="https://farm1.staticflickr.com/896/26646203017_71006971e2_o.png" alt=""></p>
-<table>
-<thead>
-<tr>
-<th>变量名</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>HOSTNAME</td>
-<td>主机名称</td>
-</tr>
-<tr>
-<td>SHELL</td>
-<td>当前的shell</td>
-</tr>
-<tr>
-<td>HISTSIZE</td>
-<td>执行命令的历史记录数量，默认是1000条</td>
-</tr>
-<tr>
-<td>PATH</td>
-<td>表示shell将到那些目录查找命令或程序</td>
-</tr>
-<tr>
-<td>PWD</td>
-<td>当前目录</td>
-</tr>
-<tr>
-<td>LANG</td>
-<td>与语言相关的环境变量，中文为<code>zh_CN.UTF-8</code> ;english为 <code>en_US.UTF-8</code></td>
-</tr>
-<tr>
-<td>HOME</td>
-<td>当前用户家目录</td>
-</tr>
-<tr>
-<td>LOGNAME</td>
-<td>当前用户登录名</td>
-</tr>
-</tbody>
-</table>
-<h5 id="set命令-显示及设置shell变量"><a href="#set命令-显示及设置shell变量" class="headerlink" title="set命令 :显示及设置shell变量"></a><code>set</code>命令 :显示及设置shell变量</h5><p> 包括的私有变量以及用户变量，不同类的shell有不同的私有变量 <code>bash</code>,<code>ksh</code>,<code>csh</code>每中shell私有变量都不一样。</p>
-<p><img src="https://farm1.staticflickr.com/841/41474873582_2fb48e1075_o.png" alt=""></p>
-<h6 id="关于PS1的知识"><a href="#关于PS1的知识" class="headerlink" title="关于PS1的知识"></a>关于<code>PS1</code>的知识</h6><p><code>PS</code> ，即命令提示符，也就是终端最左侧用方括号括起来的部分；</p>
-<p>PS1 是当前用户的命令提示符，是在用户根目录下的.bash_profile中定义的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# echo $PS1  //查看PS1</span><br><span class="line">[\u@\h \W]\$   //含义为 当前用户名@不含域名的主机名 工作目录的最后一层目录名</span><br></pre></td></tr></table></figure>
-<p>默认特殊符号代表的意义</p>
-<table>
-<thead>
-<tr>
-<th>特殊符号</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>\d</code></td>
-<td>代表日期，格式为weekday month date，例如：”Mon Aug 1” </td>
-</tr>
-<tr>
-<td><code>\H</code></td>
-<td>完整的主机名称。例如：我的机器名称为：fc4.linux，则这个名称就是fc4.linux </td>
-</tr>
-<tr>
-<td><code>\h</code></td>
-<td>仅取主机的第一个名字，如上例，则为fc4，.linux则被省略 </td>
-</tr>
-<tr>
-<td><code>\t</code></td>
-<td>显示时间为24小时格式，如：HH：MM：SS </td>
-</tr>
-<tr>
-<td><code>\T</code></td>
-<td>显示时间为12小时格式 </td>
-</tr>
-<tr>
-<td><code>\A</code></td>
-<td>显示时间为24小时格式：HH：MM </td>
-</tr>
-<tr>
-<td><code>\u</code></td>
-<td>当前用户的账号名称 </td>
-</tr>
-<tr>
-<td><code>\v</code></td>
-<td>BASH的版本信息 </td>
-</tr>
-<tr>
-<td><code>\w</code></td>
-<td>小写w，完整的工作目录名称。家目录会以 ~代替 </td>
-</tr>
-<tr>
-<td><code>\W</code></td>
-<td>大写W，利用basename取得工作目录名称，所以只会列出最后一个目录 </td>
-</tr>
-<tr>
-<td><code>\#</code></td>
-<td>下达的第几个命令 </td>
-</tr>
-<tr>
-<td><code>\$</code></td>
-<td>提示字符，如果是root时，提示符为：# ，普通用户则为：$</td>
-</tr>
-</tbody>
-</table>
-<p>在PS1中设置字符颜色的格式为<code>[\e[F;Bm]</code>，其中<code>F</code> 为字体颜色，编号为30-37；<code>B</code>为背景颜色，编号为40-47，具体如下：</p>
-<table>
-<thead>
-<tr>
-<th><code>F</code>字体颜色</th>
-<th><code>B</code>背景颜色</th>
-<th>颜色</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>30</td>
-<td>40</td>
-<td>黑色</td>
-</tr>
-<tr>
-<td>31</td>
-<td>41</td>
-<td>红色</td>
-</tr>
-<tr>
-<td>32</td>
-<td>42</td>
-<td>绿色</td>
-</tr>
-<tr>
-<td>33</td>
-<td>43</td>
-<td>黄色</td>
-</tr>
-<tr>
-<td>34</td>
-<td>44</td>
-<td>蓝色</td>
-</tr>
-<tr>
-<td>35</td>
-<td>45</td>
-<td>紫红色</td>
-</tr>
-<tr>
-<td>36</td>
-<td>46</td>
-<td>青蓝色</td>
-</tr>
-<tr>
-<td>37</td>
-<td>47</td>
-<td>白色</td>
-</tr>
-</tbody>
-</table>
-<p><strong>自定义命令提示符</strong></p>
-<p>方法一：使用export命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PS1=&apos;\[\e[37;40m\][\[\e[34;40m\]\u\[\e[37;40m\]@\h \[\e[36;40m\]\w\[\e[0m\]]\\$ &apos;</span><br></pre></td></tr></table></figure>
-<p>方法二： 修改 <code>/etc/bashrc</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/bashrc</span><br><span class="line"></span><br><span class="line">修改PS设定，按 `:wq` 保存退出。</span><br><span class="line"></span><br><span class="line">source /etc/bashrc</span><br></pre></td></tr></table></figure>
-<p>方法三：自定义<code>custom.sh</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/profile.d   //进入环境配置文件目录</span><br><span class="line"></span><br><span class="line">touch custom.sh     //新建custom.sh,将PS1设定写进该文件并保存退出</span><br><span class="line"></span><br><span class="line">source custom.sh</span><br></pre></td></tr></table></figure>
-<h5 id="echo-变量名-查看某个变量的值"><a href="#echo-变量名-查看某个变量的值" class="headerlink" title="echo $[变量名] 查看某个变量的值"></a><code>echo $[变量名]</code> 查看某个变量的值</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey ~]# echo $PATH</span><br><span class="line">/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin</span><br><span class="line">[root@stevey ~]# echo $HOSTNAME</span><br><span class="line">stevey</span><br></pre></td></tr></table></figure>
-<h4 id="关于变量设置的规则"><a href="#关于变量设置的规则" class="headerlink" title="关于变量设置的规则"></a>关于变量设置的规则</h4><p>命令行格式：<code>export A=&#39;Alibaba&#39;</code>  其中，A代表变量名，<code>&#39;Alibaba&#39;</code>代表变量内容。设置变量要符合以下规则：</p>
 <ul>
-<li><p>变量格式 a=b ,  其中a为变量名，b为变量内容，等号两边不允许有空格；</p>
-</li>
-<li><p>变量名只能由英、数字以及下划线组成，而且不能以数字开头；</p>
-</li>
-<li><p>当变量内容带有特殊字符（如空格）时，需要加上单引号；</p>
-</li>
-<li><p>如果变量内容中需要用到其他命令运行结果则可以使用反引号；</p>
-</li>
-<li><p>当变量内容含有特殊字符，需要做特殊处理，具体见下表：</p>
-</li>
+<li>创建脚本<code>mail.sh</code> ,该脚本的作用是，当系统服务异常的时候就会调用<code>mail.py</code></li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>变量内容</th>
-<th>符号</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>特殊字符（以空格）</td>
-<td>使用单引号</td>
-<td>myname=’steve yuan’</td>
-</tr>
-<tr>
-<td>变量内容本身有单引号</td>
-<td>使用双引号</td>
-<td>mac=”steve’mac”</td>
-</tr>
-<tr>
-<td>变量内容需要用到其他命令</td>
-<td>使用反引号（tab键上面的那个键）</td>
-<td>hotkey=’pwd’</td>
-</tr>
-<tr>
-<td>变量累加其他变量的内容</td>
-<td>使用双引号</td>
-<td>myname=”$LOGNAME”Steve</td>
-</tr>
-</tbody>
-</table>
-<h4 id="如何自定义变量"><a href="#如何自定义变量" class="headerlink" title="如何自定义变量"></a>如何自定义变量</h4><h5 id="方法一：修改全局变量-etc-profile"><a href="#方法一：修改全局变量-etc-profile" class="headerlink" title="方法一：修改全局变量  /etc/profile"></a>方法一：修改全局变量  <code>/etc/profile</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile     //编辑此配置文件，添加变量，修改完成后按`esc` 键，输入  `:wq` 保存退出。</span><br><span class="line"></span><br><span class="line">source /etc/profile     //此方法会影响全局所有用户</span><br></pre></td></tr></table></figure>
-<h5 id="方法二：修改当前用户变量-～-bashrc"><a href="#方法二：修改当前用户变量-～-bashrc" class="headerlink" title="方法二：修改当前用户变量 ～/.bashrc"></a>方法二：修改当前用户变量 <code>～/.bashrc</code></h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim ～/.bashrc     //编辑此配置文件，添加变量，修改完成后按`esc` 键，输入  `:wq` 保存退出。</span><br><span class="line"></span><br><span class="line">source ～/.bashrc     //此方法子对当前用户有效</span><br></pre></td></tr></table></figure>
-<h5 id="方法三：export-变量-更改全局变量"><a href="#方法三：export-变量-更改全局变量" class="headerlink" title="方法三：export [变量] 更改全局变量"></a>方法三：<code>export [变量]</code> 更改全局变量</h5><p>命令行格式： <code>export [参数][变量名称]=[变量设置值]</code></p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>-f</code> 　</td>
-<td>代表[变量名称]中为函数名称。</td>
-</tr>
-<tr>
-<td><code>-n</code> 　</td>
-<td>删除指定的变量。变量实际上并未删除，只是不会输出到后续指令的执行环境中。</td>
-</tr>
-<tr>
-<td><code>-p</code> 　</td>
-<td>列出所有的shell赋予程序的环境变量。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>列出当前所有的环境变量 <code>export -p</code></li>
-</ul>
-<p><img src="https://farm1.staticflickr.com/888/39834264590_5dc723eb62_o.png" alt=""></p>
-<ul>
-<li>定义环境变量赋值 <code>export [变量名称]=[变量设置值]</code></li>
-</ul>
-<p><img src="https://farm1.staticflickr.com/828/27773365728_2236e477bd_o.png" alt=""></p>
-<h4 id="取消变量-unset-变量名"><a href="#取消变量-unset-变量名" class="headerlink" title="取消变量 unset [变量名]"></a>取消变量 <code>unset [变量名]</code></h4><p><img src="https://farm1.staticflickr.com/893/41642032071_e4c1cdde68_o.png" alt=""></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">vi mail.sh</span><br><span class="line"></span><br><span class="line">//增加如下内容：</span><br><span class="line"></span><br><span class="line">log=$1</span><br><span class="line">t_s=`date +%s`</span><br><span class="line">t_s2=`date -d "2 hours ago" +%s`</span><br><span class="line">if [ ! -f /tmp/$log ]</span><br><span class="line">then</span><br><span class="line">    echo $t_s2 &gt; /tmp/$log</span><br><span class="line">fi</span><br><span class="line">t_s2=`tail -1 /tmp/$log|awk '&#123;print $1&#125;'`</span><br><span class="line">echo $t_s&gt;&gt;/tmp/$log</span><br><span class="line">v=$[$t_s-$t_s2]</span><br><span class="line">echo $v</span><br><span class="line">if [ $v -gt 3600 ]</span><br><span class="line">then</span><br><span class="line">    ./mail.py  $1  $2  $3</span><br><span class="line">    echo "0" &gt; /tmp/$log.txt</span><br><span class="line">else</span><br><span class="line">    if [ ! -f /tmp/$log.txt ]</span><br><span class="line">    then</span><br><span class="line">        echo "0" &gt; /tmp/$log.txt</span><br><span class="line">    fi</span><br><span class="line">    nu=`cat /tmp/$log.txt`</span><br><span class="line">    nu2=$[$nu+1]</span><br><span class="line">    echo $nu2&gt;/tmp/$log.txt</span><br><span class="line">    if [ $nu2 -gt 10 ]</span><br><span class="line">    then</span><br><span class="line">         ./mail.py  $1 "trouble continue 10 min $2" "$3"</span><br><span class="line">         echo "0" &gt; /tmp/$log.txt</span><br><span class="line">    fi</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<h2 id="运行告警系统"><a href="#运行告警系统" class="headerlink" title="运行告警系统"></a>运行告警系统</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/sbin/mon/mail</span><br><span class="line"></span><br><span class="line">//设定定时任务</span><br><span class="line">crontab -e</span><br><span class="line"></span><br><span class="line">//设定每分钟执行一次检测脚本包</span><br><span class="line">* * * * * <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/sbin/mon/mail; bash main.sh</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -816,7 +533,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://steve-yuan-8276.github.io/2018/04/17/week5-4-basisOfShellPart2/" title="Linux运维学习笔记5-4：shell基础知识（二）">https://steve-yuan-8276.github.io/2018/04/17/week5-4-basisOfShellPart2/</a>
+    <a href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-16-basisOfShellPart3/" title="linux运维学习笔记:shell告警系统">https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-16-basisOfShellPart3/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -850,8 +567,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/17/week5-3-basisOfShellPart1/" rel="next" title="Linux运维学习笔记5-3：shell基础知识（一）">
-                <i class="fa fa-chevron-left"></i> Linux运维学习笔记5-3：shell基础知识（一）
+              <a href="/2018/07/26/linuxNotes-16-basisOfShellPart2/" rel="next" title="linux运维学习笔记:如何编写shell脚本">
+                <i class="fa fa-chevron-left"></i> linux运维学习笔记:如何编写shell脚本
               </a>
             
           </div>
@@ -859,10 +576,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/17/week5-5-basisOfShellPart3/" rel="prev" title="Linux运维学习笔记5-5：shell基础知识（三）">
-                Linux运维学习笔记5-5：shell基础知识（三） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -953,7 +666,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">82</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1043,7 +756,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管道符和作业控制"><span class="nav-number">2.</span> <span class="nav-text">管道符和作业控制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#管道符用于将前一条指令的输出作为后一条指令的输入"><span class="nav-number">2.1.</span> <span class="nav-text">| 管道符用于将前一条指令的输出作为后一条指令的输入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#作业控制"><span class="nav-number">2.2.</span> <span class="nav-text">作业控制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shell变量"><span class="nav-number">3.</span> <span class="nav-text">shell变量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#系统环境变量都存在哪里？"><span class="nav-number">3.1.</span> <span class="nav-text">系统环境变量都存在哪里？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#系统级配置文件："><span class="nav-number">3.1.1.</span> <span class="nav-text">系统级配置文件：</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#etc-profile-与-etc-bashrc的区别"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">/etc/profile 与 /etc/bashrc的区别</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#用户级别配置文件："><span class="nav-number">3.1.2.</span> <span class="nav-text">用户级别配置文件：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何查看变量？"><span class="nav-number">3.2.</span> <span class="nav-text">如何查看变量？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#env-显示及设置用户变量"><span class="nav-number">3.2.1.</span> <span class="nav-text">env 显示及设置用户变量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#set命令-显示及设置shell变量"><span class="nav-number">3.2.2.</span> <span class="nav-text">set命令 :显示及设置shell变量</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#关于PS1的知识"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">关于PS1的知识</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#echo-变量名-查看某个变量的值"><span class="nav-number">3.2.3.</span> <span class="nav-text">echo $[变量名] 查看某个变量的值</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于变量设置的规则"><span class="nav-number">3.3.</span> <span class="nav-text">关于变量设置的规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何自定义变量"><span class="nav-number">3.4.</span> <span class="nav-text">如何自定义变量</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#方法一：修改全局变量-etc-profile"><span class="nav-number">3.4.1.</span> <span class="nav-text">方法一：修改全局变量  /etc/profile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#方法二：修改当前用户变量-～-bashrc"><span class="nav-number">3.4.2.</span> <span class="nav-text">方法二：修改当前用户变量 ～/.bashrc</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#方法三：export-变量-更改全局变量"><span class="nav-number">3.4.3.</span> <span class="nav-text">方法三：export [变量] 更改全局变量</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#取消变量-unset-变量名"><span class="nav-number">3.5.</span> <span class="nav-text">取消变量 unset [变量名]</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#告警系统整体设计："><span class="nav-number">2.</span> <span class="nav-text">告警系统整体设计：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写脚本包"><span class="nav-number">3.</span> <span class="nav-text">编写脚本包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：创建目录"><span class="nav-number">3.1.</span> <span class="nav-text">第一步：创建目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：编写主脚本"><span class="nav-number">3.2.</span> <span class="nav-text">第二步：编写主脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步：编辑告警系统配置文件"><span class="nav-number">3.3.</span> <span class="nav-text">第三步：编辑告警系统配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四步：编辑子脚本"><span class="nav-number">3.4.</span> <span class="nav-text">第四步：编辑子脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第五步：告警系统邮件引擎"><span class="nav-number">3.5.</span> <span class="nav-text">第五步：告警系统邮件引擎</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行告警系统"><span class="nav-number">4.</span> <span class="nav-text">运行告警系统</span></a></li></ol></div>
             
 
           </div>
@@ -1077,7 +790,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">167.3k</span>
+    <span title="Site words total count">165.0k</span>
   
 </div>
 
@@ -1235,9 +948,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://steve-yuan-8276.github.io/2018/04/17/week5-4-basisOfShellPart2/';
-          this.page.identifier = '2018/04/17/week5-4-basisOfShellPart2/';
-          this.page.title = 'Linux运维学习笔记5-4：shell基础知识（二）';
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-16-basisOfShellPart3/';
+          this.page.identifier = '2018/07/26/linuxNotes-16-basisOfShellPart3/';
+          this.page.title = 'linux运维学习笔记:shell告警系统';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://steve-yuan.disqus.com/embed.js';

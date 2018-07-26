@@ -1,6 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[linux运维学习笔记:linux集群]]></title>
+    <url>%2F2018%2F07%2F26%2FlinuxNotes-20-basisOfKeeepalived%2F</url>
+    <content type="text"><![CDATA[写在前面所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 主要包括以下内容： 高可用集群搭建 负载均衡集群搭建 集群简介 负载均衡集群 就是指将一台服务器作为任务分发器，负责把用户的请求分发给后端多台不同的服务器处理，实现负载均衡的开源软件有LVS、keepalived、haproxy、nginx，商业软件有F5、Netscaler等。 高可用集群 即“HA”集群，也常称作“双机热备”，用于关键业务。核心原理都是通过心跳线连接两台服务器，正常情况下一台用于提供服务，另外一台作为冗余，当提供服务的机器宕机，冗余将接替继续提供服务。实现高可用的开源软件有：heartbeat、keepalived。 注：心跳(heartbeat)是在群集中节点间传递的通讯包,用于监测群集中的节点、网络和网络接口的工作状态，防止节点的孤立，以保证群集的正常运作。 高可用集群是这则笔记讲的重点，后面用keepalived这个进行配置。 利用keepalived搭建高可用集群Keepalived工作原理keepalived通过VRRPVirtual Router Redundancy Protocol，虚拟路由冗余协议来实现高可用。VRBP是实现路由高可用的一种通信协议，在这个协议里会将多台功能相同的路由器组成一个小组，这个小组里会有1个master角色和N（N&gt;=1）个backup角色。工作时，master会通过组播的形式向各个backup发送VRRP协议的数据包，当backup收不到master发来的VRRP数据包时，就会认为master宕机了。此时就需要根据各个backup的优先级来决定谁成为新的mater。 Keepalived要有三个模块，分别是core、check和vrrp，他们的作用如下： core模块为keepalived的核心，负责主进程的启动、维护以及全局配置文件的加载和解析； check模块负责健康检查； vrrp模块是来实现VRRP协议的； keepalived配置高可用集群重要概念：Virtual IP 开始配置之前，先要了解一个概念VIP，这里的VIP跟我们平常理解的不太一样，而是“Virtual IP”,即“虚拟IP”。这个IP是由Keepalived给服务器配置上的，服务器靠这个VIP对外提供服务，当master机器宕机，VIP被分配到backup上。在实际应用中，服务器的切换用户是感知不到的，所以称之为Virtual IP。 准备工作准备两台虚拟机，其中 master 172.16.155.120（克隆一台虚拟机作为master，设置静态ip和hostname） backup 172.16.155.132 这里还需要做一下几个步骤： 两台机器分别安装上keepalived; 1yum install -y keepalived master和backup关闭防火墙和selinux 1234567891011//临时关闭selinuxsetenforce 0//备份iptables规则cp /etc/sysconfig/iptables /etc/sysconfig/iptables.bak//关闭iptablessystemctl stop iptables//禁止开机启动systemctl disable iptables master机器上采用yum 安装nginx 说明：之所以要这样大费周章，是因为源码包安装和yum安装的版本是不同的，方便观察实验结果，在实际使用当中并没有影响。 12345//安装epel-release 源yum install -y epel-release //安装nginxyum install -y nginx master机器配置第一步：编辑配置文件keepalive的配置文件为/etc/keepalived/keepalived.conf，编辑此文件； 12345678910111213141516171819202122232425262728293031323334353637//首先清空配置文件内容[root@local-linux00 ~]# &gt; /etc/keepalived/keepalived.conf//编辑配置文件[root@local-linux00 ~]# vi /etc/keepalived/keepalived.conf//加入以下内容global_defs &#123; //全局定义参数 notification_email &#123; root@steve-test.com //定义接收告警的人 &#125; notification_email_from root@steve-test.com //定义发邮件地址 smtp_server 127.0.0.1 //定义发邮件地址，若为127.0.0.1则使用本机自带邮件服务器发送 smtp_connect_timeout 30 router_id LVS_DEVEL&#125;vrrp_script chk_nginx &#123; //chk_nginx为自定义名字，后面还会用到它 script &quot;/usr/local/sbin/check_ng.sh&quot; //自定义脚本，该脚本为监控nginx服务的脚本 interval 3 //每隔3S执行一次该脚本&#125;vrrp_instance VI_1 &#123; state MASTER //角色为master interface ens33 //针对哪个网卡监听VIP virtual_router_id 51 priority 100 //权重为100，master要比backup大 advert_int 1 authentication &#123; auth_type PASS auth_pass 123456 //定义密码，这个密码自定义 &#125; virtual_ipaddress &#123; 172.16.155.120 //定义VIP &#125; track_script &#123; chk_nginx //定义监控脚本，这里和上面vrr_script后面的字符串保持一致 &#125;&#125; 如下图所示： 第二步：编辑监控脚本123456789101112131415161718[root@local-linux00 ~]# vi /usr/local/sbin/check_ng.sh //脚本内容如下：#!/bin/bash#时间变量，用于记录日志d=`date --date today +%Y%m%d_%H:%M:%S`#计算nginx进程数量n=`ps -C nginx --no-heading|wc -l`#如果进程为0，则启动nginx，并且再次检测nginx进程数量，#如果还为0，说明nginx无法启动，此时需要关闭keepalivedif [ $n -eq &quot;0&quot; ]; then /etc/init.d/nginx start n2=`ps -C nginx --no-heading|wc -l` if [ $n2 -eq &quot;0&quot; ]; then echo &quot;$d nginx down,keepalived will stop&quot; &gt;&gt; /var/log/check_ng.log systemctl stop keepalived fifi 第三步：启动keepalived 更改文件权限 1[root@local-linux00 ~]# chmod 755 /usr/local/sbin/check_ng.sh 启动keepalived backup 服务器配置第一步：编辑配置文件123456789101112131415161718192021222324252627282930313233343536//首先清空配置文件内容[root@local-linux02 ~]# &gt; /etc/keepalived/keepalived.conf//编辑配置文件[root@local-linux02 ~]# vi /etc/keepalived/keepalived.conf//加入以下内容global_defs &#123; notification_email &#123; root@steve-test.com &#125; notification_email_from root@steve-test.com smtp_server 127.0.0.1 smtp_connect_timeout 30 router_id LVS_DEVEL&#125;vrrp_script chk_nginx &#123; script &quot;/usr/local/sbin/check_ng.sh&quot; //检测脚本 interval 3&#125;vrrp_instance VI_1 &#123; state BACKUP //这个需要改，说明是从的状态 interface ens33 virtual_router_id 51 priority 90 //这个权重比master少 advert_int 1 authentication &#123; auth_type PASS auth_pass 123456 &#125; virtual_ipaddress &#123; 172.16.155.120 //跟master保持一致 &#125; track_script &#123; chk_nginx &#125;&#125; 第二步：编辑监控脚本注：跟master服务器监控脚本一样 123456789101112131415[root@local-linux02 ~]# vi /usr/local/sbin/check_ng.sh//添加如下内容：#!/bin/bashd=`date --date today +%Y%m%d_%H:%M:%S`n=`ps -C nginx --no-heading|wc -l`if [ $n -eq &quot;0&quot; ]; then /etc/init.d/nginx start n2=`ps -C nginx --no-heading|wc -l` if [ $n2 -eq &quot;0&quot; ]; then echo &quot;$d nginx down,keepalived will stop&quot; &gt;&gt; /var/log/check_ng.log systemctl stop keepalived fifi 第三步：启动keepalived 更改文件权限 1chmod 755 /usr/local/sbin/check_ng.sh 启动keepalived 12345678910111213141516171819202122232425262728293031323334353637383940systemctl start keepalived``` ##### TroubleShooting: keepalived 无法启动如图所示，在master和backup机器上都出现了keepalived无法启动的现象。![](https://farm1.staticflickr.com/837/42306418775_2f0846498e_o.png)排查了一下，都跟nginx有关，解决方案如下：**master：**重启了nginx，再次启动keepalived就OK了。**backup：**这个排查比较复杂。先查了错误日志，没看明白；又实用nginx -t 检查了配置文件，发现了错误提示：![](https://farm1.staticflickr.com/841/43160968952_5641af5817_o.png)提示缺少这个文件`/tmp/nginx/test.log`，touch目录创建一个，再检查发现OK。![](https://farm2.staticflickr.com/1808/28341514467_0741a2d649_o.png)之后，再次重启nginx、keepalived,终于都重新启动了。#### 测试效果基本思路，就是认为制造master机器故障，然后看看访问会不会自动切换到backup服务器上。![](https://farm2.staticflickr.com/1805/42306628125_c671148573_o.png)我们可以尝试：1. 关闭master的nginx服务；2. 在master上增加iptabls规则限制vrrp发包3. master主机关闭keepalived通过实验，来测试keepalived是否正常工作。注：iptables配置规则语句 iptables -I OUTPUT -p vrrp -j DROP systemctl restart iptables123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150## 负载均衡集群LB集群是load balance 集群的简写，也就是这里所说的负载均衡集群；根据维基百科的解释，负载平衡（Load balancing）是一种计算机网络技术，用来在多个计算机（计算机集群）、网络连接、CPU、磁盘驱动器或其他资源中分配负载，以达到最佳化资源使用、最大化吞吐率、最小化响应时间、同时避免过载的目的。简而言之，负载均衡的目的，就在于平衡负载，给用户提供优质，可靠，稳定的服务。 ![](https://farm1.staticflickr.com/847/43155971872_f5c54312e0_o.jpg) 而集群，就是一组部署有相同应用的服务器。例如，我们可以将一个网站部署在采用均衡负载部署在一个集群服务器，可以将用户的请求根据特定规则转发到应用服务器上进行处理，用户的请求无论连接到哪台服务器上，都能得到相同的处理。这实现了完整的集群处理系统。### 实现LB集群的硬件和软件：#### 硬件LB* F5 公司的 BIG-IP系列* Citrix 公司的 NetScaler系列* A10 公司的 AX系列#### 软件LB* 四层：LVS(Linux VirtualServer)* 七层：Nginx,HAProxy### 主要负载均衡方案#### HTTP 重定向负载均衡 仅适合WEB 服务器。用户发出请求时，负载均衡服务器会根据HTTP请求，重新计算出实际的WEB服务器地址，通过302重定向相应发送给用户浏览器。用户浏览器再根据302响应信息，对实际的WEB服务器发出请求。HTTP重定向方案有点是比较简单，缺点是性能比较差，需要2次请求才能返回实际结果,还有就是仅适合HTTP服务器使用#### DNS 域名解析负载均衡在DNS中存储了一个域名的多个主机地址，每次域名解析请求，都可以根据负载均衡算法返回一个不同的IP地址。这样多个WEB服务器就构成了一个集群，并由DNS服务器提供了负载均衡服务。DNS域名解析负载均衡的优点是由DNS来完成负载均衡工作，服务本身不用维护负载均衡服务器的工作。但是，由于负载均衡服务器不是自己维护，没法做精细控制，而且DNS在客户端往往带有缓存，服务器的变更很难及时反映到客户端上。#### 反向代理负载均衡Nginx服务器就可以部署为反向代理服务器，解析客户端请求，根据负载均衡算法转发到不同的后台服务器上。用户和后台服务器之间不再有直接的链接。请求，响应都由反向代理服务器进行转发，实现WEB 应用的负载均衡。优点是和负载均衡服务集成在一起，部署简单。缺点是所有的请求回应都需要经过反向代理服务器。其本身可能会成为性能的瓶颈。#### IP负载均衡用户请求包到达负载均衡服务器后，负载均衡服务器在操作系统内核层获取网络数据包，根据负载均衡算法获取真实后台服务器地址, 然后将数据包的目标地址改为后台服务器ip, 转发给内部服务器。IP均衡负载全部处理过程都在内核层(Ring 0)进行。和七层负载均衡相比，具有更好的性能。但是由于所有的响应包都要经过负载均衡服务器，负载均衡服务器的网卡带宽，很容易成为系统的瓶颈。#### 数据链路层负载均衡数据链路层是工作在TCP/IP协议最底层的数据链路层，采用数据帧进行通信，每个网卡都具有唯一的MAC地址，数据帧用MAC地址来标识数据的来源与目的地。数据链路层负载均衡，是指在数据分发过程中不修改IP地址，只修改目的MAC地址，通过配置真实物理服务器集群所有机器虚拟IP和负载均衡服务器IP一致，从而达到不修改数据包的源地址和目的地址就可以进行数据分发的目的。数据链路层负载均衡是目前使用最广泛的一种负载均衡方式。开源软件LVS(Linux Virtual Server)，同时支持上面的IP负载均衡和数据链路层负载均衡。 ### LVS是什么 LVS是一个实现负载均衡集群的开源软件项目，其架构从逻辑上可分为三层：* 调度层(Director) * server集群层(Real server)* 共享存储层#### LVS三种工作模式: ##### `LVS NAT`模式![](https://farm2.staticflickr.com/1804/41396035130_b3f82a1570_o.jpg)这种模式借助iptables的nat表来实现;用户的请求到分发器后，通过预设的iptables规则，调度器将请求的目标ip即vip地址改为`Real server`的ip(内网ip)； 返回的数据包也经过调度器，调度器再把源地址修改为vip,再返回给客户端；* 优点：在nat模式中，只需要分发器有公网ip即可，所以比较节省公网ip资源;* 缺点：用户请求的数据包和返回给用户的数据包全部经过分发器，所以分发器（调度器）成为瓶颈;##### `LVS IP Tunnel`模式![](https://farm2.staticflickr.com/1822/28336955027_bf66cfbb54_o.jpg)调度器将请求的数据包封装加上real server的ip头，加密通过ip隧道转发到后端的`real server`上，而`real server`会直接把数据返回给客户端，而不再经过调度器；##### `LVS DR`模式![](https://farm1.staticflickr.com/918/42487540814_bbcbcd8151_o.jpg)调度器将请求来的数据包的目标mac地址改为real server的mac地址，返回的时候也不经过调度器，直接返回给客户端；#### LVS的调度算法：##### 轮叫调度 `Round Robin` (简称rr) 将外部请求按顺序轮流分配到集群中的真实服务器上,它均等地对待每一台服务器,而不管服务器上实际的连接数和系统负载##### 加权轮叫 `Weighted Round Robin` (简称wrr)根据真实服务器的不同处理能力来调度访问请求，并动态地调整其权重，能者多劳，合理使用服务器资源。##### 最少链接 `least connection` (简称LC)动态地将网络请求调度到已建立的链接数最少的服务器上，如果集群系统的性能彼此都差不多，采用“最小连接&quot;效果较好。##### 加权最少链接 `Weighted Least Connections` (简称WLC)在集群中服务器之间性能差异较大的情况下，结合浏览器权重和最少链接两个方法进行请求分配;##### 基于局部性的最小连接 `Locality-Based Least Connections`（简称LBLC）针对请求报文的目标IP地址的负载均衡调度，将相同目标IP地址的请求调度到同一台服务器，来提高各台服务器的访问局部性和主存Cache命中率。目前主要用于Cache集群系统。##### 带复制的基于局部性最小连接 `Locality-Based Least Connections with Replication`（简称LBLCR）也是针对目标IP地址的负载均衡，不同之处是：它要维护从一个目标IP地址到一组服务器的映射，而LBLC算法是维护从一个目标IP地址到一台服务器的映射。LBLCR算法先根据请求的目标IP地址找出该目标IP地址对应的服务器组，按“最小连接”原则从该服务器组中选出一台服务器，若服务器没有超载，则将请求发送到该服务器；若服务器超载，则按“最小连接”原则从整个集群中选出一台服务器，将该服务器加入到服务器组中，将请求发送到该服务器。同时，当该服务器组有一段时间没有被修改，将最忙的服务器从服务器组中删除，以降低复制的程度。##### 目标地址散列调度 `Destination Hashing dh`针对目标IP地址的负载均衡的，但它是一种静态映射算法，通过一个散列（hash）函数将一个目标IP地址映射到一台服务器。目标地址散列调度算法先根据请求的目标IP地址，作为散列键（hash key)从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。##### 源地址散列调度 `Source Hashing sh`该算法正好与目标地址散列调度算法相反，它根据请求的源IP地址，作为散列键从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。它的算法流程与目标地址散列调度算法的基本相似，只不过将请求的目标IP地址换成请求的源IP地址。 ### LVS NAT模式搭建#### 准备工作：测试安装LVS NAT模式，至少需要有三台虚拟机：* 调度器（dir）两张网卡，一个内网IP：172.16.155.120，一个”外网IP“：172.16.15.99（vmware仅主机模式）；* 真实服务器rs2，内网IP：172.16.155.132，设置网关为172.16.155.120；* 真实服务器rs1，内网IP：172.16.155.128，设置网关为172.16.155.120；这里用来作为dir调度器的，是上一节笔记中克隆的虚拟机local-linux00，这里的”外网ip“是虚拟的，并非真实的外网ip。具体的设置方法如下：- 查看当前网课配置信息![](https://farm1.staticflickr.com/923/42366622215_270432b64c_o.png)进入`/etc/sysconfig/network-scripts` 文件夹，复制网卡配置文件，并重命名为`ifcfg-ens33:1`![](https://farm2.staticflickr.com/1766/42552258184_767b2c9024_o.png)编辑`ifcfg-ens33:1`文件，修改ip地址： vi ifcfg-ens33:1 //将ip地址设定为172.16.15.991234![](https://farm1.staticflickr.com/844/42366871715_42d173238d_o.png)保存后执行以下命令重启网卡 /etc/init.d/network restart12345另外，还要关闭selinux和防火墙- 关闭selinux setenforce 012- 清空防火墙规则 //备份iptables规则cp /etc/sysconfig/iptables /etc/sysconfig/iptables.bak //清空防火墙规则iptables -Fservice iptables save1234#### 配置分发器dir安装LVS核心工具ipvsdam yum install -y ipvsadm12编写配置脚本 vim /usr/local/sbin/lvs_nat.sh //增加如下配置内容： #! /bin/bash director 服务器上开启路由转发功能echo 1 &gt; /proc/sys/net/ipv4/ip_forward 关闭icmp的重定向echo 0 &gt; /proc/sys/net/ipv4/conf/all/send_redirectsecho 0 &gt; /proc/sys/net/ipv4/conf/default/send_redirects 注意区分网卡名字，这里两个网卡分别为ens33和ens37echo 0 &gt; /proc/sys/net/ipv4/conf/ens33/send_redirectsecho 0 &gt; /proc/sys/net/ipv4/conf/ens38/send_redirects director 设置nat防火墙iptables -t nat -Fiptables -t nat -Xiptables -t nat -A POSTROUTING -s 172.16.155.0/24 -j MASQUERADE director设置ipvsadmIPVSADM=’/usr/sbin/ipvsadm’$IPVSADM -C$IPVSADM -A -t 172.16.13.129:80 -s wlc -p 3$IPVSADM -a -t 172.16.13.129:80 -r 172.16.155.132:80 -m -w 1$IPVSADM -a -t 172.16.13.129:80 -r 172.16.155.128:80 -m -w 112- 执行脚本 bash /usr/local/sbin/lvs_nat.sh123456789101112131415161718192021222324#### rs服务器配置修改rs网络配置，将网关改为dir的外网地址172.16.13.129![](https://farm1.staticflickr.com/926/42322478455_05bffaec78_o.png)至此配置就成果了，使用curl命令来测试实验效果。### LVS DR模式搭建#### 准备工作DR模式同样需要三台虚拟机，三台机器只需要有“公网”IP，但在这种模式下又多了一个VIP。* 调度器dir：172.16.111.100* 真实服务器rs1：172.16.111.110* 真实服务器rs2：172.16.111.120* VIP:172.16.111.200#### dir机器上写入脚本 vim /usr/local/sbin/lvs_dr.sh //增加如下脚本内容： #! /bin/bashecho 1 &gt; /proc/sys/net/ipv4/ip_forwardipv=/usr/sbin/ipvsadmvip=172.16.111.200rs1=172.16.111.110rs2=172.16.111.120 #注意这里的网卡名字ifdown ens33 #为了不让网卡设置多次ifup ens33ifconfig ens33:2 $vip broadcast $vip netmask 255.255.255.255 uproute add -host $vip dev ens33:2$ipv -C$ipv -A -t $vip:80 -s rr$ipv -a -t $vip:80 -r $rs1:80 -g -w 1$ipv -a -t $vip:80 -r $rs2:80 -g -w 1123456- 启动脚本![](https://farm1.staticflickr.com/841/29361801558_af5b41c5a0_o.png)#### 在rs1与rs2上编写同样脚本 vim /usr/local/sbin/lvs_rs.sh //增加如下脚本内容： #/bin/bashvip=172.16.111.200 #把vip绑定在lo上，是为了实现rs直接把结果返回给客户端ifconfig lo:0 $vip broadcast $vip netmask 255.255.255.255 uproute add -host $vip lo:0 #以下操作为更改arp内核参数，目的是为了让rs顺利发送mac地址给客户端 #参考文档www.cnblogs.com/lgfeng/archive/2012/10/16/2726308.htmlecho “1” &gt;/proc/sys/net/ipv4/conf/lo/arp_ignoreecho “2” &gt;/proc/sys/net/ipv4/conf/lo/arp_announceecho “1” &gt;/proc/sys/net/ipv4/conf/all/arp_ignoreecho “2” &gt;/proc/sys/net/ipv4/conf/all/arp_announce12- 启动脚本 sh /usr/local/sbin/lvs_rs.sh123456789101112131415161718192021## keepalived + LVSLVS架构中，不管是NAT模式还是DR模式，当后端的RS宕掉时，调度器依然会把请求转发到宕掉的RS上，这样的结果并不是我们想要的。keepalived就可以解决该问题。keepalived已经嵌入了LVS功能，在调度器上只要安装了keepalived，就不用再安装ipvsadm了，也不用去编写LVS相关的脚本了。完整的keepalived+LVS架构需要有两台调度器实现高可用，提供调度服务的只需要一台，另外一台作为备用。### 准备工作准备三台机器分别为：* dir（安装keepalived）172.16.155.120* rs1:172.16.155.132* rs2:172.16.155.128* vip:172.16.155.200### dir机器上修改keepalived配置文件 vim /etc/keepalived/keepalived.conf 删除之前的配置，增加如下配置内容： vrrp_instance VI_1 { #备用服务器上为 BACKUP state MASTER #绑定vip的网卡为ens33，你的网卡和阿铭的可能不一样，这里需要你改一下 interface ens33 virtual_router_id 51 #备用服务器上为90 priority 100 advert_int 1 authentication { auth_type PASS auth_pass aminglinux } virtual_ipaddress { 172.16.111.200 } }virtual_server 172.16.111.200 80 { #(每隔10秒查询realserver状态) delay_loop 10 #(lvs 算法) lb_algo wlc #(DR模式) lb_kind DR #(同一IP的连接60秒内被分配到同一台realserver) persistence_timeout 60 #(用TCP协议检查realserver状态) protocol TCP real_server 172.16.111.110 80 { #(权重) weight 100 TCP_CHECK { #(10秒无响应超时) connect_timeout 10 nb_get_retry 3 delay_before_retry 3 connect_port 80 } } real_server 172.16.111.120 80 { weight 100 TCP_CHECK { connect_timeout 10 nb_get_retry 3 delay_before_retry 3 connect_port 80 } } }1234由于之前执行过LVS的脚本，可能需要做以下操作：- 把之前的ipvsadm规则清空 ipvsadm -C12- 把之前设置的VIP删除掉 systemctl restart network12- 在keepalived的配置文件中定义的LVS模式为DR模式，所以需要在两台rs上执行lvs_dr_rr.sh脚本，在上一节设置的脚本。 sh /usr/local/sbin/lvs_dr_rs.ch12- 启动keepalived systemctl start keepalived`]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux运维学习笔记:正则表达式]]></title>
+    <url>%2F2018%2F07%2F26%2FlinuxNotes-19-basisOfRegularExpression%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记整理正则表达式的相关内容，正则表达式 Regular expressions 被用来根据某种匹配模式来寻找strings中的某些单词。主要包括以下内容： 正则表达式基础 grep sed awk 正则表达式基础正则表达式，是经过专门编写的文本字符串，用来匹配字符串，这里还整理了一篇正则基础。 元字符 表达式 描述 . 匹配单个任意字符 [] 匹配指定范围内的任意单个字符,比如[abc],[a-z],[0-9],[a-zA-Z] [^] 取非，匹配指定范围外的任意单个字符 [:space:] 匹配空白字符 [:punct:] 匹配所有标点符号的集合 [a-z]或 [:lower:] 匹配所有的小写字母 [A-Z]或 [:upper:] 匹配所有的大写字母 [a-zA-Z]或 [:alpha:] 匹配大小写字母 [0-9]或 [:digit:] 匹配数字 [0-9a-zA-Z]或 [:alnum:] 匹配数字和大小写字母 匹配次数 表达式 描述 * 匹配其前面的字符任意次，比如.*匹配任意字符任意次数 \? 匹配其前面的字符1次或0次 \{m,n\} 匹配其前字符最少m，最多n次） 匹配单词如果我们想要找到字符串The dog chased the cat中单词 the，我们可以使用下面的正则表达式: 1/the/gi 这个正则表达式分成几段： / 是这个正则表达式的头部 the 是我们想要匹配的模式 / 是这个正则表达式的尾部 g 代表着 global(全局)，意味着返回所有的匹配而不仅仅是第一个。 i 代表着忽略大小写，意思是当我们寻找匹配的字符串的时候忽略掉字母的大小写。 匹配数字在正则表达式中使用特殊选择器来选取特殊类型的值。其中之一就是数字选择器\d，意思是被用来获取一个字符串的数字。 1/\d/g 在选择器后面添加一个加号标记(+)，例如：/\d+/g，它允许这个正则表达式匹配一个或更多数字。 尾部的g是’global’的简写，意思是允许这个正则表达式 找到所有的匹配而不是仅仅找到第一个匹配。 匹配空白使用正则表达式选择器 \s 来选择一个字符串中的空白。 1/\s+/g 注：空白字符有 “ “ (空格符)、\r (回车符)、\n (换行符)、\t (制表符) 和 \f (换页符)。 匹配非空白字符可以用正则表达式选择器的大写版本 来转化任何匹配。例如，\s 匹配任何空白字符，\S 匹配任何非空白字符。 1234567891011// 初始化变量var testString = &quot;How many non-space characters are there in this sentence?&quot;;// 请只修改这条注释以下的代码var expression = /\S/g; // 请修改这一行// 请只修改这条注释以上的代码// 用 nonSpaceCount 存储 testString 中匹配到 expression 的次数var nonSpaceCount = testString.match(expression).length; 配合位置 ^ 匹配字符串开头 $ 匹配字符串结尾 \b 匹配单词的起始终止位置 示例： 12345^\d&#123;5,12&#125;$ // 匹配5-12位的QQ号码 \ba\w*\b //匹配以字母a开头的单词（w*表示任意数量的字母或数字）\b\w&#123;6&#125;\b //匹配刚好6个字符的单词 字符转义如果想查找元字符本身，需要使用\来取消这些字符的特殊意义。示例： 12deerchao\.net //匹配deerchao.netC:\\Windows //匹配C:\Windows 匹配次数 代码/语法 说明 * 重复零次或更多次 + 重复一次或更多次 ? 重复零次或一次 {n} 重复n次 {n,} 重复n次或更多次 {n,m} 重复n到m次 常用的反义代码查找不属于某个能简单定义的字符类的字符 代码/语法 说明 \W 匹配任意不是字母，数字，下划线，汉字的字符 \S 匹配任意不是空白符的字符 \D 匹配任意非数字的字符 \B 匹配不是单词开头或结束的位置 [^x] 匹配除了x以外的任意字符 [^aeiou] 匹配除了aeiou这几个字母以外的任意字符 字符锚定 表达式 描述 ^ 锚定行首，此字符后面的任意内容必须出现在行首 $ 锚定行尾，此字符前面的任意内容必须出现在行尾 ^$ 锚定空白行，可以统计空白行 \&lt;或\b 锚定词首，其后面的任意字符必须做为单词首部出现 \&gt;或\b 锚定词尾，其前面的任意字符必须做为单词尾部出现 拓展正则表达式相比于基础正则表达式，拓展正则表达式的不同之处主要在于以下几点： 在匹配次数方面，加入了 + ，表示匹配字符出现一次或多次； 基本正则表达式，使用( ) { } . ? |都需要转义,在扩展正则表达中不需要加转义符 \ |表示或者的意思。 grep和egrep 命令grepgrep是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。 命令行格式：grep [参数] [关键词] [filename] 常用参数 用法 -c 打印符合要求的行数 -i 忽略大小写 -n 输出符合要求的行及行号 -v 取反 -r 归递处理，包含多级子目录 -l 查询多文件时只输出包含匹配字符的文件名 -A n n 为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 常见用法 匹配符合要求的行数grep -c &#39;keyword&#39; 搜索/etc目录及其多级子目录 grep -r /etc 搜索当前目录下包含‘500’ 的文件名 1ls | grep -rl &apos;500&apos; 匹配带有关键词的行，并输出行号 grep -n &#39;keyword&#39; 匹配不带有关键词的行，并输出行号 grep -v &#39;keyword&#39; 匹配包括数字的行 grep &#39;[0-9]&#39; 匹配不包括数字的行 grep -v &#39;[0-9]&#39; 匹配大写字母 grep [A-Z] 或 grep [[:upper:]] 匹配单行包含空格的内容 grep [[:space:]] 匹配单行包含标点符号的内容 grep [[:punct:]] 匹配单行包含数字和大小写字母的内容 grep [0-9a-z-A-Z]或grep [[:alnum:]] 匹配所有以#开头的行，并显示行号 grep -n &#39;^#&#39; 注：包括空行。 匹配所有的非空行和不以#开头的行 grep -vn &#39;^#&#39; 匹配任意一个字符 grep -n &#39;ro.t&#39; .表示任意字符 12[root@stevey ~]# cat a.txt | grep -n &apos;ro.t&apos;3:root:x:0:0:root:/root:/bin/bash 匹配任意多个字符 .* 表示0个或多个任意字符； 匹配特定重复次数的字符 此处需要用{}，其中为数字，表示为{n} 或{m, n}。其中 {n}表示特定次数；{m, n} 表示范围，m &lt; n 注： {}前后都要使用转义符号\；如果不想使用脱义符号，使用grep -E 或者egrep {n}表示特定次数； {m,n} 表示范围，m &lt; n n可以省略，表示m以上 m也可以省略，表示n次及以下 ABC特殊参数用法 -A n n为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 egrep 命令： grep 命令的升级版egrep 是 grep 的升级版，使用拓展式的正则表达式，与grep -E的效果相同。 + 匹配一个或多个字符 ? 匹配0个或1个字符 | 表示或者，表示二选一或者多选一，满足其中一个就可以 ()表示一个整体， 比如(oo)+， 匹配oo 出现一次或一次以上 sed 命令sed，全称是stream editor，流编辑器，也是用来进行文本处理的工具。对比grep ，他的强大之处，不仅能够用来匹配文档内容，还能够进行修改。 sed在执行的时候，会从文件或者标准输入中读取一行，将其复制到缓冲区，对文本编辑完成之后，读取下一行直到所有的文本行都编辑完毕。 所以sed命令处理时只会改变缓冲区中文本的副本，如果想要直接编辑原文件，可以使用-i选项或者将结果重定向到新的文件中。 sed 命令行格式： sed [参数] [command] [文件名] 参数 作用 -n 取消默认输出，不打印不符合要求的行 p 将选择的数据列出来，通常用 -n 连用 -d 删除 -e 多点编辑，可以执行多个子命令 -f 从脚本文件中读取命令（sed操作可以事先写入脚本，然后通过-f读取并执行） -i 直接编辑原文件 -l 指定行的长度 -r 在脚本中使用扩展正则表达式，与grep -E作用类似 s 用一个字符串替换另一个 w 写入 a\ 追加到目标行之下 i\ 追加到目标行之上 示例： 文本匹配 （与grep 类似） 打印指定的某一行 sed -n &#39;n&#39;p [filename] 注：’n’和p之间没有空格 12[root@stevey ~]# sed -n &apos;2&apos;p a.txtdvdvcfdv 打印范围，指定的某几行 sed -n &#39;m,n&#39;p [filename] 1234[root@stevey ~]# sed -n &apos;1,3&apos;p a.txt //打印第一行至第三行#cewfefdvdvcfdvfewfawef 打印包含某个字符的行 sed -n &#39;/keyword/&#39;p [filename] 123[root@stevey ~]# sed -n &apos;/root/&apos;p a.txtroot:x:0:0:root:/root:/bin/bashoperator:x:11:0:operator:/root:/sbin/nologin 在grep中使用的 . * ^ $ ,同样也可以在sed中使用 123456[root@stevey ~]# sed -n &apos;/ro.t/&apos;p a.txtroot:x:0:0:root:/root:/bin/bashoperator:x:11:0:operator:/root:/sbin/nologin[root@stevey ~]# sed -n &apos;/^#/&apos;p a.txt#cewfef 匹配多个command sed -e &#39;2&#39;p -e &#39;/sbin/&#39;p a.txt 只要符合条件之一就会打印出来 123456[root@stevey ~]# sed -n -e &apos;2&apos;p -e &apos;/sbin/&apos;p a.txtdvdvcfdvbin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinadm:x:3:4:adm:/var/adm:/sbin/nologinlp:x:4:7:lp:/var/spool/lpd:/sbin/nologin 匹配首行到末行 sed -n &#39;1，$&#39;p $表示行尾 文本编辑d 删除指定内容注：这里文档内容实际上并没有被删除，如果确实需要删除，还需要采取输出重定向或者使用-i选项。 删除第一行内容sed &#39;n&#39;d [filename] n为数字 删除空白行 sed &#39;/^$/d&#39; [filename] 删除文件最后一行 sed &#39;$&#39;d [filename] 删除文件中所有开头是root的行 sed &#39;/^root/&#39;d [filename] 删除文件的第2行到末尾所有行 sed &#39;2,$&#39;d [filename] 12[root@stevey ~]# head a.txt | sed &apos;2,$&apos;d //此处删除了第2至10行的内容#cewfef 替换文档内容 sed &#39;m,ns/keyword/替换文字/g&#39; [filename]注： 此处的m和n，代表数字，表示替换范围； s表示替换动作，s和n之间没有空格； g表示本行所有的keyword全局替换；如果不加g，则只替换本行第一个keyword / 还可以用# 或者 @ 代替 写入文档 w选项：file1 中包含 keyword内容都会被写入file2 sed -n &#39;/root/w [file2]&#39; [file1] 1234[root@stevey ~]# sed -n &apos;/root/w b.txt&apos; a.txt[root@stevey ~]# cat b.txtroot:x:0:0:root:/root:/bin/bashoperator:x:11:0:operator:/root:/sbin/nologin a\ : 指定内容追加到keyword 所在行后面 sed &#39;/^keyword/a\追加内容&#39; file 第2行之后插入 this is a test i\ : 指定内容插入到keyword所在行之前 第5行之前插入 linux is blablabla -i 直接编辑修改原文件注： 用前面提到的替换文档内容不同，加上 -i选项，就会直接更改原始文件 调换字符串位置 对字段进行排序 sed -r &#39;s/([^:]+):(.*):([^:]+)/\3:\2:\1/&#39; 1234[root@stevey ~]# head -n 3 a.txt | sed -r &apos;s/([^:]+):(.*):([^:]+)/\3:\2:\1:/&apos;/bin/bash:x:0:0:root:/root:root:/sbin/nologin:x:1:1:bin:/bin:bin:/sbin/nologin:x:2:2:daemon:/sbin:daemon: 注： -r 表示在脚本中使用扩展正则表达式，与grep -E作用类似；如果不使用-r ，就需要使用脱义符 ()表示分组，如上所述，实际上分为了三组；后面的\3、\2、\1表示分组的排序； 删除字符串，只保留数字 sed -r &#39;s/[a-zA-Z]//g&#39; 在所有行的前面加上一个字符串aaa sed -r &#39;s/(.*)/aaa:&amp;/&#39; awk 命令awk 也是流式编辑器，用来进行高级文本处理，支持关联数组、归递函数、条件语句等。 语法结构第一种：awk [选项参数] &#39;script&#39; file(s)在这种格式中，awk从一个或多个文件中读取内容，之后再用引号里的script进行处理。 [选项参数] 这里一般是-F 后面跟分割符，比如/etc/passwd，字段与字段之间使用：分割，处理时就要写成 -F &#39;:&#39;；如果不加 -F 默认使用空格分割。 再来说后面script的部分，awk 之所以能够进行高级文本处理，是因为这里的script可以很复杂，通常可分为三个可选的部分：BEGIN、BODY和END。 awk的工作方式： 执行BEGIN 语句块；这是一个可选语句块，例如变量初始化、打印输出表格的表头等通常都放在这里面。 BODY通常包含两个部分：pattern和action；awk在执行完BEGIN语句之后，会逐行读取file内容，就像一个for循环，每读一行先按照前面的pattern进行匹配，如果匹配则执行后面的action；重复这个过程，一直到文件内容全部读完。 执行END语句块；跟BEGIN类似，也是可选的。 注：在第二步中的的action 是可以省略的；如果省略action，则默认执行{ print }，也就是把所有符合pattern的内容都打印在屏幕上。 第二种：awk [选项参数] -f script-file file(s)在这种格式中，script被写进脚本文件里，在执行的时候，awk 命令会从脚本文件中读取script，在按照方式一中的步骤进行操作。这则笔记暂不涉及这种用法。 awk 基本操作匹配字符串 先来看最基本的用法：从/etc/passwd 中匹配出含有root 的行；前文说到，script的部分中，BEGIN、END都是可选的，这里都省略了，中间包括了-F指定分割符，以及BODY中的pattern，省略了action，默认执行{print}，打印出了匹配pattern的行。 123[root@stevey ~]# cat /etc/passwd | awk -F &apos;:&apos; &apos;/root/&apos;root:x:0:0:root:/root:/bin/bashoperator:x:11:0:operator:/root:/sbin/nologin 再复杂一点，可以切割之后匹配关键词；例如，在在第一段中匹配包含keyword的行，$1 表示第一个字段，~代表匹配的意思 1234[root@stevey ~]# awk -F &apos;:&apos; &apos;$1 ~/ro/&apos; a.txt root:x:0:0:root:/root:/bin/bash[root@stevey ~]# awk -F &apos;:&apos; &apos;$1 ~/oo/&apos; a.txtroot:x:0:0:root:/root:/bin/bash 关于-F选项，后面跟指定的分割符；如不加 -F选项，默认以空格或tab为分隔符；print表示打印，要用{} 括起来，$1表示第一列，$2表示第二列，以此类推； {print $n}用来指定打印区域；$n n表示数字，用来制定域；$0 很特殊，表示所有的段； 12345[root@stevey ~]# cat /etc/passwd |awk -F &apos;:&apos; &apos;$1 ~/root/ &#123;print $1&#125;&apos; //这里只将第一字段显示出来root[root@stevey ~]# cat /etc/passwd |awk -F &apos;:&apos; &apos;$1 ~/root/ &#123;print $0&#125;&apos; //$0表示显示整行root:x:0:0:root:/root:/bin/bash 多次匹配 awk -F &#39;:&#39; &#39;/keyword/{打印区域} /keyword/ {打印区域}&#39; [filename] 123456[root@stevey ~]# head -n 5 a.txt | awk -F &apos;:&apos; &apos;/root/ &#123;print $1,$3&#125; /sbin/ &#123;print $0&#125;&apos;root 0bin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinadm:x:3:4:adm:/var/adm:/sbin/nologinlp:x:4:7:lp:/var/spool/lpd:/sbin/nologin 条件操作符awk命令支持用逻辑符号进行匹配， 符号 含义 == 等于 != 不等于 &gt; 大于 &lt; 小于 &gt;= 大于等于 &lt;= 小于等于 注：在于数字做比较时，加引号，则视为字符串；不加引号，则视为数字。 匹配uid大于500的行 12345[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &gt; 500&apos; a.txt //匹配uid大于500的内容polkitd:x:999:997:User for polkitd:/:/sbin/nologinuser1:x:1000:1000::/home/user1:/bin/bashuser2:x:1001:1001::/home/user2:/bin/bashyuanfeng:x:1002:1002::/home/yuanfeng:/bin/bash 匹配uid等于1000的行，这里相当于精确匹配 12[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 == 1000&apos; a.txt //== 表示等于，相当于精确匹配user1:x:1000:1000::/home/user1:/bin/bash 匹配第七列不是’/bin/bash’ 的行，!=表示取非的意思。 1234567[root@stevey ~]# awk -F &apos;:&apos; &apos;$7 !=/bin/bash&apos; a.txtroot:x:0:0:root:/root:/bin/bashbin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinadm:x:3:4:adm:/var/adm:/sbin/nologinlp:x:4:7:lp:/var/spool/lpd:/sbin/nologinsync:x:5:0:sync:/sbin:/bin/sync awk 还可以对两列内容比较逻辑关系 123456[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &lt; $4&apos; a.txtadm:x:3:4:adm:/var/adm:/sbin/nologinlp:x:4:7:lp:/var/spool/lpd:/sbin/nologinmail:x:8:12:mail:/var/spool/mail:/sbin/nologingames:x:12:100:games:/usr/games:/sbin/nologinftp:x:14:50:FTP User:/var/ftp:/sbin/nologin 比较两个字段是否精确比较 123456[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 == $4 &apos; a.txtroot:x:0:0:root:/root:/bin/bashbin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinnobody:x:99:99:Nobody:/:/sbin/nologinsystemd-network:x:192:192:systemd Network 支持&amp;&amp;，表示且的意思，两个条件都满足。 12[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &gt; 5 &amp;&amp; $3 &lt; 7&apos; a.txtshutdown:x:6:0:shutdown:/sbin:/sbin/shutdown 支持 ||，表示或的意思，两个条件满足其一。 123[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &gt; 1000 || $4 == &quot;/bin/bash&quot;&apos; a.txtuser2:x:1001:1001::/home/user2:/bin/bashyuanfeng:x:1002:1002::/home/yuanfeng:/bin/bash\ awk 内置变量 内置变量 含义 $0 当前记录（这个变量中存放着整个行的内容） $1~$n 当前记录的第n个字段，字段间由FS分隔 FS 输入字段分隔符 默认是空格或Tab NF 当前记录中的字段个数，就是有多少列 NR 已经读出的记录数，就是行号，从1开始，如果有多个文件话，这个值也是不断累加中。 FNR 当前记录数，与NR不同的是，这个值会是各个文件自己的行号 RS 输入的记录分隔符， 默认为换行符 OFS 输出字段分隔符， 默认也是空格 ORS 输出的记录分隔符，默认为换行符 FILENAME 当前输入文件的名字 内置变量的用法示例 OFS 用法 12345678910[root@stevey ~]# awk -F &apos;:&apos; &apos;&#123;OFS=&quot;#&quot;&#125; &#123;print $1, $3, $4&#125;&apos; a.txtroot#0#0bin#1#1daemon#2#2adm#3#4lp#4#7sync#5#0shutdown#6#0halt#7#0mail#8#12 NR表示行号;NF表示有多少列， $NF 表示最后一个字段的值 12345678[root@stevey ~]# head -n 3 a.txt | awk -F &apos;:&apos; &apos;&#123;print NF&#125;&apos;777[root@stevey ~]# head -n 3 a.txt | awk -F &apos;:&apos; &apos;&#123;print $NF&#125;&apos; /bin/bash/sbin/nologin/sbin/nologin awk中的数学计算 对指定字段赋值 12345678[root@stevey ~]# awk -F &apos;:&apos; &apos;&#123;$1=&quot;root&quot;;print $0&#125;&apos; a.txtroot x 0 0 root /root /bin/bashroot x 1 1 bin /bin /sbin/nologinroot x 2 2 daemon /sbin /sbin/nologinroot x 3 4 adm /var/adm /sbin/nologinroot x 4 7 lp /var/spool/lpd /sbin/nologinroot x 5 0 sync /sbin /bin/syncroot x 6 0 shutdown /sbin /sbin/shutdown 将指定字段的值进行数学运算后，赋给另一个字段 123[root@stevey ~]# head -n 2 a.txt | awk -F &apos;:&apos; &apos;&#123;$7=$3+$4; print $0&#125;&apos; //$7被重新赋值，等于$3、$4相加之和。root x 0 0 root /root 0bin x 1 1 bin /bin 2 更多教程 正则表达式30分钟入门教程 正则表达式入门和高级教程与在线测试工具 常见的正则表达式可视化描述 AWK 简明教程 GNU/Linux awk命令用法详解 linux awk命令详解]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>regularExpression</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux学习笔记:tomcat的基础知识]]></title>
+    <url>%2F2018%2F07%2F26%2FlinuxNotes-18-basisOfTomcat%2F</url>
+    <content type="text"><![CDATA[写在前面这则笔记整理tomcat的相关知识，主要包括： tomcat介绍 tomcat安装 tomcat配置 什么是tomcat？目前，有很多的大型网站都是用java编写的，所以，解析java程序也需要由相关的程序来完成，tomcat就是其中之一。 Tomcat 类似与一个apache的扩展型，属于apache软件基金会的核心项目，属于开源的轻量级Web应用服务器，是开发和调试JSP程序的首选，主要针对Jave语言开发的网页代码进行解析，具有技术先进、性能稳定、免费开源的特点，是目前比较流行的web服务器。 Tomcat虽然具有处理HTML页面的功能，然而由于其处理静态HTML的能力远不及Apache或者Nginx，所以Tomcat通常做为一个Servlet和JSP容器单独运行在后端，运行JSP 页面和Servlet。 Tomcat 支持： 使用 Apache Axis servlet 的 Web 服务； 开发框架，如 Apache Struts； 模板引擎，如 Apache Jakarta Velocity； 对象关系映射技术，如 Hibernate； Tomcat 安装想要安装tomcat，必须先安装JDK，即java development kit，这是Sun Microsystems 针对java开发做的一个开发者软件包，包括java运行环境、java工具和java基础库，是目前java开发的核心。 安装jdk第一步：下载安装包jdk官网下载地址在这里，由于这里不能使用wget命令，因此只能通过浏览器下载，之后通过ftp程序上传到虚拟机当中，进行相关的安装配置。 这里选择了linux64位的版本来下载。 第二步：上传安装包到虚拟机因为之前已经配置好了ftp服务，所以这里刚好用上。 笔者在mac端使用的ftp软件是yummy ftp pro ，打开之后，依次选取传输协议、客户端ip、登陆用户名、密码，点击connect即可连接。 之后，选择文件，右键uoload即可。 第三步：移动安装包123456789101112131415161718192021222324252627// 进入ftp目录[root@local-linux02 ~]# cd /data/ftp//查看目录，该文件已成功传输到虚拟机当中[root@local-linux02 ftp]# lsa.txt b.txt jdk-8u171-linux-x64.tar.gz test1 test2//移动文件夹[root@local-linux02 ftp]# mv jdk-8u171-linux-x64.tar.gz /usr/local/src///进入源码包保存目录[root@local-linux02 ftp]# cd /usr/local/src/[root@local-linux02 src]# lsjdk-8u171-linux-x64.tar.gz nginx-1.14.0.tar.gz php-7.2.6nginx-1.14.0 nginx-1.14.0.tar.gz.1 php-7.2.6.tar.gz//解压[root@local-linux02 src]# tar -zxvf jdk-8u171-linux-x64.tar.gz //查看解压文件包[root@local-linux02 src]# lsjdk1.8.0_171 nginx-1.14.0.tar.gz php-7.2.6.tar.gzjdk-8u171-linux-x64.tar.gz nginx-1.14.0.tar.gz.1nginx-1.14.0 php-7.2.6//移动重命名mv jdk1.8.0_171 /usr/local/jdk1.8 第四步：配置系统环境变量系统环境变量的配置文件为 /etc/profile，下面要更改系统配置文件。 123456789101112vi /etc/profile//在末尾增加如下配置：JAVA_HOME=/usr/local/jdk1.8/JAVA_BIN=/usr/local/jdk1.8/binJRE_HOME=/usr/local/jdk1.8/jrePATH=$PATH:/usr/local/jdk1.8/bin:/usr/local/jdk1.8/jre/binCLASSPATH=/usr/local/jdk1.8/jre/lib:/usr/local/jdk1.8/lib:/usr/local/jdk1.8/jre/lib/charsets.jar //保存退出后执行如下命令生效source /etc/profile 校验配置是否正常 安装Tomcat第一步：下载二进位制安装包tomcat的官网网址为：https://tomcat.apache.org/ 这里下载的镜像站点的二进位制安装包，版本号是8.5.31。同样还是采用在mac下用chrome浏览器下载，之后再通过ftp上传到虚拟机的方式。因为在虚拟机使用wget命令下载实在是太慢了。 第二步：移动文件夹1234567891011121314151617//此处设置了alias ftp=&apos;cd /data/ftp/&apos;[root@local-linux02 src]# ftp[root@local-linux02 ftp]# lsapache-tomcat-8.5.31.tar.gz a.txt b.txt test1 test2//移动文件[root@local-linux02 ftp]# mv apache-tomcat-8.5.31.tar.gz /usr/local/src///进入源码包目录，此处也设置的alias[root@local-linux02 ftp]# src[root@local-linux02 src]# lsapache-tomcat-8.5.31.tar.gz nginx-1.14.0.tar.gz php-7.2.6.tar.gzjdk-8u171-linux-x64.tar.gz nginx-1.14.0.tar.gz.1nginx-1.14.0 php-7.2.6//解压[root@local-linux02 src]# tar -zxvf apache-tomcat-8.5.31.tar.gz 第三步：安装由于下载的是二进位制安装包，因此就省去了编译环节。 移动文件夹到自定义安装目录 1[root@local-linux02 src]# mv apache-tomcat-8.5.31 /usr/local/tomcat 运行启动脚本 1234567[root@local-linux02 bin]# /usr/local/tomcat/bin/startup.shUsing CATALINA_BASE: /usr/local/tomcatUsing CATALINA_HOME: /usr/local/tomcatUsing CATALINA_TMPDIR: /usr/local/tomcat/tempUsing JRE_HOME: /usr/local/jdk1.8Using CLASSPATH: /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jarTomcat started. 校验是否成功 ps -aux |grep java 检查端口情况 netstat -lntp |grep java 说明：正常会有三个以下端口开放 8080提供wed服务的端口； 8005为管理端口； 8009为第三方服务调用端口（如httpd和Tomcat结合时会用到）； 第四步：设置开机启动123echo &quot;/usr/local/tomcat/bin/startup.sh&quot; &gt;&gt; /etc/rc.d/rc.localchmod a+x /etc/rc.d/rc.local 第五步：配置iptables端口123456[root@local-linux02 bin]# vi /etc/sysconfig/iptables//增加一条-A INPUT -p tcp -m tcp --dport 8080 -j ACCEPT[root@local-linux02 bin]# systemctl restart iptables 校验成功浏览器登录 最后，如需关闭tomcat执行如下脚本 1/usr/local/tomcat/bin/shutdown.sh tomcat的目录结构tomcat的目录结构说明12345678910111213[root@local-linux02 conf]# tree -L 1 /usr/local/tomcat/usr/local/tomcat //tomcat目录├── bin //执行脚本目录├── conf //配置文件├── lib //运行时必要的库文件（JARS）├── LICENSE├── logs //执行日志文件├── NOTICE├── RELEASE-NOTES├── RUNNING.txt├── temp //临时文件存放目录├── webapps //主要Web发布目录（存放JSP,SERVLET等）└── work //工作目录，Tomcat将翻译JSP文件到的Java文件和class文件放在这里 bin目录主要文件包括： catalina.sh 用于启动和关闭tomcat服务器； configtest.sh 用于检查配置文件； startup.sh 启动Tomcat脚本； shutdown.sh 关闭Tomcat脚本； conf目录主要的配置文件： server.xml Tomcat 的全局配置文件； web.xml 为不同的Tomcat配置的web应用设置缺省值的文件； tomcat-users.xml Tomcat用户认证的配置文件； logs目录主要文件包括： localhost_access_log.2018-06-26.txt 访问日志 localhost.2018-06-26.log 错误和其它日志 manager.2018-06-26.log 管理日志 catalina.2018-06-26.log Tomcat启动或关闭日志文件 Tomcat 配置文件tomcat配置文件目录为 /usr/local/tomcat/conf/, 主要包括以下文件： server.xml omcat的主配置文件，包含Service, Connector, Engine, Realm, Valve, Hosts主组件的相关配置信息； web.xml 每个webapp只有“部署”后才能被访问，它的部署方式通常由web.xml进行定义，其存放位置为WEB-INF/目录中； tomcat-user.xml 用户认证的账号和密码文件，在Tomcat中添加/删除用户，为用户指定角色等将通过编辑此文件实现； catalina.policy java相关的安全策略配置文件，在系统资源级别上提供访问控制的能力；当使用-security选项启动tomcat时，用于为tomcat设置安全策略； catalina.properties Java属性的定义文件，用于设定类加载器路径，以及一些与JVM调优相关参数，Tomcat在启动时会事先读取此文件的相关设置； logging.properties Tomcat日志记录器相关的配置信息，可以用来定义日志记录的组件级别以及日志文件的存在位置等； context.xml 每个web专用的配置文件，包括所有host的默认配置信息，其存放位置为WEB-INF/目录中； tomcat的核心组件Server 组件元素是整个配置文件的根元素,在所有元素最顶层，代表整个Tomcat容器，类似于标签 className: 用于实现此Server容器的完全限定类的名称，默认为org.apache.catalina.core.StandardServer； port 接收shutdown指令的端口，默认仅允许通过本机访问，默认为8005； shutdown 指定向端口发送的命令字符串； Service 组件Service主要用于关联一个引擎和与此引擎相关的连接器，每个连接器通过一个特定的端口和协议接收入站请求交将其转发至关联的引擎进行处理。 Connector组件主要功能接收连接请求，创建Request和Response对象用于和请求端交换数据；然后分配线程让Engine来处理这个请求，并把产生的Request和Response对象传给Engine。 进入tomcat的请求可分为两类： 第一类：standalone，请求来自于客户端浏览器； 第二类：由其它的web server反代，来自前端的反代服务器； nginx –&gt; http connector –&gt; tomcat httpd(proxy_http_module) –&gt; http connector –&gt; tomcat httpd(proxy_ajp_module) –&gt; ajp connector –&gt; tomcat 相关属性： 1234567port=”8080″protocol=”HTTP/1.1″connectionTimeout=”20000″address：监听的IP地址；默认为本机所有可用地址；maxThreads：最大并发连接数，默认为200；enableLookups：是否启用DNS查询功能；acceptCount：等待队列的最大长度 Engine组件servlet引擎，其内部可以一个或多个host组件来定义站点； 通常需要通过defaultHost来定义默认的虚拟主机； Host组件Engine的子容器。Engine组件中可以内嵌1个或多个Host组件，每个Host组件代表Engine中的一个虚拟主机。Host组件至少有一个，且其中一个的name必须与Engine组件的defaultHost属性相匹配。 name 指定主机名； appBase 应用程序基本目录，即存放应用程序的目录； unpackWARs 如果为true，则tomcat会自动将WAR文件解压，否则不解压，直接从WAR文件中运行应用程序； tomcat 常用配置配置Tomcat监听80端口第一步：修改server.xml配置文件123[root@local-linux02 conf]# vi /usr/local/tomcat/conf/server.xml//Connector port=&quot;8080&quot;,将端口号改为80，之后保存退出。 第二步：重启tomcat12345678910111213141516//关闭tomcat[root@local-linux02 conf]# /usr/local/tomcat/bin/shutdown.shUsing CATALINA_BASE: /usr/local/tomcatUsing CATALINA_HOME: /usr/local/tomcatUsing CATALINA_TMPDIR: /usr/local/tomcat/tempUsing JRE_HOME: /usr/local/jdk1.8Using CLASSPATH: /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar//再次启动tomcat [root@local-linux02 conf]# /usr/local/tomcat/bin/startup.shUsing CATALINA_BASE: /usr/local/tomcatUsing CATALINA_HOME: /usr/local/tomcatUsing CATALINA_TMPDIR: /usr/local/tomcat/tempUsing JRE_HOME: /usr/local/jdk1.8Using CLASSPATH: /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jarTomcat started. 校验成果 检查端口情况 1234[root@local-linux02 conf]# netstat -lntp | grep javatcp6 0 0 127.0.0.1:8005 :::* LISTEN 42011/javatcp6 0 0 :::8009 :::* LISTEN 42011/javatcp6 0 0 :::80 :::* LISTEN 42011/java 浏览器测试 配置Tomcat虚拟主机同样还是修改配置文件server.xml，其中&lt;host&gt;&lt;/host&gt;字段就是关于虚拟主机的配置，包括以下选项： name定义域名； appBase定义应用的目录，Java的应用通常是一个war的压缩包，你只需要将war的压缩包放到appBase目录下面即可； docBase，这个参数用来定义网站的文件存放路径，默认为appBase/ROOT； 应用示例：利用zrlog部署一个java的应用 第一步：修改配置文件123456789vi /usr/local/tomcat/conf/server.xml//修改host字段&lt;Host name=&quot;www.java-test.com&quot; appBase=&quot;&quot; unpackWARs= &quot;true&quot; autoDeploy=&quot;true&quot; xmlValidation=&quot;false&quot; xmlNamespaceAware=&quot;false&quot;&gt; &lt;Context path=&quot;&quot; docBase=&quot;/data/wwwroot/java-test.com/&quot; debug=&quot;0&quot; reloadable=&quot;true&quot; crossContext=&quot;true&quot;/&gt;&lt;/Host&gt; 第二步：下载zrlog1234567//下载zrlog[root@local-linux02 src]# wget http://dl.zrlog.com/release/zrlog-1.7.1-baaecb9-release.war //移动至webapps mv zrlog-1.7.1-baaecb9-release.war /usr/local/tomcat/webapps/mv /usr/local/tomcat/webapps/zrlog-1.7.1-baaecb9-release /usr/local/tomcat/webapps/zrlog 第三步：数据库配置 登陆数据库 123456789[root@local-linux02 webapps]# mysql -u root -pEnter password:Welcome to the MariaDB monitor. Commands end with ; or \g.Your MariaDB connection id is 9Server version: 10.2.15-MariaDB MariaDB ServerCopyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement. 创建数据库 1234567891011121314MariaDB [(none)]&gt; create database zrlog;Query OK, 1 row affected (0.02 sec)MariaDB [(none)]&gt; show databases;+--------------------+| Database |+--------------------+| db2 || information_schema || mysql || performance_schema || zrlog |+--------------------+5 rows in set (0.08 sec) 授权用户 12345MariaDB [(none)]&gt; grant all on zrlog.* to &apos;zrlog&apos;@127.0.0.1 identified by &apos;steve-123&apos;;Query OK, 0 rows affected (0.05 sec)MariaDB [(none)]&gt; exitBye 测试是否数据库是否能正常登陆 第四步：浏览器访问 ip:8080/zrlog ，运行安装程序 依次填写服务器地址、数据库名、用户名、密码、端口、系统邮箱 下一步，随便填了，反正是实验环境 完成 效果预览 第五步：去掉浏览器访问时输入的目录名 第六步：重启tomcat12[root@local-linux02 webapps]# /usr/local/tomcat/bin/shutdown.sh [root@local-linux02 webapps]# /usr/local/tomcat/bin/startup.sh 浏览器测试 修改本地host文件 浏览器测试 Tomcat日志 其中， catalina开头的日志为Tomcat的综合日志，它记录Tomcat服务相关信息，也会记录错误日志。catalina.2018-xx-xx.log和catalina.out内容相同，前者会每天生成一个新的日志； host-manager和manager为管理相关的日志，其中host-manager为虚拟主机的管理日志； localhost和localhost_access为虚拟主机相关日志，其中带access字样的日志为访问日志，不带access字样的为默认虚拟主机的错误日志。 日志文件同样是在/usr/local/tomcat/conf/server.xml 中虚拟主机配置的位置字段，其中： prefix定义访问日志的前缀; suffix定义日志的后缀; pattern定义日志格式； 示例： 123&lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot; prefix=&quot;123.cn_access&quot; suffix=&quot;.log&quot; pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt; tomcat 连接 mysqltomcat连接mysql是通过自带的JDBC驱动实现的，具体步骤如下： 第一步：配置mysql，创建数据库、表、用户1234567mysql -u root -pcreate database java_test;use java_test;grant all on java_test.*&apos;java@ip&apos; identified by &apos;passwd&apos;; 第二步：修改tomcat配置文件12345678910vi content.xml&lt;Resource name=&quot;jdbc/mytest&quot; auth=&quot;Container&quot; type=&quot;javax.sql.DataSource&quot; maxActive=&quot;100&quot; maxIdle=&quot;30&quot; maxWait=&quot;10000&quot; username=&quot;java&quot; password=&quot;aminglinux&quot; driverClassName=&quot;com.mysql.jdbc.Driver&quot; url=&quot;jdbc:mysql://127.0.0.1:3306/java_test&quot;&gt;&lt;/Resource&gt; 第三步：修改 web.xml配置文件123456789vi /usr/local/tomcat/webapps/ROOT/WEB-INF/web.xml&lt;resource-ref&gt; &lt;description&gt;DB Connection&lt;/description&gt; &lt;res-ref-name&gt;jdbc/mytest&lt;/res-ref-name&gt; &lt;res-type&gt;javax.sql.DataSource&lt;/res-type&gt; &lt;res-auth&gt;Container&lt;/res-auth&gt;&lt;/r 第四步：编辑测试内容12345678910111213141516171819202122vi /usr/local/tomcat/webapps/ROOT/t.jsp&lt;%@page import=&quot;java.sql.*&quot;%&gt;&lt;%@page import=&quot;javax.sql.DataSource&quot;%&gt;&lt;%@page import=&quot;javax.naming.*&quot;%&gt;&lt;%Context ctx = new InitialContext();DataSource ds = (DataSource) ctx.lookup(&quot;java:comp/env/jdbc/mytest&quot;);Connection conn = ds.getConnection();Statement state = conn.createStatement();String sql = &quot;select * from aminglinux&quot;;ResultSet rs = state.executeQuery(sql);while (rs.next()) &#123;out.println(rs.getString(&quot;id&quot;) +&quot;&lt;tr&gt;&quot;);out.println(rs.getString(&quot;name&quot;) +&quot;&lt;tr&gt;&lt;br&gt;&quot;);&#125;rs.close();state.close();conn.close();%&gt; 第五步：重启tomcat/usr/local/tomcat/bin/shutdown.sh /usr/local/tomcat/bin/startup.sh 参考资料： 邱李的tomcat文档 JAR、WAR包区别 tomcat常见配置汇总 resin安装 tomcat 单机多实例 tomcat的jvm设置和连接数设置 jmx监控tomcat tomcat内存溢出 Tomcat 配置文件详解]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>tomcat</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux笔记:shell+ expect实现简易文件分发系统]]></title>
+    <url>%2F2018%2F07%2F26%2FlinuxNotes-17-basisOfExpect%2F</url>
+    <content type="text"><![CDATA[写在前面所谓分发系统，就是一个主要用来上线代码或同步文件的脚本。 对于大公司而言，使用机器少则几台，多则几十甚至上百台。如何将网站更新、扩展代码全部都发布到这些服务器上呢？这里就用到了分发系统。 expect的安装使用准备工作：安装 expect1yum install -y expect expect自动远程登录 编写脚本 更改脚本权限并执行 123chmod 744 1.expect./1.expect expect脚本运程传递参数编写脚本 123456789101112131415161718vi 1.expect#!/usr/bin/expectset user &quot;root&quot;set passwd 123456&quot;spawn ssh $user@172.16.111.110expect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;; exp_continue&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;//表示图中括号里的，表示当检测到这个符号时就执行我们要执行的命令expect &quot;]*&quot; send &quot;touch /tmp/12.txt\r&quot;expect &quot;]*&quot;send &quot;echo 1212 &gt; /tmp/12.txt\r&quot;expect &quot;]*&quot;send &quot;exit\r&quot; 更改脚本权限并执行 123chmod 744 2.expect./2.expect expect脚本传递参数 编写脚本 1234567891011121314151617181920212223vi 3.expect增加如下脚本内容：#!/usr/bin/expect//把第一个参数的值赋给userset user [lindex $argv 0] set host [lindex $argv 1]set passwd &quot;123456&quot;set cm [lindex $argv 2]spawn ssh $user@$hostexpect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect &quot;]*&quot;send &quot;$cm\r&quot;//-1表示永远不超时，1表示1秒，2表示2秒，以此类推，表示执行命令几秒后停止set timeout -1 expect &quot;]*&quot;send &quot;exit\r&quot; 更改脚本权限并执行 123chmod 744 2.expect./2.expect 实践项目：构建一个简易的分发系统？需求描述：假设有一个大公司，企业网站用PHP编写，在多台服务同时跑服务，如何将网站更新代码同步推送到各个服务器？ 解决思路：利用Shell和Expect，就能构建一个简单的分发系统，首先，准备好一台模板机器，将需要分发的文件准备好，然后只要使用expect脚本批量把需要同步的文件分发到目标机器即可。 核心命令： 1rsync -av --files-from=list.txt / root@host:/ 实现步骤：step1:编写一个脚本文件rsync.expect12345678910111213vim rsync.expect#!/usr/bin/expect# 目标机器的登录密码set passwd &quot;123456&quot;set host [lindex $argv 0]set file [lindex $argv 1]# 核心命令，同步多个文件spawn rsync -avR --files-from=$file / root@$host:/expect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect eof 更改脚本权限 chmod 744 rsync.expect step2:编辑一个文本文件，用来放需要同步的文件列表12345vim /tmp/list.txt/tmp/12.txt/root/test.sh/tmp/test.txt/root/expectFiles/hostFile.expect step3: 编辑一个ip.list，用于存放需要同步的目标机器的IP地址123vim /tmp/ip.list192.16.155.128192.16.155.132 step4:编写shell脚本rsync.sh，执行同步操作12345678910vim rsync.sh#!/bin/bashfor ip in `cat /tmp/ip.list`do echo $ip # 第二个参数就是需要同步的文件列表 ./rsync.expect $ip /tmp/list.txtdone 本地执行同步：1sh rsync.sh 远程执行同步编写脚本1234567891011121314vim exe.expect#!/usr/bin/expectset host [lindex $argv 0]set passwd &quot;123456&quot;set cm [lindex $argv 1]spawn ssh root@$hostexpect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect &quot;]*&quot;send &quot;$cm\r&quot;expect &quot;]*&quot;send &quot;exit\r&quot; 更改权限 1chmod a+x exe.expect 需要写shell脚本exe.sh，用于执行操作12345678vim exe.sh#!/bin/bashfor ip in `cat /tmp/ip.list`do echo $ip # 第二个参数就是需要执行的命令 ./exe.expect $ip &quot;who;ls&quot;done 执行脚本1sh exe.sh expect脚本同步文件 准备条件：安装rsync 1yum -y install rsync 编写脚本： 123456789101112 vi 4.expect增加如下脚本内容：#!/usr/bin/expectset passwd &quot;123456&quot;spawn rsync -av root@172.16.111.110:/tmp/12.txt /tmp/expect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect eof 执行脚本 123chmod a+x 4.expect ./4.expect expect脚本指定host和要同步的文件 编写脚本 1234567891011121314151617181920212223242526vi 5.expect增加如下内容：#!/usr/bin/expectset passwd &quot;123456&quot;set host [lindex $argv 0]set file [lindex $argv 1]spawn rsync -av $file root@$host:$fileexpect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect eof[root@garytao-01 shell]# cat 5.expect #!/usr/bin/expectset passwd &quot;123456&quot;set host [lindex $argv 0]set file [lindex $argv 1]spawn rsync -av $file root@$host:$fileexpect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect eof 执行脚本 123chmod a+x 5.expect ./5.expect]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>shell</tag>
+        <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>expect</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[linux运维学习笔记:shell告警系统]]></title>
     <url>%2F2018%2F07%2F26%2FlinuxNotes-16-basisOfShellPart3%2F</url>
     <content type="text"><![CDATA[写在前面之前学习过了zabbix监控系统的使用，但是对于一些比较冷门的监控项目，还需要手动编写脚本进行监控。这节课主要内容就是定制个性化的告警工具，并进行统一化、标准化的管理。 主要包括一下内容： 告警系统整体设计； 编写告警系统脚本包； 运行告警系统； 告警系统整体设计：脚本包目录结构如下： 如上图所示： bin/目录下是主程序； conf/目录下是配置文件； shares/目录下是各个监控脚本； mail/目录下是邮件引擎； log/目录下是日志。 这里的监控脚本不是单独一个脚本，而是一个脚本包，包括主程序、子程序、配置文件、邮件引擎、输出日志等。 主程序： 配置文件：是一个控制中心，用它来开关各个子程序，指定各个相关联的日志文件； 子程序：这个才是真正的监控脚本，用来监控各个指标； 邮件引擎：是由一个python程序来实现，它可以定义发邮件的服务器、发邮件人以及发件人密码； 输出日志：整个监控系统要有日志输出。 编写脚本包第一步：创建目录1234567cd /usr/local/sbin/mkdir moncd mon/mkdir bin conf shares log mail 第二步：编写主脚本12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849vim main.sh#!/bin/bash#Written by litongyao.//是否发送邮件的开关export send=1//过滤ip地址export addr=`/sbin/ifconfig |grep -A1 "ens33: "|awk '/inet/ &#123;print $2&#125;'`dir=`pwd`//只需要最后一级目录名last_dir=`echo $dir|awk -F'/' '&#123;print $NF&#125;'`//下面的判断目的是，保证执行脚本的时候，我们在bin目录里，不然监控脚本、邮件和日志很有可能找不到if [ $last_dir == "bin" ] || [ $last_dir == "bin/" ]; then conf_file="../conf/mon.conf"else echo "you shoud cd bin dir" exitfiexec 1&gt;&gt;../log/mon.log 2&gt;&gt;../log/err.logecho "`date +"%F %T"` load average"/bin/bash ../shares/load.sh//先检查配置文件中是否需要监控502if grep -q 'to_mon_502=1' $conf_file; then export log=`grep 'logfile=' $conf_file |awk -F '=' '&#123;print $2&#125;' |sed 's/ //g'` /bin/bash ../shares/502.shfi 第三步：编辑告警系统配置文件123456789101112131415161718192021222324252627282930313233343536373839vim mon.conf//to config the options if to monitor//定义mysql的服务器地址、端口以及user、passwordto_mon_cdb=0 ##0 or 1, default 0,0 not monitor, 1 monitordb_ip=10.20.3.13db_port=3315db_user=usernamedb_pass=passwd//httpd 如果是1则监控，为0不监控to_mon_httpd=0//php 如果是1则监控，为0不监控to_mon_php_socket=0//http_code_502 需要定义访问日志的路径to_mon_502=1logfile=/data/log/xxx.xxx.com/access.log//request_count 定义日志路径以及域名to_mon_request_count=0req_log=/data/log/www.discuz.net/access.logdomainname=www.discuz.net 第四步：编辑子脚本1cd /usr/local/sbin/mon/shares 监控系统平均负载 12345678910111213141516171819vim load.sh#! /bin/bash//Writen by amingload=`uptime |awk -F 'average:' '&#123;print $2&#125;'|cut -d',' -f1|sed 's/ //g' |cut -d. -f1`if [ $load -gt 10 ] &amp;&amp; [ $send -eq "1" ]then echo "$addr `date +%T` load is $load" &gt;../log/load.tmp /bin/bash ../mail/mail.sh aming_test@163.com "$addr\_load:$load" `cat ../log/load.tmp`fiecho "`date +%T` load is $load" 监控nginx报错502 1234567891011121314151617vim 502.sh #! /bin/bashd=`date -d &quot;-1 min&quot; +%H:%M`c_502=`grep :$d: $log |grep &apos; 502 &apos;|wc -l`if [ $c_502 -gt 10 ] &amp;&amp; [ $send == 1 ]; then echo &quot;$addr $d 502 count is $c_502&quot;&gt;../log/502.tmp /bin/bash ../mail/mail.sh $addr\_502 $c_502 ../log/502.tmpfiecho &quot;`date +%T` 502 $c_502&quot; 监控磁盘使用率 12345678910111213141516171819202122vim disk.sh#! /bin/bashrm -f ../log/disk.tmpfor r in `df -h |awk -F '[ %]+' '&#123;print $5&#125;'|grep -v Use`doif [ $r -gt 90 ] &amp;&amp; [ $send -eq "1" ]then echo "$addr `date +%T` disk useage is $r" &gt;&gt;../log/disk.tmpfiif [ -f ../log/disk.tmp ]then df -h &gt;&gt; ../log/disk.tmp /bin/bash ../mail/mail.sh $addr\_disk $r ../log/disk.tmp echo "`date +%T` disk useage is nook"else echo "`date +%T` disk useage is ok"fi 第五步：告警系统邮件引擎 创建python脚本 1234567891011121314151617181920212223242526272829303132333435363738394041cd mail/vi mail.py//增加如下内容：#!/usr/bin/env python#-*- coding: UTF-8 -*-import os,sysreload(sys)sys.setdefaultencoding('utf8')import getoptimport smtplibfrom email.MIMEText import MIMETextfrom email.MIMEMultipart import MIMEMultipartfrom subprocess import *def sendqqmail(username,password,mailfrom,mailto,subject,content): gserver = 'smtp.qq.com' gport = 25 try: msg = MIMEText(unicode(content).encode('utf-8')) msg['from'] = mailfrom msg['to'] = mailto msg['Reply-To'] = mailfrom msg['Subject'] = subject smtp = smtplib.SMTP(gserver, gport) smtp.set_debuglevel(0) smtp.ehlo() smtp.login(username,password) smtp.sendmail(mailfrom, mailto, msg.as_string()) smtp.close() except Exception,err: print "Send mail failed. Error: %s" % errdef main(): to=sys.argv[1] subject=sys.argv[2] content=sys.argv[3]##定义QQ邮箱的账号和密码，你需要修改成你自己的账号和密码 sendqqmail('1234567@qq.com','aaaaaaaaaa','1234567@qq.com',to,subject,content)if __name__ == "__main__": main() 脚本使用说明 首先定义好脚本中的邮箱账号和密码； 脚本执行命令为：python mail.py 目标邮箱 “邮件主题” “邮件内容”； 创建脚本mail.sh ,该脚本的作用是，当系统服务异常的时候就会调用mail.py 123456789101112131415161718192021222324252627282930313233vi mail.sh//增加如下内容：log=$1t_s=`date +%s`t_s2=`date -d "2 hours ago" +%s`if [ ! -f /tmp/$log ]then echo $t_s2 &gt; /tmp/$logfit_s2=`tail -1 /tmp/$log|awk '&#123;print $1&#125;'`echo $t_s&gt;&gt;/tmp/$logv=$[$t_s-$t_s2]echo $vif [ $v -gt 3600 ]then ./mail.py $1 $2 $3 echo "0" &gt; /tmp/$log.txtelse if [ ! -f /tmp/$log.txt ] then echo "0" &gt; /tmp/$log.txt fi nu=`cat /tmp/$log.txt` nu2=$[$nu+1] echo $nu2&gt;/tmp/$log.txt if [ $nu2 -gt 10 ] then ./mail.py $1 "trouble continue 10 min $2" "$3" echo "0" &gt; /tmp/$log.txt fifi 运行告警系统1234567cd /usr/local/sbin/mon/mail//设定定时任务crontab -e//设定每分钟执行一次检测脚本包* * * * * cd /usr/local/sbin/mon/mail; bash main.sh]]></content>
@@ -10,8 +62,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -24,8 +76,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -38,8 +90,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -50,8 +102,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zabbix</tag>
       </tags>
   </entry>
@@ -63,8 +115,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>nfs</tag>
       </tags>
   </entry>
@@ -76,8 +128,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>nfs</tag>
       </tags>
   </entry>
@@ -89,8 +141,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -102,8 +154,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>log</tag>
       </tags>
   </entry>
@@ -115,8 +167,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
       </tags>
   </entry>
@@ -128,8 +180,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
       </tags>
   </entry>
@@ -141,8 +193,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rsync</tag>
         <tag>ftp</tag>
       </tags>
@@ -155,8 +207,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>sysV</tag>
         <tag>crontab</tag>
         <tag>systemd</tag>
@@ -170,8 +222,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>iptables</tag>
         <tag>firewalld</tag>
       </tags>
@@ -184,8 +236,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>DNS</tag>
       </tags>
   </entry>
@@ -197,8 +249,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -210,8 +262,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -224,8 +276,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -238,8 +290,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -252,8 +304,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -270,8 +322,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -283,8 +335,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -296,85 +348,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux笔记：shell+ expect实现简易文件分发系统(二）]]></title>
-    <url>%2F2018%2F07%2F17%2Fweek18-2-linuxNotes-basisOfExpect-Part2%2F</url>
-    <content type="text"><![CDATA[expect脚本同步文件准备条件：安装rsync 1yum -y install rsync 编写脚本： 123456789101112 vi 4.expect增加如下脚本内容：#!/usr/bin/expectset passwd &quot;123456&quot;spawn rsync -av root@172.16.111.110:/tmp/12.txt /tmp/expect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect eof 执行脚本 123chmod a+x 4.expect ./4.expect expect脚本指定host和要同步的文件 编写脚本 1234567891011121314151617181920212223242526vi 5.expect增加如下内容：#!/usr/bin/expectset passwd &quot;123456&quot;set host [lindex $argv 0]set file [lindex $argv 1]spawn rsync -av $file root@$host:$fileexpect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect eof[root@garytao-01 shell]# cat 5.expect #!/usr/bin/expectset passwd &quot;123456&quot;set host [lindex $argv 0]set file [lindex $argv 1]spawn rsync -av $file root@$host:$fileexpect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect eof 执行脚本 123chmod a+x 5.expect ./5.expect]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>shell</tag>
         <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>expect</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux笔记：shell+ expect实现简易文件分发系统(一)]]></title>
-    <url>%2F2018%2F07%2F17%2Fweek18-1-linuxNotes-basisOfExpect-Part1%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记开始，整理文件分发系统。 什么是分发系统？所谓分发系统，就是一个主要用来上线代码或同步文件的脚本。 对于大公司而言，使用机器少则几台，多则几十甚至上百台。如何将网站更新、扩展代码全部都发布到这些服务器上呢？这里就用到了分发系统。 expect的安装使用准备工作：安装 expect1yum install -y expect expect自动远程登录 编写脚本 更改脚本权限并执行 123chmod 744 1.expect./1.expect expect脚本运程传递参数编写脚本 123456789101112131415161718vi 1.expect#!/usr/bin/expectset user &quot;root&quot;set passwd 123456&quot;spawn ssh $user@172.16.111.110expect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;; exp_continue&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;//表示图中括号里的，表示当检测到这个符号时就执行我们要执行的命令expect &quot;]*&quot; send &quot;touch /tmp/12.txt\r&quot;expect &quot;]*&quot;send &quot;echo 1212 &gt; /tmp/12.txt\r&quot;expect &quot;]*&quot;send &quot;exit\r&quot; 更改脚本权限并执行 123chmod 744 2.expect./2.expect expect脚本传递参数 编写脚本 1234567891011121314151617181920212223vi 3.expect增加如下脚本内容：#!/usr/bin/expect//把第一个参数的值赋给userset user [lindex $argv 0] set host [lindex $argv 1]set passwd &quot;123456&quot;set cm [lindex $argv 2]spawn ssh $user@$hostexpect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect &quot;]*&quot;send &quot;$cm\r&quot;//-1表示永远不超时，1表示1秒，2表示2秒，以此类推，表示执行命令几秒后停止set timeout -1 expect &quot;]*&quot;send &quot;exit\r&quot; 更改脚本权限并执行 123chmod 744 2.expect./2.expect 实践项目：构建一个简易的分发系统？需求描述：假设有一个大公司，企业网站用PHP编写，在多台服务同时跑服务，如何将网站更新代码同步推送到各个服务器？ 解决思路：利用Shell和Expect，就能构建一个简单的分发系统，首先，准备好一台模板机器，将需要分发的文件准备好，然后只要使用expect脚本批量把需要同步的文件分发到目标机器即可。 核心命令： 1rsync -av --files-from=list.txt / root@host:/ 实现步骤：step1:编写一个脚本文件rsync.expect12345678910111213vim rsync.expect#!/usr/bin/expect# 目标机器的登录密码set passwd &quot;123456&quot;set host [lindex $argv 0]set file [lindex $argv 1]# 核心命令，同步多个文件spawn rsync -avR --files-from=$file / root@$host:/expect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect eof 更改脚本权限 chmod 744 rsync.expect step2:编辑一个文本文件，用来放需要同步的文件列表12345vim /tmp/list.txt/tmp/12.txt/root/test.sh/tmp/test.txt/root/expectFiles/hostFile.expect step3: 编辑一个ip.list，用于存放需要同步的目标机器的IP地址123vim /tmp/ip.list192.16.155.128192.16.155.132 step4:编写shell脚本rsync.sh，执行同步操作12345678910vim rsync.sh#!/bin/bashfor ip in `cat /tmp/ip.list`do echo $ip # 第二个参数就是需要同步的文件列表 ./rsync.expect $ip /tmp/list.txtdone 本地执行同步：1sh rsync.sh 远程执行同步第一步：编写脚本1234567891011121314vim exe.expect#!/usr/bin/expectset host [lindex $argv 0]set passwd &quot;123456&quot;set cm [lindex $argv 1]spawn ssh root@$hostexpect &#123;&quot;yes/no&quot; &#123; send &quot;yes\r&quot;&#125;&quot;password:&quot; &#123; send &quot;$passwd\r&quot; &#125;&#125;expect &quot;]*&quot;send &quot;$cm\r&quot;expect &quot;]*&quot;send &quot;exit\r&quot; 更改权限 1chmod a+x exe.expect 需要写shell脚本exe.sh，用于执行操作12345678vim exe.sh#!/bin/bashfor ip in `cat /tmp/ip.list`do echo $ip # 第二个参数就是需要执行的命令 ./exe.expect $ip &quot;who;ls&quot;done 第三步：执行脚本1sh exe.sh]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>shell</tag>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>expect</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux笔记：LVS DR模式搭建及keepalived+LVS搭建]]></title>
-    <url>%2F2018%2F07%2F05%2Fweek15-3-linuxNotes-lvsDR-keepalived%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记主要整理LVS DR模式搭建相关知识. ps,hexo挂掉了，hexo d 怎么都push 不上去，错误提示如下： 目前正在修bug LVS DR模式搭建准备工作DR模式同样需要三台虚拟机，三台机器只需要有“公网”IP，但在这种模式下又多了一个VIP。调度器dir：172.16.111.100真实服务器rs1：172.16.111.110真实服务器rs2：172.16.111.120VIP:172.16.111.200 dir机器上写入脚本123456789101112131415161718vim /usr/local/sbin/lvs_dr.sh//增加如下脚本内容：#! /bin/bashecho 1 &gt; /proc/sys/net/ipv4/ip_forwardipv=/usr/sbin/ipvsadmvip=172.16.111.200rs1=172.16.111.110rs2=172.16.111.120#注意这里的网卡名字ifdown ens33 #为了不让网卡设置多次ifup ens33ifconfig ens33:2 $vip broadcast $vip netmask 255.255.255.255 uproute add -host $vip dev ens33:2$ipv -C$ipv -A -t $vip:80 -s rr$ipv -a -t $vip:80 -r $rs1:80 -g -w 1$ipv -a -t $vip:80 -r $rs2:80 -g -w 1 启动脚本 在rs1与rs2上编写同样脚本1234567891011121314vim /usr/local/sbin/lvs_rs.sh//增加如下脚本内容：#/bin/bashvip=172.16.111.200#把vip绑定在lo上，是为了实现rs直接把结果返回给客户端ifconfig lo:0 $vip broadcast $vip netmask 255.255.255.255 uproute add -host $vip lo:0#以下操作为更改arp内核参数，目的是为了让rs顺利发送mac地址给客户端#参考文档www.cnblogs.com/lgfeng/archive/2012/10/16/2726308.htmlecho &quot;1&quot; &gt;/proc/sys/net/ipv4/conf/lo/arp_ignoreecho &quot;2&quot; &gt;/proc/sys/net/ipv4/conf/lo/arp_announceecho &quot;1&quot; &gt;/proc/sys/net/ipv4/conf/all/arp_ignoreecho &quot;2&quot; &gt;/proc/sys/net/ipv4/conf/all/arp_announce 启动脚本 12345678910111213141516171819202122232425sh /usr/local/sbin/lvs_rs.sh``` ## keepalived + LVSLVS架构中，不管是NAT模式还是DR模式，当后端的RS宕掉时，调度器依然会把请求转发到宕掉的RS上，这样的结果并不是我们想要的。keepalived就可以解决该问题。keepalived已经嵌入了LVS功能，在调度器上只要安装了keepalived，就不用再安装ipvsadm了，也不用去编写LVS相关的脚本了。完整的keepalived+LVS架构需要有两台调度器实现高可用，提供调度服务的只需要一台，另外一台作为备用。### 准备工作准备三台机器分别为：* dir（安装keepalived）172.16.155.120* rs1:172.16.155.132* rs2:172.16.155.128* vip:172.16.155.200### dir机器上修改keepalived配置文件 vim /etc/keepalived/keepalived.conf 删除之前的配置，增加如下配置内容： vrrp_instance VI_1 { #备用服务器上为 BACKUP state MASTER #绑定vip的网卡为ens33，你的网卡和阿铭的可能不一样，这里需要你改一下 interface ens33 virtual_router_id 51 #备用服务器上为90 priority 100 advert_int 1 authentication { auth_type PASS auth_pass aminglinux } virtual_ipaddress { 172.16.111.200 } }virtual_server 172.16.111.200 80 { #(每隔10秒查询realserver状态) delay_loop 10 #(lvs 算法) lb_algo wlc #(DR模式) lb_kind DR #(同一IP的连接60秒内被分配到同一台realserver) persistence_timeout 60 #(用TCP协议检查realserver状态) protocol TCP real_server 172.16.111.110 80 { #(权重) weight 100 TCP_CHECK { #(10秒无响应超时) connect_timeout 10 nb_get_retry 3 delay_before_retry 3 connect_port 80 } } real_server 172.16.111.120 80 { weight 100 TCP_CHECK { connect_timeout 10 nb_get_retry 3 delay_before_retry 3 connect_port 80 } } }1234由于之前执行过LVS的脚本，可能需要做以下操作：把之前的ipvsadm规则清空 ipvsadm -C12把之前设置的VIP删除掉 systemctl restart network12在keepalived的配置文件中定义的LVS模式为DR模式，所以需要在两台rs上执行lvs_dr_rr.sh脚本，在上一节设置的脚本。 sh /usr/local/sbin/lvs_dr_rs.ch12启动keepalived systemctl start keepalived`]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux笔记：均衡负载集群的配置]]></title>
-    <url>%2F2018%2F07%2F05%2Fweek15-2-linuxNotes-LVS%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记整理关于均衡负载集群的配置方法。 负载均衡集群LB集群是load balance 集群的简写，也就是这里所说的负载均衡集群； 根据维基百科的解释，负载平衡（Load balancing）是一种计算机网络技术，用来在多个计算机（计算机集群）、网络连接、CPU、磁盘驱动器或其他资源中分配负载，以达到最佳化资源使用、最大化吞吐率、最小化响应时间、同时避免过载的目的。简而言之，负载均衡的目的，就在于平衡负载，给用户提供优质，可靠，稳定的服务。 而集群，就是一组部署有相同应用的服务器。例如，我们可以将一个网站部署在采用均衡负载部署在一个集群服务器，可以将用户的请求根据特定规则转发到应用服务器上进行处理，用户的请求无论连接到哪台服务器上，都能得到相同的处理。这实现了完整的集群处理系统。 实现LB集群的硬件和软件：硬件LB F5 公司的 BIG-IP系列 Citrix 公司的 NetScaler系列 A10 公司的 AX系列 软件LB 四层：LVS(Linux VirtualServer) 七层：Nginx,HAProxy 主要负载均衡方案HTTP 重定向负载均衡仅适合WEB 服务器。用户发出请求时，负载均衡服务器会根据HTTP请求，重新计算出实际的WEB服务器地址，通过302重定向相应发送给用户浏览器。用户浏览器再根据302响应信息，对实际的WEB服务器发出请求。 HTTP重定向方案有点是比较简单，缺点是性能比较差，需要2次请求才能返回实际结果,还有就是仅适合HTTP服务器使用 DNS 域名解析负载均衡在DNS中存储了一个域名的多个主机地址，每次域名解析请求，都可以根据负载均衡算法返回一个不同的IP地址。这样多个WEB服务器就构成了一个集群，并由DNS服务器提供了负载均衡服务。 DNS域名解析负载均衡的优点是由DNS来完成负载均衡工作，服务本身不用维护负载均衡服务器的工作。但是，由于负载均衡服务器不是自己维护，没法做精细控制，而且DNS在客户端往往带有缓存，服务器的变更很难及时反映到客户端上。 反向代理负载均衡Nginx服务器就可以部署为反向代理服务器，解析客户端请求，根据负载均衡算法转发到不同的后台服务器上。用户和后台服务器之间不再有直接的链接。请求，响应都由反向代理服务器进行转发，实现WEB 应用的负载均衡。 优点是和负载均衡服务集成在一起，部署简单。缺点是所有的请求回应都需要经过反向代理服务器。其本身可能会成为性能的瓶颈。 IP负载均衡用户请求包到达负载均衡服务器后，负载均衡服务器在操作系统内核层获取网络数据包，根据负载均衡算法获取真实后台服务器地址, 然后将数据包的目标地址改为后台服务器ip, 转发给内部服务器。 IP均衡负载全部处理过程都在内核层(Ring 0)进行。和七层负载均衡相比，具有更好的性能。但是由于所有的响应包都要经过负载均衡服务器，负载均衡服务器的网卡带宽，很容易成为系统的瓶颈。 数据链路层负载均衡数据链路层是工作在TCP/IP协议最底层的数据链路层，采用数据帧进行通信，每个网卡都具有唯一的MAC地址，数据帧用MAC地址来标识数据的来源与目的地。 数据链路层负载均衡，是指在数据分发过程中不修改IP地址，只修改目的MAC地址，通过配置真实物理服务器集群所有机器虚拟IP和负载均衡服务器IP一致，从而达到不修改数据包的源地址和目的地址就可以进行数据分发的目的。 数据链路层负载均衡是目前使用最广泛的一种负载均衡方式。开源软件LVS(Linux Virtual Server)，同时支持上面的IP负载均衡和数据链路层负载均衡。 LVS是什么LVS是一个实现负载均衡集群的开源软件项目，其架构从逻辑上可分为三层： 调度层(Director) server集群层(Real server) 共享存储层 LVS三种工作模式:LVS NAT模式 这种模式借助iptables的nat表来实现;用户的请求到分发器后，通过预设的iptables规则，调度器将请求的目标ip即vip地址改为Real server的ip(内网ip)； 返回的数据包也经过调度器，调度器再把源地址修改为vip,再返回给客户端； 优点：在nat模式中，只需要分发器有公网ip即可，所以比较节省公网ip资源; 缺点：用户请求的数据包和返回给用户的数据包全部经过分发器，所以分发器（调度器）成为瓶颈; LVS IP Tunnel模式 调度器将请求的数据包封装加上real server的ip头，加密通过ip隧道转发到后端的real server上，而real server会直接把数据返回给客户端，而不再经过调度器； LVS DR模式 调度器将请求来的数据包的目标mac地址改为real server的mac地址，返回的时候也不经过调度器，直接返回给客户端； LVS的调度算法：轮叫调度 Round Robin (简称rr)将外部请求按顺序轮流分配到集群中的真实服务器上,它均等地对待每一台服务器,而不管服务器上实际的连接数和系统负载 加权轮叫 Weighted Round Robin (简称wrr)根据真实服务器的不同处理能力来调度访问请求，并动态地调整其权重，能者多劳，合理使用服务器资源。 最少链接 least connection (简称LC)动态地将网络请求调度到已建立的链接数最少的服务器上，如果集群系统的性能彼此都差不多，采用“最小连接”效果较好。 加权最少链接 Weighted Least Connections (简称WLC)在集群中服务器之间性能差异较大的情况下，结合浏览器权重和最少链接两个方法进行请求分配; 基于局部性的最小连接 Locality-Based Least Connections（简称LBLC）针对请求报文的目标IP地址的负载均衡调度，将相同目标IP地址的请求调度到同一台服务器，来提高各台服务器的访问局部性和主存Cache命中率。目前主要用于Cache集群系统。 带复制的基于局部性最小连接 Locality-Based Least Connections with Replication（简称LBLCR）也是针对目标IP地址的负载均衡，不同之处是：它要维护从一个目标IP地址到一组服务器的映射，而LBLC算法是维护从一个目标IP地址到一台服务器的映射。 LBLCR算法先根据请求的目标IP地址找出该目标IP地址对应的服务器组，按“最小连接”原则从该服务器组中选出一台服务器，若服务器没有超载，则将请求发送到该服务器；若服务器超载，则按“最小连接”原则从整个集群中选出一台服务器，将该服务器加入到服务器组中，将请求发送到该服务器。同时，当该服务器组有一段时间没有被修改，将最忙的服务器从服务器组中删除，以降低复制的程度。 目标地址散列调度 Destination Hashing dh针对目标IP地址的负载均衡的，但它是一种静态映射算法，通过一个散列（hash）函数将一个目标IP地址映射到一台服务器。目标地址散列调度算法先根据请求的目标IP地址，作为散列键（hash key)从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。 源地址散列调度 Source Hashing sh该算法正好与目标地址散列调度算法相反，它根据请求的源IP地址，作为散列键从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。它的算法流程与目标地址散列调度算法的基本相似，只不过将请求的目标IP地址换成请求的源IP地址。 LVS NAT模式搭建准备工作：测试安装LVS NAT模式，至少需要有三台虚拟机： 调度器（dir）两张网卡，一个内网IP：172.16.155.120，一个”外网IP“：172.16.15.99（vmware仅主机模式）； 真实服务器rs2，内网IP：172.16.155.132，设置网关为172.16.155.120； 真实服务器rs1，内网IP：172.16.155.128，设置网关为172.16.155.120； 这里用来作为dir调度器的，是上一节笔记中克隆的虚拟机local-linux00，这里的”外网ip“是虚拟的，并非真实的外网ip。具体的设置方法如下： 查看当前网课配置信息 进入/etc/sysconfig/network-scripts 文件夹，复制网卡配置文件，并重命名为ifcfg-ens33:1 编辑ifcfg-ens33:1文件，修改ip地址： 123vi ifcfg-ens33:1//将ip地址设定为172.16.15.99 保存后执行以下命令重启网卡 1/etc/init.d/network restart 另外，还要关闭selinux和防火墙 关闭selinux 1setenforce 0 清空防火墙规则 123456//备份iptables规则cp /etc/sysconfig/iptables /etc/sysconfig/iptables.bak//清空防火墙规则iptables -Fservice iptables save 配置分发器dir安装LVS核心工具ipvsdam 1yum install -y ipvsadm 编写配置脚本 12345678910111213141516171819202122vim /usr/local/sbin/lvs_nat.sh//增加如下配置内容：#! /bin/bash# director 服务器上开启路由转发功能echo 1 &gt; /proc/sys/net/ipv4/ip_forward# 关闭icmp的重定向echo 0 &gt; /proc/sys/net/ipv4/conf/all/send_redirectsecho 0 &gt; /proc/sys/net/ipv4/conf/default/send_redirects# 注意区分网卡名字，这里两个网卡分别为ens33和ens37echo 0 &gt; /proc/sys/net/ipv4/conf/ens33/send_redirectsecho 0 &gt; /proc/sys/net/ipv4/conf/ens38/send_redirects# director 设置nat防火墙iptables -t nat -Fiptables -t nat -Xiptables -t nat -A POSTROUTING -s 172.16.155.0/24 -j MASQUERADE# director设置ipvsadmIPVSADM=&apos;/usr/sbin/ipvsadm&apos;$IPVSADM -C$IPVSADM -A -t 172.16.13.129:80 -s wlc -p 3$IPVSADM -a -t 172.16.13.129:80 -r 172.16.155.132:80 -m -w 1$IPVSADM -a -t 172.16.13.129:80 -r 172.16.155.128:80 -m -w 1 执行脚本 bash /usr/local/sbin/lvs_nat.sh rs服务器配置修改rs网络配置，将网关改为dir的外网地址172.16.13.129 至此配置就成果了，使用curl命令来测试实验效果。]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux笔记：使用keepalived配置高可用集群]]></title>
-    <url>%2F2018%2F07%2F04%2Fweek15-1-linuxNotes-keepALived%2F</url>
-    <content type="text"><![CDATA[写在前面最近几天忙着做公司的半年工作报告，忙的人仰马翻，今天抓紧时间赶紧把之前两天的课程补上。 这则笔记开始整理linux集群的知识。 什么是集群？所谓linux集群，就是指在生产环境中，往往不是一台服务器，而是多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 集群类型划分负载均衡集群就是指将一台服务器作为任务分发器，负责把用户的请求分发给后端多台不同的服务器处理，实现负载均衡的开源软件有LVS、keepalived、haproxy、nginx，商业软件有F5、Netscaler等。 高可用集群即“HA”集群，也常称作“双机热备”，用于关键业务。核心原理都是通过心跳线连接两台服务器，正常情况下一台用于提供服务，另外一台作为冗余，当提供服务的机器宕机，冗余将接替继续提供服务。实现高可用的开源软件有：heartbeat、keepalived。 注：心跳(heartbeat)是在群集中节点间传递的通讯包,用于监测群集中的节点、网络和网络接口的工作状态，防止节点的孤立，以保证群集的正常运作。 高可用集群是这则笔记讲的重点，后面用keepalived这个进行配置。 Keepalived工作原理keepalived通过VRRPVirtual Router Redundancy Protocol，虚拟路由冗余协议来实现高可用。VRBP是实现路由高可用的一种通信协议，在这个协议里会将多台功能相同的路由器组成一个小组，这个小组里会有1个master角色和N（N&gt;=1）个backup角色。工作时，master会通过组播的形式向各个backup发送VRRP协议的数据包，当backup收不到master发来的VRRP数据包时，就会认为master宕机了。此时就需要根据各个backup的优先级来决定谁成为新的mater。 Keepalived要有三个模块，分别是core、check和vrrp，他们的作用如下： core模块为keepalived的核心，负责主进程的启动、维护以及全局配置文件的加载和解析； check模块负责健康检查； vrrp模块是来实现VRRP协议的； keepalived配置高可用集群重要概念：Virtual IP 开始配置之前，先要了解一个概念VIP，这里的VIP跟我们平常理解的不太一样，而是“Virtual IP”,即“虚拟IP”。这个IP是由Keepalived给服务器配置上的，服务器靠这个VIP对外提供服务，当master机器宕机，VIP被分配到backup上。在实际应用中，服务器的切换用户是感知不到的，所以称之为Virtual IP。 准备工作准备两台虚拟机，其中 master 172.16.155.120（克隆一台虚拟机作为master，设置静态ip和hostname） backup 172.16.155.132 这里还需要做一下几个步骤： 两台机器分别安装上keepalived; 1yum install -y keepalived master和backup关闭防火墙和selinux 1234567891011//临时关闭selinuxsetenforce 0//备份iptables规则cp /etc/sysconfig/iptables /etc/sysconfig/iptables.bak//关闭iptablessystemctl stop iptables//禁止开机启动systemctl disable iptables master机器上采用yum 安装nginx 说明：之所以要这样大费周章，是因为源码包安装和yum安装的版本是不同的，方便观察实验结果，在实际使用当中并没有影响。 12345//安装epel-release 源yum install -y epel-release //安装nginxyum install -y nginx master机器配置第一步：编辑配置文件keepalive的配置文件为/etc/keepalived/keepalived.conf，编辑此文件； 12345678910111213141516171819202122232425262728293031323334353637//首先清空配置文件内容[root@local-linux00 ~]# &gt; /etc/keepalived/keepalived.conf//编辑配置文件[root@local-linux00 ~]# vi /etc/keepalived/keepalived.conf//加入以下内容global_defs &#123; //全局定义参数 notification_email &#123; root@steve-test.com //定义接收告警的人 &#125; notification_email_from root@steve-test.com //定义发邮件地址 smtp_server 127.0.0.1 //定义发邮件地址，若为127.0.0.1则使用本机自带邮件服务器发送 smtp_connect_timeout 30 router_id LVS_DEVEL&#125;vrrp_script chk_nginx &#123; //chk_nginx为自定义名字，后面还会用到它 script &quot;/usr/local/sbin/check_ng.sh&quot; //自定义脚本，该脚本为监控nginx服务的脚本 interval 3 //每隔3S执行一次该脚本&#125;vrrp_instance VI_1 &#123; state MASTER //角色为master interface ens33 //针对哪个网卡监听VIP virtual_router_id 51 priority 100 //权重为100，master要比backup大 advert_int 1 authentication &#123; auth_type PASS auth_pass 123456 //定义密码，这个密码自定义 &#125; virtual_ipaddress &#123; 172.16.155.120 //定义VIP &#125; track_script &#123; chk_nginx //定义监控脚本，这里和上面vrr_script后面的字符串保持一致 &#125;&#125; 如下图所示： 第二步：编辑监控脚本123456789101112131415161718[root@local-linux00 ~]# vi /usr/local/sbin/check_ng.sh //脚本内容如下：#!/bin/bash#时间变量，用于记录日志d=`date --date today +%Y%m%d_%H:%M:%S`#计算nginx进程数量n=`ps -C nginx --no-heading|wc -l`#如果进程为0，则启动nginx，并且再次检测nginx进程数量，#如果还为0，说明nginx无法启动，此时需要关闭keepalivedif [ $n -eq &quot;0&quot; ]; then /etc/init.d/nginx start n2=`ps -C nginx --no-heading|wc -l` if [ $n2 -eq &quot;0&quot; ]; then echo &quot;$d nginx down,keepalived will stop&quot; &gt;&gt; /var/log/check_ng.log systemctl stop keepalived fifi 第三步：启动keepalived 更改文件权限 1[root@local-linux00 ~]# chmod 755 /usr/local/sbin/check_ng.sh 启动keepalived backup 服务器配置第一步：编辑配置文件123456789101112131415161718192021222324252627282930313233343536//首先清空配置文件内容[root@local-linux02 ~]# &gt; /etc/keepalived/keepalived.conf//编辑配置文件[root@local-linux02 ~]# vi /etc/keepalived/keepalived.conf//加入以下内容global_defs &#123; notification_email &#123; root@steve-test.com &#125; notification_email_from root@steve-test.com smtp_server 127.0.0.1 smtp_connect_timeout 30 router_id LVS_DEVEL&#125;vrrp_script chk_nginx &#123; script &quot;/usr/local/sbin/check_ng.sh&quot; //检测脚本 interval 3&#125;vrrp_instance VI_1 &#123; state BACKUP //这个需要改，说明是从的状态 interface ens33 virtual_router_id 51 priority 90 //这个权重比master少 advert_int 1 authentication &#123; auth_type PASS auth_pass 123456 &#125; virtual_ipaddress &#123; 172.16.155.120 //跟master保持一致 &#125; track_script &#123; chk_nginx &#125;&#125; 第二步：编辑监控脚本注：跟master服务器监控脚本一样 123456789101112131415[root@local-linux02 ~]# vi /usr/local/sbin/check_ng.sh//添加如下内容：#!/bin/bashd=`date --date today +%Y%m%d_%H:%M:%S`n=`ps -C nginx --no-heading|wc -l`if [ $n -eq &quot;0&quot; ]; then /etc/init.d/nginx start n2=`ps -C nginx --no-heading|wc -l` if [ $n2 -eq &quot;0&quot; ]; then echo &quot;$d nginx down,keepalived will stop&quot; &gt;&gt; /var/log/check_ng.log systemctl stop keepalived fifi 第三步：启动keepalived 更改文件权限 1chmod 755 /usr/local/sbin/check_ng.sh 启动keepalived 12345678910111213141516171819202122232425262728293031323334353637383940systemctl start keepalived``` ##### TroubleShooting: keepalived 无法启动如图所示，在master和backup机器上都出现了keepalived无法启动的现象。![](https://farm1.staticflickr.com/837/42306418775_2f0846498e_o.png)排查了一下，都跟nginx有关，解决方案如下：**master：**重启了nginx，再次启动keepalived就OK了。**backup：**这个排查比较复杂。先查了错误日志，没看明白；又实用nginx -t 检查了配置文件，发现了错误提示：![](https://farm1.staticflickr.com/841/43160968952_5641af5817_o.png)提示缺少这个文件`/tmp/nginx/test.log`，touch目录创建一个，再检查发现OK。![](https://farm2.staticflickr.com/1808/28341514467_0741a2d649_o.png)之后，再次重启nginx、keepalived,终于都重新启动了。#### 测试效果基本思路，就是认为制造master机器故障，然后看看访问会不会自动切换到backup服务器上。![](https://farm2.staticflickr.com/1805/42306628125_c671148573_o.png)我们可以尝试：1. 关闭master的nginx服务；2. 在master上增加iptabls规则限制vrrp发包3. master主机关闭keepalived通过实验，来测试keepalived是否正常工作。注：iptables配置规则语句 iptables -I OUTPUT -p vrrp -j DROP systemctl restart iptables`]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux学习笔记: tomcat的基础知识(二)]]></title>
-    <url>%2F2018%2F06%2F27%2Fweek14-3-linuxNotes-tomcatPart2%2F</url>
-    <content type="text"><![CDATA[写在前面这节课继续整理tomcat配置相关的知识。 tomcat的目录结构tomcat的目录结构说明12345678910111213[root@local-linux02 conf]# tree -L 1 /usr/local/tomcat/usr/local/tomcat //tomcat目录├── bin //执行脚本目录├── conf //配置文件├── lib //运行时必要的库文件（JARS）├── LICENSE├── logs //执行日志文件├── NOTICE├── RELEASE-NOTES├── RUNNING.txt├── temp //临时文件存放目录├── webapps //主要Web发布目录（存放JSP,SERVLET等）└── work //工作目录，Tomcat将翻译JSP文件到的Java文件和class文件放在这里 bin目录主要文件包括： catalina.sh 用于启动和关闭tomcat服务器； configtest.sh 用于检查配置文件； startup.sh 启动Tomcat脚本； shutdown.sh 关闭Tomcat脚本； conf目录主要的配置文件： server.xml Tomcat 的全局配置文件； web.xml 为不同的Tomcat配置的web应用设置缺省值的文件； tomcat-users.xml Tomcat用户认证的配置文件； logs目录主要文件包括： localhost_access_log.2018-06-26.txt 访问日志 localhost.2018-06-26.log 错误和其它日志 manager.2018-06-26.log 管理日志 catalina.2018-06-26.log Tomcat启动或关闭日志文件 Tomcat 配置文件tomcat配置文件目录为 /usr/local/tomcat/conf/, 主要包括以下文件： server.xml omcat的主配置文件，包含Service, Connector, Engine, Realm, Valve, Hosts主组件的相关配置信息； web.xml 每个webapp只有“部署”后才能被访问，它的部署方式通常由web.xml进行定义，其存放位置为WEB-INF/目录中； tomcat-user.xml 用户认证的账号和密码文件，在Tomcat中添加/删除用户，为用户指定角色等将通过编辑此文件实现； catalina.policy java相关的安全策略配置文件，在系统资源级别上提供访问控制的能力；当使用-security选项启动tomcat时，用于为tomcat设置安全策略； catalina.properties Java属性的定义文件，用于设定类加载器路径，以及一些与JVM调优相关参数，Tomcat在启动时会事先读取此文件的相关设置； logging.properties Tomcat日志记录器相关的配置信息，可以用来定义日志记录的组件级别以及日志文件的存在位置等； context.xml 每个web专用的配置文件，包括所有host的默认配置信息，其存放位置为WEB-INF/目录中； tomcat的核心组件Server 组件元素是整个配置文件的根元素,在所有元素最顶层，代表整个Tomcat容器，类似于标签 className: 用于实现此Server容器的完全限定类的名称，默认为org.apache.catalina.core.StandardServer； port 接收shutdown指令的端口，默认仅允许通过本机访问，默认为8005； shutdown 指定向端口发送的命令字符串； Service 组件Service主要用于关联一个引擎和与此引擎相关的连接器，每个连接器通过一个特定的端口和协议接收入站请求交将其转发至关联的引擎进行处理。 Connector组件主要功能接收连接请求，创建Request和Response对象用于和请求端交换数据；然后分配线程让Engine来处理这个请求，并把产生的Request和Response对象传给Engine。 进入tomcat的请求可分为两类： 第一类：standalone，请求来自于客户端浏览器； 第二类：由其它的web server反代，来自前端的反代服务器； nginx –&gt; http connector –&gt; tomcat httpd(proxy_http_module) –&gt; http connector –&gt; tomcat httpd(proxy_ajp_module) –&gt; ajp connector –&gt; tomcat 相关属性： 1234567port=”8080″protocol=”HTTP/1.1″connectionTimeout=”20000″address：监听的IP地址；默认为本机所有可用地址；maxThreads：最大并发连接数，默认为200；enableLookups：是否启用DNS查询功能；acceptCount：等待队列的最大长度 Engine组件servlet引擎，其内部可以一个或多个host组件来定义站点； 通常需要通过defaultHost来定义默认的虚拟主机； Host组件Engine的子容器。Engine组件中可以内嵌1个或多个Host组件，每个Host组件代表Engine中的一个虚拟主机。Host组件至少有一个，且其中一个的name必须与Engine组件的defaultHost属性相匹配。 name 指定主机名； appBase 应用程序基本目录，即存放应用程序的目录； unpackWARs 如果为true，则tomcat会自动将WAR文件解压，否则不解压，直接从WAR文件中运行应用程序； tomcat 常用配置配置Tomcat监听80端口第一步：修改server.xml配置文件123[root@local-linux02 conf]# vi /usr/local/tomcat/conf/server.xml//Connector port=&quot;8080&quot;,将端口号改为80，之后保存退出。 第二步：重启tomcat12345678910111213141516//关闭tomcat[root@local-linux02 conf]# /usr/local/tomcat/bin/shutdown.shUsing CATALINA_BASE: /usr/local/tomcatUsing CATALINA_HOME: /usr/local/tomcatUsing CATALINA_TMPDIR: /usr/local/tomcat/tempUsing JRE_HOME: /usr/local/jdk1.8Using CLASSPATH: /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar//再次启动tomcat [root@local-linux02 conf]# /usr/local/tomcat/bin/startup.shUsing CATALINA_BASE: /usr/local/tomcatUsing CATALINA_HOME: /usr/local/tomcatUsing CATALINA_TMPDIR: /usr/local/tomcat/tempUsing JRE_HOME: /usr/local/jdk1.8Using CLASSPATH: /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jarTomcat started. 校验成果 检查端口情况 1234[root@local-linux02 conf]# netstat -lntp | grep javatcp6 0 0 127.0.0.1:8005 :::* LISTEN 42011/javatcp6 0 0 :::8009 :::* LISTEN 42011/javatcp6 0 0 :::80 :::* LISTEN 42011/java 浏览器测试 配置Tomcat虚拟主机同样还是修改配置文件server.xml，其中&lt;host&gt;&lt;/host&gt;字段就是关于虚拟主机的配置，包括以下选项： name定义域名； appBase定义应用的目录，Java的应用通常是一个war的压缩包，你只需要将war的压缩包放到appBase目录下面即可； docBase，这个参数用来定义网站的文件存放路径，默认为appBase/ROOT； 应用示例：利用zrlog部署一个java的应用 第一步：修改配置文件123456789vi /usr/local/tomcat/conf/server.xml//修改host字段&lt;Host name=&quot;www.java-test.com&quot; appBase=&quot;&quot; unpackWARs= &quot;true&quot; autoDeploy=&quot;true&quot; xmlValidation=&quot;false&quot; xmlNamespaceAware=&quot;false&quot;&gt; &lt;Context path=&quot;&quot; docBase=&quot;/data/wwwroot/java-test.com/&quot; debug=&quot;0&quot; reloadable=&quot;true&quot; crossContext=&quot;true&quot;/&gt;&lt;/Host&gt; 第二步：下载zrlog1234567//下载zrlog[root@local-linux02 src]# wget http://dl.zrlog.com/release/zrlog-1.7.1-baaecb9-release.war //移动至webapps mv zrlog-1.7.1-baaecb9-release.war /usr/local/tomcat/webapps/mv /usr/local/tomcat/webapps/zrlog-1.7.1-baaecb9-release /usr/local/tomcat/webapps/zrlog 第三步：数据库配置 登陆数据库 123456789[root@local-linux02 webapps]# mysql -u root -pEnter password:Welcome to the MariaDB monitor. Commands end with ; or \g.Your MariaDB connection id is 9Server version: 10.2.15-MariaDB MariaDB ServerCopyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement. 创建数据库 1234567891011121314MariaDB [(none)]&gt; create database zrlog;Query OK, 1 row affected (0.02 sec)MariaDB [(none)]&gt; show databases;+--------------------+| Database |+--------------------+| db2 || information_schema || mysql || performance_schema || zrlog |+--------------------+5 rows in set (0.08 sec) 授权用户 12345MariaDB [(none)]&gt; grant all on zrlog.* to &apos;zrlog&apos;@127.0.0.1 identified by &apos;steve-123&apos;;Query OK, 0 rows affected (0.05 sec)MariaDB [(none)]&gt; exitBye 测试是否数据库是否能正常登陆 第四步：浏览器访问 ip:8080/zrlog ，运行安装程序 依次填写服务器地址、数据库名、用户名、密码、端口、系统邮箱 下一步，随便填了，反正是实验环境 完成 效果预览 第五步：去掉浏览器访问时输入的目录名 第六步：重启tomcat12[root@local-linux02 webapps]# /usr/local/tomcat/bin/shutdown.sh [root@local-linux02 webapps]# /usr/local/tomcat/bin/startup.sh 浏览器测试 修改本地host文件 浏览器测试 Tomcat日志 其中， catalina开头的日志为Tomcat的综合日志，它记录Tomcat服务相关信息，也会记录错误日志。catalina.2018-xx-xx.log和catalina.out内容相同，前者会每天生成一个新的日志； host-manager和manager为管理相关的日志，其中host-manager为虚拟主机的管理日志； localhost和localhost_access为虚拟主机相关日志，其中带access字样的日志为访问日志，不带access字样的为默认虚拟主机的错误日志。 日志文件同样是在/usr/local/tomcat/conf/server.xml 中虚拟主机配置的位置字段，其中： prefix定义访问日志的前缀; suffix定义日志的后缀; pattern定义日志格式； 示例： 123&lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot; prefix=&quot;123.cn_access&quot; suffix=&quot;.log&quot; pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt; tomcat 连接 mysqltomcat连接mysql是通过自带的JDBC驱动实现的，具体步骤如下： 第一步：配置mysql，创建数据库、表、用户1234567mysql -u root -pcreate database java_test;use java_test;grant all on java_test.*&apos;java@ip&apos; identified by &apos;passwd&apos;; 第二步：修改tomcat配置文件12345678910vi content.xml&lt;Resource name=&quot;jdbc/mytest&quot; auth=&quot;Container&quot; type=&quot;javax.sql.DataSource&quot; maxActive=&quot;100&quot; maxIdle=&quot;30&quot; maxWait=&quot;10000&quot; username=&quot;java&quot; password=&quot;aminglinux&quot; driverClassName=&quot;com.mysql.jdbc.Driver&quot; url=&quot;jdbc:mysql://127.0.0.1:3306/java_test&quot;&gt;&lt;/Resource&gt; 第三步：修改 web.xml配置文件123456789vi /usr/local/tomcat/webapps/ROOT/WEB-INF/web.xml&lt;resource-ref&gt; &lt;description&gt;DB Connection&lt;/description&gt; &lt;res-ref-name&gt;jdbc/mytest&lt;/res-ref-name&gt; &lt;res-type&gt;javax.sql.DataSource&lt;/res-type&gt; &lt;res-auth&gt;Container&lt;/res-auth&gt;&lt;/r 第四步：编辑测试内容12345678910111213141516171819202122vi /usr/local/tomcat/webapps/ROOT/t.jsp&lt;%@page import=&quot;java.sql.*&quot;%&gt;&lt;%@page import=&quot;javax.sql.DataSource&quot;%&gt;&lt;%@page import=&quot;javax.naming.*&quot;%&gt;&lt;%Context ctx = new InitialContext();DataSource ds = (DataSource) ctx.lookup(&quot;java:comp/env/jdbc/mytest&quot;);Connection conn = ds.getConnection();Statement state = conn.createStatement();String sql = &quot;select * from aminglinux&quot;;ResultSet rs = state.executeQuery(sql);while (rs.next()) &#123;out.println(rs.getString(&quot;id&quot;) +&quot;&lt;tr&gt;&quot;);out.println(rs.getString(&quot;name&quot;) +&quot;&lt;tr&gt;&lt;br&gt;&quot;);&#125;rs.close();state.close();conn.close();%&gt; 第五步：重启tomcat/usr/local/tomcat/bin/shutdown.sh /usr/local/tomcat/bin/startup.sh 扩展阅读 邱李的tomcat文档 JAR、WAR包区别 tomcat常见配置汇总 resin安装 tomcat 单机多实例 tomcat的jvm设置和连接数设置 jmx监控tomcat tomcat内存溢出 参考资料： Tomcat 配置文件详解]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>tomcat</tag>
       </tags>
   </entry>
   <entry>
@@ -385,21 +360,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux学习笔记: tomcat的基础知识(一)]]></title>
-    <url>%2F2018%2F06%2F25%2Fweek14-2-linuxNotes-tomcatPart1%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记开始，整理tomcat的相关知识。 什么是tomcat？目前，有很多的大型网站都是用java编写的，所以，解析java程序也需要由相关的程序来完成，tomcat就是其中之一。 Tomcat 类似与一个apache的扩展型，属于apache软件基金会的核心项目，属于开源的轻量级Web应用服务器，是开发和调试JSP程序的首选，主要针对Jave语言开发的网页代码进行解析，具有技术先进、性能稳定、免费开源的特点，是目前比较流行的web服务器。 Tomcat虽然具有处理HTML页面的功能，然而由于其处理静态HTML的能力远不及Apache或者Nginx，所以Tomcat通常做为一个Servlet和JSP容器单独运行在后端，运行JSP 页面和Servlet。 Tomcat 支持： 使用 Apache Axis servlet 的 Web 服务； 开发框架，如 Apache Struts； 模板引擎，如 Apache Jakarta Velocity； 对象关系映射技术，如 Hibernate； Tomcat 安装与设置想要安装tomcat，必须先安装JDK，即java development kit，这是Sun Microsystems 针对java开发做的一个开发者软件包，包括java运行环境、java工具和java基础库，是目前java开发的核心。 安装jdk第一步：下载安装包jdk官网下载地址在这里，由于这里不能使用wget命令，因此只能通过浏览器下载，之后通过ftp程序上传到虚拟机当中，进行相关的安装配置。 这里选择了linux64位的版本来下载。 第二步：上传安装包到虚拟机因为之前已经配置好了ftp服务，所以这里刚好用上。 笔者在mac端使用的ftp软件是yummy ftp pro ，打开之后，依次选取传输协议、客户端ip、登陆用户名、密码，点击connect即可连接。 之后，选择文件，右键uoload即可。 第三步：移动安装包123456789101112131415161718192021222324252627// 进入ftp目录[root@local-linux02 ~]# cd /data/ftp//查看目录，该文件已成功传输到虚拟机当中[root@local-linux02 ftp]# lsa.txt b.txt jdk-8u171-linux-x64.tar.gz test1 test2//移动文件夹[root@local-linux02 ftp]# mv jdk-8u171-linux-x64.tar.gz /usr/local/src///进入源码包保存目录[root@local-linux02 ftp]# cd /usr/local/src/[root@local-linux02 src]# lsjdk-8u171-linux-x64.tar.gz nginx-1.14.0.tar.gz php-7.2.6nginx-1.14.0 nginx-1.14.0.tar.gz.1 php-7.2.6.tar.gz//解压[root@local-linux02 src]# tar -zxvf jdk-8u171-linux-x64.tar.gz //查看解压文件包[root@local-linux02 src]# lsjdk1.8.0_171 nginx-1.14.0.tar.gz php-7.2.6.tar.gzjdk-8u171-linux-x64.tar.gz nginx-1.14.0.tar.gz.1nginx-1.14.0 php-7.2.6//移动重命名mv jdk1.8.0_171 /usr/local/jdk1.8 第四步：配置系统环境变量系统环境变量的配置文件为 /etc/profile，下面要更改系统配置文件。 123456789101112vi /etc/profile//在末尾增加如下配置：JAVA_HOME=/usr/local/jdk1.8/JAVA_BIN=/usr/local/jdk1.8/binJRE_HOME=/usr/local/jdk1.8/jrePATH=$PATH:/usr/local/jdk1.8/bin:/usr/local/jdk1.8/jre/binCLASSPATH=/usr/local/jdk1.8/jre/lib:/usr/local/jdk1.8/lib:/usr/local/jdk1.8/jre/lib/charsets.jar //保存退出后执行如下命令生效source /etc/profile 校验配置是否正常 安装Tomcat第一步：下载二进位制安装包tomcat的官网网址为：https://tomcat.apache.org/ 这里下载的镜像站点的二进位制安装包，版本号是8.5.31。同样还是采用在mac下用chrome浏览器下载，之后再通过ftp上传到虚拟机的方式。因为在虚拟机使用wget命令下载实在是太慢了。 第二步：移动文件夹1234567891011121314151617//此处设置了alias ftp=&apos;cd /data/ftp/&apos;[root@local-linux02 src]# ftp[root@local-linux02 ftp]# lsapache-tomcat-8.5.31.tar.gz a.txt b.txt test1 test2//移动文件[root@local-linux02 ftp]# mv apache-tomcat-8.5.31.tar.gz /usr/local/src///进入源码包目录，此处也设置的alias[root@local-linux02 ftp]# src[root@local-linux02 src]# lsapache-tomcat-8.5.31.tar.gz nginx-1.14.0.tar.gz php-7.2.6.tar.gzjdk-8u171-linux-x64.tar.gz nginx-1.14.0.tar.gz.1nginx-1.14.0 php-7.2.6//解压[root@local-linux02 src]# tar -zxvf apache-tomcat-8.5.31.tar.gz 第三步：安装由于下载的是二进位制安装包，因此就省去了编译环节。 移动文件夹到自定义安装目录 1[root@local-linux02 src]# mv apache-tomcat-8.5.31 /usr/local/tomcat 运行启动脚本 1234567[root@local-linux02 bin]# /usr/local/tomcat/bin/startup.shUsing CATALINA_BASE: /usr/local/tomcatUsing CATALINA_HOME: /usr/local/tomcatUsing CATALINA_TMPDIR: /usr/local/tomcat/tempUsing JRE_HOME: /usr/local/jdk1.8Using CLASSPATH: /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jarTomcat started. 校验是否成功 ps -aux |grep java 检查端口情况 netstat -lntp |grep java 说明：正常会有三个以下端口开放 8080提供wed服务的端口； 8005为管理端口； 8009为第三方服务调用端口（如httpd和Tomcat结合时会用到）； 第四步：设置开机启动123echo &quot;/usr/local/tomcat/bin/startup.sh&quot; &gt;&gt; /etc/rc.d/rc.localchmod a+x /etc/rc.d/rc.local 第五步：配置iptables端口123456[root@local-linux02 bin]# vi /etc/sysconfig/iptables//增加一条-A INPUT -p tcp -m tcp --dport 8080 -j ACCEPT[root@local-linux02 bin]# systemctl restart iptables 校验成功浏览器登录 最后，如需关闭tomcat执行如下脚本 1/usr/local/tomcat/bin/shutdown.sh]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
         <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>tomcat</tag>
       </tags>
   </entry>
   <entry>
@@ -410,8 +372,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -424,8 +386,8 @@
       </categories>
       <tags>
         <tag>python</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -436,8 +398,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>base64</tag>
       </tags>
   </entry>
@@ -449,8 +411,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -461,8 +423,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>raspberryPi</tag>
       </tags>
   </entry>
@@ -501,8 +463,8 @@
       </categories>
       <tags>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -513,9 +475,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>regularExpression</tag>
       </tags>
   </entry>
   <entry>
@@ -528,47 +490,8 @@
       <tags>
         <tag>centos</tag>
         <tag>shell</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux运维学习笔记6-3：正则之awk]]></title>
-    <url>%2F2018%2F04%2F20%2Fweek6-3-basisOfRegEx-part3%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记接着上一期：Linux运维学习笔记：正则之sed，继续整理正则基础知识，主要是awk 工具基础知识。 awk 命令awk 也是流式编辑器，用来进行高级文本处理，支持关联数组、归递函数、条件语句等。 语法结构第一种：awk [选项参数] &#39;script&#39; file(s)在这种格式中，awk从一个或多个文件中读取内容，之后再用引号里的script进行处理。 [选项参数] 这里一般是-F 后面跟分割符，比如/etc/passwd，字段与字段之间使用：分割，处理时就要写成 -F &#39;:&#39;；如果不加 -F 默认使用空格分割。 再来说后面script的部分，awk 之所以能够进行高级文本处理，是因为这里的script可以很复杂，通常可分为三个可选的部分：BEGIN、BODY和END。 awk的工作方式： 执行BEGIN 语句块；这是一个可选语句块，例如变量初始化、打印输出表格的表头等通常都放在这里面。 BODY通常包含两个部分：pattern和action；awk在执行完BEGIN语句之后，会逐行读取file内容，就像一个for循环，每读一行先按照前面的pattern进行匹配，如果匹配则执行后面的action；重复这个过程，一直到文件内容全部读完。 执行END语句块；跟BEGIN类似，也是可选的。 注：在第二步中的的action 是可以省略的；如果省略action，则默认执行{ print }，也就是把所有符合pattern的内容都打印在屏幕上。 第二种：awk [选项参数] -f script-file file(s)在这种格式中，script被写进脚本文件里，在执行的时候，awk 命令会从脚本文件中读取script，在按照方式一中的步骤进行操作。这则笔记暂不涉及这种用法。 awk 基本操作匹配字符串 先来看最基本的用法：从/etc/passwd 中匹配出含有root 的行；前文说到，script的部分中，BEGIN、END都是可选的，这里都省略了，中间包括了-F指定分割符，以及BODY中的pattern，省略了action，默认执行{print}，打印出了匹配pattern的行。 123[root@stevey ~]# cat /etc/passwd | awk -F &apos;:&apos; &apos;/root/&apos;root:x:0:0:root:/root:/bin/bashoperator:x:11:0:operator:/root:/sbin/nologin 再复杂一点，可以切割之后匹配关键词；例如，在在第一段中匹配包含keyword的行，$1 表示第一个字段，~代表匹配的意思 1234[root@stevey ~]# awk -F &apos;:&apos; &apos;$1 ~/ro/&apos; a.txt root:x:0:0:root:/root:/bin/bash[root@stevey ~]# awk -F &apos;:&apos; &apos;$1 ~/oo/&apos; a.txtroot:x:0:0:root:/root:/bin/bash 关于-F选项，后面跟指定的分割符；如不加 -F选项，默认以空格或tab为分隔符；print表示打印，要用{} 括起来，$1表示第一列，$2表示第二列，以此类推； {print $n}用来指定打印区域；$n n表示数字，用来制定域；$0 很特殊，表示所有的段； 12345[root@stevey ~]# cat /etc/passwd |awk -F &apos;:&apos; &apos;$1 ~/root/ &#123;print $1&#125;&apos; //这里只将第一字段显示出来root[root@stevey ~]# cat /etc/passwd |awk -F &apos;:&apos; &apos;$1 ~/root/ &#123;print $0&#125;&apos; //$0表示显示整行root:x:0:0:root:/root:/bin/bash 多次匹配 awk -F &#39;:&#39; &#39;/keyword/{打印区域} /keyword/ {打印区域}&#39; [filename] 123456[root@stevey ~]# head -n 5 a.txt | awk -F &apos;:&apos; &apos;/root/ &#123;print $1,$3&#125; /sbin/ &#123;print $0&#125;&apos;root 0bin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinadm:x:3:4:adm:/var/adm:/sbin/nologinlp:x:4:7:lp:/var/spool/lpd:/sbin/nologin 条件操作符awk命令支持用逻辑符号进行匹配， 符号 含义 == 等于 != 不等于 &gt; 大于 &lt; 小于 &gt;= 大于等于 &lt;= 小于等于 注：在于数字做比较时，加引号，则视为字符串；不加引号，则视为数字。 匹配uid大于500的行 12345[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &gt; 500&apos; a.txt //匹配uid大于500的内容polkitd:x:999:997:User for polkitd:/:/sbin/nologinuser1:x:1000:1000::/home/user1:/bin/bashuser2:x:1001:1001::/home/user2:/bin/bashyuanfeng:x:1002:1002::/home/yuanfeng:/bin/bash 匹配uid等于1000的行，这里相当于精确匹配 12[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 == 1000&apos; a.txt //== 表示等于，相当于精确匹配user1:x:1000:1000::/home/user1:/bin/bash 匹配第七列不是’/bin/bash’ 的行，!=表示取非的意思。 1234567[root@stevey ~]# awk -F &apos;:&apos; &apos;$7 !=/bin/bash&apos; a.txtroot:x:0:0:root:/root:/bin/bashbin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinadm:x:3:4:adm:/var/adm:/sbin/nologinlp:x:4:7:lp:/var/spool/lpd:/sbin/nologinsync:x:5:0:sync:/sbin:/bin/sync awk 还可以对两列内容比较逻辑关系 123456[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &lt; $4&apos; a.txtadm:x:3:4:adm:/var/adm:/sbin/nologinlp:x:4:7:lp:/var/spool/lpd:/sbin/nologinmail:x:8:12:mail:/var/spool/mail:/sbin/nologingames:x:12:100:games:/usr/games:/sbin/nologinftp:x:14:50:FTP User:/var/ftp:/sbin/nologin 比较两个字段是否精确比较 123456[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 == $4 &apos; a.txtroot:x:0:0:root:/root:/bin/bashbin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinnobody:x:99:99:Nobody:/:/sbin/nologinsystemd-network:x:192:192:systemd Network 支持&amp;&amp;，表示且的意思，两个条件都满足。 12[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &gt; 5 &amp;&amp; $3 &lt; 7&apos; a.txtshutdown:x:6:0:shutdown:/sbin:/sbin/shutdown 支持 ||，表示或的意思，两个条件满足其一。 123[root@stevey ~]# awk -F &apos;:&apos; &apos;$3 &gt; 1000 || $4 == &quot;/bin/bash&quot;&apos; a.txtuser2:x:1001:1001::/home/user2:/bin/bashyuanfeng:x:1002:1002::/home/yuanfeng:/bin/bash\ awk 内置变量 内置变量 含义 $0 当前记录（这个变量中存放着整个行的内容） $1~$n 当前记录的第n个字段，字段间由FS分隔 FS 输入字段分隔符 默认是空格或Tab NF 当前记录中的字段个数，就是有多少列 NR 已经读出的记录数，就是行号，从1开始，如果有多个文件话，这个值也是不断累加中。 FNR 当前记录数，与NR不同的是，这个值会是各个文件自己的行号 RS 输入的记录分隔符， 默认为换行符 OFS 输出字段分隔符， 默认也是空格 ORS 输出的记录分隔符，默认为换行符 FILENAME 当前输入文件的名字 内置变量的用法示例 OFS 用法 12345678910[root@stevey ~]# awk -F &apos;:&apos; &apos;&#123;OFS=&quot;#&quot;&#125; &#123;print $1, $3, $4&#125;&apos; a.txtroot#0#0bin#1#1daemon#2#2adm#3#4lp#4#7sync#5#0shutdown#6#0halt#7#0mail#8#12 NR表示行号;NF表示有多少列， $NF 表示最后一个字段的值 12345678[root@stevey ~]# head -n 3 a.txt | awk -F &apos;:&apos; &apos;&#123;print NF&#125;&apos;777[root@stevey ~]# head -n 3 a.txt | awk -F &apos;:&apos; &apos;&#123;print $NF&#125;&apos; /bin/bash/sbin/nologin/sbin/nologin awk中的数学计算 对指定字段赋值 12345678[root@stevey ~]# awk -F &apos;:&apos; &apos;&#123;$1=&quot;root&quot;;print $0&#125;&apos; a.txtroot x 0 0 root /root /bin/bashroot x 1 1 bin /bin /sbin/nologinroot x 2 2 daemon /sbin /sbin/nologinroot x 3 4 adm /var/adm /sbin/nologinroot x 4 7 lp /var/spool/lpd /sbin/nologinroot x 5 0 sync /sbin /bin/syncroot x 6 0 shutdown /sbin /sbin/shutdown 将指定字段的值进行数学运算后，赋给另一个字段 123[root@stevey ~]# head -n 2 a.txt | awk -F &apos;:&apos; &apos;&#123;$7=$3+$4; print $0&#125;&apos; //$7被重新赋值，等于$3、$4相加之和。root x 0 0 root /root 0bin x 1 1 bin /bin 2 参考资料 AWK 简明教程 GNU/Linux awk命令用法详解 linux awk命令详解]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>regularExpression</tag>
         <tag>notes</tag>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux运维学习笔记6-2：正则之sed]]></title>
-    <url>%2F2018%2F04%2F20%2Fweek6-2-basisOfRegEx-part2%2F</url>
-    <content type="text"><![CDATA[写在前面这则笔记接着上一期：Linux运维学习笔记：正则之grep，主要介绍sed工具使用。 sed 命令sed，全称是stream editor，流编辑器，也是用来进行文本处理的工具。对比grep ，他的强大之处，不仅能够用来匹配文档内容，还能够进行修改。 sed在执行的时候，会从文件或者标准输入中读取一行，将其复制到缓冲区，对文本编辑完成之后，读取下一行直到所有的文本行都编辑完毕。 所以sed命令处理时只会改变缓冲区中文本的副本，如果想要直接编辑原文件，可以使用-i选项或者将结果重定向到新的文件中。 sed 命令行格式： sed [参数] [command] [文件名] 参数 作用 -n 取消默认输出，不打印不符合要求的行 p 将选择的数据列出来，通常用 -n 连用 -d 删除 -e 多点编辑，可以执行多个子命令 -f 从脚本文件中读取命令（sed操作可以事先写入脚本，然后通过-f读取并执行） -i 直接编辑原文件 -l 指定行的长度 -r 在脚本中使用扩展正则表达式，与grep -E作用类似 s 用一个字符串替换另一个 w 写入 a\ 追加到目标行之下 i\ 追加到目标行之上 使用案例文本匹配 （与grep 类似） 打印指定的某一行 sed -n &#39;n&#39;p [filename] 注：’n’和p之间没有空格 12[root@stevey ~]# sed -n &apos;2&apos;p a.txtdvdvcfdv 打印范围，指定的某几行 sed -n &#39;m,n&#39;p [filename] 1234[root@stevey ~]# sed -n &apos;1,3&apos;p a.txt //打印第一行至第三行#cewfefdvdvcfdvfewfawef 打印包含某个字符的行 sed -n &#39;/keyword/&#39;p [filename] 123[root@stevey ~]# sed -n &apos;/root/&apos;p a.txtroot:x:0:0:root:/root:/bin/bashoperator:x:11:0:operator:/root:/sbin/nologin 在grep中使用的 . * ^ $ ,同样也可以在sed中使用 123456[root@stevey ~]# sed -n &apos;/ro.t/&apos;p a.txtroot:x:0:0:root:/root:/bin/bashoperator:x:11:0:operator:/root:/sbin/nologin[root@stevey ~]# sed -n &apos;/^#/&apos;p a.txt#cewfef 匹配多个command sed -e &#39;2&#39;p -e &#39;/sbin/&#39;p a.txt 只要符合条件之一就会打印出来 123456[root@stevey ~]# sed -n -e &apos;2&apos;p -e &apos;/sbin/&apos;p a.txtdvdvcfdvbin:x:1:1:bin:/bin:/sbin/nologindaemon:x:2:2:daemon:/sbin:/sbin/nologinadm:x:3:4:adm:/var/adm:/sbin/nologinlp:x:4:7:lp:/var/spool/lpd:/sbin/nologin 匹配首行到末行 sed -n &#39;1，$&#39;p $表示行尾 文本编辑d 删除指定内容注：这里文档内容实际上并没有被删除，如果确实需要删除，还需要采取输出重定向或者使用-i选项。 删除第一行内容sed &#39;n&#39;d [filename] n为数字 删除空白行 sed &#39;/^$/d&#39; [filename] 删除文件最后一行 sed &#39;$&#39;d [filename] 删除文件中所有开头是root的行 sed &#39;/^root/&#39;d [filename] 删除文件的第2行到末尾所有行 sed &#39;2,$&#39;d [filename] 12[root@stevey ~]# head a.txt | sed &apos;2,$&apos;d //此处删除了第2至10行的内容#cewfef 替换文档内容 sed &#39;m,ns/keyword/替换文字/g&#39; [filename]注： 此处的m和n，代表数字，表示替换范围； s表示替换动作，s和n之间没有空格； g表示本行所有的keyword全局替换；如果不加g，则只替换本行第一个keyword / 还可以用# 或者 @ 代替 写入文档 w选项：file1 中包含 keyword内容都会被写入file2 sed -n &#39;/root/w [file2]&#39; [file1] 1234[root@stevey ~]# sed -n &apos;/root/w b.txt&apos; a.txt[root@stevey ~]# cat b.txtroot:x:0:0:root:/root:/bin/bashoperator:x:11:0:operator:/root:/sbin/nologin a\ : 指定内容追加到keyword 所在行后面 sed &#39;/^keyword/a\追加内容&#39; file 第2行之后插入 this is a test i\ : 指定内容插入到keyword所在行之前 第5行之前插入 linux is blablabla -i 直接编辑修改原文件注： 用前面提到的替换文档内容不同，加上 -i选项，就会直接更改原始文件 调换字符串位置 对字段进行排序 sed -r &#39;s/([^:]+):(.*):([^:]+)/\3:\2:\1/&#39; 1234[root@stevey ~]# head -n 3 a.txt | sed -r &apos;s/([^:]+):(.*):([^:]+)/\3:\2:\1:/&apos;/bin/bash:x:0:0:root:/root:root:/sbin/nologin:x:1:1:bin:/bin:bin:/sbin/nologin:x:2:2:daemon:/sbin:daemon: 注： -r 表示在脚本中使用扩展正则表达式，与grep -E作用类似；如果不使用-r ，就需要使用脱义符 ()表示分组，如上所述，实际上分为了三组；后面的\3、\2、\1表示分组的排序； 删除字符串，只保留数字 sed -r &#39;s/[a-zA-Z]//g&#39; 在所有行的前面加上一个字符串aaa sed -r &#39;s/(.*)/aaa:&amp;/&#39;]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>regularExpression</tag>
-        <tag>notes</tag>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Linux运维学习笔记6-1：正则之grep]]></title>
-    <url>%2F2018%2F04%2F20%2Fweek6-1-basisOfRegEx-part1%2F</url>
-    <content type="text"><![CDATA[写在前面从这则笔记开始，分3节课整理linux下正则表达式的用法，主要涉及grep、sed、awk三个命令。 正则，就是一种文本处理的方法，这里有一些正则的基础知识。 正则表达式基础正则表达式正则表达式，是经过专门编写的文本字符串，用来匹配字符串，这里还整理了一篇正则基础。 元字符 表达式 描述 . 匹配单个任意字符 [] 匹配指定范围内的任意单个字符,比如[abc],[a-z],[0-9],[a-zA-Z] [^] 取非，匹配指定范围外的任意单个字符 [:space:] 匹配空白字符 [:punct:] 匹配所有标点符号的集合 [a-z]或 [:lower:] 匹配所有的小写字母 [A-Z]或 [:upper:] 匹配所有的大写字母 [a-zA-Z]或 [:alpha:] 匹配大小写字母 [0-9]或 [:digit:] 匹配数字 [0-9a-zA-Z]或 [:alnum:] 匹配数字和大小写字母 匹配次数 表达式 描述 * 匹配其前面的字符任意次，比如.*匹配任意字符任意次数 \? 匹配其前面的字符1次或0次 \{m,n\} 匹配其前字符最少m，最多n次） 字符锚定 表达式 描述 ^ 锚定行首，此字符后面的任意内容必须出现在行首 $ 锚定行尾，此字符前面的任意内容必须出现在行尾 ^$ 锚定空白行，可以统计空白行 \&lt;或\b 锚定词首，其后面的任意字符必须做为单词首部出现 \&gt;或\b 锚定词尾，其前面的任意字符必须做为单词尾部出现 拓展正则表达式相比于基础正则表达式，拓展正则表达式的不同之处主要在于以下几点： 在匹配次数方面，加入了 + ，表示匹配字符出现一次或多次； 基本正则表达式，使用( ) { } . ? |都需要转义,在扩展正则表达中不需要加转义符 \ |表示或者的意思。 grep和egrep 命令grep用法grep是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。 命令行格式：grep [参数] [关键词] [filename] 常用参数 用法 -c 打印符合要求的行数 -i 忽略大小写 -n 输出符合要求的行及行号 -v 取反 -r 归递处理，包含多级子目录 -l 查询多文件时只输出包含匹配字符的文件名 -A n n 为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 常见用法 匹配符合要求的行数grep -c &#39;keyword&#39; 搜索/etc目录及其多级子目录 grep -r /etc 搜索当前目录下包含‘500’ 的文件名 1ls | grep -rl &apos;500&apos; 匹配带有关键词的行，并输出行号 grep -n &#39;keyword&#39; 匹配不带有关键词的行，并输出行号 grep -v &#39;keyword&#39; 匹配包括数字的行 grep &#39;[0-9]&#39; 匹配不包括数字的行 grep -v &#39;[0-9]&#39; 匹配大写字母 grep [A-Z] 或 grep [[:upper:]] 匹配单行包含空格的内容 grep [[:space:]] 匹配单行包含标点符号的内容 grep [[:punct:]] 匹配单行包含数字和大小写字母的内容 grep [0-9a-z-A-Z]或grep [[:alnum:]] 匹配所有以#开头的行，并显示行号 grep -n &#39;^#&#39; 注：包括空行。 匹配所有的非空行和不以#开头的行 grep -vn &#39;^#&#39; 匹配任意一个字符 grep -n &#39;ro.t&#39; .表示任意字符 12[root@stevey ~]# cat a.txt | grep -n &apos;ro.t&apos;3:root:x:0:0:root:/root:/bin/bash 匹配任意多个字符 .* 表示0个或多个任意字符； 匹配特定重复次数的字符 此处需要用{}，其中为数字，表示为{n} 或{m, n}。其中 {n}表示特定次数；{m, n} 表示范围，m &lt; n 注： {}前后都要使用转义符号\；如果不想使用脱义符号，使用grep -E 或者egrep {n}表示特定次数； {m,n} 表示范围，m &lt; n n可以省略，表示m以上 m也可以省略，表示n次及以下 ABC特殊参数用法 -A n n为数字，打印符合条件的行及后面n行 -B n n 为数字，打印符合条件的行及前面n行 -C n n 为数字，打印符合条件的行及前、后各n行 egrep 命令： grep 命令的升级版egrep 是 grep 的升级版，使用拓展式的正则表达式，与grep -E的效果相同。 + 匹配一个或多个字符 ? 匹配0个或1个字符 | 表示或者，表示二选一或者多选一，满足其中一个就可以 ()表示一个整体， 比如(oo)+， 匹配oo 出现一次或一次以上]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>regularExpression</tag>
-        <tag>notes</tag>
-        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -579,9 +502,9 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>regularExpression</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
+        <tag>regularExpression</tag>
       </tags>
   </entry>
   <entry>
@@ -592,10 +515,10 @@
         <category>kindle</category>
       </categories>
       <tags>
+        <tag>notes</tag>
         <tag>dropbox</tag>
         <tag>IFTTT</tag>
         <tag>kinlde</tag>
-        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -711,10 +634,10 @@
         <category>react</category>
       </categories>
       <tags>
+        <tag>github</tag>
         <tag>react</tag>
         <tag>node</tag>
         <tag>npm</tag>
-        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -736,8 +659,8 @@
         <category>github</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>github</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -763,18 +686,6 @@
         <tag>freeCodeCamp</tag>
         <tag>JavaScript</tag>
         <tag>array</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[前端学习笔记：正则表达式基础]]></title>
-    <url>%2F2017%2F12%2F27%2FbasisOfRegularExpressions%2F</url>
-    <content type="text"><![CDATA[写在前面终于要开始学正则表达式这块硬骨头了，之前还在说看正则就想看鬼画符，结果在刷freeCodeCamp的时候就遇到了这个“大山”。既然如此，所以就跟着练习题的进度整理一下正则的入门知识，希望从此迈进正则大门，也算多学了一门‘新语言’！ Regular expressions 正则表达式被用来根据某种匹配模式来寻找strings中的某些单词。 常用元字符 代码 说明 . 匹配除换行符以外的任意字符 \w 匹配字母或数字或下划线或汉字 \s 匹配任意的空白符 \d 匹配数字 \b 匹配单词的开始或结束 ^ 匹配字符串的开始 $ 匹配字符串的结束 匹配单词如果我们想要找到字符串The dog chased the cat中单词 the，我们可以使用下面的正则表达式: 1/the/gi 这个正则表达式分成几段： / 是这个正则表达式的头部 the 是我们想要匹配的模式 / 是这个正则表达式的尾部 g 代表着 global(全局)，意味着返回所有的匹配而不仅仅是第一个。 i 代表着忽略大小写，意思是当我们寻找匹配的字符串的时候忽略掉字母的大小写。 匹配数字在正则表达式中使用特殊选择器来选取特殊类型的值。其中之一就是数字选择器\d，意思是被用来获取一个字符串的数字。 1/\d/g 在选择器后面添加一个加号标记(+)，例如：/\d+/g，它允许这个正则表达式匹配一个或更多数字。 尾部的g是’global’的简写，意思是允许这个正则表达式 找到所有的匹配而不是仅仅找到第一个匹配。 匹配空白使用正则表达式选择器 \s 来选择一个字符串中的空白。 1/\s+/g 注：空白字符有 “ “ (空格符)、\r (回车符)、\n (换行符)、\t (制表符) 和 \f (换页符)。 匹配非空白字符可以用正则表达式选择器的大写版本 来转化任何匹配。例如，\s 匹配任何空白字符，\S 匹配任何非空白字符。 1234567891011// 初始化变量var testString = &quot;How many non-space characters are there in this sentence?&quot;;// 请只修改这条注释以下的代码var expression = /\S/g; // 请修改这一行// 请只修改这条注释以上的代码// 用 nonSpaceCount 存储 testString 中匹配到 expression 的次数var nonSpaceCount = testString.match(expression).length; 配合位置 ^ 匹配字符串开头 $ 匹配字符串结尾 \b 匹配单词的起始终止位置 示例： 12345^\d&#123;5,12&#125;$ // 匹配5-12位的QQ号码 \ba\w*\b //匹配以字母a开头的单词（w*表示任意数量的字母或数字）\b\w&#123;6&#125;\b //匹配刚好6个字符的单词 字符转义如果想查找元字符本身，需要使用\来取消这些字符的特殊意义。示例： 12deerchao\.net //匹配deerchao.netC:\\Windows //匹配C:\Windows 常用的限定符 代码/语法 说明 * 重复零次或更多次 + 重复一次或更多次 ? 重复零次或一次 {n} 重复n次 {n,} 重复n次或更多次 {n,m} 重复n到m次 字符类匹配没有预定义元字符的字符集合 示例 12[aeiou] //匹配任何一个英文元音字母，[.?!] //匹配标点符号(.或?或!)。[0-9] //含意与\d就是完全一致，即匹配任意数字 常用的反义代码查找不属于某个能简单定义的字符类的字符 代码/语法 说明 \W 匹配任意不是字母，数字，下划线，汉字的字符 \S 匹配任意不是空白符的字符 \D 匹配任意非数字的字符 \B 匹配不是单词开头或结束的位置 [^x] 匹配除了x以外的任意字符 [^aeiou] 匹配除了aeiou这几个字母以外的任意字符 更多教程 正则表达式30分钟入门教程 正则表达式入门和高级教程与在线测试工具 常见的正则表达式可视化描述]]></content>
-      <categories>
-        <category>front-end</category>
-      </categories>
-      <tags>
-        <tag>front-end</tag>
-        <tag>regularExpression</tag>
       </tags>
   </entry>
   <entry>
@@ -873,9 +784,9 @@
         <category>github</category>
       </categories>
       <tags>
+        <tag>github</tag>
         <tag>ssh</tag>
         <tag>bash</tag>
-        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -912,8 +823,8 @@
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>front-end</tag>
+        <tag>JavaScript</tag>
         <tag>ES6</tag>
       </tags>
   </entry>

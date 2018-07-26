@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="notes,linux,tomcat," />
+  <meta name="keywords" content="linux,notes,tomcat," />
 
 
 
@@ -81,14 +81,21 @@
 
 
 
-<meta name="description" content="写在前面这节课继续整理tomcat配置相关的知识。 tomcat的目录结构tomcat的目录结构说明12345678910111213[root@local-linux02 conf]# tree -L 1 /usr/local/tomcat/usr/local/tomcat    //tomcat目录├── bin   //执行脚本目录├── conf    //配置文件├── lib   //">
-<meta name="keywords" content="notes,linux,tomcat">
+<meta name="description" content="写在前面这则笔记整理tomcat的相关知识，主要包括：  tomcat介绍  tomcat安装  tomcat配置">
+<meta name="keywords" content="linux,notes,tomcat">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux学习笔记: tomcat的基础知识(二)">
-<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/06/27/week14-3-linuxNotes-tomcatPart2/index.html">
+<meta property="og:title" content="linux学习笔记:tomcat的基础知识">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-18-basisOfTomcat/index.html">
 <meta property="og:site_name" content="Steve的折腾学习日志">
-<meta property="og:description" content="写在前面这节课继续整理tomcat配置相关的知识。 tomcat的目录结构tomcat的目录结构说明12345678910111213[root@local-linux02 conf]# tree -L 1 /usr/local/tomcat/usr/local/tomcat    //tomcat目录├── bin   //执行脚本目录├── conf    //配置文件├── lib   //">
+<meta property="og:description" content="写在前面这则笔记整理tomcat的相关知识，主要包括：  tomcat介绍  tomcat安装  tomcat配置">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://farm1.staticflickr.com/887/28125102597_008c4a1f95_o.jpg">
+<meta property="og:image" content="https://farm2.staticflickr.com/1768/41206433620_6f2e0d2ba6_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1807/43016919531_9b2f907d87_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1808/41223584750_3bef8808ff_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1782/42115998285_deb8c686d2_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1796/42299096684_7bf6d5eca1_o.png">
+<meta property="og:image" content="https://farm2.staticflickr.com/1800/42116368715_8ee4b3cc42_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/923/42135003635_2045033be5_o.png">
 <meta property="og:image" content="https://farm2.staticflickr.com/1806/28168971887_3cb7e60d39_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/927/43044220491_70991797dd_o.png">
@@ -100,11 +107,11 @@
 <meta property="og:image" content="https://farm2.staticflickr.com/1788/41234146920_6000aaa669_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/843/29173225698_007bf6578a_o.png">
 <meta property="og:image" content="https://farm2.staticflickr.com/1767/29166127608_492f31ac1f_o.png">
-<meta property="og:updated_time" content="2018-06-27T15:47:38.640Z">
+<meta property="og:updated_time" content="2018-07-26T07:58:08.949Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux学习笔记: tomcat的基础知识(二)">
-<meta name="twitter:description" content="写在前面这节课继续整理tomcat配置相关的知识。 tomcat的目录结构tomcat的目录结构说明12345678910111213[root@local-linux02 conf]# tree -L 1 /usr/local/tomcat/usr/local/tomcat    //tomcat目录├── bin   //执行脚本目录├── conf    //配置文件├── lib   //">
-<meta name="twitter:image" content="https://farm1.staticflickr.com/923/42135003635_2045033be5_o.png">
+<meta name="twitter:title" content="linux学习笔记:tomcat的基础知识">
+<meta name="twitter:description" content="写在前面这则笔记整理tomcat的相关知识，主要包括：  tomcat介绍  tomcat安装  tomcat配置">
+<meta name="twitter:image" content="https://farm1.staticflickr.com/887/28125102597_008c4a1f95_o.jpg">
 
 
 
@@ -134,13 +141,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/06/27/week14-3-linuxNotes-tomcatPart2/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-18-basisOfTomcat/"/>
 
 
 
 
 
-  <title>linux学习笔记: tomcat的基础知识(二) | Steve的折腾学习日志</title>
+  <title>linux学习笔记:tomcat的基础知识 | Steve的折腾学习日志</title>
   
 
 
@@ -321,7 +328,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/06/27/week14-3-linuxNotes-tomcatPart2/">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-18-basisOfTomcat/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
@@ -338,7 +345,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">linux学习笔记: tomcat的基础知识(二)</h1>
+          <h1 class="post-title" itemprop="name headline">linux学习笔记:tomcat的基础知识</h1>
         
 
         <div class="post-meta">
@@ -350,8 +357,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-27T09:10:05+08:00">
-                2018-06-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-26T15:49:17+08:00">
+                2018-07-26
               </time>
             
 
@@ -391,9 +398,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/27/week14-3-linuxNotes-tomcatPart2/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/26/linuxNotes-18-basisOfTomcat/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/27/week14-3-linuxNotes-tomcatPart2/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/26/linuxNotes-18-basisOfTomcat/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -415,7 +422,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,476
+                  3,854
                 </span>
               
 
@@ -431,7 +438,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  11
+                  17
                 </span>
               
             </div>
@@ -452,7 +459,78 @@
       
 
       
-        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这节课继续整理tomcat配置相关的知识。</p>
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记整理tomcat的相关知识，主要包括：</p>
+<ul>
+<li><p>tomcat介绍</p>
+</li>
+<li><p>tomcat安装</p>
+</li>
+<li><p>tomcat配置</p>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="什么是tomcat？"><a href="#什么是tomcat？" class="headerlink" title="什么是tomcat？"></a>什么是tomcat？</h2><p>目前，有很多的大型网站都是用java编写的，所以，解析java程序也需要由相关的程序来完成，tomcat就是其中之一。</p>
+<p>Tomcat 类似与一个apache的扩展型，属于apache软件基金会的核心项目，属于开源的轻量级Web应用服务器，是开发和调试JSP程序的首选，主要针对Jave语言开发的网页代码进行解析，<strong>具有技术先进、性能稳定、免费开源的特点，</strong>是目前比较流行的web服务器。</p>
+<p>Tomcat虽然具有处理HTML页面的功能，然而由于其处理静态HTML的能力远不及Apache或者Nginx，所以Tomcat通常做为一个Servlet和JSP容器单独运行在后端，运行JSP 页面和Servlet。</p>
+<p><img src="https://farm1.staticflickr.com/887/28125102597_008c4a1f95_o.jpg" alt=""></p>
+<p>Tomcat 支持：</p>
+<ul>
+<li><p>使用 Apache Axis servlet 的 Web 服务；</p>
+</li>
+<li><p>开发框架，如 Apache Struts；</p>
+</li>
+<li><p>模板引擎，如 Apache Jakarta Velocity；</p>
+</li>
+<li><p>对象关系映射技术，如 Hibernate；</p>
+</li>
+</ul>
+<h2 id="Tomcat-安装"><a href="#Tomcat-安装" class="headerlink" title="Tomcat 安装"></a>Tomcat 安装</h2><p>想要安装tomcat，必须先安装JDK，即<code>java development kit</code>，这是Sun Microsystems 针对java开发做的一个开发者软件包，包括java运行环境、java工具和java基础库，是目前java开发的核心。</p>
+<h3 id="安装jdk"><a href="#安装jdk" class="headerlink" title="安装jdk"></a>安装jdk</h3><h4 id="第一步：下载安装包"><a href="#第一步：下载安装包" class="headerlink" title="第一步：下载安装包"></a>第一步：下载安装包</h4><p><a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="noopener">jdk官网下载地址在这里</a>，由于这里不能使用wget命令，因此只能通过浏览器下载，之后通过ftp程序上传到虚拟机当中，进行相关的安装配置。</p>
+<p>这里选择了linux64位的版本来下载。</p>
+<p><img src="https://farm2.staticflickr.com/1768/41206433620_6f2e0d2ba6_o.png" alt=""></p>
+<h4 id="第二步：上传安装包到虚拟机"><a href="#第二步：上传安装包到虚拟机" class="headerlink" title="第二步：上传安装包到虚拟机"></a>第二步：上传安装包到虚拟机</h4><p>因为之前已经配置好了ftp服务，所以这里刚好用上。</p>
+<p>笔者在mac端使用的ftp软件是<code>yummy ftp pro</code> ，打开之后，依次选取传输协议、客户端ip、登陆用户名、密码，点击connect即可连接。</p>
+<p><img src="https://farm2.staticflickr.com/1807/43016919531_9b2f907d87_o.png" alt=""> </p>
+<p>之后，选择文件，右键uoload即可。</p>
+<h4 id="第三步：移动安装包"><a href="#第三步：移动安装包" class="headerlink" title="第三步：移动安装包"></a>第三步：移动安装包</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">// 进入ftp目录</span><br><span class="line">[root@local-linux02 ~]# cd /data/ftp</span><br><span class="line"></span><br><span class="line">//查看目录，该文件已成功传输到虚拟机当中</span><br><span class="line">[root@local-linux02 ftp]# ls</span><br><span class="line">a.txt  b.txt  jdk-8u171-linux-x64.tar.gz  test1  test2</span><br><span class="line"></span><br><span class="line">//移动文件夹</span><br><span class="line">[root@local-linux02 ftp]# mv jdk-8u171-linux-x64.tar.gz /usr/local/src/</span><br><span class="line"></span><br><span class="line">//进入源码包保存目录</span><br><span class="line">[root@local-linux02 ftp]# cd /usr/local/src/</span><br><span class="line">[root@local-linux02 src]# ls</span><br><span class="line">jdk-8u171-linux-x64.tar.gz  nginx-1.14.0.tar.gz    php-7.2.6</span><br><span class="line">nginx-1.14.0                nginx-1.14.0.tar.gz.1  php-7.2.6.tar.gz</span><br><span class="line"></span><br><span class="line">//解压</span><br><span class="line">[root@local-linux02 src]# tar -zxvf jdk-8u171-linux-x64.tar.gz </span><br><span class="line"></span><br><span class="line">//查看解压文件包</span><br><span class="line">[root@local-linux02 src]# ls</span><br><span class="line">jdk1.8.0_171                nginx-1.14.0.tar.gz    php-7.2.6.tar.gz</span><br><span class="line">jdk-8u171-linux-x64.tar.gz  nginx-1.14.0.tar.gz.1</span><br><span class="line">nginx-1.14.0                php-7.2.6</span><br><span class="line"></span><br><span class="line">//移动重命名</span><br><span class="line">mv jdk1.8.0_171 /usr/local/jdk1.8</span><br></pre></td></tr></table></figure>
+<h4 id="第四步：配置系统环境变量"><a href="#第四步：配置系统环境变量" class="headerlink" title="第四步：配置系统环境变量"></a>第四步：配置系统环境变量</h4><p>系统环境变量的配置文件为 <code>/etc/profile</code>，下面要更改系统配置文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile</span><br><span class="line"></span><br><span class="line">//在末尾增加如下配置：</span><br><span class="line"></span><br><span class="line">JAVA_HOME=/usr/local/jdk1.8/</span><br><span class="line">JAVA_BIN=/usr/local/jdk1.8/bin</span><br><span class="line">JRE_HOME=/usr/local/jdk1.8/jre</span><br><span class="line">PATH=$PATH:/usr/local/jdk1.8/bin:/usr/local/jdk1.8/jre/bin</span><br><span class="line">CLASSPATH=/usr/local/jdk1.8/jre/lib:/usr/local/jdk1.8/lib:/usr/local/jdk1.8/jre/lib/charsets.jar </span><br><span class="line"></span><br><span class="line">//保存退出后执行如下命令生效</span><br><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+<h4 id="校验配置是否正常"><a href="#校验配置是否正常" class="headerlink" title="校验配置是否正常"></a>校验配置是否正常</h4><p><img src="https://farm2.staticflickr.com/1808/41223584750_3bef8808ff_o.png" alt=""></p>
+<h3 id="安装Tomcat"><a href="#安装Tomcat" class="headerlink" title="安装Tomcat"></a>安装Tomcat</h3><h4 id="第一步：下载二进位制安装包"><a href="#第一步：下载二进位制安装包" class="headerlink" title="第一步：下载二进位制安装包"></a>第一步：下载二进位制安装包</h4><p>tomcat的官网网址为：<a href="https://tomcat.apache.org/" target="_blank" rel="noopener">https://tomcat.apache.org/</a></p>
+<p>这里下载的镜像站点的二进位制安装包，版本号是8.5.31。同样还是采用在mac下用chrome浏览器下载，之后再通过ftp上传到虚拟机的方式。因为在虚拟机使用wget命令下载实在是太慢了。</p>
+<h4 id="第二步：移动文件夹"><a href="#第二步：移动文件夹" class="headerlink" title="第二步：移动文件夹"></a>第二步：移动文件夹</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//此处设置了alias ftp=&apos;cd /data/ftp/&apos;</span><br><span class="line">[root@local-linux02 src]# ftp</span><br><span class="line">[root@local-linux02 ftp]# ls</span><br><span class="line">apache-tomcat-8.5.31.tar.gz  a.txt  b.txt  test1  test2</span><br><span class="line"></span><br><span class="line">//移动文件</span><br><span class="line">[root@local-linux02 ftp]# mv apache-tomcat-8.5.31.tar.gz /usr/local/src/</span><br><span class="line"></span><br><span class="line">//进入源码包目录，此处也设置的alias</span><br><span class="line">[root@local-linux02 ftp]# src</span><br><span class="line">[root@local-linux02 src]# ls</span><br><span class="line">apache-tomcat-8.5.31.tar.gz  nginx-1.14.0.tar.gz    php-7.2.6.tar.gz</span><br><span class="line">jdk-8u171-linux-x64.tar.gz   nginx-1.14.0.tar.gz.1</span><br><span class="line">nginx-1.14.0                 php-7.2.6</span><br><span class="line"></span><br><span class="line">//解压</span><br><span class="line">[root@local-linux02 src]# tar -zxvf apache-tomcat-8.5.31.tar.gz</span><br></pre></td></tr></table></figure>
+<h4 id="第三步：安装"><a href="#第三步：安装" class="headerlink" title="第三步：安装"></a>第三步：安装</h4><p>由于下载的是二进位制安装包，因此就省去了编译环节。</p>
+<ul>
+<li>移动文件夹到自定义安装目录</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 src]# mv apache-tomcat-8.5.31 /usr/local/tomcat</span><br></pre></td></tr></table></figure>
+<ul>
+<li>运行启动脚本</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 bin]# /usr/local/tomcat/bin/startup.sh</span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/jdk1.8</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line">Tomcat started.</span><br></pre></td></tr></table></figure>
+<ul>
+<li>校验是否成功 <code>ps -aux |grep java</code></li>
+</ul>
+<p><img src="https://farm2.staticflickr.com/1782/42115998285_deb8c686d2_o.png" alt=""></p>
+<ul>
+<li>检查端口情况 <code>netstat -lntp |grep java</code></li>
+</ul>
+<p><img src="https://farm2.staticflickr.com/1796/42299096684_7bf6d5eca1_o.png" alt=""></p>
+<p>说明：正常会有三个以下端口开放</p>
+<ul>
+<li><p>8080提供wed服务的端口；</p>
+</li>
+<li><p>8005为管理端口；</p>
+</li>
+<li><p>8009为第三方服务调用端口（如httpd和Tomcat结合时会用到）；</p>
+</li>
+</ul>
+<h4 id="第四步：设置开机启动"><a href="#第四步：设置开机启动" class="headerlink" title="第四步：设置开机启动"></a>第四步：设置开机启动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;/usr/local/tomcat/bin/startup.sh&quot; &gt;&gt; /etc/rc.d/rc.local</span><br><span class="line"></span><br><span class="line">chmod a+x /etc/rc.d/rc.local</span><br></pre></td></tr></table></figure>
+<h4 id="第五步：配置iptables端口"><a href="#第五步：配置iptables端口" class="headerlink" title="第五步：配置iptables端口"></a>第五步：配置iptables端口</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 bin]# vi /etc/sysconfig/iptables</span><br><span class="line"></span><br><span class="line">//增加一条</span><br><span class="line">-A INPUT -p tcp -m tcp --dport 8080 -j ACCEPT</span><br><span class="line"></span><br><span class="line">[root@local-linux02 bin]# systemctl restart iptables</span><br></pre></td></tr></table></figure>
+<h4 id="校验成功"><a href="#校验成功" class="headerlink" title="校验成功"></a>校验成功</h4><p>浏览器登录</p>
+<p><img src="https://farm2.staticflickr.com/1800/42116368715_8ee4b3cc42_o.png" alt=""></p>
+<p>最后，如需关闭tomcat执行如下脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/tomcat/bin/shutdown.sh</span><br></pre></td></tr></table></figure>
 <h2 id="tomcat的目录结构"><a href="#tomcat的目录结构" class="headerlink" title="tomcat的目录结构"></a>tomcat的目录结构</h2><h3 id="tomcat的目录结构说明"><a href="#tomcat的目录结构说明" class="headerlink" title="tomcat的目录结构说明"></a>tomcat的目录结构说明</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 conf]# tree -L 1 /usr/local/tomcat</span><br><span class="line">/usr/local/tomcat    //tomcat目录</span><br><span class="line">├── bin   //执行脚本目录</span><br><span class="line">├── conf    //配置文件</span><br><span class="line">├── lib   //运行时必要的库文件（JARS）</span><br><span class="line">├── LICENSE</span><br><span class="line">├── logs   //执行日志文件</span><br><span class="line">├── NOTICE</span><br><span class="line">├── RELEASE-NOTES</span><br><span class="line">├── RUNNING.txt</span><br><span class="line">├── temp   //临时文件存放目录</span><br><span class="line">├── webapps   //主要Web发布目录（存放JSP,SERVLET等）</span><br><span class="line">└── work   //工作目录，Tomcat将翻译JSP文件到的Java文件和class文件放在这里</span><br></pre></td></tr></table></figure>
 <h4 id="bin目录主要文件包括："><a href="#bin目录主要文件包括：" class="headerlink" title="bin目录主要文件包括："></a>bin目录主要文件包括：</h4><ul>
 <li><p><code>catalina.sh</code> 用于启动和关闭tomcat服务器；</p>
@@ -472,7 +550,6 @@
 <li><p><code>tomcat-users.xml</code> Tomcat用户认证的配置文件；</p>
 </li>
 </ul>
-<a id="more"></a>
 <h4 id="logs目录主要文件包括："><a href="#logs目录主要文件包括：" class="headerlink" title="logs目录主要文件包括："></a>logs目录主要文件包括：</h4><p><img src="https://farm1.staticflickr.com/923/42135003635_2045033be5_o.png" alt=""></p>
 <ul>
 <li><p><code>localhost_access_log.2018-06-26.txt</code> 访问日志</p>
@@ -535,9 +612,9 @@
 <li><p><code>unpackWARs</code> 如果为true，则tomcat会自动将WAR文件解压，否则不解压，直接从WAR文件中运行应用程序；</p>
 </li>
 </ul>
-<h3 id="tomcat-常用配置"><a href="#tomcat-常用配置" class="headerlink" title="tomcat 常用配置"></a><code>tomcat</code> 常用配置</h3><h4 id="配置Tomcat监听80端口"><a href="#配置Tomcat监听80端口" class="headerlink" title="配置Tomcat监听80端口"></a>配置Tomcat监听80端口</h4><h5 id="第一步：修改server-xml配置文件"><a href="#第一步：修改server-xml配置文件" class="headerlink" title="第一步：修改server.xml配置文件"></a>第一步：修改server.xml配置文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 conf]# vi /usr/local/tomcat/conf/server.xml</span><br><span class="line"></span><br><span class="line">//Connector port=&quot;8080&quot;,将端口号改为80，之后保存退出。</span><br></pre></td></tr></table></figure>
-<h5 id="第二步：重启tomcat"><a href="#第二步：重启tomcat" class="headerlink" title="第二步：重启tomcat"></a>第二步：重启tomcat</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//关闭tomcat</span><br><span class="line">[root@local-linux02 conf]# /usr/local/tomcat/bin/shutdown.sh</span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/jdk1.8</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line"></span><br><span class="line">//再次启动tomcat </span><br><span class="line">[root@local-linux02 conf]# /usr/local/tomcat/bin/startup.sh</span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/jdk1.8</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line">Tomcat started.</span><br></pre></td></tr></table></figure>
-<h5 id="校验成果"><a href="#校验成果" class="headerlink" title="校验成果"></a>校验成果</h5><ul>
+<h2 id="tomcat-常用配置"><a href="#tomcat-常用配置" class="headerlink" title="tomcat 常用配置"></a><code>tomcat</code> 常用配置</h2><h3 id="配置Tomcat监听80端口"><a href="#配置Tomcat监听80端口" class="headerlink" title="配置Tomcat监听80端口"></a>配置Tomcat监听80端口</h3><h4 id="第一步：修改server-xml配置文件"><a href="#第一步：修改server-xml配置文件" class="headerlink" title="第一步：修改server.xml配置文件"></a>第一步：修改server.xml配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 conf]# vi /usr/local/tomcat/conf/server.xml</span><br><span class="line"></span><br><span class="line">//Connector port=&quot;8080&quot;,将端口号改为80，之后保存退出。</span><br></pre></td></tr></table></figure>
+<h4 id="第二步：重启tomcat"><a href="#第二步：重启tomcat" class="headerlink" title="第二步：重启tomcat"></a>第二步：重启tomcat</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//关闭tomcat</span><br><span class="line">[root@local-linux02 conf]# /usr/local/tomcat/bin/shutdown.sh</span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/jdk1.8</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line"></span><br><span class="line">//再次启动tomcat </span><br><span class="line">[root@local-linux02 conf]# /usr/local/tomcat/bin/startup.sh</span><br><span class="line">Using CATALINA_BASE:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_HOME:   /usr/local/tomcat</span><br><span class="line">Using CATALINA_TMPDIR: /usr/local/tomcat/temp</span><br><span class="line">Using JRE_HOME:        /usr/local/jdk1.8</span><br><span class="line">Using CLASSPATH:       /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar</span><br><span class="line">Tomcat started.</span><br></pre></td></tr></table></figure>
+<h4 id="校验成果"><a href="#校验成果" class="headerlink" title="校验成果"></a>校验成果</h4><ul>
 <li>检查端口情况</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 conf]# netstat -lntp | grep java</span><br><span class="line">tcp6       0      0 127.0.0.1:8005          :::*                    LISTEN      42011/java</span><br><span class="line">tcp6       0      0 :::8009                 :::*                    LISTEN      42011/java</span><br><span class="line">tcp6       0      0 :::80                   :::*                    LISTEN      42011/java</span><br></pre></td></tr></table></figure>
@@ -545,14 +622,14 @@
 <li>浏览器测试</li>
 </ul>
 <p><img src="https://farm2.staticflickr.com/1806/28168971887_3cb7e60d39_o.png" alt=""></p>
-<h4 id="配置Tomcat虚拟主机"><a href="#配置Tomcat虚拟主机" class="headerlink" title="配置Tomcat虚拟主机"></a>配置Tomcat虚拟主机</h4><p>同样还是修改配置文件server.xml，其中<code>&lt;host&gt;&lt;/host&gt;</code>字段就是关于虚拟主机的配置，包括以下选项：</p>
+<h3 id="配置Tomcat虚拟主机"><a href="#配置Tomcat虚拟主机" class="headerlink" title="配置Tomcat虚拟主机"></a>配置Tomcat虚拟主机</h3><p>同样还是修改配置文件server.xml，其中<code>&lt;host&gt;&lt;/host&gt;</code>字段就是关于虚拟主机的配置，包括以下选项：</p>
 <p><code>name</code>定义域名；</p>
 <p><code>appBase</code>定义应用的目录，Java的应用通常是一个war的压缩包，你只需要将war的压缩包放到appBase目录下面即可；</p>
 <p><code>docBase</code>，这个参数用来定义网站的文件存放路径，默认为<code>appBase/ROOT</code>；</p>
 <p><strong>应用示例：利用zrlog部署一个java的应用</strong></p>
-<h5 id="第一步：修改配置文件"><a href="#第一步：修改配置文件" class="headerlink" title="第一步：修改配置文件"></a>第一步：修改配置文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/tomcat/conf/server.xml</span><br><span class="line"></span><br><span class="line">//修改host字段</span><br><span class="line"></span><br><span class="line">&lt;Host name=&quot;www.java-test.com&quot; appBase=&quot;&quot;</span><br><span class="line">    unpackWARs= &quot;true&quot; autoDeploy=&quot;true&quot;</span><br><span class="line">    xmlValidation=&quot;false&quot; xmlNamespaceAware=&quot;false&quot;&gt;</span><br><span class="line">    &lt;Context path=&quot;&quot; docBase=&quot;/data/wwwroot/java-test.com/&quot; debug=&quot;0&quot; reloadable=&quot;true&quot; crossContext=&quot;true&quot;/&gt;</span><br><span class="line">&lt;/Host&gt;</span><br></pre></td></tr></table></figure>
-<h5 id="第二步：下载zrlog"><a href="#第二步：下载zrlog" class="headerlink" title="第二步：下载zrlog"></a>第二步：下载zrlog</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//下载zrlog</span><br><span class="line">[root@local-linux02 src]# wget http://dl.zrlog.com/release/zrlog-1.7.1-baaecb9-release.war  </span><br><span class="line"></span><br><span class="line">//移动至webapps </span><br><span class="line">mv zrlog-1.7.1-baaecb9-release.war /usr/local/tomcat/webapps/</span><br><span class="line"></span><br><span class="line">mv /usr/local/tomcat/webapps/zrlog-1.7.1-baaecb9-release /usr/local/tomcat/webapps/zrlog</span><br></pre></td></tr></table></figure>
-<h5 id="第三步：数据库配置"><a href="#第三步：数据库配置" class="headerlink" title="第三步：数据库配置"></a>第三步：数据库配置</h5><ul>
+<h4 id="第一步：修改配置文件"><a href="#第一步：修改配置文件" class="headerlink" title="第一步：修改配置文件"></a>第一步：修改配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/tomcat/conf/server.xml</span><br><span class="line"></span><br><span class="line">//修改host字段</span><br><span class="line"></span><br><span class="line">&lt;Host name=&quot;www.java-test.com&quot; appBase=&quot;&quot;</span><br><span class="line">    unpackWARs= &quot;true&quot; autoDeploy=&quot;true&quot;</span><br><span class="line">    xmlValidation=&quot;false&quot; xmlNamespaceAware=&quot;false&quot;&gt;</span><br><span class="line">    &lt;Context path=&quot;&quot; docBase=&quot;/data/wwwroot/java-test.com/&quot; debug=&quot;0&quot; reloadable=&quot;true&quot; crossContext=&quot;true&quot;/&gt;</span><br><span class="line">&lt;/Host&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="第二步：下载zrlog"><a href="#第二步：下载zrlog" class="headerlink" title="第二步：下载zrlog"></a>第二步：下载zrlog</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//下载zrlog</span><br><span class="line">[root@local-linux02 src]# wget http://dl.zrlog.com/release/zrlog-1.7.1-baaecb9-release.war  </span><br><span class="line"></span><br><span class="line">//移动至webapps </span><br><span class="line">mv zrlog-1.7.1-baaecb9-release.war /usr/local/tomcat/webapps/</span><br><span class="line"></span><br><span class="line">mv /usr/local/tomcat/webapps/zrlog-1.7.1-baaecb9-release /usr/local/tomcat/webapps/zrlog</span><br></pre></td></tr></table></figure>
+<h4 id="第三步：数据库配置"><a href="#第三步：数据库配置" class="headerlink" title="第三步：数据库配置"></a>第三步：数据库配置</h4><ul>
 <li>登陆数据库</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 webapps]# mysql -u root -p</span><br><span class="line">Enter password:</span><br><span class="line">Welcome to the MariaDB monitor.  Commands end with ; or \g.</span><br><span class="line">Your MariaDB connection id is 9</span><br><span class="line">Server version: 10.2.15-MariaDB MariaDB Server</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.</span><br><span class="line"></span><br><span class="line">Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement.</span><br></pre></td></tr></table></figure>
@@ -566,7 +643,7 @@
 <li>测试是否数据库是否能正常登陆</li>
 </ul>
 <p><img src="https://farm1.staticflickr.com/927/43044220491_70991797dd_o.png" alt=""></p>
-<h5 id="第四步：浏览器访问-ip-8080-zrlog-，运行安装程序"><a href="#第四步：浏览器访问-ip-8080-zrlog-，运行安装程序" class="headerlink" title="第四步：浏览器访问 ip:8080/zrlog ，运行安装程序"></a>第四步：浏览器访问 ip:8080/zrlog ，运行安装程序</h5><ul>
+<h4 id="第四步：浏览器访问-ip-8080-zrlog-，运行安装程序"><a href="#第四步：浏览器访问-ip-8080-zrlog-，运行安装程序" class="headerlink" title="第四步：浏览器访问 ip:8080/zrlog ，运行安装程序"></a>第四步：浏览器访问 ip:8080/zrlog ，运行安装程序</h4><ul>
 <li>依次填写服务器地址、数据库名、用户名、密码、端口、系统邮箱</li>
 </ul>
 <p><img src="https://farm2.staticflickr.com/1767/43044258241_21a9952d0b_o.png" alt=""></p>
@@ -582,9 +659,9 @@
 <li>效果预览</li>
 </ul>
 <p><img src="https://farm2.staticflickr.com/1783/42142092225_54c31c3782_o.png" alt=""></p>
-<h5 id="第五步：去掉浏览器访问时输入的目录名"><a href="#第五步：去掉浏览器访问时输入的目录名" class="headerlink" title="第五步：去掉浏览器访问时输入的目录名"></a>第五步：去掉浏览器访问时输入的目录名</h5><p><img src="https://farm1.staticflickr.com/845/28176355517_4985de7688_o.png" alt=""></p>
-<h5 id="第六步：重启tomcat"><a href="#第六步：重启tomcat" class="headerlink" title="第六步：重启tomcat"></a>第六步：重启tomcat</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 webapps]# /usr/local/tomcat/bin/shutdown.sh</span><br><span class="line">[root@local-linux02 webapps]# /usr/local/tomcat/bin/startup.sh</span><br></pre></td></tr></table></figure>
-<h5 id="浏览器测试"><a href="#浏览器测试" class="headerlink" title="浏览器测试"></a>浏览器测试</h5><ul>
+<h4 id="第五步：去掉浏览器访问时输入的目录名"><a href="#第五步：去掉浏览器访问时输入的目录名" class="headerlink" title="第五步：去掉浏览器访问时输入的目录名"></a>第五步：去掉浏览器访问时输入的目录名</h4><p><img src="https://farm1.staticflickr.com/845/28176355517_4985de7688_o.png" alt=""></p>
+<h4 id="第六步：重启tomcat"><a href="#第六步：重启tomcat" class="headerlink" title="第六步：重启tomcat"></a>第六步：重启tomcat</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 webapps]# /usr/local/tomcat/bin/shutdown.sh</span><br><span class="line">[root@local-linux02 webapps]# /usr/local/tomcat/bin/startup.sh</span><br></pre></td></tr></table></figure>
+<h4 id="浏览器测试"><a href="#浏览器测试" class="headerlink" title="浏览器测试"></a>浏览器测试</h4><ul>
 <li>修改本地host文件</li>
 </ul>
 <p><img src="https://farm2.staticflickr.com/1788/41234146920_6000aaa669_o.png" alt=""></p>
@@ -620,7 +697,7 @@
 <h4 id="第四步：编辑测试内容"><a href="#第四步：编辑测试内容" class="headerlink" title="第四步：编辑测试内容"></a>第四步：编辑测试内容</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/tomcat/webapps/ROOT/t.jsp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;%@page import=&quot;java.sql.*&quot;%&gt;</span><br><span class="line">&lt;%@page import=&quot;javax.sql.DataSource&quot;%&gt;</span><br><span class="line">&lt;%@page import=&quot;javax.naming.*&quot;%&gt;</span><br><span class="line">&lt;%</span><br><span class="line">Context ctx = new InitialContext();</span><br><span class="line">DataSource ds = (DataSource) ctx</span><br><span class="line">.lookup(&quot;java:comp/env/jdbc/mytest&quot;);</span><br><span class="line">Connection conn = ds.getConnection();</span><br><span class="line">Statement state = conn.createStatement();</span><br><span class="line">String sql = &quot;select * from aminglinux&quot;;</span><br><span class="line">ResultSet rs = state.executeQuery(sql);</span><br><span class="line">while (rs.next()) &#123;</span><br><span class="line">out.println(rs.getString(&quot;id&quot;) +&quot;&lt;tr&gt;&quot;);</span><br><span class="line">out.println(rs.getString(&quot;name&quot;) +&quot;&lt;tr&gt;&lt;br&gt;&quot;);</span><br><span class="line">&#125;</span><br><span class="line">rs.close();</span><br><span class="line">state.close();</span><br><span class="line">conn.close();</span><br><span class="line">%&gt;</span><br></pre></td></tr></table></figure>
 <h4 id="第五步：重启tomcat"><a href="#第五步：重启tomcat" class="headerlink" title="第五步：重启tomcat"></a>第五步：重启tomcat</h4><pre><code>/usr/local/tomcat/bin/shutdown.sh 
 /usr/local/tomcat/bin/startup.sh
-</code></pre><h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><ul>
+</code></pre><h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><ul>
 <li><p><a href="https://www.linuser.com/forum.php?mod=forumdisplay&amp;fid=37" target="_blank" rel="noopener">邱李的tomcat文档</a> </p>
 </li>
 <li><p><a href="http://blog.csdn.net/lishehe/article/details/41607725" target="_blank" rel="noopener">JAR、WAR包区别</a> </p>
@@ -637,9 +714,8 @@
 </li>
 <li><p><a href="https://blog.csdn.net/ye1992/article/details/9344807" target="_blank" rel="noopener">tomcat内存溢出</a></p>
 </li>
-</ul>
-<h2 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h2><ul>
-<li><a href="https://www.jianshu.com/p/602f051918d9" target="_blank" rel="noopener">Tomcat 配置文件详解</a></li>
+<li><p><a href="https://www.jianshu.com/p/602f051918d9" target="_blank" rel="noopener">Tomcat 配置文件详解</a></p>
+</li>
 </ul>
 
       
@@ -661,7 +737,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://steve-yuan-8276.github.io/2018/06/27/week14-3-linuxNotes-tomcatPart2/" title="linux学习笔记: tomcat的基础知识(二)">https://steve-yuan-8276.github.io/2018/06/27/week14-3-linuxNotes-tomcatPart2/</a>
+    <a href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-18-basisOfTomcat/" title="linux学习笔记:tomcat的基础知识">https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-18-basisOfTomcat/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -676,9 +752,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/notes/" rel="tag"># notes</a>
-          
             <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
           
             <a href="/tags/tomcat/" rel="tag"># tomcat</a>
           
@@ -693,8 +769,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/25/linuxNotes-usefulLinuxComands/" rel="next" title="linux学习笔记：有用的linux命令">
-                <i class="fa fa-chevron-left"></i> linux学习笔记：有用的linux命令
+              <a href="/2018/07/26/linuxNotes-17-basisOfExpect/" rel="next" title="linux笔记:shell+ expect实现简易文件分发系统">
+                <i class="fa fa-chevron-left"></i> linux笔记:shell+ expect实现简易文件分发系统
               </a>
             
           </div>
@@ -703,8 +779,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/04/week15-1-linuxNotes-keepALived/" rel="prev" title="linux笔记：使用keepalived配置高可用集群">
-                linux笔记：使用keepalived配置高可用集群 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/26/linuxNotes-19-basisOfRegularExpression/" rel="prev" title="linux运维学习笔记:正则表达式">
+                linux运维学习笔记:正则表达式 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -796,7 +872,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -886,7 +962,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomcat的目录结构"><span class="nav-number">2.</span> <span class="nav-text">tomcat的目录结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tomcat的目录结构说明"><span class="nav-number">2.1.</span> <span class="nav-text">tomcat的目录结构说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#bin目录主要文件包括："><span class="nav-number">2.1.1.</span> <span class="nav-text">bin目录主要文件包括：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#conf目录主要的配置文件："><span class="nav-number">2.1.2.</span> <span class="nav-text">conf目录主要的配置文件：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#logs目录主要文件包括："><span class="nav-number">2.1.3.</span> <span class="nav-text">logs目录主要文件包括：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomcat-配置文件"><span class="nav-number">2.2.</span> <span class="nav-text">Tomcat 配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tomcat的核心组件"><span class="nav-number">2.3.</span> <span class="nav-text">tomcat的核心组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Server-组件"><span class="nav-number">2.3.1.</span> <span class="nav-text">Server 组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Service-组件"><span class="nav-number">2.3.2.</span> <span class="nav-text">Service 组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Connector组件"><span class="nav-number">2.3.3.</span> <span class="nav-text">Connector组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Engine组件"><span class="nav-number">2.3.4.</span> <span class="nav-text">Engine组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Host组件"><span class="nav-number">2.3.5.</span> <span class="nav-text">Host组件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tomcat-常用配置"><span class="nav-number">2.4.</span> <span class="nav-text">tomcat 常用配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置Tomcat监听80端口"><span class="nav-number">2.4.1.</span> <span class="nav-text">配置Tomcat监听80端口</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：修改server-xml配置文件"><span class="nav-number">2.4.1.1.</span> <span class="nav-text">第一步：修改server.xml配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：重启tomcat"><span class="nav-number">2.4.1.2.</span> <span class="nav-text">第二步：重启tomcat</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#校验成果"><span class="nav-number">2.4.1.3.</span> <span class="nav-text">校验成果</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置Tomcat虚拟主机"><span class="nav-number">2.4.2.</span> <span class="nav-text">配置Tomcat虚拟主机</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：修改配置文件"><span class="nav-number">2.4.2.1.</span> <span class="nav-text">第一步：修改配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：下载zrlog"><span class="nav-number">2.4.2.2.</span> <span class="nav-text">第二步：下载zrlog</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：数据库配置"><span class="nav-number">2.4.2.3.</span> <span class="nav-text">第三步：数据库配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第四步：浏览器访问-ip-8080-zrlog-，运行安装程序"><span class="nav-number">2.4.2.4.</span> <span class="nav-text">第四步：浏览器访问 ip:8080/zrlog ，运行安装程序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第五步：去掉浏览器访问时输入的目录名"><span class="nav-number">2.4.2.5.</span> <span class="nav-text">第五步：去掉浏览器访问时输入的目录名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第六步：重启tomcat"><span class="nav-number">2.4.2.6.</span> <span class="nav-text">第六步：重启tomcat</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#浏览器测试"><span class="nav-number">2.4.2.7.</span> <span class="nav-text">浏览器测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomcat日志"><span class="nav-number">2.5.</span> <span class="nav-text">Tomcat日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tomcat-连接-mysql"><span class="nav-number">2.6.</span> <span class="nav-text">tomcat 连接 mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：配置mysql，创建数据库、表、用户"><span class="nav-number">2.6.1.</span> <span class="nav-text">第一步：配置mysql，创建数据库、表、用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：修改tomcat配置文件"><span class="nav-number">2.6.2.</span> <span class="nav-text">第二步：修改tomcat配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：修改-web-xml配置文件"><span class="nav-number">2.6.3.</span> <span class="nav-text">第三步：修改 web.xml配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第四步：编辑测试内容"><span class="nav-number">2.6.4.</span> <span class="nav-text">第四步：编辑测试内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第五步：重启tomcat"><span class="nav-number">2.6.5.</span> <span class="nav-text">第五步：重启tomcat</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展阅读"><span class="nav-number">3.</span> <span class="nav-text">扩展阅读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料："><span class="nav-number">4.</span> <span class="nav-text">参考资料：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是tomcat？"><span class="nav-number">2.</span> <span class="nav-text">什么是tomcat？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tomcat-安装"><span class="nav-number">3.</span> <span class="nav-text">Tomcat 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装jdk"><span class="nav-number">3.1.</span> <span class="nav-text">安装jdk</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：下载安装包"><span class="nav-number">3.1.1.</span> <span class="nav-text">第一步：下载安装包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：上传安装包到虚拟机"><span class="nav-number">3.1.2.</span> <span class="nav-text">第二步：上传安装包到虚拟机</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：移动安装包"><span class="nav-number">3.1.3.</span> <span class="nav-text">第三步：移动安装包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第四步：配置系统环境变量"><span class="nav-number">3.1.4.</span> <span class="nav-text">第四步：配置系统环境变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#校验配置是否正常"><span class="nav-number">3.1.5.</span> <span class="nav-text">校验配置是否正常</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Tomcat"><span class="nav-number">3.2.</span> <span class="nav-text">安装Tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：下载二进位制安装包"><span class="nav-number">3.2.1.</span> <span class="nav-text">第一步：下载二进位制安装包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：移动文件夹"><span class="nav-number">3.2.2.</span> <span class="nav-text">第二步：移动文件夹</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：安装"><span class="nav-number">3.2.3.</span> <span class="nav-text">第三步：安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第四步：设置开机启动"><span class="nav-number">3.2.4.</span> <span class="nav-text">第四步：设置开机启动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第五步：配置iptables端口"><span class="nav-number">3.2.5.</span> <span class="nav-text">第五步：配置iptables端口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#校验成功"><span class="nav-number">3.2.6.</span> <span class="nav-text">校验成功</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomcat的目录结构"><span class="nav-number">4.</span> <span class="nav-text">tomcat的目录结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tomcat的目录结构说明"><span class="nav-number">4.1.</span> <span class="nav-text">tomcat的目录结构说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#bin目录主要文件包括："><span class="nav-number">4.1.1.</span> <span class="nav-text">bin目录主要文件包括：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#conf目录主要的配置文件："><span class="nav-number">4.1.2.</span> <span class="nav-text">conf目录主要的配置文件：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#logs目录主要文件包括："><span class="nav-number">4.1.3.</span> <span class="nav-text">logs目录主要文件包括：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomcat-配置文件"><span class="nav-number">4.2.</span> <span class="nav-text">Tomcat 配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tomcat的核心组件"><span class="nav-number">4.3.</span> <span class="nav-text">tomcat的核心组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Server-组件"><span class="nav-number">4.3.1.</span> <span class="nav-text">Server 组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Service-组件"><span class="nav-number">4.3.2.</span> <span class="nav-text">Service 组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Connector组件"><span class="nav-number">4.3.3.</span> <span class="nav-text">Connector组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Engine组件"><span class="nav-number">4.3.4.</span> <span class="nav-text">Engine组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Host组件"><span class="nav-number">4.3.5.</span> <span class="nav-text">Host组件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomcat-常用配置"><span class="nav-number">5.</span> <span class="nav-text">tomcat 常用配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Tomcat监听80端口"><span class="nav-number">5.1.</span> <span class="nav-text">配置Tomcat监听80端口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：修改server-xml配置文件"><span class="nav-number">5.1.1.</span> <span class="nav-text">第一步：修改server.xml配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：重启tomcat"><span class="nav-number">5.1.2.</span> <span class="nav-text">第二步：重启tomcat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#校验成果"><span class="nav-number">5.1.3.</span> <span class="nav-text">校验成果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Tomcat虚拟主机"><span class="nav-number">5.2.</span> <span class="nav-text">配置Tomcat虚拟主机</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：修改配置文件"><span class="nav-number">5.2.1.</span> <span class="nav-text">第一步：修改配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：下载zrlog"><span class="nav-number">5.2.2.</span> <span class="nav-text">第二步：下载zrlog</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：数据库配置"><span class="nav-number">5.2.3.</span> <span class="nav-text">第三步：数据库配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第四步：浏览器访问-ip-8080-zrlog-，运行安装程序"><span class="nav-number">5.2.4.</span> <span class="nav-text">第四步：浏览器访问 ip:8080/zrlog ，运行安装程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第五步：去掉浏览器访问时输入的目录名"><span class="nav-number">5.2.5.</span> <span class="nav-text">第五步：去掉浏览器访问时输入的目录名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第六步：重启tomcat"><span class="nav-number">5.2.6.</span> <span class="nav-text">第六步：重启tomcat</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器测试"><span class="nav-number">5.2.7.</span> <span class="nav-text">浏览器测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomcat日志"><span class="nav-number">5.3.</span> <span class="nav-text">Tomcat日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tomcat-连接-mysql"><span class="nav-number">5.4.</span> <span class="nav-text">tomcat 连接 mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：配置mysql，创建数据库、表、用户"><span class="nav-number">5.4.1.</span> <span class="nav-text">第一步：配置mysql，创建数据库、表、用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：修改tomcat配置文件"><span class="nav-number">5.4.2.</span> <span class="nav-text">第二步：修改tomcat配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：修改-web-xml配置文件"><span class="nav-number">5.4.3.</span> <span class="nav-text">第三步：修改 web.xml配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第四步：编辑测试内容"><span class="nav-number">5.4.4.</span> <span class="nav-text">第四步：编辑测试内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第五步：重启tomcat"><span class="nav-number">5.4.5.</span> <span class="nav-text">第五步：重启tomcat</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料："><span class="nav-number">6.</span> <span class="nav-text">参考资料：</span></a></li></ol></div>
             
 
           </div>
@@ -920,7 +996,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">165.0k</span>
+    <span title="Site words total count">164.7k</span>
   
 </div>
 
@@ -1078,9 +1154,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://steve-yuan-8276.github.io/2018/06/27/week14-3-linuxNotes-tomcatPart2/';
-          this.page.identifier = '2018/06/27/week14-3-linuxNotes-tomcatPart2/';
-          this.page.title = 'linux学习笔记: tomcat的基础知识(二)';
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-18-basisOfTomcat/';
+          this.page.identifier = '2018/07/26/linuxNotes-18-basisOfTomcat/';
+          this.page.title = 'linux学习笔记:tomcat的基础知识';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://steve-yuan.disqus.com/embed.js';

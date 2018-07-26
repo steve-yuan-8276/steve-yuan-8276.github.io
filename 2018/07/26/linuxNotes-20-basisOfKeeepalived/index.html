@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="notes,linux," />
+  <meta name="keywords" content="linux,notes," />
 
 
 
@@ -81,21 +81,21 @@
 
 
 
-<meta name="description" content="写在前面最近几天忙着做公司的半年工作报告，忙的人仰马翻，今天抓紧时间赶紧把之前两天的课程补上。 这则笔记开始整理linux集群的知识。 什么是集群？所谓linux集群，就是指在生产环境中，往往不是一台服务器，而是多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 集群类型划分负载均衡集群就是指将一台服务器作为任务分发器，负责把用户的请求分发给后端多台不同的服务器处理">
-<meta name="keywords" content="notes,linux">
+<meta name="description" content="写在前面所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 主要包括以下内容：  高可用集群搭建  负载均衡集群搭建">
+<meta name="keywords" content="linux,notes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux笔记：使用keepalived配置高可用集群">
-<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/04/week15-1-linuxNotes-keepALived/index.html">
+<meta property="og:title" content="linux运维学习笔记:linux集群">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/index.html">
 <meta property="og:site_name" content="Steve的折腾学习日志">
-<meta property="og:description" content="写在前面最近几天忙着做公司的半年工作报告，忙的人仰马翻，今天抓紧时间赶紧把之前两天的课程补上。 这则笔记开始整理linux集群的知识。 什么是集群？所谓linux集群，就是指在生产环境中，往往不是一台服务器，而是多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 集群类型划分负载均衡集群就是指将一台服务器作为任务分发器，负责把用户的请求分发给后端多台不同的服务器处理">
+<meta property="og:description" content="写在前面所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 主要包括以下内容：  高可用集群搭建  负载均衡集群搭建">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm1.staticflickr.com/842/43210136571_2c453ee9df_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/843/42305840335_a872ff5b18_o.png">
 <meta property="og:image" content="https://farm2.staticflickr.com/1789/43154021772_da1662af87_o.png">
-<meta property="og:updated_time" content="2018-07-05T09:02:14.215Z">
+<meta property="og:updated_time" content="2018-07-26T08:55:38.327Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux笔记：使用keepalived配置高可用集群">
-<meta name="twitter:description" content="写在前面最近几天忙着做公司的半年工作报告，忙的人仰马翻，今天抓紧时间赶紧把之前两天的课程补上。 这则笔记开始整理linux集群的知识。 什么是集群？所谓linux集群，就是指在生产环境中，往往不是一台服务器，而是多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 集群类型划分负载均衡集群就是指将一台服务器作为任务分发器，负责把用户的请求分发给后端多台不同的服务器处理">
+<meta name="twitter:title" content="linux运维学习笔记:linux集群">
+<meta name="twitter:description" content="写在前面所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 主要包括以下内容：  高可用集群搭建  负载均衡集群搭建">
 <meta name="twitter:image" content="https://farm1.staticflickr.com/842/43210136571_2c453ee9df_o.png">
 
 
@@ -126,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/04/week15-1-linuxNotes-keepALived/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/"/>
 
 
 
 
 
-  <title>linux笔记：使用keepalived配置高可用集群 | Steve的折腾学习日志</title>
+  <title>linux运维学习笔记:linux集群 | Steve的折腾学习日志</title>
   
 
 
@@ -313,7 +313,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/04/week15-1-linuxNotes-keepALived/">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
@@ -330,7 +330,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">linux笔记：使用keepalived配置高可用集群</h1>
+          <h1 class="post-title" itemprop="name headline">linux运维学习笔记:linux集群</h1>
         
 
         <div class="post-meta">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-04T22:03:06+08:00">
-                2018-07-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-26T16:33:19+08:00">
+                2018-07-26
               </time>
             
 
@@ -383,9 +383,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/04/week15-1-linuxNotes-keepALived/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/26/linuxNotes-20-basisOfKeeepalived/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/04/week15-1-linuxNotes-keepALived/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/26/linuxNotes-20-basisOfKeeepalived/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -407,7 +407,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,023
+                  6,006
                 </span>
               
 
@@ -423,7 +423,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  9
+                  25
                 </span>
               
             </div>
@@ -444,15 +444,26 @@
       
 
       
-        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>最近几天忙着做公司的半年工作报告，忙的人仰马翻，今天抓紧时间赶紧把之前两天的课程补上。</p>
-<p>这则笔记开始整理linux集群的知识。</p>
-<h2 id="什么是集群？"><a href="#什么是集群？" class="headerlink" title="什么是集群？"></a>什么是集群？</h2><p>所谓linux集群，就是指在生产环境中，往往不是一台服务器，而是多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。</p>
-<h3 id="集群类型划分"><a href="#集群类型划分" class="headerlink" title="集群类型划分"></a>集群类型划分</h3><h4 id="负载均衡集群"><a href="#负载均衡集群" class="headerlink" title="负载均衡集群"></a>负载均衡集群</h4><p>就是指将一台服务器作为任务分发器，负责把用户的请求分发给后端多台不同的服务器处理，实现负载均衡的开源软件有LVS、keepalived、haproxy、nginx，商业软件有F5、Netscaler等。</p>
-<h4 id="高可用集群"><a href="#高可用集群" class="headerlink" title="高可用集群"></a>高可用集群</h4><p>即“HA”集群，也常称作“双机热备”，用于关键业务。核心原理都是通过心跳线连接两台服务器，正常情况下一台用于提供服务，另外一台作为冗余，当提供服务的机器宕机，冗余将接替继续提供服务。实现高可用的开源软件有：heartbeat、keepalived。</p>
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。</p>
+<p>主要包括以下内容：</p>
+<ul>
+<li><p>高可用集群搭建</p>
+</li>
+<li><p>负载均衡集群搭建</p>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="集群简介"><a href="#集群简介" class="headerlink" title="集群简介"></a>集群简介</h2><ul>
+<li>负载均衡集群</li>
+</ul>
+<p>就是指将一台服务器作为任务分发器，负责把用户的请求分发给后端多台不同的服务器处理，实现负载均衡的开源软件有LVS、keepalived、haproxy、nginx，商业软件有F5、Netscaler等。</p>
+<ul>
+<li>高可用集群</li>
+</ul>
+<p>即“HA”集群，也常称作“双机热备”，用于关键业务。核心原理都是通过心跳线连接两台服务器，正常情况下一台用于提供服务，另外一台作为冗余，当提供服务的机器宕机，冗余将接替继续提供服务。实现高可用的开源软件有：heartbeat、keepalived。</p>
 <p><strong>注：</strong>心跳(heartbeat)是在群集中节点间传递的通讯包,用于监测群集中的节点、网络和网络接口的工作状态，防止节点的孤立，以保证群集的正常运作。</p>
 <p><strong>高可用集群是这则笔记讲的重点，后面用keepalived这个进行配置。</strong></p>
-<a id="more"></a>
-<h3 id="Keepalived工作原理"><a href="#Keepalived工作原理" class="headerlink" title="Keepalived工作原理"></a><code>Keepalived</code>工作原理</h3><p>keepalived通过VRRP<code>Virtual Router Redundancy Protocol</code>，虚拟路由冗余协议来实现高可用。VRBP是实现路由高可用的一种通信协议，在这个协议里会将多台功能相同的路由器组成一个小组，这个小组里会有1个master角色和N（N&gt;=1）个backup角色。工作时，master会通过组播的形式向各个backup发送VRRP协议的数据包，当backup收不到master发来的VRRP数据包时，就会认为master宕机了。此时就需要根据各个backup的优先级来决定谁成为新的mater。</p>
+<h2 id="利用keepalived搭建高可用集群"><a href="#利用keepalived搭建高可用集群" class="headerlink" title="利用keepalived搭建高可用集群"></a>利用<code>keepalived</code>搭建高可用集群</h2><h3 id="Keepalived工作原理"><a href="#Keepalived工作原理" class="headerlink" title="Keepalived工作原理"></a><code>Keepalived</code>工作原理</h3><p>keepalived通过VRRP<code>Virtual Router Redundancy Protocol</code>，虚拟路由冗余协议来实现高可用。VRBP是实现路由高可用的一种通信协议，在这个协议里会将多台功能相同的路由器组成一个小组，这个小组里会有1个master角色和N（N&gt;=1）个backup角色。工作时，master会通过组播的形式向各个backup发送VRRP协议的数据包，当backup收不到master发来的VRRP数据包时，就会认为master宕机了。此时就需要根据各个backup的优先级来决定谁成为新的mater。</p>
 <p>Keepalived要有三个模块，分别是core、check和vrrp，他们的作用如下：</p>
 <ol>
 <li><p>core模块为keepalived的核心，负责主进程的启动、维护以及全局配置文件的加载和解析；</p>
@@ -462,7 +473,7 @@
 <li><p>vrrp模块是来实现VRRP协议的；</p>
 </li>
 </ol>
-<h3 id="keepalived配置高可用集群"><a href="#keepalived配置高可用集群" class="headerlink" title="keepalived配置高可用集群"></a>keepalived配置高可用集群</h3><p><strong>重要概念：Virtual IP</strong></p>
+<h3 id="keepalived配置高可用集群"><a href="#keepalived配置高可用集群" class="headerlink" title="keepalived配置高可用集群"></a><code>keepalived</code>配置高可用集群</h3><p><strong>重要概念：Virtual IP</strong></p>
 <p>开始配置之前，先要了解一个概念VIP，这里的VIP跟我们平常理解的不太一样，而是“Virtual IP”,即“虚拟IP”。这个IP是由Keepalived给服务器配置上的，服务器靠这个VIP对外提供服务，当master机器宕机，VIP被分配到backup上。在实际应用中，服务器的切换用户是感知不到的，所以称之为Virtual IP。</p>
 <h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>准备两台虚拟机，其中</p>
 <ul>
@@ -511,7 +522,88 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">systemctl start keepalived</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">##### TroubleShooting: keepalived 无法启动</span><br><span class="line"></span><br><span class="line">如图所示，在master和backup机器上都出现了keepalived无法启动的现象。</span><br><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/837/42306418775_2f0846498e_o.png)</span><br><span class="line"></span><br><span class="line">排查了一下，都跟nginx有关，解决方案如下：</span><br><span class="line"></span><br><span class="line">**master：**重启了nginx，再次启动keepalived就OK了。</span><br><span class="line"></span><br><span class="line">**backup：**这个排查比较复杂。先查了错误日志，没看明白；又实用nginx -t 检查了配置文件，发现了错误提示：</span><br><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/841/43160968952_5641af5817_o.png)</span><br><span class="line"></span><br><span class="line">提示缺少这个文件`/tmp/nginx/test.log`，touch目录创建一个，再检查发现OK。</span><br><span class="line"></span><br><span class="line">![](https://farm2.staticflickr.com/1808/28341514467_0741a2d649_o.png)</span><br><span class="line"></span><br><span class="line">之后，再次重启nginx、keepalived,终于都重新启动了。</span><br><span class="line"></span><br><span class="line">#### 测试效果</span><br><span class="line"></span><br><span class="line">基本思路，就是认为制造master机器故障，然后看看访问会不会自动切换到backup服务器上。</span><br><span class="line"></span><br><span class="line">![](https://farm2.staticflickr.com/1805/42306628125_c671148573_o.png)</span><br><span class="line"></span><br><span class="line">我们可以尝试：</span><br><span class="line"></span><br><span class="line">1. 关闭master的nginx服务；</span><br><span class="line"></span><br><span class="line">2. 在master上增加iptabls规则限制vrrp发包</span><br><span class="line"></span><br><span class="line">3. master主机关闭keepalived</span><br><span class="line"></span><br><span class="line">通过实验，来测试keepalived是否正常工作。</span><br><span class="line"></span><br><span class="line">注：iptables配置规则语句</span><br></pre></td></tr></table></figure>
 <p>iptables -I OUTPUT -p vrrp -j DROP </p>
-<p>systemctl restart iptables<br><code>`</code></p>
+<p>systemctl restart iptables<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 负载均衡集群</span><br><span class="line"></span><br><span class="line">LB集群是load balance 集群的简写，也就是这里所说的负载均衡集群；</span><br><span class="line"></span><br><span class="line">根据维基百科的解释，负载平衡（Load balancing）是一种计算机网络技术，用来在多个计算机（计算机集群）、网络连接、CPU、磁盘驱动器或其他资源中分配负载，以达到最佳化资源使用、最大化吞吐率、最小化响应时间、同时避免过载的目的。简而言之，负载均衡的目的，就在于平衡负载，给用户提供优质，可靠，稳定的服务。![](https://farm1.staticflickr.com/847/43155971872_f5c54312e0_o.jpg)</span><br><span class="line">而集群，就是一组部署有相同应用的服务器。例如，我们可以将一个网站部署在采用均衡负载部署在一个集群服务器，可以将用户的请求根据特定规则转发到应用服务器上进行处理，用户的请求无论连接到哪台服务器上，都能得到相同的处理。这实现了完整的集群处理系统。</span><br><span class="line"></span><br><span class="line">### 实现LB集群的硬件和软件：</span><br><span class="line"></span><br><span class="line">#### 硬件LB</span><br><span class="line"></span><br><span class="line">* F5 公司的 BIG-IP系列</span><br><span class="line"></span><br><span class="line">* Citrix 公司的 NetScaler系列</span><br><span class="line"></span><br><span class="line">* A10 公司的 AX系列</span><br><span class="line"></span><br><span class="line">#### 软件LB</span><br><span class="line"></span><br><span class="line">* 四层：LVS(Linux VirtualServer)</span><br><span class="line"></span><br><span class="line">* 七层：Nginx,HAProxy</span><br><span class="line"></span><br><span class="line">### 主要负载均衡方案</span><br><span class="line"></span><br><span class="line">#### HTTP 重定向负载均衡 </span><br><span class="line"></span><br><span class="line">仅适合WEB 服务器。用户发出请求时，负载均衡服务器会根据HTTP请求，重新计算出实际的WEB服务器地址，通过302重定向相应发送给用户浏览器。用户浏览器再根据302响应信息，对实际的WEB服务器发出请求。</span><br><span class="line"></span><br><span class="line">HTTP重定向方案有点是比较简单，缺点是性能比较差，需要2次请求才能返回实际结果,还有就是仅适合HTTP服务器使用</span><br><span class="line"></span><br><span class="line">#### DNS 域名解析负载均衡</span><br><span class="line"></span><br><span class="line">在DNS中存储了一个域名的多个主机地址，每次域名解析请求，都可以根据负载均衡算法返回一个不同的IP地址。这样多个WEB服务器就构成了一个集群，并由DNS服务器提供了负载均衡服务。</span><br><span class="line"></span><br><span class="line">DNS域名解析负载均衡的优点是由DNS来完成负载均衡工作，服务本身不用维护负载均衡服务器的工作。但是，由于负载均衡服务器不是自己维护，没法做精细控制，而且DNS在客户端往往带有缓存，服务器的变更很难及时反映到客户端上。</span><br><span class="line"></span><br><span class="line">#### 反向代理负载均衡</span><br><span class="line"></span><br><span class="line">Nginx服务器就可以部署为反向代理服务器，解析客户端请求，根据负载均衡算法转发到不同的后台服务器上。用户和后台服务器之间不再有直接的链接。请求，响应都由反向代理服务器进行转发，实现WEB 应用的负载均衡。</span><br><span class="line"></span><br><span class="line">优点是和负载均衡服务集成在一起，部署简单。缺点是所有的请求回应都需要经过反向代理服务器。其本身可能会成为性能的瓶颈。</span><br><span class="line"></span><br><span class="line">#### IP负载均衡</span><br><span class="line"></span><br><span class="line">用户请求包到达负载均衡服务器后，负载均衡服务器在操作系统内核层获取网络数据包，根据负载均衡算法获取真实后台服务器地址, 然后将数据包的目标地址改为后台服务器ip, 转发给内部服务器。</span><br><span class="line"></span><br><span class="line">IP均衡负载全部处理过程都在内核层(Ring 0)进行。和七层负载均衡相比，具有更好的性能。但是由于所有的响应包都要经过负载均衡服务器，负载均衡服务器的网卡带宽，很容易成为系统的瓶颈。</span><br><span class="line"></span><br><span class="line">#### 数据链路层负载均衡</span><br><span class="line"></span><br><span class="line">数据链路层是工作在TCP/IP协议最底层的数据链路层，采用数据帧进行通信，每个网卡都具有唯一的MAC地址，数据帧用MAC地址来标识数据的来源与目的地。</span><br><span class="line"></span><br><span class="line">数据链路层负载均衡，是指在数据分发过程中不修改IP地址，只修改目的MAC地址，通过配置真实物理服务器集群所有机器虚拟IP和负载均衡服务器IP一致，从而达到不修改数据包的源地址和目的地址就可以进行数据分发的目的。</span><br><span class="line"></span><br><span class="line">数据链路层负载均衡是目前使用最广泛的一种负载均衡方式。开源软件LVS(Linux Virtual Server)，同时支持上面的IP负载均衡和数据链路层负载均衡。</span><br><span class="line">### LVS是什么</span><br><span class="line">LVS是一个实现负载均衡集群的开源软件项目，其架构从逻辑上可分为三层：</span><br><span class="line"></span><br><span class="line">* 调度层(Director)</span><br><span class="line"> </span><br><span class="line">* server集群层(Real server)</span><br><span class="line"></span><br><span class="line">* 共享存储层</span><br><span class="line"></span><br><span class="line">#### LVS三种工作模式: </span><br><span class="line"></span><br><span class="line">##### `LVS NAT`模式</span><br><span class="line"></span><br><span class="line">![](https://farm2.staticflickr.com/1804/41396035130_b3f82a1570_o.jpg)</span><br><span class="line"></span><br><span class="line">这种模式借助iptables的nat表来实现;用户的请求到分发器后，通过预设的iptables规则，调度器将请求的目标ip即vip地址改为`Real server`的ip(内网ip)； 返回的数据包也经过调度器，调度器再把源地址修改为vip,再返回给客户端；</span><br><span class="line"></span><br><span class="line">* 优点：在nat模式中，只需要分发器有公网ip即可，所以比较节省公网ip资源;</span><br><span class="line"></span><br><span class="line">* 缺点：用户请求的数据包和返回给用户的数据包全部经过分发器，所以分发器（调度器）成为瓶颈;</span><br><span class="line"></span><br><span class="line">##### `LVS IP Tunnel`模式</span><br><span class="line"></span><br><span class="line">![](https://farm2.staticflickr.com/1822/28336955027_bf66cfbb54_o.jpg)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">调度器将请求的数据包封装加上real server的ip头，加密通过ip隧道转发到后端的`real server`上，而`real server`会直接把数据返回给客户端，而不再经过调度器；</span><br><span class="line"></span><br><span class="line">##### `LVS DR`模式</span><br><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/918/42487540814_bbcbcd8151_o.jpg)</span><br><span class="line"></span><br><span class="line">调度器将请求来的数据包的目标mac地址改为real server的mac地址，返回的时候也不经过调度器，直接返回给客户端；</span><br><span class="line"></span><br><span class="line">#### LVS的调度算法：</span><br><span class="line"></span><br><span class="line">##### 轮叫调度 `Round Robin` (简称rr) </span><br><span class="line"></span><br><span class="line">将外部请求按顺序轮流分配到集群中的真实服务器上,它均等地对待每一台服务器,而不管服务器上实际的连接数和系统负载</span><br><span class="line"></span><br><span class="line">##### 加权轮叫 `Weighted Round Robin` (简称wrr)</span><br><span class="line"></span><br><span class="line">根据真实服务器的不同处理能力来调度访问请求，并动态地调整其权重，能者多劳，合理使用服务器资源。</span><br><span class="line"></span><br><span class="line">##### 最少链接 `least connection` (简称LC)</span><br><span class="line"></span><br><span class="line">动态地将网络请求调度到已建立的链接数最少的服务器上，如果集群系统的性能彼此都差不多，采用“最小连接&quot;效果较好。</span><br><span class="line"></span><br><span class="line">##### 加权最少链接 `Weighted Least Connections` (简称WLC)</span><br><span class="line"></span><br><span class="line">在集群中服务器之间性能差异较大的情况下，结合浏览器权重和最少链接两个方法进行请求分配;</span><br><span class="line"></span><br><span class="line">##### 基于局部性的最小连接 `Locality-Based Least Connections`（简称LBLC）</span><br><span class="line"></span><br><span class="line">针对请求报文的目标IP地址的负载均衡调度，将相同目标IP地址的请求调度到同一台服务器，来提高各台服务器的访问局部性和主存Cache命中率。目前主要用于Cache集群系统。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">##### 带复制的基于局部性最小连接 `Locality-Based Least Connections with Replication`（简称LBLCR）</span><br><span class="line"></span><br><span class="line">也是针对目标IP地址的负载均衡，不同之处是：它要维护从一个目标IP地址到一组服务器的映射，而LBLC算法是维护从一个目标IP地址到一台服务器的映射。</span><br><span class="line"></span><br><span class="line">LBLCR算法先根据请求的目标IP地址找出该目标IP地址对应的服务器组，按“最小连接”原则从该服务器组中选出一台服务器，若服务器没有超载，则将请求发送到该服务器；若服务器超载，则按“最小连接”原则从整个集群中选出一台服务器，将该服务器加入到服务器组中，将请求发送到该服务器。同时，当该服务器组有一段时间没有被修改，将最忙的服务器从服务器组中删除，以降低复制的程度。</span><br><span class="line"></span><br><span class="line">##### 目标地址散列调度 `Destination Hashing dh`</span><br><span class="line"></span><br><span class="line">针对目标IP地址的负载均衡的，但它是一种静态映射算法，通过一个散列（hash）函数将一个目标IP地址映射到一台服务器。目标地址散列调度算法先根据请求的目标IP地址，作为散列键（hash key)从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。</span><br><span class="line"></span><br><span class="line">##### 源地址散列调度 `Source Hashing sh`</span><br><span class="line"></span><br><span class="line">该算法正好与目标地址散列调度算法相反，它根据请求的源IP地址，作为散列键从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。它的算法流程与目标地址散列调度算法的基本相似，只不过将请求的目标IP地址换成请求的源IP地址。</span><br><span class="line">### LVS NAT模式搭建</span><br><span class="line"></span><br><span class="line">#### 准备工作：</span><br><span class="line"></span><br><span class="line">测试安装LVS NAT模式，至少需要有三台虚拟机：</span><br><span class="line"></span><br><span class="line">* 调度器（dir）两张网卡，一个内网IP：172.16.155.120，一个”外网IP“：172.16.15.99（vmware仅主机模式）；</span><br><span class="line"></span><br><span class="line">* 真实服务器rs2，内网IP：172.16.155.132，设置网关为172.16.155.120；</span><br><span class="line"></span><br><span class="line">* 真实服务器rs1，内网IP：172.16.155.128，设置网关为172.16.155.120；</span><br><span class="line"></span><br><span class="line">这里用来作为dir调度器的，是上一节笔记中克隆的虚拟机local-linux00，这里的”外网ip“是虚拟的，并非真实的外网ip。具体的设置方法如下：</span><br><span class="line"></span><br><span class="line">- 查看当前网课配置信息</span><br><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/923/42366622215_270432b64c_o.png)</span><br><span class="line"></span><br><span class="line">进入`/etc/sysconfig/network-scripts` 文件夹，复制网卡配置文件，并重命名为`ifcfg-ens33:1`</span><br><span class="line"></span><br><span class="line">![](https://farm2.staticflickr.com/1766/42552258184_767b2c9024_o.png)</span><br><span class="line"></span><br><span class="line">编辑`ifcfg-ens33:1`文件，修改ip地址：</span><br></pre></td></tr></table></figure></p>
+<p>vi ifcfg-ens33:1</p>
+<p>//将ip地址设定为172.16.15.99<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/844/42366871715_42d173238d_o.png)</span><br><span class="line"></span><br><span class="line">保存后执行以下命令重启网卡</span><br></pre></td></tr></table></figure></p>
+<p>/etc/init.d/network restart<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">另外，还要关闭selinux和防火墙</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 关闭selinux</span><br></pre></td></tr></table></figure></p>
+<p>setenforce 0<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 清空防火墙规则</span><br></pre></td></tr></table></figure></p>
+<p>//备份iptables规则<br>cp /etc/sysconfig/iptables /etc/sysconfig/iptables.bak</p>
+<p>//清空防火墙规则<br>iptables -F<br>service iptables save<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 配置分发器dir</span><br><span class="line"></span><br><span class="line">安装LVS核心工具ipvsdam</span><br></pre></td></tr></table></figure></p>
+<p>yum install -y ipvsadm<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">编写配置脚本</span><br></pre></td></tr></table></figure></p>
+<p>vim /usr/local/sbin/lvs_nat.sh</p>
+<p>//增加如下配置内容：</p>
+<p>#! /bin/bash</p>
+<h1 id="director-服务器上开启路由转发功能"><a href="#director-服务器上开启路由转发功能" class="headerlink" title="director 服务器上开启路由转发功能"></a>director 服务器上开启路由转发功能</h1><p>echo 1 &gt; /proc/sys/net/ipv4/ip_forward</p>
+<h1 id="关闭icmp的重定向"><a href="#关闭icmp的重定向" class="headerlink" title="关闭icmp的重定向"></a>关闭icmp的重定向</h1><p>echo 0 &gt; /proc/sys/net/ipv4/conf/all/send_redirects<br>echo 0 &gt; /proc/sys/net/ipv4/conf/default/send_redirects</p>
+<h1 id="注意区分网卡名字，这里两个网卡分别为ens33和ens37"><a href="#注意区分网卡名字，这里两个网卡分别为ens33和ens37" class="headerlink" title="注意区分网卡名字，这里两个网卡分别为ens33和ens37"></a>注意区分网卡名字，这里两个网卡分别为ens33和ens37</h1><p>echo 0 &gt; /proc/sys/net/ipv4/conf/ens33/send_redirects<br>echo 0 &gt; /proc/sys/net/ipv4/conf/ens38/send_redirects</p>
+<h1 id="director-设置nat防火墙"><a href="#director-设置nat防火墙" class="headerlink" title="director 设置nat防火墙"></a>director 设置nat防火墙</h1><p>iptables -t nat -F<br>iptables -t nat -X<br>iptables -t nat -A POSTROUTING -s 172.16.155.0/24  -j MASQUERADE</p>
+<h1 id="director设置ipvsadm"><a href="#director设置ipvsadm" class="headerlink" title="director设置ipvsadm"></a>director设置ipvsadm</h1><p>IPVSADM=’/usr/sbin/ipvsadm’<br>$IPVSADM -C<br>$IPVSADM -A -t 172.16.13.129:80 -s wlc -p 3<br>$IPVSADM -a -t 172.16.13.129:80 -r 172.16.155.132:80 -m -w 1<br>$IPVSADM -a -t 172.16.13.129:80 -r 172.16.155.128:80 -m -w 1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 执行脚本</span><br></pre></td></tr></table></figure></p>
+<p>bash /usr/local/sbin/lvs_nat.sh<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### rs服务器配置</span><br><span class="line"></span><br><span class="line">修改rs网络配置，将网关改为dir的外网地址172.16.13.129</span><br><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/926/42322478455_05bffaec78_o.png)</span><br><span class="line"></span><br><span class="line">至此配置就成果了，使用curl命令来测试实验效果。</span><br><span class="line"></span><br><span class="line">### LVS DR模式搭建</span><br><span class="line"></span><br><span class="line">#### 准备工作</span><br><span class="line"></span><br><span class="line">DR模式同样需要三台虚拟机，三台机器只需要有“公网”IP，但在这种模式下又多了一个VIP。</span><br><span class="line"></span><br><span class="line">* 调度器dir：172.16.111.100</span><br><span class="line"></span><br><span class="line">* 真实服务器rs1：172.16.111.110</span><br><span class="line"></span><br><span class="line">* 真实服务器rs2：172.16.111.120</span><br><span class="line"></span><br><span class="line">* VIP:172.16.111.200</span><br><span class="line"></span><br><span class="line">#### dir机器上写入脚本</span><br></pre></td></tr></table></figure></p>
+<p>vim /usr/local/sbin/lvs_dr.sh</p>
+<p>//增加如下脚本内容：</p>
+<p>#! /bin/bash<br>echo 1 &gt; /proc/sys/net/ipv4/ip_forward<br>ipv=/usr/sbin/ipvsadm<br>vip=172.16.111.200<br>rs1=172.16.111.110<br>rs2=172.16.111.120</p>
+<p>#注意这里的网卡名字<br>ifdown ens33   #为了不让网卡设置多次<br>ifup ens33<br>ifconfig ens33:2 $vip broadcast $vip netmask 255.255.255.255 up<br>route add -host $vip dev ens33:2<br>$ipv -C<br>$ipv -A -t $vip:80 -s rr<br>$ipv -a -t $vip:80 -r $rs1:80 -g -w 1<br>$ipv -a -t $vip:80 -r $rs2:80 -g -w 1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 启动脚本</span><br><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/841/29361801558_af5b41c5a0_o.png)</span><br><span class="line"></span><br><span class="line">#### 在rs1与rs2上编写同样脚本</span><br></pre></td></tr></table></figure></p>
+<p>vim /usr/local/sbin/lvs_rs.sh</p>
+<p>//增加如下脚本内容：</p>
+<p>#/bin/bash<br>vip=172.16.111.200</p>
+<p>#把vip绑定在lo上，是为了实现rs直接把结果返回给客户端<br>ifconfig lo:0 $vip broadcast $vip netmask 255.255.255.255 up<br>route add -host $vip lo:0</p>
+<p>#以下操作为更改arp内核参数，目的是为了让rs顺利发送mac地址给客户端</p>
+<p>#参考文档<a href="http://www.cnblogs.com/lgfeng/archive/2012/10/16/2726308.html" target="_blank" rel="noopener">www.cnblogs.com/lgfeng/archive/2012/10/16/2726308.html</a><br>echo “1” &gt;/proc/sys/net/ipv4/conf/lo/arp_ignore<br>echo “2” &gt;/proc/sys/net/ipv4/conf/lo/arp_announce<br>echo “1” &gt;/proc/sys/net/ipv4/conf/all/arp_ignore<br>echo “2” &gt;/proc/sys/net/ipv4/conf/all/arp_announce<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 启动脚本</span><br></pre></td></tr></table></figure></p>
+<p>sh /usr/local/sbin/lvs_rs.sh<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## keepalived + LVS</span><br><span class="line"></span><br><span class="line">LVS架构中，不管是NAT模式还是DR模式，当后端的RS宕掉时，调度器依然会把请求转发到宕掉的RS上，这样的结果并不是我们想要的。keepalived就可以解决该问题。</span><br><span class="line"></span><br><span class="line">keepalived已经嵌入了LVS功能，在调度器上只要安装了keepalived，就不用再安装ipvsadm了，也不用去编写LVS相关的脚本了。</span><br><span class="line"></span><br><span class="line">完整的keepalived+LVS架构需要有两台调度器实现高可用，提供调度服务的只需要一台，另外一台作为备用。</span><br><span class="line"></span><br><span class="line">### 准备工作</span><br><span class="line"></span><br><span class="line">准备三台机器分别为：</span><br><span class="line">* dir（安装keepalived）172.16.155.120</span><br><span class="line"></span><br><span class="line">* rs1:172.16.155.132</span><br><span class="line"></span><br><span class="line">* rs2:172.16.155.128</span><br><span class="line"></span><br><span class="line">* vip:172.16.155.200</span><br><span class="line"></span><br><span class="line">### dir机器上修改keepalived配置文件</span><br></pre></td></tr></table></figure></p>
+<p>vim /etc/keepalived/keepalived.conf</p>
+<p>删除之前的配置，增加如下配置内容：</p>
+<p>vrrp_instance VI_1 {</p>
+<pre><code>#备用服务器上为 BACKUP
+state MASTER
+#绑定vip的网卡为ens33，你的网卡和阿铭的可能不一样，这里需要你改一下
+interface ens33
+virtual_router_id 51
+#备用服务器上为90
+priority 100
+advert_int 1
+authentication {
+    auth_type PASS
+    auth_pass aminglinux
+}
+virtual_ipaddress {
+    172.16.111.200
+}
+</code></pre><p>}<br>virtual_server 172.16.111.200 80 {</p>
+<pre><code>#(每隔10秒查询realserver状态)
+delay_loop 10
+#(lvs 算法)
+lb_algo wlc
+#(DR模式)
+lb_kind DR
+#(同一IP的连接60秒内被分配到同一台realserver)
+persistence_timeout 60
+#(用TCP协议检查realserver状态)
+protocol TCP
+real_server 172.16.111.110 80 {
+    #(权重)
+    weight 100
+    TCP_CHECK {
+    #(10秒无响应超时)
+    connect_timeout 10
+    nb_get_retry 3
+    delay_before_retry 3
+    connect_port 80
+    }
+}
+real_server 172.16.111.120 80 {
+    weight 100
+    TCP_CHECK {
+    connect_timeout 10
+    nb_get_retry 3
+    delay_before_retry 3
+    connect_port 80
+    }
+ }
+</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">由于之前执行过LVS的脚本，可能需要做以下操作：</span><br><span class="line"></span><br><span class="line">- 把之前的ipvsadm规则清空</span><br></pre></td></tr></table></figure></p>
+<p>ipvsadm -C<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 把之前设置的VIP删除掉</span><br></pre></td></tr></table></figure></p>
+<p>systemctl restart network<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 在keepalived的配置文件中定义的LVS模式为DR模式，所以需要在两台rs上执行lvs_dr_rr.sh脚本，在上一节设置的脚本。</span><br></pre></td></tr></table></figure></p>
+<p>sh /usr/local/sbin/lvs_dr_rs.ch<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 启动keepalived</span><br></pre></td></tr></table></figure></p>
+<p>systemctl start keepalived<br><code>`</code></p>
 
       
     </div>
@@ -532,7 +624,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://steve-yuan-8276.github.io/2018/07/04/week15-1-linuxNotes-keepALived/" title="linux笔记：使用keepalived配置高可用集群">https://steve-yuan-8276.github.io/2018/07/04/week15-1-linuxNotes-keepALived/</a>
+    <a href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/" title="linux运维学习笔记:linux集群">https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -547,9 +639,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/notes/" rel="tag"># notes</a>
-          
             <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
           
         </div>
       
@@ -562,8 +654,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/27/week14-3-linuxNotes-tomcatPart2/" rel="next" title="linux学习笔记: tomcat的基础知识(二)">
-                <i class="fa fa-chevron-left"></i> linux学习笔记: tomcat的基础知识(二)
+              <a href="/2018/07/26/linuxNotes-19-basisOfRegularExpression/" rel="next" title="linux运维学习笔记:正则表达式">
+                <i class="fa fa-chevron-left"></i> linux运维学习笔记:正则表达式
               </a>
             
           </div>
@@ -571,10 +663,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/05/week15-2-linuxNotes-LVS/" rel="prev" title="linux笔记：均衡负载集群的配置">
-                linux笔记：均衡负载集群的配置 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -665,7 +753,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -755,7 +843,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是集群？"><span class="nav-number">2.</span> <span class="nav-text">什么是集群？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集群类型划分"><span class="nav-number">2.1.</span> <span class="nav-text">集群类型划分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#负载均衡集群"><span class="nav-number">2.1.1.</span> <span class="nav-text">负载均衡集群</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高可用集群"><span class="nav-number">2.1.2.</span> <span class="nav-text">高可用集群</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Keepalived工作原理"><span class="nav-number">2.2.</span> <span class="nav-text">Keepalived工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keepalived配置高可用集群"><span class="nav-number">2.3.</span> <span class="nav-text">keepalived配置高可用集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备工作"><span class="nav-number">2.3.1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master机器配置"><span class="nav-number">2.3.2.</span> <span class="nav-text">master机器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：编辑配置文件"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">第一步：编辑配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：编辑监控脚本"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">第二步：编辑监控脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：启动keepalived"><span class="nav-number">2.3.2.3.</span> <span class="nav-text">第三步：启动keepalived</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#backup-服务器配置"><span class="nav-number">2.3.3.</span> <span class="nav-text">backup 服务器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：编辑配置文件-1"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">第一步：编辑配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：编辑监控脚本-1"><span class="nav-number">2.3.3.2.</span> <span class="nav-text">第二步：编辑监控脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：启动keepalived-1"><span class="nav-number">2.3.3.3.</span> <span class="nav-text">第三步：启动keepalived</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集群简介"><span class="nav-number">2.</span> <span class="nav-text">集群简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用keepalived搭建高可用集群"><span class="nav-number">3.</span> <span class="nav-text">利用keepalived搭建高可用集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Keepalived工作原理"><span class="nav-number">3.1.</span> <span class="nav-text">Keepalived工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keepalived配置高可用集群"><span class="nav-number">3.2.</span> <span class="nav-text">keepalived配置高可用集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备工作"><span class="nav-number">3.2.1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master机器配置"><span class="nav-number">3.2.2.</span> <span class="nav-text">master机器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：编辑配置文件"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">第一步：编辑配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：编辑监控脚本"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">第二步：编辑监控脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：启动keepalived"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">第三步：启动keepalived</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#backup-服务器配置"><span class="nav-number">3.2.3.</span> <span class="nav-text">backup 服务器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：编辑配置文件-1"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">第一步：编辑配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：编辑监控脚本-1"><span class="nav-number">3.2.3.2.</span> <span class="nav-text">第二步：编辑监控脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：启动keepalived-1"><span class="nav-number">3.2.3.3.</span> <span class="nav-text">第三步：启动keepalived</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director-服务器上开启路由转发功能"><span class="nav-number"></span> <span class="nav-text">director 服务器上开启路由转发功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关闭icmp的重定向"><span class="nav-number"></span> <span class="nav-text">关闭icmp的重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意区分网卡名字，这里两个网卡分别为ens33和ens37"><span class="nav-number"></span> <span class="nav-text">注意区分网卡名字，这里两个网卡分别为ens33和ens37</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director-设置nat防火墙"><span class="nav-number"></span> <span class="nav-text">director 设置nat防火墙</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director设置ipvsadm"><span class="nav-number"></span> <span class="nav-text">director设置ipvsadm</span></a></div>
             
 
           </div>
@@ -789,7 +877,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">165.0k</span>
+    <span title="Site words total count">164.7k</span>
   
 </div>
 
@@ -947,9 +1035,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/04/week15-1-linuxNotes-keepALived/';
-          this.page.identifier = '2018/07/04/week15-1-linuxNotes-keepALived/';
-          this.page.title = 'linux笔记：使用keepalived配置高可用集群';
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/';
+          this.page.identifier = '2018/07/26/linuxNotes-20-basisOfKeeepalived/';
+          this.page.title = 'linux运维学习笔记:linux集群';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://steve-yuan.disqus.com/embed.js';

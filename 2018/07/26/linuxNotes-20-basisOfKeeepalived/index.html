@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="notes,linux," />
 
 
 
@@ -81,20 +81,21 @@
 
 
 
-<meta name="description" content="title: linux运维学习笔记:linux集群date: 2018-07-26 16:33:19categories: linux tags: [linux, notes]写在前面所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 主要包括以下内容：  高可用集群搭建  负载均衡集群搭">
+<meta name="description" content="写在前面所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 主要包括以下内容：  高可用集群搭建  负载均衡集群搭建">
+<meta name="keywords" content="notes,linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Steve的折腾学习日志">
+<meta property="og:title" content="linux运维学习笔记:linux集群">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/index.html">
 <meta property="og:site_name" content="Steve的折腾学习日志">
-<meta property="og:description" content="title: linux运维学习笔记:linux集群date: 2018-07-26 16:33:19categories: linux tags: [linux, notes]写在前面所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 主要包括以下内容：  高可用集群搭建  负载均衡集群搭">
+<meta property="og:description" content="写在前面所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 主要包括以下内容：  高可用集群搭建  负载均衡集群搭建">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm1.staticflickr.com/842/43210136571_2c453ee9df_o.png">
 <meta property="og:image" content="https://farm1.staticflickr.com/843/42305840335_a872ff5b18_o.png">
 <meta property="og:image" content="https://farm2.staticflickr.com/1789/43154021772_da1662af87_o.png">
-<meta property="og:updated_time" content="2018-07-27T01:56:43.503Z">
+<meta property="og:updated_time" content="2018-07-27T02:11:38.200Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Steve的折腾学习日志">
-<meta name="twitter:description" content="title: linux运维学习笔记:linux集群date: 2018-07-26 16:33:19categories: linux tags: [linux, notes]写在前面所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 主要包括以下内容：  高可用集群搭建  负载均衡集群搭">
+<meta name="twitter:title" content="linux运维学习笔记:linux集群">
+<meta name="twitter:description" content="写在前面所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 主要包括以下内容：  高可用集群搭建  负载均衡集群搭建">
 <meta name="twitter:image" content="https://farm1.staticflickr.com/842/43210136571_2c453ee9df_o.png">
 
 
@@ -131,7 +132,7 @@
 
 
 
-  <title> | Steve的折腾学习日志</title>
+  <title>linux运维学习笔记:linux集群 | Steve的折腾学习日志</title>
   
 
 
@@ -329,7 +330,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">linux运维学习笔记:linux集群</h1>
         
 
         <div class="post-meta">
@@ -351,6 +352,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -384,7 +407,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6,029
+                  6,006
                 </span>
               
 
@@ -421,9 +444,7 @@
       
 
       
-        <hr>
-<p>title: linux运维学习笔记:linux集群<br>date: 2018-07-26 16:33:19<br>categories: linux</p>
-<h2 id="tags-linux-notes"><a href="#tags-linux-notes" class="headerlink" title="tags: [linux, notes]"></a>tags: [linux, notes]</h2><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。</p>
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。</p>
 <p>主要包括以下内容：</p>
 <ul>
 <li><p>高可用集群搭建</p>
@@ -603,7 +624,7 @@ real_server 172.16.111.120 80 {
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/" title="">https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/</a>
+    <a href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/" title="linux运维学习笔记:linux集群">https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -615,6 +636,14 @@ real_server 172.16.111.120 80 {
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
       
 
       
@@ -818,7 +847,7 @@ real_server 172.16.111.120 80 {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags-linux-notes"><span class="nav-number">1.</span> <span class="nav-text">tags: [linux, notes]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">2.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集群简介"><span class="nav-number">3.</span> <span class="nav-text">集群简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用keepalived搭建高可用集群"><span class="nav-number">4.</span> <span class="nav-text">利用keepalived搭建高可用集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Keepalived工作原理"><span class="nav-number">4.1.</span> <span class="nav-text">Keepalived工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keepalived配置高可用集群"><span class="nav-number">4.2.</span> <span class="nav-text">keepalived配置高可用集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备工作"><span class="nav-number">4.2.1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master机器配置"><span class="nav-number">4.2.2.</span> <span class="nav-text">master机器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：编辑配置文件"><span class="nav-number">4.2.2.1.</span> <span class="nav-text">第一步：编辑配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：编辑监控脚本"><span class="nav-number">4.2.2.2.</span> <span class="nav-text">第二步：编辑监控脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：启动keepalived"><span class="nav-number">4.2.2.3.</span> <span class="nav-text">第三步：启动keepalived</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#backup-服务器配置"><span class="nav-number">4.2.3.</span> <span class="nav-text">backup 服务器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：编辑配置文件-1"><span class="nav-number">4.2.3.1.</span> <span class="nav-text">第一步：编辑配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：编辑监控脚本-1"><span class="nav-number">4.2.3.2.</span> <span class="nav-text">第二步：编辑监控脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：启动keepalived-1"><span class="nav-number">4.2.3.3.</span> <span class="nav-text">第三步：启动keepalived</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director-服务器上开启路由转发功能"><span class="nav-number"></span> <span class="nav-text">director 服务器上开启路由转发功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关闭icmp的重定向"><span class="nav-number"></span> <span class="nav-text">关闭icmp的重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意区分网卡名字，这里两个网卡分别为ens33和ens37"><span class="nav-number"></span> <span class="nav-text">注意区分网卡名字，这里两个网卡分别为ens33和ens37</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director-设置nat防火墙"><span class="nav-number"></span> <span class="nav-text">director 设置nat防火墙</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director设置ipvsadm"><span class="nav-number"></span> <span class="nav-text">director设置ipvsadm</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集群简介"><span class="nav-number">2.</span> <span class="nav-text">集群简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用keepalived搭建高可用集群"><span class="nav-number">3.</span> <span class="nav-text">利用keepalived搭建高可用集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Keepalived工作原理"><span class="nav-number">3.1.</span> <span class="nav-text">Keepalived工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keepalived配置高可用集群"><span class="nav-number">3.2.</span> <span class="nav-text">keepalived配置高可用集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备工作"><span class="nav-number">3.2.1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master机器配置"><span class="nav-number">3.2.2.</span> <span class="nav-text">master机器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：编辑配置文件"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">第一步：编辑配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：编辑监控脚本"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">第二步：编辑监控脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：启动keepalived"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">第三步：启动keepalived</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#backup-服务器配置"><span class="nav-number">3.2.3.</span> <span class="nav-text">backup 服务器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：编辑配置文件-1"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">第一步：编辑配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：编辑监控脚本-1"><span class="nav-number">3.2.3.2.</span> <span class="nav-text">第二步：编辑监控脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：启动keepalived-1"><span class="nav-number">3.2.3.3.</span> <span class="nav-text">第三步：启动keepalived</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director-服务器上开启路由转发功能"><span class="nav-number"></span> <span class="nav-text">director 服务器上开启路由转发功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关闭icmp的重定向"><span class="nav-number"></span> <span class="nav-text">关闭icmp的重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意区分网卡名字，这里两个网卡分别为ens33和ens37"><span class="nav-number"></span> <span class="nav-text">注意区分网卡名字，这里两个网卡分别为ens33和ens37</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director-设置nat防火墙"><span class="nav-number"></span> <span class="nav-text">director 设置nat防火墙</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director设置ipvsadm"><span class="nav-number"></span> <span class="nav-text">director设置ipvsadm</span></a></div>
             
 
           </div>
@@ -1012,7 +1041,7 @@ real_server 172.16.111.120 80 {
         var disqus_config = function () {
           this.page.url = 'https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/';
           this.page.identifier = '2018/07/26/linuxNotes-20-basisOfKeeepalived/';
-          this.page.title = '';
+          this.page.title = 'linux运维学习笔记:linux集群';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://steve-yuan.disqus.com/embed.js';

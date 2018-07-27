@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mac,notes,bash," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="写在前面这则笔记主要整理一些在网上看到的关于mac的使用技巧。主要包括：  有趣的命令行工具  终端使用技巧  mac使用技巧">
+<meta name="keywords" content="mac,notes,bash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mac笔记:mac使用技巧">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/26/macNotes-TrickOfMac/index.html">
+<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:description" content="写在前面这则笔记主要整理一些在网上看到的关于mac的使用技巧。主要包括：  有趣的命令行工具  终端使用技巧  mac使用技巧">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://farm5.staticflickr.com/4604/39234422945_1ce3d988ce_o.jpg">
+<meta property="og:image" content="https://farm5.staticflickr.com/4711/39421680974_105b070e0e_o.jpg">
+<meta property="og:image" content="https://farm5.staticflickr.com/4714/39234428045_bb0d6db5e7_o.jpg">
+<meta property="og:image" content="https://farm5.staticflickr.com/4628/28352847519_4669b0281e_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/826/41118014595_7e78e1e4a1_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/972/42101390811_af946583a2_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/981/42033886471_f047742c33_o.png">
+<meta property="og:image" content="https://farm5.staticflickr.com/4650/25261705397_8033fc5277_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/909/41145334074_51240e092f_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/953/40963919175_e6b5e2d735_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/956/27993879978_90c7258c4e_o.png">
+<meta property="og:updated_time" content="2018-07-27T01:49:31.648Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mac笔记:mac使用技巧">
+<meta name="twitter:description" content="写在前面这则笔记主要整理一些在网上看到的关于mac的使用技巧。主要包括：  有趣的命令行工具  终端使用技巧  mac使用技巧">
+<meta name="twitter:image" content="https://farm5.staticflickr.com/4604/39234422945_1ce3d988ce_o.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/26/macNotes-TrickOfMac/"/>
+
+
+
+
+
+  <title>mac笔记:mac使用技巧 | Steve的折腾学习日志</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-111158073-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/steve-yuan-8276"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/26/macNotes-TrickOfMac/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mac笔记:mac使用技巧</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-26T17:38:55+08:00">
+                2018-07-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mac/" itemprop="url" rel="index">
+                    <span itemprop="name">mac</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/26/macNotes-TrickOfMac/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/26/macNotes-TrickOfMac/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,216
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  14
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记主要整理一些在网上看到的关于mac的使用技巧。主要包括：</p>
+<ul>
+<li><p>有趣的命令行工具</p>
+</li>
+<li><p>终端使用技巧</p>
+</li>
+<li><p>mac使用技巧</p>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="有趣的命令行工具"><a href="#有趣的命令行工具" class="headerlink" title="有趣的命令行工具"></a>有趣的命令行工具</h2><h3 id="tree"><a href="#tree" class="headerlink" title="tree"></a>tree</h3><p>list  contents  of directories in a tree-like format.顾名思义，就是可以像树状结构一样查看文件的目录。如下图所示：</p>
+<p><img src="https://farm5.staticflickr.com/4604/39234422945_1ce3d988ce_o.jpg" alt=""></p>
+<h4 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install tree //需要先安装brew</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Verify if the installation was successful:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tree --version</span><br></pre></td></tr></table></figure>
+<h4 id="How-to-Use"><a href="#How-to-Use" class="headerlink" title="How to Use:"></a>How to Use:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tree -L 2 //L 表示level，后面的2表示两级目录</span><br></pre></td></tr></table></figure>
+<p>最有用的就是这个，更多内容可以输入 <code>man tree</code> 或者 <code>tree -help</code> 进行查询。</p>
+<h3 id="命令行查询天气"><a href="#命令行查询天气" class="headerlink" title="命令行查询天气"></a>命令行查询天气</h3><p><a href="http://wttr.in" target="_blank" rel="noopener">http://wttr.in</a> 是一个允许你搜索世界各地天气预报的网站，而且它的是以 ASCII 字符的形式来显示结果的。通过使用 cURL 访问 <a href="http://wttr.in，就能直接在终端显示查询结果了。" target="_blank" rel="noopener">http://wttr.in，就能直接在终端显示查询结果了。</a></p>
+<p>查询效果是这样的，还是挺骚包的<br><img src="https://farm5.staticflickr.com/4711/39421680974_105b070e0e_o.jpg" alt=""></p>
+<h4 id="获取指定地点的天气"><a href="#获取指定地点的天气" class="headerlink" title="获取指定地点的天气"></a>获取指定地点的天气</h4><ul>
+<li>方式1:直接输入地点</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ curl wttr.in/New+York</span><br><span class="line"></span><br><span class="line">$ curl wttr.in/New_York</span><br><span class="line"></span><br><span class="line">$ curl wttr.in/newyork</span><br></pre></td></tr></table></figure>
+<p><strong>warning： 教程上说单词之间要用+或者下划线连接，实测直接连在一起也可以，但是不能有空格，会报错。</strong></p>
+<ul>
+<li>方式2:获取地标性建筑天气</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl wttr.in/~tiananmen-square</span><br></pre></td></tr></table></figure>
+<p><img src="https://farm5.staticflickr.com/4714/39234428045_bb0d6db5e7_o.jpg" alt=""></p>
+<ul>
+<li>方式3: 获取ip所在地天气</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl wttr.in/@linuxconfig.org</span><br></pre></td></tr></table></figure>
+<ul>
+<li>TIPS</li>
+</ul>
+<p>默认情况下，wttr.in 会根据你的实际地址来决定显示哪种温度单位（C 还是 F）。基本上，在美国，使用的是华氏度，而其他地方显示的是摄氏度。</p>
+<p>当然，也可以指定显示的温度单位，在 URL 后添加 ?u 会显示华氏度，而添加 ?m 会显示摄氏度。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ curl wttr.in/New_York?m    //强制显示摄氏度</span><br><span class="line"></span><br><span class="line">$ curl wttr.in/Toronto?u     //强制显示华氏度</span><br></pre></td></tr></table></figure>
+<h4 id="查询日历时间"><a href="#查询日历时间" class="headerlink" title="查询日历时间"></a>查询日历时间</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cal     //查看当月</span><br><span class="line">$ cal 2017      //查看当年的日历</span><br><span class="line">$ date     查询具体日期时间</span><br></pre></td></tr></table></figure>
+<h4 id="查询比特币价格"><a href="#查询比特币价格" class="headerlink" title="查询比特币价格"></a>查询比特币价格</h4><p><img src="https://farm5.staticflickr.com/4628/28352847519_4669b0281e_o.png" alt=""></p>
+<p>Installation：<br>前提是已经安装了node.js 和 npm，之后运行以下命令行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g coinmon</span><br></pre></td></tr></table></figure>
+<p>How to use：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">coinmon     //不带任何参数运行 Coinmon，显示前 10 位加密货币</span><br><span class="line"></span><br><span class="line">coinmon -t 20     //使用 -t 标志查看最高的 n 位加密货币</span><br><span class="line"></span><br><span class="line">coinmon -c cny    //价格默认以美元显示。你还可以使用 -c 标志将价格从美元转换为另一种货币；cny表示人民币</span><br><span class="line"></span><br><span class="line">coinmon -f btc     //使用-f 加货币简称查询制定货币价格</span><br><span class="line"></span><br><span class="line">coinmon -h     //查询说明文档</span><br></pre></td></tr></table></figure>
+<h3 id="下片神器-you-get"><a href="#下片神器-you-get" class="headerlink" title="下片神器 you-get"></a>下片神器 <code>you-get</code></h3><h4 id="you-get安装："><a href="#you-get安装：" class="headerlink" title="you-get安装："></a><code>you-get</code>安装：</h4><p><strong>安装依赖：</strong></p>
+<p><a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python 3</a></p>
+<p><a href="https://www.ffmpeg.org/" target="_blank" rel="noopener">FFmpeg</a> </p>
+<p><strong>注：</strong><code>FFmpeg</code>也可以通过brew安装 <code>brew install ffmpeg</code></p>
+<p><strong>安装<code>you-get</code>：</strong></p>
+<ul>
+<li>通过brew安装</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install you-get</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过pip3 安装：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install you-get</span><br></pre></td></tr></table></figure>
+<p><strong>升级<code>you-get</code>：</strong></p>
+<ul>
+<li>如果是通过brew 安装的，则运行：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew upgrade you-get</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果是通过pip3安装的，则运行：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install --upgrade you-get</span><br></pre></td></tr></table></figure>
+<h4 id="使用youget"><a href="#使用youget" class="headerlink" title="使用youget"></a>使用<code>youget</code></h4><h5 id="第一步：找到需要下载的资源，复制网页地址，查看画质和格式信息："><a href="#第一步：找到需要下载的资源，复制网页地址，查看画质和格式信息：" class="headerlink" title="第一步：找到需要下载的资源，复制网页地址，查看画质和格式信息："></a>第一步：找到需要下载的资源，复制网页地址，查看画质和格式信息：</h5><p>命令行格式：<code>you-get -i [url]</code> or <code>you-get --info [url]</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">steve:~ steveyuan$ you-get -i https://www.youtube.com/watch?v=iaUze8A0844</span><br><span class="line">site:                YouTube</span><br><span class="line">title:               papi酱 - 如果这些职业和医生混搭…【papi酱突然更新的放送】</span><br><span class="line">streams:             # Available quality and codecs</span><br><span class="line">    [ DASH ] ____________________________________</span><br><span class="line">    - itag:          248</span><br><span class="line">      container:     webm</span><br><span class="line">      quality:       1920x1080</span><br><span class="line">      size:          92.3 MiB (96795814 bytes)</span><br><span class="line">    # download-with: you-get --itag=248 [URL]</span><br><span class="line"></span><br><span class="line">    - itag:          137</span><br><span class="line">      container:     mp4</span><br><span class="line">      quality:       1920x1080</span><br><span class="line">      size:          68.9 MiB (72264226 bytes)</span><br><span class="line">    # download-with: you-get --itag=137 [URL]</span><br><span class="line"></span><br><span class="line">    - itag:          247</span><br><span class="line">      container:     webm</span><br><span class="line">      quality:       1280x720</span><br><span class="line">      size:          50.2 MiB (52596250 bytes)</span><br><span class="line">    # download-with: you-get --itag=247 [URL]</span><br><span class="line">     [ DEFAULT ] _________________________________</span><br><span class="line">    - itag:          22</span><br><span class="line">      container:     mp4</span><br><span class="line">      quality:       hd720</span><br><span class="line">      size:          39.6 MiB (41558299 bytes)</span><br><span class="line">    # download-with: you-get --itag=22 [URL]</span><br></pre></td></tr></table></figure>
+<p>注：带有<code>default</code> 字样的是网页当中默认的格式</p>
+<h5 id="第二步：下载视频"><a href="#第二步：下载视频" class="headerlink" title="第二步：下载视频"></a>第二步：下载视频</h5><p>命令行格式：<code>you-get [参数] [url]</code></p>
+<p>注：这里的参数，对应的就是上面info信息的这个部分，也就是 <code>--itag=22</code>，默认下载到当前目录下。如下图所示：</p>
+<p><img src="https://farm1.staticflickr.com/826/41118014595_7e78e1e4a1_o.png" alt=""></p>
+<p><code>-o [filePath]</code> 小写-o选项，可以指定下载文件路径(这里要写绝对路径)；<code>-O [fileName]</code>,大写O可以为下载文件重命名；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">you-get --itag=22 -o ~/documents/ -O papi-1.mp4 https://www.youtube.com/watch?v=iaUze8A0844</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong></p>
+<ul>
+<li><p>按照官方文档说法，这个参数可以省略，表示下载default的视频链接；</p>
+</li>
+<li><p>如果下载了一半又改主意不想下载了，按 <code>ctrl + c</code> 中止；</p>
+</li>
+</ul>
+<h4 id="分享几个小技巧"><a href="#分享几个小技巧" class="headerlink" title="分享几个小技巧"></a>分享几个小技巧</h4><ul>
+<li>搜索并下载视频</li>
+</ul>
+<p>有时候，我们并不知道下载资源的具体网址，只知道名字而已。这时候输入 <code>you-get [keyword]</code> , 此时you-get 会通过google进行搜索，并下载最相关的视频<code>most relevant video</code>。</p>
+<ul>
+<li>通过代理线路下载</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">you-get -x [代理ip：端口号] [url]</span><br><span class="line"></span><br><span class="line">或者，两个效果是一样的</span><br><span class="line"></span><br><span class="line">you-get --http-proxy [代理ip：端口号] [url]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>直接播放视频链接</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">you-get -p [播放器名] [url]</span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">you-get --player [播放器名] [url]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>此处也可以指定浏览器打开，免广告</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">you-get -p chromium [url]    //chromium是浏览器名</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>更多内容参见<a href="https://github.com/soimort/you-get#supported-sites" target="_blank" rel="noopener">官方说明文档</a></p>
+<h3 id="htop-工具：-top-替代"><a href="#htop-工具：-top-替代" class="headerlink" title="htop 工具： top 替代"></a>htop 工具： top 替代</h3><p>git地址：<a href="https://github.com/hishamhm/htop" target="_blank" rel="noopener">https://github.com/hishamhm/htop</a> </p>
+<h4 id="安装："><a href="#安装：" class="headerlink" title="安装："></a>安装：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install htop</span><br></pre></td></tr></table></figure>
+<h4 id="使用："><a href="#使用：" class="headerlink" title="使用："></a>使用：</h4><p>终端输入 htop：</p>
+<p><img src="https://farm1.staticflickr.com/972/42101390811_af946583a2_o.png" alt=""></p>
+<!--more-->
+<table>
+<thead>
+<tr>
+<th>快捷键操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>h, ? F1</td>
+<td>查看htop使用说明</td>
+</tr>
+<tr>
+<td>S，F2</td>
+<td>htop 设定</td>
+</tr>
+<tr>
+<td>/，F3</td>
+<td>搜索进程</td>
+</tr>
+<tr>
+<td>\，F4</td>
+<td>增量进程过滤器</td>
+</tr>
+<tr>
+<td>T，F5</td>
+<td>显示树形结构</td>
+</tr>
+<tr>
+<td>&lt;, &gt;，F6</td>
+<td>选择排序方式[</td>
+</tr>
+<tr>
+<td>F7</td>
+<td>可减少nice值可以提高对应进程的优先级</td>
+</tr>
+<tr>
+<td>F8</td>
+<td>可增加nice值，降低对应进程的优先级</td>
+</tr>
+<tr>
+<td>K，F9</td>
+<td>可对进程传递信号</td>
+</tr>
+<tr>
+<td>q，F10</td>
+<td>结束htop</td>
+</tr>
+<tr>
+<td>u</td>
+<td>只显示一个给定的用户的过程</td>
+</tr>
+<tr>
+<td>U</td>
+<td>取消标记所有的进程</td>
+</tr>
+<tr>
+<td>H</td>
+<td>显示或隐藏用户线程</td>
+</tr>
+<tr>
+<td>K</td>
+<td>显示或隐藏内核线程</td>
+</tr>
+<tr>
+<td>F</td>
+<td>跟踪进程</td>
+</tr>
+<tr>
+<td>P</td>
+<td>按CPU 使用排序</td>
+</tr>
+<tr>
+<td>M</td>
+<td>按内存使用排序</td>
+</tr>
+<tr>
+<td>T</td>
+<td>按Time+ 使用排序</td>
+</tr>
+<tr>
+<td>l</td>
+<td>显示进程打开的文件</td>
+</tr>
+<tr>
+<td>I</td>
+<td>倒转排序顺序</td>
+</tr>
+<tr>
+<td>s</td>
+<td>选择某进程，按s:用strace追踪进程的系统调用</td>
+</tr>
+</tbody>
+</table>
+<h3 id="gifgen-：gif文件生成工具"><a href="#gifgen-：gif文件生成工具" class="headerlink" title="gifgen ：gif文件生成工具"></a><code>gifgen</code> ：gif文件生成工具</h3><p>git地址：<a href="https://github.com/lukechilds/gifgen" target="_blank" rel="noopener">https://github.com/lukechilds/gifgen</a></p>
+<h4 id="安装：-1"><a href="#安装：-1" class="headerlink" title="安装："></a>安装：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install lukechilds/tap/gifgen</span><br></pre></td></tr></table></figure>
+<h4 id="使用：-1"><a href="#使用：-1" class="headerlink" title="使用："></a>使用：</h4><p>命令行格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gifgen [options] [input]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>常用参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-o</td>
+<td>Output file [input.gif]</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>Frames per second [10]</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>Optimize for static background</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>Display verbose output from ffmpeg</td>
+</tr>
+</tbody>
+</table>
+<p><strong>示例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//压缩视频文件为gif</span><br><span class="line">gifgen video.mp4</span><br><span class="line"></span><br><span class="line">//-o选项指定输出文件名称</span><br><span class="line">gifgen -o demo.gif SCM_1457.mp4</span><br><span class="line"></span><br><span class="line">//优化北京帧率</span><br><span class="line">gifgen -sf 15 screencap.mov</span><br></pre></td></tr></table></figure>
+<h3 id="thefuck-自动更正命令行错误"><a href="#thefuck-自动更正命令行错误" class="headerlink" title="thefuck 自动更正命令行错误"></a>thefuck 自动更正命令行错误</h3><p>git地址：<a href="https://github.com/nvbn/thefuck" target="_blank" rel="noopener">https://github.com/nvbn/thefuck</a></p>
+<h4 id="安装：-2"><a href="#安装：-2" class="headerlink" title="安装："></a>安装：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install thefuck</span><br></pre></td></tr></table></figure>
+<p>修改环境变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bashrc    //编辑bash配置文件，加入以下内容：</span><br><span class="line"></span><br><span class="line">eval $(thefuck --alias)    //之后保存退出</span><br><span class="line"></span><br><span class="line">source ~/.bashrc    重新载入配置文件</span><br></pre></td></tr></table></figure>
+<h4 id="使用：-2"><a href="#使用：-2" class="headerlink" title="使用："></a>使用：</h4><p>直接<code>fuck</code>就OK了，语法简单到令人发指。</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">steve:steveBlog steveyuan$ ls a</span><br><span class="line">ls: a: No such file or directory</span><br><span class="line">steve:steveBlog steveyuan$ fuck</span><br><span class="line">ls [enter/↑/↓/ctrl+c]</span><br><span class="line">_config.yml		node_modules		scaffolds</span><br><span class="line">a.txt			package-lock.json	source</span><br><span class="line">db.json			package.json		themes</span><br><span class="line">gulpfile.js		public</span><br></pre></td></tr></table></figure>
+<h2 id="终端使用技巧"><a href="#终端使用技巧" class="headerlink" title="终端使用技巧"></a>终端使用技巧</h2><h3 id="技巧一：终端自动补全"><a href="#技巧一：终端自动补全" class="headerlink" title="技巧一：终端自动补全"></a>技巧一：终端自动补全</h3><p>修改<code>～/.inputrc</code>配置文件（如果家目录下没有就新建一个）；配置完成后，按tab键，就能够自动补全。</p>
+<ul>
+<li>第一步：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.inputrc    打开编辑文件，加入一下内容</span><br><span class="line"></span><br><span class="line">set completion-ignore-case on</span><br><span class="line">set show-all-if-ambiguous on</span><br><span class="line">TAB: menu-complete</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>第二步：完成后，按 <code>esc</code> ，输入 <code>:wq</code> 保存退出。</p>
+</li>
+<li><p>第三步：重启shell</p>
+</li>
+</ul>
+<h3 id="技巧二：添加-alias"><a href="#技巧二：添加-alias" class="headerlink" title="技巧二：添加 alias"></a>技巧二：添加 <code>alias</code></h3><p>操作终端terminal，最繁琐的动作就是cd 命令进行目录切换，可以利用alias设置别名的方式，给常见的目录设置别名，实现快速切换。</p>
+<p><strong>解决思路：</strong></p>
+<p>修改系统配置文件<code>/etc/profile</code> 或者 <code>~/.bash_profile</code>，这两个文件的区别在于：</p>
+<ul>
+<li><p><code>/etc/profile</code> 适用于所有用户的全局配置脚本</p>
+</li>
+<li><p><code>~/.bash_profile</code> 适用于当前用户的启动配置文件</p>
+</li>
+</ul>
+<p>所以，修改<code>~/.bash_profile</code>比较安全点。</p>
+<p><strong>实现步骤：</strong></p>
+<ul>
+<li>修改<code>~/.bash_profile</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bash_profile   //使用vim编辑</span><br><span class="line"></span><br><span class="line">alias ll=&apos;ls -l --color=auto&apos;    //添加这一行，使得` ll `命令生效</span><br><span class="line"></span><br><span class="line">alias subl=&quot;&apos;/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl&apos;&quot;   // 使用 subl 打开sublime text</span><br><span class="line"></span><br><span class="line">alias ping=&apos;ping -c 4&apos;     //ping 命令默认执行4次</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>之后，按esc， 输入 :wq 保存退出；</p>
+</li>
+<li><p>执行以下命令，配置文件生效</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bath_profile</span><br></pre></td></tr></table></figure>
+<h3 id="技巧三：终端安装-mac-vim"><a href="#技巧三：终端安装-mac-vim" class="headerlink" title="技巧三：终端安装 mac-vim"></a>技巧三：终端安装 mac-vim</h3><ul>
+<li>安装brew</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装VIM</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install vim --with-lua --with-override-system-vi</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装 GUI 版 mac vim</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install macvim --with-lua --with-override-system-vim</span><br></pre></td></tr></table></figure>
+<p>安装完成后重启终端即可。</p>
+<ul>
+<li>更新mac vim</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew upgrade macvim</span><br></pre></td></tr></table></figure>
+<p>输入 <code>mvim</code> 可以从终端启动 GUI 版的 Vim。</p>
+<h3 id="技巧四：sed命令使用"><a href="#技巧四：sed命令使用" class="headerlink" title="技巧四：sed命令使用"></a>技巧四：sed命令使用</h3><p>mac 和 linux中都有sed命令，但是因为mac系统用的是原生的bsd系列，而一般的linux系统用的是gnu系统，所以两者在某些命令中还是有区别的。</p>
+<ul>
+<li>在linux中，</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed &quot;$line a\\(多一个\，用来防止转义) $value&quot; $filename</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在mac当中，</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sed &quot;$line a\       //在 \ 后要加一个空格</span><br><span class="line"></span><br><span class="line">&gt;$value             //需要添加新一行的内容）</span><br><span class="line"></span><br><span class="line">&gt;&quot; $filename        //文件名</span><br></pre></td></tr></table></figure>
+<p>如果想要像linux那样，在mac中使用sed，就需要安装 <code>gnu-sed</code> ，具体如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">brew install gnu-sed --with-default-names   //安装gnu-sed</span><br><span class="line">vim ~/.zshrc    //编辑环境变量文件，加入下面这一行</span><br><span class="line">export PATH=&quot;/usr/local/opt/gnu-sed/libexec/gnubin:$PATH&quot;</span><br><span class="line">3.source ~/.zshrc   //或者新开窗口，让设置生效</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>如果希望直接更改源文件，在使用sed的时候加上 <code>-i</code> 选项。</p>
+<h3 id="技巧五：命令行打开vscode"><a href="#技巧五：命令行打开vscode" class="headerlink" title="技巧五：命令行打开vscode"></a>技巧五：命令行打开vscode</h3><p>编辑 <code>～/.bash_profile</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bash_profile</span><br><span class="line"></span><br><span class="line">加入以下内容：</span><br><span class="line"></span><br><span class="line">code () &#123; VSCODE_CWD=&quot;$PWD&quot; open -n -b &quot;com.microsoft.VSCode&quot; --args $* ;&#125;</span><br></pre></td></tr></table></figure>
+<p>保存退出并执行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
+<h3 id="vim配置"><a href="#vim配置" class="headerlink" title="vim配置"></a>vim配置</h3><p>Vim 配置文件在<code>/etc/vimrc</code>(全局配置)、 <code>～/.vimrc</code>（用户配置），一般直接编辑<code>～/.vimrc</code>即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.vimrc      //添加以下内容</span><br><span class="line"></span><br><span class="line">//显示行号</span><br><span class="line">set nu</span><br><span class="line"></span><br><span class="line">//设置在命令行界面最下面显示当前模式等</span><br><span class="line">set showmode</span><br><span class="line"></span><br><span class="line">//显示标尺，在右下角显示光标位置</span><br><span class="line">set ruler</span><br><span class="line"></span><br><span class="line">//自动对齐</span><br><span class="line">set autoindent</span><br><span class="line"></span><br><span class="line">//语法高亮</span><br><span class="line">syntax on</span><br><span class="line"></span><br><span class="line">//设置缩进</span><br><span class="line">set tabstop=4</span><br><span class="line">set shiftwidth=4</span><br><span class="line">set expandtab</span><br><span class="line">set smarttab</span><br><span class="line"></span><br><span class="line">//高亮查找匹配</span><br><span class="line">set hlsearch</span><br><span class="line"></span><br><span class="line">//用浅色高亮当前行</span><br><span class="line">autocmd InsertEnter * se cul</span><br><span class="line"></span><br><span class="line">//启动时隐去援助提示</span><br><span class="line">set shortmess=atI</span><br></pre></td></tr></table></figure>
+<h2 id="mac技巧："><a href="#mac技巧：" class="headerlink" title="mac技巧："></a>mac技巧：</h2><h3 id="技巧一：在mac下抓包"><a href="#技巧一：在mac下抓包" class="headerlink" title="技巧一：在mac下抓包"></a>技巧一：在<code>mac</code>下抓包</h3><p><strong>前提：</strong>获取网络接口的 BSD 设备名称</p>
+<p>打开<code>about this mac</code> –&gt; <code>hardware report</code> –&gt; <code>network</code> ,在图示中，Wi-Fi 的 BSD 设备名称为 en0。</p>
+<p><img src="https://farm1.staticflickr.com/981/42033886471_f047742c33_o.png" alt=""></p>
+<ul>
+<li>第一步：打开teminal,输入以下命令，但要将“BSDname”替换为“系统信息”中的 BSD 设备名称（如 en0、en1 或 ppp0）：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tcpdump -i BSDname -s 0 -B 524288 -w ~/Desktop/DumpFile01.pcap             //要求输入管理员密码</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>第二步：按 Ctrl+C，停止抓包，抓包数据保存在桌面为<code>“DumpFile01.pcap”</code>的文件中。 </p>
+</li>
+<li><p>第三步：查看抓包的内容，请在终端中使用以下命令：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcpdump -s 0 -n -e -x -vvv -r ~/Desktop/DumpFile01.pcap</span><br></pre></td></tr></table></figure>
+<h3 id="技巧二：如何去掉恼人的bogon"><a href="#技巧二：如何去掉恼人的bogon" class="headerlink" title="技巧二：如何去掉恼人的bogon"></a>技巧二：如何去掉恼人的bogon</h3><p>新买了mac，很快发现终端计算机名变成了恼人的bogon，就像这里</p>
+<p><img src="https://farm5.staticflickr.com/4650/25261705397_8033fc5277_o.png" alt="Screen Shot 2018-02-05 at 8.40.01 PM"></p>
+<p><strong>原因分析</strong></p>
+<p>bogon这个单词是虚拟、虚伪的意思。</p>
+<p>终端会先向 DNS 请求查询当前 IP 的反向域名解析的结果，如果查询不到再显示我们设置的计算机名。而由于我们的 DNS 错误地将保留地址反向的 NS 查询结果返回了 bogon。因此。就出现 bogon 这种奇怪的“计算机名”。</p>
+<p><strong>解决思路：</strong></p>
+<ul>
+<li>MacOS:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo hostname your-desired-host-name    //将your-desired-host-name 替换为你的计算机名，输入后可能会要求输入管理员密码，照做就行</span><br><span class="line"></span><br><span class="line">sudo scutil --set LocalHostName $(hostname)</span><br><span class="line"></span><br><span class="line">sudo scutil --set HostName $(hostname)</span><br></pre></td></tr></table></figure>
+<p>之后重启计算机，再打开终端验证一下更改是否成功。</p>
+<ul>
+<li>CentOS 7:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; hostnamectl set-hostname centos7</span><br><span class="line">shell&gt; su</span><br></pre></td></tr></table></figure>
+<ul>
+<li>CentOS 6:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; vi /etc/sysconfig/network</span><br><span class="line">//  修改以下内容</span><br><span class="line">NETWORKING=yes</span><br><span class="line">HOSTNAME=centos6</span><br><span class="line">:wq #保存并退出</span><br></pre></td></tr></table></figure>
+<h3 id="技巧三-mac-录屏生成gif动图"><a href="#技巧三-mac-录屏生成gif动图" class="headerlink" title="技巧三:mac 录屏生成gif动图"></a>技巧三:mac 录屏生成gif动图</h3><h4 id="第一步：录制mov格式视频"><a href="#第一步：录制mov格式视频" class="headerlink" title="第一步：录制mov格式视频"></a>第一步：录制mov格式视频</h4><ul>
+<li>打开mac自带 QuickTime Player</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/909/41145334074_51240e092f_o.png" alt=""></p>
+<ul>
+<li><p>点击 <code>QuickTime Player -&gt; file -&gt; New Moive Recording</code></p>
+</li>
+<li><p>点击录制按钮 &gt; 选择录制区域 (选择模拟器) &gt; 开始录制</p>
+</li>
+<li><p>录制完成 &gt; 点击mac右上角停止按钮结束录制 &gt; 保存格式为 mov</p>
+</li>
+<li><p>调整视频尺寸，如果是放在公众号里面的话，480P清晰度就足够了；不然尺寸太大，转成gif依然放不到公众号里面。如下图所示：</p>
+</li>
+</ul>
+<p><img src="https://farm1.staticflickr.com/953/40963919175_e6b5e2d735_o.png" alt=""></p>
+<h4 id="第二步：将mov视频转成gif"><a href="#第二步：将mov视频转成gif" class="headerlink" title="第二步：将mov视频转成gif"></a>第二步：将mov视频转成gif</h4><p>在APP Store 就可以下载GIFBrewery，免费的功能就够了。</p>
+<p><img src="https://farm1.staticflickr.com/956/27993879978_90c7258c4e_o.png" alt=""></p>
+<p>安装后运行，GIFBrewery -&gt; File  -&gt; Open 那个mov视频</p>
+<p>点击界面Create GIF -&gt; Save成gif 文件即可。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Steve Yuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://steve-yuan-8276.github.io/2018/07/26/macNotes-TrickOfMac/" title="mac笔记:mac使用技巧">https://steve-yuan-8276.github.io/2018/07/26/macNotes-TrickOfMac/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mac/" rel="tag"># mac</a>
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
+          
+            <a href="/tags/bash/" rel="tag"># bash</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/26/linuxNotes-20-basisOfKeeepalived/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/logo.png"
+                alt="Steve Yuan" />
+            
+              <p class="site-author-name" itemprop="name">Steve Yuan</p>
+              <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">64</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/steve-yuan-8276" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/feng8276" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.facebook.com/feng74" target="_blank" title="Facebook">
+                    
+                      <i class="fa fa-fw fa-facebook"></i>Facebook</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yuanf02@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#有趣的命令行工具"><span class="nav-number">2.</span> <span class="nav-text">有趣的命令行工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tree"><span class="nav-number">2.1.</span> <span class="nav-text">tree</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Installation"><span class="nav-number">2.1.1.</span> <span class="nav-text">Installation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#How-to-Use"><span class="nav-number">2.1.2.</span> <span class="nav-text">How to Use:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令行查询天气"><span class="nav-number">2.2.</span> <span class="nav-text">命令行查询天气</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#获取指定地点的天气"><span class="nav-number">2.2.1.</span> <span class="nav-text">获取指定地点的天气</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询日历时间"><span class="nav-number">2.2.2.</span> <span class="nav-text">查询日历时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询比特币价格"><span class="nav-number">2.2.3.</span> <span class="nav-text">查询比特币价格</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下片神器-you-get"><span class="nav-number">2.3.</span> <span class="nav-text">下片神器 you-get</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#you-get安装："><span class="nav-number">2.3.1.</span> <span class="nav-text">you-get安装：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用youget"><span class="nav-number">2.3.2.</span> <span class="nav-text">使用youget</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：找到需要下载的资源，复制网页地址，查看画质和格式信息："><span class="nav-number">2.3.2.1.</span> <span class="nav-text">第一步：找到需要下载的资源，复制网页地址，查看画质和格式信息：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：下载视频"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">第二步：下载视频</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分享几个小技巧"><span class="nav-number">2.3.3.</span> <span class="nav-text">分享几个小技巧</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#htop-工具：-top-替代"><span class="nav-number">2.4.</span> <span class="nav-text">htop 工具： top 替代</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装："><span class="nav-number">2.4.1.</span> <span class="nav-text">安装：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用："><span class="nav-number">2.4.2.</span> <span class="nav-text">使用：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gifgen-：gif文件生成工具"><span class="nav-number">2.5.</span> <span class="nav-text">gifgen ：gif文件生成工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装：-1"><span class="nav-number">2.5.1.</span> <span class="nav-text">安装：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用：-1"><span class="nav-number">2.5.2.</span> <span class="nav-text">使用：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thefuck-自动更正命令行错误"><span class="nav-number">2.6.</span> <span class="nav-text">thefuck 自动更正命令行错误</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装：-2"><span class="nav-number">2.6.1.</span> <span class="nav-text">安装：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用：-2"><span class="nav-number">2.6.2.</span> <span class="nav-text">使用：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#终端使用技巧"><span class="nav-number">3.</span> <span class="nav-text">终端使用技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#技巧一：终端自动补全"><span class="nav-number">3.1.</span> <span class="nav-text">技巧一：终端自动补全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#技巧二：添加-alias"><span class="nav-number">3.2.</span> <span class="nav-text">技巧二：添加 alias</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#技巧三：终端安装-mac-vim"><span class="nav-number">3.3.</span> <span class="nav-text">技巧三：终端安装 mac-vim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#技巧四：sed命令使用"><span class="nav-number">3.4.</span> <span class="nav-text">技巧四：sed命令使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#技巧五：命令行打开vscode"><span class="nav-number">3.5.</span> <span class="nav-text">技巧五：命令行打开vscode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vim配置"><span class="nav-number">3.6.</span> <span class="nav-text">vim配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mac技巧："><span class="nav-number">4.</span> <span class="nav-text">mac技巧：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#技巧一：在mac下抓包"><span class="nav-number">4.1.</span> <span class="nav-text">技巧一：在mac下抓包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#技巧二：如何去掉恼人的bogon"><span class="nav-number">4.2.</span> <span class="nav-text">技巧二：如何去掉恼人的bogon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#技巧三-mac-录屏生成gif动图"><span class="nav-number">4.3.</span> <span class="nav-text">技巧三:mac 录屏生成gif动图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：录制mov格式视频"><span class="nav-number">4.3.1.</span> <span class="nav-text">第一步：录制mov格式视频</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：将mov视频转成gif"><span class="nav-number">4.3.2.</span> <span class="nav-text">第二步：将mov视频转成gif</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Steve Yuan</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">164.5k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/07/26/macNotes-TrickOfMac/';
+          this.page.identifier = '2018/07/26/macNotes-TrickOfMac/';
+          this.page.title = 'mac笔记:mac使用技巧';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://steve-yuan.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -26,8 +26,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>regularExpression</tag>
       </tags>
   </entry>
@@ -39,8 +39,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>tomcat</tag>
       </tags>
   </entry>
@@ -52,8 +52,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>shell</tag>
         <tag>expect</tag>
       </tags>
@@ -67,8 +67,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -81,8 +81,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -95,8 +95,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -108,8 +108,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zabbix</tag>
       </tags>
   </entry>
@@ -121,8 +121,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>nfs</tag>
       </tags>
   </entry>
@@ -134,8 +134,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>nfs</tag>
       </tags>
   </entry>
@@ -147,8 +147,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LNMP</tag>
       </tags>
   </entry>
@@ -160,8 +160,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>log</tag>
       </tags>
   </entry>
@@ -173,8 +173,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
       </tags>
   </entry>
@@ -186,8 +186,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>LAMP</tag>
       </tags>
   </entry>
@@ -199,8 +199,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>rsync</tag>
         <tag>ftp</tag>
       </tags>
@@ -213,8 +213,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>sysV</tag>
         <tag>crontab</tag>
         <tag>systemd</tag>
@@ -228,8 +228,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>iptables</tag>
         <tag>firewalld</tag>
       </tags>
@@ -242,8 +242,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>DNS</tag>
       </tags>
   </entry>
@@ -255,8 +255,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -268,8 +268,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>yum</tag>
       </tags>
   </entry>
@@ -282,8 +282,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>zip</tag>
       </tags>
   </entry>
@@ -296,8 +296,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>vim</tag>
       </tags>
   </entry>
@@ -310,8 +310,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -328,8 +328,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -341,8 +341,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -354,8 +354,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -366,8 +366,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -378,8 +378,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>mysql</tag>
       </tags>
   </entry>
@@ -392,8 +392,8 @@
       </categories>
       <tags>
         <tag>python</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -404,8 +404,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>base64</tag>
       </tags>
   </entry>
@@ -417,8 +417,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -429,8 +429,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>raspberryPi</tag>
       </tags>
   </entry>
@@ -442,8 +442,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -455,8 +455,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>regularExpression</tag>
       </tags>
   </entry>
@@ -469,8 +469,8 @@
       </categories>
       <tags>
         <tag>centos</tag>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>shell</tag>
       </tags>
   </entry>
@@ -482,8 +482,8 @@
         <category>linux</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>linux</tag>
+        <tag>notes</tag>
         <tag>regularExpression</tag>
       </tags>
   </entry>
@@ -495,10 +495,10 @@
         <category>kindle</category>
       </categories>
       <tags>
+        <tag>notes</tag>
         <tag>dropbox</tag>
         <tag>IFTTT</tag>
         <tag>kinlde</tag>
-        <tag>notes</tag>
       </tags>
   </entry>
   <entry>

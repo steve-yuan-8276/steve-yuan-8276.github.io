@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2018/04/02/howToUseGithub/</loc>
+    
+    <lastmod>2018-07-27T04:12:48.126Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/04/16/howToSendBooksToKindle/</loc>
+    
+    <lastmod>2018-07-27T03:24:56.258Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/20/howToUseGoogle/</loc>
+    
+    <lastmod>2018-07-27T03:21:25.299Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/about/index.html</loc>
+    
+    <lastmod>2018-07-27T03:14:15.722Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2018/01/30/reactNotes-environmentSetup/</loc>
     
     <lastmod>2018-07-27T02:33:30.203Z</lastmod>
@@ -12,34 +40,6 @@
     <loc>https://steve-yuan-8276.github.io/2018/02/27/basisOfReact-1-CommonErr/</loc>
     
     <lastmod>2018-07-27T02:33:02.576Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/04/16/howToSendBooksToKindle/</loc>
-    
-    <lastmod>2018-07-27T02:31:48.375Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/16/howToUseGithub/</loc>
-    
-    <lastmod>2018-07-27T02:30:55.780Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/04/shh-github/</loc>
-    
-    <lastmod>2018-07-27T02:29:59.788Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2018/01/22/advancedAit/</loc>
-    
-    <lastmod>2018-07-27T02:29:12.423Z</lastmod>
     
   </url>
   
@@ -68,13 +68,6 @@
     <loc>https://steve-yuan-8276.github.io/2017/12/27/arrayMethod/</loc>
     
     <lastmod>2018-07-27T02:25:54.221Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/20/howToUseGoogle/</loc>
-    
-    <lastmod>2018-07-27T02:24:19.922Z</lastmod>
     
   </url>
   
@@ -303,13 +296,6 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/about/index.html</loc>
-    
-    <lastmod>2018-07-18T06:37:09.355Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://steve-yuan-8276.github.io/2017/12/13/HowToInstallCentOS/</loc>
     
     <lastmod>2018-07-04T15:15:50.092Z</lastmod>
@@ -429,14 +415,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/20/basisOfXpath/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/20/basisOfXpath/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/</loc>
     
     <lastmod>2018-04-02T14:26:02.759Z</lastmod>
     

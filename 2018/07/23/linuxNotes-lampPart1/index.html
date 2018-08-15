@@ -114,7 +114,7 @@
 <meta property="og:image" content="https://farm2.staticflickr.com/1760/28678360688_74b0692a6a_o.png">
 <meta property="og:image" content="https://farm2.staticflickr.com/1726/41831490514_cc73d952ff_o.png">
 <meta property="og:image" content="https://farm2.staticflickr.com/1731/42611967001_e02a532384_o.png">
-<meta property="og:updated_time" content="2018-07-23T09:32:15.339Z">
+<meta property="og:updated_time" content="2018-08-13T02:15:39.757Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux学习笔记：lamp环境安装及配置(一)">
 <meta name="twitter:description" content="写在前面LAMP，是linux、apache、mysql、php的简写，也就是把apache、mysql、php安装在linux系统上，共同构成一个网络服务的运行环境。 lamp工作流：  系统防火墙配置  mysql、apache、php安装  lamp基础配置">
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  10,721
+                  10,710
                 </span>
               
 
@@ -523,7 +523,7 @@
 <ul>
 <li>第二步：安装配置iptables</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">//安装iptables</span><br><span class="line">[root@stevey ~]# yum install -y iptables-services</span><br><span class="line">//编辑配置文件，重点是开放80、3306端口</span><br><span class="line">[root@stevey ~]# vim /etc/sysconfig/iptables</span><br><span class="line">			# sample configuration for iptables service</span><br><span class="line">			# you can edit this manually or use system-config-firewall</span><br><span class="line">			# please do not ask us to add additional ports/services to this default configuration</span><br><span class="line">			*filter</span><br><span class="line">			:INPUT ACCEPT [0:0]</span><br><span class="line">			:FORWARD ACCEPT [0:0]</span><br><span class="line">			:OUTPUT ACCEPT [0:0]</span><br><span class="line">			-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</span><br><span class="line">			-A INPUT -p icmp -j ACCEPT</span><br><span class="line">			-A INPUT -i lo -j ACCEPT</span><br><span class="line">			-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT</span><br><span class="line">			-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT       //开放80端口，针对httpd</span><br><span class="line">			-A INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT     //开放3306端口，针对mysql</span><br><span class="line">			-A INPUT -j REJECT --reject-with icmp-host-prohibited</span><br><span class="line">			-A FORWARD -j REJECT --reject-with icmp-host-prohibited</span><br><span class="line">			COMMIT</span><br><span class="line">//重启防火墙使配置生效</span><br><span class="line">[root@stevey ~]# systemctl restart iptables.service</span><br><span class="line">//设置防火墙开机启动		</span><br><span class="line">[root@stevey ~]# systemctl enable iptables.service</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">//安装iptables</span><br><span class="line">[root@stevey ~]# yum install -y iptables-services</span><br><span class="line">//编辑配置文件，重点是开放80、3306端口</span><br><span class="line">[root@stevey ~]# vim /etc/sysconfig/iptables</span><br><span class="line"># sample configuration for iptables service</span><br><span class="line"># you can edit this manually or use system-config-firewall</span><br><span class="line"># please do not ask us to add additional ports/services to this default configuration</span><br><span class="line">*filter</span><br><span class="line">:INPUT ACCEPT [0:0]</span><br><span class="line">:FORWARD ACCEPT [0:0]</span><br><span class="line">:OUTPUT ACCEPT [0:0]</span><br><span class="line">-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</span><br><span class="line">-A INPUT -p icmp -j ACCEPT</span><br><span class="line">-A INPUT -i lo -j ACCEPT</span><br><span class="line">-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT</span><br><span class="line">-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT       //开放80端口，针对httpd</span><br><span class="line">-A INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT     //开放3306端口，针对mysql</span><br><span class="line">-A INPUT -j REJECT --reject-with icmp-host-prohibited</span><br><span class="line">-A FORWARD -j REJECT --reject-with icmp-host-prohibited</span><br><span class="line">COMMIT</span><br><span class="line">//重启防火墙使配置生效</span><br><span class="line">[root@stevey ~]# systemctl restart iptables.service</span><br><span class="line">//设置防火墙开机启动		</span><br><span class="line">[root@stevey ~]# systemctl enable iptables.service</span><br></pre></td></tr></table></figure>
 <ul>
 <li>第三步：关闭selinux</li>
 </ul>
@@ -550,7 +550,7 @@
 <h4 id="第五步：安装数据库"><a href="#第五步：安装数据库" class="headerlink" title="第五步：安装数据库"></a>第五步：安装数据库</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//当前目录为/usr/local/mysql</span><br><span class="line">./scripts/mysql_install_db --user=mysql --datadir=/data/mysql</span><br></pre></td></tr></table></figure>
 <h4 id="第六步：校验是否安装成功"><a href="#第六步：校验是否安装成功" class="headerlink" title="第六步：校验是否安装成功"></a>第六步：校验是否安装成功</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey mysql]# echo $?</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
 <h3 id="MariaDB：mysql的开源免费替代"><a href="#MariaDB：mysql的开源免费替代" class="headerlink" title="MariaDB：mysql的开源免费替代"></a>MariaDB：mysql的开源免费替代</h3><p><strong>注：同一台机器，不要同时安装mysql和mariaDB！</strong></p>
-<p>MariaDB的是甲骨文收购MySQL的项目的一个替代方案，免费。其安装步骤如下：</p>
+<p>MariaDB的mysql的开源版本，免费。其安装步骤如下：</p>
 <h4 id="第一步：备份数据库"><a href="#第一步：备份数据库" class="headerlink" title="第一步：备份数据库"></a>第一步：备份数据库</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//备份数据库</span><br><span class="line">cp -a /var/lib/mysql/ /var/lib/mysql.bak</span><br></pre></td></tr></table></figure>
 <h4 id="第2步：添加MariaDB存储库"><a href="#第2步：添加MariaDB存储库" class="headerlink" title="第2步：添加MariaDB存储库"></a>第2步：添加MariaDB存储库</h4><ul>
 <li>升级yum 源</li>
@@ -560,7 +560,7 @@
 <li>编辑配置文件</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/yum.repos.d/MariaDB10.repo</span><br><span class="line"></span><br><span class="line">//加入以下内容：</span><br><span class="line"># MariaDB 10.2 CentOS repository list - created 2018-05-15 06:14 UTC</span><br><span class="line"># http://downloads.mariadb.org/mariadb/repositories/</span><br><span class="line">[mariadb]</span><br><span class="line">name = MariaDB</span><br><span class="line">baseurl = http://yum.mariadb.org/10.2/centos7-amd64</span><br><span class="line">gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB</span><br><span class="line">gpgcheck=1</span><br></pre></td></tr></table></figure>
-<p>注：该配置文件<a href="![](https://farm1.staticflickr.com/975/41220755955_9d3f8a4cd6_o.png">来自这里</a>)，选择需要的版本即可，如下图所示：</p>
+<p>注：该配置文件<a href="https://mariadb.com/kb/en/library/yum/" target="_blank" rel="noopener">来自这里</a>，选择需要的版本即可，如下图所示：</p>
 <p><img src="https://farm1.staticflickr.com/975/41220755955_9d3f8a4cd6_o.png" alt=""></p>
 <h4 id="第三步：删除MariaDB-5-5"><a href="#第三步：删除MariaDB-5-5" class="headerlink" title="第三步：删除MariaDB 5.5"></a>第三步：删除MariaDB 5.5</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum remove mariadb-server mariadb mariadb-libs</span><br></pre></td></tr></table></figure>
 <h4 id="第四步：安装MariaDB-10"><a href="#第四步：安装MariaDB-10" class="headerlink" title="第四步：安装MariaDB 10"></a>第四步：安装MariaDB 10</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install MariaDB-server MariaDB-client</span><br></pre></td></tr></table></figure>
@@ -1257,7 +1257,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">62</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1279,7 +1279,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1381,7 +1381,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">178.3k</span>
+    <span title="Site words total count">184.1k</span>
   
 </div>
 

@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2018/08/17/linuxNote-NginxNotesPart3/</loc>
+    
+    <lastmod>2018-08-22T02:40:02.546Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2018/08/15/linuxNote-NginxNotesPart2/</loc>
+    
+    <lastmod>2018-08-17T06:40:05.630Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2018/08/13/linuxNote-NginxNotesPart1/</loc>
     
-    <lastmod>2018-08-14T06:51:58.573Z</lastmod>
+    <lastmod>2018-08-17T06:39:44.965Z</lastmod>
     
   </url>
   
@@ -387,14 +401,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/12/web-webStatusCode/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/12/web-howToUseWebp/</loc>
     
     <lastmod>2018-04-02T14:26:02.766Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/12/web-howToUseWebp/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/12/web-webStatusCode/</loc>
     
     <lastmod>2018-04-02T14:26:02.766Z</lastmod>
     

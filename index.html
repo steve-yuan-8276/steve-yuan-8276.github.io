@@ -442,11 +442,30 @@
 
       
         
-          
-          写在前面nginx的rewrite规则就是使用正则匹配请求的url，然后根据定义的规则进行重写和改变，从一个 location 跳转到另一个 location。它依赖ngx_http_rewrite_module模块来支持url重写功能(标准模块，默认已经安装)。
-这则笔记主要包括以下内容：
-rew
-          ...
+          <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>nginx的rewrite规则就是使用正则匹配请求的url，然后根据定义的规则进行重写和改变，从一个 location 跳转到另一个 location。它依赖<code>ngx_http_rewrite_module</code>模块来支持url重写功能(标准模块，默认已经安装)。</p>
+<p>这则笔记主要包括以下内容：</p>
+<p><strong>rewrite规则：</strong></p>
+<ul>
+<li><p>正则基础</p>
+</li>
+<li><p>常用变量</p>
+</li>
+<li><p>flag</p>
+</li>
+</ul>
+<p><strong>rewrite常见用法：</strong></p>
+<ul>
+<li><p>域名重定向</p>
+</li>
+<li><p>https跳转</p>
+</li>
+<li><p>域名访问二级目录</p>
+</li>
+<li><p>动静分离</p>
+</li>
+<li><p>防盗链</p>
+</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/08/17/linuxNote-NginxNotesPart3/#more" rel="contents">

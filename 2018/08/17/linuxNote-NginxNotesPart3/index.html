@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Steve的折腾学习日志">
 <meta property="og:description" content="写在前面nginx的rewrite规则就是使用正则匹配请求的url，然后根据定义的规则进行重写和改变，从一个 location 跳转到另一个 location。它依赖ngx_http_rewrite_module模块来支持url重写功能(标准模块，默认已经安装)。 这则笔记主要包括以下内容： rewrite规则：  正则基础  常用变量  flag   rewrite常见用法：  域名重定向  h">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-22T02:40:02.546Z">
+<meta property="og:updated_time" content="2018-08-22T02:54:12.326Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nginx学习笔记:rewrite重定向规则">
 <meta name="twitter:description" content="写在前面nginx的rewrite规则就是使用正则匹配请求的url，然后根据定义的规则进行重写和改变，从一个 location 跳转到另一个 location。它依赖ngx_http_rewrite_module模块来支持url重写功能(标准模块，默认已经安装)。 这则笔记主要包括以下内容： rewrite规则：  正则基础  常用变量  flag   rewrite常见用法：  域名重定向  h">
@@ -464,6 +464,7 @@
 <li><p>防盗链</p>
 </li>
 </ul>
+<a id="more"></a>
 <h2 id="rewrite规则"><a href="#rewrite规则" class="headerlink" title="rewrite规则"></a>rewrite规则</h2><p>格式：<code>rewrite  regex replacement [flag]</code> </p>
 <p><strong>说明：</strong>rewrite配置可以在server、location以及if配置段内生效，主要包括以下三个部分：</p>
 <pre><code>* regex是用于匹配URI的正则表达式，其不会匹配到$host（域名）；

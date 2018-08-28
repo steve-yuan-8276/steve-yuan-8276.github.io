@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2018/08/24/linuxNote-NginxNotesPart5-accessControl/</loc>
+    
+    <lastmod>2018-08-27T08:33:32.216Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2018/08/23/linuxNote-NginxNotesPart4-proxy/</loc>
     
-    <lastmod>2018-08-24T03:12:11.963Z</lastmod>
+    <lastmod>2018-08-27T08:27:05.417Z</lastmod>
     
   </url>
   
@@ -429,14 +436,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/16/piNote-1-download-howToInstall/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/14/mapAndFilter/</loc>
     
     <lastmod>2018-04-02T14:26:02.765Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/14/mapAndFilter/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/16/piNote-1-download-howToInstall/</loc>
     
     <lastmod>2018-04-02T14:26:02.765Z</lastmod>
     

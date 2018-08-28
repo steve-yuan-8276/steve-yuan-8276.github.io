@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="notes,linux,nginx," />
 
 
 
@@ -81,16 +81,18 @@
 
 
 
-<meta name="description" content="生命不息，折腾不止">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Steve的折腾学习日志">
-<meta property="og:url" content="https://steve-yuan-8276.github.io/archives/2018/index.html">
+<meta name="description" content="写在前面这则笔记主要整理访问控制相关的配置。 访问控制依赖于http_access_module模块，默认已经安装。主要包括以下几部分内容：  用户访问控制  访问限速  用户认证">
+<meta name="keywords" content="notes,linux,nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx学习笔记:访问控制">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2018/08/24/linuxNote-NginxNotesPart5-accessControl/index.html">
 <meta property="og:site_name" content="Steve的折腾学习日志">
-<meta property="og:description" content="生命不息，折腾不止">
+<meta property="og:description" content="写在前面这则笔记主要整理访问控制相关的配置。 访问控制依赖于http_access_module模块，默认已经安装。主要包括以下几部分内容：  用户访问控制  访问限速  用户认证">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-27T08:33:32.216Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Steve的折腾学习日志">
-<meta name="twitter:description" content="生命不息，折腾不止">
+<meta name="twitter:title" content="nginx学习笔记:访问控制">
+<meta name="twitter:description" content="写在前面这则笔记主要整理访问控制相关的配置。 访问控制依赖于http_access_module模块，默认已经安装。主要包括以下几部分内容：  用户访问控制  访问限速  用户认证">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/archives/2018/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/08/24/linuxNote-NginxNotesPart5-accessControl/"/>
 
 
 
 
 
-  <title>归档 | Steve的折腾学习日志</title>
+  <title>nginx学习笔记:访问控制 | Steve的折腾学习日志</title>
   
 
 
@@ -154,7 +156,7 @@
     
   
 
-  <div class="container sidebar-position-right page-archive">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
     <a href="https://github.com/steve-yuan-8276"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
@@ -293,410 +295,314 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/08/24/linuxNote-NginxNotesPart5-accessControl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/logo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve的折腾学习日志">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
-         
+          <h1 class="post-title" itemprop="name headline">nginx学习笔记:访问控制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-24T11:31:13+08:00">
+                2018-08-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        好! 目前共计 68 篇日志。 继续努力。
-      </span>
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
 
-        
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/24/linuxNote-NginxNotesPart5-accessControl/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/08/24/linuxNote-NginxNotesPart5-accessControl/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/08/24/linuxNote-NginxNotesPart5-accessControl/" itemprop="url">
+          
+
+          
+            <div class="post-wordcount">
               
-                <span itemprop="name">nginx学习笔记:访问控制</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  745
+                </span>
               
-            </a>
-        
-      </h2>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-08-24T11:31:13+08:00"
-              content="2018-08-24" >
-          08-24
-        </time>
-      </div>
+              
+                <span class="post-meta-divider">|</span>
+              
 
-    </header>
-  </article>
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
 
+          
 
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/08/23/linuxNote-NginxNotesPart4-proxy/" itemprop="url">
-              
-                <span itemprop="name">nginx学习笔记:代理设置</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-08-23T16:47:49+08:00"
-              content="2018-08-23" >
-          08-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/08/22/linuxNote-NginxNotesPart4/" itemprop="url">
-              
-                <span itemprop="name">nginx学习笔记:location配置</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-08-22T10:57:31+08:00"
-              content="2018-08-22" >
-          08-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/08/17/linuxNote-NginxNotesPart3/" itemprop="url">
-              
-                <span itemprop="name">nginx学习笔记:rewrite重定向规则</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-08-17T14:41:28+08:00"
-              content="2018-08-17" >
-          08-17
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记主要整理访问控制相关的配置。</p>
+<p>访问控制依赖于http_access_module模块，默认已经安装。主要包括以下几部分内容：</p>
+<ul>
+<li><p>用户访问控制</p>
+</li>
+<li><p>访问限速</p>
+</li>
+<li><p>用户认证</p>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="用户访问控制"><a href="#用户访问控制" class="headerlink" title="用户访问控制"></a>用户访问控制</h2><h3 id="语法："><a href="#语法：" class="headerlink" title="语法："></a>语法：</h3><p>allow/deny [参数]</p>
+<table>
+<thead>
+<tr>
+<th>常用参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>address</td>
+<td>表示地址</td>
+</tr>
+<tr>
+<td>CIDR</td>
+<td>表示网段</td>
+</tr>
+<tr>
+<td>unix：</td>
+<td>指定了特殊值，则允许访问所有UNIX域套接字socket</td>
+</tr>
+<tr>
+<td>all</td>
+<td>表示所有</td>
+</tr>
+</tbody>
+</table>
+<h3 id="基于location进行访问限制"><a href="#基于location进行访问限制" class="headerlink" title="基于location进行访问限制"></a>基于location进行访问限制</h3><ul>
+<li>访问指定目录，直接返回403</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location /aming/</span><br><span class="line">&#123;</span><br><span class="line">    deny all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>正则匹配，用户请求指定字段的文件，直接返回403</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location ~ &quot;.bak|\.ht&quot;</span><br><span class="line">&#123;</span><br><span class="line">    return 403;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>请求的uri中包含data、cache、tmp、image、attachment并且以.php结尾的，全部禁止访问。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location ~ (data|cache|tmp|image|attachment).*\.php$</span><br><span class="line">&#123;</span><br><span class="line">    deny all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="基于-document-uri进行访问控制"><a href="#基于-document-uri进行访问控制" class="headerlink" title="基于$document_uri进行访问控制"></a>基于$document_uri进行访问控制</h3><p>$document_uri要跟if判断配合，等价于location匹配。</p>
+<ul>
+<li>请求uri为/admin.php时返回403状态码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//此处的/表示根目录</span><br><span class="line">if ($document_uri = /admin.php)</span><br><span class="line">&#123;</span><br><span class="line">    return 403;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>请求的uri包含data或者cache目录，并且是php时，返回403状态码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if ($document_uri ~ &apos;/data/|/cache/.*\.php$&apos;)</span><br><span class="line">&#123;</span><br><span class="line">    return 403;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="基于-request-uri访问控制"><a href="#基于-request-uri访问控制" class="headerlink" title="基于$request_uri访问控制"></a>基于$request_uri访问控制</h3><p>$request_uri比$docuemnt_uri多了请求的参数。<br>主要是针对请求的uri中的参数进行控制。</p>
+<ul>
+<li>请求参数包括9至12位数字的，直接返回403</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if ($request_uri ~ &quot;gid=\d&#123;9,12&#125;&quot;)</span><br><span class="line">&#123;</span><br><span class="line">    return 403;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="基于-user-agent进行访问控制"><a href="#基于-user-agent进行访问控制" class="headerlink" title="基于$user_agent进行访问控制"></a>基于$user_agent进行访问控制</h3><p>user_agent包含以上关键词的请求，全部返回403状态码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if ($user_agent ~ &apos;YisouSpider|MJ12bot/v1.4.2|YoudaoBot|Tomato&apos;)</span><br><span class="line">&#123;</span><br><span class="line">    return 403;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="基于-http-referer进行访问控制（防盗链）"><a href="#基于-http-referer进行访问控制（防盗链）" class="headerlink" title="基于$http_referer进行访问控制（防盗链）"></a>基于$http_referer进行访问控制（防盗链）</h3><p>从百度而来访问的链接直接返回404状态码，或者返回一段html代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">if ($http_referer ~ &apos;baidu.com&apos;)</span><br><span class="line">&#123;</span><br><span class="line">    return 404;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">if ($http_referer ~ &apos;baidu.com&apos;)</span><br><span class="line">&#123;</span><br><span class="line">    return 200 &quot;&lt;html&gt;&lt;script&gt;window.location.href=&apos;//$host$request_uri&apos;;&lt;/script&gt;&lt;/html&gt;&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="访问限速"><a href="#访问限速" class="headerlink" title="访问限速"></a>访问限速</h2><p>访问限速需要依赖ngx_http_limit_conn_module和ngx_http_limit_req_module模块来实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">  //设置白名单</span><br><span class="line">	geo $limited &#123;</span><br><span class="line">		default 1;</span><br><span class="line">		127.0.0.1/32 0;</span><br><span class="line">		192.168.100.0/24 0;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	map $limited $limit &#123;</span><br><span class="line">		1 $binary_remote_addr;</span><br><span class="line">		0 &quot;&quot;;</span><br><span class="line">	&#125;</span><br><span class="line">    //设置对应的共享内存限制域和允许被处理的最大请求数阈值。 如果请求的频率超过了限制域配置的值，请求处理会被延迟；如果延迟请求数超过了定义的阈值，就会返回503 (Service Temporarily Unavailable) 错误。</span><br><span class="line">    limit_req_zone $limit zone=test:10m rate=1r/s;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        location  ^~ /download/ &#123; </span><br><span class="line">        //定义允许超过频率限制的请求数不多于5个</span><br><span class="line">            limit_req zone=test burst=5;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="访问用户控制"><a href="#访问用户控制" class="headerlink" title="访问用户控制"></a>访问用户控制</h2><p>用户认证，需要配合httpd来实现。</p>
+<ul>
+<li><p>安装httpd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y httpd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用htpasswd生产密码文件</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//创建密码</span><br><span class="line">//-c 指定文件名</span><br><span class="line">htpasswd -c /usr/local/nginx/conf/htpasswd test</span><br><span class="line"></span><br><span class="line">//追加生产用户密码</span><br><span class="line">htpasswd /usr/local/nginx/conf/htpasswd test-1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置nginx用户认证</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">location  /admin/</span><br><span class="line">&#123;</span><br><span class="line">    auth_basic              &quot;Auth&quot;;</span><br><span class="line">    auth_basic_user_file   /usr/local/nginx/conf/htpasswd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/08/15/linuxNote-NginxNotesPart2/" itemprop="url">
-              
-                <span itemprop="name">nginx学习笔记:虚拟主机配置</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-08-15T11:47:47+08:00"
-              content="2018-08-15" >
-          08-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/08/13/linuxNote-NginxNotesPart1/" itemprop="url">
-              
-                <span itemprop="name">nginx学习笔记:安装及配置文件</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-08-13T15:16:10+08:00"
-              content="2018-08-13" >
-          08-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/07/26/macNotes-TrickOfMac/" itemprop="url">
-              
-                <span itemprop="name">HowToDo笔记:mac使用技巧</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-26T17:38:55+08:00"
-              content="2018-07-26" >
-          07-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/07/26/linuxNotes-20-basisOfKeeepalived/" itemprop="url">
-              
-                <span itemprop="name">linux运维学习笔记:linux集群</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-26T16:33:19+08:00"
-              content="2018-07-26" >
-          07-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/07/26/linuxNotes-19-basisOfRegularExpression/" itemprop="url">
-              
-                <span itemprop="name">linux运维学习笔记:正则表达式</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-26T16:07:54+08:00"
-              content="2018-07-26" >
-          07-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/07/26/linuxNotes-18-basisOfTomcat/" itemprop="url">
-              
-                <span itemprop="name">linux学习笔记:tomcat的基础知识</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-26T15:49:17+08:00"
-              content="2018-07-26" >
-          07-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Steve Yuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://steve-yuan-8276.github.io/2018/08/24/linuxNote-NginxNotesPart5-accessControl/" title="nginx学习笔记:访问控制">https://steve-yuan-8276.github.io/2018/08/24/linuxNote-NginxNotesPart5-accessControl/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/notes/" rel="tag"># notes</a>
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/nginx/" rel="tag"># nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/23/linuxNote-NginxNotesPart4-proxy/" rel="next" title="nginx学习笔记:代理设置">
+                <i class="fa fa-chevron-left"></i> nginx学习笔记:代理设置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2018/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2018/page/6/">6</a><a class="extend next" rel="next" href="/archives/2018/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -704,6 +610,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -724,8 +644,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -824,6 +753,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户访问控制"><span class="nav-number">2.</span> <span class="nav-text">用户访问控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法："><span class="nav-number">2.1.</span> <span class="nav-text">语法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于location进行访问限制"><span class="nav-number">2.2.</span> <span class="nav-text">基于location进行访问限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-document-uri进行访问控制"><span class="nav-number">2.3.</span> <span class="nav-text">基于$document_uri进行访问控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-request-uri访问控制"><span class="nav-number">2.4.</span> <span class="nav-text">基于$request_uri访问控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-user-agent进行访问控制"><span class="nav-number">2.5.</span> <span class="nav-text">基于$user_agent进行访问控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-http-referer进行访问控制（防盗链）"><span class="nav-number">2.6.</span> <span class="nav-text">基于$http_referer进行访问控制（防盗链）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问限速"><span class="nav-number">3.</span> <span class="nav-text">访问限速</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问用户控制"><span class="nav-number">4.</span> <span class="nav-text">访问用户控制</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -986,6 +931,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
@@ -1003,6 +952,18 @@
       <script id="dsq-count-scr" src="https://steve-yuan.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://steve-yuan-8276.github.io/2018/08/24/linuxNote-NginxNotesPart5-accessControl/';
+          this.page.identifier = '2018/08/24/linuxNote-NginxNotesPart5-accessControl/';
+          this.page.title = 'nginx学习笔记:访问控制';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://steve-yuan.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
@@ -1364,26 +1325,6 @@
   
 
   
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

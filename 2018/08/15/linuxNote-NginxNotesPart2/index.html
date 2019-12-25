@@ -6,10 +6,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +20,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
@@ -68,13 +68,13 @@
 
 
 
-  <meta name="keywords" content="notes,linux,nginx," />
+  <meta name="keywords" content="notes,linux,nginx,">
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Steve Yuan's Workspace" type="application/atom+xml">
 
 
 
@@ -86,7 +86,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="nginx学习笔记:虚拟主机配置">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/08/15/linuxNote-NginxNotesPart2/index.html">
-<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
 <meta property="og:description" content="写在前面这则笔记主要关于虚拟主机配置的内容，主要包括以下内容：  虚拟主机配置  nginx支持php  实践安装discuz">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm2.staticflickr.com/1797/29108853207_573ae573b6_o.png">
@@ -127,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/08/15/linuxNote-NginxNotesPart2/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/08/15/linuxNote-NginxNotesPart2/">
 
 
 
 
 
-  <title>nginx学习笔记:虚拟主机配置 | Steve的折腾学习日志</title>
+  <title>nginx学习笔记:虚拟主机配置 | Steve Yuan's Workspace</title>
   
 
 
@@ -171,14 +171,14 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="site-title">Steve Yuan's Workspace</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+        <p class="site-subtitle">99%学习&&1%心得</p>
       
   </div>
 
@@ -201,7 +201,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -211,7 +211,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -221,7 +221,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -231,7 +231,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -241,7 +241,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -254,7 +254,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -275,9 +275,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -318,12 +316,12 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/uploads/logo.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
     </span>
 
     
@@ -354,7 +352,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -385,8 +383,7 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2018/08/15/linuxNote-NginxNotesPart2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/15/linuxNote-NginxNotesPart2/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/15/linuxNote-NginxNotesPart2/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -408,7 +405,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,465
+                  3.2k
                 </span>
               
 
@@ -424,7 +421,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  16
+                  14
                 </span>
               
             </div>
@@ -469,7 +466,7 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//新建虚拟主机配置文件夹</span><br><span class="line">mkdir -p /usr/local/nginx/conf/vhost/</span><br><span class="line"></span><br><span class="line">//每个虚拟主机新建一个配置文件</span><br><span class="line">至少要包括以下三项内容</span><br><span class="line">touch /usr/local/nginx/conf/vhost/discuz.conf</span><br><span class="line"></span><br><span class="line">vi /usr/local/nginx/conf/vhost/discuz.conf</span><br><span class="line"></span><br><span class="line">//必须包括以下几项内容</span><br><span class="line">    server</span><br><span class="line">    &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  discuz.com;</span><br><span class="line">        index index.html index.htm index.php;</span><br><span class="line">        root /data/wwwroot/discuz.com/;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>浏览器输入ip即可看到结果。</p>
-<p><img src="https://farm2.staticflickr.com/1797/29108853207_573ae573b6_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1797/29108853207_573ae573b6_o.png" alt></p>
 <h3 id="关于默认虚拟主机设置"><a href="#关于默认虚拟主机设置" class="headerlink" title="关于默认虚拟主机设置"></a>关于默认虚拟主机设置</h3><p>nginx允许在同一台服务器上设置多个虚拟主机，比如我们可以再设置一个zrlog.com的主机。配置方法跟上面类似。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">//配置zrlog.com</span><br><span class="line">[root@local-linux00 wwwroot]# mkdir zrlog.com</span><br><span class="line">[root@local-linux00 wwwroot]# touch zrlog.com/index.html</span><br><span class="line">[root@local-linux00 wwwroot]# echo &apos;this is zrlog.com&apos; &gt; !$</span><br><span class="line">echo &apos;this is zrlog.com&apos; &gt; zrlog.com/index.html</span><br><span class="line">[root@local-linux00 wwwroot]# cd /usr/local/nginx/conf/vhost/</span><br><span class="line">[root@local-linux00 vhost]# cp /usr/local/nginx/conf/vhost/discuz.conf zrlog.conf</span><br><span class="line">[root@local-linux00 vhost]# vi !$</span><br><span class="line">vi zrlog.conf</span><br><span class="line">[root@local-linux00 vhost]# nginx -t</span><br><span class="line">nginx: the configuration file /usr/local/nginx/conf/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /usr/local/nginx/conf/nginx.conf test is successful</span><br><span class="line">[root@local-linux00 vhost]# nginx -s reload</span><br><span class="line"></span><br><span class="line">//校验结果</span><br><span class="line">[root@local-linux00 vhost]# curl -x 127.0.0.1:80 discuz.com</span><br><span class="line">discuz.com is fine</span><br><span class="line"></span><br><span class="line">[root@local-linux00 vhost]# curl -x 127.0.0.1:80 zrlog.com</span><br><span class="line">this is zrlog.com</span><br></pre></td></tr></table></figure>
 <p>在同时并存多个虚拟主机的情况下，如果不进行设置，在访问一个该主机上没有域名时，就以配置文件排序在前的为准。</p>
@@ -477,7 +474,7 @@
 <p>也可以手动进行设置，指定默认虚拟主机。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/nginx/conf/vhost/default.conf</span><br><span class="line"></span><br><span class="line">server</span><br><span class="line">&#123;</span><br><span class="line">    listen 80 default_server;</span><br><span class="line">    root /data/wwwroot/zrlog.com/;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//保存后重新加载</span><br><span class="line">nginx -t</span><br><span class="line"></span><br><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
 <p>校验结果</p>
-<p><img src="https://farm2.staticflickr.com/1812/42237064220_0ed3a15d6e_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1812/42237064220_0ed3a15d6e_o.png" alt></p>
 <p>相比较而言，另一种更合理策略是，访问该主机上不存在的域名时，直接拒绝，显示不存在，这样更符合行为逻辑。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/nginx/conf/vhost/default.conf</span><br><span class="line"></span><br><span class="line">server</span><br><span class="line">&#123;</span><br><span class="line">    listen 80 default_server;</span><br><span class="line">    deny all;   </span><br><span class="line">&#125;</span><br><span class="line">//这里的deny all 会回复403错误。</span><br><span class="line"></span><br><span class="line">//校验结果</span><br><span class="line">[root@local-linux00 vhost]# curl -x 127.0.0.1:80 log.com</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;&lt;title&gt;403 Forbidden&lt;/title&gt;&lt;/head&gt;</span><br><span class="line">&lt;body bgcolor=&quot;white&quot;&gt;</span><br><span class="line">&lt;center&gt;&lt;h1&gt;403 Forbidden&lt;/h1&gt;&lt;/center&gt;</span><br><span class="line">&lt;hr&gt;&lt;center&gt;nginx&lt;/center&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 <h3 id="泛解析"><a href="#泛解析" class="headerlink" title="泛解析"></a>泛解析</h3><p>所谓泛解析就是域名只要符合某种规则的，都解析到同一地址。如下所示，在server_name 这一项中增加*.discuz.com之后，不管是1.discuz.com 还是 vesrerbef.discuz.com，都会解析到改目录下。</p>
@@ -497,7 +494,7 @@
 <p>按照上述方法修改zrlog.conf</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/nginx/conf/vhost/zrlog.conf</span><br><span class="line"></span><br><span class="line">server</span><br><span class="line">&#123;</span><br><span class="line">    listen       80 default_server;</span><br><span class="line">    server_name  zrlog.com *zrlog.conf;</span><br><span class="line">    index index.html index.htm index.php;</span><br><span class="line">    root /data/wwwroot/zrlog.com;</span><br><span class="line">    </span><br><span class="line">    location ~ \.php$</span><br><span class="line">    &#123;</span><br><span class="line">        include fastcgi_params;</span><br><span class="line">        fastcgi_pass unix:/tmp/php-fcgi.sock; </span><br><span class="line">        fastcgi_index index.php;</span><br><span class="line">        fastcgi_param SCRIPT_FILENAME /data/wwwroot/zrlog.com$fastcgi_script_name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//修改保存后，在zrlog.com目录下新建一个info.php</span><br><span class="line">//info.php作用是显示php配置信息</span><br><span class="line">vi /data/wwwroot/zrlog.com/info.php</span><br><span class="line"></span><br><span class="line">//加入如下内容</span><br><span class="line">&lt;?php</span><br><span class="line">phpinfo();</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">//重新加载服务</span><br><span class="line">nginx -t</span><br><span class="line"></span><br><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
 <p>校验结果</p>
-<p><img src="https://farm2.staticflickr.com/1772/43344900594_51cd7cc78a_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1772/43344900594_51cd7cc78a_o.png" alt></p>
 <h2 id="实践部分"><a href="#实践部分" class="headerlink" title="实践部分"></a>实践部分</h2><p>尝试在虚拟机上安装zrlog、discuz、dedecms</p>
 <h3 id="安装discuz"><a href="#安装discuz" class="headerlink" title="安装discuz"></a>安装discuz</h3><p>discuz是一套由中国人开发的通用的社区论坛软件系统，采用世界上最流行的web编程组合PHP+MySQL实现，用户可以在不需要任何编程的基础上，通过简单的设置和安装，在互联网上搭建起具备完善功能、很强负载能力和可高度定制的论坛服务。</p>
 <p><strong>实验教训：</strong></p>
@@ -544,7 +541,7 @@
 <p>//拷贝站点内容到站点目录<br>mv /usr/local/tomcat/webapps/zrlog/*  /data/wwwroot/zrlog.com</p>
 <p>浏览器安装，输入 <code>http://172.16.155.131/tomcat/zrlog/install</code> 这里的路径，其实是相对<code>于/usr/local/tomcat/webapps/</code>的路径</p>
 <p>输入无误的话，如下图：</p>
-<p><img src="https://farm2.staticflickr.com/1774/29147734677_6c2e1ef98b_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1774/29147734677_6c2e1ef98b_o.png" alt></p>
 
       
     </div>
@@ -685,9 +682,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/uploads/logo.png"
-                alt="Steve Yuan" />
+              <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan">
             
               <p class="site-author-name" itemprop="name">Steve Yuan</p>
               <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
@@ -810,7 +805,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -824,7 +819,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">196.2k</span>
+    <span title="Site words total count">190.8k</span>
   
 </div>
 

@@ -6,10 +6,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +20,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
@@ -68,13 +68,13 @@
 
 
 
-  <meta name="keywords" content="centos,ls,swap,bootloader,grub," />
+  <meta name="keywords" content="centos,ls,swap,bootloader,grub,">
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Steve Yuan's Workspace" type="application/atom+xml">
 
 
 
@@ -86,7 +86,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux运维笔记：CentOS 系统的分区、启动及目录查询">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/03/09/centOS-fileSystem/index.html">
-<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
 <meta property="og:description" content="写在前面主要整理初次CentOS的基本操作，可能会显得比较乱。 系统分区CentOS分区基本规则   分区名称 空间大小     /boot 200M   /swap 4G   / 20G   /data 剩余磁盘空间    注：如果是虚拟机仅仅用来学习linux，磁盘空间有限的情况下，处 /boot 、/swap 之外的空间都可以分给 / 根目录，没有必要再分出/data 了。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm5.staticflickr.com/4778/38949748290_b5fc59518e_o.jpg">
@@ -124,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/03/09/centOS-fileSystem/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/03/09/centOS-fileSystem/">
 
 
 
 
 
-  <title>linux运维笔记：CentOS 系统的分区、启动及目录查询 | Steve的折腾学习日志</title>
+  <title>linux运维笔记：CentOS 系统的分区、启动及目录查询 | Steve Yuan's Workspace</title>
   
 
 
@@ -168,14 +168,14 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="site-title">Steve Yuan's Workspace</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+        <p class="site-subtitle">99%学习&&1%心得</p>
       
   </div>
 
@@ -198,7 +198,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -208,7 +208,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -218,7 +218,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -228,7 +228,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -238,7 +238,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -251,7 +251,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -272,9 +272,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -315,12 +313,12 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/uploads/logo.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
     </span>
 
     
@@ -351,7 +349,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -382,8 +380,7 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2018/03/09/centOS-fileSystem/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/03/09/centOS-fileSystem/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/03/09/centOS-fileSystem/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -405,7 +402,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,505
+                  1.5k
                 </span>
               
 
@@ -421,7 +418,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6
+                  5
                 </span>
               
             </div>
@@ -506,7 +503,7 @@
 </tbody>
 </table>
 <h3 id="CentOS是如何启动的"><a href="#CentOS是如何启动的" class="headerlink" title="CentOS是如何启动的"></a>CentOS是如何启动的</h3><h4 id="概括流程："><a href="#概括流程：" class="headerlink" title="概括流程："></a>概括流程：</h4><p><code>POST</code> =&gt; <code>Boot Sequence</code> =&gt; <code>MBR(bootloader）</code>=&gt; <code>kernel</code>=&gt; <code>/sbin/init</code></p>
-<p>具体而言：<br><img src="https://farm5.staticflickr.com/4778/38949748290_b5fc59518e_o.jpg" alt=""></p>
+<p>具体而言：<br><img src="https://farm5.staticflickr.com/4778/38949748290_b5fc59518e_o.jpg" alt></p>
 <h5 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h5><p>加电自检，检测必要的硬件设备：CPU，内存。实现自检功能主要是由镶嵌在主板芯片(CMOS)上的BIOS(basic input output system)程序，检测没问题之后进行硬件设备的初始化。</p>
 <h5 id="Boot-Sequence-启动管理程序"><a href="#Boot-Sequence-启动管理程序" class="headerlink" title="Boot Sequence(启动管理程序)"></a>Boot Sequence(启动管理程序)</h5><p>Boot Sequence是一个程序，它依赖于某个硬盘硬件，准确的说是第一个硬盘扇区的MBR，从而按次序查找各引导设备。</p>
 <h5 id="MBR引导，bootloader引导加载器，启动程序"><a href="#MBR引导，bootloader引导加载器，启动程序" class="headerlink" title="MBR引导，bootloader引导加载器，启动程序"></a>MBR引导，bootloader引导加载器，启动程序</h5><p>MBR(Master Boot Record)：此记录在0磁道1扇区，总共为512字节，前446字节为bootloder，后64字节为分区表信息，主分区加上扩展分区不能大于四个，最后2个字节为校验信息，为55AA。</p>
@@ -817,9 +814,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/uploads/logo.png"
-                alt="Steve Yuan" />
+              <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan">
             
               <p class="site-author-name" itemprop="name">Steve Yuan</p>
               <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
@@ -942,7 +937,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -956,7 +951,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">196.2k</span>
+    <span title="Site words total count">190.8k</span>
   
 </div>
 

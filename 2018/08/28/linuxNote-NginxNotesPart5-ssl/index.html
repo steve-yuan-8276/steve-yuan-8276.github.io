@@ -6,10 +6,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +20,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
@@ -68,13 +68,13 @@
 
 
 
-  <meta name="keywords" content="notes,linux,nginx," />
+  <meta name="keywords" content="notes,linux,nginx,">
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Steve Yuan's Workspace" type="application/atom+xml">
 
 
 
@@ -86,7 +86,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="nginx学习笔记:ssl配置">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/08/28/linuxNote-NginxNotesPart5-ssl/index.html">
-<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
 <meta property="og:description" content="写在前面http，即超文本传输协议，是互联网上应用最为广泛的一种网络协议，采用明文传输，监听80端口。在安全隐私问题越来越被关注的今天，http存在三大问题：  通信使用明文(不加密), 内容可能会被窃听；  不验证通信方的身份, 因此有可能遭遇伪装；  无法证明报文的完整性, 所有有可能已遭篡改；   https，简单讲是HTTP的安全版，即HTTP下加入SSL层，HTTPS的安全基础是SSL，">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm2.staticflickr.com/1881/30471541008_8344bea684_o.jpg">
@@ -124,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/08/28/linuxNote-NginxNotesPart5-ssl/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/08/28/linuxNote-NginxNotesPart5-ssl/">
 
 
 
 
 
-  <title>nginx学习笔记:ssl配置 | Steve的折腾学习日志</title>
+  <title>nginx学习笔记:ssl配置 | Steve Yuan's Workspace</title>
   
 
 
@@ -168,14 +168,14 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="site-title">Steve Yuan's Workspace</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+        <p class="site-subtitle">99%学习&&1%心得</p>
       
   </div>
 
@@ -198,7 +198,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -208,7 +208,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -218,7 +218,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -228,7 +228,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -238,7 +238,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -251,7 +251,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -272,9 +272,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -315,12 +313,12 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/uploads/logo.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
     </span>
 
     
@@ -351,7 +349,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -382,8 +380,7 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2018/08/28/linuxNote-NginxNotesPart5-ssl/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/28/linuxNote-NginxNotesPart5-ssl/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/28/linuxNote-NginxNotesPart5-ssl/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -405,7 +402,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,165
+                  2.1k
                 </span>
               
 
@@ -421,7 +418,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  8
+                  7
                 </span>
               
             </div>
@@ -463,7 +460,7 @@
 <p>证书分为三种类型，域名型SSL证书（DV SSL）、企业型SSL证书（OVSSL）、增强型SSL证书（EVSSL）。个人拥护一版采用第一种就可以。</p>
 <p><strong>证书内容</strong>主要包括：电子签证机关的信息、公钥用户信息、公钥、权威机构的签字和有效期等等。目前，证书的格式和验证方法普遍遵循X.509国际标准。</p>
 <p>根据证书颁发机构的不同，CA证书也是分层级的。如下图中，只要处于最顶端的跟证书C没问题，那么它之下的所有证书都没问题。</p>
-<p><img src="https://farm2.staticflickr.com/1881/30471541008_8344bea684_o.jpg" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1881/30471541008_8344bea684_o.jpg" alt></p>
 <p>CA 是“Certificate Authority”的缩写，也叫“证书授权中心”，是负责管理和签发证书的第三方机构。CA 是“Certificate Authority”的缩写，也叫“证书授权中心”，是负责管理和签发证书的第三方机构。</p>
 <p>常见的免费证书发放机构：</p>
 <ul>
@@ -669,9 +666,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/uploads/logo.png"
-                alt="Steve Yuan" />
+              <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan">
             
               <p class="site-author-name" itemprop="name">Steve Yuan</p>
               <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
@@ -794,7 +789,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -808,7 +803,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">196.2k</span>
+    <span title="Site words total count">190.8k</span>
   
 </div>
 

@@ -6,10 +6,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +20,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
@@ -68,13 +68,13 @@
 
 
 
-  <meta name="keywords" content="centos,notes,linux," />
+  <meta name="keywords" content="centos,notes,linux,">
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Steve Yuan's Workspace" type="application/atom+xml">
 
 
 
@@ -86,7 +86,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux运维学习笔记：centOS磁盘管理">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/19/linuxNotes-04-diskManegement/index.html">
-<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
 <meta property="og:description" content="写在前面这则笔记主要整理linux磁盘管理的基础知识。 磁盘分区挂载的工作流：  磁盘分区 （fdisk、parted）  磁盘格式化  （mkfs.ext2、mkfs.ext3、mkfs.ext4和mkfs.xfs ）  挂载分区  （mount）  修改 /etc/fstab   除此之外，还会整理磁盘分区动态管理LVM，以及手动增加swap分区的相关知识。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm1.staticflickr.com/814/41225770961_503ef1b094_o.png">
@@ -146,13 +146,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/19/linuxNotes-04-diskManegement/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/19/linuxNotes-04-diskManegement/">
 
 
 
 
 
-  <title>Linux运维学习笔记：centOS磁盘管理 | Steve的折腾学习日志</title>
+  <title>Linux运维学习笔记：centOS磁盘管理 | Steve Yuan's Workspace</title>
   
 
 
@@ -190,14 +190,14 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="site-title">Steve Yuan's Workspace</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+        <p class="site-subtitle">99%学习&&1%心得</p>
       
   </div>
 
@@ -220,7 +220,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -230,7 +230,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -240,7 +240,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -250,7 +250,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -260,7 +260,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -273,7 +273,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -294,9 +294,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -337,12 +335,12 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/uploads/logo.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
     </span>
 
     
@@ -373,7 +371,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -404,8 +402,7 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2018/07/19/linuxNotes-04-diskManegement/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/19/linuxNotes-04-diskManegement/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/19/linuxNotes-04-diskManegement/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -427,7 +424,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5,064
+                  5k
                 </span>
               
 
@@ -443,7 +440,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  20
+                  19
                 </span>
               
             </div>
@@ -479,7 +476,7 @@
 <p>除此之外，还会整理磁盘分区动态管理LVM，以及手动增加swap分区的相关知识。</p>
 <a id="more"></a>
 <h2 id="查看磁盘"><a href="#查看磁盘" class="headerlink" title="查看磁盘"></a>查看磁盘</h2><h3 id="df命令-查看已挂载磁盘的容量"><a href="#df命令-查看已挂载磁盘的容量" class="headerlink" title="df命令 查看已挂载磁盘的容量"></a><code>df</code>命令 查看已挂载磁盘的容量</h3><p>命令行格式： <code>df [参数]</code></p>
-<p><img src="https://farm1.staticflickr.com/814/41225770961_503ef1b094_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/814/41225770961_503ef1b094_o.png" alt></p>
 <p>如上图所示，一共有6列：</p>
 <table>
 <thead>
@@ -520,52 +517,52 @@
 <ul>
 <li><code>-i</code> 查看inodes 使用情况，如果inodes已使用100%，即使磁盘空间仍有空余，也会提示磁盘空间已满。</li>
 </ul>
-<p><img src="https://lh3.googleusercontent.com/-IMWI8LRKkqI/WsSBi8VE0dI/AAAAAAABiEE/0-bGw_lxJxcnVisgLOMGno80e09R8Y24gCHMYCw/I/15228276574394.jpg" alt=""></p>
+<p><img src="https://lh3.googleusercontent.com/-IMWI8LRKkqI/WsSBi8VE0dI/AAAAAAABiEE/0-bGw_lxJxcnVisgLOMGno80e09R8Y24gCHMYCw/I/15228276574394.jpg" alt></p>
 <ul>
 <li><code>-h</code> 使用合适的存储单位显示。</li>
 </ul>
-<p><img src="https://lh3.googleusercontent.com/-OPAKilt8CLY/WsSCreK2J8I/AAAAAAABiEQ/HzL92vF0KHI41_m298-d7LA6Irr4GFRSwCHMYCw/I/15228279476641.jpg" alt=""></p>
+<p><img src="https://lh3.googleusercontent.com/-OPAKilt8CLY/WsSCreK2J8I/AAAAAAABiEQ/HzL92vF0KHI41_m298-d7LA6Irr4GFRSwCHMYCw/I/15228279476641.jpg" alt></p>
 <ul>
 <li><code>-k、-m</code> 指定存储单位显示，k 表示KB；m表示MB。</li>
 </ul>
-<p><img src="https://lh3.googleusercontent.com/-eNcvEoz5X9E/WsSC2IG1z6I/AAAAAAABiEU/tCBpOknKPnsKiBCfUbAYumAtrvBTV3SrgCHMYCw/I/15228279907551.jpg" alt=""></p>
-<h3 id="free-命令-查看swap-分区情况"><a href="#free-命令-查看swap-分区情况" class="headerlink" title="free 命令 查看swap 分区情况"></a>free 命令 查看swap 分区情况</h3><p><img src="https://farm1.staticflickr.com/794/39506950090_fff5cce919_o.png" alt=""></p>
+<p><img src="https://lh3.googleusercontent.com/-eNcvEoz5X9E/WsSC2IG1z6I/AAAAAAABiEU/tCBpOknKPnsKiBCfUbAYumAtrvBTV3SrgCHMYCw/I/15228279907551.jpg" alt></p>
+<h3 id="free-命令-查看swap-分区情况"><a href="#free-命令-查看swap-分区情况" class="headerlink" title="free 命令 查看swap 分区情况"></a>free 命令 查看swap 分区情况</h3><p><img src="https://farm1.staticflickr.com/794/39506950090_fff5cce919_o.png" alt></p>
 <h3 id="du-命令-查看某个目录或者文件的大小"><a href="#du-命令-查看某个目录或者文件的大小" class="headerlink" title="du 命令 查看某个目录或者文件的大小"></a>du 命令 查看某个目录或者文件的大小</h3><p>命令行格式 <code>du [参数] [dirname/filename]</code></p>
 <p>不加任何参数，只会目录（包括子目录）的大小：</p>
-<p><img src="https://lh3.googleusercontent.com/-6PsUVosd6Zw/WsSFwUQ0kzI/AAAAAAABiEk/ceOJBHZTONci0SLYPQZ3OSDN214tTaqQgCHMYCw/I/15228287345586.jpg" alt=""></p>
+<p><img src="https://lh3.googleusercontent.com/-6PsUVosd6Zw/WsSFwUQ0kzI/AAAAAAABiEk/ceOJBHZTONci0SLYPQZ3OSDN214tTaqQgCHMYCw/I/15228287345586.jpg" alt></p>
 <p><strong>常用参数用法如下：</strong></p>
 <ul>
 <li><code>-a</code> 列出全部文件及目录的大小</li>
 </ul>
-<p><img src="https://lh3.googleusercontent.com/-CTGZGx2qRB8/WsSGBgf-3oI/AAAAAAABiEo/liCA18cXV0guU278TUGoUSmzG6mejKoWwCHMYCw/I/15228288055580.jpg" alt=""></p>
+<p><img src="https://lh3.googleusercontent.com/-CTGZGx2qRB8/WsSGBgf-3oI/AAAAAAABiEo/liCA18cXV0guU278TUGoUSmzG6mejKoWwCHMYCw/I/15228288055580.jpg" alt></p>
 <ul>
 <li><code>-b、 -k、 -m</code>  指定不同的存储单位，<code>b</code> 表示<code>bytes</code> 字节；<code>k</code>代表<code>KB</code> ；<code>m</code>代表 <code>MB</code>。</li>
 </ul>
-<p><img src="https://lh3.googleusercontent.com/--pPLOelccUs/WsSHtJ-cbtI/AAAAAAABiE0/QVNDZnan2Cgxkk-XGJEJioicja-w7JskQCHMYCw/I/15228292328939.jpg" alt=""></p>
+<p><img src="https://lh3.googleusercontent.com/--pPLOelccUs/WsSHtJ-cbtI/AAAAAAABiE0/QVNDZnan2Cgxkk-XGJEJioicja-w7JskQCHMYCw/I/15228292328939.jpg" alt></p>
 <p><strong>注：</strong>使用 -k 时，如果文件小于4KB，会显示4KB（inodes记录文件存储的最小的单位是块，通常是4KB大小。）</p>
 <ul>
 <li><code>-h</code> 自适应恰当的输出单位</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/900/41182118502_f7a2323758_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/900/41182118502_f7a2323758_o.png" alt></p>
 <ul>
 <li><code>-c</code> 表示最后加总和</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/874/26353893207_0cc0d4f43c_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/874/26353893207_0cc0d4f43c_o.png" alt></p>
 <ul>
 <li><code>-s</code> 表示只列出总和</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/864/27352848428_185185c7b1_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/864/27352848428_185185c7b1_o.png" alt></p>
 <ul>
 <li>参数可以连用，例如 <code>du -sh [dirname/filename]</code></li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/804/41226806021_8fd282234b_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/804/41226806021_8fd282234b_o.png" alt></p>
 <ul>
 <li>利用管道符，对结果进行排序 <code>du -h [dir_name] | sort -n</code></li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/818/39555652670_b9ef0984fb_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/818/39555652670_b9ef0984fb_o.png" alt></p>
 <h2 id="磁盘分区"><a href="#磁盘分区" class="headerlink" title="磁盘分区"></a>磁盘分区</h2><h3 id="前提准备：添加虚拟分区"><a href="#前提准备：添加虚拟分区" class="headerlink" title="前提准备：添加虚拟分区"></a>前提准备：添加虚拟分区</h3><p>点击虚拟机设置，选择磁盘，调整大小。</p>
-<p><img src="https://farm1.staticflickr.com/807/39417218650_d06e284c49_o.png" alt=""></p>
-<p><img src="https://farm1.staticflickr.com/813/40603141934_1abddd3362_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/807/39417218650_d06e284c49_o.png" alt></p>
+<p><img src="https://farm1.staticflickr.com/813/40603141934_1abddd3362_o.png" alt></p>
 <h3 id="利用fdisk-进行磁盘分区"><a href="#利用fdisk-进行磁盘分区" class="headerlink" title="利用fdisk 进行磁盘分区"></a>利用fdisk 进行磁盘分区</h3><p><code>fdisk</code>是linux 下的磁盘分区工具，分区格式为MBR，特点是最多分4个主分区，磁盘大小不能超过2T。因此使用fdisk需要遵循以下原则：</p>
 <ul>
 <li><p>主分区（包括拓展分区）控制在4个以内，不得超过4个；</p>
@@ -577,7 +574,7 @@
 </ul>
 <h4 id="第一步：查看硬盘使用情况"><a href="#第一步：查看硬盘使用情况" class="headerlink" title="第一步：查看硬盘使用情况"></a>第一步：查看硬盘使用情况</h4><p>输入 <code>fdisk -l /dev/sda</code>，观察硬盘使用情形。</p>
 <h4 id="第二步："><a href="#第二步：" class="headerlink" title="第二步："></a>第二步：</h4><p>输入 <code>fdisk /dev/sda</code>，进入分割硬盘模式。</p>
-<p><img src="https://farm1.staticflickr.com/869/26445115377_2691e2091f_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/869/26445115377_2691e2091f_o.png" alt></p>
 <table>
 <thead>
 <tr>
@@ -843,16 +840,16 @@
 <h3 id="查看系统分区信息"><a href="#查看系统分区信息" class="headerlink" title="查看系统分区信息"></a>查看系统分区信息</h3><ul>
 <li><code>mount</code> 查看已挂载的分区</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/876/39508454940_ba483bdca2_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/876/39508454940_ba483bdca2_o.png" alt></p>
 <ul>
 <li><code>blkid</code> 查看未挂载的分区</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/785/40604614524_759d353bbf_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/785/40604614524_759d353bbf_o.png" alt></p>
 <ul>
 <li><code>/etc/fstab</code>文件 </li>
 </ul>
 <p>输入命令行 <code>cat /etc/fstab</code> ,可以查看启动时需要挂载的分区信息</p>
-<p><img src="https://farm1.staticflickr.com/889/40417612895_e0886fbcb1_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/889/40417612895_e0886fbcb1_o.png" alt></p>
 <table>
 <thead>
 <tr>
@@ -944,15 +941,15 @@
 <h4 id="设置分区自动挂载"><a href="#设置分区自动挂载" class="headerlink" title="设置分区自动挂载"></a>设置分区自动挂载</h4><h5 id="方法一：编辑-etc-fstab"><a href="#方法一：编辑-etc-fstab" class="headerlink" title="方法一：编辑 /etc/fstab"></a>方法一：编辑 <code>/etc/fstab</code></h5><ul>
 <li>cat命令看一下配置文件的格式</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/909/27291044237_7f5f58e556_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/909/27291044237_7f5f58e556_o.png" alt></p>
 <ul>
 <li>blkid命令查询需要添加的 UUID</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/827/41261959055_7b6c1dab11_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/827/41261959055_7b6c1dab11_o.png" alt></p>
 <ul>
 <li>vim编辑配置文件</li>
 </ul>
-<p>按照下面的格式，增加一行，替换UUID等内容即可；<br><img src="https://farm1.staticflickr.com/909/27291044237_7f5f58e556_o.png" alt=""></p>
+<p>按照下面的格式，增加一行，替换UUID等内容即可；<br><img src="https://farm1.staticflickr.com/909/27291044237_7f5f58e556_o.png" alt></p>
 <p>修改保存后，重启电脑。</p>
 <h5 id="方法二：将挂载命令写入-etc-rc-d-rc-local"><a href="#方法二：将挂载命令写入-etc-rc-d-rc-local" class="headerlink" title="方法二：将挂载命令写入 /etc/rc.d/rc.local"></a>方法二：将挂载命令写入 <code>/etc/rc.d/rc.local</code></h5><ul>
 <li>编辑<code>/etc/rc.d/rc.local</code></li>
@@ -994,7 +991,7 @@
 <h4 id="卸载虚拟磁盘"><a href="#卸载虚拟磁盘" class="headerlink" title="卸载虚拟磁盘"></a>卸载虚拟磁盘</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swapoff /tmp/newdisk</span><br></pre></td></tr></table></figure>
 <p>主要是LVM相关知识。</p>
 <h2 id="逻辑卷管理器lvm"><a href="#逻辑卷管理器lvm" class="headerlink" title="逻辑卷管理器lvm"></a>逻辑卷管理器lvm</h2><h3 id="什么是lvm？"><a href="#什么是lvm？" class="headerlink" title="什么是lvm？"></a>什么是lvm？</h3><p>LVM全称是Logical Volume Manager，即逻辑卷管理器。它是Linux环境下对磁盘分区进行管理的一种机制；它可以将多个物理分区整合在一起，并且可以根据实际需要动态调整文件系统空间，从而实现磁盘的动态管理。</p>
-<p><img src="https://farm1.staticflickr.com/796/27487620198_4a8888491c_o.jpg" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/796/27487620198_4a8888491c_o.jpg" alt></p>
 <p>如上图所示：</p>
 <ul>
 <li><p><strong>Disk（磁盘）：</strong>接入系统的的物理磁盘。如图所示，就是disk A 和disk B。</p>
@@ -1286,9 +1283,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/uploads/logo.png"
-                alt="Steve Yuan" />
+              <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan">
             
               <p class="site-author-name" itemprop="name">Steve Yuan</p>
               <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
@@ -1411,7 +1406,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -1425,7 +1420,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">196.2k</span>
+    <span title="Site words total count">190.8k</span>
   
 </div>
 

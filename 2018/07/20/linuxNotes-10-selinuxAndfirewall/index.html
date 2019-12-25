@@ -6,10 +6,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +20,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
@@ -68,13 +68,13 @@
 
 
 
-  <meta name="keywords" content="notes,linux,iptables,firewalld," />
+  <meta name="keywords" content="notes,linux,iptables,firewalld,">
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Steve Yuan's Workspace" type="application/atom+xml">
 
 
 
@@ -86,7 +86,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux运维学习笔记：系统防火墙设置">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-10-selinuxAndfirewall/index.html">
-<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
 <meta property="og:description" content="写在前面这则笔记主要整理linux防火墙相关的知识，主要包括以下三个方面：  selinux  iptables  firewalld   以上三个工具，都与linux系统安全息息相关。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm1.staticflickr.com/972/41924662192_70a6231098_o.png">
@@ -127,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-10-selinuxAndfirewall/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-10-selinuxAndfirewall/">
 
 
 
 
 
-  <title>Linux运维学习笔记：系统防火墙设置 | Steve的折腾学习日志</title>
+  <title>Linux运维学习笔记：系统防火墙设置 | Steve Yuan's Workspace</title>
   
 
 
@@ -171,14 +171,14 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="site-title">Steve Yuan's Workspace</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+        <p class="site-subtitle">99%学习&&1%心得</p>
       
   </div>
 
@@ -201,7 +201,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -211,7 +211,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -221,7 +221,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -231,7 +231,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -241,7 +241,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -254,7 +254,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -275,9 +275,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -318,12 +316,12 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/uploads/logo.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
     </span>
 
     
@@ -354,7 +352,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -385,8 +383,7 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2018/07/20/linuxNotes-10-selinuxAndfirewall/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/20/linuxNotes-10-selinuxAndfirewall/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/20/linuxNotes-10-selinuxAndfirewall/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -408,7 +405,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6,681
+                  6.6k
                 </span>
               
 
@@ -424,7 +421,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  27
+                  26
                 </span>
               
             </div>
@@ -507,8 +504,8 @@
 <h3 id="netfilter的5链、5表"><a href="#netfilter的5链、5表" class="headerlink" title="netfilter的5链、5表"></a>netfilter的5链、5表</h3><p>前面说过，<code>netfilter</code>是系统真正的安全框架，在系统内核里；而<code>iptables</code>只是一个命令行工具，利用这个工具来操作<code>netfilter</code></p>
 <h4 id="netfilter的-5个链"><a href="#netfilter的-5个链" class="headerlink" title="netfilter的 5个链"></a>netfilter的 5个链</h4><p>防火墙的核心就是设定规则，在不同的节点，对数据匹配规则并执行相应的操作。</p>
 <p>链（chains）是数据包传播的路径，每一条链其实就是众多规则中的一个检查清单，每一条链中可以有一条或数条规则。</p>
-<p><img src="https://farm1.staticflickr.com/972/41924662192_70a6231098_o.png" alt=""></p>
-<p><img src="https://farm1.staticflickr.com/881/42311826141_04f0662203_o.jpg" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/972/41924662192_70a6231098_o.png" alt></p>
+<p><img src="https://farm1.staticflickr.com/881/42311826141_04f0662203_o.jpg" alt></p>
 <p>规则链则依据数据包处理位置的不同，可以分为以下5种：</p>
 <ul>
 <li><p><code>PREROUTING</code>：在进行路由选择前处理数据包；</p>
@@ -523,7 +520,7 @@
 </li>
 </ul>
 <h4 id="netfilter的-5个表"><a href="#netfilter的-5个表" class="headerlink" title="netfilter的 5个表"></a>netfilter的 5个表</h4><p>相同规则的集合，叫做“表”，netfilter有也有5个表：</p>
-<p><img src="https://farm1.staticflickr.com/949/41971355321_f35e30511a_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/949/41971355321_f35e30511a_o.png" alt></p>
 <h5 id="表一：Filter（过滤数据包）"><a href="#表一：Filter（过滤数据包）" class="headerlink" title="表一：Filter（过滤数据包）"></a>表一：Filter（过滤数据包）</h5><p>主要跟进入Linux本机的数据包有关，是默认的table。</p>
 <ul>
 <li><p><code>INPUT</code> 链：过滤所有目标地址是本机的数据包（对进入本机数据包的过滤）</p>
@@ -907,7 +904,7 @@
 <ul>
 <li>限制对内部封包的发送速度</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/967/27123175687_6b5edac5a5_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/967/27123175687_6b5edac5a5_o.png" alt></p>
 <ul>
 <li>限制建立联机的转发</li>
 </ul>
@@ -1298,9 +1295,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/uploads/logo.png"
-                alt="Steve Yuan" />
+              <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan">
             
               <p class="site-author-name" itemprop="name">Steve Yuan</p>
               <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
@@ -1423,7 +1418,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -1437,7 +1432,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">196.2k</span>
+    <span title="Site words total count">190.8k</span>
   
 </div>
 

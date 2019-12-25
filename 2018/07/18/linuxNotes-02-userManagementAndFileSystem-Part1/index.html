@@ -6,10 +6,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +20,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
@@ -68,13 +68,13 @@
 
 
 
-  <meta name="keywords" content="centos,notes,linux," />
+  <meta name="keywords" content="centos,notes,linux,">
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Steve Yuan's Workspace" type="application/atom+xml">
 
 
 
@@ -86,7 +86,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux运维学习笔记：centOS用户和文件管理（一）">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/index.html">
-<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
 <meta property="og:description" content="写在前面linux是一个多用户、多任务系统，具有很好的稳定性和安全性，而这与linux的用户和权限管理机制密不可分。 我们在linux系统中的操作，实际上都是操作进程访问文件，这里的访问权限是基于Linux的安全管理机制的。linux上最初的安全模型，叫做DAC，Discretionary Access Contorl，主动访问控制；后来在此基础上又增加了额外的权限管理机制，成为MAC，Manda">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm1.staticflickr.com/787/40206810334_bb89977f05_o.jpg">
@@ -140,13 +140,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/">
 
 
 
 
 
-  <title>Linux运维学习笔记：centOS用户和文件管理（一） | Steve的折腾学习日志</title>
+  <title>Linux运维学习笔记：centOS用户和文件管理（一） | Steve Yuan's Workspace</title>
   
 
 
@@ -184,14 +184,14 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="site-title">Steve Yuan's Workspace</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+        <p class="site-subtitle">99%学习&&1%心得</p>
       
   </div>
 
@@ -214,7 +214,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -224,7 +224,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -234,7 +234,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -244,7 +244,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -254,7 +254,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -267,7 +267,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -288,9 +288,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -331,12 +329,12 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/uploads/logo.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
     </span>
 
     
@@ -367,7 +365,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -398,8 +396,7 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/18/linuxNotes-02-userManagementAndFileSystem-Part1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -421,7 +418,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6,415
+                  6.3k
                 </span>
               
 
@@ -437,7 +434,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  24
+                  23
                 </span>
               
             </div>
@@ -464,7 +461,7 @@
 <p>这则笔记分为文件系统和用户管理两个部分进行整理。</p>
 <a id="more"></a>
 <h2 id="linux的文件系统"><a href="#linux的文件系统" class="headerlink" title="linux的文件系统"></a>linux的文件系统</h2><p>在linux当中，一切都是文件。使用<code>ll  [filename]</code> 或者 <code>ls -l [filename/dirname]</code>  查看文件类型。</p>
-<h3 id="linux文件系统构成"><a href="#linux文件系统构成" class="headerlink" title="linux文件系统构成"></a>linux文件系统构成</h3><h4 id="linux文件目录结构："><a href="#linux文件目录结构：" class="headerlink" title="linux文件目录结构："></a>linux文件目录结构：</h4><p><img src="https://farm1.staticflickr.com/787/40206810334_bb89977f05_o.jpg" alt=""></p>
+<h3 id="linux文件系统构成"><a href="#linux文件系统构成" class="headerlink" title="linux文件系统构成"></a>linux文件系统构成</h3><h4 id="linux文件目录结构："><a href="#linux文件目录结构：" class="headerlink" title="linux文件目录结构："></a>linux文件目录结构：</h4><p><img src="https://farm1.staticflickr.com/787/40206810334_bb89977f05_o.jpg" alt></p>
 <h4 id="常用文件类型："><a href="#常用文件类型：" class="headerlink" title="常用文件类型："></a>常用文件类型：</h4><table>
 <thead>
 <tr>
@@ -518,7 +515,7 @@
 <li><p>数据文件<code>data</code>：有些程序在运行的过程中会读取某些特定格式的文件，那些特定格式的文件可以被称为数据文件。例如，系统登录数据会记录在<code>/var/log/wtmp</code> ，这就是一个数据文件，可以用<code>last -f /var/log/wtmp</code> 命令查看。</p>
 </li>
 </ol>
-<p><img src="https://farm1.staticflickr.com/805/39264033010_f44a3df2ca_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/805/39264033010_f44a3df2ca_o.png" alt></p>
 <h5 id="目录-directory-："><a href="#目录-directory-：" class="headerlink" title="目录 directory ："></a>目录 <code>directory</code> ：</h5><p> 跟<code>windows</code> 下的文件夹类似，用 <code>ll</code> 命令查看属性的第一个字母为<code>d</code></p>
 <h5 id="链接文件-link-file"><a href="#链接文件-link-file" class="headerlink" title="链接文件 link file"></a>链接文件 <code>link file</code></h5><p>类似<code>Windows</code>系统底下的快捷方式！ 第一个属性为<code>l</code>，分为软链接和硬链接，这个上一则笔记已经整理过了，下面会专门讲到。</p>
 <h5 id="设备文件-device"><a href="#设备文件-device" class="headerlink" title="设备文件 device"></a>设备文件 <code>device</code></h5><ol>
@@ -550,12 +547,12 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -m 777 test3     //输入</span><br><span class="line">drwxrwxrwx 2 root root 4096 10-25 17:46 test3    //实现效果</span><br></pre></td></tr></table></figure>
 <p> -p 新建一个目录串</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /test1/test2</span><br></pre></td></tr></table></figure>
-<p> <img src="https://farm5.staticflickr.com/4776/27024999888_3e624dcbcd_o.png" alt=""></p>
+<p> <img src="https://farm5.staticflickr.com/4776/27024999888_3e624dcbcd_o.png" alt></p>
 <p>-v 创建新目录都显示信息</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -v /test3</span><br></pre></td></tr></table></figure>
-<p><img src="https://farm1.staticflickr.com/806/40895559391_9279c2cc95_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/806/40895559391_9279c2cc95_o.png" alt></p>
 <p>在指定目录下创建多个目录<strong>（使用绝对路径）</strong></p>
-<p><img src="https://farm1.staticflickr.com/878/39590698680_863c8252b1_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/878/39590698680_863c8252b1_o.png" alt></p>
 <h5 id="rmdir-命令：删除目录"><a href="#rmdir-命令：删除目录" class="headerlink" title="rmdir 命令：删除目录"></a>rmdir 命令：删除目录</h5><p>跟mkdir 相反，rmdir表示删除目录。命令格式为：<code>mkdir  [参数] [文件目录]</code> 。这个命令的特点在于，只能删除空目录；即使加了 -p 参数，也只能删除一串空目录。如果目录当中有文件，这个命令就没有用了。</p>
 <h5 id="touch-命令：创建文件"><a href="#touch-命令：创建文件" class="headerlink" title="touch 命令：创建文件"></a>touch 命令：创建文件</h5><p>命令行格式： <code>touch [参数] [filename]</code></p>
 <table>
@@ -868,7 +865,7 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ~ -user sam –print     //在$HOME目录中查找文件属主为sam的文件</span><br></pre></td></tr></table></figure>
 <h5 id="which-查询可执行文件的绝对路径"><a href="#which-查询可执行文件的绝对路径" class="headerlink" title="which 查询可执行文件的绝对路径"></a>which 查询可执行文件的绝对路径</h5><p>命令行格式： <code>which [filename]</code></p>
-<p><img src="https://farm1.staticflickr.com/799/41046981492_381002a7b0_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/799/41046981492_381002a7b0_o.png" alt></p>
 <h5 id="whereis-查找文件"><a href="#whereis-查找文件" class="headerlink" title="whereis 查找文件"></a>whereis 查找文件</h5><p>命令行格式： <code>whereis [参数] [filename]</code></p>
 <table>
 <thead>
@@ -892,7 +889,7 @@
 </tr>
 </tbody>
 </table>
-<p><img src="https://farm1.staticflickr.com/877/40380947864_168e70a3a8_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/877/40380947864_168e70a3a8_o.png" alt></p>
 <h5 id="locate-查找文件"><a href="#locate-查找文件" class="headerlink" title="locate 查找文件"></a>locate 查找文件</h5><p>跟whereis 作用类似，通过查找预先生产的文件列表库来查找文件。</p>
 <p><code>locate</code>命令 需要单独安装，</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install mlocate</span><br></pre></td></tr></table></figure>
@@ -908,7 +905,7 @@
 </ul>
 <p>举例来说：</p>
 <p>pwd        //查询当前所在的绝对路径</p>
-<p><img src="https://farm1.staticflickr.com/808/27024710608_759c7aebd7_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/808/27024710608_759c7aebd7_o.png" alt></p>
 <p>上图中，红框标示出来的部分，就是当前所在的绝对路径，即 <code>/Users/stevey/documents/github-file</code> ，通过 ls 命令可以看到，下面有一个 steveBlog 的文件夹。</p>
 <p>要进入这个文件夹可以采用两种方法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd steveBlog        //相对路径</span><br><span class="line"></span><br><span class="line">cd /Users/stevey/documents/github-file/steveBlog        //绝对路径</span><br></pre></td></tr></table></figure>
@@ -972,7 +969,7 @@
 </tbody>
 </table>
 <p>示例：</p>
-<p><img src="https://farm1.staticflickr.com/834/43483148681_fb39608605_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/834/43483148681_fb39608605_o.png" alt></p>
 <h5 id="pwd-命令：显示当前目录绝对路径"><a href="#pwd-命令：显示当前目录绝对路径" class="headerlink" title="pwd 命令：显示当前目录绝对路径"></a>pwd 命令：显示当前目录绝对路径</h5><p>用于显示当前所在目录。在linux系统中， <code>.</code>表示当前目录，  <code>..</code>表示上一级目录。</p>
 <p>示例：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_0_7_centos ~]# pwd</span><br><span class="line">/root</span><br></pre></td></tr></table></figure>
@@ -1014,7 +1011,7 @@
 <li>显示当前已设置的别名</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias</span><br></pre></td></tr></table></figure>
-<p><img src="https://lh3.googleusercontent.com/-wCFJNyclSxs/Wq8hgnOzutI/AAAAAAABhlw/v12kCqp-610mvOQAqHoxq52xiHSaKzSlACHMYCw/I/15214268144359.jpg" alt=""></p>
+<p><img src="https://lh3.googleusercontent.com/-wCFJNyclSxs/Wq8hgnOzutI/AAAAAAABhlw/v12kCqp-610mvOQAqHoxq52xiHSaKzSlACHMYCw/I/15214268144359.jpg" alt></p>
 <ul>
 <li>设置vim别名</li>
 </ul>
@@ -1031,28 +1028,28 @@
 <ul>
 <li><code>-r</code>复制目录及目录内的所有项目</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/783/27064365958_41e8d5cb77_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/783/27064365958_41e8d5cb77_o.png" alt></p>
 <ul>
 <li><code>-i</code>覆盖前询问</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/787/40227078774_24c2c183e5_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/787/40227078774_24c2c183e5_o.png" alt></p>
 <h5 id="mv-命令：移动或重命名"><a href="#mv-命令：移动或重命名" class="headerlink" title="mv 命令：移动或重命名"></a>mv 命令：移动或重命名</h5><p>命令格式为 <code>mv [参数] [源文件或目录] [目标文件或目录]</code> ，常见用法如下：</p>
 <ul>
 <li>目标是目录，且目录已存在</li>
 </ul>
-<p><img src="https://lh3.googleusercontent.com/-06StOHqE9TU/WrIs4knF1SI/AAAAAAABhoE/YQU6sJP5mEYYAbCQbiMBAoYPPbTZYHMBACHMYCw/I/15216263364690.jpg" alt=""></p>
+<p><img src="https://lh3.googleusercontent.com/-06StOHqE9TU/WrIs4knF1SI/AAAAAAABhoE/YQU6sJP5mEYYAbCQbiMBAoYPPbTZYHMBACHMYCw/I/15216263364690.jpg" alt></p>
 <ul>
 <li>目标是目录，但该目录不存在(实际相当于给文件重命名)</li>
 </ul>
-<p><img src="https://farm5.staticflickr.com/4794/40041669495_ba9d3081aa_o.png" alt=""></p>
+<p><img src="https://farm5.staticflickr.com/4794/40041669495_ba9d3081aa_o.png" alt></p>
 <ul>
 <li>目标是文件，且该文件已存在(实际相当于覆盖目标文件)</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/794/40893873202_fb7d6eca0c_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/794/40893873202_fb7d6eca0c_o.png" alt></p>
 <ul>
 <li>目标是文件，但该文件不存在（实际相当于重命名源文件）</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/818/26062809817_041eae441d_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/818/26062809817_041eae441d_o.png" alt></p>
 <h3 id="文件权限管理"><a href="#文件权限管理" class="headerlink" title="文件权限管理"></a>文件权限管理</h3><h4 id="文件基本权限"><a href="#文件基本权限" class="headerlink" title="文件基本权限"></a>文件基本权限</h4><p>文件的基本权限包括读read、写write和执行execute，分别可以用4、2、1来表示；</p>
 <p>它与用户密不可分，分为三组进行管理：</p>
 <ul>
@@ -1090,7 +1087,7 @@
 </li>
 </ul>
 <p>例如<code>/etc/shadow</code> 这个文件，用来保存用户信息，处于系统安全的考虑，这个文件读、写、执行的权限都没有；但是passwd命令拥有suid的特殊权限位，如下图所示，出现在x位置的那个s，即表示suid，这就好像尚方宝剑，赋予它临时修改密码配置文件，也就是更改密码的权限。</p>
-<p><img src="https://farm1.staticflickr.com/886/40358699654_292fe93e3c_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/886/40358699654_292fe93e3c_o.png" alt></p>
 <p>由上图可知，<code>/etc/shadow</code> 默认的权限为<code>000</code>，<code>rwx</code>权限都没有的，也不能执行相应的操作。但 <code>passwd</code>赋予一个特殊权限，让我们在执行<code>passwd</code>命令时，临时拥有 root 权限，从而可以修改密码。</p>
 <p><strong>注意：</strong> </p>
 <ol>
@@ -1377,9 +1374,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/uploads/logo.png"
-                alt="Steve Yuan" />
+              <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan">
             
               <p class="site-author-name" itemprop="name">Steve Yuan</p>
               <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
@@ -1502,7 +1497,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -1516,7 +1511,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">196.2k</span>
+    <span title="Site words total count">190.8k</span>
   
 </div>
 

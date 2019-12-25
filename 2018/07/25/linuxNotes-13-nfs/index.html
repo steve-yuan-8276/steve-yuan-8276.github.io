@@ -6,10 +6,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +20,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
@@ -68,13 +68,13 @@
 
 
 
-  <meta name="keywords" content="notes,linux,nfs," />
+  <meta name="keywords" content="notes,linux,nfs,">
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Steve Yuan's Workspace" type="application/atom+xml">
 
 
 
@@ -86,7 +86,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux学习笔记:文件共享服务NFS">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/25/linuxNotes-13-nfs/index.html">
-<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
 <meta property="og:description" content="写在前面这则笔记开始，整理NFS服务的相关知识，主要包括以下内容：  NFS工作原理  NFS部署  NFS挂载">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm2.staticflickr.com/1782/42058712455_71b07c3df0_o.jpg">
@@ -134,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/25/linuxNotes-13-nfs/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/25/linuxNotes-13-nfs/">
 
 
 
 
 
-  <title>linux学习笔记:文件共享服务NFS | Steve的折腾学习日志</title>
+  <title>linux学习笔记:文件共享服务NFS | Steve Yuan's Workspace</title>
   
 
 
@@ -178,14 +178,14 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="site-title">Steve Yuan's Workspace</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+        <p class="site-subtitle">99%学习&&1%心得</p>
       
   </div>
 
@@ -208,7 +208,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -218,7 +218,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -228,7 +228,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -238,7 +238,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -248,7 +248,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -261,7 +261,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -282,9 +282,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -325,12 +323,12 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/uploads/logo.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
     </span>
 
     
@@ -361,7 +359,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -392,8 +390,7 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2018/07/25/linuxNotes-13-nfs/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/25/linuxNotes-13-nfs/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/25/linuxNotes-13-nfs/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -415,7 +412,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,322
+                  4.1k
                 </span>
               
 
@@ -431,7 +428,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  19
+                  17
                 </span>
               
             </div>
@@ -471,7 +468,7 @@
 <li><p>保持数据信息一致 （网站代码、展示内容）；</p>
 </li>
 </ol>
-<h3 id="NFS共享系统原理"><a href="#NFS共享系统原理" class="headerlink" title="NFS共享系统原理"></a>NFS共享系统原理</h3><p><img src="https://farm2.staticflickr.com/1782/42058712455_71b07c3df0_o.jpg" alt=""></p>
+<h3 id="NFS共享系统原理"><a href="#NFS共享系统原理" class="headerlink" title="NFS共享系统原理"></a>NFS共享系统原理</h3><p><img src="https://farm2.staticflickr.com/1782/42058712455_71b07c3df0_o.jpg" alt></p>
 <ol>
 <li><p>在NFS服务端创建共享目录；</p>
 </li>
@@ -502,14 +499,14 @@
 <ul>
 <li>使用ping命 令检查网络是否联通</li>
 </ul>
-<p><img src="https://farm2.staticflickr.com/1838/42910911962_4ab708e5ec_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1838/42910911962_4ab708e5ec_o.png" alt></p>
 <h4 id="第三步：修改主机名"><a href="#第三步：修改主机名" class="headerlink" title="第三步：修改主机名"></a>第三步：修改主机名</h4><p>这一步不是必须 ，不过原来的虚拟机和克隆主机的hostname目前都是一样的，区分起来比较费劲，所以将原主机改为<code>local-linux01</code> ， 克隆主机改为<code>local-lin  ux02</code>，好进行区分。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//原虚拟机hostname改为 local-linux01</span><br><span class="line">steveyuan@steve:~|⇒  hostnamectl set-hostname local-linux01</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//克隆虚拟机hostname改为 local-linux02</span><br><span class="line">steveyuan@steve:~|⇒  hostnamectl set-hostname local-linux02</span><br></pre></td></tr></table></figure>
 <h4 id="第四步：配置虚拟机ssh登陆"><a href="#第四步：配置虚拟机ssh登陆" class="headerlink" title="第四步：配置虚拟机ssh登陆"></a>第四步：配置虚拟机ssh登陆</h4><h5 id="1-编辑配置文件"><a href="#1-编辑配置文件" class="headerlink" title="1. 编辑配置文件"></a>1. 编辑配置文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ssh/sshd_config</span><br><span class="line"></span><br><span class="line">//去掉下面两行的井号注释</span><br><span class="line">#PubkeyAuthentication yes</span><br><span class="line">#AuthorizedKeysFile .ssh/authorized_keys</span><br><span class="line"></span><br><span class="line">然后，修改下面的内容的 yes 为 no</span><br><span class="line"></span><br><span class="line">PasswordAuthentication yes</span><br></pre></td></tr></table></figure>
 <h5 id="2-生成密匙对（在虚拟机一上操作）"><a href="#2-生成密匙对（在虚拟机一上操作）" class="headerlink" title="2. 生成密匙对（在虚拟机一上操作）"></a>2. 生成密匙对（在虚拟机一上操作）</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen     //生成密钥</span><br><span class="line"></span><br><span class="line">cat /root/.ssh/id_rsa.pub    //复制的到的字符串</span><br></pre></td></tr></table></figure>
 <h5 id="3-编辑认证文件-（在虚拟机二上操作）"><a href="#3-编辑认证文件-（在虚拟机二上操作）" class="headerlink" title="3. 编辑认证文件  （在虚拟机二上操作）"></a>3. 编辑认证文件  （在虚拟机二上操作）</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /root/.ssh/authorized_keys   点击I选择编辑，加上刚才复制的代码_</span><br></pre></td></tr></table></figure>
 <h5 id="4-远程登陆-（在虚拟机一上操作）"><a href="#4-远程登陆-（在虚拟机一上操作）" class="headerlink" title="4. 远程登陆 （在虚拟机一上操作）"></a>4. 远程登陆 （在虚拟机一上操作）</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh root@172.16.155.132</span><br></pre></td></tr></table></figure>
-<p><img src="https://farm2.staticflickr.com/1765/42227884834_9a59ecb821_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1765/42227884834_9a59ecb821_o.png" alt></p>
 <p>登陆之后，跟在mac上用iterm2登陆虚拟机是一样样的。</p>
 <p>至此，两台虚拟机已经准备好，下面开始将local-linux01作为服务器；local-linux02作为客服端，安装nfs共享服务。</p>
 <h3 id="服务器端配置"><a href="#服务器端配置" class="headerlink" title="服务器端配置"></a>服务器端配置</h3><ul>
@@ -537,9 +534,9 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//开启NFS服务</span><br><span class="line">systemctl start nfs</span><br><span class="line"></span><br><span class="line">//把NFS设为开机启动</span><br><span class="line">systemctl enable nfs</span><br><span class="line"></span><br><span class="line">//开启RPC服务</span><br><span class="line">systemctl start rpcbind</span><br><span class="line"></span><br><span class="line">//将RPC设为开机自启</span><br><span class="line">systemctl enable rpcbind</span><br><span class="line"></span><br><span class="line">//校验是否启动</span><br><span class="line">systemctl status nfs</span><br></pre></td></tr></table></figure>
 <p>如下所示，说明成功</p>
-<p><img src="https://farm2.staticflickr.com/1780/42898650762_ef95e08552_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1780/42898650762_ef95e08552_o.png" alt></p>
 <h4 id="nfs配置解读"><a href="#nfs配置解读" class="headerlink" title="nfs配置解读"></a>nfs配置解读</h4><p>如前所示，nfs的配置文件为/etc/exports，他的配置文件只有一行，如下所示：</p>
-<p><img src="https://farm2.staticflickr.com/1819/42948210481_c2ec853380_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1819/42948210481_c2ec853380_o.png" alt></p>
 <p>共分为三个部分：</p>
 <p><strong>第一部分：</strong>/home/nfstestdir/ 表示共享目录</p>
 <p><strong>第二部分：</strong>192.168.188.0/24  允许哪些主机访问，这里既可以是ip，也可以是ip段；</p>
@@ -584,21 +581,21 @@
 </ul>
 <p>这里使用<code>rpcinfo</code>命令， <code>rpcinfo -p [host]</code>列出所有在host用portmap注册的RPC程序，如果没有指定host，就查找本机上的RPC程序。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 ~]# rpcinfo -p localhost</span><br></pre></td></tr></table></figure>
-<p><img src="https://farm2.staticflickr.com/1831/29075690808_ee53bd07ce_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1831/29075690808_ee53bd07ce_o.png" alt></p>
 <ul>
 <li>编辑<code>/etc/sysconfig/nfs</code>，去掉注释：</li>
 </ul>
-<p><img src="https://farm2.staticflickr.com/1827/41138526230_c0ab43653f_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1827/41138526230_c0ab43653f_o.png" alt></p>
 <ul>
 <li>编辑/etc/modprobe.d/lockd.conf，进行如下设置</li>
 </ul>
-<p><img src="https://farm2.staticflickr.com/1839/42899719842_a7a171fe66_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1839/42899719842_a7a171fe66_o.png" alt></p>
 <ul>
 <li>重启 rpcbind和nfs</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//重启rpcbind</span><br><span class="line">[root@local-linux02 ~]# service rpcbind restart</span><br><span class="line">Redirecting to /bin/systemctl restart rpcbind.service</span><br><span class="line"></span><br><span class="line">//重启nfs</span><br><span class="line">[root@local-linux02 ~]# service nfs restart</span><br><span class="line">Redirecting to /bin/systemctl restart nfs.service</span><br><span class="line"></span><br><span class="line">//还需要重启机器，改动才能生效</span><br><span class="line">[root@local-linux02 ~]# init 6</span><br></pre></td></tr></table></figure>
 <p>如图所示：</p>
-<p><img src="https://farm2.staticflickr.com/1830/42047265845_0a2577968f_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1830/42047265845_0a2577968f_o.png" alt></p>
 <ul>
 <li>设置iptables，加入以下规则</li>
 </ul>
@@ -615,9 +612,9 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux01 mnt]# mount |grep share</span><br><span class="line">172.16.155.132:/home/sharedir on /mnt/share type nfs4 (rw,relatime,vers=4.1,rsize=131072,wsize=131072,namlen=255,hard,proto=tcp,port=0,timeo=600,retrans=2,sec=sys,clientaddr=172.16.155.128,local_lock=none,addr=172.16.155.132)</span><br></pre></td></tr></table></figure>
 <p>TroubleShooting: 无法读写共享文件夹</p>
-<p><img src="https://farm2.staticflickr.com/1777/42949741291_f44dc380cf_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1777/42949741291_f44dc380cf_o.png" alt></p>
 <p>查看一下服务器端权限设置：</p>
-<p><img src="https://farm2.staticflickr.com/1789/42900094212_9d2e56ed5f_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1789/42900094212_9d2e56ed5f_o.png" alt></p>
 <p>估计还是文件夹权限设置的问题，突然想起来，在配置权限时设置了<code>all_squash</code>这一项，不论登入NFS 的使用者身份为何， 他的身份都会被降权成为普通用户，<strong>后面跟的<code>anonuid anongid</code>，必须存在于你的/etc/passwd 当中对这个普通用户进行指定，换句话说，我们规定了来自客户端的访问等同于本地指定用户。</strong></p>
 <p>在我们的实验当中，指定的uid1000的用户，对应的用户名是user1，而这个文件是由本地root用户创建的，所属用户是root，难怪没有权限进行访问。如下所示：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//查看uid为1000的用户</span><br><span class="line">[root@local-linux02 ~]# cat /etc/passwd | grep 1000</span><br><span class="line">user1:x:1000:1000::/home/user1:/bin/bash</span><br><span class="line"></span><br><span class="line">//当前共享文件夹的所属用户和属组是root</span><br><span class="line">[root@local-linux02 ~]# ls -l /home</span><br><span class="line">total 0</span><br><span class="line">drwx------. 2 php-fpm php-fpm 62 Jun  8 15:24 php-fpm</span><br><span class="line">drwxrwxrwx  2 root    root     6 Jun 22 14:07 sharedir</span><br><span class="line">drwx------. 2 user1   user1   62 Apr  3 22:58 use1</span><br><span class="line">drwx------. 2 user1   user1   96 Apr  4 03:32 user1</span><br><span class="line">drwx------. 2 user2   user2   62 Apr  3 23:13 user2</span><br></pre></td></tr></table></figure>
@@ -850,9 +847,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/uploads/logo.png"
-                alt="Steve Yuan" />
+              <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan">
             
               <p class="site-author-name" itemprop="name">Steve Yuan</p>
               <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
@@ -975,7 +970,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -989,7 +984,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">196.2k</span>
+    <span title="Site words total count">190.8k</span>
   
 </div>
 

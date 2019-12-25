@@ -6,10 +6,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +20,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
@@ -68,13 +68,13 @@
 
 
 
-  <meta name="keywords" content="notes,linux,rsync,ftp," />
+  <meta name="keywords" content="notes,linux,rsync,ftp,">
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Steve Yuan's Workspace" type="application/atom+xml">
 
 
 
@@ -86,7 +86,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux运维学习笔记：数据备份和同步rsync">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/23/linuxNotes-12-rsyncAndFtp/index.html">
-<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
 <meta property="og:description" content="写在前面这则笔记重点整理rsync 数据同步备份工具相关知识，主要包括两个方面的内容：  rsync安装及使用  ftp服务架设及使用  pureftp服务架设及使用  云服务使用何种同步备份工具？">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm1.staticflickr.com/885/41392949015_e5a9f223a0_o.png">
@@ -135,13 +135,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/23/linuxNotes-12-rsyncAndFtp/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/23/linuxNotes-12-rsyncAndFtp/">
 
 
 
 
 
-  <title>Linux运维学习笔记：数据备份和同步rsync | Steve的折腾学习日志</title>
+  <title>Linux运维学习笔记：数据备份和同步rsync | Steve Yuan's Workspace</title>
   
 
 
@@ -179,14 +179,14 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="site-title">Steve Yuan's Workspace</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+        <p class="site-subtitle">99%学习&&1%心得</p>
       
   </div>
 
@@ -209,7 +209,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -219,7 +219,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -229,7 +229,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -239,7 +239,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -249,7 +249,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -262,7 +262,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -283,9 +283,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -326,12 +324,12 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/uploads/logo.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
     </span>
 
     
@@ -362,7 +360,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -393,8 +391,7 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2018/07/23/linuxNotes-12-rsyncAndFtp/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/23/linuxNotes-12-rsyncAndFtp/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/23/linuxNotes-12-rsyncAndFtp/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -416,7 +413,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  8,977
+                  8.2k
                 </span>
               
 
@@ -432,7 +429,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  41
+                  36
                 </span>
               
             </div>
@@ -682,7 +679,7 @@
 <li>修改服务端rsync 配置文件</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/rsyncd.conf</span><br></pre></td></tr></table></figure>
-<p><img src="https://farm1.staticflickr.com/885/41392949015_e5a9f223a0_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/885/41392949015_e5a9f223a0_o.png" alt></p>
 <ul>
 <li>创建本地密码文件</li>
 </ul>
@@ -690,7 +687,7 @@
 <ul>
 <li>再次尝试执行同步，就需要手动输入密码文件</li>
 </ul>
-<p><img src="https://farm1.staticflickr.com/960/42247831092_922f257b94_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/960/42247831092_922f257b94_o.png" alt></p>
 <ul>
 <li><code>--password-file=[passwdfile]</code> 指定密码文件，就不用手动输入密码了。注：这里的文件要写绝对路径。</li>
 </ul>
@@ -699,13 +696,13 @@
 <h2 id="ftp工具架设及使用"><a href="#ftp工具架设及使用" class="headerlink" title="ftp工具架设及使用"></a>ftp工具架设及使用</h2><p>vsftpd是一款在Linux发行版中最受推崇的FTP服务器程序，全称是“very secure FTP daemon”，它可以运行在诸如 Linux、BSD、Solaris、 HP-UNIX等系统上，是一个完全免费的、开发源代码的ftp服务器软件，支持很多其他的 FTP 服务器所不支持的特征。比如：非常高的安全性需求、带宽限制、良好的可伸缩性、可创建虚拟用户、支持IPv6、速率高等。</p>
 <h3 id="ftp工具架设"><a href="#ftp工具架设" class="headerlink" title="ftp工具架设"></a>ftp工具架设</h3><h4 id="第一步：安装ftp"><a href="#第一步：安装ftp" class="headerlink" title="第一步：安装ftp"></a>第一步：安装ftp</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//安装vsftpd</span><br><span class="line">yum install -y vsftpd</span><br><span class="line"></span><br><span class="line">//启动服务</span><br><span class="line">systemctl start vsftpd.service</span><br><span class="line"></span><br><span class="line">//校验进程是否启动</span><br><span class="line">ps -aux | grep vsftpd</span><br></pre></td></tr></table></figure>
 <p>如下图所示，说明已启动</p>
-<p><img src="https://farm1.staticflickr.com/875/40938717090_0438c2032c_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/875/40938717090_0438c2032c_o.png" alt></p>
 <h4 id="第二步：修改-vsftpd-配置"><a href="#第二步：修改-vsftpd-配置" class="headerlink" title="第二步：修改 vsftpd 配置"></a>第二步：修改 vsftpd 配置</h4><p>vcftpd 的配置文件地址为<code>/etc/vsftpd/vsftpd.conf</code></p>
 <ul>
 <li>如果不知道配置文件在那里，使用一下命令查询</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name &apos;vsftpd.conf&apos;</span><br></pre></td></tr></table></figure>
-<p><img src="https://farm1.staticflickr.com/888/27896822517_4fe15639cd_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/888/27896822517_4fe15639cd_o.png" alt></p>
 <ul>
 <li>查看已有的配置</li>
 </ul>
@@ -725,7 +722,7 @@
 </li>
 </ul>
 <p>被动模式是<strong>FTP服务器返回数据传输需要的端口，FTP客户端去连接FTP服务端</strong>。目前，绝大部分的互联网应用(比如Web/Http)，都是客户端向服务端发起连接。</p>
-<p><img src="https://farm2.staticflickr.com/1789/42942630462_e5b41054fa_o.jpg" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1789/42942630462_e5b41054fa_o.jpg" alt></p>
 <h5 id="被动模式下iptables规则配置"><a href="#被动模式下iptables规则配置" class="headerlink" title="被动模式下iptables规则配置"></a>被动模式下iptables规则配置</h5><ul>
 <li>修改vsftpd配置文件</li>
 </ul>
@@ -737,7 +734,7 @@
 <h4 id="ftp主动模式"><a href="#ftp主动模式" class="headerlink" title="ftp主动模式"></a>ftp主动模式</h4><p>命令连接：客户端 &gt;1024端口 -&gt; 服务器 21端口  </p>
 <p>数据连接：客户端 &gt;1024端口 &lt;- 服务器 20端口 </p>
 <p><strong>主动模式是FTP客户端向FTP服务器发送数据传输需要的端口，FTP服务端去连接FTP客户端的端口，与被动模式刚好相反。</strong></p>
-<p><img src="https://farm2.staticflickr.com/1791/28124191167_eec09e019f_o.jpg" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1791/28124191167_eec09e019f_o.jpg" alt></p>
 <h5 id="主动模式下iptables设置原则"><a href="#主动模式下iptables设置原则" class="headerlink" title="主动模式下iptables设置原则"></a>主动模式下<code>iptables</code>设置原则</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</span><br><span class="line"></span><br><span class="line">iptables -A INPUT -p tcp  -m multiport --dport 20,21  -m state --state NEW -j ACCEPT</span><br></pre></td></tr></table></figure>
 <p>说明：</p>
 <ul>
@@ -753,7 +750,7 @@
 <h3 id="阿里云配置ftp服务注意事项："><a href="#阿里云配置ftp服务注意事项：" class="headerlink" title="阿里云配置ftp服务注意事项："></a>阿里云配置ftp服务注意事项：</h3><p>在阿里云主机配置ftp服务，只支持主动连接模式；除了上面的步骤，还要对安全策略进行配置。</p>
 <h4 id="修改阿里云服务的安全策略"><a href="#修改阿里云服务的安全策略" class="headerlink" title="修改阿里云服务的安全策略"></a>修改阿里云服务的安全策略</h4><p>打开阿里云服务器控制台 <code>https://home.console.aliyun.com</code>，点“我的资源”下面的云服务器进入你的实例列表</p>
 <p>选择右边的<code>更多–安全组配置–添加规则–添加安全组规则</code>，配置如下：</p>
-<p><img src="https://farm2.staticflickr.com/1734/41865905765_02d6ea3364_o.jpg" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1734/41865905765_02d6ea3364_o.jpg" alt></p>
 <h4 id="设置主动连接模式"><a href="#设置主动连接模式" class="headerlink" title="设置主动连接模式"></a>设置主动连接模式</h4><p>下载ftp 软件，我用的是<code>yummy ftp pro</code></p>
 <p>阿里云不支持ftp被动模式，需采用主动模式进行连接。</p>
 <h2 id="使用pure-ftpd搭建ftp服务"><a href="#使用pure-ftpd搭建ftp服务" class="headerlink" title="使用pure-ftpd搭建ftp服务"></a>使用pure-ftpd搭建ftp服务</h2><h3 id="第一步：安装pure-ftpd"><a href="#第一步：安装pure-ftpd" class="headerlink" title="第一步：安装pure-ftpd"></a>第一步：安装pure-ftpd</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//安装拓展源</span><br><span class="line">yum install -y epel-release</span><br><span class="line"></span><br><span class="line">//安装pure-ftpd</span><br><span class="line">yum install -y pure-ftpd</span><br></pre></td></tr></table></figure>
@@ -762,9 +759,9 @@
 <ul>
 <li>校验结果，查看vsftpd状态</li>
 </ul>
-<p><img src="https://farm2.staticflickr.com/1784/42943085652_6424f80169_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1784/42943085652_6424f80169_o.png" alt></p>
 <h3 id="第三步：编辑pure-ftp配置文件"><a href="#第三步：编辑pure-ftp配置文件" class="headerlink" title="第三步：编辑pure-ftp配置文件"></a>第三步：编辑pure-ftp配置文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/pure-ftpd/pure-ftpd.conf</span><br><span class="line"></span><br><span class="line">//查找PureDB /etc/pure-ftpd/pureftpd.pdb，将前面的#删除</span><br></pre></td></tr></table></figure>
-<p><img src="https://farm2.staticflickr.com/1798/42274322624_58c0685df5_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1798/42274322624_58c0685df5_o.png" alt></p>
 <ul>
 <li>启动pure-ftp</li>
 </ul>
@@ -772,7 +769,7 @@
 <ul>
 <li>校验结果</li>
 </ul>
-<p><img src="https://farm2.staticflickr.com/1814/41182572270_4a9a5296d0_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1814/41182572270_4a9a5296d0_o.png" alt></p>
 <h3 id="第四步：建立虚拟账号"><a href="#第四步：建立虚拟账号" class="headerlink" title="第四步：建立虚拟账号"></a>第四步：建立虚拟账号</h3><p><strong>注：安全起见，pure-ftpd使用的账号并非linux的系统账号，而是虚拟账号。</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//建立ftp文件夹</span><br><span class="line">[root@local-linux02 ~]# mkdir -p /data/ftp</span><br><span class="line"></span><br><span class="line">//建立系统账户</span><br><span class="line">[root@local-linux02 ~]# useradd -u 1010 pure-ftp</span><br><span class="line"></span><br><span class="line">//更改ftp文件夹的所属用户和组</span><br><span class="line">[root@local-linux02 ~]# chown -R pure-ftp:pure-ftp /data/ftp</span><br><span class="line"></span><br><span class="line">//创建虚拟账户；</span><br><span class="line">//-u是将虚拟用户ftp_usera与系统用户pure-ftp关联在一起，使用ftp_usera账号登录ftp后，会以pure-ftp的身份来读取和下载文件；</span><br><span class="line">//-d是指定ftp_usera账户的家目录，这样可以使用户ftp_usera只能访问其家目录/data/ftp/</span><br><span class="line">//提示，此处需要输入密码</span><br><span class="line">[root@local-linux02 ~]# pure-pw useradd ftp_usera -u pure-ftp  -d /data/ftp</span><br><span class="line">Password:</span><br><span class="line">Enter it again:</span><br><span class="line"></span><br><span class="line">//创建用户信息数据库文件</span><br><span class="line">[root@local-linux02 ~]# pure-pw mkdb</span><br></pre></td></tr></table></figure>
 <p><strong>账号常见操作：</strong></p>
@@ -780,10 +777,10 @@
 <h3 id="第五步：测试连接"><a href="#第五步：测试连接" class="headerlink" title="第五步：测试连接"></a>第五步：测试连接</h3><p>命令行格式：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">lftp ftp://user:password@ip:port</span><br><span class="line"></span><br><span class="line">其中，</span><br><span class="line">- ftp:// 可省略；</span><br><span class="line">- user 登录名；</span><br><span class="line">- password 登陆密码，此处可不写，在后面交互界面输入；</span><br><span class="line">- ip 即服务器端的ip地址；</span><br><span class="line">- port 默认为21，也可另行指定。</span><br></pre></td></tr></table></figure>
 <p>示例：</p>
-<p><img src="https://farm2.staticflickr.com/1779/42294559944_a5025f80d1_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1779/42294559944_a5025f80d1_o.png" alt></p>
 <p>TroubleShooting: 链接错误</p>
 <p>如下所示，虽然看起来连上了，但是执行ls命令的时候，却一直显示重新链接的状态。</p>
-<p><img src="https://farm2.staticflickr.com/1807/29140686268_e2b220634b_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1807/29140686268_e2b220634b_o.png" alt></p>
 <p><strong>排查思路：</strong></p>
 <p><strong>首先，</strong>排查<code>pure-ftpd</code>服务器端是否启动，执行 <code>systemctl status   pure-ftpd</code> 是正常的，runing状态。</p>
 <p><strong>其次，</strong>估计是端口设置的问题，google了一下pure-ftpd被动模式端口设置的方法：</p>
@@ -1012,9 +1009,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/uploads/logo.png"
-                alt="Steve Yuan" />
+              <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan">
             
               <p class="site-author-name" itemprop="name">Steve Yuan</p>
               <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
@@ -1137,7 +1132,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -1151,7 +1146,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">196.2k</span>
+    <span title="Site words total count">190.8k</span>
   
 </div>
 

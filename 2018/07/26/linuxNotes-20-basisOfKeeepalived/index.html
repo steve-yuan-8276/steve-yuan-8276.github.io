@@ -6,10 +6,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +20,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
@@ -68,13 +68,13 @@
 
 
 
-  <meta name="keywords" content="notes,linux," />
+  <meta name="keywords" content="notes,linux,">
 
 
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Steve的折腾学习日志" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="Steve Yuan's Workspace" type="application/atom+xml">
 
 
 
@@ -86,7 +86,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux运维学习笔记:linux集群">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/index.html">
-<meta property="og:site_name" content="Steve的折腾学习日志">
+<meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
 <meta property="og:description" content="写在前面所谓集群，是多台服务器组成一个整体来为企业服务提供支撑。在生产环境中，采用多台服务器组成一个集群来运行程序，既可以避免单点故障，还能够提升服务器的承载能力。 主要包括以下内容：  高可用集群搭建  负载均衡集群搭建">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://farm1.staticflickr.com/842/43210136571_2c453ee9df_o.png">
@@ -126,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/"/>
+  <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-20-basisOfKeeepalived/">
 
 
 
 
 
-  <title>linux运维学习笔记:linux集群 | Steve的折腾学习日志</title>
+  <title>linux运维学习笔记:linux集群 | Steve Yuan's Workspace</title>
   
 
 
@@ -170,14 +170,14 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Steve的折腾学习日志</span>
+        <span class="site-title">Steve Yuan's Workspace</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle">99%全栈笔记&&1%唧唧歪歪</p>
+        <p class="site-subtitle">99%学习&&1%心得</p>
       
   </div>
 
@@ -200,7 +200,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -210,7 +210,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -220,7 +220,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -230,7 +230,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -240,7 +240,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -253,7 +253,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -274,9 +274,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -317,12 +315,12 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/uploads/logo.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve的折腾学习日志">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
     </span>
 
     
@@ -353,7 +351,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -384,8 +382,7 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2018/07/26/linuxNotes-20-basisOfKeeepalived/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/26/linuxNotes-20-basisOfKeeepalived/" itemprop="commentCount"></span>
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/26/linuxNotes-20-basisOfKeeepalived/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -407,7 +404,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6,006
+                  5.6k
                 </span>
               
 
@@ -423,7 +420,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  25
+                  22
                 </span>
               
             </div>
@@ -499,9 +496,9 @@
 <h4 id="master机器配置"><a href="#master机器配置" class="headerlink" title="master机器配置"></a>master机器配置</h4><h5 id="第一步：编辑配置文件"><a href="#第一步：编辑配置文件" class="headerlink" title="第一步：编辑配置文件"></a>第一步：编辑配置文件</h5><p>keepalive的配置文件为<code>/etc/keepalived/keepalived.conf</code>，编辑此文件；</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">//首先清空配置文件内容</span><br><span class="line">[root@local-linux00 ~]# &gt; /etc/keepalived/keepalived.conf</span><br><span class="line"></span><br><span class="line">//编辑配置文件</span><br><span class="line">[root@local-linux00 ~]# vi /etc/keepalived/keepalived.conf</span><br><span class="line">//加入以下内容</span><br><span class="line"></span><br><span class="line">global_defs &#123;                   //全局定义参数</span><br><span class="line">   notification_email &#123;</span><br><span class="line">     root@steve-test.com          //定义接收告警的人</span><br><span class="line">   &#125;</span><br><span class="line">   notification_email_from root@steve-test.com  //定义发邮件地址</span><br><span class="line">   smtp_server 127.0.0.1  //定义发邮件地址，若为127.0.0.1则使用本机自带邮件服务器发送</span><br><span class="line">   smtp_connect_timeout 30</span><br><span class="line">   router_id LVS_DEVEL</span><br><span class="line">&#125;</span><br><span class="line">vrrp_script chk_nginx &#123;      //chk_nginx为自定义名字，后面还会用到它</span><br><span class="line">    script &quot;/usr/local/sbin/check_ng.sh&quot;  //自定义脚本，该脚本为监控nginx服务的脚本</span><br><span class="line">    interval 3   //每隔3S执行一次该脚本</span><br><span class="line">&#125;</span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state MASTER         //角色为master</span><br><span class="line">    interface ens33        //针对哪个网卡监听VIP</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 100            //权重为100，master要比backup大</span><br><span class="line">    advert_int 1   </span><br><span class="line">    authentication &#123;                        </span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass 123456       //定义密码，这个密码自定义</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        172.16.155.120    //定义VIP</span><br><span class="line">    &#125;</span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_nginx     //定义监控脚本，这里和上面vrr_script后面的字符串保持一致</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如下图所示：</p>
-<p><img src="https://farm1.staticflickr.com/842/43210136571_2c453ee9df_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/842/43210136571_2c453ee9df_o.png" alt></p>
 <h5 id="第二步：编辑监控脚本"><a href="#第二步：编辑监控脚本" class="headerlink" title="第二步：编辑监控脚本"></a>第二步：编辑监控脚本</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux00 ~]# vi /usr/local/sbin/check_ng.sh  </span><br><span class="line"></span><br><span class="line">//脚本内容如下：</span><br><span class="line">#!/bin/bash</span><br><span class="line">#时间变量，用于记录日志</span><br><span class="line">d=`date --date today +%Y%m%d_%H:%M:%S`</span><br><span class="line">#计算nginx进程数量</span><br><span class="line">n=`ps -C nginx --no-heading|wc -l`</span><br><span class="line">#如果进程为0，则启动nginx，并且再次检测nginx进程数量，</span><br><span class="line">#如果还为0，说明nginx无法启动，此时需要关闭keepalived</span><br><span class="line">if [ $n -eq &quot;0&quot; ]; then</span><br><span class="line">    /etc/init.d/nginx start</span><br><span class="line">    n2=`ps -C nginx --no-heading|wc -l`</span><br><span class="line">        if [ $n2 -eq &quot;0&quot;  ]; then</span><br><span class="line">            echo &quot;$d nginx down,keepalived will stop&quot; &gt;&gt; /var/log/check_ng.log</span><br><span class="line">            systemctl stop keepalived</span><br><span class="line">        fi</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
-<p><img src="https://farm1.staticflickr.com/843/42305840335_a872ff5b18_o.png" alt=""></p>
+<p><img src="https://farm1.staticflickr.com/843/42305840335_a872ff5b18_o.png" alt></p>
 <h5 id="第三步：启动keepalived"><a href="#第三步：启动keepalived" class="headerlink" title="第三步：启动keepalived"></a>第三步：启动keepalived</h5><ul>
 <li>更改文件权限</li>
 </ul>
@@ -509,7 +506,7 @@
 <ul>
 <li>启动keepalived</li>
 </ul>
-<p><img src="https://farm2.staticflickr.com/1789/43154021772_da1662af87_o.png" alt=""></p>
+<p><img src="https://farm2.staticflickr.com/1789/43154021772_da1662af87_o.png" alt></p>
 <h4 id="backup-服务器配置"><a href="#backup-服务器配置" class="headerlink" title="backup 服务器配置"></a>backup 服务器配置</h4><h5 id="第一步：编辑配置文件-1"><a href="#第一步：编辑配置文件-1" class="headerlink" title="第一步：编辑配置文件"></a>第一步：编辑配置文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">//首先清空配置文件内容</span><br><span class="line">[root@local-linux02 ~]# &gt; /etc/keepalived/keepalived.conf</span><br><span class="line"></span><br><span class="line">//编辑配置文件</span><br><span class="line">[root@local-linux02 ~]# vi /etc/keepalived/keepalived.conf</span><br><span class="line">//加入以下内容</span><br><span class="line">global_defs &#123;</span><br><span class="line">   notification_email &#123;</span><br><span class="line">     root@steve-test.com</span><br><span class="line">   &#125;</span><br><span class="line">   notification_email_from root@steve-test.com</span><br><span class="line">   smtp_server 127.0.0.1</span><br><span class="line">   smtp_connect_timeout 30</span><br><span class="line">   router_id LVS_DEVEL</span><br><span class="line">&#125;</span><br><span class="line">vrrp_script chk_nginx &#123;</span><br><span class="line">    script &quot;/usr/local/sbin/check_ng.sh&quot;  //检测脚本</span><br><span class="line">    interval 3</span><br><span class="line">&#125;</span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state BACKUP      //这个需要改，说明是从的状态</span><br><span class="line">    interface ens33</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 90      //这个权重比master少</span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass 123456</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        172.16.155.120   //跟master保持一致</span><br><span class="line">    &#125;</span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_nginx</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h5 id="第二步：编辑监控脚本-1"><a href="#第二步：编辑监控脚本-1" class="headerlink" title="第二步：编辑监控脚本"></a>第二步：编辑监控脚本</h5><p><strong>注：</strong>跟master服务器监控脚本一样</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux02 ~]# vi /usr/local/sbin/check_ng.sh</span><br><span class="line"></span><br><span class="line">//添加如下内容：</span><br><span class="line"></span><br><span class="line">#!/bin/bash</span><br><span class="line">d=`date --date today +%Y%m%d_%H:%M:%S`</span><br><span class="line">n=`ps -C nginx --no-heading|wc -l`</span><br><span class="line">if [ $n -eq &quot;0&quot; ]; then</span><br><span class="line">    /etc/init.d/nginx start</span><br><span class="line">    n2=`ps -C nginx --no-heading|wc -l`</span><br><span class="line">    if [ $n2 -eq &quot;0&quot;  ]; then</span><br><span class="line">        echo &quot;$d nginx down,keepalived will stop&quot; &gt;&gt; /var/log/check_ng.log</span><br><span class="line">        systemctl stop keepalived</span><br><span class="line">    fi</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
@@ -742,9 +739,7 @@ real_server 172.16.111.120 80 {
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/uploads/logo.png"
-                alt="Steve Yuan" />
+              <img class="site-author-image" itemprop="image" src="/uploads/logo.png" alt="Steve Yuan">
             
               <p class="site-author-name" itemprop="name">Steve Yuan</p>
               <p class="site-description motion-element" itemprop="description">生命不息，折腾不止</p>
@@ -847,7 +842,7 @@ real_server 172.16.111.120 80 {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集群简介"><span class="nav-number">2.</span> <span class="nav-text">集群简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用keepalived搭建高可用集群"><span class="nav-number">3.</span> <span class="nav-text">利用keepalived搭建高可用集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Keepalived工作原理"><span class="nav-number">3.1.</span> <span class="nav-text">Keepalived工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keepalived配置高可用集群"><span class="nav-number">3.2.</span> <span class="nav-text">keepalived配置高可用集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备工作"><span class="nav-number">3.2.1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master机器配置"><span class="nav-number">3.2.2.</span> <span class="nav-text">master机器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：编辑配置文件"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">第一步：编辑配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：编辑监控脚本"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">第二步：编辑监控脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：启动keepalived"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">第三步：启动keepalived</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#backup-服务器配置"><span class="nav-number">3.2.3.</span> <span class="nav-text">backup 服务器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：编辑配置文件-1"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">第一步：编辑配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：编辑监控脚本-1"><span class="nav-number">3.2.3.2.</span> <span class="nav-text">第二步：编辑监控脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：启动keepalived-1"><span class="nav-number">3.2.3.3.</span> <span class="nav-text">第三步：启动keepalived</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director-服务器上开启路由转发功能"><span class="nav-number"></span> <span class="nav-text">director 服务器上开启路由转发功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关闭icmp的重定向"><span class="nav-number"></span> <span class="nav-text">关闭icmp的重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意区分网卡名字，这里两个网卡分别为ens33和ens37"><span class="nav-number"></span> <span class="nav-text">注意区分网卡名字，这里两个网卡分别为ens33和ens37</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director-设置nat防火墙"><span class="nav-number"></span> <span class="nav-text">director 设置nat防火墙</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director设置ipvsadm"><span class="nav-number"></span> <span class="nav-text">director设置ipvsadm</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集群简介"><span class="nav-number">2.</span> <span class="nav-text">集群简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用keepalived搭建高可用集群"><span class="nav-number">3.</span> <span class="nav-text">利用keepalived搭建高可用集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Keepalived工作原理"><span class="nav-number">3.1.</span> <span class="nav-text">Keepalived工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keepalived配置高可用集群"><span class="nav-number">3.2.</span> <span class="nav-text">keepalived配置高可用集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备工作"><span class="nav-number">3.2.1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master机器配置"><span class="nav-number">3.2.2.</span> <span class="nav-text">master机器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：编辑配置文件"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">第一步：编辑配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：编辑监控脚本"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">第二步：编辑监控脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：启动keepalived"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">第三步：启动keepalived</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#backup-服务器配置"><span class="nav-number">3.2.3.</span> <span class="nav-text">backup 服务器配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一步：编辑配置文件-1"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">第一步：编辑配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二步：编辑监控脚本-1"><span class="nav-number">3.2.3.2.</span> <span class="nav-text">第二步：编辑监控脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第三步：启动keepalived-1"><span class="nav-number">3.2.3.3.</span> <span class="nav-text">第三步：启动keepalived</span></a></li></ol></li></ol></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#director-服务器上开启路由转发功能"><span class="nav-number"></span> <span class="nav-text">director 服务器上开启路由转发功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关闭icmp的重定向"><span class="nav-number"></span> <span class="nav-text">关闭icmp的重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意区分网卡名字，这里两个网卡分别为ens33和ens37"><span class="nav-number"></span> <span class="nav-text">注意区分网卡名字，这里两个网卡分别为ens33和ens37</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director-设置nat防火墙"><span class="nav-number"></span> <span class="nav-text">director 设置nat防火墙</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#director设置ipvsadm"><span class="nav-number"></span> <span class="nav-text">director设置ipvsadm</span></a></li></div>
             
 
           </div>
@@ -867,7 +862,7 @@ real_server 172.16.111.120 80 {
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -881,7 +876,7 @@ real_server 172.16.111.120 80 {
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">196.2k</span>
+    <span title="Site words total count">190.8k</span>
   
 </div>
 

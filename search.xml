@@ -1568,9 +1568,9 @@ curl -x127.0.0.1:80 &apos;test.com/abc/123.html
         <category>HowToDo</category>
       </categories>
       <tags>
-        <tag>mac</tag>
         <tag>notes</tag>
         <tag>bash</tag>
+        <tag>mac</tag>
       </tags>
   </entry>
   <entry>
@@ -17763,8 +17763,8 @@ afterEach：每个spec（即it）运行之后运行
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>

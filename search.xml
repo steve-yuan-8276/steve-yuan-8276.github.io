@@ -17764,8 +17764,8 @@ afterEach：每个spec（即it）运行之后运行
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>

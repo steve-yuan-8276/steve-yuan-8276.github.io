@@ -20,8 +20,8 @@
         <category>macTricks</category>
       </categories>
       <tags>
-        <tag>search</tag>
         <tag>notes</tag>
+        <tag>search</tag>
         <tag>skill</tag>
       </tags>
   </entry>
@@ -17587,8 +17587,8 @@ real_server 172.16.111.120 80 {
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>JavaScript</tag>
+        <tag>front-end</tag>
         <tag>ES6</tag>
       </tags>
   </entry>
@@ -17925,8 +17925,8 @@ PasswordAuthentication no
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
         <tag>google</tag>
       </tags>
   </entry>
@@ -18093,8 +18093,8 @@ PasswordAuthentication no
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>web</tag>
+        <tag>front-end</tag>
       </tags>
   </entry>
 </search>

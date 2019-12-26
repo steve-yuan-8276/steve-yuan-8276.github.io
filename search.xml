@@ -20,8 +20,8 @@
         <category>macTricks</category>
       </categories>
       <tags>
-        <tag>notes</tag>
         <tag>search</tag>
+        <tag>notes</tag>
         <tag>skill</tag>
       </tags>
   </entry>
@@ -1570,8 +1570,8 @@ curl -x127.0.0.1:80 &apos;test.com/abc/123.html
       </categories>
       <tags>
         <tag>mac</tag>
-        <tag>bash</tag>
         <tag>notes</tag>
+        <tag>bash</tag>
       </tags>
   </entry>
   <entry>
@@ -17587,8 +17587,8 @@ real_server 172.16.111.120 80 {
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>front-end</tag>
+        <tag>JavaScript</tag>
         <tag>ES6</tag>
       </tags>
   </entry>

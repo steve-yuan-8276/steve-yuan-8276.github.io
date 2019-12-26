@@ -4,6 +4,7 @@
     <title>macTricks-有用搜索收集技巧</title>
     <url>/2018/12/06/macTricks-someTricksConllections/</url>
     <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>好长时间没有整理博客，想想还是应该重新捡起来。这这博客主要整理一些从网上看到的零碎知识，主要是关于信息收集方法的。</p>
+<a id="more"></a>
 <h2 id="twitter使用技巧"><a href="#twitter使用技巧" class="headerlink" title="twitter使用技巧"></a>twitter使用技巧</h2><p>网址： <a href="https://twitter.com/search-advanced" target="_blank" rel="noopener">https://twitter.com/search-advanced</a></p>
 <p>如下图所示，可以添加各种限定因素进行搜索。</p>
 <p><img src="https://farm5.staticflickr.com/4851/46149938532_8f67337586_o.png" alt></p>
@@ -1568,9 +1569,9 @@ curl -x127.0.0.1:80 &apos;test.com/abc/123.html
         <category>HowToDo</category>
       </categories>
       <tags>
-        <tag>notes</tag>
-        <tag>bash</tag>
         <tag>mac</tag>
+        <tag>bash</tag>
+        <tag>notes</tag>
       </tags>
   </entry>
   <entry>
@@ -17763,8 +17764,8 @@ afterEach：每个spec（即it）运行之后运行
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>

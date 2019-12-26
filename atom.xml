@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://steve-yuan-8276.github.io/"/>
-  <updated>2019-12-25T09:32:46.949Z</updated>
+  <updated>2019-12-26T03:06:22.922Z</updated>
   <id>https://steve-yuan-8276.github.io/</id>
   
   <author>
@@ -21,17 +21,13 @@
     <link href="https://steve-yuan-8276.github.io/2018/12/06/macTricks-someTricksConllections/"/>
     <id>https://steve-yuan-8276.github.io/2018/12/06/macTricks-someTricksConllections/</id>
     <published>2018-12-06T07:36:05.000Z</published>
-    <updated>2019-12-25T09:32:46.949Z</updated>
+    <updated>2019-12-26T03:06:22.922Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>好长时间没有整理博客，想想还是应该重新捡起来。这这博客主要整理一些从网上看到的零碎知识，主要是关于信息收集方法的。</p><h2 id="twitter使用技巧"><a href="#twitter使用技巧" class="headerlink" title="twitter使用技巧"></a>twitter使用技巧</h2><p>网址： <a href="https://twitter.com/search-advanced" target="_blank" rel="noopener">https://twitter.com/search-advanced</a></p><p>如下图所示，可以添加各种限定因素进行搜索。</p><p><img src="https://farm5.staticflickr.com/4851/46149938532_8f67337586_o.png" alt></p><p>同时，与google类似，twitter也支持一些搜索语法，常用的如下图所示：</p><p><img src="https://farm5.staticflickr.com/4893/32328650208_da1878ca7a_o.jpg" alt></p><p>例如：</p><p>查找关于某个话题的最热推文,语法：<code>keyword min_retweets:number]</code></p><p><img src="https://farm5.staticflickr.com/4901/44383750930_e2809d5f0b_o.png" alt></p><p>搜索特定时间段某个id发过的所有推文。语法：<code>from:*** since:YYYY-MM-DD until:YYYY-MM-DD</code></p><p><img src="https://farm5.staticflickr.com/4879/31261781687_595a36b048_o.png" alt></p>]]></content>
+    <content type="html"><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>好长时间没有整理博客，想想还是应该重新捡起来。这这博客主要整理一些从网上看到的零碎知识，主要是关于信息收集方法的。</p><a id="more"></a><h2 id="twitter使用技巧"><a href="#twitter使用技巧" class="headerlink" title="twitter使用技巧"></a>twitter使用技巧</h2><p>网址： <a href="https://twitter.com/search-advanced" target="_blank" rel="noopener">https://twitter.com/search-advanced</a></p><p>如下图所示，可以添加各种限定因素进行搜索。</p><p><img src="https://farm5.staticflickr.com/4851/46149938532_8f67337586_o.png" alt></p><p>同时，与google类似，twitter也支持一些搜索语法，常用的如下图所示：</p><p><img src="https://farm5.staticflickr.com/4893/32328650208_da1878ca7a_o.jpg" alt></p><p>例如：</p><p>查找关于某个话题的最热推文,语法：<code>keyword min_retweets:number]</code></p><p><img src="https://farm5.staticflickr.com/4901/44383750930_e2809d5f0b_o.png" alt></p><p>搜索特定时间段某个id发过的所有推文。语法：<code>from:*** since:YYYY-MM-DD until:YYYY-MM-DD</code></p><p><img src="https://farm5.staticflickr.com/4879/31261781687_595a36b048_o.png" alt></p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;h2 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h2&gt;&lt;p&gt;好长时间没有整理博客，想想还是应该重新捡起来。这这博客主要整理一些从网上看到的零碎知识，主要是关于信息收集方法的。&lt;/p&gt;
-
-      
+      &lt;h2 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;写在前面&lt;/h2&gt;&lt;p&gt;好长时间没有整理博客，想想还是应该重新捡起来。这这博客主要整理一些从网上看到的零碎知识，主要是关于信息收集方法的。&lt;/p&gt;
     
     </summary>
     
@@ -317,11 +313,11 @@
       <category term="HowToDo" scheme="https://steve-yuan-8276.github.io/categories/HowToDo/"/>
     
     
-      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
+      <category term="mac" scheme="https://steve-yuan-8276.github.io/tags/mac/"/>
     
       <category term="bash" scheme="https://steve-yuan-8276.github.io/tags/bash/"/>
     
-      <category term="mac" scheme="https://steve-yuan-8276.github.io/tags/mac/"/>
+      <category term="notes" scheme="https://steve-yuan-8276.github.io/tags/notes/"/>
     
   </entry>
   

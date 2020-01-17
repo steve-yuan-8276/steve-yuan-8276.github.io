@@ -36,13 +36,23 @@
 <p>事后，我还联系了国内一家在果粉圈里小有名气的网站，希望他们能仗义执言，曝光苹果这种霸道行为，这家网站管理员选择了沉默。倒是有热心网友出来说：苹果在他家有广告投放，拿人手短，不会报的。</p>
 <h2 id="明知故犯，苹果理应赔偿客户"><a href="#明知故犯，苹果理应赔偿客户" class="headerlink" title="明知故犯，苹果理应赔偿客户"></a>明知故犯，苹果理应赔偿客户</h2><p>因为个人原因没有及时送修，确实我也有一定责任。但是花将近一万五买的电脑，刚刚两年就这样，我相信绝大多数人都无法接受吧？</p>
 <p>更何况，通过后来在网上查资料，发现这根本就不是一个个案，而是广泛存在的一个问题。对于屏幕门，国内外科技媒体在2019年上半年就有过指名道姓的明确报道，随便摘几篇：</p>
-<p><a href="https://www.theverge.com/2019/3/19/18271733/flexgate-display-problem-macbook-pro-apple" target="_blank" rel="noopener">The verge：Flexgate is real, and Apple should acknowledge it</a>  </p>
-<p><a href="https://zh.ifixit.com/News/flexgate" target="_blank" rel="noopener">Ifixit ：The Design Flaw Behind MacBook Pro’s “Stage Light” Effect</a> </p>
-<p><a href="https://www.expreview.com/66522.html" target="_blank" rel="noopener">超能网（Expreview）：苹果MacBook Pro笔记本再陷一“门”屏幕存在设计缺陷</a> </p>
-<p><a href="https://notebook.pconline.com.cn/1241/12415557.html" target="_blank" rel="noopener">太平洋电脑网：MacBook屏幕排线屡出问题 苹果至今未正面回应MacBook屏幕排线屡出问题 苹果至今未正面回应</a>  </p>
+<ul>
+<li><p><a href="https://www.theverge.com/2019/3/19/18271733/flexgate-display-problem-macbook-pro-apple" target="_blank" rel="noopener">The verge：Flexgate is real, and Apple should acknowledge it</a>  </p>
+</li>
+<li><p><a href="https://zh.ifixit.com/News/flexgate" target="_blank" rel="noopener">Ifixit ：The Design Flaw Behind MacBook Pro’s “Stage Light” Effect</a> </p>
+</li>
+<li><p><a href="https://www.expreview.com/66522.html" target="_blank" rel="noopener">超能网（Expreview）：苹果MacBook Pro笔记本再陷一“门”屏幕存在设计缺陷</a> </p>
+</li>
+<li><p><a href="https://notebook.pconline.com.cn/1241/12415557.html" target="_blank" rel="noopener">太平洋电脑网：MacBook屏幕排线屡出问题 苹果至今未正面回应MacBook屏幕排线屡出问题 苹果至今未正面回应</a>  </p>
+</li>
+</ul>
 <p>国内自媒体博主也有明确报道，比如这两个：</p>
-<p>bilibili：<a href="https://www.bilibili.com/video/av40542848/" target="_blank" rel="noopener">“键盘门”后又出问题？2016-18 MacBook Pro屏幕惊现设计缺陷</a> </p>
-<p>罗磊（自媒体up主）：<a href="https://luolei.org/apple-macbook-flexgate/" target="_blank" rel="noopener">背光门 | 苹果 MacBook 即将爆发的下一个质量问题 ?</a> </p>
+<ul>
+<li><p>bilibili：<a href="https://www.bilibili.com/video/av40542848/" target="_blank" rel="noopener">“键盘门”后又出问题？2016-18 MacBook Pro屏幕惊现设计缺陷</a> </p>
+</li>
+<li><p>罗磊（自媒体up主）：<a href="https://luolei.org/apple-macbook-flexgate/" target="_blank" rel="noopener">背光门 | 苹果 MacBook 即将爆发的下一个质量问题 ?</a> </p>
+</li>
+</ul>
 <p>更重要的是，受到问题影响的，绝不仅仅是“个别人”，国外网址 change.org 就在这里 <a href="https://www.change.org/p/apple-fix-all-macbook-pro-2016-and-later-with-stage-light-effect-or-backlight-shutdown-flexgate?use_react=false" target="_blank" rel="noopener">Fix all MacBook Pro 2016 and later with stage light effect or backlight shutdown #flexgate</a> ，发起了一个联署维权情愿活动。到我搜到这个网页为止，已经有<strong>24243人</strong>联名要求苹果召回问题产品，并解决维修问题。</p>
 <p>然而，重点来了，苹果只在2019年5月21日发布了文章一开头说的那个公告，仅仅对2016款13寸MacBook Pro进行免费维修。</p>
 <p>其他的，比如前文提到的自媒体up主罗磊的 Macbook Pro 2016 15寸 顶配(带 bar) ，对不起，不管！</p>
@@ -1654,8 +1664,8 @@ curl -x127.0.0.1:80 &apos;test.com/abc/123.html
       </categories>
       <tags>
         <tag>mac</tag>
-        <tag>bash</tag>
         <tag>notes</tag>
+        <tag>bash</tag>
       </tags>
   </entry>
   <entry>
@@ -3297,7 +3307,7 @@ real_server 172.16.111.120 80 {
 </tbody>
 </table>
 <p>示例：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat if-file.sh</span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">f="/tmp/if-test"</span><br><span class="line">if [ -f $f ]</span><br><span class="line">then</span><br><span class="line">    echo $f exist</span><br><span class="line">else</span><br><span class="line">    touch $f</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat if-file.sh</span><br><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">f="/tmp/if-test"</span><br><span class="line">if [ -f $f ]</span><br><span class="line">then</span><br><span class="line">    echo $f exist</span><br><span class="line">else</span><br><span class="line">    touch $f</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
 <p>执行效果</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@local-linux01 sbin]# bash -x !$</span><br><span class="line">bash -x if-file.sh</span><br><span class="line">+ f=/tmp/if-test</span><br><span class="line">+ &apos;[&apos; -f /tmp/if-test &apos;]&apos;</span><br><span class="line">+ touch /tmp/if-test</span><br></pre></td></tr></table></figure>
 <h3 id="if特殊用法"><a href="#if特殊用法" class="headerlink" title="if特殊用法"></a>if特殊用法</h3><table>
@@ -3337,7 +3347,7 @@ real_server 172.16.111.120 80 {
 </li>
 </ul>
 <p>示例：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">read -p "Please input a number: " n</span><br><span class="line">if [ -z "$n" ]</span><br><span class="line">then</span><br><span class="line">    echo "Please input a number."</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">n1=`echo $n|sed 's/[0-9]//g'`</span><br><span class="line">if [ -n "$n1" ]</span><br><span class="line">then</span><br><span class="line">    echo "Please input a number."</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ $n -lt 60 ] &amp;&amp; [ $n -ge 0 ]</span><br><span class="line">then</span><br><span class="line">    tag=1</span><br><span class="line">elif [ $n -ge 60 ] &amp;&amp; [ $n -lt 80 ]</span><br><span class="line">then</span><br><span class="line">    tag=2</span><br><span class="line">elif [ $n -ge 80 ]  &amp;&amp; [ $n -lt 90 ]</span><br><span class="line">then</span><br><span class="line">    tag=3</span><br><span class="line">elif [ $n -ge 90 ] &amp;&amp; [ $n -le 100 ]</span><br><span class="line">then</span><br><span class="line">    tag=4</span><br><span class="line">else</span><br><span class="line">    tag=0</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">case $tag in</span><br><span class="line">    1)</span><br><span class="line">    echo "not ok"</span><br><span class="line">        ;;</span><br><span class="line">    2)</span><br><span class="line">        echo "ok"</span><br><span class="line">        ;;</span><br><span class="line">    3)</span><br><span class="line">        echo "ook"</span><br><span class="line">        ;;</span><br><span class="line">    4)</span><br><span class="line">        echo "oook"</span><br><span class="line">        ;;</span><br><span class="line">    *)</span><br><span class="line">        echo "The number range is 0-100."</span><br><span class="line">        ;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">read -p "Please input a number: " n</span><br><span class="line">if [ -z "$n" ]</span><br><span class="line">then</span><br><span class="line">    echo "Please input a number."</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">n1=`echo $n|sed 's/[0-9]//g'`</span><br><span class="line">if [ -n "$n1" ]</span><br><span class="line">then</span><br><span class="line">    echo "Please input a number."</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ $n -lt 60 ] &amp;&amp; [ $n -ge 0 ]</span><br><span class="line">then</span><br><span class="line">    tag=1</span><br><span class="line">elif [ $n -ge 60 ] &amp;&amp; [ $n -lt 80 ]</span><br><span class="line">then</span><br><span class="line">    tag=2</span><br><span class="line">elif [ $n -ge 80 ]  &amp;&amp; [ $n -lt 90 ]</span><br><span class="line">then</span><br><span class="line">    tag=3</span><br><span class="line">elif [ $n -ge 90 ] &amp;&amp; [ $n -le 100 ]</span><br><span class="line">then</span><br><span class="line">    tag=4</span><br><span class="line">else</span><br><span class="line">    tag=0</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">case $tag in</span><br><span class="line">    1)</span><br><span class="line">    echo "not ok"</span><br><span class="line">        ;;</span><br><span class="line">    2)</span><br><span class="line">        echo "ok"</span><br><span class="line">        ;;</span><br><span class="line">    3)</span><br><span class="line">        echo "ook"</span><br><span class="line">        ;;</span><br><span class="line">    4)</span><br><span class="line">        echo "oook"</span><br><span class="line">        ;;</span><br><span class="line">    *)</span><br><span class="line">        echo "The number range is 0-100."</span><br><span class="line">        ;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
 <p>执行效果</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@local-linux01 sbin]# bash !$</span><br><span class="line">bash case01.sh</span><br><span class="line">Please input a number: 1</span><br><span class="line">not ok</span><br></pre></td></tr></table></figure>
 <p>执行过程</p>
@@ -3348,16 +3358,16 @@ real_server 172.16.111.120 80 {
 <ul>
 <li>示例1：</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in `seq 1 100 `</span><br><span class="line">do </span><br><span class="line">   echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">for i in `seq 1 100 `</span><br><span class="line">do </span><br><span class="line">   echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <!--more-->
 <ul>
 <li>示例2:累加计算</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">sum=0</span><br><span class="line">for i in `seq 1 100`</span><br><span class="line">do </span><br><span class="line">   echo "$sum + $i"</span><br><span class="line">   sum=$[$sum+$i]</span><br><span class="line">   echo $sum</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">sum=0</span><br><span class="line">for i in `seq 1 100`</span><br><span class="line">do </span><br><span class="line">   echo "$sum + $i"</span><br><span class="line">   sum=$[$sum+$i]</span><br><span class="line">   echo $sum</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <ul>
 <li>示例3：遍历文件夹</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">cd /etc/</span><br><span class="line">for a in ls /etc/</span><br><span class="line">do</span><br><span class="line">    if [ -d $a ]</span><br><span class="line">    then</span><br><span class="line">        echo $a</span><br><span class="line">        ls $a</span><br><span class="line">    fi</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">cd /etc/</span><br><span class="line">for a in ls /etc/</span><br><span class="line">do</span><br><span class="line">    if [ -d $a ]</span><br><span class="line">    then</span><br><span class="line">        echo $a</span><br><span class="line">        ls $a</span><br><span class="line">    fi</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <h3 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h3><p>while循环相当于一种特殊的for循环，当满足条件时，会一直执行，直到不再满足条件为止。</p>
 <p>格式：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">while condition</span><br><span class="line">do</span><br><span class="line">	command</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
@@ -3370,20 +3380,20 @@ real_server 172.16.111.120 80 {
 <ul>
 <li>示例1：</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">while true</span><br><span class="line">do</span><br><span class="line">    load=`w|head -1|awk -F 'load average: ' '&#123;print $2&#125;'|cut -d. -f1`</span><br><span class="line">    if [ $load -gt 10 ]</span><br><span class="line">    then</span><br><span class="line">        /usr/local/sbin/mail.py xxx@qq.com "load high" "$load"</span><br><span class="line">    fi</span><br><span class="line">    sleep 30</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">while true</span><br><span class="line">do</span><br><span class="line">    load=`w|head -1|awk -F 'load average: ' '&#123;print $2&#125;'|cut -d. -f1`</span><br><span class="line">    if [ $load -gt 10 ]</span><br><span class="line">    then</span><br><span class="line">        /usr/local/sbin/mail.py xxx@qq.com "load high" "$load"</span><br><span class="line">    fi</span><br><span class="line">    sleep 30</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <ul>
 <li>Samples2:在循环过程中需要人为的输入一个数字</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">while :</span><br><span class="line">do</span><br><span class="line">    read -p "Please input a number: " n</span><br><span class="line">    if [ -z "$n" ]</span><br><span class="line">    then</span><br><span class="line">        echo "you need input sth."</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    n1=`echo $n|sed 's/[0-9]//g'`</span><br><span class="line">    if [ ! -z "$n1" ]</span><br><span class="line">    then</span><br><span class="line">        echo "you just only input numbers."</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    break</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">while :</span><br><span class="line">do</span><br><span class="line">    read -p "Please input a number: " n</span><br><span class="line">    if [ -z "$n" ]</span><br><span class="line">    then</span><br><span class="line">        echo "you need input sth."</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    n1=`echo $n|sed 's/[0-9]//g'`</span><br><span class="line">    if [ ! -z "$n1" ]</span><br><span class="line">    then</span><br><span class="line">        echo "you just only input numbers."</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    break</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <h3 id="break跳出循环"><a href="#break跳出循环" class="headerlink" title="break跳出循环"></a>break跳出循环</h3><p>适用场景：将判断和循环结合起来，符合某些条件时break中断循环。注：break只会影响本次循环，在有多重循环嵌套的情况，break只会影响本层级的循环，它的上层循环不受影响。</p>
 <p>samples:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    if [ $i -eq 3 ]</span><br><span class="line">    then</span><br><span class="line">        break</span><br><span class="line">    fi</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    if [ $i -eq 3 ]</span><br><span class="line">    then</span><br><span class="line">        break</span><br><span class="line">    fi</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <h3 id="continue结束本次循环"><a href="#continue结束本次循环" class="headerlink" title="continue结束本次循环"></a>continue结束本次循环</h3><p>忽略continue之下的代码，直接进行下一次循环</p>
 <p>samples:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    if [ $i -eq 3 ]</span><br><span class="line">    then</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    if [ $i -eq 3 ]</span><br><span class="line">    then</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <h3 id="exit退出整个脚本"><a href="#exit退出整个脚本" class="headerlink" title="exit退出整个脚本"></a>exit退出整个脚本</h3><p>跟break不同之处，在于使用exit语句，会直接退出整个shell脚本。</p>
 <p>samples:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">  echo $i</span><br><span class="line">  if [ $i -eq 3 ]</span><br><span class="line">  then</span><br><span class="line">      exit</span><br><span class="line">  fi</span><br><span class="line">  echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">  echo $i</span><br><span class="line">  if [ $i -eq 3 ]</span><br><span class="line">  then</span><br><span class="line">      exit</span><br><span class="line">  fi</span><br><span class="line">  echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <p><strong>注：运行exit语句，直接退出shell脚本，后面的语句都不执行。</strong></p>
 <h2 id="shell中的函数"><a href="#shell中的函数" class="headerlink" title="shell中的函数"></a>shell中的函数</h2><p>linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。</p>
 <h3 id="用法："><a href="#用法：" class="headerlink" title="用法："></a>用法：</h3><ul>

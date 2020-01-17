@@ -12,6 +12,7 @@
 <li>尝试一切可能的方法维权，包括投诉；</li>
 <li>最后，要接受结果，尽管有时候这并不是最好的。</li>
 </ol>
+<a id="more"></a>
 <h2 id="什么是“屏幕门”"><a href="#什么是“屏幕门”" class="headerlink" title="什么是“屏幕门”"></a>什么是“屏幕门”</h2><p>“屏幕门”是一种广泛存在于MacBook Pro2016至2018款笔记本上的设计缺陷，按照苹果的官方说法，详见<a href="https://support.apple.com/zh-cn/13-inch-macbook-pro-display-backlight-service" target="_blank" rel="noopener">《13 英寸 MacBook Pro 显示屏背光服务计划》</a></p>
 <blockquote>
 <p>Apple 已经确定，很少一部分 13 英寸 MacBook Pro 显示屏可能会出现以下一种或多种状况：</p>
@@ -17670,8 +17671,8 @@ real_server 172.16.111.120 80 {
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>front-end</tag>
         <tag>JavaScript</tag>
+        <tag>front-end</tag>
         <tag>ES6</tag>
       </tags>
   </entry>

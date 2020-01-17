@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://steve-yuan-8276.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="写在前面 我是一名果粉，也是一个普通消费者。最近，我遇到了所谓的苹果“屏幕门”，这里分享了我的经历，也想顺便对事中、事后说“不”说一下我的看法： 当你的正当权益受到侵害的时候，请记住：  自己的事情自己做，不要寄希望别人帮你搞定一切； 尽快冷静下来，激动无助于解决问题； 尝试一切可能的方法维权，包括投诉； 最后，要接受结果，尽管有时候这并不是最好的。  什么是“屏幕门”“屏幕门”是一种广泛存在于M">
+<meta name="keywords" content="mac,notes,Flexgate">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我遭遇了Apple“屏幕门”">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2020/01/17/macnotes-howToFixFlexgate/index.html">
+<meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
+<meta property="og:description" content="写在前面 我是一名果粉，也是一个普通消费者。最近，我遇到了所谓的苹果“屏幕门”，这里分享了我的经历，也想顺便对事中、事后说“不”说一下我的看法： 当你的正当权益受到侵害的时候，请记住：  自己的事情自己做，不要寄希望别人帮你搞定一切； 尽快冷静下来，激动无助于解决问题； 尝试一切可能的方法维权，包括投诉； 最后，要接受结果，尽管有时候这并不是最好的。  什么是“屏幕门”“屏幕门”是一种广泛存在于M">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/3qyqNC20200117.jpg">
+<meta property="og:updated_time" content="2020-01-17T07:04:42.684Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我遭遇了Apple“屏幕门”">
+<meta name="twitter:description" content="写在前面 我是一名果粉，也是一个普通消费者。最近，我遇到了所谓的苹果“屏幕门”，这里分享了我的经历，也想顺便对事中、事后说“不”说一下我的看法： 当你的正当权益受到侵害的时候，请记住：  自己的事情自己做，不要寄希望别人帮你搞定一切； 尽快冷静下来，激动无助于解决问题； 尝试一切可能的方法维权，包括投诉； 最后，要接受结果，尽管有时候这并不是最好的。  什么是“屏幕门”“屏幕门”是一种广泛存在于M">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/3qyqNC20200117.jpg">
+
+<link rel="canonical" href="https://steve-yuan-8276.github.io/2020/01/17/macnotes-howToFixFlexgate/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>我遭遇了Apple“屏幕门” | Steve Yuan's Workspace</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111158073-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-111158073-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a href="https://github.com/steve-yuan-8276" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#FD6C6C; color:#fff; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Steve Yuan's Workspace</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">99%学习&&1%心得</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2020/01/17/macnotes-howToFixFlexgate/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/logo.png">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="生命不息，折腾不止">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          我遭遇了Apple“屏幕门”
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-17 13:41:04 / 修改时间：15:04:42" itemprop="dateCreated datePublished" datetime="2020-01-17T13:41:04+08:00">2020-01-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mac/" itemprop="url" rel="index">
+                    <span itemprop="name">mac</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/01/17/macnotes-howToFixFlexgate/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/17/macnotes-howToFixFlexgate/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/3qyqNC20200117.jpg" alt></p>
+<p>我是一名果粉，也是一个普通消费者。最近，我遇到了所谓的苹果“屏幕门”，这里分享了我的经历，也想顺便对事中、事后说“不”说一下我的看法：</p>
+<p>当你的正当权益受到侵害的时候，请记住：</p>
+<ol>
+<li>自己的事情自己做，不要寄希望别人帮你搞定一切；</li>
+<li>尽快冷静下来，激动无助于解决问题；</li>
+<li>尝试一切可能的方法维权，包括投诉；</li>
+<li>最后，要接受结果，尽管有时候这并不是最好的。</li>
+</ol>
+<h2 id="什么是“屏幕门”"><a href="#什么是“屏幕门”" class="headerlink" title="什么是“屏幕门”"></a>什么是“屏幕门”</h2><p>“屏幕门”是一种广泛存在于MacBook Pro2016至2018款笔记本上的设计缺陷，按照苹果的官方说法，详见<a href="https://support.apple.com/zh-cn/13-inch-macbook-pro-display-backlight-service" target="_blank" rel="noopener">《13 英寸 MacBook Pro 显示屏背光服务计划》</a></p>
+<blockquote>
+<p>Apple 已经确定，很少一部分 13 英寸 MacBook Pro 显示屏可能会出现以下一种或多种状况：</p>
+</blockquote>
+<blockquote>
+<p>显示屏背光沿整个屏幕底部持续或间歇性显示垂直的明亮区域<br>显示屏背光完全停止工作</p>
+</blockquote>
+<p>借用国内一名同样遭受“屏幕门”媒体博主更通俗的说法：2016-2018款的MacBook pro，由于采用了更加轻薄的设计，修改简化了之前屏幕和机身连接处的线路设计，导致笔记本转轴处的连接线异常脆弱，以至于正常的开合笔记本都可能出现连接线路接触不良，导致屏幕显示不正常，甚至直接黑屏。</p>
+<p>是的，你没有看错，就是一个正常的开合笔记本的动作就可以导致这么严重的后果。试问，开合笔记本，这属于用户的“不当”操作吗？还是苹果笔记本的严重设计缺陷呢？</p>
+<p>更夸张的是：</p>
+<p>第一，这个严重设计缺陷并非上面公告说的，仅仅存在于16款13寸MacBook Pro，这个严重问题的覆盖面要比苹果承认的大得多。</p>
+<p>第二，这个错误并不是什么极限压力测试下的极个别情况，任何正常使用Mac笔记本的用户都可能遇到。</p>
+<p>关于这两点，我在后面都会进一步说明。</p>
+<h2 id="痛苦的维修经历"><a href="#痛苦的维修经历" class="headerlink" title="痛苦的维修经历"></a>痛苦的维修经历</h2><p>2020年刚过元旦，我的2017款13寸MacBook Pro在正常使用过程中突然遭遇屏幕门（当时我并没有进行开合盖的动作）。当时的症状是这样的：</p>
+<p>屏幕突然开始忽明忽暗的闪烁，持续了将近十分钟之后，出现黑屏。</p>
+<p>我人在北京，第一反应当然是预约就近的苹果直营店去检修。但是由于临近春节，一直预约不上，所以直到2019年1月5日、6日分别去apple王府井和apple 西单大悦城两家直营店分别和苹果“天才吧”的“天才”们进行了PK，具体情形是这样的：</p>
+<p>第一次是1月5号在apple 王府井，前面说到一直约不到，所以只能趁周末去直营店现场碰碰运气，先去了西单大悦城的apple直营店，答复是零时加号要等六个小时；之后不甘心，又去了王府井apple直营店，这边说只需要等大概两个小时左右，于是就在这边等着检修。过了大概十几分钟，一位apple“天才”接待了我，听完问题描述后，他简单看了一下机器，然后拿一个小手电筒反复照屏幕，之后告诉我，机器没坏，但是屏幕灯管不亮了，测试外接显示器，果然可以正常使用。但是，重点来了，屏幕不亮了算谁的锅呢？<strong>这位天才吧工作人员的解释是，过了苹果的一年保修期，苹果就不保了，需要用户自费近4000元人民币更换屏幕</strong>。第一次PK到此告一段落。</p>
+<p>回来之后想想不对啊，国家三包政策不是规定 “主要部件两年质保”吗？于是又预约了1月6日周一的apple西单大悦城。</p>
+<p>1月6日晚6:30，我来到了西单大悦城苹果直营店，这次接待我的天才吧工作人员没有用手电筒，而是接上了一个所谓官方采用的检测系统，检测之后熟练地打开apple中国官网延保计划的网页，之后对我说，官方屏幕延保计划只针对2016款13寸MacBook Pro，你是2017款的；而且按照国家三包政策，我的电脑激活时间为2018年1月2日，到现在（2020年1月6日）已经过了4天，苹果不负责免费维修。如果我不服，可以打官方400电话投诉。</p>
+<p>就在店门外，我拨打了苹果 <em>4006668820</em> 的官方客服电话。对方是一位自称是高级客服专家的工作人员，听完我的投诉之后，对方说让我把电话给负责接待我的“天才”，说要进一步核实情况。然而，十分钟前接待我的“天才”以正在忙为由拒绝接听电话，最后是前台负责签到的一个女性客服接听电话，她的说法简单说就是：这就是苹果的保修政策，这就是最终决定。电话客服接着说，<strong>接听电话的她就是亚太地区的最高级别技术专家，而电话应答只负责软件问题，硬件问题以直营店的决定作为apple的最终决定。所以，付费维修，这就是苹果的最终处理结果</strong>。那我说，我只有投诉。电话那头一脸无辜地表示，我们尊重您的选择，但是这就是我们的最终决定。</p>
+<p>事后，我还联系了国内一家在果粉圈里小有名气的网站，希望他们能仗义执言，曝光苹果这种霸道行为，这家网站管理员选择了沉默。倒是有热心网友出来说：苹果在他家有广告投放，拿人手短，不会报的。</p>
+<h2 id="明知故犯，苹果理应赔偿客户"><a href="#明知故犯，苹果理应赔偿客户" class="headerlink" title="明知故犯，苹果理应赔偿客户"></a>明知故犯，苹果理应赔偿客户</h2><p>因为个人原因没有及时送修，确实我也有一定责任。但是花将近一万五买的电脑，刚刚两年就这样，我相信绝大多数人都无法接受吧？</p>
+<p>更何况，通过后来在网上查资料，发现这根本就不是一个个案，而是广泛存在的一个问题。对于屏幕门，国内外科技媒体在2019年上半年就有过指名道姓的明确报道，随便摘几篇：</p>
+<p><a href="https://www.theverge.com/2019/3/19/18271733/flexgate-display-problem-macbook-pro-apple" target="_blank" rel="noopener">The verge：Flexgate is real, and Apple should acknowledge it</a>  </p>
+<p><a href="https://zh.ifixit.com/News/flexgate" target="_blank" rel="noopener">Ifixit ：The Design Flaw Behind MacBook Pro’s “Stage Light” Effect</a> </p>
+<p><a href="https://www.expreview.com/66522.html" target="_blank" rel="noopener">超能网（Expreview）：苹果MacBook Pro笔记本再陷一“门”屏幕存在设计缺陷</a> </p>
+<p><a href="https://notebook.pconline.com.cn/1241/12415557.html" target="_blank" rel="noopener">太平洋电脑网：MacBook屏幕排线屡出问题 苹果至今未正面回应MacBook屏幕排线屡出问题 苹果至今未正面回应</a>  </p>
+<p>国内自媒体博主也有明确报道，比如这两个：</p>
+<p>bilibili：<a href="https://www.bilibili.com/video/av40542848/" target="_blank" rel="noopener">“键盘门”后又出问题？2016-18 MacBook Pro屏幕惊现设计缺陷</a> </p>
+<p>罗磊（自媒体up主）：<a href="https://luolei.org/apple-macbook-flexgate/" target="_blank" rel="noopener">背光门 | 苹果 MacBook 即将爆发的下一个质量问题 ?</a> </p>
+<p>更重要的是，受到问题影响的，绝不仅仅是“个别人”，国外网址 change.org 就在这里 <a href="https://www.change.org/p/apple-fix-all-macbook-pro-2016-and-later-with-stage-light-effect-or-backlight-shutdown-flexgate?use_react=false" target="_blank" rel="noopener">Fix all MacBook Pro 2016 and later with stage light effect or backlight shutdown #flexgate</a> ，发起了一个联署维权情愿活动。到我搜到这个网页为止，已经有<strong>24243人</strong>联名要求苹果召回问题产品，并解决维修问题。</p>
+<p>然而，重点来了，苹果只在2019年5月21日发布了文章一开头说的那个公告，仅仅对2016款13寸MacBook Pro进行免费维修。</p>
+<p>其他的，比如前文提到的自媒体up主罗磊的 Macbook Pro 2016 15寸 顶配(带 bar) ，对不起，不管！</p>
+<p>对于我的2017款13寸 Macbook Pro ，也不管！</p>
+<p>明明是一样的设计缺陷，为什么避重就轻，这分明是把消费者当猴耍！</p>
+<p>近日，国家市场监管总局发布的《消费品召回管理暂行规定》就明文指出，包括家电在内的家庭日常生活中购买使用的消费品，均受到这一规定的制约，相关缺陷产品面临生产者必须要召回。</p>
+<h2 id="有点无语的结局"><a href="#有点无语的结局" class="headerlink" title="有点无语的结局"></a>有点无语的结局</h2><p>在联系苹果“无果”的情况下，我后来又做了三件事：</p>
+<ol>
+<li><p>联系微博、微信大V爆料</p>
+</li>
+<li><p>联系媒体朋友曝光</p>
+</li>
+<li><p>向市场监管部门投诉</p>
+</li>
+</ol>
+<p>前两条，从后来的反馈来看，基本没卵用。网络大V根本不鸟，完全无视我的存在；媒体的朋友听说我要维权，第一反应是打趣说，你也投P2P啦？然后，就没有然后了。</p>
+<p>对于这个结果，其实我也能理解，维权这种事，替你“伸张正义”出力不讨好，又不赚钱。每年315出来做做样子就算了，没人真在乎你。</p>
+<p>倒是第三条，原本最不抱希望，后来却发挥了作用。在我向12315官网投诉之后，没两天就就接到了苹果中国高级客服的电话，说让拍个屏幕黑屏的照片给他，这个事可以协商解决。</p>
+<p>后面的事情就简单了。苹果最终给出的解决方案是：<strong>我的案子确实不符合屏幕更换延保计划，也确实超过国家三包时间了。但是，考虑到我的实际情况，愿意按照特例提供免费维修。</strong></p>
+<p>对于我投诉的“屏幕门”，客服的解释是，<strong>感谢反馈，目前苹果正在展开内部调查，目前尚没有进一步的消息。</strong></p>
+<p>怎么说呢？这样的处理意见我不满意，但是可以接受。毕竟，苹果最终还是给出了和解的态度，也给我了免费维修了屏幕，这一点值得欣慰。</p>
+<p>但是，我也想说，我也给苹果高级客服说了，<strong>希望苹果能够认真调查这个事情，如果确认有问题，能够真正负起责任召回问题产品。</strong></p>
+<p>最后，简单总结一下：</p>
+<ul>
+<li><p>自己的事情，自己操心。什么网红大V都是骗人的，<strong>这个世界本来就没有什么救世主，</strong>不要觉得他需要怎样，他就怎样，他们关心的只有粉丝的钱而已。</p>
+</li>
+<li><p>不要放弃投诉，投诉不一定有用，但是这个步骤必不可少。</p>
+</li>
+<li><p>最后，不要感情用事，解决问题永远比表达情绪的优先级高。</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <div>
+    
+    <div>
+
+    <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+
+</div>
+    
+    </div>
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Steve Yuan 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Steve Yuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://steve-yuan-8276.github.io/2020/01/17/macnotes-howToFixFlexgate/" title="我遭遇了Apple“屏幕门”">https://steve-yuan-8276.github.io/2020/01/17/macnotes-howToFixFlexgate/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/mac/" rel="tag"># mac</a>
+              <a href="/tags/notes/" rel="tag"># notes</a>
+              <a href="/tags/Flexgate/" rel="tag"># Flexgate</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/12/06/macTricks-someTricksConllections/" rel="prev" title="macTricks-有用搜索收集技巧">
+      <i class="fa fa-chevron-left"></i> macTricks-有用搜索收集技巧
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是“屏幕门”"><span class="nav-number">2.</span> <span class="nav-text">什么是“屏幕门”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#痛苦的维修经历"><span class="nav-number">3.</span> <span class="nav-text">痛苦的维修经历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#明知故犯，苹果理应赔偿客户"><span class="nav-number">4.</span> <span class="nav-text">明知故犯，苹果理应赔偿客户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#有点无语的结局"><span class="nav-number">5.</span> <span class="nav-text">有点无语的结局</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Steve Yuan"
+      src="/uploads/logo.png">
+  <p class="site-author-name" itemprop="name">Steve Yuan</p>
+  <div class="site-description" itemprop="description">生命不息，折腾不止</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">71</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">72</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/steve-yuan-8276" title="GitHub → https://github.com/steve-yuan-8276" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yuanf02@gmail.com" title="Mail → mailto:yuanf02@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/feng8276" title="Twitter → https://twitter.com/feng8276" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Steve Yuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">474k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">7:10</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://steve-yuan.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://steve-yuan-8276.github.io/2020/01/17/macnotes-howToFixFlexgate/",
+            identifier: "2020/01/17/macnotes-howToFixFlexgate/",
+            title: "我遭遇了Apple“屏幕门”"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://steve-yuan.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

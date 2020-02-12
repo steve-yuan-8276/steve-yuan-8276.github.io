@@ -1,6 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Linux命令行学习笔记｜网络测速开源工具</title>
+    <url>/2020/02/12/linuxNote-commandlinePart1/</url>
+    <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>从今天开启一个100天计划，每天整理一篇学习博客。希望自己能坚持下来。</p>
+<p>第一天整理的是命令行测速工具：speedtest、fast和iperf。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/RgIWAG20200212.png" alt="RgIWAG20200212"></p>
+<a id="more"></a>
+<h2 id="命令行网速测试工具"><a href="#命令行网速测试工具" class="headerlink" title="命令行网速测试工具"></a>命令行网速测试工具</h2><h3 id="Speedtest"><a href="#Speedtest" class="headerlink" title="Speedtest"></a>Speedtest</h3><p>通过Python 实现，可用Apt 或者pip安装；详细用法参见 <a href="https://www.cyberciti.biz/faq/install-speedtest-cli-on-centos-redhat-fedoa-scientific-to-measure-internetspeed/" target="_blank" rel="noopener">Install Speedtest-cli On a CentOS / RHEL / Fedora Linux To Check Internet Speed</a></p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//apt 安装</span><br><span class="line">sudo apt install speedtest-cli</span><br><span class="line">//pip 安装，centos需安装好python3</span><br><span class="line">sudo pip3 install speedtest-cli</span><br></pre></td></tr></table></figure>
+<p>或者直接下载脚本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ wget -O speedtest-cli https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py</span><br><span class="line">$ chmod +x speedtest-cli</span><br></pre></td></tr></table></figure>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//第一种方式</span><br><span class="line">$ ./speedtest-cli</span><br><span class="line"></span><br><span class="line">//第二种方式</span><br><span class="line">$ python speedtest-cli</span><br></pre></td></tr></table></figure>
+<p>示例：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/7wD6zz20200212.png" alt></p>
+<p>特殊用法：测试并生成分享图片</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ./speedtest-cli --share --bytes</span><br></pre></td></tr></table></figure>
+<p>输出效果：</p>
+<p><img src="https://www.speedtest.net/result/9031480833.png" alt></p>
+<h3 id="Fast"><a href="#Fast" class="headerlink" title="Fast"></a>Fast</h3><p>Fast 是 Netflix 提供的测速服务，也可通过 npm 安装的命令行工具运行。</p>
+<h4 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h4><ul>
+<li>Enable snapd</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo yum install epel-release</span><br><span class="line"></span><br><span class="line">sudo yum install snapd</span><br><span class="line"></span><br><span class="line">sudo systemctl enable --now snapd.socket</span><br><span class="line"></span><br><span class="line">sudo ln -s /var/lib/snapd/snap /snap</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Install fast</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo snap install fast</span><br></pre></td></tr></table></figure>
+<h4 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//测试下载速度</span><br><span class="line">$ fast</span><br><span class="line"></span><br><span class="line">//测试上传速度</span><br><span class="line">$ fast -u</span><br></pre></td></tr></table></figure>
+<h3 id="iPerf"><a href="#iPerf" class="headerlink" title="iPerf"></a>iPerf</h3><p>局域网测速工具</p>
+<h4 id="安装-2"><a href="#安装-2" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//Debian、Raspbian 和 Ubuntu</span><br><span class="line">sudo apt install iperf</span><br><span class="line"></span><br><span class="line">//CentOS</span><br><span class="line">yum install epel-release</span><br><span class="line">yum update</span><br><span class="line">yum install iperf</span><br><span class="line"></span><br><span class="line">//Arch Linux</span><br><span class="line">pacman -S iperf</span><br><span class="line"></span><br><span class="line">//openSUSE</span><br><span class="line">zypper install iperf</span><br><span class="line"></span><br><span class="line">//Gentoo</span><br><span class="line">emerge iperf</span><br></pre></td></tr></table></figure>
+<h4 id="使用-2"><a href="#使用-2" class="headerlink" title="使用"></a>使用</h4><p>需要在同一网络上的两台计算机上安装 iPerf，指定其中一台作为服务器，另一台为客户端。</p>
+<ul>
+<li>服务器端操作</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//获取服务端计算机的 IP 地址：</span><br><span class="line">ip addr show | grep inet.*brd</span><br><span class="line"></span><br><span class="line">//在服务端启动 iperf：</span><br><span class="line">iperf -s</span><br></pre></td></tr></table></figure>
+<ul>
+<li>客户端操作</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">iperf -c 172.16.200.133</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>mac</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
+        <tag>commandline</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>我遭遇了Apple“屏幕门”</title>
     <url>/2020/01/17/macnotes-howToFixFlexgate/</url>
     <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/3qyqNC20200117.jpg" alt></p>
@@ -3307,7 +3357,7 @@ real_server 172.16.111.120 80 {
 </tbody>
 </table>
 <p>示例：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat if-file.sh</span><br><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">f="/tmp/if-test"</span><br><span class="line">if [ -f $f ]</span><br><span class="line">then</span><br><span class="line">    echo $f exist</span><br><span class="line">else</span><br><span class="line">    touch $f</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat if-file.sh</span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">f="/tmp/if-test"</span><br><span class="line">if [ -f $f ]</span><br><span class="line">then</span><br><span class="line">    echo $f exist</span><br><span class="line">else</span><br><span class="line">    touch $f</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
 <p>执行效果</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@local-linux01 sbin]# bash -x !$</span><br><span class="line">bash -x if-file.sh</span><br><span class="line">+ f=/tmp/if-test</span><br><span class="line">+ &apos;[&apos; -f /tmp/if-test &apos;]&apos;</span><br><span class="line">+ touch /tmp/if-test</span><br></pre></td></tr></table></figure>
 <h3 id="if特殊用法"><a href="#if特殊用法" class="headerlink" title="if特殊用法"></a>if特殊用法</h3><table>
@@ -3347,7 +3397,7 @@ real_server 172.16.111.120 80 {
 </li>
 </ul>
 <p>示例：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">read -p "Please input a number: " n</span><br><span class="line">if [ -z "$n" ]</span><br><span class="line">then</span><br><span class="line">    echo "Please input a number."</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">n1=`echo $n|sed 's/[0-9]//g'`</span><br><span class="line">if [ -n "$n1" ]</span><br><span class="line">then</span><br><span class="line">    echo "Please input a number."</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ $n -lt 60 ] &amp;&amp; [ $n -ge 0 ]</span><br><span class="line">then</span><br><span class="line">    tag=1</span><br><span class="line">elif [ $n -ge 60 ] &amp;&amp; [ $n -lt 80 ]</span><br><span class="line">then</span><br><span class="line">    tag=2</span><br><span class="line">elif [ $n -ge 80 ]  &amp;&amp; [ $n -lt 90 ]</span><br><span class="line">then</span><br><span class="line">    tag=3</span><br><span class="line">elif [ $n -ge 90 ] &amp;&amp; [ $n -le 100 ]</span><br><span class="line">then</span><br><span class="line">    tag=4</span><br><span class="line">else</span><br><span class="line">    tag=0</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">case $tag in</span><br><span class="line">    1)</span><br><span class="line">    echo "not ok"</span><br><span class="line">        ;;</span><br><span class="line">    2)</span><br><span class="line">        echo "ok"</span><br><span class="line">        ;;</span><br><span class="line">    3)</span><br><span class="line">        echo "ook"</span><br><span class="line">        ;;</span><br><span class="line">    4)</span><br><span class="line">        echo "oook"</span><br><span class="line">        ;;</span><br><span class="line">    *)</span><br><span class="line">        echo "The number range is 0-100."</span><br><span class="line">        ;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">read -p "Please input a number: " n</span><br><span class="line">if [ -z "$n" ]</span><br><span class="line">then</span><br><span class="line">    echo "Please input a number."</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">n1=`echo $n|sed 's/[0-9]//g'`</span><br><span class="line">if [ -n "$n1" ]</span><br><span class="line">then</span><br><span class="line">    echo "Please input a number."</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ $n -lt 60 ] &amp;&amp; [ $n -ge 0 ]</span><br><span class="line">then</span><br><span class="line">    tag=1</span><br><span class="line">elif [ $n -ge 60 ] &amp;&amp; [ $n -lt 80 ]</span><br><span class="line">then</span><br><span class="line">    tag=2</span><br><span class="line">elif [ $n -ge 80 ]  &amp;&amp; [ $n -lt 90 ]</span><br><span class="line">then</span><br><span class="line">    tag=3</span><br><span class="line">elif [ $n -ge 90 ] &amp;&amp; [ $n -le 100 ]</span><br><span class="line">then</span><br><span class="line">    tag=4</span><br><span class="line">else</span><br><span class="line">    tag=0</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">case $tag in</span><br><span class="line">    1)</span><br><span class="line">    echo "not ok"</span><br><span class="line">        ;;</span><br><span class="line">    2)</span><br><span class="line">        echo "ok"</span><br><span class="line">        ;;</span><br><span class="line">    3)</span><br><span class="line">        echo "ook"</span><br><span class="line">        ;;</span><br><span class="line">    4)</span><br><span class="line">        echo "oook"</span><br><span class="line">        ;;</span><br><span class="line">    *)</span><br><span class="line">        echo "The number range is 0-100."</span><br><span class="line">        ;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
 <p>执行效果</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@local-linux01 sbin]# bash !$</span><br><span class="line">bash case01.sh</span><br><span class="line">Please input a number: 1</span><br><span class="line">not ok</span><br></pre></td></tr></table></figure>
 <p>执行过程</p>
@@ -3358,16 +3408,16 @@ real_server 172.16.111.120 80 {
 <ul>
 <li>示例1：</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">for i in `seq 1 100 `</span><br><span class="line">do </span><br><span class="line">   echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in `seq 1 100 `</span><br><span class="line">do </span><br><span class="line">   echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <!--more-->
 <ul>
 <li>示例2:累加计算</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">sum=0</span><br><span class="line">for i in `seq 1 100`</span><br><span class="line">do </span><br><span class="line">   echo "$sum + $i"</span><br><span class="line">   sum=$[$sum+$i]</span><br><span class="line">   echo $sum</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">sum=0</span><br><span class="line">for i in `seq 1 100`</span><br><span class="line">do </span><br><span class="line">   echo "$sum + $i"</span><br><span class="line">   sum=$[$sum+$i]</span><br><span class="line">   echo $sum</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <ul>
 <li>示例3：遍历文件夹</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">cd /etc/</span><br><span class="line">for a in ls /etc/</span><br><span class="line">do</span><br><span class="line">    if [ -d $a ]</span><br><span class="line">    then</span><br><span class="line">        echo $a</span><br><span class="line">        ls $a</span><br><span class="line">    fi</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">cd /etc/</span><br><span class="line">for a in ls /etc/</span><br><span class="line">do</span><br><span class="line">    if [ -d $a ]</span><br><span class="line">    then</span><br><span class="line">        echo $a</span><br><span class="line">        ls $a</span><br><span class="line">    fi</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <h3 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h3><p>while循环相当于一种特殊的for循环，当满足条件时，会一直执行，直到不再满足条件为止。</p>
 <p>格式：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">while condition</span><br><span class="line">do</span><br><span class="line">	command</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
@@ -3380,20 +3430,20 @@ real_server 172.16.111.120 80 {
 <ul>
 <li>示例1：</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">while true</span><br><span class="line">do</span><br><span class="line">    load=`w|head -1|awk -F 'load average: ' '&#123;print $2&#125;'|cut -d. -f1`</span><br><span class="line">    if [ $load -gt 10 ]</span><br><span class="line">    then</span><br><span class="line">        /usr/local/sbin/mail.py xxx@qq.com "load high" "$load"</span><br><span class="line">    fi</span><br><span class="line">    sleep 30</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">while true</span><br><span class="line">do</span><br><span class="line">    load=`w|head -1|awk -F 'load average: ' '&#123;print $2&#125;'|cut -d. -f1`</span><br><span class="line">    if [ $load -gt 10 ]</span><br><span class="line">    then</span><br><span class="line">        /usr/local/sbin/mail.py xxx@qq.com "load high" "$load"</span><br><span class="line">    fi</span><br><span class="line">    sleep 30</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <ul>
 <li>Samples2:在循环过程中需要人为的输入一个数字</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">while :</span><br><span class="line">do</span><br><span class="line">    read -p "Please input a number: " n</span><br><span class="line">    if [ -z "$n" ]</span><br><span class="line">    then</span><br><span class="line">        echo "you need input sth."</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    n1=`echo $n|sed 's/[0-9]//g'`</span><br><span class="line">    if [ ! -z "$n1" ]</span><br><span class="line">    then</span><br><span class="line">        echo "you just only input numbers."</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    break</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">while :</span><br><span class="line">do</span><br><span class="line">    read -p "Please input a number: " n</span><br><span class="line">    if [ -z "$n" ]</span><br><span class="line">    then</span><br><span class="line">        echo "you need input sth."</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    n1=`echo $n|sed 's/[0-9]//g'`</span><br><span class="line">    if [ ! -z "$n1" ]</span><br><span class="line">    then</span><br><span class="line">        echo "you just only input numbers."</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    break</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <h3 id="break跳出循环"><a href="#break跳出循环" class="headerlink" title="break跳出循环"></a>break跳出循环</h3><p>适用场景：将判断和循环结合起来，符合某些条件时break中断循环。注：break只会影响本次循环，在有多重循环嵌套的情况，break只会影响本层级的循环，它的上层循环不受影响。</p>
 <p>samples:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    if [ $i -eq 3 ]</span><br><span class="line">    then</span><br><span class="line">        break</span><br><span class="line">    fi</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    if [ $i -eq 3 ]</span><br><span class="line">    then</span><br><span class="line">        break</span><br><span class="line">    fi</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <h3 id="continue结束本次循环"><a href="#continue结束本次循环" class="headerlink" title="continue结束本次循环"></a>continue结束本次循环</h3><p>忽略continue之下的代码，直接进行下一次循环</p>
 <p>samples:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    if [ $i -eq 3 ]</span><br><span class="line">    then</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    if [ $i -eq 3 ]</span><br><span class="line">    then</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <h3 id="exit退出整个脚本"><a href="#exit退出整个脚本" class="headerlink" title="exit退出整个脚本"></a>exit退出整个脚本</h3><p>跟break不同之处，在于使用exit语句，会直接退出整个shell脚本。</p>
 <p>samples:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">  echo $i</span><br><span class="line">  if [ $i -eq 3 ]</span><br><span class="line">  then</span><br><span class="line">      exit</span><br><span class="line">  fi</span><br><span class="line">  echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">  echo $i</span><br><span class="line">  if [ $i -eq 3 ]</span><br><span class="line">  then</span><br><span class="line">      exit</span><br><span class="line">  fi</span><br><span class="line">  echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <p><strong>注：运行exit语句，直接退出shell脚本，后面的语句都不执行。</strong></p>
 <h2 id="shell中的函数"><a href="#shell中的函数" class="headerlink" title="shell中的函数"></a>shell中的函数</h2><p>linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。</p>
 <h3 id="用法："><a href="#用法：" class="headerlink" title="用法："></a>用法：</h3><ul>
@@ -17681,8 +17731,8 @@ real_server 172.16.111.120 80 {
         <category>front-end</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>front-end</tag>
+        <tag>JavaScript</tag>
         <tag>ES6</tag>
       </tags>
   </entry>

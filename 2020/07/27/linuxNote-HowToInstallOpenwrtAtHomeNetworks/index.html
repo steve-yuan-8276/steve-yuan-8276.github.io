@@ -58,7 +58,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/fxxX9220200721.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/2nSAfZ20200727.png">
-<meta property="og:updated_time" content="2020-07-27T08:25:09.893Z">
+<meta property="og:updated_time" content="2020-07-27T08:30:23.021Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux学习|家庭软路由小白折腾记">
 <meta name="twitter:description" content="写在前面好长时间没有更新笔记了，或者换句话说，自打疫情发生以来，整个人都过着猪一样颓废的生活……这样是不对的。 其实很早就想搞一个家庭科学上网的环境，最初试过华硕AC68U + 梅林插件，但是路由器发热严重，还时不时断线，后来放弃；之后很长时间采用surge + 机场订阅，好是好，就是要配合mac/ios设备使用，还有设备授权数量的限制，更重要的是，还是不能实现在电视上看netflix的愿望。恰好">
@@ -250,7 +250,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-07-27 14:36:41 / 修改时间：16:25:09" itemprop="dateCreated datePublished" datetime="2020-07-27T14:36:41+08:00">2020-07-27</time>
+              <time title="创建时间：2020-07-27 14:36:41 / 修改时间：16:30:23" itemprop="dateCreated datePublished" datetime="2020-07-27T14:36:41+08:00">2020-07-27</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -318,6 +318,7 @@
       
         <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>好长时间没有更新笔记了，或者换句话说，自打疫情发生以来，整个人都过着猪一样颓废的生活……这样是不对的。</p>
 <p>其实很早就想搞一个家庭科学上网的环境，最初试过华硕AC68U + 梅林插件，但是路由器发热严重，还时不时断线，后来放弃；之后很长时间采用surge + 机场订阅，好是好，就是要配合mac/ios设备使用，还有设备授权数量的限制，更重要的是，还是不能实现在电视上看netflix的愿望。恰好最近看到了老白的家庭软路由的视频，看起来不复杂，本着不折腾不舒服的”神经“，还是折腾一下。</p>
+<a id="more"></a>
 <h2 id="事前准备"><a href="#事前准备" class="headerlink" title="事前准备"></a>事前准备</h2><p>结合老白的教程，感觉单臂软路由完全满足自己的需求，以下是大概的软硬件配置。</p>
 <h3 id="硬件准备"><a href="#硬件准备" class="headerlink" title="硬件准备"></a>硬件准备</h3><ul>
 <li><p>软路由：锐角云（N3450），购自闲鱼；</p>
@@ -331,7 +332,7 @@
 </ul>
 <h3 id="软件准备"><a href="#软件准备" class="headerlink" title="软件准备"></a>软件准备</h3><p>软路由器上安装的是esir大神编译的openwrt系统，这个闲鱼卖家已经帮着装好了，省了太多的事情。</p>
 <h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><p>先附上老白视频当中的一张单臂软路由示意图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/fxxX9220200721.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/fxxX9220200721.png" alt="单臂软路由"></p>
 <p>按照老白的说法，家庭软路由主要遵循两个原则：</p>
 <ol>
 <li><p>所有设备统一在同一网段下，意味着只有一层NAT转换，只有一个负责NAT的设备；</p>
@@ -352,7 +353,7 @@
 <h3 id="第二步：软路由设置"><a href="#第二步：软路由设置" class="headerlink" title="第二步：软路由设置"></a>第二步：软路由设置</h3><h4 id="lan-wan设置"><a href="#lan-wan设置" class="headerlink" title="lan/wan设置"></a>lan/wan设置</h4><p>按照教程，单臂软路由是主路由的一种变形，所以要先将软路由与笔记本通过网线连接，此时软路由是不联网的，输入openwrt的初始网址：<code>192.168.5.1</code>，依次点击网络、接口，把lan口和wan口设置都改为 <code>eth0</code> ，之后保存退出。</p>
 <p><em>注意：esir 大神编译的openwrt的高大全版初始网址是192.168.5.1，初次登陆需要设置root密码；完成lan/wan地址设置后，登陆网址可以根据自己的使用环境修改。</em></p>
 <h4 id="拨号设置"><a href="#拨号设置" class="headerlink" title="拨号设置"></a>拨号设置</h4><p>此时，将所有的设备通过千兆交换器连接起来，如下图所示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/2nSAfZ20200727.png" alt="2nSAfZ20200727"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/2nSAfZ20200727.png" alt="连接示意图"></p>
 <p>本该连接无线路由器的那个网线先接到笔记本上，登陆 <code>192.168.5.1</code> ，依次点击网络、接口、wan口、修改，将接入方式改为 PPPoe，输入运营商的账号、密码，应该就可以上网了。</p>
 <p>下一步，点击 服务 、<code>shadowSocksR 插件</code>，输入机场订阅地址，获取订阅节点，之后保存应用，此时应该就可以科学上网了。</p>
 <h3 id="第三步：无线路由器配置"><a href="#第三步：无线路由器配置" class="headerlink" title="第三步：无线路由器配置"></a>第三步：无线路由器配置</h3><p>到了这一步，首先要把原本接无线路由器的网线接到无线路由上，之后进入路由器后台，点击高级设置，更改接入方式为AP模式（小米路由器好像叫静态ip），设置ip 信息：</p>

@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://steve-yuan-8276.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="写在前面好长时间没有更新笔记了，或者换句话说，自打疫情发生以来，整个人都过着猪一样颓废的生活……这样是不对的。 其实很早就想搞一个家庭科学上网的环境，最初试过华硕AC68U + 梅林插件，但是路由器发热严重，还时不时断线，后来放弃；之后很长时间采用surge + 机场订阅，好是好，就是要配合mac/ios设备使用，还有设备授权数量的限制，更重要的是，还是不能实现在电视上看netflix的愿望。恰好">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux学习|家庭软路由小白折腾记">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/index.html">
+<meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
+<meta property="og:description" content="写在前面好长时间没有更新笔记了，或者换句话说，自打疫情发生以来，整个人都过着猪一样颓废的生活……这样是不对的。 其实很早就想搞一个家庭科学上网的环境，最初试过华硕AC68U + 梅林插件，但是路由器发热严重，还时不时断线，后来放弃；之后很长时间采用surge + 机场订阅，好是好，就是要配合mac/ios设备使用，还有设备授权数量的限制，更重要的是，还是不能实现在电视上看netflix的愿望。恰好">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/fxxX9220200721.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/2nSAfZ20200727.png">
+<meta property="og:updated_time" content="2020-07-27T08:25:09.893Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux学习|家庭软路由小白折腾记">
+<meta name="twitter:description" content="写在前面好长时间没有更新笔记了，或者换句话说，自打疫情发生以来，整个人都过着猪一样颓废的生活……这样是不对的。 其实很早就想搞一个家庭科学上网的环境，最初试过华硕AC68U + 梅林插件，但是路由器发热严重，还时不时断线，后来放弃；之后很长时间采用surge + 机场订阅，好是好，就是要配合mac/ios设备使用，还有设备授权数量的限制，更重要的是，还是不能实现在电视上看netflix的愿望。恰好">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/fxxX9220200721.png">
+
+<link rel="canonical" href="https://steve-yuan-8276.github.io/2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>linux学习|家庭软路由小白折腾记 | Steve Yuan's Workspace</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111158073-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-111158073-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a href="https://github.com/steve-yuan-8276" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#FD6C6C; color:#fff; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Steve Yuan's Workspace</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">99%学习&&1%心得</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/logo.png">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="生命不息，折腾不止">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux学习|家庭软路由小白折腾记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-27 14:36:41 / 修改时间：16:25:09" itemprop="dateCreated datePublished" datetime="2020-07-27T14:36:41+08:00">2020-07-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/openwrt/" itemprop="url" rel="index">
+                    <span itemprop="name">openwrt</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/openwrt/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>好长时间没有更新笔记了，或者换句话说，自打疫情发生以来，整个人都过着猪一样颓废的生活……这样是不对的。</p>
+<p>其实很早就想搞一个家庭科学上网的环境，最初试过华硕AC68U + 梅林插件，但是路由器发热严重，还时不时断线，后来放弃；之后很长时间采用surge + 机场订阅，好是好，就是要配合mac/ios设备使用，还有设备授权数量的限制，更重要的是，还是不能实现在电视上看netflix的愿望。恰好最近看到了老白的家庭软路由的视频，看起来不复杂，本着不折腾不舒服的”神经“，还是折腾一下。</p>
+<h2 id="事前准备"><a href="#事前准备" class="headerlink" title="事前准备"></a>事前准备</h2><p>结合老白的教程，感觉单臂软路由完全满足自己的需求，以下是大概的软硬件配置。</p>
+<h3 id="硬件准备"><a href="#硬件准备" class="headerlink" title="硬件准备"></a>硬件准备</h3><ul>
+<li><p>软路由：锐角云（N3450），购自闲鱼；</p>
+</li>
+<li><p>USB转千兆网口：微软，同购于闲鱼，没用上；</p>
+</li>
+<li><p>千兆交换机：水星，购自JD；</p>
+</li>
+<li><p>路由器：小米AX3600，购自JD，非必须，但是家里之前AC68U实在是不能忍，索性一起换掉；</p>
+</li>
+</ul>
+<h3 id="软件准备"><a href="#软件准备" class="headerlink" title="软件准备"></a>软件准备</h3><p>软路由器上安装的是esir大神编译的openwrt系统，这个闲鱼卖家已经帮着装好了，省了太多的事情。</p>
+<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><p>先附上老白视频当中的一张单臂软路由示意图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/fxxX9220200721.png" alt></p>
+<p>按照老白的说法，家庭软路由主要遵循两个原则：</p>
+<ol>
+<li><p>所有设备统一在同一网段下，意味着只有一层NAT转换，只有一个负责NAT的设备；</p>
+</li>
+<li><p>所有网络控制功能都应该尽力收归openWRT服务器；</p>
+</li>
+</ol>
+<p>结合我实践，这两句话的意思就是：</p>
+<ol>
+<li><p>所有的设备，光猫、软路由、无线路由全部都接在千兆交换机上；</p>
+</li>
+<li><p>软路由是<strong>核心</strong>，搞定最主要的部分，包括宽带拨号、科学上网管理等；光猫只负责光电转换；无线路由只负责AP的部分；</p>
+</li>
+</ol>
+<p>下面是具体的实践过程：</p>
+<h3 id="第一步：光猫设置"><a href="#第一步：光猫设置" class="headerlink" title="第一步：光猫设置"></a>第一步：光猫设置</h3><p>直接拨打运营商客服将光猫由路由模式改为桥接模式，由运营商客服后台更改，修改后的光猫只负责将光纤信号转化成电信号。</p>
+<p>一个电话搞定，就这么简单。</p>
+<h3 id="第二步：软路由设置"><a href="#第二步：软路由设置" class="headerlink" title="第二步：软路由设置"></a>第二步：软路由设置</h3><h4 id="lan-wan设置"><a href="#lan-wan设置" class="headerlink" title="lan/wan设置"></a>lan/wan设置</h4><p>按照教程，单臂软路由是主路由的一种变形，所以要先将软路由与笔记本通过网线连接，此时软路由是不联网的，输入openwrt的初始网址：<code>192.168.5.1</code>，依次点击网络、接口，把lan口和wan口设置都改为 <code>eth0</code> ，之后保存退出。</p>
+<p><em>注意：esir 大神编译的openwrt的高大全版初始网址是192.168.5.1，初次登陆需要设置root密码；完成lan/wan地址设置后，登陆网址可以根据自己的使用环境修改。</em></p>
+<h4 id="拨号设置"><a href="#拨号设置" class="headerlink" title="拨号设置"></a>拨号设置</h4><p>此时，将所有的设备通过千兆交换器连接起来，如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/2nSAfZ20200727.png" alt="2nSAfZ20200727"></p>
+<p>本该连接无线路由器的那个网线先接到笔记本上，登陆 <code>192.168.5.1</code> ，依次点击网络、接口、wan口、修改，将接入方式改为 PPPoe，输入运营商的账号、密码，应该就可以上网了。</p>
+<p>下一步，点击 服务 、<code>shadowSocksR 插件</code>，输入机场订阅地址，获取订阅节点，之后保存应用，此时应该就可以科学上网了。</p>
+<h3 id="第三步：无线路由器配置"><a href="#第三步：无线路由器配置" class="headerlink" title="第三步：无线路由器配置"></a>第三步：无线路由器配置</h3><p>到了这一步，首先要把原本接无线路由器的网线接到无线路由上，之后进入路由器后台，点击高级设置，更改接入方式为AP模式（小米路由器好像叫静态ip），设置ip 信息：</p>
+<p>ip：192.168.5.x （取决于软路由地址，比如软路由是192.168.5.1，前三个网段保持一致，只要设置最后一个网段的值，0 &lt; x &lt; 255，且不能和软路由地址完全一样，否则会地址冲突）</p>
+<p>子网掩码：255.255.255.0</p>
+<p>网关地址：软路由ip</p>
+<p>DNS地址：软路由ip</p>
+<p>保存应用，路由器会自动重启，之后就可以愉快滴刷美剧了。</p>
+<h2 id="TroubleShooting"><a href="#TroubleShooting" class="headerlink" title="TroubleShooting"></a>TroubleShooting</h2><p>结合自己的实践，难点主要有3个：</p>
+<h3 id="1、接线"><a href="#1、接线" class="headerlink" title="1、接线"></a>1、接线</h3><p>原本觉得很高深吗，其实实践起来很简单粗暴，我买的这款千兆交换机支持盲插，所以不用犹豫，一股脑接上去就好了。</p>
+<p>之所以分了三步，其实是受到教学视频的启发，这样一步步做下来不容易出错；一旦出错，排查起来也相对简单。</p>
+<h3 id="2、无线路由ip设置"><a href="#2、无线路由ip设置" class="headerlink" title="2、无线路由ip设置"></a>2、无线路由ip设置</h3><p>这一步自己折腾了很久，但是一直不成功；后来琢磨着按照上面的做法，前两步都成功了，只有无线路由器配置一直搞不定，折腾了一晚上没搞定。要命的是，AC68U实在是廉颇老矣，每次修改完路由器ip重启一下就七八分钟过去了，然后不成功，各种登录不上；重置路由器，重启，再修改，再来十分钟，妥妥滴老态龙钟，实在是受不鸟啊。</p>
+<p>后来一狠心，干脆换个新的小米路由器，到货开箱，接通电源后几分钟搞定，我还能说什么呢。</p>
+<h3 id="3、AP设置"><a href="#3、AP设置" class="headerlink" title="3、AP设置"></a>3、AP设置</h3><p>这一块的难点在于网关和DNS设定，之所以叫“难点”，是因为老白的教程没说。好吧，可能在专家眼里，这样的设定细节都太过小儿科了。</p>
+<p>其实答案也很简单，就是都保持和软路由ip一致；想通了也很简单，所有的流量都经过软路由，由他来进行处理的嘛。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>附上两个网络教程，一个是老白叫软路由原理的，另一个是esir叫他的编译固件的，那里说的更全面专业。</p>
+<ul>
+<li><p><a href="https://www.youtube.com/watch?v=ZqpB4vWKZZQ&amp;t=1996s" target="_blank" rel="noopener">老白软路由教程</a></p>
+</li>
+<li><p><a href="https://www.youtube.com/watch?v=UgeagLrI0zs" target="_blank" rel="noopener">esir讲openwrt</a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <div>
+    
+    <div>
+
+    <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+
+</div>
+    
+    </div>
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Steve Yuan 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Steve Yuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://steve-yuan-8276.github.io/2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/" title="linux学习|家庭软路由小白折腾记">https://steve-yuan-8276.github.io/2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/02/21/macnotes-howToUseLauchbar/" rel="prev" title="Mac笔记-可以跟Alfred媲美的启动器：Launchbar">
+      <i class="fa fa-chevron-left"></i> Mac笔记-可以跟Alfred媲美的启动器：Launchbar
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事前准备"><span class="nav-number">2.</span> <span class="nav-text">事前准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#硬件准备"><span class="nav-number">2.1.</span> <span class="nav-text">硬件准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#软件准备"><span class="nav-number">2.2.</span> <span class="nav-text">软件准备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现过程"><span class="nav-number">3.</span> <span class="nav-text">实现过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：光猫设置"><span class="nav-number">3.1.</span> <span class="nav-text">第一步：光猫设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：软路由设置"><span class="nav-number">3.2.</span> <span class="nav-text">第二步：软路由设置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lan-wan设置"><span class="nav-number">3.2.1.</span> <span class="nav-text">lan/wan设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拨号设置"><span class="nav-number">3.2.2.</span> <span class="nav-text">拨号设置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步：无线路由器配置"><span class="nav-number">3.3.</span> <span class="nav-text">第三步：无线路由器配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TroubleShooting"><span class="nav-number">4.</span> <span class="nav-text">TroubleShooting</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、接线"><span class="nav-number">4.1.</span> <span class="nav-text">1、接线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、无线路由ip设置"><span class="nav-number">4.2.</span> <span class="nav-text">2、无线路由ip设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、AP设置"><span class="nav-number">4.3.</span> <span class="nav-text">3、AP设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">5.</span> <span class="nav-text">最后</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Steve Yuan"
+      src="/uploads/logo.png">
+  <p class="site-author-name" itemprop="name">Steve Yuan</p>
+  <div class="site-description" itemprop="description">生命不息，折腾不止</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">74</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/steve-yuan-8276" title="GitHub → https://github.com/steve-yuan-8276" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yuanf02@gmail.com" title="Mail → mailto:yuanf02@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/feng8276" title="Twitter → https://twitter.com/feng8276" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Steve Yuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">482k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">7:19</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://steve-yuan.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://steve-yuan-8276.github.io/2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/",
+            identifier: "2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/",
+            title: "linux学习|家庭软路由小白折腾记"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://steve-yuan.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

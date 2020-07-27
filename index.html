@@ -221,6 +221,1137 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/logo.png">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="生命不息，折腾不止">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/" class="post-title-link" itemprop="url">linux学习|家庭软路由小白折腾记</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-27 14:36:41 / 修改时间：16:25:09" itemprop="dateCreated datePublished" datetime="2020-07-27T14:36:41+08:00">2020-07-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/openwrt/" itemprop="url" rel="index">
+                    <span itemprop="name">openwrt</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/openwrt/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>好长时间没有更新笔记了，或者换句话说，自打疫情发生以来，整个人都过着猪一样颓废的生活……这样是不对的。</p>
+<p>其实很早就想搞一个家庭科学上网的环境，最初试过华硕AC68U + 梅林插件，但是路由器发热严重，还时不时断线，后来放弃；之后很长时间采用surge + 机场订阅，好是好，就是要配合mac/ios设备使用，还有设备授权数量的限制，更重要的是，还是不能实现在电视上看netflix的愿望。恰好最近看到了老白的家庭软路由的视频，看起来不复杂，本着不折腾不舒服的”神经“，还是折腾一下。</p>
+<h2 id="事前准备"><a href="#事前准备" class="headerlink" title="事前准备"></a>事前准备</h2><p>结合老白的教程，感觉单臂软路由完全满足自己的需求，以下是大概的软硬件配置。</p>
+<h3 id="硬件准备"><a href="#硬件准备" class="headerlink" title="硬件准备"></a>硬件准备</h3><ul>
+<li><p>软路由：锐角云（N3450），购自闲鱼；</p>
+</li>
+<li><p>USB转千兆网口：微软，同购于闲鱼，没用上；</p>
+</li>
+<li><p>千兆交换机：水星，购自JD；</p>
+</li>
+<li><p>路由器：小米AX3600，购自JD，非必须，但是家里之前AC68U实在是不能忍，索性一起换掉；</p>
+</li>
+</ul>
+<h3 id="软件准备"><a href="#软件准备" class="headerlink" title="软件准备"></a>软件准备</h3><p>软路由器上安装的是esir大神编译的openwrt系统，这个闲鱼卖家已经帮着装好了，省了太多的事情。</p>
+<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><p>先附上老白视频当中的一张单臂软路由示意图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/fxxX9220200721.png" alt></p>
+<p>按照老白的说法，家庭软路由主要遵循两个原则：</p>
+<ol>
+<li><p>所有设备统一在同一网段下，意味着只有一层NAT转换，只有一个负责NAT的设备；</p>
+</li>
+<li><p>所有网络控制功能都应该尽力收归openWRT服务器；</p>
+</li>
+</ol>
+<p>结合我实践，这两句话的意思就是：</p>
+<ol>
+<li><p>所有的设备，光猫、软路由、无线路由全部都接在千兆交换机上；</p>
+</li>
+<li><p>软路由是<strong>核心</strong>，搞定最主要的部分，包括宽带拨号、科学上网管理等；光猫只负责光电转换；无线路由只负责AP的部分；</p>
+</li>
+</ol>
+<p>下面是具体的实践过程：</p>
+<h3 id="第一步：光猫设置"><a href="#第一步：光猫设置" class="headerlink" title="第一步：光猫设置"></a>第一步：光猫设置</h3><p>直接拨打运营商客服将光猫由路由模式改为桥接模式，由运营商客服后台更改，修改后的光猫只负责将光纤信号转化成电信号。</p>
+<p>一个电话搞定，就这么简单。</p>
+<h3 id="第二步：软路由设置"><a href="#第二步：软路由设置" class="headerlink" title="第二步：软路由设置"></a>第二步：软路由设置</h3><h4 id="lan-wan设置"><a href="#lan-wan设置" class="headerlink" title="lan/wan设置"></a>lan/wan设置</h4><p>按照教程，单臂软路由是主路由的一种变形，所以要先将软路由与笔记本通过网线连接，此时软路由是不联网的，输入openwrt的初始网址：<code>192.168.5.1</code>，依次点击网络、接口，把lan口和wan口设置都改为 <code>eth0</code> ，之后保存退出。</p>
+<p><em>注意：esir 大神编译的openwrt的高大全版初始网址是192.168.5.1，初次登陆需要设置root密码；完成lan/wan地址设置后，登陆网址可以根据自己的使用环境修改。</em></p>
+<h4 id="拨号设置"><a href="#拨号设置" class="headerlink" title="拨号设置"></a>拨号设置</h4><p>此时，将所有的设备通过千兆交换器连接起来，如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/2nSAfZ20200727.png" alt="2nSAfZ20200727"></p>
+<p>本该连接无线路由器的那个网线先接到笔记本上，登陆 <code>192.168.5.1</code> ，依次点击网络、接口、wan口、修改，将接入方式改为 PPPoe，输入运营商的账号、密码，应该就可以上网了。</p>
+<p>下一步，点击 服务 、<code>shadowSocksR 插件</code>，输入机场订阅地址，获取订阅节点，之后保存应用，此时应该就可以科学上网了。</p>
+<h3 id="第三步：无线路由器配置"><a href="#第三步：无线路由器配置" class="headerlink" title="第三步：无线路由器配置"></a>第三步：无线路由器配置</h3><p>到了这一步，首先要把原本接无线路由器的网线接到无线路由上，之后进入路由器后台，点击高级设置，更改接入方式为AP模式（小米路由器好像叫静态ip），设置ip 信息：</p>
+<p>ip：192.168.5.x （取决于软路由地址，比如软路由是192.168.5.1，前三个网段保持一致，只要设置最后一个网段的值，0 &lt; x &lt; 255，且不能和软路由地址完全一样，否则会地址冲突）</p>
+<p>子网掩码：255.255.255.0</p>
+<p>网关地址：软路由ip</p>
+<p>DNS地址：软路由ip</p>
+<p>保存应用，路由器会自动重启，之后就可以愉快滴刷美剧了。</p>
+<h2 id="TroubleShooting"><a href="#TroubleShooting" class="headerlink" title="TroubleShooting"></a>TroubleShooting</h2><p>结合自己的实践，难点主要有3个：</p>
+<h3 id="1、接线"><a href="#1、接线" class="headerlink" title="1、接线"></a>1、接线</h3><p>原本觉得很高深吗，其实实践起来很简单粗暴，我买的这款千兆交换机支持盲插，所以不用犹豫，一股脑接上去就好了。</p>
+<p>之所以分了三步，其实是受到教学视频的启发，这样一步步做下来不容易出错；一旦出错，排查起来也相对简单。</p>
+<h3 id="2、无线路由ip设置"><a href="#2、无线路由ip设置" class="headerlink" title="2、无线路由ip设置"></a>2、无线路由ip设置</h3><p>这一步自己折腾了很久，但是一直不成功；后来琢磨着按照上面的做法，前两步都成功了，只有无线路由器配置一直搞不定，折腾了一晚上没搞定。要命的是，AC68U实在是廉颇老矣，每次修改完路由器ip重启一下就七八分钟过去了，然后不成功，各种登录不上；重置路由器，重启，再修改，再来十分钟，妥妥滴老态龙钟，实在是受不鸟啊。</p>
+<p>后来一狠心，干脆换个新的小米路由器，到货开箱，接通电源后几分钟搞定，我还能说什么呢。</p>
+<h3 id="3、AP设置"><a href="#3、AP设置" class="headerlink" title="3、AP设置"></a>3、AP设置</h3><p>这一块的难点在于网关和DNS设定，之所以叫“难点”，是因为老白的教程没说。好吧，可能在专家眼里，这样的设定细节都太过小儿科了。</p>
+<p>其实答案也很简单，就是都保持和软路由ip一致；想通了也很简单，所有的流量都经过软路由，由他来进行处理的嘛。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>附上两个网络教程，一个是老白叫软路由原理的，另一个是esir叫他的编译固件的，那里说的更全面专业。</p>
+<ul>
+<li><p><a href="https://www.youtube.com/watch?v=ZqpB4vWKZZQ&amp;t=1996s" target="_blank" rel="noopener">老白软路由教程</a></p>
+</li>
+<li><p><a href="https://www.youtube.com/watch?v=UgeagLrI0zs" target="_blank" rel="noopener">esir讲openwrt</a></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <div>
+    
+    </div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2020/02/21/macnotes-howToUseLauchbar/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/logo.png">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="生命不息，折腾不止">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/21/macnotes-howToUseLauchbar/" class="post-title-link" itemprop="url">Mac笔记-可以跟Alfred媲美的启动器：Launchbar</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-21 16:35:34 / 修改时间：16:46:34" itemprop="dateCreated datePublished" datetime="2020-02-21T16:35:34+08:00">2020-02-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/macTricks/" itemprop="url" rel="index">
+                    <span itemprop="name">macTricks</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/02/21/macnotes-howToUseLauchbar/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/02/21/macnotes-howToUseLauchbar/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p> Launchbar教程</p>
+<h2 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h2><h3 id="老牌mac启动器，特长是自动化"><a href="#老牌mac启动器，特长是自动化" class="headerlink" title="老牌mac启动器，特长是自动化"></a>老牌mac启动器，特长是自动化</h3><h3 id="下载地址"><a href="#下载地址" class="headerlink" title="下载地址"></a>下载地址</h3><ul>
+<li><a href="https://obdev.at/products/launchbar/index.html" target="_blank" rel="noopener">https://obdev.at/products/launchbar/index.html</a></li>
+</ul>
+<h2 id="基础设置"><a href="#基础设置" class="headerlink" title="基础设置"></a>基础设置</h2><h3 id="第一步：设置呼出快捷键"><a href="#第一步：设置呼出快捷键" class="headerlink" title="第一步：设置呼出快捷键"></a>第一步：设置呼出快捷键</h3><ul>
+<li><p>设置-&gt;勾选第一行 Search in LaunchBar (在 LaunchBar 中搜索) ，并设置为 ⌘ 空格</p>
+</li>
+<li><p>同时修改spotlight快捷键，避免冲突</p>
+</li>
+</ul>
+<h3 id="第二步：设置语言：英文"><a href="#第二步：设置语言：英文" class="headerlink" title="第二步：设置语言：英文"></a>第二步：设置语言：英文</h3><ul>
+<li><p>针对系统语言非英文的情况</p>
+</li>
+<li><p>1、终端输入：defaults write at.obdev.LaunchBar AppleLanguages -array en</p>
+</li>
+<li><p>2、launchbar重启</p>
+</li>
+</ul>
+<h3 id="第三步：为非英文名的程序添加英文名"><a href="#第三步：为非英文名的程序添加英文名" class="headerlink" title="第三步：为非英文名的程序添加英文名"></a>第三步：为非英文名的程序添加英文名</h3><ul>
+<li>设置-&gt; Advanced 标签页 中勾选 Append English filename if different from localized name</li>
+</ul>
+<h3 id="第四步：偏好输入法"><a href="#第四步：偏好输入法" class="headerlink" title="第四步：偏好输入法"></a>第四步：偏好输入法</h3><ul>
+<li>设置-&gt;选择 Advanced 标签页，选择 english</li>
+</ul>
+<h3 id="第五步：防止误触导致的退出"><a href="#第五步：防止误触导致的退出" class="headerlink" title="第五步：防止误触导致的退出"></a>第五步：防止误触导致的退出</h3><ul>
+<li><p>设置-&gt;选择 Shortcuts 标签页，勾选最下面的 Quit LaunchBar with ⌥⌘Q </p>
+<ul>
+<li>如需退出launchbar，需按option comand Q</li>
+</ul>
+</li>
+</ul>
+<h3 id="第六步：启动automator第三方动作"><a href="#第六步：启动automator第三方动作" class="headerlink" title="第六步：启动automator第三方动作"></a>第六步：启动automator第三方动作</h3><ul>
+<li>打开 Automator ，在菜单栏上选择 Automator→ Third-Party Automator Actions…，在出现的对话框中勾选 Enable Automator actions from third parties </li>
+</ul>
+<h3 id="第七步：开启系统权限"><a href="#第七步：开启系统权限" class="headerlink" title="第七步：开启系统权限"></a>第七步：开启系统权限</h3><ul>
+<li><p>System Preferences (系统设置) → Security &amp; Privacy Preference Pane (安全性与隐私) → Privacy (隐私) → Accessibility (辅助功能) 中添加了以下两项：</p>
+<ul>
+<li><p>/Applications/LaunchBar.app</p>
+</li>
+<li><p>/Applications/LaunchBar.app/Contents/Resources/LaunchBar AppleScript Runner.app</p>
+</li>
+</ul>
+</li>
+<li><p>System Preferences → Security &amp; Privacy → Privacy→ Full Disk Access</p>
+</li>
+</ul>
+<h3 id="第八步：设置开机启动"><a href="#第八步：设置开机启动" class="headerlink" title="第八步：设置开机启动"></a>第八步：设置开机启动</h3><ul>
+<li>System Preferences  → Users &amp; Groups 中加入开机启动</li>
+</ul>
+<h3 id="第9步：Dock隐藏图标"><a href="#第9步：Dock隐藏图标" class="headerlink" title="第9步：Dock隐藏图标"></a>第9步：Dock隐藏图标</h3><ul>
+<li>设置  → Advanced 标签页 中，将 Show Dock Icon (显示程序坞图标) 取消勾选</li>
+</ul>
+<h3 id="第十步：-重新输入延迟（Retype-Delay）"><a href="#第十步：-重新输入延迟（Retype-Delay）" class="headerlink" title="第十步： 重新输入延迟（Retype Delay）"></a>第十步： 重新输入延迟（Retype Delay）</h3><ul>
+<li><p>新特性：当输入终端，自动抛弃之前的输入内容</p>
+<ul>
+<li><p>优劣分析</p>
+<ul>
+<li><p>好处</p>
+<ul>
+<li>当输入错误，只要稍作停顿即可重新输入</li>
+</ul>
+</li>
+<li><p>坏处</p>
+<ul>
+<li>上手需适应</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>过渡方案</p>
+<ul>
+<li><p>打开配置，在 General 标签页下的 Retype Delay（重新输入延迟） 项中可以调节重新输入的停顿间隔</p>
+<ul>
+<li><p>初期间隔放长一点</p>
+</li>
+<li><p>适应操作之后再改回来</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>例外处理</p>
+<ul>
+<li><p>立即抛掉当前输入内容</p>
+<ul>
+<li><p>方法1:按下 ESC </p>
+</li>
+<li><p>方法2:重新按下 ⌘ 空格</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="网络搜索"><a href="#网络搜索" class="headerlink" title="网络搜索"></a>网络搜索</h2><h3 id="设置搜索索引-LaunchBar-Index"><a href="#设置搜索索引-LaunchBar-Index" class="headerlink" title="设置搜索索引  LaunchBar Index"></a>设置搜索索引  LaunchBar Index</h3><ul>
+<li><p>进入方式</p>
+<ul>
+<li><p>方式1:</p>
+<ul>
+<li><p>1、唤出 LaunchBar 后把鼠标移到界面的最右边，此时这里会显示一个齿轮图标</p>
+</li>
+<li><p>2、点击它，可以弹出另一个菜单LaunchBar Menu</p>
+</li>
+<li><p>3、选择 Index → Show Index</p>
+</li>
+</ul>
+</li>
+<li><p>方式2:</p>
+<ul>
+<li>唤出 LaunchBar 后，按下快捷键 ⌥ ⌘ I</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>设置</p>
+<ul>
+<li><p>Launchbar会监控列表中的程序</p>
+</li>
+<li><p>不监听某程序</p>
+<ul>
+<li>如不想监视某程序，直接把后面的勾去掉</li>
+</ul>
+</li>
+<li><p>禁用索引分类</p>
+<ul>
+<li>Index设置页面，选中某一分类，右击选择 Disable 或按空格</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>注意事项</p>
+<ul>
+<li><p>选择项目的高亮颜色</p>
+<ul>
+<li><p>蓝色</p>
+<ul>
+<li>全局搜索</li>
+</ul>
+</li>
+<li><p>橙色</p>
+<ul>
+<li>二级搜索</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="自定义"><a href="#自定义" class="headerlink" title="自定义"></a>自定义</h3><ul>
+<li><p>自定定义搜索模板</p>
+<ul>
+<li><p>位置</p>
+<ul>
+<li><p>西文模版：Search Templates (ISO Latin 1)</p>
+</li>
+<li><p>通用模版：Search Templates (UTF–8)</p>
+</li>
+</ul>
+</li>
+<li><p>模版样式</p>
+<ul>
+<li><p>构成</p>
+<ul>
+<li><p>元素</p>
+<ul>
+<li><p>动作</p>
+</li>
+<li><p>变量</p>
+</li>
+<li><p>赋值</p>
+</li>
+</ul>
+</li>
+<li><p>分隔符</p>
+<ul>
+<li><p>动作与变量之间用 ? 分隔</p>
+</li>
+<li><p>变量与变量之间用 &amp; 分隔</p>
+</li>
+<li><p>变量与赋值之间用 = 分隔</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>示例</p>
+<ul>
+<li><p><a href="https://sspai.com/search/article?q=" target="_blank" rel="noopener">https://sspai.com/search/article?q=</a>*</p>
+<ul>
+<li><p>少数派搜索模版</p>
+</li>
+<li><p>星号为通配符</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="高级技巧"><a href="#高级技巧" class="headerlink" title="高级技巧"></a>高级技巧</h3><ul>
+<li><p>「发送」搜索关键词至搜索模板</p>
+<ul>
+<li><p>方法一</p>
+<ul>
+<li><p>1、选中文字，按住 ⌘ 键再按住空格键，直到 LaunchBar 被唤出并有显示选中文字</p>
+</li>
+<li><p>2、输入缩写如 GG，选择内置搜索动作 Google，回车确认</p>
+</li>
+</ul>
+</li>
+<li><p>方法二：快速发送instant send也可以选中文字后，双击快捷键 fn，其他步骤一样</p>
+</li>
+<li><p>例外处理</p>
+<ul>
+<li>如果mac系统了Siri助手，要记得更改siri快捷键，不然会冲突</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>选择浏览器打开网址</p>
+<ul>
+<li><p>1、全选地址，把它快速发送至 LaunchBar</p>
+</li>
+<li><p>2、再输入缩写如SAF，选择 safari，按回车确认</p>
+</li>
+</ul>
+</li>
+<li><p>建立短链接</p>
+<ul>
+<li><p>利用内置的tinyurl</p>
+<ul>
+<li><p>Make TinyURL：转换为 TinyURL 缩略网址并堆放在 LaunchBar 中，以进行进一步操作</p>
+</li>
+<li><p>Copy as TinyURL：转换为 TinyURL 缩略网址并复制</p>
+</li>
+</ul>
+</li>
+<li><p>生产短链接并复制到剪切板</p>
+<ul>
+<li><p>1、光标定位至 Safari 地址栏（也可以通过 Safari 中的快捷键 ⌘ L），全选地址，把它快速发送至 LaunchBar；</p>
+</li>
+<li><p>2、按 Tab 键，再输入缩写如 TINYURL，选择  Copy as TinyURL</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="文本操作"><a href="#文本操作" class="headerlink" title="文本操作"></a>文本操作</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><ul>
+<li><p>输入文本</p>
+<ul>
+<li><p>方法1:使用快速发送（Instant Send）把选中的文字发送到 LaunchBar 中</p>
+</li>
+<li><p>方法2:把剪贴板中的文字通过 ⌘ V 粘贴进到 LaunchBar 中</p>
+</li>
+<li><p>方法3:在项目上长按 → 方向键，查看其详细信息，以从中获取相关的文本信息</p>
+</li>
+<li><p>方法4:Enter Text 动作，使用缩写如 ENTERT，找到enter text 按 回车 进行文本输入，输完后按 回车 确认</p>
+</li>
+</ul>
+</li>
+<li><p>查看文本</p>
+<ul>
+<li><p>放大显示文本</p>
+<ul>
+<li>输入文本后，直接按 回车</li>
+</ul>
+</li>
+<li><p>使用类型</p>
+<ul>
+<li>txt 文件、tex 文件、md 文件、doc（docx）文件、html 文件以及各种编程语言的代码文件</li>
+</ul>
+</li>
+<li><p>操作</p>
+<ul>
+<li>按 → 方向键，逐级进入文件来查看文件信息</li>
+</ul>
+</li>
+<li><p>查看文件信息</p>
+<ul>
+<li>选中文件，按command 空格或双击fn唤醒launchbar，按 → 方向键</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>复制文本</p>
+<ul>
+<li><p>1、唤出 LaunchBar，查找关键词</p>
+</li>
+<li><p>2、按向右方向键，查看联系人信息</p>
+</li>
+<li><p>3、上下方向键选择到她的电话号码并按 ⌘ C 以复制</p>
+</li>
+<li><p>4、打开应用程序粘贴</p>
+</li>
+</ul>
+</li>
+<li><p>修改文本</p>
+<ul>
+<li><p>1、选中文字，快速发送至 LaunchBar</p>
+</li>
+<li><p>2、按 空格 键，即可进行编辑文字，再按 回车 确认</p>
+</li>
+<li><p>3、按tab键，继续进行其他的动作</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="文本动作"><a href="#文本动作" class="headerlink" title="文本动作"></a>文本动作</h3><ul>
+<li><p>思路</p>
+<ul>
+<li><p>思路1:把文字发送给该动作</p>
+</li>
+<li><p>思路2:选中动作后输入文字</p>
+</li>
+</ul>
+</li>
+<li><p>案例</p>
+<ul>
+<li><p>查词典</p>
+<ul>
+<li><p>方法一</p>
+<ul>
+<li><p>1、选中这个词，通过快速发送，传递至 LaunchBar</p>
+</li>
+<li><p>2、输入缩写如 LDIC，选择内置动作 <strong>Look Up in Dictionary</strong></p>
+</li>
+<li><p>3、按 回车，即可在词典中打开</p>
+</li>
+</ul>
+</li>
+<li><p>方法二</p>
+<ul>
+<li><p>1、打开 LaunchBar ，检索出动作 Look Up in Dictionary，按 回车 或 空格，出现文本框</p>
+</li>
+<li><p>2、输入关键词，回车</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>简繁体互换</p>
+<ul>
+<li><p>方法一</p>
+<ul>
+<li><p>1、选中文字，通过快速发送，传递至 LaunchBar</p>
+</li>
+<li><p>2、输入缩写 CHINESE，选择内置搜索动作 Convert Text to Traditional Chinese</p>
+</li>
+<li><p>3、按 回车</p>
+</li>
+</ul>
+</li>
+<li><p>方法二</p>
+<ul>
+<li><p>1、先找到这个动作Convert Text to Traditional Chinese</p>
+</li>
+<li><p>2、按 回车 或 空格，在出现的输入界面输入要转换的文字，回车</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>大小写互换</p>
+<ul>
+<li><p>方法一</p>
+<ul>
+<li><p>1、选中这行文字，通过快速发送，把这个词传递至 LaunchBar</p>
+</li>
+<li><p>2、按 Tab 键，再输入缩写如 TITLECASE，选择内置搜索动作 Convert to Titlecase</p>
+</li>
+<li><p>3、按 回车</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>网页搜索</p>
+<ul>
+<li><p>方法一</p>
+<ul>
+<li><p>1、在网页上选中文字，快速发送至 LaunchBar</p>
+</li>
+<li><p>2、输入gg，调用google，后回车</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="snippets"><a href="#snippets" class="headerlink" title="snippets"></a>snippets</h3><ul>
+<li><p>管理</p>
+<ul>
+<li><p>在 LaunchBar Index 中查看并管理 LauchBar 中的 Snippets</p>
+</li>
+<li><p>每一个snippets，都是一个txt文件</p>
+</li>
+<li><p>命名规范</p>
+<ul>
+<li><p>一般内容</p>
+<ul>
+<li>具体内容 - 内容描述</li>
+</ul>
+</li>
+<li><p>类别字符</p>
+<ul>
+<li>具体内容 - 内容描述 | 所属类别</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>emoji</p>
+<ul>
+<li><p>基本操作</p>
+<ul>
+<li>Emoji默认分类，直接输入英文即可调用</li>
+</ul>
+</li>
+<li><p>设置emoji肤色</p>
+<ul>
+<li>可在 LaunchBar Index 中选择默认的肤色</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>长文本输入</p>
+<ul>
+<li><p>日期占位符</p>
+<ul>
+<li><p>年</p>
+<ul>
+<li><p>yy：用两位数字表示年份，如 17</p>
+</li>
+<li><p>yyyy：用四位数字表示年份，如 2017</p>
+</li>
+</ul>
+</li>
+<li><p>月</p>
+<ul>
+<li><p>MM：用两位数字表示月份，如 12</p>
+</li>
+<li><p>MMM：月份英文简称表示月份，如 Dec</p>
+</li>
+<li><p>MMMM：完整英文单词表示月份，如 December</p>
+</li>
+</ul>
+</li>
+<li><p>日</p>
+<ul>
+<li>dd：用两位数字表示日，如 05</li>
+</ul>
+</li>
+<li><p>上午/下午</p>
+<ul>
+<li><p>AM：上午</p>
+</li>
+<li><p>PM：下午</p>
+</li>
+</ul>
+</li>
+<li><p>时</p>
+<ul>
+<li><p>HH：用 24 小时制表示时</p>
+</li>
+<li><p>hh：用 12 小时制表示时</p>
+</li>
+</ul>
+</li>
+<li><p>分</p>
+<ul>
+<li>分：mm</li>
+</ul>
+</li>
+<li><p>秒</p>
+<ul>
+<li>秒：ss</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>光标停放位置</p>
+<ul>
+<li>&lt;|&gt;：光标停放位置</li>
+</ul>
+</li>
+<li><p>用户姓名</p>
+<ul>
+<li><p><first name>：名</first></p>
+</li>
+<li><p><last name>：姓</last></p>
+</li>
+<li><p><full name>：全名</full></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="应用协作"><a href="#应用协作" class="headerlink" title="应用协作"></a>应用协作</h2><h3 id="与系统应用协作"><a href="#与系统应用协作" class="headerlink" title="与系统应用协作"></a>与系统应用协作</h3><ul>
+<li><p>联系人</p>
+<ul>
+<li><p>关键词contacts  按 → 键选择</p>
+</li>
+<li><p>bug处理</p>
+<ul>
+<li><p>问题：Ios/mac平台非中文系统，，所有的中文姓名都在 # 下面</p>
+</li>
+<li><p>解决步骤</p>
+<ul>
+<li><p>1、选择edit，点击 add field，在弹出选项中选择 Phonetic first name</p>
+</li>
+<li><p>2、继续选择 Phonetic last name</p>
+</li>
+<li><p>3、在 Last name 和 First name 中输入联系人姓名， Phonetic 信息栏会自动填充拼音</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>邮件</p>
+<ul>
+<li><p>更换系统默认邮件客户端</p>
+<ul>
+<li><p>1、打开系统原生的邮箱客户端 Mail，按 ⌘Command-，打开设置界面</p>
+</li>
+<li><p>General 标签页上的第一项 Default email reader 中选择你的邮件客户端</p>
+</li>
+</ul>
+</li>
+<li><p>步骤</p>
+<ul>
+<li><p>1、选中文件</p>
+</li>
+<li><p>2、双击fn唤醒launchbar，instant send</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>电话</p>
+<ul>
+<li><p>1、选择联系人，按 → 方向键，检索到联系人电话号码</p>
+</li>
+<li><p>2、按 Tab 键，输入缩写如 CALL 找到 Call with iPhone 动作，按回车确认</p>
+</li>
+</ul>
+</li>
+<li><p>日历</p>
+<ul>
+<li><p>步骤</p>
+<ul>
+<li><p>1、通过缩写如 CAL 找到 Calendar 应用</p>
+</li>
+<li><p>2、按 → 方向键，打开日历列表</p>
+</li>
+<li><p>3、选择新日程所在的列表并按回车或空格</p>
+</li>
+<li><p>4、输入日程内容，按回车</p>
+</li>
+</ul>
+</li>
+<li><p>语法</p>
+<ul>
+<li><p>时间和地点分别用 @ 符号打头</p>
+</li>
+<li><p>时间</p>
+<ul>
+<li><p>日月年之间用英文点号或者空格隔开</p>
+</li>
+<li><p>@ mon、@ tue、@ wed、@ thu、@ fri、@ sat、@sun：分别表示周一至周日</p>
+</li>
+<li><p>@ today、@ tomorrow</p>
+</li>
+<li><p>持续时间可以以分钟（如：35m、15min）或小时（1.5h、3hours）表示</p>
+</li>
+<li><p>提醒用感叹号 ! </p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>TODO</p>
+<ul>
+<li><p>方法1</p>
+<ul>
+<li><p>创建任务的语法与创建日程相似</p>
+</li>
+<li><p>提示日期以 @ 符号表示，时间跟在日期后面</p>
+</li>
+<li><p>优先级用 !、!!、!!! 表示，分别代表「低」、「中」、「高」</p>
+</li>
+</ul>
+</li>
+<li><p>方法2</p>
+<ul>
+<li>内置 Add to Reminders 动作，利用instant send实现</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="第三方应用"><a href="#第三方应用" class="headerlink" title="第三方应用"></a>第三方应用</h3><ul>
+<li><p>通过服务协作</p>
+<ul>
+<li><p>设置</p>
+<ul>
+<li><p>1、打开系统设置中的键盘设置，选择 Shortcuts  标签页，选择左侧 Services 分组</p>
+</li>
+<li><p>2、勾选了Text 分组中的 Send to LaunchBar </p>
+</li>
+<li><p>3、鼠标右键选择service，调用send to launchbar</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>通过动作协作</p>
+<ul>
+<li><p>设置</p>
+<ul>
+<li>在launchbar index   →  action查看</li>
+</ul>
+</li>
+<li><p>action分享站点</p>
+<ul>
+<li><p><a href="https://github.com/prenagha/launchbar" target="_blank" rel="noopener">https://github.com/prenagha/launchbar</a></p>
+</li>
+<li><p><a href="https://github.com/hlissner/lb6-actions" target="_blank" rel="noopener">https://github.com/hlissner/lb6-actions</a></p>
+</li>
+<li><p><a href="https://github.com/davidfmiller/lbactions" target="_blank" rel="noopener">https://github.com/davidfmiller/lbactions</a></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><h3 id="文件检索"><a href="#文件检索" class="headerlink" title="文件检索"></a>文件检索</h3><ul>
+<li><p>设置检索范围</p>
+<ul>
+<li><p>添加监控文件夹</p>
+<ul>
+<li><p>1、在激活的 LaunchBar 后按下 ⌥Option-⌘Command-I，打开 LaunchBar Index，</p>
+</li>
+<li><p>2、点击左上角的 ADD，在弹出菜单中选择 Add Folder…，添加文件夹</p>
+</li>
+</ul>
+</li>
+<li><p>设置检索范围细节</p>
+<ul>
+<li>在 LaunchBar Index 中选中文件夹，点击右上角的 Options 按钮，进行细节设置</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="复制、移动和建立链接"><a href="#复制、移动和建立链接" class="headerlink" title="复制、移动和建立链接"></a>复制、移动和建立链接</h3><ul>
+<li><p>常用动作</p>
+<ul>
+<li><p>Copy to：复制到；</p>
+</li>
+<li><p>Make Alias：创建别名；</p>
+</li>
+<li><p>Make Hard Link：创建硬链接；</p>
+</li>
+<li><p>Make Symbolic Link (Absolute)：创建软链接（绝对）；</p>
+</li>
+<li><p>Make Symbolic Link (Relative)：创建软链接（相对）</p>
+</li>
+</ul>
+</li>
+<li><p>操作步骤</p>
+<ul>
+<li><p>1、通过缩写检索到文件 lebenslauf.pdf</p>
+</li>
+<li><p>2、选择此文件后，按 ⇥Tab 对其进行发送</p>
+</li>
+<li><p>3、输入缩写 DROP，找到 Dropbox 文件夹</p>
+</li>
+<li><p>4、按回车</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="选择文件"><a href="#选择文件" class="headerlink" title="选择文件"></a>选择文件</h3><ul>
+<li><p>同一路径下</p>
+<ul>
+<li><p>全部文件</p>
+<ul>
+<li>⌘Command-A </li>
+</ul>
+</li>
+<li><p>连续文件</p>
+<ul>
+<li>住 ⇧Shift 键再按上下方向键</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>不同路径下</p>
+<ul>
+<li><p>前提：必须在同一搜索结果中</p>
+</li>
+<li><p>举例：选择所有 PDF 文件</p>
+<ul>
+<li><p>1、通过缩写 PDFD 找到 PDF Documents 分类</p>
+</li>
+<li><p>2、按下回车或向右方向键，进入此分类，再按下 ⌘Command-A 即可</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>分散在各处的文件</p>
+<ul>
+<li><p>借助 Staging （工作台）实现</p>
+</li>
+<li><p>操作：在一个文件上按逗号 , 键，堆放在工作台上，再进行下一个文件的选择</p>
+</li>
+</ul>
+</li>
+<li><p>检索中文文件</p>
+<ul>
+<li><p>对重要、常用文件进行标注</p>
+</li>
+<li><p>使用 Search in Spotlight 动作</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="发送动作（核心优势）"><a href="#发送动作（核心优势）" class="headerlink" title="发送动作（核心优势）"></a>发送动作（核心优势）</h3><ul>
+<li><p>发送给程序</p>
+<ul>
+<li>用此程序打开文件</li>
+</ul>
+</li>
+<li><p>发送给文件夹</p>
+<ul>
+<li>对文件进行移动或复制</li>
+</ul>
+</li>
+<li><p>发送给动作</p>
+<ul>
+<li>对文件进行特定动作</li>
+</ul>
+</li>
+<li><p>发送给联系人或邮箱地址</p>
+<ul>
+<li>把文件通过邮件发送</li>
+</ul>
+</li>
+</ul>
+<h2 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h2><h3 id="快速打开（Instant-Open）"><a href="#快速打开（Instant-Open）" class="headerlink" title="快速打开（Instant Open）"></a>快速打开（Instant Open）</h3><ul>
+<li><p>采用智能算法学习用户输入习惯</p>
+</li>
+<li><p>举例：快速打开 Safari</p>
+<ul>
+<li><p>1、依次输入 S，A；</p>
+</li>
+<li><p>2、长按F 直至 Safari 快速启动</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="系统命令（内置动作）"><a href="#系统命令（内置动作）" class="headerlink" title="系统命令（内置动作）"></a>系统命令（内置动作）</h3><ul>
+<li><p>打开纸篓 - Open Trash</p>
+</li>
+<li><p>清空纸篓 - Empty Trash</p>
+</li>
+<li><p>启动屏保 - Start Screen Saver</p>
+</li>
+<li><p>关闭所有程序 - Quit All Applications</p>
+</li>
+<li><p>登出 - Log Out</p>
+</li>
+<li><p>重新启动 - Restart</p>
+</li>
+<li><p>关机 - Shut Down</p>
+</li>
+</ul>
+<h3 id="关闭程序"><a href="#关闭程序" class="headerlink" title="关闭程序"></a>关闭程序</h3><ul>
+<li><p>以关闭Safari为例</p>
+<ul>
+<li><p>1、在 LaunchBar 在通过缩写如 SAF 选中 Safari；</p>
+</li>
+<li><p>2、按 Tab 键，此时 Safari 名字后面出现了一个 ⇥；</p>
+</li>
+<li><p>3、通过缩写 QUIT 找到 Quit Application 或 Force Quit Application 动作，按回车退出</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="指定缩写"><a href="#指定缩写" class="headerlink" title="指定缩写"></a>指定缩写</h3><ul>
+<li><p>常规步骤</p>
+<ul>
+<li><p>以邮件客户端spark为例</p>
+<ul>
+<li><p>1、在 LaunchBar 中找到 Spark</p>
+</li>
+<li><p>2、把指针移到左边的检索结果的名字上，点鼠标左键，（⌨️：或直接按 ⌃ ⌘ →）出现Action Menu</p>
+<ul>
+<li>此步骤也可采用快捷键 ⌥ ⌘ A</li>
+</ul>
+</li>
+<li><p>3、选择倒数第二项 Assign Abbreviation，在出现的空文字框中输入 MAIL 并回车确认</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>例外处理</p>
+<ul>
+<li><p>为中文应用指定缩写</p>
+<ul>
+<li><p>方法1：在 LaunchBar 中输入缩写如 APP 找到 Applications 分类，按 → 方向键打开这个分类并按上下方向键查看，找到这个软件为其指定缩写</p>
+</li>
+<li><p>方法2:在 Finder 中进入 Applications 文件夹，选中这个软件后长按 ⌘ 空格，直到唤出 LaunchBar 界面，此时这个软件显示在 LaunchBar 界面中，此时也可以为其指定缩写</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="计算器"><a href="#计算器" class="headerlink" title="计算器"></a>计算器</h3><ul>
+<li><p>调用</p>
+<ul>
+<li><p>关键词 CALC 或 = </p>
+</li>
+<li><p>常见计算语句</p>
+<ul>
+<li><p>四则运算：44 - 16 * (12.3 + 4.8 / 3)</p>
+</li>
+<li><p>三角运算：sin(pi / 2)，atan(1)</p>
+</li>
+<li><p>开方：sqrt(2)</p>
+</li>
+<li><p>求幂：pow(27 | 1/3)，2^8</p>
+</li>
+<li><p>指数：exp(1)</p>
+</li>
+<li><p>对数：Logarithm (base 10)，log(1000)，ln(2.71828182846)，ld(1024)</p>
+</li>
+<li><p>最大公约数：gcd(527 | 697)</p>
+</li>
+<li><p>最小公倍数：lcm(91 | 143)</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <div>
+    
+    </div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2020/02/12/linuxNote-commandlinePart1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -463,7 +1594,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/06/macTricks-someTricksConllections/" class="post-title-link" itemprop="url">macTricks-有用搜索收集技巧</a>
+            <a href="/2018/12/06/macTricks-someTricksConllections/" class="post-title-link" itemprop="url">Mac笔记-有用mac应用技巧</a>
         </h1>
 
         <div class="post-meta">
@@ -480,7 +1611,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-26 11:06:22" itemprop="dateModified" datetime="2019-12-26T11:06:22+08:00">2019-12-26</time>
+                <time title="修改时间：2020-02-21 16:37:26" itemprop="dateModified" datetime="2020-02-21T16:37:26+08:00">2020-02-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1181,247 +2312,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/08/15/linuxNote-NginxNotesPart2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/logo.png">
-      <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="生命不息，折腾不止">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve Yuan's Workspace">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/08/15/linuxNote-NginxNotesPart2/" class="post-title-link" itemprop="url">nginx学习笔记:虚拟主机配置</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-08-15 11:47:47" itemprop="dateCreated datePublished" datetime="2018-08-15T11:47:47+08:00">2018-08-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-08-17 14:40:05" itemprop="dateModified" datetime="2018-08-17T14:40:05+08:00">2018-08-17</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2018/08/15/linuxNote-NginxNotesPart2/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/15/linuxNote-NginxNotesPart2/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>10k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>9 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记主要关于虚拟主机配置的内容，主要包括以下内容：</p>
-<ul>
-<li><p>虚拟主机配置</p>
-</li>
-<li><p>nginx支持php</p>
-</li>
-<li><p>实践安装discuz</p>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/08/15/linuxNote-NginxNotesPart2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <div>
-    
-    </div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/08/13/linuxNote-NginxNotesPart1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/logo.png">
-      <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="生命不息，折腾不止">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve Yuan's Workspace">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/08/13/linuxNote-NginxNotesPart1/" class="post-title-link" itemprop="url">nginx学习笔记:安装及配置文件</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-08-13 15:16:10" itemprop="dateCreated datePublished" datetime="2018-08-13T15:16:10+08:00">2018-08-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-08-17 14:39:44" itemprop="dateModified" datetime="2018-08-17T14:39:44+08:00">2018-08-17</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2018/08/13/linuxNote-NginxNotesPart1/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/13/linuxNote-NginxNotesPart1/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>13k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>nginx是一个高性能的http和反向代理服务器，也是IMAP/POP3/SMTP服务器，由俄国大牛开发，于2004年10月4日发布第一个版本。目前，Nginx与Apache、IIS三分天下，约占全球web服务市场的三成。国内很多大型网站，如百度、京东、新浪、网易、腾讯、淘宝均采用nginx。</p>
-<p>nginx的特点：占用内存少、并发能力强、系统稳定、功能集丰富，随着时代的发展，还支持均衡负载、缓存加速、SSL、流媒体（FLV/mp4）服务。</p>
-<p>淘宝基于nginx开发了tengine，继承了Nginxx-1.8.1的所有特性，并兼容Nginx的配置，在此基础上，针对大访问量网站的需求，添加了很多高级功能和特性。</p>
-<p>从这则笔记开始，详细整理nginx的相关用法。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/08/13/linuxNote-NginxNotesPart1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <div>
-    
-    </div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1494,14 +2384,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">74</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -1559,13 +2449,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">475k</span>
+    <span title="站点总字数">482k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">7:11</span>
+    <span title="站点阅读时长">7:19</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0
   </div>

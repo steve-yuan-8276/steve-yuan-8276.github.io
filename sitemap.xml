@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://steve-yuan-8276.github.io/2020/07/31/basisOfPython/</loc>
+    
+    <lastmod>2020-07-31T09:56:03.421Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://steve-yuan-8276.github.io/2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/</loc>
     
     <lastmod>2020-07-27T08:30:23.021Z</lastmod>
@@ -331,14 +338,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-08-HowToCheckLinux/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-10-selinuxAndfirewall/</loc>
     
     <lastmod>2018-07-20T09:41:42.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-10-selinuxAndfirewall/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/07/20/linuxNotes-08-HowToCheckLinux/</loc>
     
     <lastmod>2018-07-20T09:41:42.000Z</lastmod>
     
@@ -464,14 +471,28 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/14/mapAndFilter/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/12/web-howToUseWebp/</loc>
     
     <lastmod>2018-04-02T14:26:02.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2018/03/16/piNote-1-download-howToInstall/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/17/basisOfPthonScrapy/</loc>
+    
+    <lastmod>2018-04-02T14:26:02.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://steve-yuan-8276.github.io/2017/12/20/basisOfXpath/</loc>
     
     <lastmod>2018-04-02T14:26:02.000Z</lastmod>
     
@@ -485,21 +506,7 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/22/basisOfBootstrap/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/12/web-howToUseWebp/</loc>
-    
-    <lastmod>2018-04-02T14:26:02.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/20/basisOfXpath/</loc>
+    <loc>https://steve-yuan-8276.github.io/2018/03/16/piNote-1-download-howToInstall/</loc>
     
     <lastmod>2018-04-02T14:26:02.000Z</lastmod>
     
@@ -520,14 +527,14 @@
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/17/basisOfPthonScrapy/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/22/basisOfBootstrap/</loc>
     
     <lastmod>2018-04-02T14:26:02.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://steve-yuan-8276.github.io/2017/12/18/basisOfRequests/</loc>
+    <loc>https://steve-yuan-8276.github.io/2017/12/14/mapAndFilter/</loc>
     
     <lastmod>2018-04-02T14:26:02.000Z</lastmod>
     

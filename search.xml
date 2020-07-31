@@ -1,6 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Python学习笔记（一）：基础知识点整理</title>
+    <url>/2020/07/31/basisOfPython/</url>
+    <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>主要整理python相关的基础知识，便于复习掌握。如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/BasisOfPython20200731.png" alt="BasisOfPython20200731"></p>
+<a id="more"></a>
+<h2 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h2><h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><h4 id="单行注释"><a href="#单行注释" class="headerlink" title="单行注释"></a>单行注释</h4><p>以#开头，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 我是注释</span><br><span class="line">print(&apos;hello world&apos;)</span><br></pre></td></tr></table></figure>
+<h4 id="多行注释"><a href="#多行注释" class="headerlink" title="多行注释"></a>多行注释</h4><p>多行注释用三个单引号 <code>&#39;&#39;&#39;</code>或者三个双引号 <code>&quot;&quot;&quot;</code>将注释括起来，例如:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&apos;&apos;&apos;</span><br><span class="line">这是多行注释，用三个单引号</span><br><span class="line">这是多行注释，用三个单引号 </span><br><span class="line">&apos;&apos;&apos;</span><br><span class="line">print(&quot;Hello, World!&quot;)</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">这是多行注释，用三个双引号</span><br><span class="line">这是多行注释，用三个双引号 </span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">print(&quot;Hello, World!&quot;)</span><br></pre></td></tr></table></figure>
+<h4 id="中文注释"><a href="#中文注释" class="headerlink" title="中文注释"></a>中文注释</h4><p>在程序的开头写入如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-   </span><br><span class="line">或   </span><br><span class="line">#coding=utf-8</span><br></pre></td></tr></table></figure>
+<h3 id="变量以及类型"><a href="#变量以及类型" class="headerlink" title="变量以及类型"></a>变量以及类型</h3><h4 id="变量的定义"><a href="#变量的定义" class="headerlink" title="变量的定义"></a>变量的定义</h4><p>变量是存放数据值的容器。与其他编程语言不同，Python变量不需要使用任何特定类型声明，甚至可以在设置后更改其类型。</p>
+<p>Python 变量命名规则：</p>
+<ul>
+<li>变量名必须以字母或下划线字符开头</li>
+<li>变量名称不能以数字开头</li>
+<li>变量名只能包含字母数字字符和下划线（A-z、0-9 和 _）</li>
+<li>变量名称区分大小写（age、Age 和 AGE 是三个不同的变量）</li>
+</ul>
+<h4 id="变量类型"><a href="#变量类型" class="headerlink" title="变量类型"></a>变量类型</h4><p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/aY30CC20200731.jpg" alt="变量类型"></p>
+<h4 id="命名规范"><a href="#命名规范" class="headerlink" title="命名规范"></a>命名规范</h4><p><strong>小驼峰式命名法（lower camel case）：</strong> 第一个单词以小写字母开始；第二个单词的首字母大写，例如：myName、aDog</p>
+<p><strong>大驼峰式命名法（upper camel case）：</strong> 每一个单字的首字母都采用大写字母，例如：FirstName、LastName</p>
+<p><strong>普通变量常用下划线分隔：</strong>小写字母，单词之间用 _分割，例如：this_is_a_var</p>
+<p><strong>常量名</strong>所有字母大写，由下划线连接各个单词如 MAX_OVERFLOW，TOTAL</p>
+<h3 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>python一些具有特殊功能的标示符，这就是所谓的关键字。</p>
+<h4 id="查看关键字"><a href="#查看关键字" class="headerlink" title="查看关键字"></a>查看关键字</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">and     as      assert     break     class      continue    def     del</span><br><span class="line">elif    else    except     exec      finally    for         from    global</span><br><span class="line">if      in      import     is        lambda     not         or      pass</span><br><span class="line">print   raise   return     try       while      with        yield</span><br></pre></td></tr></table></figure>
+<h3 id="输入及输出"><a href="#输入及输出" class="headerlink" title="输入及输出"></a>输入及输出</h3><ul>
+<li>输出： print语句</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">my_name = &quot;ada love&quot;</span><br><span class="line">my_first_name = &quot;ada&quot;</span><br><span class="line">my_last_name = &quot;love&quot;</span><br><span class="line">my_full_name = my_first_name + my_last_name</span><br><span class="line">your_name = input(&quot;Hello,What is your name?&quot;)</span><br><span class="line">print(f&quot;My name is &#123;my_name.title()&#125;&quot;)</span><br><span class="line">print(my_full_name.upper())</span><br><span class="line">print(f&quot;Hi,&#123;your_name.title()&#125;.let&apos;s starting code!&quot;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>输入： input语句</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">age = input(&quot;How old are you?&quot;)</span><br><span class="line">print(f&quot;Happy &#123;age&#125; Birthday!&quot;)</span><br></pre></td></tr></table></figure>
+<h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><h4 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h4><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+</td>
+<td>加</td>
+<td>两个对象相加之和 </td>
+</tr>
+<tr>
+<td>-</td>
+<td>减</td>
+<td>得到负数或是一个数减去另一个数 </td>
+</tr>
+<tr>
+<td>*</td>
+<td>乘</td>
+<td>两个数相乘或是返回一个被重复若干次的字符串</td>
+</tr>
+<tr>
+<td>/</td>
+<td>除</td>
+<td>x除以y </td>
+</tr>
+<tr>
+<td>%</td>
+<td>取余</td>
+<td>返回除法的余数 </td>
+</tr>
+<tr>
+<td>**</td>
+<td>幂</td>
+<td>返回x的y次幂 </td>
+</tr>
+<tr>
+<td>//</td>
+<td>取整除</td>
+<td>返回商的整数部分 </td>
+</tr>
+</tbody>
+</table>
+<h4 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h4><p>把=号右边的结果给左边的变量，例如： num=1+2*3 结果num的值为7</p>
+<h4 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h4><p><em>注意：反馈结果只有True 、False 两种。</em></p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>==</td>
+<td>检查两个操作数的值是否相等，如果是则条件变为真。</td>
+<td>如a=3,b=3则（a == b) 为 true.</td>
+</tr>
+<tr>
+<td>!=</td>
+<td>检查两个操作数的值是否相等，如果值不相等，则条件变为真。</td>
+<td>如a=1,b=3则(a != b) 为 true.</td>
+</tr>
+<tr>
+<td>&lt;&gt;</td>
+<td>检查两个操作数的值是否相等，如果值不相等，则条件变为真。</td>
+<td>如a=1,b=3则(a &lt;&gt; b) 为 true。这个类似于 != 运算符</td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td>检查左操作数的值是否大于右操作数的值，如果是，则条件成立。</td>
+<td>如a=7,b=3则(a &gt; b) 为 true.</td>
+</tr>
+<tr>
+<td>&lt;</td>
+<td>检查左操作数的值是否小于右操作数的值，如果是，则条件成立。</td>
+<td>如a=7,b=3则(a &lt; b) 为 false.</td>
+</tr>
+<tr>
+<td>&gt;=</td>
+<td>检查左操作数的值是否大于或等于右操作数的值，如果是，则条件成立。</td>
+<td>如a=3,b=3则(a &gt;= b) 为 true.</td>
+</tr>
+<tr>
+<td>&lt;=</td>
+<td>检查左操作数的值是否小于或等于右操作数的值，如果是，则条件成立。</td>
+<td>如a=3,b=3则(a &lt;= b) 为 true.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h4><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>逻辑表达式</th>
+<th>描述</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>and</td>
+<td>x and y</td>
+<td>布尔”与”</td>
+<td>如果 x 为 False，x and y 返回 False，否则它返回 y 的计算值。    (a and b) 返回 20。</td>
+</tr>
+<tr>
+<td>or</td>
+<td>x or y</td>
+<td>布尔”或”</td>
+<td>如果 x 是 True，它返回 True，否则它返回 y 的计算值。    (a or b) 返回 10。</td>
+</tr>
+<tr>
+<td>not</td>
+<td>not x</td>
+<td>布尔”非”</td>
+<td>如果 x 为 True，返回 False 。如果 x 为 False，它返回 True。    not(a and b) 返回 False</td>
+</tr>
+</tbody>
+</table>
+<h3 id="数据类型转换"><a href="#数据类型转换" class="headerlink" title="数据类型转换"></a>数据类型转换</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int(x [,base ])</td>
+<td>将x转换为一个整数</td>
+</tr>
+<tr>
+<td>long(x [,base ])</td>
+<td>将x转换为一个长整数</td>
+</tr>
+<tr>
+<td>float(x )</td>
+<td>将x转换到一个浮点数</td>
+</tr>
+<tr>
+<td>complex(real [,imag ])</td>
+<td>创建一个复数</td>
+</tr>
+<tr>
+<td>str(x )</td>
+<td>将对象 x 转换为字符串</td>
+</tr>
+<tr>
+<td>repr(x )</td>
+<td>将对象 x 转换为表达式字符串</td>
+</tr>
+<tr>
+<td>eval(str )</td>
+<td>用来计算在字符串中的有效Python表达式,并返回一个对象</td>
+</tr>
+<tr>
+<td>tuple(s )</td>
+<td>将序列 s 转换为一个元组</td>
+</tr>
+<tr>
+<td>list(s )</td>
+<td>将序列 s 转换为一个列表</td>
+</tr>
+<tr>
+<td>chr(x )</td>
+<td>将一个整数转换为一个字符</td>
+</tr>
+<tr>
+<td>unichr(x )</td>
+<td>将一个整数转换为Unicode字符</td>
+</tr>
+<tr>
+<td>ord(x )</td>
+<td>将一个字符转换为它的整数值</td>
+</tr>
+<tr>
+<td>hex(x )</td>
+<td>将一个整数转换为一个十六进制字符串</td>
+</tr>
+<tr>
+<td>oct(x )</td>
+<td>将一个整数转换为一个八进制字符串</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux学习|家庭软路由小白折腾记</title>
     <url>/2020/07/27/linuxNote-HowToInstallOpenwrtAtHomeNetworks/</url>
     <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>好长时间没有更新笔记了，或者换句话说，自打疫情发生以来，整个人都过着猪一样颓废的生活……这样是不对的。</p>
@@ -4308,7 +4541,7 @@ real_server 172.16.111.120 80 {
 </tbody>
 </table>
 <p>示例：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat if-file.sh</span><br><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">f="/tmp/if-test"</span><br><span class="line">if [ -f $f ]</span><br><span class="line">then</span><br><span class="line">    echo $f exist</span><br><span class="line">else</span><br><span class="line">    touch $f</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat if-file.sh</span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">f="/tmp/if-test"</span><br><span class="line">if [ -f $f ]</span><br><span class="line">then</span><br><span class="line">    echo $f exist</span><br><span class="line">else</span><br><span class="line">    touch $f</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
 <p>执行效果</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@local-linux01 sbin]# bash -x !$</span><br><span class="line">bash -x if-file.sh</span><br><span class="line">+ f=/tmp/if-test</span><br><span class="line">+ &apos;[&apos; -f /tmp/if-test &apos;]&apos;</span><br><span class="line">+ touch /tmp/if-test</span><br></pre></td></tr></table></figure>
 <h3 id="if特殊用法"><a href="#if特殊用法" class="headerlink" title="if特殊用法"></a>if特殊用法</h3><table>
@@ -4348,7 +4581,7 @@ real_server 172.16.111.120 80 {
 </li>
 </ul>
 <p>示例：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">read -p "Please input a number: " n</span><br><span class="line">if [ -z "$n" ]</span><br><span class="line">then</span><br><span class="line">    echo "Please input a number."</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">n1=`echo $n|sed 's/[0-9]//g'`</span><br><span class="line">if [ -n "$n1" ]</span><br><span class="line">then</span><br><span class="line">    echo "Please input a number."</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ $n -lt 60 ] &amp;&amp; [ $n -ge 0 ]</span><br><span class="line">then</span><br><span class="line">    tag=1</span><br><span class="line">elif [ $n -ge 60 ] &amp;&amp; [ $n -lt 80 ]</span><br><span class="line">then</span><br><span class="line">    tag=2</span><br><span class="line">elif [ $n -ge 80 ]  &amp;&amp; [ $n -lt 90 ]</span><br><span class="line">then</span><br><span class="line">    tag=3</span><br><span class="line">elif [ $n -ge 90 ] &amp;&amp; [ $n -le 100 ]</span><br><span class="line">then</span><br><span class="line">    tag=4</span><br><span class="line">else</span><br><span class="line">    tag=0</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">case $tag in</span><br><span class="line">    1)</span><br><span class="line">    echo "not ok"</span><br><span class="line">        ;;</span><br><span class="line">    2)</span><br><span class="line">        echo "ok"</span><br><span class="line">        ;;</span><br><span class="line">    3)</span><br><span class="line">        echo "ook"</span><br><span class="line">        ;;</span><br><span class="line">    4)</span><br><span class="line">        echo "oook"</span><br><span class="line">        ;;</span><br><span class="line">    *)</span><br><span class="line">        echo "The number range is 0-100."</span><br><span class="line">        ;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">read -p "Please input a number: " n</span><br><span class="line">if [ -z "$n" ]</span><br><span class="line">then</span><br><span class="line">    echo "Please input a number."</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">n1=`echo $n|sed 's/[0-9]//g'`</span><br><span class="line">if [ -n "$n1" ]</span><br><span class="line">then</span><br><span class="line">    echo "Please input a number."</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">if [ $n -lt 60 ] &amp;&amp; [ $n -ge 0 ]</span><br><span class="line">then</span><br><span class="line">    tag=1</span><br><span class="line">elif [ $n -ge 60 ] &amp;&amp; [ $n -lt 80 ]</span><br><span class="line">then</span><br><span class="line">    tag=2</span><br><span class="line">elif [ $n -ge 80 ]  &amp;&amp; [ $n -lt 90 ]</span><br><span class="line">then</span><br><span class="line">    tag=3</span><br><span class="line">elif [ $n -ge 90 ] &amp;&amp; [ $n -le 100 ]</span><br><span class="line">then</span><br><span class="line">    tag=4</span><br><span class="line">else</span><br><span class="line">    tag=0</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">case $tag in</span><br><span class="line">    1)</span><br><span class="line">    echo "not ok"</span><br><span class="line">        ;;</span><br><span class="line">    2)</span><br><span class="line">        echo "ok"</span><br><span class="line">        ;;</span><br><span class="line">    3)</span><br><span class="line">        echo "ook"</span><br><span class="line">        ;;</span><br><span class="line">    4)</span><br><span class="line">        echo "oook"</span><br><span class="line">        ;;</span><br><span class="line">    *)</span><br><span class="line">        echo "The number range is 0-100."</span><br><span class="line">        ;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
 <p>执行效果</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@local-linux01 sbin]# bash !$</span><br><span class="line">bash case01.sh</span><br><span class="line">Please input a number: 1</span><br><span class="line">not ok</span><br></pre></td></tr></table></figure>
 <p>执行过程</p>
@@ -4359,16 +4592,16 @@ real_server 172.16.111.120 80 {
 <ul>
 <li>示例1：</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">for i in `seq 1 100 `</span><br><span class="line">do </span><br><span class="line">   echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in `seq 1 100 `</span><br><span class="line">do </span><br><span class="line">   echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <!--more-->
 <ul>
 <li>示例2:累加计算</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">sum=0</span><br><span class="line">for i in `seq 1 100`</span><br><span class="line">do </span><br><span class="line">   echo "$sum + $i"</span><br><span class="line">   sum=$[$sum+$i]</span><br><span class="line">   echo $sum</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">sum=0</span><br><span class="line">for i in `seq 1 100`</span><br><span class="line">do </span><br><span class="line">   echo "$sum + $i"</span><br><span class="line">   sum=$[$sum+$i]</span><br><span class="line">   echo $sum</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <ul>
 <li>示例3：遍历文件夹</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">cd /etc/</span><br><span class="line">for a in ls /etc/</span><br><span class="line">do</span><br><span class="line">    if [ -d $a ]</span><br><span class="line">    then</span><br><span class="line">        echo $a</span><br><span class="line">        ls $a</span><br><span class="line">    fi</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">cd /etc/</span><br><span class="line">for a in ls /etc/</span><br><span class="line">do</span><br><span class="line">    if [ -d $a ]</span><br><span class="line">    then</span><br><span class="line">        echo $a</span><br><span class="line">        ls $a</span><br><span class="line">    fi</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <h3 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h3><p>while循环相当于一种特殊的for循环，当满足条件时，会一直执行，直到不再满足条件为止。</p>
 <p>格式：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">while condition</span><br><span class="line">do</span><br><span class="line">	command</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
@@ -4381,20 +4614,20 @@ real_server 172.16.111.120 80 {
 <ul>
 <li>示例1：</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">while true</span><br><span class="line">do</span><br><span class="line">    load=`w|head -1|awk -F 'load average: ' '&#123;print $2&#125;'|cut -d. -f1`</span><br><span class="line">    if [ $load -gt 10 ]</span><br><span class="line">    then</span><br><span class="line">        /usr/local/sbin/mail.py xxx@qq.com "load high" "$load"</span><br><span class="line">    fi</span><br><span class="line">    sleep 30</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">while true</span><br><span class="line">do</span><br><span class="line">    load=`w|head -1|awk -F 'load average: ' '&#123;print $2&#125;'|cut -d. -f1`</span><br><span class="line">    if [ $load -gt 10 ]</span><br><span class="line">    then</span><br><span class="line">        /usr/local/sbin/mail.py xxx@qq.com "load high" "$load"</span><br><span class="line">    fi</span><br><span class="line">    sleep 30</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <ul>
 <li>Samples2:在循环过程中需要人为的输入一个数字</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">while :</span><br><span class="line">do</span><br><span class="line">    read -p "Please input a number: " n</span><br><span class="line">    if [ -z "$n" ]</span><br><span class="line">    then</span><br><span class="line">        echo "you need input sth."</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    n1=`echo $n|sed 's/[0-9]//g'`</span><br><span class="line">    if [ ! -z "$n1" ]</span><br><span class="line">    then</span><br><span class="line">        echo "you just only input numbers."</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    break</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">while :</span><br><span class="line">do</span><br><span class="line">    read -p "Please input a number: " n</span><br><span class="line">    if [ -z "$n" ]</span><br><span class="line">    then</span><br><span class="line">        echo "you need input sth."</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    n1=`echo $n|sed 's/[0-9]//g'`</span><br><span class="line">    if [ ! -z "$n1" ]</span><br><span class="line">    then</span><br><span class="line">        echo "you just only input numbers."</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    break</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <h3 id="break跳出循环"><a href="#break跳出循环" class="headerlink" title="break跳出循环"></a>break跳出循环</h3><p>适用场景：将判断和循环结合起来，符合某些条件时break中断循环。注：break只会影响本次循环，在有多重循环嵌套的情况，break只会影响本层级的循环，它的上层循环不受影响。</p>
 <p>samples:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    if [ $i -eq 3 ]</span><br><span class="line">    then</span><br><span class="line">        break</span><br><span class="line">    fi</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    if [ $i -eq 3 ]</span><br><span class="line">    then</span><br><span class="line">        break</span><br><span class="line">    fi</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <h3 id="continue结束本次循环"><a href="#continue结束本次循环" class="headerlink" title="continue结束本次循环"></a>continue结束本次循环</h3><p>忽略continue之下的代码，直接进行下一次循环</p>
 <p>samples:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    if [ $i -eq 3 ]</span><br><span class="line">    then</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">    echo $i</span><br><span class="line">    if [ $i -eq 3 ]</span><br><span class="line">    then</span><br><span class="line">        continue</span><br><span class="line">    fi</span><br><span class="line">    echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <h3 id="exit退出整个脚本"><a href="#exit退出整个脚本" class="headerlink" title="exit退出整个脚本"></a>exit退出整个脚本</h3><p>跟break不同之处，在于使用exit语句，会直接退出整个shell脚本。</p>
 <p>samples:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">  echo $i</span><br><span class="line">  if [ $i -eq 3 ]</span><br><span class="line">  then</span><br><span class="line">      exit</span><br><span class="line">  fi</span><br><span class="line">  echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in `seq 1 5`</span><br><span class="line">do</span><br><span class="line">  echo $i</span><br><span class="line">  if [ $i -eq 3 ]</span><br><span class="line">  then</span><br><span class="line">      exit</span><br><span class="line">  fi</span><br><span class="line">  echo $i</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 <p><strong>注：运行exit语句，直接退出shell脚本，后面的语句都不执行。</strong></p>
 <h2 id="shell中的函数"><a href="#shell中的函数" class="headerlink" title="shell中的函数"></a>shell中的函数</h2><p>linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。</p>
 <h3 id="用法："><a href="#用法：" class="headerlink" title="用法："></a>用法：</h3><ul>

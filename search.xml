@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>印象笔记，你吃相还能再难看点吗？</title>
+    <title>抛弃印象笔记的三大理由</title>
     <url>/2020/11/25/fuck-evernote/</url>
     <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>一句话，赚钱我不反对；但是你不能把我们用户当猴耍吧？生生看着一个曾经喜欢的笔记应用堕落成这个样子。我也是醉了……</p>
 <p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/kPgrNH20201125.jpg" alt="kPgrNH20201125"></p>
@@ -17776,9 +17776,9 @@ real_server 172.16.111.120 80 {
         <category>front-end</category>
       </categories>
       <tags>
+        <tag>note</tag>
         <tag>html</tag>
         <tag>css</tag>
-        <tag>note</tag>
       </tags>
   </entry>
   <entry>

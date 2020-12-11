@@ -221,6 +221,141 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/08/23/linuxNote-NginxNotesPart4-proxy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/logo.png">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="生命不息，折腾不止">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/08/23/linuxNote-NginxNotesPart4-proxy/" class="post-title-link" itemprop="url">nginx学习笔记:代理设置</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-23 16:47:49" itemprop="dateCreated datePublished" datetime="2018-08-23T16:47:49+08:00">2018-08-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-09 09:58:37" itemprop="dateModified" datetime="2020-12-09T09:58:37+08:00">2020-12-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/nginx/notes/" itemprop="url" rel="index">
+                    <span itemprop="name">notes</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2018/08/23/linuxNote-NginxNotesPart4-proxy/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/23/linuxNote-NginxNotesPart4-proxy/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这则笔记整理nginx代理相关的知识，主要包括：</p>
+<ul>
+<li><p>正向代理（解决内网服务器上网的问题）</p>
+</li>
+<li><p>反向代理（解决访问一台内网服务器的问题）</p>
+</li>
+<li><p>负载均衡（反向代理的升级版，解决访问多台内网服务器的问题）</p>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/08/23/linuxNote-NginxNotesPart4-proxy/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <div>
+    
+    </div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/08/22/linuxNote-NginxNotesPart4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -244,18 +379,24 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2018-08-22 10:57:31 / 修改时间：16:29:48" itemprop="dateCreated datePublished" datetime="2018-08-22T10:57:31+08:00">2018-08-22</time>
+              <time title="创建时间：2018-08-22 10:57:31" itemprop="dateCreated datePublished" datetime="2018-08-22T10:57:31+08:00">2018-08-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-09 15:43:36" itemprop="dateModified" datetime="2020-12-09T15:43:36+08:00">2020-12-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
                   </a>
                 </span>
             </span>
@@ -363,7 +504,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-08-22 10:54:12" itemprop="dateModified" datetime="2018-08-22T10:54:12+08:00">2018-08-22</time>
+                <time title="修改时间：2020-12-09 15:43:52" itemprop="dateModified" datetime="2020-12-09T15:43:52+08:00">2020-12-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -371,8 +512,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
                   </a>
                 </span>
             </span>
@@ -501,7 +642,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-08-17 14:40:05" itemprop="dateModified" datetime="2018-08-17T14:40:05+08:00">2018-08-17</time>
+                <time title="修改时间：2020-12-09 15:43:52" itemprop="dateModified" datetime="2020-12-09T15:43:52+08:00">2020-12-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -509,8 +650,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
                   </a>
                 </span>
             </span>
@@ -624,7 +765,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-08-17 14:39:44" itemprop="dateModified" datetime="2018-08-17T14:39:44+08:00">2018-08-17</time>
+                <time title="修改时间：2020-12-09 15:43:57" itemprop="dateModified" datetime="2020-12-09T15:43:57+08:00">2020-12-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -632,8 +773,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
                   </a>
                 </span>
             </span>
@@ -742,7 +883,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-07-27 10:21:29" itemprop="dateModified" datetime="2018-07-27T10:21:29+08:00">2018-07-27</time>
+                <time title="修改时间：2020-12-09 15:44:05" itemprop="dateModified" datetime="2020-12-09T15:44:05+08:00">2020-12-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -750,8 +891,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/HowToDo/" itemprop="url" rel="index">
-                    <span itemprop="name">HowToDo</span>
+                  <a href="/categories/技巧/" itemprop="url" rel="index">
+                    <span itemprop="name">技巧</span>
                   </a>
                 </span>
             </span>
@@ -865,7 +1006,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-07-27 10:11:38" itemprop="dateModified" datetime="2018-07-27T10:11:38+08:00">2018-07-27</time>
+                <time title="修改时间：2020-12-09 15:44:17" itemprop="dateModified" datetime="2020-12-09T15:44:17+08:00">2020-12-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -873,8 +1014,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
                   </a>
                 </span>
             </span>
@@ -987,7 +1128,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-07-27 09:58:02" itemprop="dateModified" datetime="2018-07-27T09:58:02+08:00">2018-07-27</time>
+                <time title="修改时间：2020-12-09 15:44:23" itemprop="dateModified" datetime="2020-12-09T15:44:23+08:00">2020-12-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -995,8 +1136,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
                   </a>
                 </span>
             </span>
@@ -1104,18 +1245,24 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2018-07-26 15:49:17 / 修改时间：15:58:08" itemprop="dateCreated datePublished" datetime="2018-07-26T15:49:17+08:00">2018-07-26</time>
+              <time title="创建时间：2018-07-26 15:49:17" itemprop="dateCreated datePublished" datetime="2018-07-26T15:49:17+08:00">2018-07-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-09 15:44:31" itemprop="dateModified" datetime="2020-12-09T15:44:31+08:00">2020-12-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
                   </a>
                 </span>
             </span>
@@ -1221,18 +1368,24 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2018-07-26 15:38:40 / 修改时间：15:46:44" itemprop="dateCreated datePublished" datetime="2018-07-26T15:38:40+08:00">2018-07-26</time>
+              <time title="创建时间：2018-07-26 15:38:40" itemprop="dateCreated datePublished" datetime="2018-07-26T15:38:40+08:00">2018-07-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-09 15:45:06" itemprop="dateModified" datetime="2020-12-09T15:45:06+08:00">2020-12-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
+                  <a href="/categories/运维/" itemprop="url" rel="index">
+                    <span itemprop="name">运维</span>
                   </a>
                 </span>
             </span>
@@ -1356,124 +1509,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2018/07/26/linuxNotes-16-basisOfShellPart3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/logo.png">
-      <meta itemprop="name" content="Steve Yuan">
-      <meta itemprop="description" content="生命不息，折腾不止">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Steve Yuan's Workspace">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/07/26/linuxNotes-16-basisOfShellPart3/" class="post-title-link" itemprop="url">linux运维学习笔记:shell告警系统</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2018-07-26 10:34:45 / 修改时间：11:59:33" itemprop="dateCreated datePublished" datetime="2018-07-26T10:34:45+08:00">2018-07-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2018/07/26/linuxNotes-16-basisOfShellPart3/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/26/linuxNotes-16-basisOfShellPart3/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>之前学习过了zabbix监控系统的使用，但是对于一些比较冷门的监控项目，还需要手动编写脚本进行监控。这节课主要内容就是定制个性化的告警工具，并进行统一化、标准化的管理。</p>
-<p>主要包括一下内容：</p>
-<ul>
-<li><p>告警系统整体设计；</p>
-</li>
-<li><p>编写告警系统脚本包；</p>
-</li>
-<li><p>运行告警系统；</p>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/07/26/linuxNotes-16-basisOfShellPart3/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <div>
-    
-    </div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1546,20 +1581,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">76</span>
+          <span class="site-state-item-count">77</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">73</span>
+        <span class="site-state-item-count">77</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1611,13 +1646,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">487k</span>
+    <span title="站点总字数">490k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">7:23</span>
+    <span title="站点阅读时长">7:26</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0
   </div>

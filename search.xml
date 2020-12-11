@@ -1,6 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Docker 基础知识：如何安装</title>
+    <url>/2020/12/08/learn-to-install-docker/</url>
+    <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p><img src="https://cdn.jsdelivr.net/gh/steve-yuan-8276/pic-blog@master/uPic/NW4EpX20201209.jpg" alt="NW4EpX20201209"></p>
+<p>Docker 属于 Linux 容器的一种封装，提供简单易用的容器使用接口。它是目前最流行的 Linux 容器解决方案。</p>
+<p>主要用途：</p>
+<ul>
+<li><p>提供一次性的环境，比如测试软件、持续集成的时候提供单元测试和构建的环境。</p>
+</li>
+<li><p>提供弹性的云服务，适合动态扩容和缩容。</p>
+</li>
+<li><p>组建微服务架构，一台机器可以跑多个服务。</p>
+</li>
+</ul>
+<p>主要优势：</p>
+<ul>
+<li><p>对开发人员：Build Once， Run Anywhere</p>
+</li>
+<li><p>对运维人员：Configure Once， Run Anywhere</p>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="镜像（Image）"><a href="#镜像（Image）" class="headerlink" title="镜像（Image）"></a>镜像（Image）</h3><p>Docker 把应用程序及其依赖，打包在 image 文件里面。只有通过这个文件，才能生成 Docker 容器。</p>
+<h3 id="容器（Container）"><a href="#容器（Container）" class="headerlink" title="容器（Container）"></a>容器（Container）</h3><p>容器是镜像的实例化，本身也是一个文件，称为容器文件。</p>
+<h3 id="仓库（Repository）"><a href="#仓库（Repository）" class="headerlink" title="仓库（Repository）"></a>仓库（Repository）</h3><p><a href="https:/hub.docker.com" target="_blank" rel="noopener">Docker Hub</a>是默认的 Registry,由 Docker公司维护,上面有数以万计的镜像,用户可以自由下载和使用。</p>
+<h2 id="安装及启动"><a href="#安装及启动" class="headerlink" title="安装及启动"></a>安装及启动</h2><p>Docker 是一个开源的商业产品，有两个版本：</p>
+<ul>
+<li>社区版（Community Edition，缩写为 CE）：免费，个人推荐用这个</li>
+<li>企业版（Enterprise Edition，缩写为 EE）</li>
+</ul>
+<h3 id="CentOS下安装启用"><a href="#CentOS下安装启用" class="headerlink" title="CentOS下安装启用"></a>CentOS下安装启用</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><h5 id="系统要求"><a href="#系统要求" class="headerlink" title="系统要求"></a>系统要求</h5><p>Docker 支持 64 位版本 CentOS 7/8，并且要求内核版本不低于 3.10。</p>
+<h5 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h5><ul>
+<li>卸载旧版本 </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ sudo yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-selinux \</span><br><span class="line">                  docker-engine-selinux \</span><br><span class="line">                  docker-engine</span><br></pre></td></tr></table></figure>
+<ul>
+<li>替换国内源</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ sudo yum-config-manager \</span><br><span class="line">    --add-repo \</span><br><span class="line">    https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line"></span><br><span class="line">$ sudo sed -i &apos;s/download.docker.com/mirrors.aliyun.com\/docker-ce/g&apos; /etc/yum.repos.d/docker-ce.repo</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装依赖包</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ sudo yum install -y yum-utils</span><br></pre></td></tr></table></figure>
+<h5 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ sudo yum install docker-ce docker-ce-cli containerd.io</span><br></pre></td></tr></table></figure>
+<h5 id="CentOS8-额外设置"><a href="#CentOS8-额外设置" class="headerlink" title="CentOS8 额外设置"></a>CentOS8 额外设置</h5><p>由于 CentOS8 防火墙使用了 nftables，但 Docker 尚未支持 nftables，因此需要使用 iptables。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 方法一：需要修改etc/firewalld/firewalld.conf配置文件：</span><br><span class="line">FirewallBackend=iptables</span><br><span class="line"></span><br><span class="line"># 方法二：执行如下命令：</span><br><span class="line">$ firewall-cmd --permanent --zone=trusted --add-interface=docker0</span><br><span class="line">$ firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<h4 id="首次启动"><a href="#首次启动" class="headerlink" title="首次启动"></a>首次启动</h4><h5 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ sudo systemctl enable docker</span><br><span class="line">$ sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+<h5 id="建立-docker-用户组"><a href="#建立-docker-用户组" class="headerlink" title="建立 docker 用户组"></a>建立 docker 用户组</h5><p>docker 命令会使用 Unix socket 与 Docker 引擎通讯，而只有 root 用户和 docker 组的用户才可以访问 Docker 引擎的 Unix socket。出于安全考虑，需要将使用 docker 的用户加入 docker 用户组。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 第一步：建立 docker 组：</span><br><span class="line">$ sudo groupadd docker</span><br><span class="line"></span><br><span class="line"># 第二步：将当前用户USER名加入 docker 组：</span><br><span class="line">$ sudo usermod -aG docker $USER</span><br><span class="line"></span><br><span class="line"># 第三步：退出当前终端并重新登录</span><br></pre></td></tr></table></figure>
+<h5 id="测试-Docker-是否安装正确"><a href="#测试-Docker-是否安装正确" class="headerlink" title="测试 Docker 是否安装正确"></a>测试 Docker 是否安装正确</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 运行 hello world 脚本</span><br><span class="line">$ docker run hello-world</span><br></pre></td></tr></table></figure>
+<h3 id="Respberry-Pi-安装启用"><a href="#Respberry-Pi-安装启用" class="headerlink" title="Respberry Pi 安装启用"></a>Respberry Pi 安装启用</h3><h4 id="安装-2"><a href="#安装-2" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 使用 APT 安装</span><br><span class="line">$ sudo apt-get update</span><br><span class="line"></span><br><span class="line">$ sudo apt-get install \</span><br><span class="line">     apt-transport-https \</span><br><span class="line">     ca-certificates \</span><br><span class="line">     curl \</span><br><span class="line">     gnupg2 \</span><br><span class="line">     lsb-release \</span><br><span class="line">     software-properties-common</span><br><span class="line"></span><br><span class="line"># 为确认软件包的合法性，需要添加软件源的 GPG 密钥</span><br><span class="line">$ curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/raspbian/gpg | sudo apt-key add -</span><br><span class="line"></span><br><span class="line"># 向 sources.list 中添加 Docker 软件源</span><br><span class="line">$ sudo add-apt-repository \</span><br><span class="line">    &quot;deb [arch=armhf] https://mirrors.aliyun.com/docker-ce/linux/raspbian \</span><br><span class="line">    $(lsb_release -cs) \</span><br><span class="line">    stable&quot;</span><br><span class="line"></span><br><span class="line"># 更新 apt 软件包缓存，并安装 docker-ce</span><br><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install docker-ce</span><br><span class="line"></span><br><span class="line"># 验证是否安装成功。</span><br><span class="line">$ docker version</span><br><span class="line"># 或</span><br><span class="line">$ docker info</span><br></pre></td></tr></table></figure>
+<h4 id="首次启动设置"><a href="#首次启动设置" class="headerlink" title="首次启动设置"></a>首次启动设置</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 与centos 设置类似，测试是否安装成功，运行一下命令行</span><br><span class="line">$ docker run arm32v7/hello-world</span><br></pre></td></tr></table></figure>
+<h3 id="MacOS-安装"><a href="#MacOS-安装" class="headerlink" title="MacOS 安装"></a>MacOS 安装</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 使用 Homebrew 安装</span><br><span class="line">$ brew cask install docker</span><br><span class="line"></span><br><span class="line"># 也可以从安装包直接安装</span><br><span class="line"></span><br><span class="line"># 检查安装后版本</span><br><span class="line">$ docker --version</span><br><span class="line">$ docker-compose --version</span><br><span class="line"></span><br><span class="line"># 测试是否安装成功</span><br></pre></td></tr></table></figure>
+<h3 id="配置镜像加速器"><a href="#配置镜像加速器" class="headerlink" title="配置镜像加速器"></a>配置镜像加速器</h3><p>国内从 Docker Hub 拉取镜像有时会遇到困难，此时可以配置镜像加速器。</p>
+<h4 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 使用 systemd 的 Linux 发行版中配置镜像加速器。</span><br><span class="line"># 首先执行以下命令，查看是否在 docker.service 文件中配置过镜像地址</span><br><span class="line">$ systemctl cat docker | grep &apos;\-\-registry\-mirror&apos;</span><br><span class="line"></span><br><span class="line"># 如果该命令有输出，那么请执行 $ systemctl cat docker 查看 ExecStart= 出现的位置，修改对应的文件内容去掉 --registry-mirror 参数及其值，并按接下来的步骤进行配置。</span><br><span class="line"># 如果以上命令没有任何输出，那么就可以在 /etc/docker/daemon.json 中写入如下内容（如果文件不存在请新建该文件）：</span><br><span class="line">&#123;</span><br><span class="line">  &quot;registry-mirrors&quot;: [</span><br><span class="line">    &quot;https://hub-mirror.c.163.com&quot;,</span><br><span class="line">    &quot;https://mirror.baidubce.com&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 重新启动服务</span><br><span class="line"></span><br><span class="line">$ sudo systemctl daemon-reload</span><br><span class="line">$ sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+<h4 id="macOS"><a href="#macOS" class="headerlink" title="macOS"></a>macOS</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 在任务栏点击 Docker Desktop 应用图标 -&gt; Perferences，在左侧导航菜单选择 Docker Engine，在右侧像下边一样编辑 json 文件</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;registry-mirrors&quot;: [</span><br><span class="line">    &quot;https://hub-mirror.c.163.com&quot;,</span><br><span class="line">    &quot;https://mirror.baidubce.com&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"># 修改完成之后，点击 Apply &amp; Restart</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>linux， docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>抛弃印象笔记的三大理由</title>
     <url>/2020/11/25/fuck-evernote/</url>
     <content><![CDATA[<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>一句话，赚钱我不反对；但是你不能把我们用户当猴耍吧？生生看着一个曾经喜欢的笔记应用堕落成这个样子。我也是醉了……</p>
@@ -37,11 +101,11 @@
 <p>又或许，作为消费者，我们从一开始就不该迁就。</p>
 ]]></content>
       <categories>
-        <category>note</category>
-        <category>talking</category>
+        <category>随想</category>
       </categories>
       <tags>
         <tag>note</tag>
+        <tag>talking</tag>
       </tags>
   </entry>
   <entry>
@@ -271,7 +335,7 @@
 </table>
 ]]></content>
       <categories>
-        <category>python</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>python</tag>
@@ -342,10 +406,10 @@
 </ul>
 ]]></content>
       <categories>
-        <category>openwrt</category>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
+        <tag>openwrt</tag>
         <tag>linux</tag>
       </tags>
   </entry>
@@ -1220,7 +1284,7 @@
 </ul>
 ]]></content>
       <categories>
-        <category>macTricks</category>
+        <category>技巧</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -1269,7 +1333,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">iperf -c 172.16.200.133</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>mac</tag>
@@ -1364,7 +1428,7 @@
 </ul>
 ]]></content>
       <categories>
-        <category>mac</category>
+        <category>随想</category>
       </categories>
       <tags>
         <tag>mac</tag>
@@ -1389,7 +1453,7 @@
 <p><img src="https://farm5.staticflickr.com/4879/31261781687_595a36b048_o.png" alt></p>
 ]]></content>
       <categories>
-        <category>macTricks</category>
+        <category>技巧</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -1493,7 +1557,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1. 443端口为ssl监听端口。</span><br><span class="line">2. ssl on表示打开ssl支持。</span><br><span class="line">3. ssl_certificate指定crt文件所在路径，如果写相对路径，必须把该文件和nginx.conf文件放到一个目录下。</span><br><span class="line">4. ssl_certificate_key指定key文件所在路径。</span><br><span class="line">5. ssl_protocols指定SSL协议。</span><br><span class="line">6. ssl_ciphers配置ssl加密算法，多个算法用:分隔，ALL表示全部算法，!表示不启用该算法，+表示将该算法排到最后面去。</span><br><span class="line">7. ssl_prefer_server_ciphers 如果不指定默认为off，当为on时，在使用SSLv3和TLS协议时，服务器加密算法将优于客户端加密算法。</span><br></pre></td></tr></table></figure>
 <h4 id="双向认证"><a href="#双向认证" class="headerlink" title="双向认证"></a>双向认证</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//copy证书文件</span><br><span class="line">cp /etc/pki/ca_test/root/ca.crt /usr/local/nginx/conf/</span><br><span class="line"></span><br><span class="line">//修改nginx配置</span><br><span class="line">&#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    server_name www.aminglinux.com;</span><br><span class="line">    index index.html index.php;</span><br><span class="line">    root /data/wwwroot/aminglinux.com;</span><br><span class="line">    ssl on;</span><br><span class="line">    ssl_certificate server.crt;</span><br><span class="line">    ssl_certificate_key server.key;</span><br><span class="line">    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br><span class="line">    ssl_ciphers ALL:!DH:!EXPORT:!RC4:+HIGH:+MEDIUM:!eNULL;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">    ssl_client_certificate ca.crt; //这里的ca.crt是根证书公钥文件</span><br><span class="line">    ssl_verify_client on;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -1588,7 +1652,7 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location  /admin/</span><br><span class="line">&#123;</span><br><span class="line">    auth_basic              &quot;Auth&quot;;</span><br><span class="line">    auth_basic_user_file   /usr/local/nginx/conf/htpasswd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -1711,11 +1775,11 @@
 <h3 id="根据不同的目录负载到不同的后端服务器"><a href="#根据不同的目录负载到不同的后端服务器" class="headerlink" title="根据不同的目录负载到不同的后端服务器"></a>根据不同的目录负载到不同的后端服务器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">upstream aaa.com</span><br><span class="line">&#123;</span><br><span class="line">            server 192.168.111.6;</span><br><span class="line">&#125;</span><br><span class="line">upstream bbb.com</span><br><span class="line">&#123;</span><br><span class="line">            server 192.168.111.20;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">        listen 80;</span><br><span class="line">        server_name www.test.com;</span><br><span class="line">        location /aaa/</span><br><span class="line">        &#123;</span><br><span class="line">            proxy_pass http://aaa.com/aaa/;</span><br><span class="line">            proxy_set_header Host   $host;</span><br><span class="line">            proxy_set_header X-Real-IP      $remote_addr;</span><br><span class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line">        location /bbb/</span><br><span class="line">        &#123;</span><br><span class="line">            proxy_pass http://bbb.com/bbb/;</span><br><span class="line">            proxy_set_header Host   $host;</span><br><span class="line">            proxy_set_header X-Real-IP      $remote_addr;</span><br><span class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line">        location /</span><br><span class="line">        &#123;</span><br><span class="line">            proxy_pass http://bbb.com/;</span><br><span class="line">            proxy_set_header Host   $host;</span><br><span class="line">            proxy_set_header X-Real-IP      $remote_addr;</span><br><span class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>linux</category>
+        <category>nginx</category>
+        <category>notes</category>
       </categories>
       <tags>
-        <tag>notes</tag>
-        <tag>linux</tag>
-        <tag>nginx</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -1857,7 +1921,7 @@ curl -x127.0.0.1:80 &apos;test.com/abc/123.html
 </code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server</span><br><span class="line">&#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name test.com;</span><br><span class="line">    root /data/wwwroot/test.com;</span><br><span class="line"></span><br><span class="line">    location ^~ &apos;/abc.html&apos;</span><br><span class="line">    &#123;</span><br><span class="line">        echo &apos;^~&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">    location = &apos;/abc.html&apos;</span><br><span class="line">    &#123;</span><br><span class="line">        echo &apos;=&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">测试：</span><br><span class="line">curl -x127.0.0.1:80 &apos;test.com/abc.html</span><br><span class="line">结果是：=</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -2071,7 +2135,7 @@ curl -x127.0.0.1:80 &apos;test.com/abc/123.html
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -2184,7 +2248,7 @@ curl -x127.0.0.1:80 &apos;test.com/abc/123.html
 <p><img src="https://farm2.staticflickr.com/1774/29147734677_6c2e1ef98b_o.png" alt></p>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -2565,7 +2629,7 @@ curl -x127.0.0.1:80 &apos;test.com/abc/123.html
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -2938,7 +3002,7 @@ curl -x127.0.0.1:80 &apos;test.com/abc/123.html
 <p>点击界面Create GIF -&gt; Save成gif 文件即可。</p>
 ]]></content>
       <categories>
-        <category>HowToDo</category>
+        <category>技巧</category>
       </categories>
       <tags>
         <tag>mac</tag>
@@ -3111,7 +3175,7 @@ real_server 172.16.111.120 80 {
 <p>systemctl start keepalived<br><code>`</code></p>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -3838,7 +3902,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -4109,7 +4173,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -4183,7 +4247,7 @@ real_server 172.16.111.120 80 {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">chmod a+x 5.expect </span><br><span class="line"></span><br><span class="line">./5.expect</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -4268,7 +4332,7 @@ real_server 172.16.111.120 80 {
 <h2 id="运行告警系统"><a href="#运行告警系统" class="headerlink" title="运行告警系统"></a>运行告警系统</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/sbin/mon/mail</span><br><span class="line"></span><br><span class="line">//设定定时任务</span><br><span class="line">crontab -e</span><br><span class="line"></span><br><span class="line">//设定每分钟执行一次检测脚本包</span><br><span class="line">* * * * * <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/sbin/mon/mail; bash main.sh</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -4721,7 +4785,7 @@ real_server 172.16.111.120 80 {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@local-linux01 sbin]# vi array01.sh</span><br><span class="line">[root@local-linux01 sbin]# bash array01.sh</span><br><span class="line">Zara Qadir Mahnaz Ayan Daisy</span><br><span class="line">echo delete second name:Mahnaz</span><br><span class="line">The name remains: Zara Qadir Ayan Daisy</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -5481,7 +5545,7 @@ real_server 172.16.111.120 80 {
 <p><img src="https://farm1.staticflickr.com/826/41535296161_754313794f_o.png" alt></p>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -5834,7 +5898,7 @@ real_server 172.16.111.120 80 {
 <p><img src="https://farm2.staticflickr.com/1789/43272585342_e1c89d4ec0_o.jpg" alt></p>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -6244,7 +6308,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -6515,7 +6579,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -7543,7 +7607,7 @@ real_server 172.16.111.120 80 {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//第一步：在php-fpm.conf对应的pool池中行尾配置</span><br><span class="line">php_admin_value[open_basedir]=/home/wwwroot/:/proc/:/tmp/</span><br><span class="line"></span><br><span class="line">//第二步：在nginx fastcgi fastcgi_param配置</span><br><span class="line">#这里用$document_root是一种取巧的方法,也可以设置绝对路径</span><br><span class="line"># set php open_basedir</span><br><span class="line">fastcgi_param PHP_ADMIN_VALUE &quot;open_basedir=$document_root/:/tmp/:/proc/&quot;;</span><br><span class="line"></span><br><span class="line">//第三步：在php.ini行尾配置</span><br><span class="line">[HOST=www.iamle.com]</span><br><span class="line">open_basedir=/home/wwwroot/www.iamle.com/:/proc/:/tmp/</span><br><span class="line">[PATH=/home/wwwroot/www.iamle.com/]</span><br><span class="line">open_basedir=/home/wwwroot/www.iamle.com/:/proc/:/tmp/</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -7632,7 +7696,7 @@ real_server 172.16.111.120 80 {
 <p>// 指定日志文件保存多久<br>$ sudo journalctl –vacuum-time=1years<br><code>`</code></p>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -7730,7 +7794,7 @@ real_server 172.16.111.120 80 {
 <h3 id="限制user-agent"><a href="#限制user-agent" class="headerlink" title="限制user_agent"></a>限制user_agent</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf</span><br><span class="line"></span><br><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    DocumentRoot &quot;/data/discuz.com&quot;</span><br><span class="line">    ServerName steve-discuz-test.com</span><br><span class="line">    ServerAlias www.steve-aaa.com</span><br><span class="line">    ServerAlias www.steve-bbb.com</span><br><span class="line">    CustomLog &quot;logs/discuz.com-access_log&quot; combined</span><br><span class="line">    &lt;Directory /data/discuz.com&gt;   //定义目录</span><br><span class="line">        RewriteEngine on</span><br><span class="line">        RewriteCond %&#123;HTTP_USER_AGENT&#125; ^.*curl.* [NC,OR]</span><br><span class="line">        RewriteCond %&#123;HTTP_USER_AGENT&#125; ^.*baidu.com.* [NC]</span><br><span class="line">        RewriteRule .* - [F]</span><br><span class="line">    &lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -8379,7 +8443,7 @@ real_server 172.16.111.120 80 {
 <p>pear 跟pecl的用法类似，不再赘述。</p>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -8809,7 +8873,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -9603,7 +9667,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -10329,7 +10393,7 @@ real_server 172.16.111.120 80 {
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">firewall-cmd --zone=external --add-masquerade </span><br><span class="line">firewall-cmd --zone=external --add-forward-port=port=22:proto=tcp:toport=3777</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -10782,7 +10846,7 @@ real_server 172.16.111.120 80 {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tshark -r H:/httpsession.pcap -q -n -t ad -z follow,tcp,ascii,71.6.167.142:27017,101.201.42.120:59381 | more</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -11941,7 +12005,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -12344,7 +12408,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -12731,7 +12795,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -12942,7 +13006,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -13638,7 +13702,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -13953,7 +14017,7 @@ real_server 172.16.111.120 80 {
 <p><strong>解决方法：</strong>尝试了很久，最终发现还是网络环境问题，单位网络不行，换到家里的网络就OK了。</p>
 ]]></content>
       <categories>
-        <category>Mac</category>
+        <category>技巧</category>
       </categories>
       <tags>
         <tag>github pages</tag>
@@ -14587,7 +14651,7 @@ real_server 172.16.111.120 80 {
 <p><a href="http://www.apelearn.com/bbs/thread-6899-1-1.html" target="_blank" rel="noopener">sudo -i 也可以登录到root吗？</a></p>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -15379,7 +15443,7 @@ real_server 172.16.111.120 80 {
 <h5 id="ln-s命令可以创建软链接"><a href="#ln-s命令可以创建软链接" class="headerlink" title="ln -s命令可以创建软链接"></a>ln -s命令可以创建软链接</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ln -s [源文文件或目录] [目标文件或目录]</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -15752,7 +15816,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -15853,7 +15917,7 @@ real_server 172.16.111.120 80 {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@local-linux02 test]# cat ~/test/a.txt | grep -i qq</span><br><span class="line">www.qq.com</span><br><span class="line">www.QQ.com</span><br><span class="line"></span><br><span class="line">[root@local-linux02 test]#cat ~/test/a.txt</span><br><span class="line">www.baidu.com</span><br><span class="line">www.163.com</span><br><span class="line">www.qq.com</span><br><span class="line">www.yaho.com</span><br><span class="line">www.google.com</span><br><span class="line">this is test</span><br><span class="line">www.QQ.com</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -16058,7 +16122,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -16095,7 +16159,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>python</tag>
@@ -16180,7 +16244,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -16223,7 +16287,7 @@ real_server 172.16.111.120 80 {
 <p>之后，只要输入<code>ali-linux</code>，就可以登陆阿里云主机了，完美！</p>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -16281,7 +16345,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -16331,7 +16395,7 @@ real_server 172.16.111.120 80 {
 <h4 id="shell脚本"><a href="#shell脚本" class="headerlink" title="shell脚本"></a>shell脚本</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#! /bin/bash   </span><br><span class="line"></span><br><span class="line">## In this script, we&apos;ll create disk-usage log</span><br><span class="line"></span><br><span class="line">date=`date +%Y-%m-%d`     //定义日期格式</span><br><span class="line">logfile=$date.log         </span><br><span class="line">df -h &gt; $logfile</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -16383,7 +16447,7 @@ real_server 172.16.111.120 80 {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@stevey ~]# sed -n -e &apos;/name/p&apos; -e &apos;/name/=&apos; c.txt</span><br><span class="line">My name is steve.</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -16529,7 +16593,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -16633,7 +16697,7 @@ real_server 172.16.111.120 80 {
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>notes</tag>
@@ -16768,7 +16832,7 @@ real_server 172.16.111.120 80 {
 <p>最后，在多说一句，其实calibre 更强大的功能在于书籍管理，有兴趣可以研究一下。</p>
 ]]></content>
       <categories>
-        <category>HowToDo</category>
+        <category>技巧</category>
       </categories>
       <tags>
         <tag>dropbox</tag>
@@ -16801,7 +16865,7 @@ real_server 172.16.111.120 80 {
 <p><a href="http://www.ruanyifeng.com/blog/2017/06/raspberry-pi-tutorial.html" target="_blank" rel="noopener">树莓派新手入门教程</a></p>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>树莓派</tag>
@@ -16978,7 +17042,7 @@ real_server 172.16.111.120 80 {
 </table>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -17223,7 +17287,7 @@ real_server 172.16.111.120 80 {
 <p><a href="http://www.haorooms.com/post/centeros_wj_zj" target="_blank" rel="noopener">CentOS常用的文件操作命令总结</a></p>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -17293,7 +17357,7 @@ real_server 172.16.111.120 80 {
 <p>最后，更多automator的使用技巧，可以在<a href="https://macosxautomation.com/automator/index.html" target="_blank" rel="noopener">macosxautomation.com</a> 查找。</p>
 ]]></content>
       <categories>
-        <category>HowToDo</category>
+        <category>技巧</category>
       </categories>
       <tags>
         <tag>mac</tag>
@@ -17383,7 +17447,7 @@ real_server 172.16.111.120 80 {
 </ul>
 <h5 id="3-因为状态已变化，render-再次被调用。这样就会重新渲染页面，但是现在-this-state-name-和-this-state-age-具有值了。"><a href="#3-因为状态已变化，render-再次被调用。这样就会重新渲染页面，但是现在-this-state-name-和-this-state-age-具有值了。" class="headerlink" title="3. 因为状态已变化，render() 再次被调用。这样就会重新渲染页面，但是现在 this.state.name 和 this.state.age 具有值了。"></a>3. 因为状态已变化，render() 再次被调用。这样就会重新渲染页面，但是现在 this.state.name 和 this.state.age 具有值了。</h5>]]></content>
       <categories>
-        <category>front-end</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>react</tag>
@@ -17478,7 +17542,7 @@ real_server 172.16.111.120 80 {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm start   // 在 http://localhost:3000 启动应用 </span><br><span class="line"></span><br><span class="line">npm test     // 运行所有测试 </span><br><span class="line"></span><br><span class="line">npm run build     // 构建项目的产品文件</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>front-end</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>react</tag>
@@ -17571,7 +17635,7 @@ real_server 172.16.111.120 80 {
 <p>注：本题其实靠的是字符编码，英文字母大写从65-90；小写字母从97-122。</p>
 ]]></content>
       <categories>
-        <category>front-end</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>freeCodeCamp</tag>
@@ -17608,7 +17672,7 @@ real_server 172.16.111.120 80 {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//使用 join 方法，连接符为&apos; &apos;把数组 joinMe 转化成字符串 joinedString</span><br><span class="line"></span><br><span class="line">var joinMe = [&quot;Split&quot;,&quot;me&quot;,&quot;into&quot;,&quot;an&quot;,&quot;array&quot;];</span><br><span class="line">var joinedString = &apos;&apos;;</span><br><span class="line">joinedString = joinMe.join(&apos; &apos;);</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>front-end</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>freeCodeCamp</tag>
@@ -17657,7 +17721,7 @@ real_server 172.16.111.120 80 {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var Car = function() &#123;</span><br><span class="line">  // this is a private variable</span><br><span class="line">  var speed = 10;</span><br><span class="line"></span><br><span class="line">  // these are public methods</span><br><span class="line">  this.accelerate = function(change) &#123;</span><br><span class="line">    speed += change;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  this.decelerate = function() &#123;</span><br><span class="line">    speed -= 5;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  this.getSpeed = function() &#123;</span><br><span class="line">    return speed;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">var Bike = function() &#123;</span><br><span class="line"></span><br><span class="line">  // 只能在这一行下面写代码</span><br><span class="line">  var gear = 10;</span><br><span class="line"></span><br><span class="line">  // these are public methods</span><br><span class="line">  this.setGear = function(change) &#123;</span><br><span class="line">    gear = change;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  this.getGear = function() &#123;</span><br><span class="line">    return gear;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">var myCar = new Car();</span><br><span class="line"></span><br><span class="line">var myBike = new Bike();</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>front-end</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>freeCodeCamp</tag>
@@ -17737,7 +17801,7 @@ real_server 172.16.111.120 80 {
 <p>最后，更多更详细的资料参见<a href="http://v3.bootcss.com/css/#grid-example-mixed-complete" target="_blank" rel="noopener">官方说明文档</a>。</p>
 ]]></content>
       <categories>
-        <category>front-end</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>front-end</tag>
@@ -17773,12 +17837,12 @@ real_server 172.16.111.120 80 {
 <p><strong>写在最后：</strong>这些知识点虽然不难，但却是之前在学习中一直忽略的内容，正好借此机会补齐。</p>
 ]]></content>
       <categories>
-        <category>front-end</category>
+        <category>运维</category>
       </categories>
       <tags>
-        <tag>note</tag>
         <tag>html</tag>
         <tag>css</tag>
+        <tag>note</tag>
       </tags>
   </entry>
   <entry>
@@ -17942,7 +18006,7 @@ real_server 172.16.111.120 80 {
 <h3 id="计算器"><a href="#计算器" class="headerlink" title="计算器"></a>计算器</h3><p>＊是称号，／是除号，^表示次方 </p>
 ]]></content>
       <categories>
-        <category>HowToDo</category>
+        <category>技巧</category>
       </categories>
       <tags>
         <tag>google</tag>
@@ -17978,7 +18042,7 @@ real_server 172.16.111.120 80 {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#手写Xpath</span><br><span class="line">import requests</span><br><span class="line">from lxml import etree</span><br><span class="line"></span><br><span class="line">url = &apos;https://book.douban.com/subject/1084336/comments/&apos;</span><br><span class="line">r = requests.get(url).text</span><br><span class="line"></span><br><span class="line">s = etree.HTML(r)</span><br><span class="line">print(s.xpath(&apos;//div[@class=&quot;comment&quot;]/p/text()&apos;)[0])</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>python</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>python</tag>
@@ -18052,7 +18116,7 @@ real_server 172.16.111.120 80 {
 <h5 id="允许所有的机器人："><a href="#允许所有的机器人：" class="headerlink" title="允许所有的机器人："></a>允许所有的机器人：</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">User-agent: * </span><br><span class="line">Disallow:</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>python</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>python</tag>
@@ -18106,7 +18170,7 @@ real_server 172.16.111.120 80 {
 <p>r.text        #打印结果<br><code>`</code></p>
 ]]></content>
       <categories>
-        <category>python</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>python</tag>
@@ -18307,7 +18371,7 @@ real_server 172.16.111.120 80 {
 <p>这样，之前误删的commit就回来了。</p>
 ]]></content>
       <categories>
-        <category>HowToDo</category>
+        <category>技巧</category>
       </categories>
       <tags>
         <tag>ssh</tag>
@@ -18906,7 +18970,7 @@ real_server 172.16.111.120 80 {
 </table>
 ]]></content>
       <categories>
-        <category>HowToDo</category>
+        <category>技巧</category>
       </categories>
       <tags>
         <tag>front-end</tag>
@@ -18928,7 +18992,7 @@ real_server 172.16.111.120 80 {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.nav &#123;</span><br><span class="line">    background-color: steelblue;</span><br><span class="line">    &amp;__container &#123;</span><br><span class="line">        display: flex;</span><br><span class="line">        justify-content: space-between;</span><br><span class="line">    &#125;</span><br><span class="line">    &amp;__item &#123;</span><br><span class="line">        color: white;</span><br><span class="line">        &amp;--active &#123;</span><br><span class="line">            @ extend .nav__item;   //@后面没有空格 </span><br><span class="line">            border-bottom: 1px solid red;</span><br><span class="line">      </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>front-end</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>feont-end</tag>
@@ -18956,7 +19020,7 @@ real_server 172.16.111.120 80 {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;artist&gt; is a great performer</span><br><span class="line">const popular = musicData</span><br><span class="line">  .filter(album =&gt; album.sales &gt; 1000000)</span><br><span class="line">  .map(album =&gt; `$&#123;album.artist&#125; is a great performer`);</span><br><span class="line">  console.log(popular);</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>front-end</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>JavaScript</tag>
@@ -19133,7 +19197,7 @@ afterEach：每个spec（即it）运行之后运行
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">describe(&quot;Asynchronous specs&quot;, function() &#123;</span><br><span class="line">        var value;</span><br><span class="line"></span><br><span class="line">        beforeEach(function(done) &#123;</span><br><span class="line">            setTimeout(function() &#123;</span><br><span class="line">                value = 0;</span><br><span class="line">                done();</span><br><span class="line">            &#125;, 1);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        // 在上面beforeEach的done()被执行之前，这个测试用例不会被执行</span><br><span class="line">        it(&quot;should support async execution of test preparation and expectations&quot;, function(done) &#123;</span><br><span class="line">            value++;</span><br><span class="line">            expect(value).toBeGreaterThan(0);</span><br><span class="line">            done(); // 执行完done()之后，该测试用例真正执行完成</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        // Jasmine异步执行超时时间默认为5秒，超过后将报错</span><br><span class="line">        describe(&quot;long asynchronous specs&quot;, function() &#123;</span><br><span class="line">            var originalTimeout;</span><br><span class="line"></span><br><span class="line">            beforeEach(function() &#123;</span><br><span class="line">                originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;</span><br><span class="line">                // 设置全局的默认超时时间</span><br><span class="line">                jasmine.DEFAULT_TIMEOUT_INTERVAL = 6000;</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            it(&quot;takes a long time&quot;, function(done) &#123;</span><br><span class="line">                setTimeout(function() &#123;</span><br><span class="line">                    done();</span><br><span class="line">                &#125;, 4000);</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            // 如果要调整指定用例的默认的超时时间，可以在beforeEach，it和afterEach中传入一个时间参数</span><br><span class="line">            //it(&quot;takes a long time for this spec&quot;, function(done) &#123;</span><br><span class="line">            //    setTimeout(function() &#123;</span><br><span class="line">            //        done();</span><br><span class="line">            //    &#125;, 6000);</span><br><span class="line">            //&#125;, 7000);</span><br><span class="line"></span><br><span class="line">            afterEach(function() &#123;</span><br><span class="line">                jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;());</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>front-end</category>
+        <category>技巧</category>
       </categories>
       <tags>
         <tag>github</tag>
@@ -19266,7 +19330,7 @@ PasswordAuthentication no
 </ul>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>运维</category>
       </categories>
       <tags>
         <tag>centos</tag>
@@ -19294,7 +19358,7 @@ PasswordAuthentication no
 <p>More  instruction, check <a href="https://developers.google.com/speed/webp/docs/dwebp" target="_blank" rel="noopener">ducumentation</a></p>
 ]]></content>
       <categories>
-        <category>front-end</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>front-end</tag>
@@ -19462,7 +19526,7 @@ PasswordAuthentication no
 </table>
 ]]></content>
       <categories>
-        <category>front-end</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>front-end</tag>

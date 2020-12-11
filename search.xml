@@ -409,8 +409,8 @@
         <category>运维</category>
       </categories>
       <tags>
-        <tag>openwrt</tag>
         <tag>linux</tag>
+        <tag>openwrt</tag>
       </tags>
   </entry>
   <entry>
@@ -1774,12 +1774,12 @@
 <h3 id="根据不同的uri配置不同的均衡负载"><a href="#根据不同的uri配置不同的均衡负载" class="headerlink" title="根据不同的uri配置不同的均衡负载"></a>根据不同的uri配置不同的均衡负载</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">    upstream aa.com &#123;         </span><br><span class="line">                      server 172.16.155.131:80;</span><br><span class="line">                      server 172.16.155.132:80;  </span><br><span class="line">     &#125;</span><br><span class="line">    upstream bb.com &#123;  </span><br><span class="line">                       server 172.16.155.133:80;</span><br><span class="line">                       server 172.16.155.134:80;</span><br><span class="line">    &#125;</span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  www.test.com;</span><br><span class="line">        location ~ aa.php</span><br><span class="line">        &#123;</span><br><span class="line">            proxy_pass http://aa.com/;</span><br><span class="line">            proxy_set_header Host   $host;</span><br><span class="line">            proxy_set_header X-Real-IP      $remote_addr;</span><br><span class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line">        location ~ bb.php</span><br><span class="line">        &#123;</span><br><span class="line">              proxy_pass http://bb.com/;</span><br><span class="line">              proxy_set_header Host   $host;</span><br><span class="line">              proxy_set_header X-Real-IP      $remote_addr;</span><br><span class="line">              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line">        location /</span><br><span class="line">        &#123;</span><br><span class="line">              proxy_pass http://bb.com/;</span><br><span class="line">              proxy_set_header Host   $host;</span><br><span class="line">              proxy_set_header X-Real-IP      $remote_addr;</span><br><span class="line">              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">说明：请求aa.php的，会到aa.com组，请求bb.php的会到bb.com，其他请求全部到bb.com。</span><br></pre></td></tr></table></figure>
 <h3 id="根据不同的目录负载到不同的后端服务器"><a href="#根据不同的目录负载到不同的后端服务器" class="headerlink" title="根据不同的目录负载到不同的后端服务器"></a>根据不同的目录负载到不同的后端服务器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">upstream aaa.com</span><br><span class="line">&#123;</span><br><span class="line">            server 192.168.111.6;</span><br><span class="line">&#125;</span><br><span class="line">upstream bbb.com</span><br><span class="line">&#123;</span><br><span class="line">            server 192.168.111.20;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">        listen 80;</span><br><span class="line">        server_name www.test.com;</span><br><span class="line">        location /aaa/</span><br><span class="line">        &#123;</span><br><span class="line">            proxy_pass http://aaa.com/aaa/;</span><br><span class="line">            proxy_set_header Host   $host;</span><br><span class="line">            proxy_set_header X-Real-IP      $remote_addr;</span><br><span class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line">        location /bbb/</span><br><span class="line">        &#123;</span><br><span class="line">            proxy_pass http://bbb.com/bbb/;</span><br><span class="line">            proxy_set_header Host   $host;</span><br><span class="line">            proxy_set_header X-Real-IP      $remote_addr;</span><br><span class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line">        location /</span><br><span class="line">        &#123;</span><br><span class="line">            proxy_pass http://bbb.com/;</span><br><span class="line">            proxy_set_header Host   $host;</span><br><span class="line">            proxy_set_header X-Real-IP      $remote_addr;</span><br><span class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
-        <category>linux</category>
-        <category>nginx</category>
-        <category>notes</category>
+        <category>运维</category>
       </categories>
       <tags>
-        <tag>运维</tag>
+        <tag>notes</tag>
+        <tag>linux</tag>
+        <tag>nginx</tag>
       </tags>
   </entry>
   <entry>

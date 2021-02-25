@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://steve-yuan-8276.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="写在前面整理一下近期遇到的几个电脑基础设置方面的问题，涉及系统 MacOS、 Kali linux、 google基础设置。 这则笔记当中，主要包括三个部分：  macOS big sur系统下 如何更新homebrew Kali linux的基础设置 google TV WiFi错误提示">
+<meta name="keywords" content="kalilinux,mac,google tv">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TroubleShooting：近期遇到的几个电脑设置问题和解决办法">
+<meta property="og:url" content="https://steve-yuan-8276.github.io/2021/02/19/TroubleShootingOf2021-1/index.html">
+<meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
+<meta property="og:description" content="写在前面整理一下近期遇到的几个电脑基础设置方面的问题，涉及系统 MacOS、 Kali linux、 google基础设置。 这则笔记当中，主要包括三个部分：  macOS big sur系统下 如何更新homebrew Kali linux的基础设置 google TV WiFi错误提示">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/25/7xlVOAPDfn9eM1I.png">
+<meta property="og:updated_time" content="2021-02-25T03:20:37.371Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TroubleShooting：近期遇到的几个电脑设置问题和解决办法">
+<meta name="twitter:description" content="写在前面整理一下近期遇到的几个电脑基础设置方面的问题，涉及系统 MacOS、 Kali linux、 google基础设置。 这则笔记当中，主要包括三个部分：  macOS big sur系统下 如何更新homebrew Kali linux的基础设置 google TV WiFi错误提示">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/25/7xlVOAPDfn9eM1I.png">
+
+<link rel="canonical" href="https://steve-yuan-8276.github.io/2021/02/19/TroubleShootingOf2021-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>TroubleShooting：近期遇到的几个电脑设置问题和解决办法 | Steve Yuan's Workspace</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111158073-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-111158073-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a href="https://github.com/steve-yuan-8276" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#FD6C6C; color:#fff; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Steve Yuan's Workspace</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">99%学习&&1%心得</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://steve-yuan-8276.github.io/2021/02/19/TroubleShootingOf2021-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/logo.png">
+      <meta itemprop="name" content="Steve Yuan">
+      <meta itemprop="description" content="生命不息，折腾不止">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Steve Yuan's Workspace">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TroubleShooting：近期遇到的几个电脑设置问题和解决办法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-19 09:13:30" itemprop="dateCreated datePublished" datetime="2021-02-19T09:13:30+08:00">2021-02-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-25 11:20:37" itemprop="dateModified" datetime="2021-02-25T11:20:37+08:00">2021-02-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技巧/" itemprop="url" rel="index">
+                    <span itemprop="name">技巧</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/02/19/TroubleShootingOf2021-1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/02/19/TroubleShootingOf2021-1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>整理一下近期遇到的几个电脑基础设置方面的问题，涉及系统 MacOS、 Kali linux、 google基础设置。</p>
+<p>这则笔记当中，主要包括三个部分：</p>
+<ul>
+<li>macOS big sur系统下 如何更新homebrew</li>
+<li>Kali linux的基础设置</li>
+<li>google TV WiFi错误提示</li>
+</ul>
+<a id="more"></a>
+<h2 id="macOS-big-sur系统下-如何更新homebrew"><a href="#macOS-big-sur系统下-如何更新homebrew" class="headerlink" title="macOS big sur系统下 如何更新homebrew"></a>macOS big sur系统下 如何更新homebrew</h2><p>解决思路：主要参考以下网页</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/65160625/cant-update-or-upgrade-homebrew" target="_blank" rel="noopener">Can’t update or upgrade Homebrew</a></li>
+<li><a href="https://apple.stackexchange.com/questions/401899/homebrew-your-clt-does-not-support-macos-11-0" target="_blank" rel="noopener">Homebrew: Your CLT does not support macOS 11.0</a></li>
+</ul>
+<h3 id="解决方法：具体说，就是分两步："><a href="#解决方法：具体说，就是分两步：" class="headerlink" title="解决方法：具体说，就是分两步："></a>解决方法：具体说，就是分两步：</h3><h4 id="第一步：错误提示如下和解决方法如下："><a href="#第一步：错误提示如下和解决方法如下：" class="headerlink" title="第一步：错误提示如下和解决方法如下："></a>第一步：错误提示如下和解决方法如下：</h4><p>错误提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Error: homebrew-core is a shallow clone. To `brew update` first run:</span><br><span class="line">  git -C &quot;/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core&quot; fetch --unshallow</span><br></pre></td></tr></table></figure></p>
+<p>解决方法：需要网络环境，不行就换个网络，多试几次</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git -C &quot;/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core&quot; fetch --unshallow</span><br><span class="line">git -C &quot;/usr/local/Homebrew/Library/Taps/homebrew/homebrew-cask&quot; fetch --unshallow</span><br></pre></td></tr></table></figure>
+<h4 id="第二步：错误提示如下和解决方法如下："><a href="#第二步：错误提示如下和解决方法如下：" class="headerlink" title="第二步：错误提示如下和解决方法如下："></a>第二步：错误提示如下和解决方法如下：</h4><p>错误提示：解决第一步之后，还是没有办法运行brew update，错误提示如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Error: Your CLT does not support macOS 11.0.</span><br><span class="line">It is either outdated or was modified.</span><br><span class="line">Please update your CLT or delete it if no updates are available.</span><br><span class="line">Error: An exception occurred within a child process:</span><br><span class="line">  SystemExit: exit</span><br></pre></td></tr></table></figure>
+<p>解决方法：重新安装CLT</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># rm -rf 会删光后面目录的内容，需谨慎操作</span><br><span class="line">sudo rm -rf /Library/Developer/CommandLineTools</span><br><span class="line">sudo xcode-select --install</span><br></pre></td></tr></table></figure>
+<p>之后，就可以愉快地执行 <code>brew update &amp;&amp; brew upgrade</code> 了。</p>
+<h2 id="Kali-linux的基础设置"><a href="#Kali-linux的基础设置" class="headerlink" title="Kali linux的基础设置"></a>Kali linux的基础设置</h2><h3 id="问题一：如何修改kali-Linux的默认系统语言"><a href="#问题一：如何修改kali-Linux的默认系统语言" class="headerlink" title="问题一：如何修改kali Linux的默认系统语言"></a>问题一：如何修改kali Linux的默认系统语言</h3><p>步骤：<br> 1.在Terminal Emulator 中执行<code>dpkg-reconfigure locales</code>命令<br> 2.使用空格键取消勾选<code>en_US.UTF-8 UTF-8</code>选项<br> 3.选定<code>[ ]zh_CN.GBK_GBK</code> 和<code>[ ] zh-CN.UTF-8.UTF-8</code>两个选项：上下键选择，空格键选定，确认无误后<code>enter</code>回车<br> 4.使用<code>reboot</code>命令重启机器使其配置生效 </p>
+<h3 id="问题二：如何快速修改root用户密码"><a href="#问题二：如何快速修改root用户密码" class="headerlink" title="问题二：如何快速修改root用户密码"></a>问题二：如何快速修改root用户密码</h3><p>安装系统过程中，需求创建一个普通用户。而且，在安装过程中没有设置过root密码。由于大部分软件需要root用户权限，可采用以下方法快速修改root权限。</p>
+<p><strong>注：此方法适用于在XFCE桌面；在GNOME桌面中，这种设置方法无效。</strong><br>步骤：<br>1.在Terminal Emulator 中执行<code>sudo passwd root</code>命令<br>2.输入当前用户的密码；<br>3.为root用户设置密码（此操作需要连续输入两次）<br>4.logout 之后，重新用root账户登入即可。</p>
+<h3 id="问题三：如何启动默认服务"><a href="#问题三：如何启动默认服务" class="headerlink" title="问题三：如何启动默认服务"></a>问题三：如何启动默认服务</h3><h4 id="启动apache-服务"><a href="#启动apache-服务" class="headerlink" title="启动apache 服务"></a>启动apache 服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">service apache2 start</span><br><span class="line">检验是否成功，可在浏览器输入本机ip地址访问，本机内网ip通过 `ip add`命令查看</span><br></pre></td></tr></table></figure>
+<h4 id="启动-SSH服务"><a href="#启动-SSH服务" class="headerlink" title="启动 SSH服务"></a>启动 SSH服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">service ssh start</span><br><span class="line">检验是否成功，使用以下命令：</span><br><span class="line">netstat -tpan | grep 22</span><br></pre></td></tr></table></figure>
+<h2 id="Google-TV-Error-“已连接无法访问互联网”-以及无法下载应用的解决办法"><a href="#Google-TV-Error-“已连接无法访问互联网”-以及无法下载应用的解决办法" class="headerlink" title="Google TV Error: “已连接无法访问互联网” 以及无法下载应用的解决办法"></a>Google TV Error: “已连接无法访问互联网” 以及无法下载应用的解决办法</h2><p>ADB： Android调试桥（ adb ）是一个开发工具，帮助安卓设备和个人计算机之间的通信。 这种通信大多是在USB电缆下进行，但是也支持Wi-Fi连接。 adb 还可被用来与电脑上运行的安卓模拟器交流通信。</p>
+<h3 id="第一步：安装ADB"><a href="#第一步：安装ADB" class="headerlink" title="第一步：安装ADB"></a>第一步：安装ADB</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 通过 Homebrew 安装</span><br><span class="line">brew install --cask android-platform-tools</span><br><span class="line"># 测试是否正常安装</span><br><span class="line">adb devices</span><br></pre></td></tr></table></figure>
+<h3 id="第二步：更新ntp服务器"><a href="#第二步：更新ntp服务器" class="headerlink" title="第二步：更新ntp服务器"></a>第二步：更新ntp服务器</h3><p>注：采用无线adb方式，电脑和google tv 需要在同一个局域网内。</p>
+<p>1、打开adb<code>设置-系统-关于</code>连续点击4次 Android TV操作系统版本，此时回到系统就有开发者选项-勾选USB调试</p>
+<p>2、连接adb</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ adb connect [google tv 内网 ip]</span><br></pre></td></tr></table></figure>
+<p>3、写入新的ntp服务器地址 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ adb shell settings put global ntp_server ntp1.aliyun.com</span><br></pre></td></tr></table></figure>
+<p>4、重启Google TV后生效</p>
+<p>附：ntp 备用地址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">dns1.synet.edu.cn </span><br><span class="line">news.neu.edu.cn </span><br><span class="line">dns.sjtu.edu.cm </span><br><span class="line">dns2.synet.edu.cn </span><br><span class="line">ntp.glnet.edu.cn </span><br><span class="line">ntp1.aliyun.com </span><br><span class="line">ntp2.aliyun.com </span><br><span class="line">ntp3.aliyun.com </span><br><span class="line">ntp4.aliyun.com </span><br><span class="line">ntp5.aliyun.com </span><br><span class="line">ntp6.aliyun.com </span><br><span class="line">ntp7.aliyun.com</span><br></pre></td></tr></table></figure>
+<h3 id="第三步：如果还是无法下载，应该怎么做"><a href="#第三步：如果还是无法下载，应该怎么做" class="headerlink" title="第三步：如果还是无法下载，应该怎么做"></a>第三步：如果还是无法下载，应该怎么做</h3><p>网上的教程大概都是到前两步为止，当时我在设置完前两步之后，发现系统时间显示正常，也能连上google play 商店，但还是无法下载应用，具体说，就是总是卡在download pending的界面不动。只好求助于google，结果还真个找到了。</p>
+<p><img src="https://i.loli.net/2021/02/25/7xlVOAPDfn9eM1I.png" alt="7xlVOAPDfn9eM1I"></p>
+<p>翻译过来，就是依次点击 <code>设置</code>，<code>google play store</code>，<code>卸载更新</code>，之后返回，就可以正常按照app了。</p>
+<p>参考网页：</p>
+<ul>
+<li><a href="https://didiboy0702.gitbook.io/wukongdaily/test/google-tv-xiu-gai-ntp-fu-wu-qi-di-zhi" target="_blank" rel="noopener">Google TV /Shield TV/Tivo Stream 4K 已连接无法访问互联网</a></li>
+<li><a href="https://www.jianshu.com/p/1b3fb1f27b67" target="_blank" rel="noopener">在 MAC OS X 安装 ADB (Android调试桥)</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <div>
+    
+    <div>
+
+    <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+
+</div>
+    
+    </div>
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Steve Yuan 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Steve Yuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://steve-yuan-8276.github.io/2021/02/19/TroubleShootingOf2021-1/" title="TroubleShooting：近期遇到的几个电脑设置问题和解决办法">https://steve-yuan-8276.github.io/2021/02/19/TroubleShootingOf2021-1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/kalilinux/" rel="tag"># kalilinux</a>
+              <a href="/tags/mac/" rel="tag"># mac</a>
+              <a href="/tags/google-tv/" rel="tag"># google tv</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/14/basisOfSSH/" rel="prev" title="Linux 学习笔记：SSH基础">
+      <i class="fa fa-chevron-left"></i> Linux 学习笔记：SSH基础
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#macOS-big-sur系统下-如何更新homebrew"><span class="nav-number">2.</span> <span class="nav-text">macOS big sur系统下 如何更新homebrew</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法：具体说，就是分两步："><span class="nav-number">2.1.</span> <span class="nav-text">解决方法：具体说，就是分两步：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：错误提示如下和解决方法如下："><span class="nav-number">2.1.1.</span> <span class="nav-text">第一步：错误提示如下和解决方法如下：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：错误提示如下和解决方法如下："><span class="nav-number">2.1.2.</span> <span class="nav-text">第二步：错误提示如下和解决方法如下：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kali-linux的基础设置"><span class="nav-number">3.</span> <span class="nav-text">Kali linux的基础设置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题一：如何修改kali-Linux的默认系统语言"><span class="nav-number">3.1.</span> <span class="nav-text">问题一：如何修改kali Linux的默认系统语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题二：如何快速修改root用户密码"><span class="nav-number">3.2.</span> <span class="nav-text">问题二：如何快速修改root用户密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题三：如何启动默认服务"><span class="nav-number">3.3.</span> <span class="nav-text">问题三：如何启动默认服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#启动apache-服务"><span class="nav-number">3.3.1.</span> <span class="nav-text">启动apache 服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动-SSH服务"><span class="nav-number">3.3.2.</span> <span class="nav-text">启动 SSH服务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-TV-Error-“已连接无法访问互联网”-以及无法下载应用的解决办法"><span class="nav-number">4.</span> <span class="nav-text">Google TV Error: “已连接无法访问互联网” 以及无法下载应用的解决办法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：安装ADB"><span class="nav-number">4.1.</span> <span class="nav-text">第一步：安装ADB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：更新ntp服务器"><span class="nav-number">4.2.</span> <span class="nav-text">第二步：更新ntp服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步：如果还是无法下载，应该怎么做"><span class="nav-number">4.3.</span> <span class="nav-text">第三步：如果还是无法下载，应该怎么做</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Steve Yuan"
+      src="/uploads/logo.png">
+  <p class="site-author-name" itemprop="name">Steve Yuan</p>
+  <div class="site-description" itemprop="description">生命不息，折腾不止</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">78</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/steve-yuan-8276" title="GitHub → https://github.com/steve-yuan-8276" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yuanf02@gmail.com" title="Mail → mailto:yuanf02@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/feng8276" title="Twitter → https://twitter.com/feng8276" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Steve Yuan</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">496k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">7:31</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://steve-yuan.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://steve-yuan-8276.github.io/2021/02/19/TroubleShootingOf2021-1/",
+            identifier: "2021/02/19/TroubleShootingOf2021-1/",
+            title: "TroubleShooting：近期遇到的几个电脑设置问题和解决办法"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://steve-yuan.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

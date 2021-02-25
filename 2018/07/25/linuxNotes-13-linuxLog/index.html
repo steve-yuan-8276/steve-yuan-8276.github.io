@@ -49,17 +49,20 @@
 </script>
 
   <meta name="description" content="写在前面这则笔记主要整理linux日志管理的相关知识，主要包括：  系统日志介绍  日志服务：rsyslogd  日志查看：dmesg、last、lastb  日志管理：journalctl">
-<meta name="keywords" content="notes,linux,log">
+<meta name="keywords" content="linux,notes,log">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux运维学习笔记：日志管理">
 <meta property="og:url" content="https://steve-yuan-8276.github.io/2018/07/25/linuxNotes-13-linuxLog/index.html">
 <meta property="og:site_name" content="Steve Yuan&#39;s Workspace">
 <meta property="og:description" content="写在前面这则笔记主要整理linux日志管理的相关知识，主要包括：  系统日志介绍  日志服务：rsyslogd  日志查看：dmesg、last、lastb  日志管理：journalctl">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-12-09T07:45:34.801Z">
+<meta property="og:image" content="https://farm1.staticflickr.com/846/41819706080_bb1204a76b_o.png">
+<meta property="og:image" content="https://farm1.staticflickr.com/946/28225927548_49efe7fb88_o.png">
+<meta property="og:updated_time" content="2020-12-14T09:56:23.873Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux运维学习笔记：日志管理">
 <meta name="twitter:description" content="写在前面这则笔记主要整理linux日志管理的相关知识，主要包括：  系统日志介绍  日志服务：rsyslogd  日志查看：dmesg、last、lastb  日志管理：journalctl">
+<meta name="twitter:image" content="https://farm1.staticflickr.com/846/41819706080_bb1204a76b_o.png">
 
 <link rel="canonical" href="https://steve-yuan-8276.github.io/2018/07/25/linuxNotes-13-linuxLog/">
 
@@ -253,7 +256,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-12-09 15:45:34" itemprop="dateModified" datetime="2020-12-09T15:45:34+08:00">2020-12-09</time>
+                <time title="修改时间：2020-12-14 17:56:23" itemprop="dateModified" datetime="2020-12-14T17:56:23+08:00">2020-12-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -294,7 +297,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>6.6k</span>
+              <span>6.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -341,55 +344,448 @@
 <li><p>与syslog配置文件相兼容；</p>
 </li>
 </ol>
-<h3 id="查看系统日志是否启动"><a href="#查看系统日志是否启动" class="headerlink" title="查看系统日志是否启动"></a>查看系统日志是否启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">//查看服务是否启动</span><br><span class="line">ps aux | grep rsyslogd                   </span><br><span class="line"></span><br><span class="line">//查看服务是否自启动</span><br><span class="line">chkconfig --list | grep rsyslog</span><br><span class="line">```        </span><br><span class="line"></span><br><span class="line">### 常见日志类型</span><br><span class="line"></span><br><span class="line">文件名|内容说明</span><br><span class="line">---|---</span><br><span class="line">message |系统启动后的信息和错误日志，是Red Hat Linux中最常用的日志之一 </span><br><span class="line">secure |与安全相关的日志信息 </span><br><span class="line">maillog |与邮件相关的日志信息 </span><br><span class="line">cron |与定时任务相关的日志信息 </span><br><span class="line">spooler |与UUCP和news设备相关的日志信息</span><br><span class="line">boot.log |守护进程启动和停止相关的日志消息</span><br><span class="line">access-log　　　|纪录HTTP/web的传输 </span><br><span class="line">btmp　　　　　　|纪录失败的纪录 </span><br><span class="line">lastlog　　　　 |纪录最近几次成功登录的事件和最后一次不成功的登录 </span><br><span class="line">sudolog　　　　 |纪录使用sudo发出的命令 </span><br><span class="line">sulog　　　　　 |纪录使用su命令的使用 </span><br><span class="line">syslog　　　　　|从syslog中记录信息（通常链接到messages文件） </span><br><span class="line">utmp　　　　　　|纪录当前登录的每个用户 </span><br><span class="line">wtmp　　　　　　|一个用户每次登录进入和退出时间的永久纪录 </span><br><span class="line">xferlog　　　　 |纪录FTP会话 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 日志服务：rsyslogd</span><br><span class="line"></span><br><span class="line">### 日志文件格式（四列）：</span><br><span class="line"></span><br><span class="line">* 时间产生的时间</span><br><span class="line"></span><br><span class="line">* 发生事件的服务器的主机名</span><br><span class="line"></span><br><span class="line">* 产生事件的服务名或进程名</span><br><span class="line"></span><br><span class="line">* 事件的具体信息</span><br><span class="line"></span><br><span class="line">### 配置文件</span><br><span class="line"></span><br><span class="line">rsyslogd 配置文件为 `/etc/rsyslog.conf` </span><br><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/846/41819706080_bb1204a76b_o.png)</span><br><span class="line"></span><br><span class="line">配置文件格式为：</span><br></pre></td></tr></table></figure>
-<p>服务名称[连接符号]日志等级                  日志记录位置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">服务名称 |说明</span><br><span class="line">---|---</span><br><span class="line">auth|安全和认证相关消息(不推荐使用authpriv替代)</span><br><span class="line">authpriv|安全和认证相关消息(私有的)</span><br><span class="line">cron|系统定时任务cront和at产生的日志</span><br><span class="line">daemon|和各个守护进程相关的日志</span><br><span class="line">ftp|ftp守护进程产生的日志</span><br><span class="line">kern|内核产生的日志(不是用户进程产生的)</span><br><span class="line">local0-local7|为本地使用预留的服务</span><br><span class="line">lpr|打印产生的日志</span><br><span class="line">mail |邮件收发信息</span><br><span class="line">news | 与新闻服务器相关的日志</span><br><span class="line">syslog |由syslogd服务产生的日志信息</span><br><span class="line">user|用户等级类别的日志信息</span><br><span class="line">uucp |uucp子系统的日志信息，uucp是早期linux系统进行数据传递的协议，后来也常用在新闻组服务中</span><br><span class="line"></span><br><span class="line">#### 连接符号</span><br><span class="line"></span><br><span class="line">`*`代表所有日志等级，比如：&quot;authpriv&quot;代表authpriv认证服务产生的日志，所有的日志等级都记录</span><br><span class="line"></span><br><span class="line">`.`代表只要比后面的等级高的(包含该等级)日志都记录下来。比如：&quot;cron.info&quot;代表cron服务产生的日志，只要日志等级大于info级别，就记录；</span><br><span class="line"></span><br><span class="line">`.=`代表只记录所需等级的日志，其他等级的都不记录。比如：&quot;*.=emerg&quot;代表人和日志服务产生的日志，只要等级是emerg等级就记录。这种用法及少见。</span><br><span class="line"></span><br><span class="line">`.!`代表不等于，也就是除了该等级的日志外，其他等级的日志都记录；</span><br><span class="line"></span><br><span class="line">#### 日志等级</span><br><span class="line"></span><br><span class="line">debug ：一般的调试信息说明</span><br><span class="line"></span><br><span class="line">info：基本的通知信息</span><br><span class="line"></span><br><span class="line">notice ：普通信息，但是有一定的重要性</span><br><span class="line"></span><br><span class="line">warning ：警告信息，但是还不会影响到服务或系统的运行</span><br><span class="line"></span><br><span class="line">err ：错误信息，一般达到err等级的信息就影响到服务或系统的运行了</span><br><span class="line"></span><br><span class="line">crit：临界状况信息，比err等级还要严重</span><br><span class="line"></span><br><span class="line">alert：警告状态信息，比crit还要严重，必须立即采取行动</span><br><span class="line"></span><br><span class="line">emerg ：疼痛等级信息，系统已经无法使用了；</span><br><span class="line"></span><br><span class="line">#### 日志保存位置</span><br><span class="line"></span><br><span class="line">* 日志文件的绝对路径，如 “/var/log/secure”;</span><br><span class="line"></span><br><span class="line">* 系统设备文件，如 “/dev/lp0”;</span><br><span class="line"></span><br><span class="line">* 转发给远程主机，如 “@192.168.0.210:514”;</span><br><span class="line"></span><br><span class="line">* 发给在线的用户，如 “root”，”*”;</span><br><span class="line"></span><br><span class="line">* 忽略或丢弃日志，如 “~”;</span><br><span class="line"></span><br><span class="line">**说明：* 星号代表任何内容。**</span><br><span class="line"></span><br><span class="line">* 如果是在服务名称处，代表任何服务；</span><br><span class="line"></span><br><span class="line">* 如果是在日志等级处，代表任何日志等级；</span><br><span class="line"></span><br><span class="line">* 如果是在保存位置处，代表发给所有的在线用户。</span><br><span class="line"></span><br><span class="line">### 日志论替切割 ：logrotate 命令</span><br><span class="line"></span><br><span class="line">`logrotate`程序是一个日志文件管理工具。用于分割日志文件，删除旧的日志文件，并创建新的日志文件，起到“转储”作用，从而节省磁盘空间。</span><br><span class="line"></span><br><span class="line">**日志轮转是系统自动完成的** 为了方便管理将每个服务类型的日志轮替配置信息形成独立文件存储在`/etc/logrotate.d/*`。</span><br><span class="line"></span><br><span class="line">* `如果配置文件中拥有 dateext 参数`，那么日志会用日期来作为日志文件的后缀。例如 secure-20140609。这样，日志文件就不会重名，也就不需要更改日志的文件名，只需保存指定的日志个数，删除其他的日志文件即可。</span><br><span class="line"></span><br><span class="line">* `如果配置文件中没有 dateext 参数`，那么日志文件就需要进行改名了。当第一次进行日志轮替时，当前的 secure 日志会自动更名为 secure.1 ，然后新建 secure 日志，用来保存新的日志。当第二次进行日志轮替时， secure.1 会自动改名为 secure.2 ，当前的 secure 日志会自动更名为 secure.1 ，然后新建 secure 日志，用来保存新的日志。</span><br><span class="line"></span><br><span class="line">#### `logrotate` 配置文件</span><br><span class="line"></span><br><span class="line">Logrotate的配置信息保存在`/etc/logrotate.conf`文件中。</span><br><span class="line"></span><br><span class="line">参数	|说明</span><br><span class="line">---|---</span><br><span class="line">daily	|日志的轮替周期是每天。</span><br><span class="line">weekly	|日志的轮替周期是每周。</span><br><span class="line">monthly	|日志的轮替周期是每月。</span><br><span class="line">rotate 数字	|保留的日志文件的个数。0指没有备份。</span><br><span class="line">compress	|日志轮替时，旧的日志进行压缩</span><br><span class="line">create mode owner group	|建立新日志，同时指定新日志的权限、所有者和所属组。 如 create 0600 root utmp。</span><br><span class="line">mail address	|当日志轮替时，输出内容通过邮件发送到指定的邮箱。</span><br><span class="line">missingok	|如果日志不存在，则忽略该日志的警告信息。</span><br><span class="line">notifempty	|如果日志为空文件，则不进行日志轮替。</span><br><span class="line">minisize 大小	|日志轮替的最小值。也就是日志一定要达到这个最小值才会轮替，否则就算时间达到也不轮替。</span><br><span class="line">size 大小	|日志只有大于指定大小才进行日志轮替，而不是按照时间轮替。 如 size 100k。</span><br><span class="line">dateext	|使用日期作为日志轮替文件的后缀。 如 secure-20140609</span><br></pre></td></tr></table></figure></p>
-<p>[root@localhost ~]# cat /etc/logrotate.conf</p>
-<p>=&gt;下面为默认值。如不单独配置将才有下面的默认值<br>weekly    &lt;==默认每周进行一次 rotate 的工作<br>rotate 4  &lt;==默认保留4个登录文件<br>create    &lt;==以新创建文件继续存储日志文件</p>
-<p>#compress &lt;==被更动的登录文件是否需要压缩？如果登录文件太大则可考虑此参数启动</p>
-<p>include /etc/logrotate.d</p>
-<p>/var/log/wtmp {       &lt;==仅针对 /var/log/wtmp 所配置的参数<br>    monthly           &lt;==每个月一次，取代每周！<br>    minsize 1M        &lt;==文件容量一定要超过 1M 后才进行<br>    create 0664 root utmp &lt;==指定新建文件的权限与所属帐号/群组<br>    rotate 1          &lt;==仅保留一个<br>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### `logrotate` 语法</span><br><span class="line"></span><br><span class="line">命令格式：</span><br></pre></td></tr></table></figure>
-<p>logrotate [OPTION] [configfile]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">常用参数|说明</span><br><span class="line">---|---</span><br><span class="line">-d, --debug |debug模式，测试配置文件是否有错误；</span><br><span class="line">-f, --force |强制转储文件；</span><br><span class="line">-m, --mail=command |压缩日志后，发送日志到指定邮箱；</span><br><span class="line">-s, --state=statefile |使用指定的状态文件；</span><br><span class="line">-v, --verbose |显示转储过程；</span><br><span class="line"></span><br><span class="line">常见用法：</span><br></pre></td></tr></table></figure></p>
-<p>//强制进行日志文件都进行轮替操作</p>
-<p>logrotate -vf /etc/logrotate.conf</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 查看日志的常见命令</span><br><span class="line"></span><br><span class="line">### `dmesg` 命令</span><br><span class="line"></span><br><span class="line">`dmesg`命令显示linux内核的环形缓冲区信息，我们可以从中获得诸如系统架构、cpu、挂载的硬件，RAM等多个运行级别的大量的系统信息。</span><br><span class="line"></span><br><span class="line">命令行格式：</span><br></pre></td></tr></table></figure>
-<p>dmesg [options]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">参数|说明</span><br><span class="line">---|---</span><br><span class="line">-c 　|显示信息后，清除ring buffer中的内容</span><br><span class="line">-s&lt;缓冲区大小&gt; 　|预设置为8196，刚好等于ring buffer的大小</span><br><span class="line">-n 　|设置记录信息的层级</span><br><span class="line"></span><br><span class="line">示例：</span><br><span class="line"></span><br><span class="line">- 列出加载到内核中的所有驱动</span><br></pre></td></tr></table></figure></p>
-<p>dmesg | less<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 搜索包含特定字符串的被检测到的硬件，-i 表示忽略大小写</span><br></pre></td></tr></table></figure></p>
-<p>dmesg | grep -i usb<br>dmesg | grep -i tty<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 实时监控dmesg日志输出</span><br></pre></td></tr></table></figure></p>
-<p>watch ‘dmesg | tail -f’ </p>
-<p>或者</p>
-<p>tail -f /var/log/dmesg<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 只输出dmesg命令开头/结尾20行日志</span><br></pre></td></tr></table></figure></p>
-<p>dmesg | head -n 20   //开头20行</p>
-<p>dmesg | tail -n 20   //结尾20行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### `last`命令</span><br><span class="line"></span><br><span class="line">`last`命令，用来显示`/var/log/wtmp`文件，这是一个二进位制文件，内容是所有登录、登出的用户。</span><br><span class="line"></span><br><span class="line">命令行格式：</span><br></pre></td></tr></table></figure></p>
-<p>last [options]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">选项|说明</span><br><span class="line">---|---</span><br><span class="line">-a 　|把从何处登入系统的主机名称或IP地址，显示在最后一行；</span><br><span class="line">-d |将IP地址转换成主机名称。</span><br><span class="line">-f &lt;记录文件&gt; 　|指定记录文件，默认是显示/var/log目录下的wtmp文件的记录，但/var/log目录下得btmp能显示的内容更丰富，可以显示远程登录，例如ssh登录 ，包括失败的登录请求。</span><br><span class="line">-n &lt;显示列数&gt;或-&lt;显示列数&gt; 　|设置列出名单的显示列数。</span><br><span class="line">-R 　|不显示登入系统的主机名称或IP地址。</span><br><span class="line">-x 　|显示系统关机，重新开机，以及执行等级的改变等信息。</span><br><span class="line">-i |显示特定ip登录的情况</span><br><span class="line">-t  |显示特定时刻之前的信息</span><br><span class="line">-num |展示前 num 个</span><br><span class="line">username |展示 username 的登入讯息</span><br><span class="line">tty |限制登入讯息包含终端机代号</span><br><span class="line"></span><br><span class="line">**last 命令能查看哪些信息**</span><br><span class="line"></span><br><span class="line">![](https://farm1.staticflickr.com/946/28225927548_49efe7fb88_o.png)</span><br><span class="line"></span><br><span class="line">字段|说明</span><br><span class="line">---|---</span><br><span class="line">第一列|用户名</span><br><span class="line">第二列|终端位置</span><br><span class="line">第三列|登录ip或者内核</span><br><span class="line">第四列|开始时间</span><br><span class="line">第五列|结束时间（still login in 还未退出  down 直到正常关机 crash 直到强制关机）</span><br><span class="line">第六列|持续时间</span><br><span class="line"></span><br><span class="line">**示例：**</span><br><span class="line"></span><br><span class="line">- 显示特定的用户名</span><br></pre></td></tr></table></figure></p>
-<p>last root     //root可替换为需要查询的username<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 最后一列显示主机IP地址</span><br></pre></td></tr></table></figure></p>
-<p>last -n 5 -a -i<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### `lastb `查看失败登录</span><br><span class="line"></span><br><span class="line">`lastb `命令记录失败的登录尝试。你必须拥有root权限才能运行lastb命令。</span><br><span class="line"></span><br><span class="line">**示例：**</span><br></pre></td></tr></table></figure></p>
-<p>[root@stevey log]# lastb</p>
-<p>btmp begins Mon May 14 09:58:37 2018<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### `lastlog`命令 查看每一个用户最近一次的登录信息</span><br></pre></td></tr></table></figure></p>
-<p>[root@local-linux00 ~]# lastlog<br>Username         Port     From             Latest<br>root             pts/0    172.16.155.1     Wed Jul 25 15:29:15 +0800 2018<br>bin                                        <strong>Never logged in</strong><br>daemon                                     <strong>Never logged in</strong><br>adm                                        <strong>Never logged in</strong><br>lp                                         <strong>Never logged in</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 日志管理</span><br><span class="line"></span><br><span class="line">Systemd统一管理所有Unit 的启动日志。带来的好处就是，可以只用journalctl一个命令，查看所有内核日志和应用日志，其配置文件`/etc/systemd/journald.conf`</span><br><span class="line"></span><br><span class="line">### journalctl用法</span><br></pre></td></tr></table></figure></p>
-<p>// 查看所有日志（默认情况下 ，只保存本次启动的日志）<br>$ sudo journalctl</p>
-<p>// 查看内核日志（不显示应用日志）<br>$ sudo journalctl -k</p>
-<p>// 查看系统本次启动的日志<br>$ sudo journalctl -b<br>$ sudo journalctl -b -0</p>
-<p>// 查看上一次启动的日志（需更改设置）<br>$ sudo journalctl -b -1</p>
-<p>// 查看指定时间的日志<br>$ sudo journalctl –since=”2012-10-30 18:17:16”<br>$ sudo journalctl –since “20 min ago”<br>$ sudo journalctl –since yesterday<br>$ sudo journalctl –since “2015-01-10” –until “2015-01-11 03:00”<br>$ sudo journalctl –since 09:00 –until “1 hour ago”</p>
-<p>// 显示尾部的最新10行日志<br>$ sudo journalctl -n</p>
-<p>// 显示尾部指定行数的日志<br>$ sudo journalctl -n 20</p>
-<p>// 实时滚动显示最新日志<br>$ sudo journalctl -f</p>
-<p>// 查看指定服务的日志<br>$ sudo journalctl /usr/lib/systemd/systemd</p>
-<p>// 查看指定进程的日志<br>$ sudo journalctl _PID=1</p>
-<p>// 查看某个路径的脚本的日志<br>$ sudo journalctl /usr/bin/bash</p>
-<p>// 查看指定用户的日志<br>$ sudo journalctl _UID=33 –since today</p>
-<p>// 查看某个 Unit 的日志<br>$ sudo journalctl -u nginx.service<br>$ sudo journalctl -u nginx.service –since today</p>
-<p>// 实时滚动显示某个 Unit 的最新日志<br>$ sudo journalctl -u nginx.service -f</p>
-<p>// 合并显示多个 Unit 的日志<br>$ journalctl -u nginx.service -u php-fpm.service –since today</p>
-<p>// 查看指定优先级（及其以上级别）的日志，共有8级<br>// 0: emerg<br>// 1: alert<br>// 2: crit<br>// 3: err<br>// 4: warning<br>// 5: notice<br>// 6: info<br>// 7: debug<br>$ sudo journalctl -p err -b</p>
-<p>// 日志默认分页输出，–no-pager 改为正常的标准输出<br>$ sudo journalctl –no-pager</p>
-<p>// 以 JSON 格式（单行）输出<br>$ sudo journalctl -b -u nginx.service -o json</p>
-<p>// 以 JSON 格式（多行）输出，可读性更好<br>$ sudo journalctl -b -u nginx.serviceqq<br> -o json-pretty</p>
-<p>// 显示日志占据的硬盘空间<br>$ sudo journalctl –disk-usage</p>
-<p>// 指定日志文件占据的最大空间<br>$ sudo journalctl –vacuum-size=1G</p>
-<p>// 指定日志文件保存多久<br>$ sudo journalctl –vacuum-time=1years<br><code>`</code></p>
-
+<h3 id="查看系统日志是否启动"><a href="#查看系统日志是否启动" class="headerlink" title="查看系统日志是否启动"></a>查看系统日志是否启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//查看服务是否启动</span><br><span class="line">ps aux | grep rsyslogd                   </span><br><span class="line"></span><br><span class="line">//查看服务是否自启动</span><br><span class="line">chkconfig --list | grep rsyslog</span><br></pre></td></tr></table></figure>
+<h3 id="常见日志类型"><a href="#常见日志类型" class="headerlink" title="常见日志类型"></a>常见日志类型</h3><table>
+<thead>
+<tr>
+<th>文件名</th>
+<th>内容说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>message</td>
+<td>系统启动后的信息和错误日志，是Red Hat Linux中最常用的日志之一 </td>
+</tr>
+<tr>
+<td>secure</td>
+<td>与安全相关的日志信息 </td>
+</tr>
+<tr>
+<td>maillog</td>
+<td>与邮件相关的日志信息 </td>
+</tr>
+<tr>
+<td>cron</td>
+<td>与定时任务相关的日志信息 </td>
+</tr>
+<tr>
+<td>spooler</td>
+<td>与UUCP和news设备相关的日志信息</td>
+</tr>
+<tr>
+<td>boot.log</td>
+<td>守护进程启动和停止相关的日志消息</td>
+</tr>
+<tr>
+<td>access-log　　　</td>
+<td>纪录HTTP/web的传输 </td>
+</tr>
+<tr>
+<td>btmp　　　　　　</td>
+<td>纪录失败的纪录 </td>
+</tr>
+<tr>
+<td>lastlog　　　　</td>
+<td>纪录最近几次成功登录的事件和最后一次不成功的登录 </td>
+</tr>
+<tr>
+<td>sudolog　　　　</td>
+<td>纪录使用sudo发出的命令 </td>
+</tr>
+<tr>
+<td>sulog　　　　　</td>
+<td>纪录使用su命令的使用 </td>
+</tr>
+<tr>
+<td>syslog　　　　　</td>
+<td>从syslog中记录信息（通常链接到messages文件） </td>
+</tr>
+<tr>
+<td>utmp　　　　　　</td>
+<td>纪录当前登录的每个用户 </td>
+</tr>
+<tr>
+<td>wtmp　　　　　　</td>
+<td>一个用户每次登录进入和退出时间的永久纪录 </td>
+</tr>
+<tr>
+<td>xferlog　　　　</td>
+<td>纪录FTP会话 </td>
+</tr>
+</tbody>
+</table>
+<h2 id="日志服务：rsyslogd"><a href="#日志服务：rsyslogd" class="headerlink" title="日志服务：rsyslogd"></a>日志服务：rsyslogd</h2><h3 id="日志文件格式（四列）："><a href="#日志文件格式（四列）：" class="headerlink" title="日志文件格式（四列）："></a>日志文件格式（四列）：</h3><ul>
+<li><p>时间产生的时间</p>
+</li>
+<li><p>发生事件的服务器的主机名</p>
+</li>
+<li><p>产生事件的服务名或进程名</p>
+</li>
+<li><p>事件的具体信息</p>
+</li>
+</ul>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><p>rsyslogd 配置文件为 <code>/etc/rsyslog.conf</code> </p>
+<p><img src="https://farm1.staticflickr.com/846/41819706080_bb1204a76b_o.png" alt></p>
+<p>配置文件格式为：</p>
+<p><code>服务名称[连接符号]日志等级                  日志记录位置</code></p>
+<table>
+<thead>
+<tr>
+<th>服务名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>auth</td>
+<td>安全和认证相关消息(不推荐使用authpriv替代)</td>
+</tr>
+<tr>
+<td>authpriv</td>
+<td>安全和认证相关消息(私有的)</td>
+</tr>
+<tr>
+<td>cron</td>
+<td>系统定时任务cront和at产生的日志</td>
+</tr>
+<tr>
+<td>daemon</td>
+<td>和各个守护进程相关的日志</td>
+</tr>
+<tr>
+<td>ftp</td>
+<td>ftp守护进程产生的日志</td>
+</tr>
+<tr>
+<td>kern</td>
+<td>内核产生的日志(不是用户进程产生的)</td>
+</tr>
+<tr>
+<td>local0-local7</td>
+<td>为本地使用预留的服务</td>
+</tr>
+<tr>
+<td>lpr</td>
+<td>打印产生的日志</td>
+</tr>
+<tr>
+<td>mail</td>
+<td>邮件收发信息</td>
+</tr>
+<tr>
+<td>news</td>
+<td>与新闻服务器相关的日志</td>
+</tr>
+<tr>
+<td>syslog</td>
+<td>由syslogd服务产生的日志信息</td>
+</tr>
+<tr>
+<td>user</td>
+<td>用户等级类别的日志信息</td>
+</tr>
+<tr>
+<td>uucp</td>
+<td>uucp子系统的日志信息，uucp是早期linux系统进行数据传递的协议，后来也常用在新闻组服务中</td>
+</tr>
+</tbody>
+</table>
+<h4 id="连接符号"><a href="#连接符号" class="headerlink" title="连接符号"></a>连接符号</h4><p><code>*</code>代表所有日志等级，比如：”authpriv”代表authpriv认证服务产生的日志，所有的日志等级都记录</p>
+<p><code>.</code>代表只要比后面的等级高的(包含该等级)日志都记录下来。比如：”cron.info”代表cron服务产生的日志，只要日志等级大于info级别，就记录；</p>
+<p><code>.=</code>代表只记录所需等级的日志，其他等级的都不记录。比如：”*.=emerg”代表人和日志服务产生的日志，只要等级是emerg等级就记录。这种用法及少见。</p>
+<p><code>.!</code>代表不等于，也就是除了该等级的日志外，其他等级的日志都记录；</p>
+<h4 id="日志等级"><a href="#日志等级" class="headerlink" title="日志等级"></a>日志等级</h4><ul>
+<li><p>debug ：一般的调试信息说明</p>
+</li>
+<li><p>info：基本的通知信息</p>
+</li>
+<li><p>notice ：普通信息，但是有一定的重要性</p>
+</li>
+<li><p>warning ：警告信息，但是还不会影响到服务或系统的运行</p>
+</li>
+<li><p>err ：错误信息，一般达到err等级的信息就影响到服务或系统的运行了</p>
+</li>
+<li><p>crit：临界状况信息，比err等级还要严重</p>
+</li>
+<li><p>alert：警告状态信息，比crit还要严重，必须立即采取行动</p>
+</li>
+<li><p>emerg ：疼痛等级信息，系统已经无法使用了；</p>
+</li>
+</ul>
+<h4 id="日志保存位置"><a href="#日志保存位置" class="headerlink" title="日志保存位置"></a>日志保存位置</h4><ul>
+<li><p>日志文件的绝对路径，如 “/var/log/secure”;</p>
+</li>
+<li><p>系统设备文件，如 “/dev/lp0”;</p>
+</li>
+<li><p>转发给远程主机，如 “@192.168.0.210:514”;</p>
+</li>
+<li><p>发给在线的用户，如 “root”，”*”;</p>
+</li>
+<li><p>忽略或丢弃日志，如 “~”;</p>
+</li>
+</ul>
+<p><strong>说明：* 星号代表任何内容。</strong></p>
+<ul>
+<li><p>如果是在服务名称处，代表任何服务；</p>
+</li>
+<li><p>如果是在日志等级处，代表任何日志等级；</p>
+</li>
+<li><p>如果是在保存位置处，代表发给所有的在线用户。</p>
+</li>
+</ul>
+<h3 id="日志论替切割-：logrotate-命令"><a href="#日志论替切割-：logrotate-命令" class="headerlink" title="日志论替切割 ：logrotate 命令"></a>日志论替切割 ：logrotate 命令</h3><p><code>logrotate</code>程序是一个日志文件管理工具。用于分割日志文件，删除旧的日志文件，并创建新的日志文件，起到“转储”作用，从而节省磁盘空间。</p>
+<p><strong>日志轮转是系统自动完成的</strong> 为了方便管理将每个服务类型的日志轮替配置信息形成独立文件存储在<code>/etc/logrotate.d/*</code>。</p>
+<ul>
+<li><p><code>如果配置文件中拥有 dateext 参数</code>，那么日志会用日期来作为日志文件的后缀。例如 secure-20140609。这样，日志文件就不会重名，也就不需要更改日志的文件名，只需保存指定的日志个数，删除其他的日志文件即可。</p>
+</li>
+<li><p><code>如果配置文件中没有 dateext 参数</code>，那么日志文件就需要进行改名了。当第一次进行日志轮替时，当前的 secure 日志会自动更名为 secure.1 ，然后新建 secure 日志，用来保存新的日志。当第二次进行日志轮替时， secure.1 会自动改名为 secure.2 ，当前的 secure 日志会自动更名为 secure.1 ，然后新建 secure 日志，用来保存新的日志。</p>
+</li>
+</ul>
+<h4 id="logrotate-配置文件"><a href="#logrotate-配置文件" class="headerlink" title="logrotate 配置文件"></a><code>logrotate</code> 配置文件</h4><p>Logrotate的配置信息保存在<code>/etc/logrotate.conf</code>文件中。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>daily</td>
+<td>日志的轮替周期是每天。</td>
+</tr>
+<tr>
+<td>weekly</td>
+<td>日志的轮替周期是每周。</td>
+</tr>
+<tr>
+<td>monthly</td>
+<td>日志的轮替周期是每月。</td>
+</tr>
+<tr>
+<td>rotate 数字</td>
+<td>保留的日志文件的个数。0指没有备份。</td>
+</tr>
+<tr>
+<td>compress</td>
+<td>日志轮替时，旧的日志进行压缩</td>
+</tr>
+<tr>
+<td>create mode owner group</td>
+<td>建立新日志，同时指定新日志的权限、所有者和所属组。 如 create 0600 root utmp。</td>
+</tr>
+<tr>
+<td>mail address</td>
+<td>当日志轮替时，输出内容通过邮件发送到指定的邮箱。</td>
+</tr>
+<tr>
+<td>missingok</td>
+<td>如果日志不存在，则忽略该日志的警告信息。</td>
+</tr>
+<tr>
+<td>notifempty</td>
+<td>如果日志为空文件，则不进行日志轮替。</td>
+</tr>
+<tr>
+<td>minisize 大小</td>
+<td>日志轮替的最小值。也就是日志一定要达到这个最小值才会轮替，否则就算时间达到也不轮替。</td>
+</tr>
+<tr>
+<td>size 大小</td>
+<td>日志只有大于指定大小才进行日志轮替，而不是按照时间轮替。 如 size 100k。</td>
+</tr>
+<tr>
+<td>dateext</td>
+<td>使用日期作为日志轮替文件的后缀。 如 secure-20140609</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat /etc/logrotate.conf</span><br><span class="line"></span><br><span class="line">=&gt;下面为默认值。如不单独配置将才有下面的默认值</span><br><span class="line">weekly    &lt;==默认每周进行一次 rotate 的工作</span><br><span class="line">rotate 4  &lt;==默认保留4个登录文件 </span><br><span class="line">create    &lt;==以新创建文件继续存储日志文件</span><br><span class="line">#compress &lt;==被更动的登录文件是否需要压缩？如果登录文件太大则可考虑此参数启动</span><br><span class="line"></span><br><span class="line">include /etc/logrotate.d</span><br><span class="line"></span><br><span class="line">/var/log/wtmp &#123;       &lt;==仅针对 /var/log/wtmp 所配置的参数</span><br><span class="line">    monthly           &lt;==每个月一次，取代每周！</span><br><span class="line">    minsize 1M        &lt;==文件容量一定要超过 1M 后才进行</span><br><span class="line">    create 0664 root utmp &lt;==指定新建文件的权限与所属帐号/群组</span><br><span class="line">    rotate 1          &lt;==仅保留一个 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="logrotate-语法"><a href="#logrotate-语法" class="headerlink" title="logrotate 语法"></a><code>logrotate</code> 语法</h4><p>命令格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logrotate [OPTION] [configfile]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>常用参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-d, –debug</td>
+<td>debug模式，测试配置文件是否有错误；</td>
+</tr>
+<tr>
+<td>-f, –force</td>
+<td>强制转储文件；</td>
+</tr>
+<tr>
+<td>-m, –mail=command</td>
+<td>压缩日志后，发送日志到指定邮箱；</td>
+</tr>
+<tr>
+<td>-s, –state=statefile</td>
+<td>使用指定的状态文件；</td>
+</tr>
+<tr>
+<td>-v, –verbose</td>
+<td>显示转储过程；</td>
+</tr>
+</tbody>
+</table>
+<p>常见用法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//强制进行日志文件都进行轮替操作</span><br><span class="line"></span><br><span class="line">logrotate -vf /etc/logrotate.conf</span><br></pre></td></tr></table></figure>
+<h2 id="查看日志的常见命令"><a href="#查看日志的常见命令" class="headerlink" title="查看日志的常见命令"></a>查看日志的常见命令</h2><h3 id="dmesg-命令"><a href="#dmesg-命令" class="headerlink" title="dmesg 命令"></a><code>dmesg</code> 命令</h3><p><code>dmesg</code>命令显示linux内核的环形缓冲区信息，我们可以从中获得诸如系统架构、cpu、挂载的硬件，RAM等多个运行级别的大量的系统信息。</p>
+<p>命令行格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dmesg [options]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-c 　</td>
+<td>显示信息后，清除ring buffer中的内容</td>
+</tr>
+<tr>
+<td>-s&lt;缓冲区大小&gt; 　</td>
+<td>预设置为8196，刚好等于ring buffer的大小</td>
+</tr>
+<tr>
+<td>-n 　</td>
+<td>设置记录信息的层级</td>
+</tr>
+</tbody>
+</table>
+<p>示例：</p>
+<ul>
+<li>列出加载到内核中的所有驱动</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dmesg | less</span><br></pre></td></tr></table></figure>
+<ul>
+<li>搜索包含特定字符串的被检测到的硬件，-i 表示忽略大小写</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dmesg | grep -i usb</span><br><span class="line">dmesg | grep -i tty</span><br></pre></td></tr></table></figure>
+<ul>
+<li>实时监控dmesg日志输出</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">watch &apos;dmesg | tail -f&apos; </span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">tail -f /var/log/dmesg</span><br></pre></td></tr></table></figure>
+<ul>
+<li>只输出dmesg命令开头/结尾20行日志</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dmesg | head -n 20   //开头20行</span><br><span class="line"></span><br><span class="line">dmesg | tail -n 20   //结尾20行</span><br></pre></td></tr></table></figure>
+<h3 id="last命令"><a href="#last命令" class="headerlink" title="last命令"></a><code>last</code>命令</h3><p><code>last</code>命令，用来显示<code>/var/log/wtmp</code>文件，这是一个二进位制文件，内容是所有登录、登出的用户。</p>
+<p>命令行格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">last [options]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a 　</td>
+<td>把从何处登入系统的主机名称或IP地址，显示在最后一行；</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>将IP地址转换成主机名称。</td>
+</tr>
+<tr>
+<td>-f &lt;记录文件&gt; 　</td>
+<td>指定记录文件，默认是显示/var/log目录下的wtmp文件的记录，但/var/log目录下得btmp能显示的内容更丰富，可以显示远程登录，例如ssh登录 ，包括失败的登录请求。</td>
+</tr>
+<tr>
+<td>-n &lt;显示列数&gt;或-&lt;显示列数&gt; 　</td>
+<td>设置列出名单的显示列数。</td>
+</tr>
+<tr>
+<td>-R 　</td>
+<td>不显示登入系统的主机名称或IP地址。</td>
+</tr>
+<tr>
+<td>-x 　</td>
+<td>显示系统关机，重新开机，以及执行等级的改变等信息。</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>显示特定ip登录的情况</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>显示特定时刻之前的信息</td>
+</tr>
+<tr>
+<td>-num</td>
+<td>展示前 num 个</td>
+</tr>
+<tr>
+<td>username</td>
+<td>展示 username 的登入讯息</td>
+</tr>
+<tr>
+<td>tty</td>
+<td>限制登入讯息包含终端机代号</td>
+</tr>
+</tbody>
+</table>
+<p><strong>last 命令能查看哪些信息</strong></p>
+<p><img src="https://farm1.staticflickr.com/946/28225927548_49efe7fb88_o.png" alt></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一列</td>
+<td>用户名</td>
+</tr>
+<tr>
+<td>第二列</td>
+<td>终端位置</td>
+</tr>
+<tr>
+<td>第三列</td>
+<td>登录ip或者内核</td>
+</tr>
+<tr>
+<td>第四列</td>
+<td>开始时间</td>
+</tr>
+<tr>
+<td>第五列</td>
+<td>结束时间（still login in 还未退出  down 直到正常关机 crash 直到强制关机）</td>
+</tr>
+<tr>
+<td>第六列</td>
+<td>持续时间</td>
+</tr>
+</tbody>
+</table>
+<p><strong>示例：</strong></p>
+<ul>
+<li>显示特定的用户名</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">last root     //root可替换为需要查询的username</span><br></pre></td></tr></table></figure>
+<ul>
+<li>最后一列显示主机IP地址</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">last -n 5 -a -i</span><br></pre></td></tr></table></figure>
+<h3 id="lastb查看失败登录"><a href="#lastb查看失败登录" class="headerlink" title="lastb查看失败登录"></a><code>lastb</code>查看失败登录</h3><p><code>lastb</code>命令记录失败的登录尝试。你必须拥有root权限才能运行lastb命令。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@stevey log]# lastb</span><br><span class="line"></span><br><span class="line">btmp begins Mon May 14 09:58:37 2018</span><br></pre></td></tr></table></figure>
+<h3 id="lastlog命令-查看每一个用户最近一次的登录信息"><a href="#lastlog命令-查看每一个用户最近一次的登录信息" class="headerlink" title="lastlog命令 查看每一个用户最近一次的登录信息"></a><code>lastlog</code>命令 查看每一个用户最近一次的登录信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@local-linux00 ~]# lastlog</span><br><span class="line">Username         Port     From             Latest</span><br><span class="line">root             pts/0    172.16.155.1     Wed Jul 25 15:29:15 +0800 2018</span><br><span class="line">bin                                        **Never logged in**</span><br><span class="line">daemon                                     **Never logged in**</span><br><span class="line">adm                                        **Never logged in**</span><br><span class="line">lp                                         **Never logged in**</span><br></pre></td></tr></table></figure>
+<h2 id="日志管理"><a href="#日志管理" class="headerlink" title="日志管理"></a>日志管理</h2><p>Systemd统一管理所有Unit 的启动日志。带来的好处就是，可以只用journalctl一个命令，查看所有内核日志和应用日志，其配置文件<code>/etc/systemd/journald.conf</code></p>
+<h3 id="journalctl用法"><a href="#journalctl用法" class="headerlink" title="journalctl用法"></a>journalctl用法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">// 查看所有日志（默认情况下 ，只保存本次启动的日志）</span><br><span class="line">$ sudo journalctl</span><br><span class="line"></span><br><span class="line">// 查看内核日志（不显示应用日志）</span><br><span class="line">$ sudo journalctl -k</span><br><span class="line"></span><br><span class="line">// 查看系统本次启动的日志</span><br><span class="line">$ sudo journalctl -b</span><br><span class="line">$ sudo journalctl -b -0</span><br><span class="line"></span><br><span class="line">// 查看上一次启动的日志（需更改设置）</span><br><span class="line">$ sudo journalctl -b -1</span><br><span class="line"></span><br><span class="line">// 查看指定时间的日志</span><br><span class="line">$ sudo journalctl --since=&quot;2012-10-30 18:17:16&quot;</span><br><span class="line">$ sudo journalctl --since &quot;20 min ago&quot;</span><br><span class="line">$ sudo journalctl --since yesterday</span><br><span class="line">$ sudo journalctl --since &quot;2015-01-10&quot; --until &quot;2015-01-11 03:00&quot;</span><br><span class="line">$ sudo journalctl --since 09:00 --until &quot;1 hour ago&quot;</span><br><span class="line"></span><br><span class="line">// 显示尾部的最新10行日志</span><br><span class="line">$ sudo journalctl -n</span><br><span class="line"></span><br><span class="line">// 显示尾部指定行数的日志</span><br><span class="line">$ sudo journalctl -n 20</span><br><span class="line"></span><br><span class="line">// 实时滚动显示最新日志</span><br><span class="line">$ sudo journalctl -f</span><br><span class="line"></span><br><span class="line">// 查看指定服务的日志</span><br><span class="line">$ sudo journalctl /usr/lib/systemd/systemd</span><br><span class="line"></span><br><span class="line">// 查看指定进程的日志</span><br><span class="line">$ sudo journalctl _PID=1</span><br><span class="line"></span><br><span class="line">// 查看某个路径的脚本的日志</span><br><span class="line">$ sudo journalctl /usr/bin/bash</span><br><span class="line"></span><br><span class="line">// 查看指定用户的日志</span><br><span class="line">$ sudo journalctl _UID=33 --since today</span><br><span class="line"></span><br><span class="line">// 查看某个 Unit 的日志</span><br><span class="line">$ sudo journalctl -u nginx.service</span><br><span class="line">$ sudo journalctl -u nginx.service --since today</span><br><span class="line"></span><br><span class="line">// 实时滚动显示某个 Unit 的最新日志</span><br><span class="line">$ sudo journalctl -u nginx.service -f</span><br><span class="line"></span><br><span class="line">// 合并显示多个 Unit 的日志</span><br><span class="line">$ journalctl -u nginx.service -u php-fpm.service --since today</span><br><span class="line"></span><br><span class="line">// 查看指定优先级（及其以上级别）的日志，共有8级</span><br><span class="line">// 0: emerg</span><br><span class="line">// 1: alert</span><br><span class="line">// 2: crit</span><br><span class="line">// 3: err</span><br><span class="line">// 4: warning</span><br><span class="line">// 5: notice</span><br><span class="line">// 6: info</span><br><span class="line">// 7: debug</span><br><span class="line">$ sudo journalctl -p err -b</span><br><span class="line"></span><br><span class="line">// 日志默认分页输出，--no-pager 改为正常的标准输出</span><br><span class="line">$ sudo journalctl --no-pager</span><br><span class="line"></span><br><span class="line">// 以 JSON 格式（单行）输出</span><br><span class="line">$ sudo journalctl -b -u nginx.service -o json</span><br><span class="line"></span><br><span class="line">// 以 JSON 格式（多行）输出，可读性更好</span><br><span class="line">$ sudo journalctl -b -u nginx.serviceqq</span><br><span class="line"> -o json-pretty</span><br><span class="line"></span><br><span class="line">// 显示日志占据的硬盘空间</span><br><span class="line">$ sudo journalctl --disk-usage</span><br><span class="line"></span><br><span class="line">// 指定日志文件占据的最大空间</span><br><span class="line">$ sudo journalctl --vacuum-size=1G</span><br><span class="line"></span><br><span class="line">// 指定日志文件保存多久</span><br><span class="line">$ sudo journalctl --vacuum-time=1years</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -440,8 +836,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/notes/" rel="tag"># notes</a>
               <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/notes/" rel="tag"># notes</a>
               <a href="/tags/log/" rel="tag"># log</a>
           </div>
 
@@ -524,7 +920,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linux系统日志简介"><span class="nav-number">2.</span> <span class="nav-text">linux系统日志简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看系统日志是否启动"><span class="nav-number">2.1.</span> <span class="nav-text">查看系统日志是否启动</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linux系统日志简介"><span class="nav-number">2.</span> <span class="nav-text">linux系统日志简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看系统日志是否启动"><span class="nav-number">2.1.</span> <span class="nav-text">查看系统日志是否启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见日志类型"><span class="nav-number">2.2.</span> <span class="nav-text">常见日志类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志服务：rsyslogd"><span class="nav-number">3.</span> <span class="nav-text">日志服务：rsyslogd</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#日志文件格式（四列）："><span class="nav-number">3.1.</span> <span class="nav-text">日志文件格式（四列）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件"><span class="nav-number">3.2.</span> <span class="nav-text">配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#连接符号"><span class="nav-number">3.2.1.</span> <span class="nav-text">连接符号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#日志等级"><span class="nav-number">3.2.2.</span> <span class="nav-text">日志等级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#日志保存位置"><span class="nav-number">3.2.3.</span> <span class="nav-text">日志保存位置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志论替切割-：logrotate-命令"><span class="nav-number">3.3.</span> <span class="nav-text">日志论替切割 ：logrotate 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#logrotate-配置文件"><span class="nav-number">3.3.1.</span> <span class="nav-text">logrotate 配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#logrotate-语法"><span class="nav-number">3.3.2.</span> <span class="nav-text">logrotate 语法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看日志的常见命令"><span class="nav-number">4.</span> <span class="nav-text">查看日志的常见命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dmesg-命令"><span class="nav-number">4.1.</span> <span class="nav-text">dmesg 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#last命令"><span class="nav-number">4.2.</span> <span class="nav-text">last命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lastb查看失败登录"><span class="nav-number">4.3.</span> <span class="nav-text">lastb查看失败登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lastlog命令-查看每一个用户最近一次的登录信息"><span class="nav-number">4.4.</span> <span class="nav-text">lastlog命令 查看每一个用户最近一次的登录信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志管理"><span class="nav-number">5.</span> <span class="nav-text">日志管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#journalctl用法"><span class="nav-number">5.1.</span> <span class="nav-text">journalctl用法</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -540,7 +936,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">77</span>
+          <span class="site-state-item-count">79</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -553,7 +949,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">76</span>
+        <span class="site-state-item-count">78</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -595,7 +991,7 @@
 <div class="copyright">
   
   &copy; 2017 – 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -605,13 +1001,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">490k</span>
+    <span title="站点总字数">496k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">7:26</span>
+    <span title="站点阅读时长">7:31</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0
   </div>
